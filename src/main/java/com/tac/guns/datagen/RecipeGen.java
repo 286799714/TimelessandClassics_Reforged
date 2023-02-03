@@ -210,10 +210,10 @@ public class RecipeGen extends RecipeProvider
                 .build(consumer);
 
         //Ammo
-        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.RPG7_MISSILE.get())
+        /*WorkbenchRecipeBuilder.workbenchRecipe(ModItems.RPG7_MISSILE.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 32)
                 .addIngredient(Tags.Items.GUNPOWDER, 8)
-                .build(consumer);
+                .build(consumer);*/
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.BULLET_10g.get(), 8)
                 .addIngredient(Tags.Items.NUGGETS_IRON, 12)
@@ -241,11 +241,11 @@ public class RecipeGen extends RecipeProvider
                 .addIngredient(Tags.Items.GEMS_DIAMOND)
                 .build(consumer);
 
-        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.MAGNUM_BULLET.get(), 6)
+        /*WorkbenchRecipeBuilder.workbenchRecipe(ModItems.MAGNUM_BULLET.get(), 6)
                 .addIngredient(Tags.Items.NUGGETS_IRON, 12)
                 .addIngredient(Tags.Items.GUNPOWDER, 2)
                 .addIngredient(Tags.Items.GEMS_DIAMOND)
-                .build(consumer);
+                .build(consumer);*/
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.BULLET_58x42.get(), 10)
                 .addIngredient(Tags.Items.NUGGETS_IRON, 16)
@@ -311,7 +311,13 @@ public class RecipeGen extends RecipeProvider
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.AIMPOINT_T2_SIGHT.get())
-                .addIngredient(Tags.Items.INGOTS_IRON, 8)
+                .addIngredient(Tags.Items.INGOTS_IRON, 18)
+                .addIngredient(Tags.Items.GLASS_PANES, 4)
+                .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
+                .build(consumer);
+
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.AIMPOINT_T2_SIGHT.get())
+                .addIngredient(Tags.Items.INGOTS_IRON, 10)
                 .addIngredient(Tags.Items.GLASS_PANES, 4)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
@@ -347,9 +353,15 @@ public class RecipeGen extends RecipeProvider
                 .build(consumer);*/
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.MINI_DOT.get())
-                .addIngredient(Tags.Items.INGOTS_IRON, 6)
+                .addIngredient(Tags.Items.INGOTS_IRON, 8)
                 .addIngredient(Tags.Items.GLASS_PANES, 4)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
+                .build(consumer);
+
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.SRO_DOT.get())
+                .addIngredient(Tags.Items.INGOTS_IRON, 16)
+                .addIngredient(Tags.Items.GLASS_PANES, 12)
+                .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 2)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.OLD_LONGRANGE_4x_SCOPE.get())

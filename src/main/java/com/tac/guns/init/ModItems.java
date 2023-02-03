@@ -105,7 +105,7 @@ public class ModItems
 
 
     /* Ammunition */
-    public static final RegistryObject<Item> MAGNUM_BULLET = REGISTER.register("magnumround", TimelessAmmoItem::new);
+    //public static final RegistryObject<Item> MAGNUM_BULLET = REGISTER.register("magnumround", TimelessAmmoItem::new);
     public static final RegistryObject<Item> BULLET_45 = REGISTER.register("round45", TimelessAmmoItem::new);
     public static final RegistryObject<Item> BULLET_50AE = REGISTER.register("ae50", TimelessAmmoItem::new);
     public static final RegistryObject<Item> BULLET_30_WIN = REGISTER.register("win_30-30", TimelessAmmoItem::new);
@@ -120,11 +120,11 @@ public class ModItems
     public static final RegistryObject<Item> BULLET_50_BMG = REGISTER.register("50bmg", TimelessAmmoItem::new);
     //public static final RegistryObject<Item> BULLET_300MAG = REGISTER.register("762x39", TimelessAmmoItem::new);
     public static final RegistryObject<Item> BULLET_LAPUA338 = REGISTER.register("lapua338", TimelessAmmoItem::new);
-    public static final RegistryObject<Item> GRENADE_40MM = REGISTER.register("grenade40mm", TimelessAmmoItem::new);
+    //public static final RegistryObject<Item> GRENADE_40MM = REGISTER.register("grenade40mm", TimelessAmmoItem::new);
     public static final RegistryObject<Item> BULLET_68 = REGISTER.register("bullet68", TimelessAmmoItem::new);
 
     /* Explosives */
-    public static final RegistryObject<Item> RPG7_MISSILE = REGISTER.register("rpg7_missile", () -> new AmmoItem(new Item.Properties().group(GunMod.AMMO)));
+    //public static final RegistryObject<Item> RPG7_MISSILE = REGISTER.register("rpg7_missile", () -> new AmmoItem(new Item.Properties().group(GunMod.AMMO)));
 
     public static final RegistryObject<Item> LIGHT_GRENADE = REGISTER.register("light_grenade", () ->  new LightGrenadeItem(new Item.Properties().group(GunMod.EXPLOSIVES), 25 * 4, 0.95f, 1.35f));
     public static final RegistryObject<Item> BASEBALL_GRENADE = REGISTER.register("baseball_grenade", () ->  new BaseballGrenadeItem(new Item.Properties().group(GunMod.EXPLOSIVES), 20 * 7, 1.425f, 1.135f));
