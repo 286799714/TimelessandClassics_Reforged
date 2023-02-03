@@ -5,7 +5,7 @@
       "item": {
         "tag": "forge:ingots/iron"
       },
-      "count": 8
+      "count": 18
     },
     {
       "item": {
@@ -16,8 +16,7 @@
     {
       "item": {
         "tag": "forge:storage_blocks/redstone"
-      },
-      "count": 1
+      }
     }
   ],
   "result": {

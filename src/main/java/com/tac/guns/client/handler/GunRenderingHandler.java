@@ -11,11 +11,8 @@ import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.client.render.IHeldAnimation;
-import com.tac.guns.client.render.animation.M4AnimationController;
-import com.tac.guns.client.render.animation.MK47AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PistalAnimationController;
-import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
@@ -28,14 +25,12 @@ import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.*;
 import com.tac.guns.item.TransitionalTypes.ITimelessAnimated;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
-import com.tac.guns.item.TransitionalTypes.TimelessPistolGunItem;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.item.attachment.IBarrel;
 import com.tac.guns.item.attachment.impl.Barrel;
 import com.tac.guns.item.attachment.impl.Scope;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessagePlayerShake;
-import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.OptifineHelper;
 import com.tac.guns.util.math.OneDimensionalPerlinNoise;
@@ -68,7 +63,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.LightType;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
@@ -1161,7 +1155,7 @@ public class GunRenderingHandler {
 
         //MK47AnimationController x = MK47AnimationController.getInstance();
         //PlayerHandAnimation.render(x,event.getTransformType(),event.getMatrixStack(),event.getRenderTypeBuffer(),event.getLight());
-        if (!Config.CLIENT.quality.reducedGuiWeaponQuality.get()/* && event.getTransformType().equals(ItemCameraTransforms.TransformType.GUI)*/)
+        if (!Config.CLIENT.quality.reducedQualityHotBar.get()/* && event.getTransformType().equals(ItemCameraTransforms.TransformType.GUI)*/)
         {
             Minecraft mc = Minecraft.getInstance();
             event.setCanceled(this.renderWeapon(mc.player, event.getItem(), event.getTransformType(), event.getMatrixStack(), event.getRenderTypeBuffer(), event.getLight(), event.getPartialTicks()));
@@ -1235,7 +1229,7 @@ public class GunRenderingHandler {
             if (model != null) {
 
                 //TODO: Only when needed
-                if(ModelOverrides.hasModel(stack) && transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedGuiWeaponQuality.get()) {
+                if(ModelOverrides.hasModel(stack) && transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedQualityHotBar.get()) {
                     matrixStack.push();
                     matrixStack.rotate(Vector3f.XP.rotationDegrees(25.0F));
                     matrixStack.rotate(Vector3f.YP.rotationDegrees(-145.0F));
@@ -1246,7 +1240,7 @@ public class GunRenderingHandler {
         } else {
             RenderUtil.renderModel(stack, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, entity);
         }
-        if(ModelOverrides.hasModel(stack) && transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedGuiWeaponQuality.get())
+        if(ModelOverrides.hasModel(stack) && transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedQualityHotBar.get())
             matrixStack.pop();
     }
     /*private void renderColoredModel(LivingEntity entity, ItemCameraTransforms.TransformType transformType, IBakedModel model, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, float partialTicks)

@@ -3,24 +3,23 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:nuggets/iron"
+        "tag": "forge:ingots/iron"
       },
-      "count": 14
+      "count": 10
     },
     {
       "item": {
-        "tag": "forge:gunpowder"
+        "tag": "forge:glass_panes"
       },
-      "count": 3
+      "count": 4
     },
     {
       "item": {
-        "tag": "forge:gems/diamond"
+        "tag": "forge:storage_blocks/redstone"
       }
     }
   ],
   "result": {
-    "item": "tac:ae50",
-    "count": 8
+    "item": "tac:aimpoint_t1"
   }
 }

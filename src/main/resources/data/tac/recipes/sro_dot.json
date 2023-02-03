@@ -5,22 +5,22 @@
       "item": {
         "tag": "forge:ingots/iron"
       },
-      "count": 7
+      "count": 16
     },
     {
       "item": {
         "tag": "forge:glass_panes"
       },
-      "count": 4
+      "count": 12
     },
     {
       "item": {
         "tag": "forge:storage_blocks/redstone"
       },
-      "count": 1
+      "count": 2
     }
   ],
   "result": {
-    "item": "tac:micro_holo_sight"
+    "item": "tac:sro_dot"
   }
 }

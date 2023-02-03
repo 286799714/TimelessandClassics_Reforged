@@ -264,7 +264,7 @@ public class Config
      */
     public static class Quality
     {
-        public final ForgeConfigSpec.BooleanValue reducedGuiWeaponQuality;
+        public final ForgeConfigSpec.BooleanValue reducedQualityHotBar;
         //public final ForgeConfigSpec.BooleanValue reducedGuiScopeQuality;
         //public final ForgeConfigSpec.BooleanValue reducedGuiAmmunitionQuality;
         //public final ForgeConfigSpec.BooleanValue reducedEffects;
@@ -273,7 +273,7 @@ public class Config
         {
             builder.comment("Properties relating to improving graphical performance (Currently unsupported, do not attempt to change these settings until announcements are made about these features!)").push("quality");
             {
-                this.reducedGuiWeaponQuality = builder.comment("If enabled all main weapons will be unloaded and replaced with lower quality and legacy models, not all guns maybe replaced with this mode!").define("reducedGuiWeaponQuality", true);
+                this.reducedQualityHotBar = builder.comment("If enabled all main weapons will be unloaded and replaced with lower quality and legacy models, not all guns maybe replaced with this mode!").define("reducedQualityHotBar", true);
                 //this.reducedGuiScopeQuality = builder.comment("If enabled all main scopes will be unloaded and replaced with lower quality and legacy models, not all scopes maybe replaced with this mode!").define("reducedScopeQuality", false);
                 //this.reducedGuiAmmunitionQuality = builder.comment("If enabled all main ammunition will be unloaded and replaced with lower quality and legacy models, not all ammo types maybe replaced with this mode!").define("reducedAmmunitionQuality", false);
                 //this.reducedEffects = builder.comment("If enabled all main effects will be disabled such as muzzle flash / smoke and more!").define("reducedEffects", false);
