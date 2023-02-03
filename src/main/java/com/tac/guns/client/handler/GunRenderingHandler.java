@@ -11,8 +11,11 @@ import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.client.render.IHeldAnimation;
+import com.tac.guns.client.render.animation.M4AnimationController;
+import com.tac.guns.client.render.animation.MK47AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PistalAnimationController;
+import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
@@ -1165,17 +1168,22 @@ public class GunRenderingHandler {
     @SubscribeEvent
     public void onRenderEntityItem(RenderItemEvent.Entity.Pre event) {
         Minecraft mc = Minecraft.getInstance();
-        event.setCanceled(this.renderWeapon(mc.player, event.getItem(), event.getTransformType(), event.getMatrixStack(), event.getRenderTypeBuffer(), event.getLight(), event.getPartialTicks()));
+        if (!event.getTransformType().equals(ItemCameraTransforms.TransformType.GUI)) {
+            event.setCanceled(this.renderWeapon(mc.player, event.getItem(), event.getTransformType(), event.getMatrixStack(), event.getRenderTypeBuffer(), event.getLight(), event.getPartialTicks()));
+        }
     }
 
-    //TODO: Rebuild to support 2d rendering
     @SubscribeEvent
     public void onRenderEntityItem(RenderItemEvent.Gui.Pre event) {
-        if (!Config.CLIENT.quality.reducedGuiWeaponQuality.get())
+
+        //MK47AnimationController x = MK47AnimationController.getInstance();
+        //PlayerHandAnimation.render(x,event.getTransformType(),event.getMatrixStack(),event.getRenderTypeBuffer(),event.getLight());
+        if (!Config.CLIENT.quality.reducedGuiWeaponQuality.get()/* && event.getTransformType().equals(ItemCameraTransforms.TransformType.GUI)*/)
         {
             Minecraft mc = Minecraft.getInstance();
             event.setCanceled(this.renderWeapon(mc.player, event.getItem(), event.getTransformType(), event.getMatrixStack(), event.getRenderTypeBuffer(), event.getLight(), event.getPartialTicks()));
         }
+        // TODO: Enable some form of either player hand anim preloading, or on game load segment for the held gun, since it seems 90%+ cases don't miss loading hand animations
     }
 
     @SubscribeEvent
@@ -1244,11 +1252,21 @@ public class GunRenderingHandler {
         if (ModelOverrides.hasModel(stack)) {
             IOverrideModel model = ModelOverrides.getModel(stack);
             if (model != null) {
+
+                //TODO: Only when needed
+                if(ModelOverrides.hasModel(stack) && transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedGuiWeaponQuality.get()) {
+                    matrixStack.push();
+                    matrixStack.rotate(Vector3f.XP.rotationDegrees(25.0F));
+                    matrixStack.rotate(Vector3f.YP.rotationDegrees(-145.0F));
+                    matrixStack.scale(0.55f,0.55f,0.55f);
+                }
                 model.render(partialTicks, transformType, stack, ItemStack.EMPTY, entity, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
             }
         } else {
             RenderUtil.renderModel(stack, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, entity);
         }
+        if(ModelOverrides.hasModel(stack) && transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedGuiWeaponQuality.get())
+            matrixStack.pop();
     }
     /*private void renderColoredModel(LivingEntity entity, ItemCameraTransforms.TransformType transformType, IBakedModel model, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, float partialTicks)
     {
@@ -1291,12 +1309,18 @@ public class GunRenderingHandler {
                             matrixStack.scale((float) positioned.getScale(), (float) positioned.getScale(), (float) positioned.getScale());
 
                             IOverrideModel model = ModelOverrides.getModel(attachmentStack);
+                            /*if(transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedGuiWeaponQuality.get()) {
+                                matrixStack.push();
+                                matrixStack.rotate(Vector3f.XP.rotationDegrees(25.0F));
+                                matrixStack.rotate(Vector3f.YP.rotationDegrees(-145.0F));
+                            }*/
                             if (model != null) {
                                 model.render(partialTicks, transformType, attachmentStack, stack, entity, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
                             } else {
                                 RenderUtil.renderModel(attachmentStack, stack, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
                             }
-
+                            //if(transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedGuiWeaponQuality.get())
+                                //matrixStack.pop();
                             matrixStack.pop();
                         }
                     }

@@ -42,6 +42,7 @@ public enum AnimationHandler {
     INSTANCE;
 
     public static void preloadAnimations(){
+        //TODO: Make automatic or have some sort of check for this
         AA12AnimationController.getInstance();
         Dp28AnimationController.getInstance();
         Glock17AnimationController.getInstance();
@@ -68,7 +69,15 @@ public enum AnimationHandler {
         DBShotgunAnimationController.getInstance();
         FNFALAnimationController.getInstance();
         M16A4AnimationController.getInstance();
-        //SPR15AnimationController.getInstance();
+        SPR15AnimationController.getInstance();
+        Deagle50AnimationController.getInstance();
+        Type95LAnimationController.getInstance();
+        MAC10AnimationController.getInstance();
+        Vector45AnimationController.getInstance();
+        SKSTacticalAnimationController.getInstance();
+        M24AnimationController.getInstance();
+        //TODO: RPK redo due to static animation issue
+        RPKAnimationController.getInstance();
     }
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {
@@ -87,11 +96,11 @@ public enum AnimationHandler {
         AnimationMeta reloadEmptyMeta = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
         AnimationMeta reloadNormalMeta = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL);
         if (Gun.hasAmmo(itemStack)) {
-            if (!controller.getPreviousAnimation().equals(reloadNormalMeta))
+            if (controller.getPreviousAnimation() != null && !controller.getPreviousAnimation().equals(reloadNormalMeta))
                 controller.stopAnimation();
             controller.runAnimation(GunAnimationController.AnimationLabel.RELOAD_NORMAL);
         } else {
-            if (!controller.getPreviousAnimation().equals(reloadEmptyMeta))
+            if (controller.getPreviousAnimation() != null && !controller.getPreviousAnimation().equals(reloadEmptyMeta))
                 controller.stopAnimation();
 
             if(GunAnimationController.fromItem(itemStack.getItem()) instanceof PumpShotgunAnimationController)

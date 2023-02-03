@@ -1,7 +1,7 @@
 {
   "general": {
     "auto": true,
-    "rate": 450,
+    "rate": 400,
     "rateSelector": [
       0,
       2
