@@ -91,6 +91,7 @@ public class GunRenderingHandler {
     private final SecondOrderDynamics sprintDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
     private final SecondOrderDynamics bobbingDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 1);
     private final SecondOrderDynamics speedUpDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
+    private final SecondOrderDynamics delaySwayDynamics = new SecondOrderDynamics(0.45f,1f, 1.2f, 0);
     private final SecondOrderDynamics sprintDynamicsZ = new SecondOrderDynamics(0.22f,0.8f, 0.5f, 0);
     private final SecondOrderDynamics jumpingDynamics =  new SecondOrderDynamics(0.28f,1f, 0.65f, 0);
     // High Speed Sprint Dynamics
@@ -470,7 +471,6 @@ public class GunRenderingHandler {
         matrixStack.push();
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
 
-        //applyDelayedSwayTransforms(matrixStack, modifiedGun, entity, translateX, translateY, translateZ, event.getPartialTicks());
 
         if (modifiedGun.canAimDownSight())
         {
@@ -560,6 +560,7 @@ public class GunRenderingHandler {
             }
         }
 
+        applyDelayedSwayTransforms(matrixStack, entity, event.getPartialTicks());
         float equipProgress = this.getEquipProgress(event.getPartialTicks());
         matrixStack.rotate(Vector3f.XP.rotationDegrees(equipProgress * -50F));
 
@@ -597,38 +598,19 @@ public class GunRenderingHandler {
         this.renderWeapon(Minecraft.getInstance().player, heldItem, transformType, event.getMatrixStack(), event.getBuffers(), packedLight, event.getPartialTicks());
         matrixStack.pop();
     }
-
-    private float prevDelayedPitch;
-    private float prevDelayedYaw;
+    private final float maxRotationDegree = 4;
     private void applyDelayedSwayTransforms(MatrixStack stack, ClientPlayerEntity player, float partialTicks)
     {
         if(player != null)
         {
-            Matrix4f matrix = stack.getLast().getMatrix();
-
-            stack.translate(this.translateX, this.translateY, this.translateZ);
-            float oldPitch = player.prevRotationPitch;
-            float oldYaw = player.prevRotationYaw;
-            float pitch = player.rotationPitch;
-            float yaw = player.rotationYaw;
-            float interpolatedPitch = oldPitch + (pitch - oldPitch);
-            float interpolatedYaw = oldYaw + (yaw - oldYaw) /** partialTicks*/;
-
-            /*float bobPitch = MathHelper.rotLerp(partialTicks, player.prevRotationPitch, player.prevRotationPitch);
-            float headPitch = MathHelper.rotLerp(partialTicks, player.prevCameraYaw, player.prevCameraYaw);
-            float swayPitch = headPitch-bobPitch;
-            swayPitch *= 1.0 - 0.5 * AimingHandler.get().getNormalisedAdsProgress();*/
-            matrix.mul(SwayType.DIRECTIONAL.pitchRotation.rotationDegrees((interpolatedPitch-prevDelayedPitch)* partialTicks /** 0.8f*/));
-
-            /*float headPitch1 = MathHelper.rotLerp(partialTicks, player.prevRotationPitch, player.prevRotationPitch);
-            float swayYaw = headPitch1;
-            swayYaw *= 1.0 - 0.5 * AimingHandler.get().getNormalisedAdsProgress();*/
-            matrix.mul(SwayType.DIRECTIONAL.yawRotation.rotationDegrees((interpolatedYaw-prevDelayedYaw)* partialTicks /** 0.8f*/));
-
-            prevDelayedPitch = interpolatedPitch;
-            prevDelayedYaw = interpolatedYaw;
+            float f4 = MathHelper.lerp(partialTicks, player.prevRenderArmYaw, player.renderArmYaw);
+            float degree = delaySwayDynamics.update(0, (player.getYaw(partialTicks) - f4) * -0.1F);
+            if(Math.abs(degree) > maxRotationDegree) degree = degree / Math.abs(degree) * maxRotationDegree;
 
             stack.translate(-this.translateX, -this.translateY, -this.translateZ);
+            stack.rotate(Vector3f.YP.rotationDegrees(degree));
+            stack.rotate(Vector3f.ZP.rotationDegrees(degree*1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
+            stack.translate(this.translateX, this.translateY, this.translateZ);
         }
     }
 
