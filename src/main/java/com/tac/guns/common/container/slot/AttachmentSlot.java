@@ -23,6 +23,7 @@ public class AttachmentSlot extends Slot
     private ItemStack weapon;
     private IAttachment.Type type;
     private PlayerEntity player;
+    private IAttachment.Type[] types;
 
     public AttachmentSlot(AttachmentContainer container, IInventory weaponInventory, ItemStack weapon, IAttachment.Type type, PlayerEntity player, int index, int x, int y)
     {
@@ -30,6 +31,15 @@ public class AttachmentSlot extends Slot
         this.container = container;
         this.weapon = weapon;
         this.type = type;
+        this.player = player;
+    }
+
+    public AttachmentSlot(AttachmentContainer container, IInventory weaponInventory, ItemStack weapon, IAttachment.Type[] types, PlayerEntity player, int index, int x, int y)
+    {
+        super(weaponInventory, index, x, y);
+        this.container = container;
+        this.weapon = weapon;
+        this.types = types;
         this.player = player;
     }
 
@@ -48,7 +58,16 @@ public class AttachmentSlot extends Slot
         {
             GunItem item = (GunItem) this.weapon.getItem();
             Gun modifiedGun = item.getModifiedGun(this.weapon);
-            return modifiedGun.canAttachType(this.type);
+            if(modifiedGun.canAttachType(this.type))
+                return true;
+            else if(types != null)
+            {
+                for (IAttachment.Type x : types) {
+                    if(modifiedGun.canAttachType(x))
+                        return true;
+                }
+            }
+            return false;
         }
         /*GunItem item = (GunItem) this.weapon.getItem();
         Gun modifiedGun = item.getModifiedGun(this.weapon);
@@ -70,7 +89,15 @@ public class AttachmentSlot extends Slot
         {
             GunItem item = (GunItem) this.weapon.getItem();
             Gun modifiedGun = item.getModifiedGun(this.weapon);
-            return stack.getItem() instanceof IAttachment && ((IAttachment) stack.getItem()).getType() == this.type && modifiedGun.canAttachType(this.type);
+            if (((IAttachment) stack.getItem()).getType() == this.type && modifiedGun.canAttachType(this.type))
+                return true;
+            else if (types != null) {
+                for (IAttachment.Type x : types) {
+                    if (((IAttachment) stack.getItem()).getType() == x)
+                        return true;
+                }
+            }
+            return false;//stack.getItem() instanceof IAttachment && ((IAttachment) stack.getItem()).getType() == this.type && modifiedGun.canAttachType(this.type);
         }
     }
 

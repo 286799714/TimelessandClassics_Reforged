@@ -25,11 +25,10 @@ import com.tac.guns.common.tooling.CommandsHandler;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
 import com.tac.guns.init.ModSyncedDataKeys;
-import com.tac.guns.item.GrenadeItem;
-import com.tac.guns.item.GunItem;
-import com.tac.guns.item.ScopeItem;
+import com.tac.guns.item.*;
 import com.tac.guns.item.TransitionalTypes.ITimelessAnimated;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.item.TransitionalTypes.TimelessPistolGunItem;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.item.attachment.IBarrel;
 import com.tac.guns.item.attachment.impl.Barrel;
@@ -69,6 +68,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.LightType;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
@@ -515,6 +515,7 @@ public class GunRenderingHandler {
                     double viewFinderOffset = isScopeOffsetType || isScopeRenderType ? scope.getViewFinderOffsetSpecial() : scope.getViewFinderOffset(); // switches between either, but either must be populated
                     if (OptifineHelper.isShadersEnabled()) viewFinderOffset *= 0.735;
                     Gun.ScaledPositioned scaledPos = modifiedGun.getModules().getAttachments().getPistolScope();
+
                     xOffset = -translateX +  (modifiedGun.getModules().getZoom().getXOffset() * 0.0625) + -scaledPos.getXOffset() * 0.0625 * scaleX;
                     yOffset = -translateY + (8 - scaledPos.getYOffset()) * 0.0625 * scaleY - scope.getCenterOffset() * scaleY * 0.0625 * scaledPos.getScale();
                     zOffset = Config.CLIENT.display.sight1xRealisticPosition.get() && scope.getAdditionalZoom().getFovZoom() == 0 ? -translateZ + modifiedGun.getModules().getZoom().getZOffset() * 0.0625 * scaleZ :
@@ -773,7 +774,7 @@ public class GunRenderingHandler {
     {
         Minecraft mc = Minecraft.getInstance();
         double recoilNormal = RecoilHandler.get().getGunRecoilNormal();
-        if (Gun.hasAttachmentEquipped(item, gun, IAttachment.Type.SCOPE)) {
+        if (Gun.hasAttachmentEquipped(item, gun, IAttachment.Type.SCOPE) || Gun.hasAttachmentEquipped(item, gun, IAttachment.Type.PISTOL_SCOPE) || Gun.hasAttachmentEquipped(item, gun, IAttachment.Type.OLD_SCOPE)) {
             recoilNormal -= recoilNormal * (0.25 * AimingHandler.get().getNormalisedAdsProgress());
         }
         this.kickReduction = 1.0F - GunModifierHelper.getKickReduction(item);
@@ -1216,13 +1217,11 @@ public class GunRenderingHandler {
     }
 
     public boolean renderScope(LivingEntity entity, ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, float partialTicks) {
-        if (stack.getItem() instanceof ScopeItem) {
+        if (stack.getItem() instanceof ScopeItem || stack.getItem() instanceof PistolScopeItem || stack.getItem() instanceof OldScopeItem) {
             matrixStack.push();
 
             ItemStack model = ItemStack.EMPTY;
-
             RenderUtil.applyTransformType(model.isEmpty() ? stack : model, matrixStack, transformType, entity);
-
             this.renderGun(entity, transformType, model.isEmpty() ? stack : model, matrixStack, renderTypeBuffer, light, partialTicks);//matrixStack, renderTypeBuffer, light, partialTicks);
             matrixStack.pop();
             return true;
@@ -1291,14 +1290,15 @@ public class GunRenderingHandler {
                         if (positioned != null) {
                             matrixStack.push();
                             GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
-                            if(controller!=null){
-                                if(type!=null && type.equals(IAttachment.Type.PISTOL_SCOPE)){
-                                    if(controller instanceof PistalAnimationController) {
+                            if (controller != null) {
+                                if (type != null) {
+                                    if (controller instanceof PistalAnimationController) {
                                         //Minecraft.getInstance().player.sendChatMessage("test");
                                         PistalAnimationController pcontroller = (PistalAnimationController) controller;
-                                        controller.applyTransform(stack,pcontroller.getSlideNodeIndex(),transformType,entity,matrixStack);
-                                    }
-                                }else
+                                        controller.applyTransform(stack, pcontroller.getSlideNodeIndex(), transformType, entity, matrixStack);
+                                    } else
+                                        controller.applyAttachmentsTransform(stack, transformType, entity, matrixStack);
+                                } else
                                     controller.applyAttachmentsTransform(stack, transformType, entity, matrixStack);
                             }
                             double displayX = positioned.getXOffset() * 0.0625;
@@ -1309,18 +1309,11 @@ public class GunRenderingHandler {
                             matrixStack.scale((float) positioned.getScale(), (float) positioned.getScale(), (float) positioned.getScale());
 
                             IOverrideModel model = ModelOverrides.getModel(attachmentStack);
-                            /*if(transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedGuiWeaponQuality.get()) {
-                                matrixStack.push();
-                                matrixStack.rotate(Vector3f.XP.rotationDegrees(25.0F));
-                                matrixStack.rotate(Vector3f.YP.rotationDegrees(-145.0F));
-                            }*/
                             if (model != null) {
                                 model.render(partialTicks, transformType, attachmentStack, stack, entity, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
                             } else {
                                 RenderUtil.renderModel(attachmentStack, stack, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
                             }
-                            //if(transformType.equals(ItemCameraTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedGuiWeaponQuality.get())
-                                //matrixStack.pop();
                             matrixStack.pop();
                         }
                     }

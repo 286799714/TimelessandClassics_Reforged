@@ -8,6 +8,7 @@ import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessOldRifleGunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessPistolGunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.item.attachment.IScope;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -70,11 +71,15 @@ public class AttachmentContainer extends Container
         }
         else if (stack.getItem() instanceof TimelessGunItem)
         {
-            for (int i = 0; i < attachments.length-6; i++)
+            for (int i = 0; i < IAttachment.Type.values().length-6; i++)
             {
-                /*if(i == 0)
-                    attachments[i] = Gun.getAttachment(IAttachment.Type.SCOPE, stack);*/
-                attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
+                //if(i==0) {
+                if(Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack) != ItemStack.EMPTY)
+                    attachments[i] = Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack);
+                else
+                    attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
+                //}
+                //attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
             }
         }
         return attachments;
@@ -122,21 +127,17 @@ public class AttachmentContainer extends Container
             }
             for (int i = 0; i < attachments.length-6; i++)
             {
-                /*if (i==0)
-                {
-                    this.weaponInventory.setInventorySlotContents(0, attachments[0]);
-                }
-                else*/
-                    this.weaponInventory.setInventorySlotContents(i, attachments[i]);
+                this.weaponInventory.setInventorySlotContents(i, attachments[i]);
             }
         }
         else if (this.weapon.getItem() instanceof TimelessGunItem)
         {
             for (int i = 0; i < attachments.length-6; i++)
             {
-                /*if(i == 0)
-                    attachments[i] = Gun.getAttachment(IAttachment.Type.SCOPE, stack);*/
-                attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
+                if(Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack) != ItemStack.EMPTY && i == 0)
+                    attachments[i] = Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack);
+                else
+                    attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
             }
             for (int i = 0; i < attachments.length-6; i++) {
                 this.weaponInventory.setInventorySlotContents(i, attachments[i]);
@@ -199,7 +200,10 @@ public class AttachmentContainer extends Container
         {
             for (int i = 0; i < IAttachment.Type.values().length-6; i++)
             {
-                this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.values()[i], playerInventory.player, i, 5, 17 + i * 18));
+                if(i==0 && ((TimelessGunItem)this.weapon.getItem()).getGun().canAttachType(IAttachment.Type.PISTOL_SCOPE))
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, new IAttachment.Type[]{IAttachment.Type.values()[i], IAttachment.Type.PISTOL_SCOPE}, playerInventory.player, 0, 5, 17 + 0 * 18));
+                else
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.values()[i], playerInventory.player, i, 5, 17 + i * 18));
             }
         }
 
@@ -310,13 +314,17 @@ public class AttachmentContainer extends Container
         }
         else if(this.weapon.getItem() instanceof TimelessGunItem)// && !(this.weapon.getItem() instanceof TimelessOldRifleGunItem))
         {
-            for (int i = 0; i < 5; i++)
-            {
-                ItemStack attachment = this.getSlot(i).getStack();
-
-                if (attachment.getItem() instanceof IAttachment)
-                {
-                    attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
+            for (int i = 0; i < IAttachment.Type.values().length-6; i++) {
+                /*if (i == 0) {
+                    ItemStack attachment = this.getSlot(i).getStack();
+                    if (attachment.getItem() instanceof PistolScopeItem) {
+                        attachments.put(((ScopeItem) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
+                        attachments.put(((PistolScopeItem) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
+                    }
+                } else */{
+                    ItemStack attachment = this.getSlot(i).getStack();
+                    if (attachment.getItem() instanceof IAttachment)
+                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
                 }
             }
         }

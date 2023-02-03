@@ -2066,41 +2066,38 @@ public final class Gun implements INBTSerializable<CompoundNBT>
     public static Scope getScope(ItemStack gun)
     {
         CompoundNBT compound = gun.getTag();
+        Scope scope = null;
         if(compound != null && compound.contains("Attachments", Constants.NBT.TAG_COMPOUND))
         {
             CompoundNBT attachment = compound.getCompound("Attachments");
             if(attachment.contains("Scope", Constants.NBT.TAG_COMPOUND))
             {
                 ItemStack scopeStack = ItemStack.read(attachment.getCompound("Scope"));
-                Scope scope = null;
                 if(scopeStack.getItem() instanceof IScope)
                 {
                     scope = ((IScope) scopeStack.getItem()).getProperties();
                 }
-                return scope;
+
             }
             else if(attachment.contains("OldScope", Constants.NBT.TAG_COMPOUND))
             {
                 ItemStack OldScopeStack = ItemStack.read(attachment.getCompound("OldScope"));
-                Scope scope = null;
                 if(OldScopeStack.getItem() instanceof IScope)
                 {
                     scope = ((IScope) OldScopeStack.getItem()).getProperties();
                 }
-                return scope;
-            }
+           }
             else if(attachment.contains("PistolScope", Constants.NBT.TAG_COMPOUND))
             {
                 ItemStack OldScopeStack = ItemStack.read(attachment.getCompound("PistolScope"));
-                Scope scope = null;
                 if(OldScopeStack.getItem() instanceof IScope)
                 {
                     scope = ((IScope) OldScopeStack.getItem()).getProperties();
                 }
-                return scope;
             }
         }
-        return null;
+        return scope;
+        //return null;
     }
 
     public static ItemStack getAttachment(IAttachment.Type type, ItemStack gun)
