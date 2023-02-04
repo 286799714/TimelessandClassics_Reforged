@@ -83,7 +83,7 @@ public class CoyoteSightModel implements IOverrideModel
                 Matrix3f normal = matrixStack.getLast().getNormal();
 
                 float size = 1.4F / 16.0F;
-                matrixStack.translate(((-size / 2) -0.0035 + scopeData.getReticleXMod()), (0.85 -0.164 + scopeData.getReticleYMod()) * 0.0625, (0.075+ 0.5895 + scopeData.getReticleZMod()) * 0.0625);
+                matrixStack.translate(((-size / 2) -0.0035 + scopeData.getReticleXMod()), (0.85 -0.164 + scopeData.getReticleYMod()) * 0.0625, (0.395+ 0.5995 + scopeData.getReticleZMod()) * 0.0625);
 
                 IVertexBuilder builder;
 
@@ -111,6 +111,8 @@ public class CoyoteSightModel implements IOverrideModel
                 /* The new controlled bobbing */
                 if(AimingHandler.get().isAiming())
                     aimed = true;
+
+                GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -1f);
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.25f);
                 GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.5f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.8f);

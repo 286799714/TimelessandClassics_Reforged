@@ -131,7 +131,7 @@ public class ACOG_4x_ScopeModel implements IOverrideModel
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true);
                 matrixStack.scale(7.5f,7.5f,7.5f);
                 matrixStack.translate(0, 0, 0.001);
-                matrixStack.translate(-0.00335715-0.00022-0.0008825 + scopeData.getReticleXMod(), -0.0035055-0.0006325 + scopeData.getReticleYMod(), 0.0000 + scopeData.getReticleZMod());
+                matrixStack.translate(-0.00335715-0.00022-0.0008825 + scopeData.getReticleXMod(), -0.0035055-0.0006325 + scopeData.getReticleYMod(), 0.0007 + scopeData.getReticleZMod());
 
 
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
@@ -141,6 +141,7 @@ public class ACOG_4x_ScopeModel implements IOverrideModel
                 if(AimingHandler.get().isAiming())
                     aimed = true;
 
+                GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -0.045f);
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 0.085f);
                 GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -0.11f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.11f);

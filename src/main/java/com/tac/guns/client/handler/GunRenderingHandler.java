@@ -88,7 +88,7 @@ public class GunRenderingHandler {
     private final SecondOrderDynamics sprintDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
     private final SecondOrderDynamics bobbingDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 1);
     private final SecondOrderDynamics speedUpDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
-    private final SecondOrderDynamics delaySwayDynamics = new SecondOrderDynamics(0.45f,1f, 1.2f, 0);
+    private final SecondOrderDynamics delaySwayDynamics = new SecondOrderDynamics(0.75f,1f, 1.4f, 0);
     private final SecondOrderDynamics sprintDynamicsZ = new SecondOrderDynamics(0.22f,0.8f, 0.5f, 0);
     private final SecondOrderDynamics jumpingDynamics =  new SecondOrderDynamics(0.28f,1f, 0.65f, 0);
     // High Speed Sprint Dynamics
@@ -600,7 +600,7 @@ public class GunRenderingHandler {
         this.renderWeapon(Minecraft.getInstance().player, heldItem, transformType, event.getMatrixStack(), event.getBuffers(), packedLight, event.getPartialTicks());
         matrixStack.pop();
     }
-    private final float maxRotationDegree = 4;
+    private final float maxRotationDegree = 4.5f;
     private void applyDelayedSwayTransforms(MatrixStack stack, ClientPlayerEntity player, float partialTicks)
     {
         if(player != null)
@@ -608,6 +608,24 @@ public class GunRenderingHandler {
             float f4 = MathHelper.lerp(partialTicks, player.prevRenderArmYaw, player.renderArmYaw);
             float degree = delaySwayDynamics.update(0, (player.getYaw(partialTicks) - f4) * -0.1F);
             if(Math.abs(degree) > maxRotationDegree) degree = degree / Math.abs(degree) * maxRotationDegree;
+
+            stack.translate(-this.translateX, -this.translateY, -this.translateZ);
+            stack.rotate(Vector3f.YP.rotationDegrees(degree));
+            stack.rotate(Vector3f.ZP.rotationDegrees(degree*1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
+            stack.translate(this.translateX, this.translateY, this.translateZ);
+        }
+    }
+
+    public void applyDelayedSwayTransforms(MatrixStack stack, ClientPlayerEntity player, float partialTicks, float percentage)
+    {
+        if(player != null)
+        {
+            float f4 = MathHelper.lerp(partialTicks, player.prevRenderArmYaw, player.renderArmYaw);
+            float degree = delaySwayDynamics.update(0, (player.getYaw(partialTicks) - f4) * -0.1F);
+            if(Math.abs(degree) > maxRotationDegree)
+                degree = degree / Math.abs(degree) * maxRotationDegree;
+
+            degree *= percentage;
 
             stack.translate(-this.translateX, -this.translateY, -this.translateZ);
             stack.rotate(Vector3f.YP.rotationDegrees(degree));

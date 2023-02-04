@@ -141,7 +141,7 @@ public class elcan_14x_ScopeModel implements IOverrideModel
 
                 matrixStack.scale(7.5f,7.5f,7.5f);
                 matrixStack.translate(0,0, 0.001);
-                matrixStack.translate((-0.00335715-0.0033) + scopeData.getReticleXMod(), (-0.0035055-0.0046) + scopeData.getReticleYMod(), 0.0000 + scopeData.getReticleZMod());
+                matrixStack.translate((-0.00335715-0.0033) + scopeData.getReticleXMod(), (-0.0035055-0.0046) + scopeData.getReticleYMod(), 0.0003 + scopeData.getReticleZMod());
 
 
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
@@ -152,6 +152,7 @@ public class elcan_14x_ScopeModel implements IOverrideModel
                     aimed = true;
                 alpha = (float) (1F * AimingHandler.get().getNormalisedAdsProgress());
 
+                GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -0.0525f);
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 0.085f);
                 GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -0.11f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.0625f);

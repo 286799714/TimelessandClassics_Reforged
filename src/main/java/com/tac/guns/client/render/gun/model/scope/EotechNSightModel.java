@@ -75,7 +75,7 @@ public class EotechNSightModel implements IOverrideModel
                 Matrix3f normal = matrixStack.getLast().getNormal();
 
                 float size = 1.4F / 16.0F;
-                matrixStack.translate(((-size / 2) -0.001485 + scopeData.getReticleXMod()), (0.975 + 0.03575125 + 0.3995025 + scopeData.getReticleYMod()) * 0.0625, (0.075 + scopeData.getReticleZMod()) * 0.0625);
+                matrixStack.translate(((-size / 2) -0.001485 + scopeData.getReticleXMod()), (0.975 + 0.03575125 + 0.3995025 + scopeData.getReticleYMod()) * 0.0625, (0.3+0.0875 + scopeData.getReticleZMod()) * 0.0625);
 
                 IVertexBuilder builder;
 
@@ -104,6 +104,7 @@ public class EotechNSightModel implements IOverrideModel
                     aimed = true;
                 double invertZoomProgress = aimed ? 0.0575 : 0.468;//double invertZoomProgress = aimed ? 0.135 : 0.94;//aimed ? 1.0 - AimingHandler.get().getNormalisedAdsProgress() : ;
 
+                GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -1f);
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.0f);
                 GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.5f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.8f);

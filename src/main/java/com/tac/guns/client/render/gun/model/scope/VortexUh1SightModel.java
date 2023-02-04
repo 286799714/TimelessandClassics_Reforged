@@ -80,7 +80,7 @@ public class VortexUh1SightModel implements IOverrideModel
                 Matrix3f normal = matrixStack.getLast().getNormal();
 
                 float size = 1.4F / 16.0F;
-                matrixStack.translate(((-size / 2) -0.001235 + scopeData.getReticleXMod()), (1.5665 + 0.01775 + 0.20273875 + scopeData.getReticleYMod()) * 0.0625, (0.075 + scopeData.getReticleZMod()) * 0.0625);  //0.3
+                matrixStack.translate(((-size / 2) -0.001235 + scopeData.getReticleXMod()), (1.5665 + 0.01775 + 0.20273875 + scopeData.getReticleYMod()) * 0.0625, (0.3+0.0875 + scopeData.getReticleZMod()) * 0.0625);  //0.3
 
                 IVertexBuilder builder;
 
@@ -109,6 +109,8 @@ public class VortexUh1SightModel implements IOverrideModel
                     aimed = true;
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true);
                 double invertZoomProgress = aimed ? 0.0575 : 0.468;//double invertZoomProgress = aimed ? 0.135 : 0.94;//aimed ? 1.0 - AimingHandler.get().getNormalisedAdsProgress() : ;
+
+                GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -1f);
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 0.8f);
                 GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.25f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.8f);

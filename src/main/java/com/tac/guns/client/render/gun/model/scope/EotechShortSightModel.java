@@ -90,7 +90,8 @@ public class EotechShortSightModel implements IOverrideModel
 
                 //matrixStack.translate(0, 0, -0.2);
                 float size = 1.4F / 16.0F;
-                matrixStack.translate(((-size / 2) -0.002015 + scopeData.getReticleXMod()), (1.38 + 0.03308125 + scopeData.getReticleYMod()+0.47275) * 0.0625, (0.075 + scopeData.getReticleZMod() + (!Config.CLIENT.display.redDotSquishUpdate.get() ? 1.2625 : 0)) * 0.0625);
+                matrixStack.translate(((-size / 2) -0.002015 + scopeData.getReticleXMod()), (1.38 + 0.03308125 + scopeData.getReticleYMod()+0.47275) * 0.0625, (0.3+0.0875 + scopeData.getReticleZMod() + (!Config.CLIENT.display.redDotSquishUpdate.get() ?
+                        1.2625 : 0)) * 0.0625);
                 IVertexBuilder builder;
                 matrixStack.translate(-0.04 * invertProgress, 0.01 * invertProgress, 0);
 
@@ -110,6 +111,7 @@ public class EotechShortSightModel implements IOverrideModel
 
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
 
+                GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -1f);
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.0f);
                 GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.5f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.8f);

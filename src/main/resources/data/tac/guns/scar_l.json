@@ -73,6 +73,13 @@
         "zOffset": 6.715,
         "scale": 1.0
       },
+      "pistolScope": {
+        "yOffset": 10.89,
+        "zOffset": 5.35,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      },
       "underBarrel": {
         "yOffset": 7.799,
         "zOffset": -2.35,

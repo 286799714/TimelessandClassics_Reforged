@@ -77,7 +77,7 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-        if(!(this.weapon.getItem() instanceof GunItem) && !(this.weapon.getItem() instanceof ScopeItem))
+        if(!(this.weapon.getItem() instanceof GunItem) && !(this.weapon.getItem() instanceof ScopeItem) || stack.getItem() instanceof GunItem)
         {
             return false;
         }
