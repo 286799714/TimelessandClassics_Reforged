@@ -133,6 +133,7 @@ public class AimpointT1SightModel implements IOverrideModel
                     {
                         green = 0;
                         blue = 0;
+                        red = 1;
                     }
                     float opac = Math.max(Math.min(HUDRenderingHandler.get().hitMarkerTracker / HUDRenderingHandler.hitMarkerRatio, 100f), 0.25f);
                     opac *= (float) AimingHandler.get().getNormalisedAdsProgress();

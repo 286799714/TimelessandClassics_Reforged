@@ -29,7 +29,6 @@ import org.lwjgl.opengl.GL;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.minecraft.entity.ai.attributes.Attributes.MOVEMENT_SPEED;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -179,7 +178,7 @@ public class BulletTrailRenderingHandler
         Entity shooter = bulletTrail.getShooter();
         if(shooter != null)
         {
-            trailLength = (float) Math.min(trailLength+0.55f, shooter.getEyePosition(partialTicks).distanceTo(new Vector3d(bulletX,bulletY, bulletZ)));
+            trailLength = (float) Math.min(trailLength+1.15f, shooter.getEyePosition(partialTicks).distanceTo(new Vector3d(bulletX,bulletY, bulletZ))/1.105f);
         }
 
         Matrix4f matrix4f = matrixStack.getLast().getMatrix();
@@ -204,7 +203,7 @@ public class BulletTrailRenderingHandler
             builder.pos(matrix4f, -0.6F, 0, 0).color(red, green, blue, alpha).lightmap(15728880).endVertex();
             builder.pos(matrix4f, 0, 0, -0.6F).color(red, green, blue, alpha).lightmap(15728880).endVertex();
 
-            matrixStack.scale(1.5F, 1.5F, 2.5F);
+            matrixStack.scale(1.5F, 1.5F, 1.85F);
             if(!AimingHandler.get().isAiming()) {
 
                 matrixStack.translate(GunRenderingHandler.get().sizeZ / 16.5f, -GunRenderingHandler.get().sizeZ / 2, 0);

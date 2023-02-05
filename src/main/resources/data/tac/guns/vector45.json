@@ -39,10 +39,8 @@
     "item": "tac:round45",
     "visible": false,
     "damage": 7.0,
-    "size": 0.225,
     "speed": 11.5,
-    "life": 19,
-    "trailLengthMultiplier": 4.05
+    "life": 19
   },
   "sounds": {
     "fire": "tac:item.vector_fire",
@@ -57,7 +55,8 @@
     "flash": {
       "yOffset": 11.35,
       "zOffset": -11.0,
-      "size": 1.10
+      "size": 1.10,
+      "trailAdjust": 0.6925
     }
   },
   "modules": {

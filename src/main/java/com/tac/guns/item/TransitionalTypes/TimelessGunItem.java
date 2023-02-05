@@ -7,6 +7,7 @@ import com.tac.guns.common.Gun;
 import com.tac.guns.common.network.ServerPlayHandler;
 import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.item.GunItem;
+import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.Process;
@@ -103,12 +104,13 @@ public class TimelessGunItem extends GunItem {
             else
                 tooltip.add((new TranslationTextComponent("info.tac.heavyWeightGun", new TranslationTextComponent(-((int) ((0.1 - speed) * 1000)) + "%").mergeStyle(TextFormatting.RED)).mergeStyle(TextFormatting.DARK_RED)));
 
-            float percentageToNextLevel =
-                    ( tagCompound.getFloat("levelDmg") * 100) / (modifiedGun.getGeneral().getLevelReq()*(((tagCompound.getInt("level"))*3.0f)));
-            tooltip.add((new TranslationTextComponent("info.tac.current_level").append(new TranslationTextComponent( " " + tagCompound.getInt("level") + " : " + percentageToNextLevel+"%")))
+            float percentageToNextLevel = ( tagCompound.getFloat("levelDmg") * 100) / (modifiedGun.getGeneral().getLevelReq()*(((tagCompound.getInt("level"))*3.0f)));
+            tooltip.add((new TranslationTextComponent("info.tac.current_level").append(new TranslationTextComponent( " " + tagCompound.getInt("level") + " : " + String.format("%.2f", percentageToNextLevel)+"%")))
                     .mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.BOLD));
         }
         tooltip.add((new TranslationTextComponent("info.tac.attachment_help", (new KeybindTextComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH))).mergeStyle(TextFormatting.YELLOW));
+        if(gun.getGun().canAttachType(IAttachment.Type.PISTOL_SCOPE))
+            tooltip.add((new TranslationTextComponent("info.tac.pistolScope", new TranslationTextComponent("MiniScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
     }
 
     public IGunModifier[] getModifiers() {

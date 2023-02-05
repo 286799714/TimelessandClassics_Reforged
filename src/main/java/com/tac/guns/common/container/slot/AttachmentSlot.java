@@ -89,9 +89,9 @@ public class AttachmentSlot extends Slot
         {
             GunItem item = (GunItem) this.weapon.getItem();
             Gun modifiedGun = item.getModifiedGun(this.weapon);
-            if (((IAttachment) stack.getItem()).getType() == this.type && modifiedGun.canAttachType(this.type))
+            if (stack.getItem() instanceof IAttachment && ((IAttachment) stack.getItem()).getType() == this.type && modifiedGun.canAttachType(this.type))
                 return true;
-            else if (types != null) {
+            else if (types != null && stack.getItem() instanceof IAttachment) {
                 for (IAttachment.Type x : types) {
                     if (((IAttachment) stack.getItem()).getType() == x)
                         return true;

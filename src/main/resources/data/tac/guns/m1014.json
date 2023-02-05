@@ -6,8 +6,8 @@
       1
     ],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 7.175,
-    "horizontalRecoilAngle": 0.775,
+    "recoilAngle": 6.175,
+    "horizontalRecoilAngle": 2.775,
     "recoilKick": 3.0,
     "recoilAdsReduction": 0.175,
     "cameraRecoilModifier": 2.175,
@@ -28,7 +28,7 @@
     "maxAmmo": 7,
     "reloadAmount": 1,
     "preReloadPauseTicks": 0,
-    "interReloadPauseTicks": 20,
+    "interReloadPauseTicks": 15,
     "openBolt": false
   },
   "projectile": {
