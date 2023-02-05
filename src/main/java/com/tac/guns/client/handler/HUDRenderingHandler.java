@@ -205,12 +205,9 @@ public class HUDRenderingHandler extends AbstractGui {
 
     private static ResourceLocation fleshHitMarker = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_128x.png");
     private static ResourceLocation fleshHitMarkerADS = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_ads_128x.png");
-    public int hitMarkerTracker = 0;
     public boolean hitMarkerHeadshot = false;
-
-    public static final float hitMarkerRatio = 12.5f;
-
-
+    public static final float hitMarkerRatio = 16.5f;
+    public float hitMarkerTracker = 0;
     @SubscribeEvent
     public void onOverlayRender(RenderGameOverlayEvent.Post event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) {
@@ -241,16 +238,9 @@ public class HUDRenderingHandler extends AbstractGui {
         int width = event.getWindow().getWidth();
         int height = event.getWindow().getHeight();
 
-
+        // TODO: turn hitMarkerTracker into a float/frame time variable
         if(this.hitMarkerTracker > 0 && ((AimingHandler.get().isAiming() && Gun.getScope(heldItem) == null) || !AimingHandler.get().isAiming()))//Hit Markers
         {
-            ObjectRenderEditor.RENDER_Element data = new ObjectRenderEditor.RENDER_Element(0,0,0,0);
-            if(GuiEditor.get() != null)
-            {
-                if(ObjectRenderEditor.get().currElement == 1 && ObjectRenderEditor.get().GetFromElements(ObjectRenderEditor.get().currElement) != null)
-                    data = ObjectRenderEditor.get().GetFromElements(ObjectRenderEditor.get().currElement);
-            }
-
             RenderSystem.enableAlphaTest();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             stack.push();
@@ -279,9 +269,8 @@ public class HUDRenderingHandler extends AbstractGui {
             buffer.finishDrawing();
             WorldVertexBufferUploader.draw(buffer);
             stack.pop();
-
-            this.hitMarkerTracker--;
         }
+        //this.hitMarkerTracker--;
 
         // All code for rendering night vision, still only a test
         if(false) {

@@ -39,7 +39,9 @@ public class BulletTrail
 
     private float shooterPitch;
 
-    public BulletTrail(int entityId, Vector3d position, Vector3d motion, float shooterYaw, float shooterPitch, ItemStack item, int trailColor, double trailMultiplier, int maxAge, double gravity, int shooterId)
+    private float size;
+
+    public BulletTrail(int entityId, Vector3d position, Vector3d motion, float shooterYaw, float shooterPitch, ItemStack item, int trailColor, double trailMultiplier, int maxAge, double gravity, int shooterId, float size)
     {
         this.entityId = entityId;
         this.position = position;
@@ -53,6 +55,7 @@ public class BulletTrail
         this.updateYawPitch();
         this.shooterYaw = shooterYaw;
         this.shooterPitch = shooterPitch;
+        this.size = size;
     }
 
     private void updateYawPitch()
@@ -140,6 +143,7 @@ public class BulletTrail
     public float getShooterYaw() { return shooterYaw; }
 
     public float getShooterPitch() { return shooterPitch; }
+    public float getSize() { return size; }
 
     /**
      * Gets the instance of the entity that shot the bullet. The entity is cached to avoid searching

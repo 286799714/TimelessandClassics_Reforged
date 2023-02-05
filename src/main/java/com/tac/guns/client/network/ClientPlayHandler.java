@@ -124,7 +124,7 @@ public class ClientPlayHandler
             int shooterId = message.getShooterId();
             for(int i = 0; i < message.getCount(); i++)
             {
-                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i], shooterYaws[i], shooterPitch[i], item, trailColor, trailLengthMultiplier, life, gravity, shooterId));
+                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i], shooterYaws[i], shooterPitch[i], item, trailColor, trailLengthMultiplier, life, gravity, shooterId, message.getSize()));
             }
         }
     }

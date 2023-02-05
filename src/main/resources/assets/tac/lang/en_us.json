@@ -230,7 +230,7 @@
     "info.tac.ammo_type": "Ammo Type: %s",
 
     "info.tac.oldRifleScope": "Scope slot only accepts %s",
-    "info.tac.pistolScope": "Scope slot only accepts %s",
+    "info.tac.pistolScope": "Scope slot supports %s",
     "info.tac.pistolBarrel": "Barrel slot only accepts %s",
 
     "info.tac.oldScope_type": "OldScope",

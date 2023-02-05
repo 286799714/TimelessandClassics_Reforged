@@ -39,8 +39,10 @@
     "item": "tac:round45",
     "visible": false,
     "damage": 7.0,
-    "speed": 11.5,
-    "life": 19
+    "speed": 14.5,
+    "life": 19,
+    "size": 0.035,
+    "trailLengthMultiplier": 3.25
   },
   "sounds": {
     "fire": "tac:item.vector_fire",

@@ -26,10 +26,11 @@ public class MessageBulletTrail implements IMessage
     private int life;
     private double gravity;
     private int shooterId;
+    private float size;
 
     public MessageBulletTrail() {}
 
-    public MessageBulletTrail(ProjectileEntity[] spawnedProjectiles, Gun.Projectile projectileProps, int shooterId)
+    public MessageBulletTrail(ProjectileEntity[] spawnedProjectiles, Gun.Projectile projectileProps, int shooterId, float size)
     {
         this.positions = new Vector3d[spawnedProjectiles.length];
         this.motions = new Vector3d[spawnedProjectiles.length];
@@ -51,6 +52,7 @@ public class MessageBulletTrail implements IMessage
         this.life = projectileProps.getLife();
         this.gravity = spawnedProjectiles[0].getModifiedGravity(); //It's possible that projectiles have different gravity
         this.shooterId = shooterId;
+        this.size = size;
     }
 
     @Override
@@ -80,6 +82,7 @@ public class MessageBulletTrail implements IMessage
         buffer.writeInt(this.life);
         buffer.writeDouble(this.gravity);
         buffer.writeInt(this.shooterId);
+        buffer.writeFloat(this.size);
     }
 
     @Override
@@ -105,6 +108,7 @@ public class MessageBulletTrail implements IMessage
         this.life = buffer.readInt();
         this.gravity = buffer.readDouble();
         this.shooterId = buffer.readInt();
+        this.size = buffer.readFloat();
     }
 
     @Override
@@ -167,4 +171,5 @@ public class MessageBulletTrail implements IMessage
     public float[] getShooterYaws() { return shooterYaws; }
 
     public float[] getShooterPitches() { return shooterPitches; }
+    public float getSize() { return size; }
 }

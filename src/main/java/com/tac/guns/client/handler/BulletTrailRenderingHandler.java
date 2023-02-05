@@ -199,23 +199,27 @@ public class BulletTrailRenderingHandler
 
             // all 0.2f works
 
+            //0.6f static
+            float posSize = 0.475f;
+            posSize *= bulletTrail.getSize()*10;
+
             builder.pos(matrix4f, 0, trailLength/1.325f, 0).color(red, green, blue, alpha).lightmap(15728880).endVertex();
-            builder.pos(matrix4f, -0.6F, 0, 0).color(red, green, blue, alpha).lightmap(15728880).endVertex();
-            builder.pos(matrix4f, 0, 0, -0.6F).color(red, green, blue, alpha).lightmap(15728880).endVertex();
+            builder.pos(matrix4f, -posSize, 0, 0).color(red, green, blue, alpha).lightmap(15728880).endVertex();
+            builder.pos(matrix4f, 0, 0, -posSize).color(red, green, blue, alpha).lightmap(15728880).endVertex();
 
             matrixStack.scale(1.5F, 1.5F, 1.85F);
-            if(!AimingHandler.get().isAiming()) {
+            //if(!AimingHandler.get().isAiming()) {
 
                 matrixStack.translate(GunRenderingHandler.get().sizeZ / 16.5f, -GunRenderingHandler.get().sizeZ / 2, 0);
                 //matrixStack.translate(GunRenderingHandler.get().sizeZ / 2, GunRenderingHandler.get().sizeZ / 2, 0);
                 matrixStack.translate(GunRenderingHandler.get().displayX, GunRenderingHandler.get().displayY, GunRenderingHandler.get().displayZ);
                 // Make customizable?
                 matrixStack.translate(0, 0, GunRenderingHandler.get().adjustedTrailZ);//1.15f);
-            }
+            //}
 
             builder.pos(matrix4f, 0, -trailLength/1.325f, 0).color(red, green, blue, alpha).lightmap(15728880).endVertex();
-            builder.pos(matrix4f, 0.6F, 0, 0).color(red, green, blue, alpha).lightmap(15728880).endVertex();
-            builder.pos(matrix4f, 0, 0, 0.6F).color(red, green, blue, alpha).lightmap(15728880).endVertex();
+            builder.pos(matrix4f, posSize, 0, 0).color(red, green, blue, alpha).lightmap(15728880).endVertex();
+            builder.pos(matrix4f, 0, 0, posSize).color(red, green, blue, alpha).lightmap(15728880).endVertex();
 
 
             //builder.pos(matrix4f, 0, trailLength, 0).color(red, green, blue, alpha).lightmap(15728880).endVertex();

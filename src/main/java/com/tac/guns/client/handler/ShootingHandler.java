@@ -148,8 +148,22 @@ public class  ShootingHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void renderTick(TickEvent.RenderTickEvent evt)
     {
-        if(shootMsGap > 0F)
-            shootMsGap -= evt.renderTickTime;
+        //TODO: Gurantee this solution is good, run a performance profile soon and reduce renderTick listeners
+        if(HUDRenderingHandler.get().hitMarkerTracker > 0F)
+            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime;
+        else
+            HUDRenderingHandler.get().hitMarkerTracker = 0;
+        /*if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isAlive())
+            Minecraft.getInstance().player.sendChatMessage(""+evt. renderTickTime);
+        */
+        if(shootMsGap > 0F) {
+            //TODO: There is a way to get the private performance and FPS int using obfuscation helper, use this along with forge-bot to help get the fps counter I need, using it I might be able to smoothen
+            //  up the generated firing animations by applying a multiplier to the shoot ms gap reducement.
+            //  Current issue is that some weapons look to have a near unadjusted firing animation compared to others, this is an attempt at globalizing the adjustment instead of adding some sort of
+            //  "per render multiplier" in order to help faster shooting guns still maintain a visual aid per shot.
+            //if(Minecraft.getInstance().getMinecraftGame().getPerformanceMetrics().get)
+            shootMsGap -= 0.35f;
+        }
         else if (shootMsGap < -0.05F)
             shootMsGap = 0F;
         if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getHeldItemMainhand().getItem() instanceof GunItem)
@@ -165,7 +179,6 @@ public class  ShootingHandler
                 this.burstTracker = 0;
             this.clickUp = true;
         }
-
     }
 
     @SubscribeEvent
@@ -317,7 +330,7 @@ public class  ShootingHandler
             // TODO: Test serverside, possible issues 0.3.4-alpha
             final float rpm = modifiedGun.getGeneral().getRate(); // Rounds per sec. Should come from gun properties in the end.
             shootTickGapLeft += calcShootTickGap((int) rpm);
-            shootMsGap += calcShootTickGap((int) rpm);
+            shootMsGap = calcShootTickGap((int) rpm);
             RecoilHandler.get().lastRandPitch = RecoilHandler.get().lastRandPitch;
             RecoilHandler.get().lastRandYaw = RecoilHandler.get().lastRandYaw;
             PacketHandler.getPlayChannel().sendToServer(new MessageShoot(player.getYaw(1), player.getPitch(1), RecoilHandler.get().lastRandPitch, RecoilHandler.get().lastRandYaw));
