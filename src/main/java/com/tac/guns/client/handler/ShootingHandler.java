@@ -263,14 +263,13 @@ public class  ShootingHandler
         Minecraft mc = Minecraft.getInstance();
         PlayerEntity player = mc.player;
         if(player != null)
-        {
-            ItemStack heldItem = player.getHeldItemMainhand();
-            if(heldItem.getTag() == null) {
-                heldItem.getOrCreateTag();
-                return;
-            }
+        {   ItemStack heldItem = player.getHeldItemMainhand();
             if(heldItem.getItem() instanceof TimelessGunItem)
             {
+                if(heldItem.getTag() == null) {
+                    heldItem.getOrCreateTag();
+                    return;
+                }
                 TimelessGunItem gunItem = (TimelessGunItem) heldItem.getItem();
                 if(heldItem.getTag().getInt("CurrentFireMode") == 3 && Config.CLIENT.controls.burstPress.get())
                 {
