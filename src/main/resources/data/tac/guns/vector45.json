@@ -41,8 +41,8 @@
     "damage": 7.0,
     "speed": 14.5,
     "life": 19,
-    "size": 0.035,
-    "trailLengthMultiplier": 3.25
+    "size": 0.075,
+    "trailLengthMultiplier": 3.15
   },
   "sounds": {
     "fire": "tac:item.vector_fire",

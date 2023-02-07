@@ -40,7 +40,8 @@
     "damage": 7.0,
     "size": 0.175,
     "speed": 36.5,
-    "life": 12
+    "life": 12,
+    "trailLengthMultiplier": 3.75
   },
   "sounds": {
     "fire": "tac:item.mtar_fire",

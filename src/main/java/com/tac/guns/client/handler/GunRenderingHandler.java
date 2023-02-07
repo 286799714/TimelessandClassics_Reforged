@@ -1286,7 +1286,7 @@ public class GunRenderingHandler {
                             GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
                             if (controller != null) {
                                 if (type != null) {
-                                    if (controller instanceof PistalAnimationController) {
+                                    if (controller instanceof PistalAnimationController && gun.getModules().getAttachments().getPistolScope().getDoOnSlideMovement()) {
                                         //Minecraft.getInstance().player.sendChatMessage("test");
                                         PistalAnimationController pcontroller = (PistalAnimationController) controller;
                                         controller.applyTransform(stack, pcontroller.getSlideNodeIndex(), transformType, entity, matrixStack);

@@ -2,6 +2,7 @@ package com.tac.guns.client.handler;
 
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.common.SpreadTracker;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.eventbus.api.EventPriority;
 import org.lwjgl.glfw.GLFW;
@@ -31,6 +32,8 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.awt.event.MouseMotionAdapter;
+
+import static net.minecraftforge.event.TickEvent.Type.RENDER;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -145,12 +148,14 @@ public class  ShootingHandler
         return shootTickGap;
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void renderTick(TickEvent.RenderTickEvent evt)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void renderTickLow(TickEvent.RenderTickEvent evt)
     {
+        if(!evt.type.equals(RENDER) || !evt.phase.equals(TickEvent.Phase.START))
+            return;
         //TODO: Gurantee this solution is good, run a performance profile soon and reduce renderTick listeners
         if(HUDRenderingHandler.get().hitMarkerTracker > 0F)
-            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime;
+            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime/1.325;
         else
             HUDRenderingHandler.get().hitMarkerTracker = 0;
         /*if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isAlive())
@@ -162,10 +167,32 @@ public class  ShootingHandler
             //  Current issue is that some weapons look to have a near unadjusted firing animation compared to others, this is an attempt at globalizing the adjustment instead of adding some sort of
             //  "per render multiplier" in order to help faster shooting guns still maintain a visual aid per shot.
             //if(Minecraft.getInstance().getMinecraftGame().getPerformanceMetrics().get)
-            shootMsGap -= 0.35f;
+            shootMsGap -= evt.renderTickTime/1.325;
         }
         else if (shootMsGap < -0.05F)
             shootMsGap = 0F;
+    }
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void renderTick(TickEvent.RenderTickEvent evt)
+    {
+        /*//TODO: Gurantee this solution is good, run a performance profile soon and reduce renderTick listeners
+        if(HUDRenderingHandler.get().hitMarkerTracker > 0F)
+            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime;
+        else
+            HUDRenderingHandler.get().hitMarkerTracker = 0;
+        *//*if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isAlive())
+            Minecraft.getInstance().player.sendChatMessage(""+evt. renderTickTime);
+        *//*
+        if(shootMsGap > 0F) {
+            //TODO: There is a way to get the private performance and FPS int using obfuscation helper, use this along with forge-bot to help get the fps counter I need, using it I might be able to smoothen
+            //  up the generated firing animations by applying a multiplier to the shoot ms gap reducement.
+            //  Current issue is that some weapons look to have a near unadjusted firing animation compared to others, this is an attempt at globalizing the adjustment instead of adding some sort of
+            //  "per render multiplier" in order to help faster shooting guns still maintain a visual aid per shot.
+            //if(Minecraft.getInstance().getMinecraftGame().getPerformanceMetrics().get)
+            shootMsGap -= 0.35f;
+        }
+        else if (shootMsGap < -0.05F)
+            shootMsGap = 0F;*/
         if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getHeldItemMainhand().getItem() instanceof GunItem)
             return;
         GunAnimationController controller = GunAnimationController.fromItem(Minecraft.getInstance().player.getHeldItemMainhand().getItem());
