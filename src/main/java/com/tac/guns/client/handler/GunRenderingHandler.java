@@ -177,7 +177,10 @@ public class GunRenderingHandler {
 
     @SubscribeEvent
     public void onCameraSetup(EntityViewRenderEvent.CameraSetup event){
-        if(!(Minecraft.getInstance().player.getHeldItemMainhand().getItem() instanceof GunItem) || Minecraft.getInstance().player.getHeldItemMainhand().getTag().isEmpty())
+        Minecraft mc = Minecraft.getInstance();
+        if(mc.player == null || mc.world == null)
+            return;
+        if(!(mc.player.getHeldItemMainhand().getItem() instanceof GunItem) || mc.player.getHeldItemMainhand().getTag() == null)
             return;
         if((Config.COMMON.gameplay.forceCameraShakeOnFire.get() || Config.CLIENT.display.cameraShakeOnFire.get()) && Minecraft.getInstance().player.getHeldItemMainhand().getTag().getInt("CurrentFireMode") != 0){
             float cameraShakeDuration = 0.06f; //TODO: Force to be adjusted per shot later in 0.3.4-0.3.5, customizable per gun
