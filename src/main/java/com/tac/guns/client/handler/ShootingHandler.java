@@ -86,6 +86,8 @@ public class  ShootingHandler
     private boolean isInGame()
     {
         Minecraft mc = Minecraft.getInstance();
+        if(mc == null || mc.player == null)
+            return false;
         if(mc.loadingGui != null)
             return false;
         if(mc.currentScreen != null)
@@ -175,24 +177,6 @@ public class  ShootingHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void renderTick(TickEvent.RenderTickEvent evt)
     {
-        /*//TODO: Gurantee this solution is good, run a performance profile soon and reduce renderTick listeners
-        if(HUDRenderingHandler.get().hitMarkerTracker > 0F)
-            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime;
-        else
-            HUDRenderingHandler.get().hitMarkerTracker = 0;
-        *//*if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isAlive())
-            Minecraft.getInstance().player.sendChatMessage(""+evt. renderTickTime);
-        *//*
-        if(shootMsGap > 0F) {
-            //TODO: There is a way to get the private performance and FPS int using obfuscation helper, use this along with forge-bot to help get the fps counter I need, using it I might be able to smoothen
-            //  up the generated firing animations by applying a multiplier to the shoot ms gap reducement.
-            //  Current issue is that some weapons look to have a near unadjusted firing animation compared to others, this is an attempt at globalizing the adjustment instead of adding some sort of
-            //  "per render multiplier" in order to help faster shooting guns still maintain a visual aid per shot.
-            //if(Minecraft.getInstance().getMinecraftGame().getPerformanceMetrics().get)
-            shootMsGap -= 0.35f;
-        }
-        else if (shootMsGap < -0.05F)
-            shootMsGap = 0F;*/
         if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getHeldItemMainhand().getItem() instanceof GunItem)
             return;
         GunAnimationController controller = GunAnimationController.fromItem(Minecraft.getInstance().player.getHeldItemMainhand().getItem());
@@ -281,7 +265,10 @@ public class  ShootingHandler
         if(player != null)
         {
             ItemStack heldItem = player.getHeldItemMainhand();
-//            player.sendStatusMessage(new TranslationTextComponent(this.burstCooldown+"| | |"+this.burstTracker+"| | |"+heldItem.getTag().getInt("CurrentFireMode")), true);
+            if(heldItem.getTag() == null) {
+                heldItem.getOrCreateTag();
+                return;
+            }
             if(heldItem.getItem() instanceof TimelessGunItem)
             {
                 TimelessGunItem gunItem = (TimelessGunItem) heldItem.getItem();

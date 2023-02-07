@@ -197,7 +197,7 @@ public class GunRenderingHandler {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || !mc.player.isAlive() || mc.player.isSpectator())
             return;
-        if(!(mc.player.getHeldItemMainhand().getItem() instanceof GunItem) || mc.player.getHeldItemMainhand().getTag().isEmpty())
+        if(!(mc.player.getHeldItemMainhand().getItem() instanceof GunItem) || mc.player.getHeldItemMainhand().getTag() == null)
             return;
 
         if((Config.COMMON.gameplay.forceCameraShakeOnFire.get() || Config.CLIENT.display.cameraShakeOnFire.get()) && mc.player.getHeldItemMainhand().getTag().getInt("CurrentFireMode") != 0) {
