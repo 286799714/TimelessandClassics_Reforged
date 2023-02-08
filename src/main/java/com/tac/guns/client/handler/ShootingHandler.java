@@ -157,7 +157,7 @@ public class  ShootingHandler
             return;
         //TODO: Gurantee this solution is good, run a performance profile soon and reduce renderTick listeners
         if(HUDRenderingHandler.get().hitMarkerTracker > 0F)
-            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime/1.325;
+            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime/1.125;
         else
             HUDRenderingHandler.get().hitMarkerTracker = 0;
         /*if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isAlive())

@@ -1,0 +1,14 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 30
+    }
+  ],
+  "result": {
+    "item": "tac:micro_uzi"
+  }
+}

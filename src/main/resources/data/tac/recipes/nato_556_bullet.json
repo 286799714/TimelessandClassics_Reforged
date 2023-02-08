@@ -3,9 +3,9 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:nuggets/iron"
+        "tag": "forge:ingots/iron"
       },
-      "count": 10
+      "count": 2
     },
     {
       "item": {
@@ -15,6 +15,6 @@
   ],
   "result": {
     "item": "tac:nato_556_bullet",
-    "count": 22
+    "count": 30
   }
 }

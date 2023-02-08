@@ -145,7 +145,7 @@ public class BulletTrailRenderingHandler
         Vector3d motionVec = new Vector3d(motion.x, motion.y, motion.z);
         float length = (float) motionVec.length();
 
-        if(mc.player.getLookVec().y > 0.975) // max 1.0
+        if(mc.player.getLookVec().y > 0.915) // max 1.0
             length *=0.25;
         if(mc.player.getLookVec().y > 0.385)
             matrixStack.translate(0, -0.115f*mc.player.getLookVec().y, 0);
@@ -178,7 +178,13 @@ public class BulletTrailRenderingHandler
         Entity shooter = bulletTrail.getShooter();
         if(shooter != null)
         {
-            trailLength = (float) Math.min(trailLength+0.6f, shooter.getEyePosition(partialTicks).distanceTo(new Vector3d(bulletX,bulletY, bulletZ))/1.0775f); ///1.1125f TODO: Add another value per trail to help give a maximum to player eyes distance
+            if(AimingHandler.get().getNormalisedAdsProgress() > 0.4)
+            {
+                trailLength = (float) Math.min(trailLength+0.6f, shooter.getEyePosition(partialTicks).distanceTo(new Vector3d(bulletX,bulletY, bulletZ))/1.175f);
+            }
+            else
+                trailLength = (float) Math.min(trailLength+0.6f, shooter.getEyePosition(partialTicks).distanceTo(new Vector3d(bulletX,bulletY, bulletZ))/1.0975f); ///1.1125f TODO: Add another value per trail to help give a maximum to player eyes
+            // distance
         }
 
         Matrix4f matrix4f = matrixStack.getLast().getMatrix();

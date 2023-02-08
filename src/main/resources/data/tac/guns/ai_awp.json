@@ -40,9 +40,9 @@
     "visible": false,
     "gravity": true,
     "damage": 32,
-    "size": 0.3,
-    "speed": 72.5,
-    "life": 7
+    "size": 0.0,
+    "speed": 44.5,
+    "life": 32
   },
   "sounds": {
     "fire": "tac:item.aiawp_fire",

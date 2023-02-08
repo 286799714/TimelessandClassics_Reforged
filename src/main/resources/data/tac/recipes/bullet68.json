@@ -3,19 +3,18 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:nuggets/iron"
+        "tag": "forge:ingots/iron"
       },
-      "count": 16
+      "count": 2
     },
     {
       "item": {
         "tag": "forge:gunpowder"
-      },
-      "count": 2
+      }
     }
   ],
   "result": {
     "item": "tac:bullet68",
-    "count": 10
+    "count": 20
   }
 }

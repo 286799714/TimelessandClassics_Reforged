@@ -37,9 +37,9 @@
     "item": "tac:9mm_round",
     "visible": false,
     "damage": 5.5,
-    "size": 0.2,
+    "size": 0.15,
     "speed": 20.0,
-    "life": 4
+    "life": 8
   },
   "sounds": {
     "fire": "tac:item.fire_glock",
@@ -54,7 +54,8 @@
     "flash": {
       "yOffset": 10.35,
       "zOffset": -12.09,
-      "size": 0.7
+      "size": 0.8,
+      "trailAdjust": 0.7825
     },
     "weaponType": 2
   },

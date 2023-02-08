@@ -55,7 +55,8 @@
     "flash": {
       "size": 1.2,
       "yOffset": 9.69,
-      "zOffset": -24.05
+      "zOffset": -24.05,
+      "trailAdjust": 1.555
     },
     "hipfireScale": 0.325,
     "hipfireMoveScale": 0.225,

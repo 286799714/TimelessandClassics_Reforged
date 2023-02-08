@@ -38,9 +38,8 @@
     "item": "tac:round45",
     "visible": false,
     "damage": 9.0,
-    "size": 0.2,
-    "speed": 13.0,
-    "life": 8
+    "speed": 15.0,
+    "life": 14
   },
   "sounds": {
     "fire": "tac:item.m1911_fire",
@@ -55,7 +54,8 @@
     "flash": {
       "yOffset": 11.15,
       "zOffset": -13.32,
-      "size": 1.1
+      "size": 1.1,
+      "trailAdjust": 0.88
     },
     "weaponType": 2
   },

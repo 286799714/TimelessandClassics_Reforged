@@ -3,24 +3,19 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:nuggets/iron"
+        "tag": "forge:ingots/iron"
       },
-      "count": 14
+      "count": 3
     },
     {
       "item": {
         "tag": "forge:gunpowder"
       },
       "count": 3
-    },
-    {
-      "item": {
-        "tag": "forge:gems/diamond"
-      }
     }
   ],
   "result": {
     "item": "tac:ae50",
-    "count": 8
+    "count": 20
   }
 }

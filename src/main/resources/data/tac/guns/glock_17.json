@@ -37,9 +37,9 @@
     "item": "tac:9mm_round",
     "visible": false,
     "damage": 5.0,
-    "size": 0.2,
-    "speed": 17.0,
-    "life": 8
+    "size": 0.1,
+    "speed": 19.0,
+    "life": 12
   },
   "sounds": {
     "fire": "tac:item.glock17_fire",

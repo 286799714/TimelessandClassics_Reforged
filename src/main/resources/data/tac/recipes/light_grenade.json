@@ -3,18 +3,19 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:nuggets/iron"
+        "tag": "forge:ingots/iron"
       },
-      "count": 12
+      "count": 6
     },
     {
       "item": {
         "tag": "forge:gunpowder"
       },
-      "count": 2
+      "count": 3
     }
   ],
   "result": {
-    "item": "tac:light_grenade"
+    "item": "tac:light_grenade",
+    "count": 2
   }
 }

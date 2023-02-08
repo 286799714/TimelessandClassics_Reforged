@@ -643,7 +643,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Optional
         private float damage;
         @Ignored
-        private float size = 0.2f;
+        private float size = 0.1f;
         @Optional
         private double speed;
         @Optional

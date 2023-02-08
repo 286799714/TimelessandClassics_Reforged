@@ -53,9 +53,10 @@
   },
   "display": {
     "flash": {
-      "yOffset": 12.225,
+      "yOffset": 9.825,
       "zOffset": -13.32,
-      "size": 1.1
+      "size": 1.1,
+      "trailAdjust": 0.895
     },
     "weaponType": 2
   },

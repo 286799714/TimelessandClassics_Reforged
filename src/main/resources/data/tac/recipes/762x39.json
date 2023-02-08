@@ -3,7 +3,7 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:nuggets/iron"
+        "tag": "forge:ingots/iron"
       },
       "count": 10
     },
@@ -15,6 +15,6 @@
   ],
   "result": {
     "item": "tac:762x39",
-    "count": 15
+    "count": 20
   }
 }

@@ -42,8 +42,8 @@
     "item": "tac:9mm_round",
     "visible": false,
     "damage": 4.5,
-    "speed": 15.5,
-    "life": 22,
+    "speed": 20,
+    "life": 18,
     "ricochet": true
   },
   "sounds": {
@@ -59,7 +59,7 @@
     "flash": {
       "yOffset": 10.75,
       "zOffset": -10.525,
-      "size": 0.38,
+      "size": 0.52,
       "trailAdjust": 0.70
     },
     "hipfireScale": 2.5,
