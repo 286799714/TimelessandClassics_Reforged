@@ -1256,6 +1256,43 @@
       ]
    },
 
+   "animation.m870_reload_intro": {
+      "subtitle": "animation.m870_reload_intro",
+      "sounds": [
+         { "name": "tac:animation/m870_reload_intro"}
+      ]
+   },
+   "animation.m870_reload_loop": {
+      "subtitle": "animation.m870_reload_loop",
+      "sounds": [
+         { "name": "tac:animation/m870_reload_loop"}
+      ]
+   },
+   "animation.m870_reload_norm_end": {
+      "subtitle": "animation.m870_reload_norm_end",
+      "sounds": [
+         { "name": "tac:animation/m870_reload_norm_end"}
+      ]
+   },
+   "animation.m870_reload_empty_end": {
+      "subtitle": "animation.m870_reload_empty_end",
+      "sounds": [
+         { "name": "tac:animation/m870_reload_empty_end"}
+      ]
+   },
+   "animation.m870_draw": {
+      "subtitle": "animation.m870_draw",
+      "sounds": [
+         { "name": "tac:animation/m870_draw"}
+      ]
+   },
+   "animation.m870_inspect": {
+      "subtitle": "animation.m870_inspect",
+      "sounds": [
+         { "name": "tac:animation/m870_inspect"}
+      ]
+   },
+
    "animation.m4_draw": {
       "subtitle": "animation.m4_draw",
       "sounds": [

@@ -44,6 +44,7 @@ public class micro_uzi_animation implements IOverrideModel {
             controller.applySpecialModelTransform(SpecialModels.MICRO_UZI_BODY.getModel(), MAC10AnimationController.INDEX_BODY, transformType, matrices);
 
             RenderUtil.renderModel(SpecialModels.MICRO_UZI_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(SpecialModels.MICRO_UZI_FOLDED_STOCK.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();
 
@@ -53,11 +54,11 @@ public class micro_uzi_animation implements IOverrideModel {
 
             if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
             {
-                RenderUtil.renderModel(SpecialModels.MAC_10_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(SpecialModels.MICRO_UZI_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             else
             {
-                RenderUtil.renderModel(SpecialModels.MAC_10_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(SpecialModels.MICRO_UZI_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
         matrices.pop();
@@ -71,16 +72,10 @@ public class micro_uzi_animation implements IOverrideModel {
             if(transformType.isFirstPerson()) {
                 AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
                 boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
-                if (Gun.hasAmmo(stack) || shouldOffset) {
-                    // Math provided by Bomb787 on GitHub and Curseforge!!!
-                    matrices.translate(0, 0, 0.200f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
-                } else if (!Gun.hasAmmo(stack)) {
-                    if (cooldownOg > 0.5) {
-                        // Math provided by Bomb787 on GitHub and Curseforge!!!
-                        matrices.translate(0, 0, 0.200f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
-                    } else {
-                        matrices.translate(0, 0, 0.200f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
-                    }
+                if(!shouldOffset && !Gun.hasAmmo(stack)){
+                    matrices.translate(0,0,-0.25);
+                }else {
+                    matrices.translate(0,0, -0.25 + Math.pow(cooldownOg - 0.5, 2));
                 }
             }
             matrices.translate(0.00, 0.0, 0.030);
