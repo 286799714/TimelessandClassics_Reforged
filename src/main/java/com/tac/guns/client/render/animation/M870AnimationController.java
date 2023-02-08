@@ -34,6 +34,10 @@ public class M870AnimationController extends PumpShotgunAnimationController {
 
     public static final AnimationMeta NORMAL_END = new AnimationMeta(new ResourceLocation("tac","animations/m870_reload_normal_end.gltf"));
 
+    public static final AnimationMeta EMPTY_END = new AnimationMeta(new ResourceLocation("tac","animations/m870_reload_empty_end.gltf"));
+
+    public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/m870_inspect.gltf"));
+
     private static final M870AnimationController instance = new M870AnimationController();
 
     public static M870AnimationController getInstance(){return instance;}
@@ -45,6 +49,8 @@ public class M870AnimationController extends PumpShotgunAnimationController {
             Animations.load(INTRO);
             Animations.load(LOOP);
             Animations.load(NORMAL_END);
+            Animations.load(EMPTY_END);
+            Animations.load(INSPECT);
         } catch (IOException e) {
             GunMod.LOGGER.fatal(e.getStackTrace());
         }
@@ -61,6 +67,8 @@ public class M870AnimationController extends PumpShotgunAnimationController {
             case RELOAD_INTRO: return INTRO;
             case RELOAD_LOOP: return LOOP;
             case RELOAD_NORMAL_END: return NORMAL_END;
+            case RELOAD_EMPTY_END: return EMPTY_END;
+            case INSPECT: return INSPECT;
             default: return null;
         }
     }

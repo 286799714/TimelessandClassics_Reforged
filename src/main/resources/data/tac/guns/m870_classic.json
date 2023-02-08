@@ -42,8 +42,13 @@
   },
   "sounds": {
     "fire": "tac:item.m870_fire",
-    "pump": "tac:item.m8701",
-    "reload": "tac:item.pistol.reload",
+    "pump": "tac:item.m870_pump",
+    "reloadIntro": "tac:animation.m870_reload_intro",
+    "reloadLoop": "tac:animation.m870_reload_loop",
+    "reloadEnd": "tac:animation.m870_reload_norm_end",
+    "reloadEndEmpty": "tac:animation.m870_reload_empty_end",
+    "draw": "tac:animation.m870_draw",
+    "inspect": "tac:animation.m870_inspect",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.fire_m16s"
   },
