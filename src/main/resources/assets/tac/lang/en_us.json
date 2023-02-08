@@ -250,6 +250,16 @@
     "info.tac.tac_armor_repair2": " in-game to repair Armor",
     "info.tac.current_armor_amount": "Current Armor Durability: ",
 
+
+
+
+    "perk.tac.silencedv2": "+Silenced",
+    "perk.tac.sound_radiusv2": "Sound Radius %s",
+
+
+
+
+
     "key.categories.tac": "Timeless and Classic Guns",
 
 	"key.tac.pull_trigger": "Pull Trigger",

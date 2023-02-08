@@ -157,7 +157,7 @@ public class  ShootingHandler
             return;
         //TODO: Gurantee this solution is good, run a performance profile soon and reduce renderTick listeners
         if(HUDRenderingHandler.get().hitMarkerTracker > 0F)
-            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime/1.125;
+            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime/0.925;
         else
             HUDRenderingHandler.get().hitMarkerTracker = 0;
         /*if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isAlive())
@@ -169,7 +169,7 @@ public class  ShootingHandler
             //  Current issue is that some weapons look to have a near unadjusted firing animation compared to others, this is an attempt at globalizing the adjustment instead of adding some sort of
             //  "per render multiplier" in order to help faster shooting guns still maintain a visual aid per shot.
             //if(Minecraft.getInstance().getMinecraftGame().getPerformanceMetrics().get)
-            shootMsGap -= evt.renderTickTime/1.325;
+            shootMsGap -= evt.renderTickTime/1.275;
         }
         else if (shootMsGap < -0.05F)
             shootMsGap = 0F;

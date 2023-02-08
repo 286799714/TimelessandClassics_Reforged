@@ -87,7 +87,7 @@ public abstract class Attachment
             /* Test for silenced */
             for (IGunModifier modifier : modifiers) {
                 if (modifier.silencedFire()) {
-                    addPerk(positivePerks, "perk.tac.silenced.positive", new TranslationTextComponent("+Silenced").mergeStyle(TextFormatting.GREEN));
+                    addPerk(positivePerks, "perk.tac.silenced.positive", new TranslationTextComponent("perk.tac.silencedv2").mergeStyle(TextFormatting.GREEN));
                     break;
                 }
             }
@@ -99,9 +99,11 @@ public abstract class Attachment
                 outputRadius = modifier.modifyFireSoundRadius(outputRadius);
             }
             if (outputRadius > inputRadius) {
-                addPerk(negativePerks, "perk.tac.sound_radius.negative", new TranslationTextComponent("+" + Math.round(outputRadius) + " Sound Radius").mergeStyle(TextFormatting.RED));
+                addPerk(negativePerks, "perk.tac.sound_radius.negative", new TranslationTextComponent("+")
+                                .append(new TranslationTextComponent("perk.tac.sound_radiusv2",Math.round(outputRadius)).mergeStyle(TextFormatting.RED)));
             } else if (outputRadius < inputRadius) {
-                addPerk(positivePerks, "perk.tac.sound_radius.positive", new TranslationTextComponent("-" + Math.round(outputRadius) + " Sound Radius").mergeStyle(TextFormatting.GREEN));
+                addPerk(positivePerks, "perk.tac.sound_radius.positive", new TranslationTextComponent("+")
+                        .append(new TranslationTextComponent("perk.tac.sound_radiusv2",Math.round(outputRadius)).mergeStyle(TextFormatting.GREEN)));
             }
 
             /* Test for additional damage */

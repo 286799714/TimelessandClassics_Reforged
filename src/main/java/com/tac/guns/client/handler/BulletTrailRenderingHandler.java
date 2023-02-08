@@ -131,8 +131,6 @@ public class BulletTrailRenderingHandler
         Entity entity = mc.getRenderViewEntity();
         if(entity == null || bulletTrail.isDead())
             return;
-        /*if(!AimingHandler.get().isAiming() && bulletTrail.getAge() < 1)
-            return;*/
         matrixStack.push();
         Vector3d view = mc.gameRenderer.getActiveRenderInfo().getProjectedView();
         Vector3d position = bulletTrail.getPosition();
@@ -145,11 +143,12 @@ public class BulletTrailRenderingHandler
         Vector3d motionVec = new Vector3d(motion.x, motion.y, motion.z);
         float length = (float) motionVec.length();
 
-        if(mc.player.getLookVec().y > 0.915) // max 1.0
-            length *=0.25;
-        if(mc.player.getLookVec().y > 0.385)
-            matrixStack.translate(0, -0.115f*mc.player.getLookVec().y, 0);
-
+        if(Minecraft.getInstance().player.isEntityEqual(entity)) {
+            if (mc.player.getLookVec().y > 0.93) // max 1.0
+                length *= 0.25;
+            else if (mc.player.getLookVec().y > 0.385)
+                matrixStack.translate(0, -0.115f * mc.player.getLookVec().y, 0);
+        }
         if(ShootingHandler.get().isShooting() && Minecraft.getInstance().player.isEntityEqual(entity) && bulletTrail.getAge() < 1)
         {
             matrixStack.translate(bulletX - (view.getX()), bulletY - view.getY() - 0.145f, (bulletZ - view.getZ()));
@@ -163,8 +162,6 @@ public class BulletTrailRenderingHandler
 
         }
         matrixStack.rotate(Vector3f.YP.rotationDegrees(bulletTrail.getYaw()));
-        /*if(!AimingHandler.get().isAiming())
-            matrixStack.rotate(Vector3f.ZP.rotationDegrees(mc.player.getYaw(partialTicks) - (mc.player.getYaw(partialTicks)+0.75f)));*/
         matrixStack.rotate(Vector3f.XP.rotationDegrees(-bulletTrail.getPitch() + 90.105f));
 
 
@@ -176,7 +173,7 @@ public class BulletTrailRenderingHandler
 
         // Prevents the trail length from being longer than the distance to shooter
         Entity shooter = bulletTrail.getShooter();
-        if(shooter != null)
+        if(shooter != null && Minecraft.getInstance().player.isEntityEqual(shooter))
         {
             if(AimingHandler.get().getNormalisedAdsProgress() > 0.4)
             {
@@ -199,7 +196,7 @@ public class BulletTrailRenderingHandler
 
             // all 0.2f works
             //0.6f static
-            float posSize = 0.2f;
+            float posSize = 0.1f;
             posSize *= bulletTrail.getSize()*10;
 
             builder.pos(matrix4f, 0, trailLength/1.325f, 0).color(red, green, blue, alpha).lightmap(15728880).endVertex();
