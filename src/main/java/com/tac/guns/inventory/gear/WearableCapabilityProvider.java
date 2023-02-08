@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public class WearableCapabilityProvider implements ICapabilitySerializable<ListNBT> {
 
     @CapabilityInject(IWearableItemHandler.class)
-    public static Capability<IWearableItemHandler> capability = null;
+    public static Capability<IWearableItemHandler> capability = InventoryListener.ITEM_HANDLER_CAPABILITY;
     private GearSlotsHandler itemHandler = new GearSlotsHandler(2);
     private LazyOptional<IWearableItemHandler> optionalStorage = LazyOptional.of(() -> itemHandler);
     public LazyOptional<IWearableItemHandler> getOptionalStorage() {

@@ -60,7 +60,7 @@ public class InventoryListener {
         if(!(event.getObject().getItem() instanceof IArmoredRigItem)) return;
 
         ArmorRigInventoryCapability armorRigInventoryCapability = new ArmorRigInventoryCapability();
-        event.addCapability(new ResourceLocation("tac", "rig_capability"), armorRigInventoryCapability);
+        event.addCapability(new ResourceLocation("tac", "rig"), armorRigInventoryCapability);
         event.addListener(armorRigInventoryCapability.getOptionalStorage()::invalidate);
     }
 }

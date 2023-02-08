@@ -1,5 +1,6 @@
 package com.tac.guns.inventory.gear.armor;
 
+import com.tac.guns.inventory.gear.InventoryListener;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -14,7 +15,7 @@ import javax.annotation.Nullable;
 public class ArmorRigInventoryCapability implements ICapabilitySerializable<ListNBT> {
 
     @CapabilityInject(IAmmoItemHandler.class)
-    public static Capability<IAmmoItemHandler> capability = null;
+    public static Capability<IAmmoItemHandler> capability = InventoryListener.RIG_HANDLER_CAPABILITY;
 
     private IAmmoItemHandler itemHandler = new RigSlotsHandler(27);
     private LazyOptional<IAmmoItemHandler> optionalStorage = LazyOptional.of(() -> itemHandler);
