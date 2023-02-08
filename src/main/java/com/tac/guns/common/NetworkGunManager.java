@@ -58,7 +58,7 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
     protected Map<GunItem, Gun> prepare(IResourceManager resourceManager, IProfiler profiler)
     {
         Map<GunItem, Gun> map = Maps.newHashMap();
-        GunMod.LOGGER.log(Level.FATAL,"YO_DATA_GUN");
+        GunMod.LOGGER.info("YO_DATA_GUN");
         ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof GunItem).forEach(item ->
         {
             ResourceLocation id = item.getRegistryName();
