@@ -9,9 +9,9 @@
     },
     {
       "item": {
-        "tag": "forge:glass_panes"
+        "tag": "forge:glass_panes/colorless"
       },
-      "count": 60
+      "count": 20
     }
   ],
   "result": {

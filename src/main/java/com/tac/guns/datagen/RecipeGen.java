@@ -364,94 +364,94 @@ public class RecipeGen extends RecipeProvider
         //Scope
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.LONGRANGE_8x_SCOPE.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 36)
-                .addIngredient(Tags.Items.GLASS_PANES, 60)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 60)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.ACOG_4.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 28)
-                .addIngredient(Tags.Items.GLASS_PANES, 24)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 24)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 2)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.AIMPOINT_T2_SIGHT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 18)
-                .addIngredient(Tags.Items.GLASS_PANES, 4)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 4)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.AIMPOINT_T1_SIGHT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 10)
-                .addIngredient(Tags.Items.GLASS_PANES, 4)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 4)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.COYOTE_SIGHT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 20)
-                .addIngredient(Tags.Items.GLASS_PANES, 6)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 6)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.ELCAN_DR_14X.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 30)
-                .addIngredient(Tags.Items.GLASS_PANES, 26)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 26)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.EOTECH_N_SIGHT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 16)
-                .addIngredient(Tags.Items.GLASS_PANES, 10)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 10)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 2)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.EOTECH_SHORT_SIGHT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 20)
-                .addIngredient(Tags.Items.GLASS_PANES, 14)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 14)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
 
 /*        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.MICRO_HOLO_SIGHT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 7)
-                .addIngredient(Tags.Items.GLASS_PANES, 4)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 4)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);*/
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.VORTEX_LPVO_1_6.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 32)
-                .addIngredient(Tags.Items.GLASS_PANES, 24)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 24)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.MINI_DOT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 8)
-                .addIngredient(Tags.Items.GLASS_PANES, 4)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 4)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.SRO_DOT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 16)
-                .addIngredient(Tags.Items.GLASS_PANES, 12)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 12)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 2)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.OLD_LONGRANGE_4x_SCOPE.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 20)
-                .addIngredient(Tags.Items.GLASS_PANES, 32)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 32)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.OLD_LONGRANGE_8x_SCOPE.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 24)
-                .addIngredient(Tags.Items.GLASS_PANES, 48)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 48)
                 .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.QMK152.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 24)
-                .addIngredient(Tags.Items.GLASS_PANES, 20)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 20)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 2)
                 .build(consumer);
 
         /*WorkbenchRecipeBuilder.workbenchRecipe(ModItems.SLX_2X.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 15)
-                .addIngredient(Tags.Items.GLASS_PANES, 10)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 10)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);*/
 
@@ -462,7 +462,7 @@ public class RecipeGen extends RecipeProvider
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.VORTEX_UH_1.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 18)
-                .addIngredient(Tags.Items.GLASS_PANES, 12)
+                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 12)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
 
