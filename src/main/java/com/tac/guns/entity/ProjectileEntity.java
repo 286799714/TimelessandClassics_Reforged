@@ -572,7 +572,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             entity.hurtResistantTime = 0;
             source.setDamageBypassesArmor();
             source.setDamageIsAbsolute();
-            if(!(Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() >= 1.0))
+            if(Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() <= 1.0)
                 entity.attackEntityFrom(source, (damage-damageToMcArmor)); // Apply pure damage
         }
         else

@@ -34,10 +34,10 @@
   "projectile": {
     "item": "tac:10_gauge_round",
     "visible": false,
-    "damage": 24.5,
-    "size": 0.3,
-    "speed": 23.5,
-    "life": 4,
+    "damage": 26.0,
+    "size": 0.2,
+    "speed": 20.5,
+    "life": 5,
     "ricochet": false
   },
   "sounds": {

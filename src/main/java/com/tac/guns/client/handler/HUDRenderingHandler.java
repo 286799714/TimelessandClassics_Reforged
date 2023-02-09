@@ -206,7 +206,7 @@ public class HUDRenderingHandler extends AbstractGui {
     private static ResourceLocation fleshHitMarker = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_128x.png");
     private static ResourceLocation fleshHitMarkerADS = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_ads_128x.png");
     public boolean hitMarkerHeadshot = false;
-    public static final float hitMarkerRatio = 16.5f;
+    public static final float hitMarkerRatio = 14f;
     public float hitMarkerTracker = 0;
     @SubscribeEvent
     public void onOverlayRender(RenderGameOverlayEvent.Post event) {
