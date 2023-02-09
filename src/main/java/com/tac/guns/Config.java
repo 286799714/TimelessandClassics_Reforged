@@ -90,6 +90,10 @@ public class Config
         public final ForgeConfigSpec.BooleanValue weaponDelayedSwayDirection;
 
         public final ForgeConfigSpec.BooleanValue weaponDelayedSwayYNOptical;
+
+
+        public final ForgeConfigSpec.BooleanValue showBulletTrails;
+        public final ForgeConfigSpec.DoubleValue bulletTrailOpacity;
         public Display(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Configuration for display related options").push("display");
@@ -116,6 +120,9 @@ public class Config
                 this.weaponDelayedSwayMultiplier = builder.comment("Adjusts the sensitivity of the weapon's delayed sway, depending on mouse / head, movement.").defineInRange("weaponDelayedSwayMultiplier", -0.1, -0.4, -0.05);
                 this.weaponDelayedSwayDirection = builder.comment("If true, the weapon will drag against the aiming point, false will drag the aiming point on sway.").define("weaponDelayedSwayDirection", false);
                 this.weaponDelayedSwayYNOptical = builder.comment("If true, the weapon will drag against the aiming point ONLY if an optic is added.").define("weaponDelayedSwayYNOptical", false);
+
+                this.showBulletTrails = builder.comment("Choose to see any bullet trails, trails by you or any other player / bot will not appear. Helps with Shader compatability.").define("showBulletTrails", true);
+                this.bulletTrailOpacity = builder.comment("Adjusts the opacity, AKA how see through the bullet trails are seen as, higher values can be seen better indoors or at daytime.").defineInRange("bulletTrailOpacity", 0.285, 0.1, 1.0);
             }
             builder.pop();
         }

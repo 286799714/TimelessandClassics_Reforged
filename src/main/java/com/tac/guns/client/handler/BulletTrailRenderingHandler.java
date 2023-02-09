@@ -124,12 +124,11 @@ public class BulletTrailRenderingHandler
      */
     private void renderBulletTrail(BulletTrail bulletTrail, MatrixStack matrixStack, float partialTicks)
     {
-        if(!Config.CLIENT.display.showFirstPersonBulletTrails.get())
-            return;
-
         Minecraft mc = Minecraft.getInstance();
         Entity entity = mc.getRenderViewEntity();
-        if(entity == null || bulletTrail.isDead())
+        if(entity == null || bulletTrail.isDead() || !Config.CLIENT.display.showBulletTrails.get())
+            return;
+        if(!Config.CLIENT.display.showFirstPersonBulletTrails.get() && Minecraft.getInstance().player.isEntityEqual(entity))
             return;
         matrixStack.push();
         Vector3d view = mc.gameRenderer.getActiveRenderInfo().getProjectedView();
@@ -144,7 +143,7 @@ public class BulletTrailRenderingHandler
         float length = (float) motionVec.length();
 
         if(Minecraft.getInstance().player.isEntityEqual(entity)) {
-            if (mc.player.getLookVec().y > 0.93) // max 1.0
+            if (mc.player.getLookVec().y > 0.945) // max 1.0
                 length *= 0.25;
             else if (mc.player.getLookVec().y > 0.385)
                 matrixStack.translate(0, -0.115f * mc.player.getLookVec().y, 0);
@@ -169,7 +168,7 @@ public class BulletTrailRenderingHandler
         float red = (float) (bulletTrail.getTrailColor() >> 16 & 255) / 255.0F;
         float green = (float) (bulletTrail.getTrailColor() >> 8 & 255) / 255.0F;
         float blue = (float) (bulletTrail.getTrailColor() & 255) / 255.0F;
-        float alpha = 0.285F;
+        float alpha = Config.CLIENT.display.bulletTrailOpacity.get().floatValue();
 
         // Prevents the trail length from being longer than the distance to shooter
         Entity shooter = bulletTrail.getShooter();
