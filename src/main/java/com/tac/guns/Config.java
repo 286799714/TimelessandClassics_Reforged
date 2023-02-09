@@ -82,7 +82,14 @@ public class Config
         public final ForgeConfigSpec.BooleanValue cameraShakeOptionGlobal;
         public final ForgeConfigSpec.BooleanValue cameraShakeOnFire;
 
+        public final ForgeConfigSpec.BooleanValue weaponDelayedSway;
         public final ForgeConfigSpec.BooleanValue showFirstPersonBulletTrails;
+
+        public final ForgeConfigSpec.DoubleValue weaponDelayedSwayMaximum;
+        public final ForgeConfigSpec.DoubleValue weaponDelayedSwayMultiplier;
+        public final ForgeConfigSpec.BooleanValue weaponDelayedSwayDirection;
+
+        public final ForgeConfigSpec.BooleanValue weaponDelayedSwayYNOptical;
         public Display(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Configuration for display related options").push("display");
@@ -90,7 +97,7 @@ public class Config
                 this.oldAnimations = builder.comment("If true, uses the old animation poses for weapons. This is only for nostalgic reasons and not recommended to switch back.").define("oldAnimations", false);
                 this.crosshair = builder.comment("The custom crosshair to use for weapons. Go to (Options > Controls > Mouse Settings > Crosshair) in game to change this!").define("crosshair", Crosshair.DEFAULT.getLocation().toString());
 
-                this.weaponAmmoBar = builder.comment("Show % of your ammo in your gun via a colored durability bar!, Set to false to remove bar entirely for more realistic gameplay!").define("weaponAmmoBar", false);
+                this.weaponAmmoBar = builder.comment("Show % of your ammo in your gun via a colored durability bar. Set to false to remove bar entirely for more realistic gameplay").define("weaponAmmoBar", false);
 
                 this.gameplayEnchancedScopeOffset = builder.comment("Scopes are brought closer to the shooter to help fill FOV with a scope view at all times").define("gameplayEnchancedScopeOffset", true);
                 this.scopeDoubleRender = builder.comment("Enable picture in picture rendering for scopes, saves on some performance and issues with Optifine").define("scopeDoubleRender", true);
@@ -102,6 +109,13 @@ public class Config
                 this.cameraShakeOnFire = builder.comment("Shake camera when firing the weapon, currently in beta but will be expanded on in the future, if it causes vomit, DISABLE, else enjoy!").define("cameraShakeOnFire", true);
 
                 this.showFirstPersonBulletTrails = builder.comment("Attempt to show bullet trails from your own gun, currently ALPHA, doesn't map to the barrel of weapons and maybe distracting.").define("showFirstPersonBulletTrails", true);
+
+                this.weaponDelayedSway = builder.comment("When looking around the weapon sways smoothly in delay with the camera movement. Disable if distracting with scopes.").define("weaponDelayedSway", true);
+
+                this.weaponDelayedSwayMaximum = builder.comment("Maximum degrees the weapon's delayed sway can rotate the weapon.").defineInRange("weaponDelayedSwayMaximum", 3.35, 0.5, 10.0);
+                this.weaponDelayedSwayMultiplier = builder.comment("Adjusts the sensitivity of the weapon's delayed sway, depending on mouse / head, movement.").defineInRange("weaponDelayedSwayMultiplier", -0.1, -0.4, -0.05);
+                this.weaponDelayedSwayDirection = builder.comment("If true, the weapon will drag against the aiming point, false will drag the aiming point on sway.").define("weaponDelayedSwayDirection", false);
+                this.weaponDelayedSwayYNOptical = builder.comment("If true, the weapon will drag against the aiming point ONLY if an optic is added.").define("weaponDelayedSwayYNOptical", false);
             }
             builder.pop();
         }

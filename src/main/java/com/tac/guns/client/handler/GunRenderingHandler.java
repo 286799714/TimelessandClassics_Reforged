@@ -565,6 +565,12 @@ public class GunRenderingHandler {
             }
         }
 
+        //Set Delayed Sway config options
+
+        this.maxRotationDegree = Config.CLIENT.display.weaponDelayedSwayMaximum.get().floatValue(); // 3.95f or 4.5f
+        this.delayedSwayMultiplier = Config.CLIENT.display.weaponDelayedSwayMultiplier.get().floatValue(); // Lower = a more delayed sway
+        this.YDIR = Config.CLIENT.display.weaponDelayedSwayDirection.get() ? Vector3f.YN : Vector3f.YP;
+
         applyDelayedSwayTransforms(matrixStack, entity, event.getPartialTicks());
         float equipProgress = this.getEquipProgress(event.getPartialTicks());
         matrixStack.rotate(Vector3f.XP.rotationDegrees(equipProgress * -50F));
@@ -603,99 +609,58 @@ public class GunRenderingHandler {
         this.renderWeapon(Minecraft.getInstance().player, heldItem, transformType, event.getMatrixStack(), event.getBuffers(), packedLight, event.getPartialTicks());
         matrixStack.pop();
     }
-    private final float maxRotationDegree = 4.5f;
+    private static float maxRotationDegree; // 3.95f or 4.5f
+    private static float delayedSwayMultiplier; // Lower = a more delayed sway
+    private static Vector3f YDIR;
     private void applyDelayedSwayTransforms(MatrixStack stack, ClientPlayerEntity player, float partialTicks)
     {
-        if(player != null)
-        {
-            float f4 = MathHelper.lerp(partialTicks, player.prevRenderArmYaw, player.renderArmYaw);
-            float degree = delaySwayDynamics.update(0, (player.getYaw(partialTicks) - f4) * -0.1F);
-            if(Math.abs(degree) > maxRotationDegree) degree = degree / Math.abs(degree) * maxRotationDegree;
+        if(Config.CLIENT.display.weaponDelayedSway.get())
+            if(player != null)
+            {
+                float f4 = MathHelper.lerp(partialTicks, player.prevRenderArmYaw, player.renderArmYaw);
+                float degree = delaySwayDynamics.update(0, (player.getYaw(partialTicks) - f4) * delayedSwayMultiplier);
+                if(Math.abs(degree) > maxRotationDegree) degree = degree / Math.abs(degree) * maxRotationDegree;
 
-            stack.translate(-this.translateX, -this.translateY, -this.translateZ);
-            stack.rotate(Vector3f.YP.rotationDegrees(degree));
-            stack.rotate(Vector3f.ZP.rotationDegrees(degree*1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
-            stack.translate(this.translateX, this.translateY, this.translateZ);
-        }
+                if((Config.CLIENT.display.weaponDelayedSwayYNOptical.get() && Gun.getScope(player.getHeldItemMainhand()) != null) || YDIR.equals(Vector3f.YN)) {
+                    stack.translate(this.translateX, this.translateY, this.translateZ);
+                    stack.rotate(YDIR.rotationDegrees(degree));
+                    stack.rotate(Vector3f.ZP.rotationDegrees(degree * 1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
+                    stack.translate(-this.translateX, -this.translateY, -this.translateZ);
+                }
+                else{
+                    stack.translate(-this.translateX, -this.translateY, -this.translateZ);
+                    stack.rotate(YDIR.rotationDegrees(degree));
+                    stack.rotate(Vector3f.ZP.rotationDegrees(degree * 1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
+                    stack.translate(this.translateX, this.translateY, this.translateZ);
+                }
+            }
     }
 
     public void applyDelayedSwayTransforms(MatrixStack stack, ClientPlayerEntity player, float partialTicks, float percentage)
     {
-        if(player != null)
-        {
-            float f4 = MathHelper.lerp(partialTicks, player.prevRenderArmYaw, player.renderArmYaw);
-            float degree = delaySwayDynamics.update(0, (player.getYaw(partialTicks) - f4) * -0.1F);
-            if(Math.abs(degree) > maxRotationDegree)
-                degree = degree / Math.abs(degree) * maxRotationDegree;
+        if(Config.CLIENT.display.weaponDelayedSway.get())
+            if(player != null)
+            {
+                float f4 = MathHelper.lerp(partialTicks, player.prevRenderArmYaw, player.renderArmYaw);
+                float degree = delaySwayDynamics.update(0, (player.getYaw(partialTicks) - f4) * delayedSwayMultiplier);
+                if(Math.abs(degree) > maxRotationDegree) degree = degree / Math.abs(degree) * maxRotationDegree;
 
-            degree *= percentage;
+                degree *= percentage;
 
-            stack.translate(-this.translateX, -this.translateY, -this.translateZ);
-            stack.rotate(Vector3f.YP.rotationDegrees(degree));
-            stack.rotate(Vector3f.ZP.rotationDegrees(degree*1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
-            stack.translate(this.translateX, this.translateY, this.translateZ);
-        }
+                if((Config.CLIENT.display.weaponDelayedSwayYNOptical.get() && Gun.getScope(player.getHeldItemMainhand()) != null) || YDIR.equals(Vector3f.YN)) {
+                    stack.translate(this.translateX, this.translateY, this.translateZ);
+                    stack.rotate(YDIR.rotationDegrees(degree));
+                    stack.rotate(Vector3f.ZP.rotationDegrees(degree * 1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
+                    stack.translate(-this.translateX, -this.translateY, -this.translateZ);
+                }
+                else{
+                    stack.translate(-this.translateX, -this.translateY, -this.translateZ);
+                    stack.rotate(YDIR.rotationDegrees(degree));
+                    stack.rotate(Vector3f.ZP.rotationDegrees(degree * 1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
+                    stack.translate(this.translateX, this.translateY, this.translateZ);
+                }
+            }
     }
-
-    private void applyDelayedSwayScopeReversal(MatrixStack poseStack, ClientPlayerEntity player, float partialTicks)
-    {
-        poseStack.push();
-        if(player != null)
-        {
-            Matrix4f matrix = poseStack.getLast().getMatrix();
-
-            poseStack.translate(this.translateX, this.translateY, this.translateZ);
-            /*
-            PlayerEntity playerentity = (PlayerEntity) mc.getRenderViewEntity();
-            float deltaDistanceWalked = playerentity.distanceWalkedModified - playerentity.prevDistanceWalkedModified;
-            float distanceWalked = -(playerentity.distanceWalkedModified + deltaDistanceWalked * event.getPartialTicks());
-            float cameraYaw = MathHelper.lerp(event.getPartialTicks(), playerentity.prevCameraYaw, playerentity.cameraYaw);
-
-            *//* Reverses the original bobbing rotations and translations so it can be controlled *//*
-            matrixStack.rotate(Vector3f.XP.rotationDegrees(-(Math.abs(MathHelper.cos(distanceWalked * (float) Math.PI - 0.2F) * cameraYaw) * 5.0F)));
-            matrixStack.rotate(Vector3f.ZP.rotationDegrees(-(MathHelper.sin(distanceWalked * (float) Math.PI) * cameraYaw * 3.0F)));
-            matrixStack.translate((double) -(MathHelper.sin(distanceWalked * (float) Math.PI) * cameraYaw * 0.5F), (double) -(-Math.abs(MathHelper.cos(distanceWalked * (float) Math.PI) * cameraYaw)), 0.0D);
-*/
-            float headPitch = MathHelper.rotLerp(partialTicks, player.prevCameraYaw, player.cameraYaw);
-            float swayPitch = headPitch;
-            swayPitch *= 1.0 - 0.25 * AimingHandler.get().getNormalisedAdsProgress();
-            matrix.mul(SwayType.DRAG.pitchRotation.rotationDegrees(swayPitch * 0.3f));
-
-            float headYaw = MathHelper.rotLerp(partialTicks, player.prevRotationYawHead, player.getRotationYawHead());
-            float swayYaw = headYaw;
-            swayYaw *= 1.0 - 0.25 * AimingHandler.get().getNormalisedAdsProgress();
-            matrix.mul(SwayType.DRAG.yawRotation.rotationDegrees(swayYaw * 0.3f));
-
-            poseStack.translate(-this.translateX, -this.translateY, -this.translateZ);
-        }
-        poseStack.pop();
-    }
-
-    public enum SwayType
-    {
-        DIRECTIONAL(Vector3f.XN, Vector3f.YN),
-        DRAG(Vector3f.XP, Vector3f.YP);
-
-        Vector3f pitchRotation;
-        Vector3f yawRotation;
-
-        SwayType(Vector3f pitchRotation, Vector3f yawRotation)
-        {
-            this.pitchRotation = pitchRotation;
-            this.yawRotation = yawRotation;
-        }
-
-        public Vector3f getPitchRotation()
-        {
-            return this.pitchRotation;
-        }
-
-        public Vector3f getYawRotation()
-        {
-            return this.yawRotation;
-        }
-    }
-
     // Sprinting Offset Transition, the same transition aggregate used for all running anims,
     // made public for adjusting hands within animator instances
     public float sOT = 0.0f;
