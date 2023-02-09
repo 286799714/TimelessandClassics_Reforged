@@ -44,13 +44,13 @@
     "trailLengthMultiplier": 3.75
   },
   "sounds": {
-    "fire": "tac:item.mtar_fire",
+    "fire": "tac:item.qbz95_fire",
     "reloadNormal": "tac:animation.type_95_reload_norm",
     "reloadEmpty": "tac:animation.type_95_reload_empty",
     "draw": "tac:animation.type_95_draw",
     "inspect": "tac:animation.type_95_inspect",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.mtar_fire_s"
+    "silencedFire": "tac:item.qbz95_fire_s"
   },
   "display": {
     "flash": {

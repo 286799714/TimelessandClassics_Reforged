@@ -39,7 +39,7 @@
     "life": 8
   },
   "sounds": {
-    "fire": "tac:item.fire_glock",
+    "fire": "tac:item.mac10_fire",
     "reloadNormal": "tac:animation.mac10_reload_norm",
     "reloadEmpty": "tac:animation.mac10_reload_empty",
     "draw": "tac:animation.mac10_draw",

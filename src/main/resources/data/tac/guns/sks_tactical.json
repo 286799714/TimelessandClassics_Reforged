@@ -46,7 +46,7 @@
     "ricochet": true
   },
   "sounds": {
-    "fire": "tac:item.sks",
+    "fire": "tac:item.skstti_fire",
     "reloadNormal": "tac:animation.sks_tactical_reload_norm",
     "reloadEmpty": "tac:animation.sks_tactical_reload_empty",
     "draw": "tac:animation.sks_tactical_draw",
