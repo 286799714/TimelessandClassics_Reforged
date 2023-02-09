@@ -265,11 +265,11 @@ public abstract class Attachment
     private static void addPerkP(List<ITextComponent> components, String id, Object... params)
     {
         //TextFormatting format,   components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(format)));
-        components.add(new TranslationTextComponent("perk.tac.entry.positive", new TranslationTextComponent(id, params).mergeStyle(TextFormatting.GREEN)));
+        components.add( new TranslationTextComponent(id, params).mergeStyle(TextFormatting.GREEN));
     }
     private static void addPerkN(List<ITextComponent> components, String id, Object... params)
     {
         //TextFormatting format,   components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(format)));
-        components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(TextFormatting.RED)));
+        components.add( new TranslationTextComponent(id, params).mergeStyle(TextFormatting.RED));
     }
 }
