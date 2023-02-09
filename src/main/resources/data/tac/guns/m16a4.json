@@ -40,10 +40,10 @@
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 7.0,
+    "damage": 7.5,
     "size": 0.1,
-    "speed": 34.5,
-    "life": 10,
+    "speed": 30.5,
+    "life": 19,
     "ricochet": true
   },
   "sounds": {
