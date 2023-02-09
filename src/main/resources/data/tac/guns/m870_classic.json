@@ -44,7 +44,7 @@
     "fire": "tac:item.m870_fire",
     "pump": "tac:item.m870_pump",
     "reloadIntro": "tac:animation.m870_reload_intro",
-    "reloadLoop": "tac:animation.m870_reload_loop",
+    "reloadLoop": "tac:animation.m1014_reload_loop",
     "reloadEnd": "tac:animation.m870_reload_norm_end",
     "reloadEndEmpty": "tac:animation.m870_reload_empty_end",
     "draw": "tac:animation.m870_draw",
