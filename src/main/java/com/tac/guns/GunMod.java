@@ -15,6 +15,7 @@ import com.tac.guns.datagen.*;
 import com.tac.guns.enchantment.EnchantmentTypes;
 import com.tac.guns.entity.GrenadeEntity;
 import com.tac.guns.entity.MissileEntity;
+import com.tac.guns.extra_events.TacEventListeners;
 import com.tac.guns.init.*;
 import com.tac.guns.inventory.gear.GearSlotsHandler;
 import com.tac.guns.inventory.gear.IWearableItemHandler;
@@ -49,6 +50,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -246,7 +248,10 @@ public class GunMod
         bus.addListener(this::dataSetup);
         controllableLoaded = ModList.get().isLoaded("controllable");
         curiosLoaded = ModList.get().isLoaded("curios");
+        modInfo = ModLoadingContext.get().getActiveContainer().getModInfo();
     }
+
+    public static IModInfo modInfo = null;
 
     private void onCommonSetup(FMLCommonSetupEvent event)
     {
