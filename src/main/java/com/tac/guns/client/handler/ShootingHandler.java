@@ -1,9 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.tac.guns.client.render.animation.module.GunAnimationController;
-import com.tac.guns.common.SpreadTracker;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.vector.Vector3d;
+import com.tac.guns.mixin.client.MinecraftStaticMixin;
 import net.minecraftforge.eventbus.api.EventPriority;
 import org.lwjgl.glfw.GLFW;
 
@@ -22,7 +20,6 @@ import com.tac.guns.network.message.MessageUpdateMoveInacc;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.InputEvent;
@@ -30,8 +27,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.awt.event.MouseMotionAdapter;
 
 import static net.minecraftforge.event.TickEvent.Type.RENDER;
 
@@ -155,33 +150,72 @@ public class  ShootingHandler
         return shootTickGap;
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void renderTickLow(TickEvent.RenderTickEvent evt)
+
+    private static float hitmarkerCooldownMultiplier()
     {
-        if(!evt.type.equals(RENDER) || !evt.phase.equals(TickEvent.Phase.START))
+        int fps = ((MinecraftStaticMixin) Minecraft.getInstance()).getCurrentFPS();
+        if(fps < 11)
+            return 16f;
+        else if(fps < 21)
+            return 14.5f;
+        else if(fps < 31)
+            return 4f;
+        else if(fps < 61)
+            return 2f;
+        else if(fps < 121)
+            return 1f;
+        else if(fps < 181)
+            return 0.7f;
+        else if(fps < 201)
+            return 0.5f;
+        else
+            return 0.375f;
+    }
+    private static float visualCooldownMultiplier()
+    {
+        int fps = ((MinecraftStaticMixin) Minecraft.getInstance()).getCurrentFPS();
+        if(fps < 11)
+            return 8f;
+        else if(fps < 21)
+            return 6.25f;
+        else if(fps < 31)
+            return 1.25f;
+        else if(fps < 61)
+            return 0.95f;
+        else if(fps < 121)
+            return 0.625f;
+        else if(fps < 181)
+            return 0.425f;
+        else if(fps < 201)
+            return 0.35f;
+        else
+            return 0.25f;
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public void renderTickLow(TickEvent.RenderTickEvent evt) {
+        if(!evt.type.equals(RENDER) || evt.phase.equals(TickEvent.Phase.START))
             return;
+
         //TODO: Gurantee this solution is good, run a performance profile soon and reduce renderTick listeners
         if(HUDRenderingHandler.get().hitMarkerTracker > 0F)
-            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime/0.925;
+            HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime*hitmarkerCooldownMultiplier();
         else
             HUDRenderingHandler.get().hitMarkerTracker = 0;
-        /*if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isAlive())
-            Minecraft.getInstance().player.sendChatMessage(""+evt. renderTickTime);
-        */
         if(shootMsGap > 0F) {
-            //TODO: There is a way to get the private performance and FPS int using obfuscation helper, use this along with forge-bot to help get the fps counter I need, using it I might be able to smoothen
-            //  up the generated firing animations by applying a multiplier to the shoot ms gap reducement.
-            //  Current issue is that some weapons look to have a near unadjusted firing animation compared to others, this is an attempt at globalizing the adjustment instead of adding some sort of
-            //  "per render multiplier" in order to help faster shooting guns still maintain a visual aid per shot.
-            //if(Minecraft.getInstance().getMinecraftGame().getPerformanceMetrics().get)
-            shootMsGap -= evt.renderTickTime/1.275;
+            shootMsGap -= evt.renderTickTime* visualCooldownMultiplier();
         }
         else if (shootMsGap < -0.05F)
             shootMsGap = 0F;
     }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void renderTick(TickEvent.RenderTickEvent evt)
     {
+
+
+        // Upper is to handle rendering, bellow is handling animation calls and burst tracking
+
         if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getHeldItemMainhand().getItem() instanceof GunItem)
             return;
         GunAnimationController controller = GunAnimationController.fromItem(Minecraft.getInstance().player.getHeldItemMainhand().getItem());
