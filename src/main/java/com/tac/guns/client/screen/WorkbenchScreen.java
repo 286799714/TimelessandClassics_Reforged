@@ -67,6 +67,8 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
     private CheckBox checkBoxMaterials;
     private ItemStack displayStack;
 
+    float posDelta = 0.1f;//works for gun models, + means higher
+
     public WorkbenchScreen(WorkbenchContainer container, PlayerInventory playerInventory, ITextComponent title)
     {
         super(container, playerInventory, title);
@@ -437,10 +439,9 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
                 GunRenderingHandler.get().renderScope(this.minecraft.player, currentItem, ItemCameraTransforms.TransformType.HEAD, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
                 matrixStack.scale(0.5f,0.5f,0.5f);
             }else if(currentItem.getItem() instanceof GunItem){
-//                matrixStack.scale(2,2,2);
+                matrixStack.translate(0,posDelta,0);
                 GunRenderingHandler.get().renderWeapon(this.minecraft.player, currentItem, ItemCameraTransforms.TransformType.FIXED, matrixStack, buffer, 15728880, 0F);
                 //TransformType.GROUND with 2x size will block out the text above it.
-//                matrixStack.scale(0.5f,0.5f,0.5f);
             }else Minecraft.getInstance().getItemRenderer().renderItem(currentItem, ItemCameraTransforms.TransformType.FIXED, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(currentItem));
 
             buffer.finish();
