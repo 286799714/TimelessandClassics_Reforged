@@ -385,6 +385,9 @@
     "perk.tac.ads_speed.positivev2": "+开镜速度 %s",
     "perk.tac.ads_speed.negativev2": "-开镜速度 %s",
 
+    "updateCheck.tac":"TaC有新的版本可用 %s \n %s",
+
+
     "perk.tac.vol": "% 枪声",
 
     "tac.options.gui_settings": "TAC HUD选项",
@@ -420,7 +423,18 @@
     "tac.button.reload": "装弹 / 卸弹",
     "tac.button.attachments": "配件管理",
     "tac.button.steadyAim": "屏息瞄准",
-    "curios.identifier.armor_rig": "TAC 防弹衣"
+    "curios.identifier.armor_rig": "TAC 防弹衣",
+    "key.tac.aim_sights": "Toggle ADS",
+    "tac.options.toggleAim": "Toggle ADS",
+    "perk.tac.additional_damage.positive": "Additional Damage Â§r(Â§l+%s â™¥Â§r)",
+    "perk.tac.additional_damage.negative": "Negative Damage Â§r(Â§l-%s â™¥Â§r)",
+    "item.tac.sro_dot": "Trijicon SRO",
+    "info.tac.tac_armor_repair1": "Hold your ",
+    "info.tac.tac_armor_repair2": " in-game to repair Armor",
+    "info.tac.current_armor_amount": "Current Armor Durability: ",
+    "tac.options.weaponsVolume.format": "Gun fire Volume: %s",
+    "tac.options.toggleAim": "Toggle ADS",
+    "tac.options.showFirstPersonBulletTrails": "Show FPS trails"
     
     
 }
