@@ -437,9 +437,10 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
                 GunRenderingHandler.get().renderScope(this.minecraft.player, currentItem, ItemCameraTransforms.TransformType.HEAD, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
                 matrixStack.scale(0.5f,0.5f,0.5f);
             }else if(currentItem.getItem() instanceof GunItem){
-                matrixStack.scale(2,2,2);
-                GunRenderingHandler.get().renderWeapon(this.minecraft.player, currentItem, ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F);
-                matrixStack.scale(0.5f,0.5f,0.5f);
+//                matrixStack.scale(2,2,2);
+                GunRenderingHandler.get().renderWeapon(this.minecraft.player, currentItem, ItemCameraTransforms.TransformType.FIXED, matrixStack, buffer, 15728880, 0F);
+                //TransformType.GROUND with 2x size will block out the text above it.
+//                matrixStack.scale(0.5f,0.5f,0.5f);
             }else Minecraft.getInstance().getItemRenderer().renderItem(currentItem, ItemCameraTransforms.TransformType.FIXED, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(currentItem));
 
             buffer.finish();
