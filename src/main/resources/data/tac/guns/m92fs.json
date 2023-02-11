@@ -10,7 +10,7 @@
     "horizontalRecoilAngle": 2.25,
     "recoilKick": 1.6,
     "recoilAdsReduction": 0.20,
-    "weaponRecoilDuration": 0.9,
+    "weaponRecoilOffset": 0.9,
     "cameraRecoilModifier": 1.85,
     "alwaysSpread": true,
     "spread": 3.35,
@@ -18,7 +18,7 @@
   },
   "reloads": {
     "magFed": true,
-    "maxAmmo": 17,
+    "maxAmmo": 15,
     "reloadMagTimer": 45,
     "additionalReloadEmptyMagTimer": 6,
     "maxAdditionalAmmoPerOC": [
@@ -51,13 +51,11 @@
     "weaponType": 2
   },
   "modules": {
-    "zoom": [
-      {
-        "fovModifier": 0.9,
-        "yOffset": 12.56,
-        "zOffset": -13.5
-      }
-    ],
+    "zoom": {
+      "fovModifier": 0.9,
+      "yOffset": 12.56,
+      "zOffset": -13.5
+    },
     "attachments": {
       "pistolBarrel": {
         "yOffset": -100829.84,

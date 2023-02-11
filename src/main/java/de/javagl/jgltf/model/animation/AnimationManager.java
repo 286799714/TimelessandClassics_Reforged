@@ -116,7 +116,6 @@ public final class AnimationManager
     {
         startNs = System.nanoTime();
         currentNs = System.nanoTime();
-        performStep(0);
     }
     
     /**
@@ -124,13 +123,23 @@ public final class AnimationManager
      * 
      * @return The animation time
      */
-    float getCurrentTimeS()
+    public float getCurrentTimeS()
     {
         long timeNs = currentNs - startNs;
         float timeS = timeNs * 1e-9f;
         return timeS;
     }
-    
+
+    public void setCurrentTimeS(float timeS)
+    {
+        long timeNs =(long)(timeS * 1e9f);
+        currentNs = startNs + timeNs;
+    }
+
+    public float getMaxEndTimeS() {
+        return maxEndTimeS;
+    }
+
     /**
      * Add the given {@link Animation} to this manager.
      * 

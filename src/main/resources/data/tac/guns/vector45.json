@@ -1,64 +1,72 @@
 {
   "general": {
     "auto": true,
-    "rate": 1,
+    "rate": 1200,
+    "burstCount": 2,
+    "burstRate": 6,
     "rateSelector": [
       0,
-      2
+      2,
+      3
     ],
     "gripType": "tac:two_handed_vector",
-    "maxAmmo": 20,
-    "recoilAngle": 2.225,
-    "horizontalRecoilAngle": 0.85,
-    "recoilKick": 1.185,
-    "recoilAdsReduction": 0.24,
-    "weaponRecoilDuration": 0.9625,
-    "cameraRecoilModifier": 0.775,
-    "recoilDuration": 0.1775,
-    "alwaysSpread": true,
-    "spread": 6.65,
-    "weightKilo": 2.9
+    "recoilAngle": 1.575,
+    "horizontalRecoilAngle": 1.275,
+    "recoilKick": 2.575,
+    "recoilAdsReduction": 0.205,
+    "weaponRecoilOffset": 0.9275,
+    "cameraRecoilModifier": 0.865,
+    "recoilDuration": 0.1375,
+    "weightKilo": 1.45,
+
+    "spread": 1.8,
+    "firstShotSpread": 0.155,
+    "hipFireInaccuracy": 3.2,
+    "projToMinAccuracy": 9,
+    "msToAccuracyReset": 130,
+    "movementInaccuracy": 0.225
   },
   "reloads": {
     "magFed": true,
-    "maxAmmo": 20,
-    "reloadMagTimer": 36,
-    "additionalReloadEmptyMagTimer": 10,
-    "maxAdditionalAmmoPerOC": [10, 15, 20],
+    "maxAmmo": 13,
+    "reloadMagTimer": 15,
+    "additionalReloadEmptyMagTimer": 15,
+    "maxAdditionalAmmoPerOC": [5, 10, 17],
     "preReloadPauseTicks": 9,
     "openBolt": false
   },
   "projectile": {
     "item": "tac:round45",
     "visible": false,
-    "damage": 3.0,
-    "size": 0.2,
-    "speed": 22.5,
-    "life": 3
+    "damage": 7.0,
+    "speed": 14.5,
+    "life": 19,
+    "size": 0.075,
+    "trailLengthMultiplier": 3.15
   },
   "sounds": {
-    "fire": "tac:item.vector",
-    "reload": "tac:item.pistol.reload",
+    "fire": "tac:item.vector_fire",
+    "reloadNormal": "tac:animation.vector45_reload_norm",
+    "reloadEmpty": "tac:animation.vector45_reload_empty",
+    "draw": "tac:animation.vector45_draw",
+    "inspect": "tac:animation.vector45_inspect",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.fire_m1911s"
+    "silencedFire": "tac:item.m1911_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 11.35,
       "zOffset": -11.0,
-      "size": 1.10
-    },
-    "hipfireScale": 0.425,
-    "hipfireMoveScale": 0.725,
-    "hipfireRecoilScale": 0.95,
-    "weaponType": 4
+      "size": 1.10,
+      "trailAdjust": 0.6925
+    }
   },
   "modules": {
-    "zoom": [{
+    "zoom":{
       "fovModifier": 0.9,
       "yOffset": 14.80,
       "zOffset": 3.75
-    }],
+    },
     "attachments": {
       "barrel": {
         "yOffset": -100829.84,
@@ -67,8 +75,15 @@
       },
       "scope": {
         "yOffset": 13.35,
-        "zOffset": 1.675,
+        "zOffset": -1.175,
         "scale": 1.00
+      },
+      "pistolScope": {
+        "yOffset": 13.35,
+        "zOffset": -2.175,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
       },
       "stock": {
         "yOffset": 7.75,

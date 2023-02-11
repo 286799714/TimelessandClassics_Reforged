@@ -1,0 +1,100 @@
+{
+  "general": {
+    "auto": true,
+    "rate": 700,
+    "rateSelector": [
+      0,
+      1,
+      2
+    ],
+    "gripType": "tac:two_handed_ak47",
+    "recoilAngle": 3.325,
+    "horizontalRecoilAngle": 2.75,
+    "recoilKick": 1.8,
+    "recoilAdsReduction": 0.215,
+    "weaponRecoilOffset": 0.775,
+    "cameraRecoilModifier": 1.65,
+    "recoilDuration": 0.135,
+    "weightKilo": 4.3,
+
+    "spread": 1.775,
+    "firstShotSpread": 0.115,
+    "hipFireInaccuracy": 6.25,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 220,
+    "movementInaccuracy": 0.35
+  },
+  "projectile": {
+    "item": "tac:762x39",
+    "visible": false,
+    "damage": 7.75,
+    "size": 0.2,
+    "speed": 17.0,
+    "life": 21
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 30,
+    "reloadMagTimer": 34,
+    "additionalReloadEmptyMagTimer": 14,
+    "maxAdditionalAmmoPerOC": [
+      10,
+      15,
+      20
+    ],
+    "preReloadPauseTicks": 0
+  },
+  "sounds": {
+    "fire": "tac:item.mk47_fire",
+    "reloadNormal": "tac:animation.mk47_norm_reload",
+    "reloadEmpty": "tac:animation.mk47_empty_reload",
+    "draw": "tac:animation.mk47_draw",
+    "inspect": "tac:animation.mk47_inspect",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "tac:item.mk47_fire_s"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 9.55,
+      "zOffset": -17.35,
+      "size": 0.9
+    },
+    "hipfireScale": 1.175,
+    "hipfireMoveScale": 0.8,
+    "hipfireRecoilScale": 1.25,
+    "showDynamicHipfire": true,
+    "weaponType": 0
+  },
+  "modules": {
+    "zoom": {
+      "fovModifier": 0.8,
+      "yOffset": 12.415,
+      "zOffset": 0.8
+    },
+    "attachments": {
+      "barrel": {
+        "yOffset": -100829.84,
+        "zOffset": -11.55,
+        "scale": 1.00
+      },
+      "stock": {
+        "yOffset": 7.75,
+        "zOffset": -22.05,
+        "scale": 0.00
+      },
+      "scope": {
+        "yOffset": 10.8,
+        "zOffset": 0.66,
+        "scale": 1.0
+      },
+      "pistolScope": {
+        "yOffset": 10.8,
+        "zOffset": -0.36,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      }
+    }
+  }
+}
+

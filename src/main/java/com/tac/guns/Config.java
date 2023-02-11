@@ -46,13 +46,16 @@ public class Config
         public final ForgeConfigSpec.ConfigValue<String> headshotSound;
         public final ForgeConfigSpec.BooleanValue playSoundWhenCritical;
         public final ForgeConfigSpec.ConfigValue<String> criticalSound;
+        public final ForgeConfigSpec.DoubleValue weaponsVolume;
 
         public Sounds(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Control sounds triggered by guns").push("sounds");
             {
+                this.weaponsVolume = builder.comment("Show your ammunition as numbers, reloading timer, weapon icon, and fire mode all on the HUD.").defineInRange("weaponsVolume", 1.0, 0.0, 1.0);
+
                 this.playSoundWhenHeadshot = builder.comment("If true, a sound will play when you successfully hit a headshot on a entity with a gun").define("playSoundWhenHeadshot", true);
-                this.headshotSound = builder.comment("The sound to play when a headshot occurs").define("headshotSound", "tac:item.headshot");
+                this.headshotSound = builder.comment("The sound to play when a headshot occurs").define("headshotSound", "minecraft:entity.player.attack.crit");
                 this.playSoundWhenCritical = builder.comment("If true, a sound will play when you successfully hit a critical on a entity with a gun").define("playSoundWhenCritical", true);
                 this.criticalSound = builder.comment("The sound to play when a critical occurs").define("criticalSound", "minecraft:entity.player.attack.crit");
             }
@@ -70,7 +73,27 @@ public class Config
 
         public final ForgeConfigSpec.BooleanValue weaponAmmoBar;
 
+        public final ForgeConfigSpec.BooleanValue gameplayEnchancedScopeOffset;
+        public final ForgeConfigSpec.BooleanValue scopeDoubleRender;
+        public final ForgeConfigSpec.BooleanValue redDotSquishUpdate;
+        public final ForgeConfigSpec.BooleanValue sight1xRealisticPosition;
 
+        public final ForgeConfigSpec.IntValue cameraShakeOnHit;
+        public final ForgeConfigSpec.BooleanValue cameraShakeOptionGlobal;
+        public final ForgeConfigSpec.BooleanValue cameraShakeOnFire;
+
+        public final ForgeConfigSpec.BooleanValue weaponDelayedSway;
+        public final ForgeConfigSpec.BooleanValue showFirstPersonBulletTrails;
+
+        public final ForgeConfigSpec.DoubleValue weaponDelayedSwayMaximum;
+        public final ForgeConfigSpec.DoubleValue weaponDelayedSwayMultiplier;
+        public final ForgeConfigSpec.BooleanValue weaponDelayedSwayDirection;
+
+        public final ForgeConfigSpec.BooleanValue weaponDelayedSwayYNOptical;
+
+
+        public final ForgeConfigSpec.BooleanValue showBulletTrails;
+        public final ForgeConfigSpec.DoubleValue bulletTrailOpacity;
         public Display(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Configuration for display related options").push("display");
@@ -78,7 +101,28 @@ public class Config
                 this.oldAnimations = builder.comment("If true, uses the old animation poses for weapons. This is only for nostalgic reasons and not recommended to switch back.").define("oldAnimations", false);
                 this.crosshair = builder.comment("The custom crosshair to use for weapons. Go to (Options > Controls > Mouse Settings > Crosshair) in game to change this!").define("crosshair", Crosshair.DEFAULT.getLocation().toString());
 
-                this.weaponAmmoBar = builder.comment("Show % of your ammo in your gun via a colored durability bar!, Set to false to remove bar entirely for more realistic gameplay!").define("weaponAmmoBar", false);
+                this.weaponAmmoBar = builder.comment("Show % of your ammo in your gun via a colored durability bar. Set to false to remove bar entirely for more realistic gameplay").define("weaponAmmoBar", false);
+
+                this.gameplayEnchancedScopeOffset = builder.comment("Scopes are brought closer to the shooter to help fill FOV with a scope view at all times").define("gameplayEnchancedScopeOffset", true);
+                this.scopeDoubleRender = builder.comment("Enable picture in picture rendering for scopes, saves on some performance and issues with Optifine").define("scopeDoubleRender", true);
+                this.redDotSquishUpdate = builder.comment("Enable 0 fov multiplied sights (Dot/Holo sights) to render in 2d when aimed like the scopeDoubleRender(false) effect.").define("redDotSquishUpdate", false);
+                this.sight1xRealisticPosition = builder.comment("Enable 0 fov multiplied sights (Dot/Holo sights) to be viewed realisticly, with the players head static for iron sights, and 1x optics").define("sight1xRealisticPostion", false);
+
+                this.cameraShakeOnHit = builder.comment("Shake camera when hit, 0 = no camera shake when you are hit, while holding a gun, meant to help reduce jarring feel when attempting to aim.").defineInRange("cameraShakeOnHit", 6, 0, 10);
+                this.cameraShakeOptionGlobal = builder.comment("Enable the cameraShakeOnHit option to always take effect, holding a gun or not, keep false for vanilla gameplay to remain vanilla.").define("cameraShakeOptionGlobal", false);
+                this.cameraShakeOnFire = builder.comment("Shake camera when firing the weapon, currently in beta but will be expanded on in the future, if it causes vomit, DISABLE, else enjoy!").define("cameraShakeOnFire", true);
+
+                this.showFirstPersonBulletTrails = builder.comment("Attempt to show bullet trails from your own gun, currently ALPHA, doesn't map to the barrel of weapons and maybe distracting.").define("showFirstPersonBulletTrails", true);
+
+                this.weaponDelayedSway = builder.comment("When looking around the weapon sways smoothly in delay with the camera movement. Disable if distracting with scopes.").define("weaponDelayedSway", true);
+
+                this.weaponDelayedSwayMaximum = builder.comment("Maximum degrees the weapon's delayed sway can rotate the weapon.").defineInRange("weaponDelayedSwayMaximum", 3.35, 0.5, 10.0);
+                this.weaponDelayedSwayMultiplier = builder.comment("Adjusts the sensitivity of the weapon's delayed sway, depending on mouse / head, movement.").defineInRange("weaponDelayedSwayMultiplier", -0.1, -0.4, -0.05);
+                this.weaponDelayedSwayDirection = builder.comment("If true, the weapon will drag against the aiming point, false will drag the aiming point on sway.").define("weaponDelayedSwayDirection", false);
+                this.weaponDelayedSwayYNOptical = builder.comment("If true, the weapon will drag against the aiming point ONLY if an optic is added.").define("weaponDelayedSwayYNOptical", false);
+
+                this.showBulletTrails = builder.comment("Choose to see any bullet trails, trails by you or any other player / bot will not appear. Helps with Shader compatability.").define("showBulletTrails", true);
+                this.bulletTrailOpacity = builder.comment("Adjusts the opacity, AKA how see through the bullet trails are seen as, higher values can be seen better indoors or at daytime.").defineInRange("bulletTrailOpacity", 0.285, 0.1, 1.0);
             }
             builder.pop();
         }
@@ -92,6 +136,7 @@ public class Config
         public final WeaponFireMode weaponFireMode;
         public final WeaponAmmoCounter weaponAmmoCounter;
         public final WeaponReloadTimer weaponReloadTimer;
+
 
         public WeaponGUI(ForgeConfigSpec.Builder builder)
         {
@@ -220,17 +265,16 @@ public class Config
     {
         public final ForgeConfigSpec.DoubleValue aimDownSightSensitivity;
 
-        public final ForgeConfigSpec.BooleanValue toggleAim;
         public final ForgeConfigSpec.IntValue toggleAimDelay;
-
+        public final ForgeConfigSpec.BooleanValue burstPress;
         public Controls(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to controls").push("controls");
             {
                 this.aimDownSightSensitivity = builder.comment("A value to multiple the mouse sensitivity by when aiming down weapon sights. Go to (Options > Controls > Mouse Settings > ADS Sensitivity) in game to change this!").defineInRange("aimDownSightSensitivity", 0.75, 0.0, 2.0);
 
-                this.toggleAim = builder.comment("Click to toggle aim on and off in game, instead of holding your aim button, the only way to utilize the toggleAim Keybind at this point!").define("toggleAim", false);
                 this.toggleAimDelay = builder.comment("The delay in ticks before being able to activate your toggleAim again, recommended to leave alone or increase past default!").defineInRange("toggleAimDelay", 8, 1, 60);
+                this.burstPress = builder.comment("Press to use a burst fire a gun, or hold to continue a burst, un-clicking cancels your burst").define("burstPress", true);
             }
             builder.pop();
         }
@@ -241,7 +285,7 @@ public class Config
      */
     public static class Quality
     {
-        public final ForgeConfigSpec.BooleanValue reducedGuiWeaponQuality;
+        public final ForgeConfigSpec.BooleanValue reducedQualityHotBar;
         //public final ForgeConfigSpec.BooleanValue reducedGuiScopeQuality;
         //public final ForgeConfigSpec.BooleanValue reducedGuiAmmunitionQuality;
         //public final ForgeConfigSpec.BooleanValue reducedEffects;
@@ -250,7 +294,7 @@ public class Config
         {
             builder.comment("Properties relating to improving graphical performance (Currently unsupported, do not attempt to change these settings until announcements are made about these features!)").push("quality");
             {
-                this.reducedGuiWeaponQuality = builder.comment("If enabled all main weapons will be unloaded and replaced with lower quality and legacy models, not all guns maybe replaced with this mode!").define("reducedGuiWeaponQuality", false);
+                this.reducedQualityHotBar = builder.comment("If enabled all main weapons will be unloaded and replaced with lower quality and legacy models, not all guns maybe replaced with this mode!").define("reducedQualityHotBar", true);
                 //this.reducedGuiScopeQuality = builder.comment("If enabled all main scopes will be unloaded and replaced with lower quality and legacy models, not all scopes maybe replaced with this mode!").define("reducedScopeQuality", false);
                 //this.reducedGuiAmmunitionQuality = builder.comment("If enabled all main ammunition will be unloaded and replaced with lower quality and legacy models, not all ammo types maybe replaced with this mode!").define("reducedAmmunitionQuality", false);
                 //this.reducedEffects = builder.comment("If enabled all main effects will be disabled such as muzzle flash / smoke and more!").define("reducedEffects", false);
@@ -297,7 +341,7 @@ public class Config
     public static class Gameplay
     {
         public final ForgeConfigSpec.BooleanValue enableGunGriefing;
-        public final ForgeConfigSpec.DoubleValue growBoundingBoxAmount;
+        public final ForgeConfigSpec.DoubleValue growBoundingBoxAmountV2;
         public final ForgeConfigSpec.BooleanValue enableHeadShots;
         public final ForgeConfigSpec.DoubleValue headShotDamageMultiplier;
         public final ForgeConfigSpec.DoubleValue criticalDamageMultiplier;
@@ -311,16 +355,23 @@ public class Config
         public final ForgeConfigSpec.BooleanValue realisticAimedBreathing;
         public final ForgeConfigSpec.BooleanValue safetyExistence;
 
-        public final ForgeConfigSpec.BooleanValue gameplayEnchancedScopeOffset;
-        public final ForgeConfigSpec.BooleanValue scopeDoubleRender;
-        public final ForgeConfigSpec.BooleanValue redDotSquish2D;
+        public final ForgeConfigSpec.BooleanValue bulletsIgnoreStandardArmor;
+
+        public final ForgeConfigSpec.DoubleValue percentDamageIgnoresStandardArmor;
+
+        public final ForgeConfigSpec.BooleanValue renderTaCArmor;
+        public final ForgeConfigSpec.BooleanValue armorBluntDamage;
+
+        public final ForgeConfigSpec.BooleanValue forceCameraShakeOnFire;
+
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to gameplay").push("gameplay");
             {
                 this.enableGunGriefing = builder.comment("If enable, allows guns to shoot out glass and remove blocks on explosions").define("enableGunGriefing", true);
-                this.growBoundingBoxAmount = builder.comment("The extra amount to expand an entity's bounding box when checking for projectile collision. Setting this value higher will make it easier to hit entities").defineInRange("growBoundingBoxAmount", 0.3, 0.0, 1.0);
+                this.growBoundingBoxAmountV2 = builder.comment("The extra amount to expand an entity's bounding box when checking for projectile collision. Setting this value higher will make it easier to hit entities").defineInRange(
+                        "growBoundingBoxAmountV2", 0.0, 0.0, 1.0);
                 this.enableHeadShots = builder.comment("Enables the check for head shots for players. Projectiles that hit the head of a player will have increased damage.").define("enableHeadShots", true);
                 this.headShotDamageMultiplier = builder.comment("The value to multiply the damage by if projectile hit the players head").defineInRange("headShotDamageMultiplier", 1.25, 1.0, Double.MAX_VALUE);
                 this.criticalDamageMultiplier = builder.comment("The value to multiply the damage by if projectile is a critical hit").defineInRange("criticalDamageMultiplier", 1.5, 1.0, Double.MAX_VALUE);
@@ -336,9 +387,18 @@ public class Config
 
                 this.realisticAimedBreathing = builder.comment("Aiming will present a breathing animation, moving the weapon over time, crouch to lower it's effects").define("realisticAimedBreathing", false);
 
-                this.gameplayEnchancedScopeOffset = builder.comment("Scopes are brought closer to the shooter to help fill FOV with a scope view at all times").define("gameplayEnchancedScopeOffset", true);
-                this.scopeDoubleRender = builder.comment("Enable scope double render, saves on some performance and compatability issues with Optifine").define("scopeDoubleRender", true);
-                this.redDotSquish2D = builder.comment("Enable 0 fov multiplied sights (Dot/Holo sights) to render in 2d when aimed like the scopeDoubleRender(false) effect.").define("redDotSquish2D", true);
+                this.bulletsIgnoreStandardArmor = builder.comment("Bullets completely ignore Minecraft armor, forcing you to use our armor system.").define("bulletsIgnoreStandardArmor", true);
+                this.percentDamageIgnoresStandardArmor =
+                        builder.comment("The percent of the damage to be applied standard, AKA Minecraft armor reduces this portion of the damage, while the rest passes through freely, only active when either armor hits 0 or no TaC armor worn at " +
+                                "all, 0 = Minecraft armor never effects bullet damage, 1 = Minecraft armor effectiveness doesn't change.").defineInRange(
+                        "percentDamageIgnoresStandardArmor", 0.25, 0.0, 1.0);
+                this.renderTaCArmor = builder.comment("Enable rendering of TaC armor on the player, useful if other armors are taking priority, doesn't fit gameplay theme, or not performant enough.").define("renderTaCArmor",
+                        true);
+                this.armorBluntDamage = builder.comment("All weapons have a percentage of damage applied, no matter the class match up, false means blunt damage is never applied before armor calc.").define("armorBluntDamage", true);
+
+                this.forceCameraShakeOnFire = builder.comment("Force camera shake on for all players, since control over the weapon is reduced with this off, having a client only options could lead to balance issues.").define("forceCameraShakeOnFire",
+                        false);
+
             }
             builder.pop();
         }
@@ -347,12 +407,18 @@ public class Config
     public static class Development
     {
         public final ForgeConfigSpec.BooleanValue permanentCrosshair;
+        public final ForgeConfigSpec.BooleanValue enableTDev;
+        public final ForgeConfigSpec.ConfigValue<String> TDevPath;
+        public final ForgeConfigSpec.BooleanValue bulletSelfHarm;
 
         public Development(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Development").push("development");
             {
                 this.permanentCrosshair = builder.comment("If enabled any crosshair will continue to render on aim.").define("permanentCrosshair", false);
+                this.enableTDev = builder.comment("If enabled, /tdev will both be registered (Upon restart), and function! Used as well to speed up tag checks").define("enableTDev", false);
+                this.TDevPath = builder.comment("Directory to build all TaC sub-directories, these will contain export data from /tdev functions").define("tDevPath", "");
+                this.bulletSelfHarm = builder.comment("Wether the shooters bullets can harm the shooter, great for testing armor and onhit effects with the development gun").define("bulletSelfHarm", false);
             }
             builder.pop();
         }
@@ -557,13 +623,15 @@ public class Config
     {
         public final ForgeConfigSpec.IntValue spreadThreshold;
         public final ForgeConfigSpec.IntValue maxCount;
-
+        public final ForgeConfigSpec.BooleanValue movementInaccuracy;
         public ProjectileSpread(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to projectile spread").push("projectile_spread");
             {
                 this.spreadThreshold = builder.comment("The amount of time in milliseconds before logic to apply spread is skipped. The value indicates a reasonable amount of time before a weapon is considered stable again.").defineInRange("spreadThreshold", 300, 0, 1000);
-                this.maxCount = builder.comment("The amount of times a player has to shoot within the spread threshold before the maximum amount of spread is applied. Setting the value higher means it will take longer for the spread to be applied.").defineInRange("maxCount", 10, 1, Integer.MAX_VALUE);
+                this.maxCount = builder.comment("The amount of times a player has to shoot within" +
+                        " the spread threshold before the maximum amount of spread is applied. Setting the value higher means it will take longer for the spread to be applied.").defineInRange("maxCount", 3, 1, Integer.MAX_VALUE);
+                this.movementInaccuracy = builder.comment("Weapon grows more inaccurate depending if the player is in motion (Forward, Strafing, Jumping)").define("movementInaccuracy", true);
             }
             builder.pop();
         }

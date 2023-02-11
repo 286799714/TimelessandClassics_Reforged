@@ -25,12 +25,23 @@ public class BulletTrail
     private int trailColor;
     private double trailLengthMultiplier;
     private int age;
+
+    public int getMaxAge() {
+        return maxAge;
+    }
+
     private int maxAge;
     private double gravity;
     private int shooterId;
     private WeakReference<Entity> shooter;
 
-    public BulletTrail(int entityId, Vector3d position, Vector3d motion, ItemStack item, int trailColor, double trailMultiplier, int maxAge, double gravity, int shooterId)
+    private float shooterYaw;
+
+    private float shooterPitch;
+
+    private float size;
+
+    public BulletTrail(int entityId, Vector3d position, Vector3d motion, float shooterYaw, float shooterPitch, ItemStack item, int trailColor, double trailMultiplier, int maxAge, double gravity, int shooterId, float size)
     {
         this.entityId = entityId;
         this.position = position;
@@ -42,6 +53,9 @@ public class BulletTrail
         this.gravity = gravity;
         this.shooterId = shooterId;
         this.updateYawPitch();
+        this.shooterYaw = shooterYaw;
+        this.shooterPitch = shooterPitch;
+        this.size = size;
     }
 
     private void updateYawPitch()
@@ -65,7 +79,7 @@ public class BulletTrail
 
         Entity entity = Minecraft.getInstance().getRenderViewEntity();
         double distance = entity != null ? Math.sqrt(entity.getDistanceSq(this.position)) : Double.MAX_VALUE;
-        if(this.age >= this.maxAge || distance > 256)
+        if(this.age >= this.maxAge || distance > 1024)
         {
             this.dead = true;
         }
@@ -126,6 +140,11 @@ public class BulletTrail
         return this.shooterId;
     }
 
+    public float getShooterYaw() { return shooterYaw; }
+
+    public float getShooterPitch() { return shooterPitch; }
+    public float getSize() { return size; }
+
     /**
      * Gets the instance of the entity that shot the bullet. The entity is cached to avoid searching
      * for it every frame, especially when lots of bullet trails are being rendered.
@@ -162,7 +181,7 @@ public class BulletTrail
     public boolean isTrailVisible()
     {
         Entity entity = Minecraft.getInstance().getRenderViewEntity();
-        return entity != null && entity.getEntityId() != this.shooterId;
+        return entity != null/* && entity.getEntityId() != this.shooterId*/;
     }
 
     @Override

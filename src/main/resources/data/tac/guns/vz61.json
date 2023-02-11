@@ -11,7 +11,7 @@
     "horizontalRecoilAngle": 1.35,
     "recoilKick": 1.525,
     "recoilAdsReduction": 0.15,
-    "weaponRecoilDuration": 0.9625,
+    "weaponRecoilOffset": 0.9625,
     "cameraRecoilModifier": 1.45,
     "recoilDuration": 0.15,
     "alwaysSpread": true,
@@ -33,10 +33,10 @@
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "damage": 4.25,
+    "damage": 3.5,
     "size": 0.2,
-    "speed": 17.5,
-    "life": 4
+    "speed": 13.5,
+    "life": 5
   },
   "sounds": {
     "fire": "tac:item.fire_m92fs",
@@ -53,13 +53,12 @@
     "weaponType": 2
   },
   "modules": {
-    "zoom": [
+    "zoom":
       {
         "fovModifier": 0.9,
         "yOffset": 12.875,
         "zOffset": -15.25
-      }
-    ],
+      },
     "attachments": {}
   }
 }

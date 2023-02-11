@@ -1,19 +1,19 @@
 package com.tac.guns.client.settings;
 
+import java.text.DecimalFormat;
+
 import com.tac.guns.Config;
 import com.tac.guns.client.handler.CrosshairHandler;
 import com.tac.guns.client.render.crosshair.Crosshair;
+
 import net.minecraft.client.AbstractOption;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.widget.button.OptionButton;
 import net.minecraft.client.settings.BooleanOption;
 import net.minecraft.client.settings.SliderPercentageOption;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
-
-import java.text.DecimalFormat;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -32,14 +32,14 @@ public class GunOptions
         return new TranslationTextComponent("tac.options.adsSensitivity.format", FORMAT.format(adsSensitivity));
     });
 
-    public static final BooleanOption TOGGLE_ADS = new BooleanOption("tac.options.toggleAim", (settings) -> {
-        return Config.CLIENT.controls.toggleAim.get();
+   /* public static final BooleanOption BURST_MECH = new BooleanOption("tac.options.burstPress", (settings) -> {
+        return Config.CLIENT.controls.burstPress.get();
     }, (settings, value) -> {
-        Config.CLIENT.controls.toggleAim.set(value);
+        Config.CLIENT.controls.burstPress.set(value);
         Config.saveClientConfig();
     });
     // this.minecraft.displayGuiScreen
-
+*/
 
     public static final AbstractOption CROSSHAIR = new GunListOption<>("tac.options.crosshair", () -> {
         return CrosshairHandler.get().getRegisteredCrosshairs();
@@ -71,6 +71,25 @@ public class GunOptions
             }
         }
         matrixStack.pop();
+    });
+
+    public static final BooleanOption DOUBLE_RENDER_EXIST = new BooleanOption("tac.options.doubleRender", (settings) -> {
+        return Config.CLIENT.display.scopeDoubleRender.get();
+    }, (settings, value) -> {
+        Config.CLIENT.display.scopeDoubleRender.set(value);
+        Config.saveClientConfig();
+    });
+    public static final BooleanOption SHOW_FPS_TRAILS_EXIST = new BooleanOption("tac.options.showFirstPersonBulletTrails", (settings) -> {
+        return Config.CLIENT.display.showFirstPersonBulletTrails.get();
+    }, (settings, value) -> {
+        Config.CLIENT.display.showFirstPersonBulletTrails.set(value);
+        Config.saveClientConfig();
+    });
+    public static final BooleanOption REDDOT_SQUISH_EXIST = new BooleanOption("tac.options.reddotSquish", (settings) -> {
+        return Config.CLIENT.display.redDotSquishUpdate.get();
+    }, (settings, value) -> {
+        Config.CLIENT.display.redDotSquishUpdate.set(value);
+        Config.saveClientConfig();
     });
 
     public static final BooleanOption FIREMODE_EXIST = new BooleanOption("tac.options.firemodeExist", (settings) -> {
@@ -254,6 +273,22 @@ public class GunOptions
             (gameSettings, option) -> {
                 double adsSensitivity = Config.CLIENT.weaponGUI.weaponReloadTimer.x.get();
                 return new TranslationTextComponent("tac.options.xReloadBarPos.format", FORMAT.format(adsSensitivity));
+            });
+
+    public static final SliderPercentageOption Fire_Volume = new GunSliderPercentageOption("tac.options.weaponsVolume", 0f, 1f, 0.01F,
+            gameSettings ->
+            {
+                return Config.CLIENT.sounds.weaponsVolume.get();
+                //return Config.CLIENT.controls.aimDownSightSensitivity.get();
+            },
+            (gameSettings, value) ->
+            {
+                Config.CLIENT.sounds.weaponsVolume.set(MathHelper.clamp(value, 0f, 1f));
+                Config.saveClientConfig();
+            },
+            (gameSettings, option) -> {
+                double adsSensitivity = Config.CLIENT.sounds.weaponsVolume.get();
+                return new TranslationTextComponent("tac.options.weaponsVolume.format", FORMAT.format(adsSensitivity));
             });
     public static final SliderPercentageOption Y_ReloadBar_POS = new GunSliderPercentageOption("tac.options.yReloadBarPos", -500, 500, 0.001F,
             gameSettings ->

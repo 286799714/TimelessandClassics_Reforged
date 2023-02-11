@@ -1,0 +1,107 @@
+{
+  "general": {
+    "auto": true,
+    "rate": 600,
+    "rateSelector": [
+      0,
+      1,
+      2
+    ],
+    "gripType": "tac:two_handed_ak47",
+    "recoilAngle": 3.525,
+    "horizontalRecoilAngle": 2.15,
+    "recoilKick": 1.95,
+    "recoilAdsReduction": 0.22,
+    "weaponRecoilOffset": 0.785,
+    "cameraRecoilModifier": 1.325,
+    "recoilDuration": 0.27,
+    "weightKilo": 6.90,
+
+    "spread": 1.225,
+    "firstShotSpread": 0.085,
+    "hipFireInaccuracy": 7.75,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 200,
+    "movementInaccuracy": 0.95
+  },
+  "projectile": {
+    "item": "tac:bullet_308",
+    "visible": false,
+    "damage": 15,
+    "size": 0.15,
+    "speed": 27.5,
+    "life": 20,
+    "trailLengthMultiplier": 4.05
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 18,
+    "reloadMagTimer": 33,
+    "additionalReloadEmptyMagTimer": 16,
+    "maxAdditionalAmmoPerOC": [
+      2,
+      4,
+      7
+    ],
+    "preReloadPauseTicks": 0
+  },
+  "sounds": {
+    "fire": "tac:item.scarh_fire",
+    "reloadNormal": "tac:animation.scar_l_norm_reload",
+    "reloadEmpty": "tac:animation.scar_h_empty_reload",
+    "draw": "tac:animation.scar_l_draw",
+    "inspect": "tac:animation.scar_l_inspect",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "tac:item.scarh_fire_s"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 9.445,
+      "zOffset": -19.95,
+      "size": 0.8,
+      "trailAdjust": 1.2775
+    },
+    "hipfireScale": 1.55,
+    "hipfireMoveScale": 0.71,
+    "hipfireRecoilScale": 0.95,
+    "showDynamicHipfire": true,
+    "weaponType": 0
+  },
+  "modules": {
+    "zoom": {
+      "fovModifier": 0.8,
+      "yOffset": 12.845,
+      "zOffset": -5.805
+    },
+    "attachments": {
+      "scope": {
+        "yOffset": 10.95,
+        "zOffset": 6.715,
+        "scale": 1.0
+      },
+      "pistolScope": {
+        "yOffset": 10.95,
+        "zOffset": 5.35,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      },
+      "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "barrel": {
+        "yOffset": -100829.84,
+        "zOffset": -22.80,
+        "scale": 1.00
+      }
+    }
+  }
+}
+

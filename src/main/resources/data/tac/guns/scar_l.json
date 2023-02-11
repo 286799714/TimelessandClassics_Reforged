@@ -1,0 +1,102 @@
+{
+  "general": {
+    "auto": true,
+    "rate": 600,
+    "rateSelector": [
+      0,
+      1,
+      2
+    ],
+    "gripType": "tac:two_handed_ak47",
+    "recoilAngle": 1.975,
+    "horizontalRecoilAngle": 1.55,
+    "recoilKick": 1.6,
+    "recoilAdsReduction": 0.24,
+    "weaponRecoilOffset": 0.755,
+    "cameraRecoilModifier": 1.275,
+    "recoilDuration": 0.29,
+    "weightKilo": 5.60,
+
+    "spread": 1.35,
+    "firstShotSpread": 0.105,
+    "hipFireInaccuracy": 5.75,
+    "projToMinAccuracy": 3,
+    "msToAccuracyReset": 200,
+    "movementInaccuracy": 0.65
+  },
+  "projectile": {
+    "item": "tac:nato_556_bullet",
+    "visible": false,
+    "damage": 8.5,
+    "size": 0.15,
+    "speed": 30,
+    "life": 9
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 30,
+    "reloadMagTimer": 32,
+    "additionalReloadEmptyMagTimer": 13,
+    "maxAdditionalAmmoPerOC": [
+      10,
+      20,
+      30
+    ],
+    "preReloadPauseTicks": 0
+  },
+  "sounds": {
+    "fire": "tac:item.scarl_fire",
+    "reloadNormal": "tac:animation.scar_h_norm_reload",
+    "reloadEmpty": "tac:animation.scar_l_empty_reload",
+    "draw": "tac:animation.scar_h_draw",
+    "inspect": "tac:animation.scar_h_inspect",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "tac:item.scarl_fire_s"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 9.445,
+      "zOffset": -16.77,
+      "size": 0.675,
+      "trailAdjust": 1.09
+    },
+    "hipfireScale": 2.5
+  },
+  "modules": {
+    "zoom": {
+      "fovModifier": 0.8,
+      "yOffset": 12.845,
+      "zOffset": -5.805
+    },
+    "attachments": {
+      "scope": {
+        "yOffset": 10.89,
+        "zOffset": 6.715,
+        "scale": 1.0
+      },
+      "pistolScope": {
+        "yOffset": 10.89,
+        "zOffset": 5.35,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      },
+      "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "barrel": {
+        "yOffset": -100829.84,
+        "zOffset": -22.80,
+        "scale": 1.00
+      }
+    }
+  }
+}
+

@@ -22,9 +22,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-/**
- * Author: Forked from MrCrayfish, continued by Timeless devs
- */
 @Mixin(MouseHelper.class)
 public class MouseHelperMixin
 {
@@ -38,14 +35,14 @@ public class MouseHelperMixin
                 GunItem gunItem = (GunItem) heldItem.getItem();
                 if (AimingHandler.get().isAiming() && !SyncedPlayerData.instance().get(mc.player, ModSyncedDataKeys.RELOADING)) {
                     Gun modifiedGun = gunItem.getModifiedGun(heldItem);
-                    if (!ArrayUtils.isEmpty(modifiedGun.getModules().getZoom() )) {
-                        float newFov = modifiedGun.getModules().getZoom()[heldItem.getTag().getInt("currentZoom")].getFovModifier();
+                    if (modifiedGun.getModules().getZoom() != null) {
+                        float newFov = modifiedGun.getModules().getZoom().getFovModifier();
 
                         Scope scope = Gun.getScope(heldItem);
                         if (scope != null) {
-                            newFov -= scope.getAdditionalZoom();// * (Config.COMMON.gameplay.scopeDoubleRender.get() ? 1:1.25);
+                            newFov -= scope.getAdditionalZoom().getFovZoom();// * (Config.CLIENT.display.scopeDoubleRender.get() ? 1:1.25);
 
-                            additionalAdsSensitivity = MathHelper.clamp(1.0F - (1.0F / newFov) / 10F, 0.0F, 1.0F) * (Config.COMMON.gameplay.scopeDoubleRender.get() && scope.getAdditionalZoom() > 0 ? 1F:0.7F);
+                            additionalAdsSensitivity = MathHelper.clamp(1.0F - (1.0F / newFov) / 10F, 0.0F, 1.0F) * ((Config.CLIENT.display.scopeDoubleRender.get() && scope.getAdditionalZoom().getFovZoom() > -1) || scope.getAdditionalZoom().getFovZoom() == 0 ? 1F:0.7F);
                         }
                         else
                             additionalAdsSensitivity = MathHelper.clamp(1.0F - (1.0F / newFov) / 10F, 0.0F, 1.0F);

@@ -1,0 +1,14 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 34
+    }
+  ],
+  "result": {
+    "item": "tac:hk_mp5a5"
+  }
+}

@@ -1,42 +1,55 @@
 {
   "general": {
     "auto": true,
-    "rate": 3,
+    "rate": 400,
     "rateSelector": [
       0,
       2
     ],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 2.55,
-    "horizontalRecoilAngle": 0.85,
-    "recoilKick": 0.815,
-    "recoilAdsReduction": 0.55,
-    "weaponRecoilDuration": 0.885,
-    "cameraRecoilModifier": 1.95,
-    "alwaysSpread": true,
-    "spread": 3.5,
-    "weightKilo": 9.0
+    "recoilAngle": 3.55,
+    "horizontalRecoilAngle": 2.65,
+    "recoilKick": 1.875,
+    "recoilAdsReduction": 0.315,
+    "weaponRecoilOffset": 0.715,
+    "cameraRecoilModifier": 1.25,
+    "recoilDuration": 0.335,
+    "weightKilo": 11.25,
+
+    "spread": 2.25,
+    "firstShotSpread": 0.245,
+    "hipFireInaccuracy": 7.2,
+    "projToMinAccuracy": 8,
+    "msToAccuracyReset": 420,
+    "movementInaccuracy": 0.45
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 70,
-    "reloadMagTimer": 88,
-    "additionalReloadEmptyMagTimer": 32,
-    "maxAdditionalAmmoPerOC": [30, 60, 80],
-    "preReloadPauseTicks": 24,
+    "reloadMagTimer": 72,
+    "additionalReloadEmptyMagTimer": 20,
+    "maxAdditionalAmmoPerOC": [
+      30,
+      60,
+      80
+    ],
+    "preReloadPauseTicks": 0,
     "openBolt": true
   },
   "projectile": {
     "item": "tac:762x54",
     "visible": false,
-    "damage": 10,
+    "damage": 14,
     "size": 0.2,
-    "speed": 24.5,
-    "life": 6
+    "speed": 26.5,
+    "life": 7
   },
   "sounds": {
     "fire": "tac:item.fire_dp28",
-    "reload": "tac:item.pistol.reload",
+    "reloadNormal": "tac:animation.dp28_reload_norm",
+    "reloadEmpty": "tac:animation.dp28_reload_empty",
+    "draw": "tac:animation.dp28_draw",
+    "inspect": "tac:animation.dp28_inspect",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.pistol.silenced_fire"
   },
@@ -44,15 +57,16 @@
     "flash": {
       "yOffset": 10.3,
       "zOffset": -22.95,
-      "size": 0.8
+      "size": 0.8,
+      "trailAdjust": 1.4725
     },
     "weaponType": 1
   },
   "modules": {
-    "zoom":[ {
+    "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 12.15,
+      "yOffset": 12.19,
       "zOffset": -4.2
-    }]
+    }
   }
 }

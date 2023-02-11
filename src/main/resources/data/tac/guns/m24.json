@@ -1,39 +1,51 @@
 {
   "general": {
     "boltAction": true,
-    "rate": 26,
+    "rate": 44,
     "gripType": "tac:two_handed_mosin",
-    "recoilAngle": 3.075,
-    "recoilKick": 1.95,
-    "horizontalRecoilAngle": 0.125,
-    "recoilAdsReduction": 0.40,
-    "weaponRecoilDuration": 0.85,
+    "recoilAngle": 3.675,
+    "recoilKick": 1.55,
+    "horizontalRecoilAngle": 0.825,
+    "recoilAdsReduction": 0.215,
+    "weaponRecoilOffset": 0.85,
     "recoilDuration": 0.125,
     "cameraRecoilModifier": 2.0,
-    "alwaysSpread": true,
-    "spread": 0.55,
-    "weightKilo": 4.6
+    "weightKilo": 4.0,
+
+    "spread": 0.225,
+    "firstShotSpread": 0.015,
+    "hipFireInaccuracy": 8.75,
+    "projToMinAccuracy": 1,
+    "msToAccuracyReset": 1100,
+    "movementInaccuracy": 0.275
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 5,
-    "reloadMagTimer": 50,
-    "additionalReloadEmptyMagTimer": 12,
-    "maxAdditionalAmmoPerOC": [5, 8, 10],
-    "preReloadPauseTicks": 10
+    "reloadMagTimer": 33,
+    "additionalReloadEmptyMagTimer": 17,
+    "maxAdditionalAmmoPerOC": [
+      5,
+      8,
+      10
+    ],
+    "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:win_30-30",
     "visible": false,
-    "gravity": true,
     "damage": 24,
     "size": 0.2,
-    "speed": 110.0,
-    "life": 4
+    "speed": 60.0,
+    "life": 52
   },
   "sounds": {
-    "fire": "tac:item.m24",
-    "reload": "tac:item.pistol.reload",
+    "fire": "tac:item.m24_fire",
+    "reloadNormal": "tac:animation.m24_reload_norm",
+    "reloadEmpty": "tac:animation.m24_reload_empty",
+    "draw": "tac:animation.m24_draw",
+    "inspect": "tac:animation.m24_inspect",
+    "pullBolt": "tac:animation.m24_bolt",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.assault_rifle.silenced_fire"
   },
@@ -41,23 +53,30 @@
     "flash": {
       "yOffset": 5.1,
       "zOffset": -29.90,
-      "size": 1.3
+      "size": 1.3,
+      "trailAdjust": 1.9525
     },
     "showDynamicHipfire": false,
     "weaponType": 5
   },
   "modules": {
-    "zoom": [
-      {
-        "fovModifier": 0.7,
-        "yOffset": 7.20,
-        "zOffset": -6.4
-      }],
+    "zoom": {
+      "fovModifier": 0.7,
+      "yOffset": 7.40,
+      "zOffset": -6.4
+    },
     "attachments": {
       "scope": {
         "yOffset": 6.65,
         "zOffset": 6.0,
         "scale": 1.0
+      },
+      "pistolScope": {
+        "yOffset": 6.65,
+        "zOffset": 4.85,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
       }
     }
   }

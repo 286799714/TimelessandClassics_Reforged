@@ -4,16 +4,17 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Pair;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
-import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.common.container.WorkbenchContainer;
 import com.tac.guns.crafting.WorkbenchRecipe;
 import com.tac.guns.crafting.WorkbenchRecipes;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.*;
+import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageCraft;
@@ -32,6 +33,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
@@ -64,6 +66,8 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
     private Button btnCraft;
     private CheckBox checkBoxMaterials;
     private ItemStack displayStack;
+
+    float posDelta = 0.1f;//works for gun models, + means higher
 
     public WorkbenchScreen(WorkbenchContainer container, PlayerInventory playerInventory, ITextComponent title)
     {
@@ -110,8 +114,8 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
 
         if(!weapons.isEmpty())
         {
-            ItemStack icon = new ItemStack(ModItems.AR15_HELLMOUTH.get());
-            icon.getOrCreateTag().putInt("AmmoCount", ModItems.AR15_HELLMOUTH.get().getGun().getReloads().getMaxAmmo());
+            ItemStack icon = new ItemStack(ModItems.HK416_A5.get());
+            icon.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem)ModItems.HK416_A5.get()).getGun().getReloads().getMaxAmmo());
             this.tabs.add(new Tab(icon, "weapons", weapons));
         }
 
@@ -284,12 +288,14 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
 
         this.materials.clear();
 
-        List<ItemStack> materials = recipe.getMaterials();
+        List<Pair<Ingredient, Integer>> materials = recipe.getMaterials();
         if(materials != null)
         {
-            for(ItemStack material : materials)
+            for(Pair<Ingredient, Integer> material : materials)
             {
-                MaterialItem item = new MaterialItem(material);
+                ItemStack stack = material.getFirst().getMatchingStacks()[0];
+                stack.setCount(material.getSecond());
+                MaterialItem item = new MaterialItem(stack);
                 item.update();
                 this.materials.add(item);
             }
@@ -432,8 +438,11 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
                 matrixStack.scale(2,2,2);
                 GunRenderingHandler.get().renderScope(this.minecraft.player, currentItem, ItemCameraTransforms.TransformType.HEAD, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
                 matrixStack.scale(0.5f,0.5f,0.5f);
-            }else
-                Minecraft.getInstance().getItemRenderer().renderItem(currentItem, ItemCameraTransforms.TransformType.FIXED, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(currentItem));
+            }else if(currentItem.getItem() instanceof GunItem){
+                matrixStack.translate(0,posDelta,0);
+                GunRenderingHandler.get().renderWeapon(this.minecraft.player, currentItem, ItemCameraTransforms.TransformType.FIXED, matrixStack, buffer, 15728880, 0F);
+                //TransformType.GROUND with 2x size will block out the text above it.
+            }else Minecraft.getInstance().getItemRenderer().renderItem(currentItem, ItemCameraTransforms.TransformType.FIXED, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(currentItem));
 
             buffer.finish();
 

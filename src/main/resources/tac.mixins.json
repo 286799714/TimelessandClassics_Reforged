@@ -7,13 +7,17 @@
   "mixins": [
     "common.LivingEntityMixin",
     "common.PlayerListMixin",
+    "common.ServerPlayNetHandlerMixin",
     "common.SittingPhaseMixin"
   ],
   "client": [
     "client.FirstPersonRendererMixin",
     "client.GameRendererMixin",
+    "client.MinecraftStaticMixin",
+    "client.InventoryScreenMixin",
     "client.MouseHelperMixin",
-    "client.WorldRendererMixin"
+    "client.WorldRendererMixin",
+    "client.ShadersFramebufferMixin"
   ],
   "injectors": {
     "defaultRequire": 1

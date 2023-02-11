@@ -1,77 +1,55 @@
 package com.tac.guns.client.network;
 
 import com.tac.guns.Config;
-import com.tac.guns.GunMod;
-import com.tac.guns.Reference;
 import com.tac.guns.client.BulletTrail;
 import com.tac.guns.client.CustomGunManager;
+import com.tac.guns.client.CustomRigManager;
 import com.tac.guns.client.audio.GunShotSound;
-import com.tac.guns.client.handler.*;
+import com.tac.guns.client.handler.BulletTrailRenderingHandler;
+import com.tac.guns.client.handler.GunRenderingHandler;
+import com.tac.guns.client.handler.HUDRenderingHandler;
+import com.tac.guns.client.handler.ReloadHandler;
+import com.tac.guns.client.render.animation.module.AnimationMeta;
+import com.tac.guns.client.render.animation.module.AnimationSoundManager;
+import com.tac.guns.client.render.animation.module.AnimationSoundMeta;
 import com.tac.guns.common.Gun;
-import com.tac.guns.common.GunModifiers;
 import com.tac.guns.common.NetworkGunManager;
+import com.tac.guns.common.NetworkRigManager;
 import com.tac.guns.init.ModParticleTypes;
-import com.tac.guns.init.ModSounds;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.inventory.gear.InventoryListener;
+import com.tac.guns.inventory.gear.armor.ArmorRigInventoryCapability;
+import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
+import com.tac.guns.item.GunItem;
 import com.tac.guns.network.message.*;
 import com.tac.guns.particles.BulletHoleData;
-import com.tac.guns.util.GunModifierHelper;
-import mod.chiselsandbits.ChiselsAndBits;
-import mod.chiselsandbits.api.ChiselsAndBitsAPI;
-import mod.chiselsandbits.api.chiseling.ChiselingOperation;
-import mod.chiselsandbits.api.chiseling.IChiselingContext;
-import mod.chiselsandbits.api.chiseling.IChiselingManager;
-import mod.chiselsandbits.api.chiseling.mode.IChiselMode;
-import mod.chiselsandbits.api.exceptions.SpaceOccupiedException;
-import mod.chiselsandbits.api.multistate.accessor.IStateEntryInfo;
-import mod.chiselsandbits.api.multistate.accessor.identifier.IAreaShapeIdentifier;
-import mod.chiselsandbits.api.multistate.accessor.sortable.IPositionMutator;
-import mod.chiselsandbits.api.multistate.mutator.IAreaMutator;
-import mod.chiselsandbits.api.multistate.mutator.IMutableStateEntryInfo;
-import mod.chiselsandbits.api.multistate.snapshot.IMultiStateSnapshot;
-import mod.chiselsandbits.multistate.mutator.ChiselAdaptingWorldMutator;
-import mod.chiselsandbits.multistate.mutator.WorldWrappingMutator;
+import com.tac.guns.util.WearableHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierManager;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.KeybindTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.Level;
-//import mod.chiselsandbits.chiseling.
+import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
-import java.util.Optional;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
-
-import static net.minecraft.entity.ai.attributes.Attributes.MOVEMENT_SPEED;
+import java.util.UUID;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -91,12 +69,25 @@ public class ClientPlayHandler
 
         if(message.getShooterId() == mc.player.getEntityId())
         {
-            Minecraft.getInstance().getSoundHandler().play(new SimpleSound(message.getId(), SoundCategory.PLAYERS, message.getVolume(), message.getPitch(), false, 0, ISound.AttenuationType.LINEAR, 0, 0, 0, true));
+            Minecraft.getInstance().getSoundHandler().play(new SimpleSound(message.getId(), SoundCategory.PLAYERS, (float) (message.getVolume()*Config.CLIENT.sounds.weaponsVolume.get()), message.getPitch(), false, 0, ISound.AttenuationType.LINEAR, 0, 0, 0,
+                    true));
         }
         else
         {
             Minecraft.getInstance().getSoundHandler().play(new GunShotSound(message.getId(), SoundCategory.PLAYERS, message.getX(), message.getY(), message.getZ(), message.getVolume(), message.getPitch(), message.isReload()));
         }
+    }
+
+    public static void handleMessageAnimationSound(UUID fromWho, ResourceLocation animationResource, ResourceLocation soundResource, boolean play){
+        World world = Minecraft.getInstance().world;
+        if(world == null) return;
+        PlayerEntity player = world.getPlayerByUuid(fromWho);
+        if (player == null) return;
+        if (animationResource == null || soundResource == null) return;
+        AnimationMeta animationMeta = new AnimationMeta(animationResource);
+        AnimationSoundMeta soundMeta = new AnimationSoundMeta(soundResource);
+        if (play) AnimationSoundManager.INSTANCE.playerSound(player, animationMeta, soundMeta);
+        else AnimationSoundManager.INSTANCE.interruptSound(player, animationMeta);
     }
 
     public static void handleMessageBlood(MessageBlood message)
@@ -123,6 +114,8 @@ public class ClientPlayHandler
             int[] entityIds = message.getEntityIds();
             Vector3d[] positions = message.getPositions();
             Vector3d[] motions = message.getMotions();
+            float[] shooterYaws = message.getShooterYaws();
+            float[] shooterPitch = message.getShooterPitches();
             ItemStack item = message.getItem();
             int trailColor = message.getTrailColor();
             double trailLengthMultiplier = message.getTrailLengthMultiplier();
@@ -131,7 +124,7 @@ public class ClientPlayHandler
             int shooterId = message.getShooterId();
             for(int i = 0; i < message.getCount(); i++)
             {
-                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i], item, trailColor, trailLengthMultiplier, life, gravity, shooterId));
+                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i], shooterYaws[i], shooterPitch[i], item, trailColor, trailLengthMultiplier, life, gravity, shooterId, message.getSize()));
             }
         }
     }
@@ -180,28 +173,18 @@ public class ClientPlayHandler
         Minecraft mc = Minecraft.getInstance();
         World world = mc.world;
         if (world != null) {
-            /*if(GunMod.cabLoaded)
-            {
-                double holeX = 0.005 * message.getFace().getXOffset();
-                double holeY = 0.005 * message.getFace().getYOffset();
-                double holeZ = 0.005 * message.getFace().getZOffset();
-                //System.out.println(world.getBlockState(message.getPos()).getBlock().getTranslatedName().getString());
-                //deleteBitOnHit(message.getPos(), world.getBlockState(message.getPos()), holeX,holeY,holeZ);
+            BlockState state = world.getBlockState(message.getPos());
+            double holeX = message.getX() + 0.005 * message.getFace().getXOffset();
+            double holeY = message.getY() + 0.005 * message.getFace().getYOffset();
+            double holeZ = message.getZ() + 0.005 * message.getFace().getZOffset();
+            double distance = Math.sqrt(mc.player.getDistanceSq(message.getX(), message.getY(), message.getZ()));
+            world.addParticle(new BulletHoleData(message.getFace(), message.getPos()), false, holeX, holeY, holeZ, 0, 0, 0);
+            if (distance < 16.0) {
+                world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, state), false, message.getX(), message.getY(), message.getZ(), 0, 0, 0);
             }
-            else {*/
-                BlockState state = world.getBlockState(message.getPos());
-                double holeX = message.getX() + 0.005 * message.getFace().getXOffset();
-                double holeY = message.getY() + 0.005 * message.getFace().getYOffset();
-                double holeZ = message.getZ() + 0.005 * message.getFace().getZOffset();
-                double distance = Math.sqrt(mc.player.getDistanceSq(message.getX(), message.getY(), message.getZ()));
-                world.addParticle(new BulletHoleData(message.getFace(), message.getPos()), false, holeX, holeY, holeZ, 0, 0, 0);
-                if (distance < 16.0) {
-                    world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, state), false, message.getX(), message.getY(), message.getZ(), 0, 0, 0);
-                }
-                if (distance < 32.0) {
-                    world.playSound(message.getX(), message.getY(), message.getZ(), state.getSoundType().getBreakSound(), SoundCategory.BLOCKS, 0.75F, 2.0F, false);
-                }
-            //}
+            if (distance < 32.0) {
+                world.playSound(message.getX(), message.getY(), message.getZ(), state.getSoundType().getBreakSound(), SoundCategory.BLOCKS, 0.75F, 2.0F, false);
+            }
         }
     }
 
@@ -212,7 +195,10 @@ public class ClientPlayHandler
         if(world == null)
             return;
 
-        SoundEvent event = getHitSound(message.isCritical(), message.isHeadshot(), message.isPlayer());
+        HUDRenderingHandler.get().hitMarkerTracker = (int) HUDRenderingHandler.hitMarkerRatio;
+        HUDRenderingHandler.get().hitMarkerHeadshot = message.isHeadshot();
+
+        SoundEvent event = getHitSound(message.isCritical(), message.isHeadshot(), message.isPlayer()); // Hit marker sound, after sound set HuD renderder hitmarker ticker to 3 fade in and out quick, use textured crosshair as a base
         if(event == null)
             return;
 
@@ -243,6 +229,11 @@ public class ClientPlayHandler
         {
             return SoundEvents.ENTITY_PLAYER_HURT;
         }
+        else
+        {
+            return SoundEvents.ENTITY_PLAYER_ATTACK_WEAK; // Hitmarker
+        }
+
         return null;
     }
 
@@ -251,9 +242,35 @@ public class ClientPlayHandler
         BulletTrailRenderingHandler.get().remove(message.getEntityId());
     }
 
+    /*public static void handleDevelopingGuns(MessageUpdateGuns message)
+    {
+        NetworkGunManager.updateRegisteredGuns(message);
+        CustomGunManager.updateCustomGuns(message);
+    }*/
+
     public static void handleUpdateGuns(MessageUpdateGuns message)
     {
         NetworkGunManager.updateRegisteredGuns(message);
         CustomGunManager.updateCustomGuns(message);
     }
+    public static void handleUpdateRigs(MessageUpdateRigs message)
+    {
+        NetworkRigManager.updateRegisteredRigs(message);
+        CustomRigManager.updateCustomRigs(message);
+    }
+
+    public static void updateRigInv(MessageRigInvToClient message)
+    {
+        // Incase I manage to adjust counts on accident
+        //HUDRenderingHandler.get().serverSideRig = message.getRig().copy();
+        if(message.getOnlyResetRigCount()){HUDRenderingHandler.get().rigReserveCount = 0; ReloadHandler.get().rigAmmoCount = 0;}
+        else {
+            HUDRenderingHandler.get().rigReserveCount = 0;
+            HUDRenderingHandler.get().rigReserveCount += message.getCount();
+            ReloadHandler.get().rigAmmoCount = 0;
+            ReloadHandler.get().rigAmmoCount += message.getCount();
+        }
+
+    }
+
 }

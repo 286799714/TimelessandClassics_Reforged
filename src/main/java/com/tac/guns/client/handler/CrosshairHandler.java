@@ -53,7 +53,7 @@ public class CrosshairHandler
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "arrow")));
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "dot")));
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "box")));
-        this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "hit_marker")));
+        //this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "hit_marker")));
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "line")));
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "t")));
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "smiley")));
@@ -148,11 +148,12 @@ public class CrosshairHandler
         Crosshair crosshair = this.getCurrentCrosshair();
         if((crosshair == null|| crosshair.isDefault()))
             return;
-
+        if(ShootingHandler.get().isShooting())
+            crosshair.onGunFired();
         crosshair.tick();
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void onGunFired(GunFireEvent.Post event)
     {
         Crosshair crosshair = this.getCurrentCrosshair();
@@ -160,5 +161,5 @@ public class CrosshairHandler
             return;
 
         crosshair.onGunFired();
-    }
+    }*/
 }

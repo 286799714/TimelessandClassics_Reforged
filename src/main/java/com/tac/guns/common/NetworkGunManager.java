@@ -11,6 +11,7 @@ import com.tac.guns.annotation.Validator;
 import com.tac.guns.item.GunItem;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResource;
@@ -26,14 +27,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.Validate;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -41,6 +40,7 @@ import java.util.Map;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
 {
+
     private static final Gson GSON_INSTANCE = Util.make(() -> {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ResourceLocation.class, JsonDeserializers.RESOURCE_LOCATION);
@@ -50,20 +50,23 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
 
     private static List<GunItem> clientRegisteredGuns = new ArrayList<>();
     private static NetworkGunManager instance;
-
     private Map<ResourceLocation, Gun> registeredGuns = new HashMap<>();
 
+    public HashSet<UUID> Ids = new HashSet<>();
+    public Map<UUID, ItemStack> StackIds = new HashMap<>();
     @Override
     protected Map<GunItem, Gun> prepare(IResourceManager resourceManager, IProfiler profiler)
     {
         Map<GunItem, Gun> map = Maps.newHashMap();
+        GunMod.LOGGER.info("YO_DATA_GUN");
         ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof GunItem).forEach(item ->
         {
             ResourceLocation id = item.getRegistryName();
             if(id != null)
             {
                 ResourceLocation resourceLocation = new ResourceLocation(String.format("%s:guns/%s.json", id.getNamespace(), id.getPath()));
-                try(IResource resource = resourceManager.getResource(resourceLocation); InputStream is = resource.getInputStream(); Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
+                try(IResource resource = resourceManager.getResource(resourceLocation); InputStream is = resource.getInputStream();
+                    Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
                 {
                     Gun gun = JSONUtils.fromJson(GSON_INSTANCE, reader, Gun.class);
                     if(gun != null && Validator.isValidObject(gun))
