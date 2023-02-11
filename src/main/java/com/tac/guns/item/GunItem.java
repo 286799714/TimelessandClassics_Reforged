@@ -1,5 +1,6 @@
 package com.tac.guns.item;
 
+import com.tac.guns.common.DiscardOffhand;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.enchantment.EnchantmentTypes;
@@ -10,6 +11,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -171,17 +173,21 @@ public class GunItem extends Item implements IColored
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (isSelected)
+        if (isSelected && !worldIn.isRemote)
         {
             if (entityIn instanceof PlayerEntity)
             {
                 PlayerEntity playerEntity = (PlayerEntity) entityIn;
-                if (!isSingleHanded(stack))
+                if (!isSingleHanded(stack) && !DiscardOffhand.isSafeTime(playerEntity))
                 {
                     ItemStack offHand = playerEntity.getHeldItemOffhand();
                     if (!(offHand.getItem() instanceof GunItem) && !offHand.isEmpty()) {
-                        playerEntity.dropItem(offHand, false);
+                        ItemEntity entity = playerEntity.dropItem(offHand, false);
                         playerEntity.setHeldItem(Hand.OFF_HAND, ItemStack.EMPTY);
+                        if (entity != null)
+                        {
+                            entity.setNoPickupDelay();
+                        }
                     }
                 }
             }
