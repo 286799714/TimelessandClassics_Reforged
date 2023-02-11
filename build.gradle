@@ -99,6 +99,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
     //implementation fg.deobf('curse.maven:obfuscate-289380:3169369')
     implementation fg.deobf('curse.maven:obfuscate-289380:3336021') // 3740120') // 3336021
+    implementation fg.deobf('curse.maven:configured-457570:3434071')
     //implementation fg.deobf('curse.maven:enchancedvisuals-255389:3419985')
     //implementation fg.deobf('curse.maven:ccore-257814:3419983')
     //implementation fg.deobf('curse.maven:chisel-and-bits-231095:3593643')
