@@ -52,6 +52,7 @@ import com.tac.guns.item.IColored;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageAttachments;
 import com.tac.guns.network.message.MessageInspection;
+import com.tac.guns.util.IDLNBTUtil;
 import com.tac.guns.util.math.SecondOrderDynamics;
 
 import de.javagl.jgltf.model.animation.AnimationRunner;
@@ -180,9 +181,9 @@ public class ClientHandler
             {
                 return -1;
             }
-            if(index == 0 && stack.hasTag() && stack.getTag().contains("Color", Constants.NBT.TAG_INT))
+            if(index == 0)
             {
-                return stack.getTag().getInt("Color");
+                return IDLNBTUtil.getInt(stack,"Color",-1);
             }
             return -1;
         };
