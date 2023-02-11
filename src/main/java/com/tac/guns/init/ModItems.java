@@ -135,7 +135,7 @@ public class ModItems
             () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(0.00F,0.00F)},  2.635F,0.325, "aimpoint2",GunModifiers.AIMPOINT_T1_SIGHT_ADS).viewFinderOffset(0.39).viewFinderOffsetSpecial(0.39),
                     new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
     public static final RegistryObject<Item> AIMPOINT_T1_SIGHT = REGISTER.register("aimpoint_t1",
-            () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(0.00F,0.00F)}, 1.3F,0.325, "aimpoint1",GunModifiers.AIMPOINT_T1_SIGHT_ADS).viewFinderOffset(0.39).viewFinderOffsetSpecial(0.39),
+            () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(0.00F,0.00F)}, 1.3F,0.325, "aimpoint1",GunModifiers.AIMPOINT_T1_SIGHT_ADS).viewFinderOffset(0.45).viewFinderOffsetSpecial(0.45),
                     new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
     public static final RegistryObject<Item> EOTECH_N_SIGHT = REGISTER.register("eotech_n", () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(0.00F,0.00F)}, 2.225F,0.325, "eotechn",GunModifiers.EOTECH_N_SIGHT_ADS).viewFinderOffset(0.415).viewFinderOffsetSpecial(0.415), new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
     public static final RegistryObject<Item> VORTEX_UH_1 = REGISTER.register("vortex_uh_1",
