@@ -1,0 +1,107 @@
+{
+  "general": {
+    "auto": true,
+    "rate": 800,
+    "rateSelector": [
+      0,
+      1,
+      2
+    ],
+    "gripType": "tac:two_handed_ak47",
+    "recoilAngle": 1.875,
+    "horizontalRecoilAngle": 2.025,
+    "recoilKick": 1.325,
+    "recoilAdsReduction": 0.205,
+    "weaponRecoilOffset": 0.855,
+    "cameraRecoilModifier": 1.475,
+    "recoilDuration": 0.185,
+    "weightKilo": 2.65,
+
+    "spread": 1.375,
+    "firstShotSpread": 0.0925,
+    "hipFireInaccuracy": 4.05,
+    "projToMinAccuracy": 6,
+    "msToAccuracyReset": 140,
+    "movementInaccuracy": 0.225
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 30,
+    "reloadMagTimer": 36,
+    "additionalReloadEmptyMagTimer": 12,
+    "maxAdditionalAmmoPerOC": [
+      10,
+      20,
+      30
+    ],
+    "preReloadPauseTicks": 0
+  },
+  "projectile": {
+    "item": "tac:nato_556_bullet",
+    "visible": false,
+    "damage": 6.5,
+    "size": 0.1,
+    "speed": 22.5,
+    "life": 14
+  },
+  "sounds": {
+    "fire": "tac:item.ar15_fire",
+    "reloadNormal": "tac:animation.m4_norm_reload",
+    "reloadEmpty": "tac:animation.m4_empty_reload",
+    "draw": "tac:animation.m4_draw",
+    "inspect": "tac:animation.m4_inspect",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "tac:item.ar15_fire_s"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 9.35,
+      "zOffset": -17.55,
+      "size": 1.15,
+      "trailAdjust": 1.12
+    },
+    "hipfireScale": 2.0,
+    "weaponType": 0
+  },
+  "modules": {
+    "zoom": {
+      "fovModifier": 0.8,
+      "yOffset": 12.98,
+      "zOffset": -1.9
+    },
+    "attachments": {
+      "scope": {
+        "yOffset": 10.455,
+        "zOffset": 2.945,
+        "scale": 1.00
+      },
+      "pistolScope": {
+        "yOffset": 10.475,
+        "zOffset": 2.945,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      },
+      "barrel": {
+        "yOffset": -100829.84,
+        "zOffset": -11.55,
+        "scale": 1.00
+      },
+      "stock": {
+        "yOffset": 7.75,
+        "zOffset": -22.05,
+        "scale": 0.00
+      },
+      "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      }
+    }
+  }
+}

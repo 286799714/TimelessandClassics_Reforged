@@ -2,13 +2,16 @@
   "general": {
     "auto": true,
     "rate": 2,
-    "rateSelector": [0,2],
+    "rateSelector": [
+      0,
+      2
+    ],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 1.375,
     "horizontalRecoilAngle": 1.355,
     "recoilKick": 0.920,
     "recoilAdsReduction": 0.30,
-    "weaponRecoilDuration": 0.325,
+    "weaponRecoilOffset": 0.325,
     "cameraRecoilModifier": 1.105,
     "recoilDuration": 0.275,
     "alwaysSpread": true,
@@ -20,13 +23,17 @@
     "maxAmmo": 30,
     "reloadMagTimer": 33,
     "additionalReloadEmptyMagTimer": 10,
-    "maxAdditionalAmmoPerOC": [10, 15, 20],
+    "maxAdditionalAmmoPerOC": [
+      10,
+      15,
+      20
+    ],
     "preReloadPauseTicks": 9,
     "openBolt": true
   },
   "projectile": {
     "item": "tac:round45",
-    "visible": true,
+    "visible": false,
     "damage": 4.0,
     "size": 0.1,
     "speed": 14.5,
@@ -51,13 +58,11 @@
     "weaponType": 4
   },
   "modules": {
-    "zoom": [
-      {
-        "fovModifier": 0.9,
-        "yOffset": 10.655,
-        "zOffset": -4.75
-      }
-    ],
+    "zoom": {
+      "fovModifier": 0.9,
+      "yOffset": 10.655,
+      "zOffset": -4.75
+    },
     "attachments": {}
   }
 }

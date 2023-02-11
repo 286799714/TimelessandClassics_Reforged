@@ -1,7 +1,6 @@
 package com.tac.guns.client.render.pose;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.tac.guns.client.render.animation.GunAnimationController;
 import com.tac.guns.client.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -23,12 +22,10 @@ public class TwoHandedPoseHighRes_ak47 extends TwoHandedPose {
 	{
 
 		matrixStack.push();
-		GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
-		if(controller != null) controller.applyLeftHandTransform(stack, player, matrixStack);
 		matrixStack.translate(0, 0, -1);
 		matrixStack.rotate(Vector3f.YP.rotationDegrees(180F));
 
-		//float reloadProgress = ReloadHandler.get().getReloadProgress(partialTicks, stack);
+		//float reloadProgress = ReloadHandler.get().getRepairProgress(partialTicks, stack);
 		//extraMatrixStack.translate(reloadProgress * 1.25, -reloadProgress, -reloadProgress * 1.5);
 
 
@@ -59,7 +56,6 @@ public class TwoHandedPoseHighRes_ak47 extends TwoHandedPose {
 		matrixStack.pop();
 
 		matrixStack.push();
-		if(controller != null) controller.applyRightHandTransform(stack, player, matrixStack);
 		matrixStack.translate(0, 0, -1);
 		matrixStack.rotate(Vector3f.YP.rotationDegrees(180F));
 
@@ -84,7 +80,7 @@ public class TwoHandedPoseHighRes_ak47 extends TwoHandedPose {
 package com.tac.guns.client.render.pose;
 
 		import com.mojang.blaze3d.matrix.MatrixStack;
-		import com.tac.guns.client.render.animation.GunAnimationController;
+		import com.tac.guns.client.render.animation.impl.GunAnimationController;
 		import com.tac.guns.client.util.RenderUtil;
 		import net.minecraft.client.Minecraft;
 		import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -109,7 +105,7 @@ public class TwoHandedPoseHighRes_ak47 extends TwoHandedPose {
 		matrixStack.translate(0, 0, -1);
 		matrixStack.rotate(Vector3f.YP.rotationDegrees(180F));
 
-		//float reloadProgress = ReloadHandler.get().getReloadProgress(partialTicks, stack);
+		//float reloadProgress = ReloadHandler.get().getRepairProgress(partialTicks, stack);
 		//extraMatrixStack.translate(reloadProgress * 1.25, -reloadProgress, -reloadProgress * 1.5);
 
 		float sideFloat = hand.opposite() == HandSide.RIGHT ? -0.25F : -1;

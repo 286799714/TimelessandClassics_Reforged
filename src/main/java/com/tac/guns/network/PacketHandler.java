@@ -41,6 +41,14 @@ public class PacketHandler
                 .markAsLoginPacket()
                 .add();
 
+        handshakeChannel.messageBuilder(HandshakeMessages.S2CUpdateRigs.class, 2)
+                .loginIndex(HandshakeMessages.LoginIndexedMessage::getLoginIndex, HandshakeMessages.LoginIndexedMessage::setLoginIndex)
+                .decoder(HandshakeMessages.S2CUpdateRigs::decode)
+                .encoder(HandshakeMessages.S2CUpdateRigs::encode)
+                .consumer(FMLHandshakeHandler.biConsumerFor((handler, msg, supplier) -> HandshakeHandler.handleUpdateRigs(msg, supplier)))
+                .markAsLoginPacket()
+                .add();
+
         playChannel = NetworkRegistry.ChannelBuilder
                 .named(new ResourceLocation(Reference.MOD_ID, "play"))
                 .networkProtocolVersion(() -> PROTOCOL_VERSION)
@@ -51,6 +59,7 @@ public class PacketHandler
         registerPlayMessage(MessageAim.class, MessageAim::new, LogicalSide.SERVER);
         registerPlayMessage(MessageReload.class, MessageReload::new, LogicalSide.SERVER);
         registerPlayMessage(MessageShoot.class, MessageShoot::new, LogicalSide.SERVER);
+        registerPlayMessage(MessageSaveItemUpgradeBench.class, MessageSaveItemUpgradeBench::new, LogicalSide.SERVER);
         registerPlayMessage(MessageLightChange.class, MessageLightChange::new, LogicalSide.SERVER);
         registerPlayMessage(MessageUnload.class, MessageUnload::new, LogicalSide.SERVER);
         registerPlayMessage(MessageStunGrenade.class, MessageStunGrenade::new, LogicalSide.CLIENT);
@@ -60,6 +69,7 @@ public class PacketHandler
         registerPlayMessage(MessageInspection.class, MessageInspection::new, LogicalSide.SERVER);
         registerPlayMessage(MessageColorBench.class, MessageColorBench::new, LogicalSide.SERVER);
         registerPlayMessage(MessageUpdateGuns.class, MessageUpdateGuns::new, LogicalSide.CLIENT);
+        registerPlayMessage(MessageUpdateRigs.class, MessageUpdateRigs::new, LogicalSide.CLIENT);
         registerPlayMessage(MessageBlood.class, MessageBlood::new, LogicalSide.CLIENT);
         registerPlayMessage(MessageShooting.class, MessageShooting::new, LogicalSide.SERVER);
         registerPlayMessage(MessageGunSound.class, MessageGunSound::new, LogicalSide.CLIENT);
@@ -67,9 +77,20 @@ public class PacketHandler
         registerPlayMessage(MessageProjectileHitEntity.class, MessageProjectileHitEntity::new, LogicalSide.CLIENT);
         registerPlayMessage(MessageRemoveProjectile.class, MessageRemoveProjectile::new, LogicalSide.CLIENT);
         registerPlayMessage(MessageFireMode.class, MessageFireMode::new, LogicalSide.SERVER);
-        registerPlayMessage(MessageIronSightSwitch.class, MessageIronSightSwitch::new, LogicalSide.CLIENT);
+        registerPlayMessage(MessageUpdateGunID.class, MessageUpdateGunID::new, LogicalSide.SERVER);
+        registerPlayMessage(MessageUpgradeBenchApply.class, MessageUpgradeBenchApply::new, LogicalSide.SERVER);
+        registerPlayMessage(MessageUpdateMoveInacc.class, MessageUpdateMoveInacc::new, LogicalSide.SERVER);
+        registerPlayMessage(MessageEmptyMag.class, MessageEmptyMag::new, LogicalSide.SERVER);
+        registerPlayMessage(MessageArmorRepair.class, MessageArmorRepair::new, LogicalSide.SERVER);
+
+        registerPlayMessage(MessagePlayerShake.class, MessagePlayerShake::new, LogicalSide.CLIENT);
 
         registerPlayMessage(MessageUpdatePlayerMovement.class, MessageUpdatePlayerMovement::new, LogicalSide.SERVER);
+        registerPlayMessage(MessageAnimationSound.class, MessageAnimationSound::new, LogicalSide.CLIENT);
+        registerPlayMessage(MessageAnimationRun.class, MessageAnimationRun::new, LogicalSide.SERVER);
+
+        registerPlayMessage(MessageRigInvToClient.class, MessageRigInvToClient::new, LogicalSide.CLIENT);
+        registerPlayMessage(MessageToClientRigInv.class, MessageToClientRigInv::new, LogicalSide.SERVER);
     }
 
     /**

@@ -1,37 +1,25 @@
 package com.tac.guns.client.handler;
 
-import com.tac.guns.Reference;
-import com.tac.guns.client.KeyBinds;
+import static com.tac.guns.GunMod.LOGGER;
+
+import java.util.UUID;
+
+import org.apache.logging.log4j.Level;
+
+import com.tac.guns.client.InputHandler;
 import com.tac.guns.common.Gun;
-import com.tac.guns.init.ModBlocks;
-import com.tac.guns.init.ModItems;
+import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.item.GunItem;
+import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageLightChange;
-import com.tac.guns.network.message.MessageShooting;
-import com.tac.guns.tileentity.FlashLightSource;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.arguments.EntityAnchorArgument;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.ResourcePackInfo;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorld;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.fml.common.Mod;
-import org.lwjgl.glfw.GLFW;
 
-import static net.minecraftforge.eventbus.api.EventPriority.HIGHEST;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -49,6 +37,24 @@ public class FlashlightHandler
         return instance;
     }
 
+    private boolean active = false;
+    
+    private FlashlightHandler()
+    {
+    	InputHandler.ACTIVATE_SIDE_RAIL.addPressCallback( () -> {
+    		final Minecraft mc = Minecraft.getInstance();
+    		final PlayerEntity player = mc.player;
+    		if(
+    			player != null
+    			&& player.getHeldItemMainhand().getItem() instanceof GunItem
+    			&& Gun.getAttachment(
+    				IAttachment.Type.SIDE_RAIL,
+    				player.getHeldItemMainhand()
+    			) != null
+    		) this.active = !active;
+    	} );
+    }
+
     private boolean isInGame()
     {
         Minecraft mc = Minecraft.getInstance();
@@ -61,27 +67,6 @@ public class FlashlightHandler
         return mc.isGameFocused();
     }
 
-    private boolean active = false;
-    @SubscribeEvent
-    public void onKeyPressed(InputEvent.KeyInputEvent event)
-    {
-        if(event.getAction() != GLFW.GLFW_PRESS)
-            return;
-        Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
-        if(player == null)
-            return;
-        if(KeyBinds.KEY_ACTIVATE_SIDE_RAIL.isPressed() && event.getAction() == GLFW.GLFW_PRESS) // REPLACE KEYBIND
-        {
-            if(player.getHeldItemMainhand().getItem() instanceof GunItem)
-            {
-                if(Gun.getAttachment(IAttachment.Type.SIDE_RAIL,player.getHeldItemMainhand()) != null)
-                    this.active=!active;
-            }
-            return;
-        }
-    }
-
     @SubscribeEvent
     public void onPlayerUpdate(PlayerTickEvent event)
     {
@@ -90,6 +75,23 @@ public class FlashlightHandler
         PlayerEntity player = event.player;
         if(player == null)
             return;
+
+        if(NetworkGunManager.get() != null && NetworkGunManager.get().StackIds != null) {
+            if (player.getHeldItemMainhand().getItem() instanceof TimelessGunItem && player.getHeldItemMainhand().getTag() != null) {
+                if (!player.getHeldItemMainhand().getTag().contains("ID")) {
+                    UUID id;
+                    while (true) {
+                        LOGGER.log(Level.INFO, "NEW UUID GEN FOR TAC GUN");
+                        id = UUID.randomUUID();
+                        if (NetworkGunManager.get().Ids.add(id))
+                            break;
+                    }
+                    player.getHeldItemMainhand().getTag().putUniqueId("ID", id);
+                    NetworkGunManager.get().StackIds.put(id, player.getHeldItemMainhand());
+                }
+            }
+        }
+
         if (event.phase == Phase.START && (player.getHeldItemMainhand() != null && this.active && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, player.getHeldItemMainhand()) != null))
         {
             PacketHandler.getPlayChannel().sendToServer(new MessageLightChange(new int[]{32}));//(new int[]{2,32}));

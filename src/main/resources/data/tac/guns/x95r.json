@@ -12,7 +12,7 @@
     "recoilKick": 0.875,
     "horizontalRecoilAngle": 1.075,
     "recoilAdsReduction": 0.2325,
-    "weaponRecoilDuration": 0.225,
+    "weaponRecoilOffset": 0.225,
     "cameraRecoilModifier": 0.825,
     "recoilDuration": 0.235,
     "alwaysSpread": true,
@@ -50,11 +50,11 @@
     "weaponType": 0
   },
   "modules": {
-    "zoom": [{
+    "zoom":{
       "fovModifier": 0.8,
       "yOffset": 12.125,
       "zOffset": 2.25
-    }],
+    },
     "attachments": {
       "scope": {
         "yOffset": 10.55,

@@ -12,7 +12,7 @@
     "horizontalRecoilAngle": 0.8235,
     "recoilKick": 0.5,
     "recoilAdsReduction": 0.32,
-    "weaponRecoilDuration": 0.00001,
+    "weaponRecoilOffset": 0.00001,
     "recoilDuration": 0.125,
     "cameraRecoilModifier": 1.725,
     "alwaysSpread": true,
@@ -30,7 +30,7 @@
   "projectile": {
     "item": "tac:762x25",
     "visible": false,
-    "damage": 2.75,
+    "damage": 3.25,
     "size": 0.2,
     "speed": 28.5,
     "life": 3
@@ -50,11 +50,11 @@
     "weaponType": 4
   },
   "modules": {
-    "zoom": [{
+    "zoom":{
       "fovModifier": 0.9,
       "yOffset": 10.42,
       "zOffset": 1.6
-    }],
+    },
     "attachments": {}
   }
 }

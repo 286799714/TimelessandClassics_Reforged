@@ -1,56 +1,91 @@
 package com.tac.guns.client;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Map;
+
 import com.tac.guns.Config;
+import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
-import com.tac.guns.client.handler.*;
+import com.tac.guns.client.handler.AimingHandler;
+import com.tac.guns.client.handler.AnimationHandler;
+import com.tac.guns.client.handler.ArmorInteractionHandler;
+import com.tac.guns.client.handler.BulletTrailRenderingHandler;
+import com.tac.guns.client.handler.CrosshairHandler;
+import com.tac.guns.client.handler.FireModeSwitchEvent;
+import com.tac.guns.client.handler.GunRenderingHandler;
+import com.tac.guns.client.handler.HUDRenderingHandler;
+import com.tac.guns.client.handler.MovementAdaptationsHandler;
+import com.tac.guns.client.handler.RecoilHandler;
+import com.tac.guns.client.handler.ReloadHandler;
+import com.tac.guns.client.handler.ScopeJitterHandler;
+import com.tac.guns.client.handler.ShootingHandler;
+import com.tac.guns.client.handler.SightSwitchEvent;
+import com.tac.guns.client.handler.SoundHandler;
+import com.tac.guns.client.handler.command.GuiEditor;
+import com.tac.guns.client.handler.command.GunEditor;
+import com.tac.guns.client.handler.command.ObjectRenderEditor;
+import com.tac.guns.client.handler.command.ScopeEditor;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.render.armor.VestLayer.VestLayerRender;
+import com.tac.guns.client.render.armor.models.MediumArmor;
+import com.tac.guns.client.render.armor.models.ModernArmor;
 import com.tac.guns.client.render.entity.GrenadeRenderer;
 import com.tac.guns.client.render.entity.MissileRenderer;
 import com.tac.guns.client.render.entity.ProjectileRenderer;
 import com.tac.guns.client.render.entity.ThrowableGrenadeRenderer;
 import com.tac.guns.client.render.gun.ModelOverrides;
-import com.tac.guns.client.render.gun.model.*;
-import com.tac.guns.client.screen.*;
+import com.tac.guns.client.render.gun.model.scope.*;
+import com.tac.guns.client.screen.AmmoPackScreen;
+import com.tac.guns.client.screen.AttachmentScreen;
+import com.tac.guns.client.screen.InspectScreen;
+import com.tac.guns.client.screen.TaCSettingsScreen;
+import com.tac.guns.client.screen.UpgradeBenchScreen;
+import com.tac.guns.client.screen.WorkbenchScreen;
 import com.tac.guns.client.settings.GunOptions;
-import com.tac.guns.common.BoundingBoxManager;
-import com.tac.guns.common.FloodLightSource.FloodLightSource;
 import com.tac.guns.init.ModBlocks;
 import com.tac.guns.init.ModContainers;
 import com.tac.guns.init.ModEntities;
 import com.tac.guns.init.ModItems;
-import com.tac.guns.interfaces.IHeadshotBox;
 import com.tac.guns.item.IColored;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageAttachments;
-import com.tac.guns.network.message.MessageColorBench;
 import com.tac.guns.network.message.MessageInspection;
-import com.tac.guns.network.message.MessageIronSightSwitch;
-import com.tac.guns.tileentity.FlashLightSource;
+import com.tac.guns.util.math.SecondOrderDynamics;
+
+import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screen.ControlsScreen;
 import net.minecraft.client.gui.screen.MouseSettingsScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.VideoSettingsScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.list.OptionsRowList;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.lang.reflect.Field;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -60,8 +95,9 @@ public class ClientHandler
 {
     private static Field mouseOptionsField;
 
-    public static void setup()
-    {
+    private static File keyBindsFile;
+    
+    public static void setup( Minecraft mc ) {
         MinecraftForge.EVENT_BUS.register(AimingHandler.get());
         MinecraftForge.EVENT_BUS.register(BulletTrailRenderingHandler.get());
         MinecraftForge.EVENT_BUS.register(CrosshairHandler.get());
@@ -72,26 +108,58 @@ public class ClientHandler
         MinecraftForge.EVENT_BUS.register(SoundHandler.get());
         MinecraftForge.EVENT_BUS.register(HUDRenderingHandler.get());
         MinecraftForge.EVENT_BUS.register(FireModeSwitchEvent.get()); // Technically now a handler but, yes I need some naming reworks
-        MinecraftForge.EVENT_BUS.register(IronSightSwitchEvent.get()); // Still, as well an event, am uncertain on what to name it, in short handles upcoming advanced iron sights
+        MinecraftForge.EVENT_BUS.register(SightSwitchEvent.get()); // Still, as well an event, am uncertain on what to name it, in short handles upcoming advanced iron sights
+        MinecraftForge.EVENT_BUS.register(ArmorInteractionHandler.get());
 
         //MinecraftForge.EVENT_BUS.register(FlashlightHandler.get()); // Completely broken... Needs a full rework
         //MinecraftForge.EVENT_BUS.register(FloodLightSource.get());
 
-        MinecraftForge.EVENT_BUS.register(ScopeJitterHandler.getInstance()); // All built by MayDay memory part of the Timeless dev team, amazing work!!!!!!!!!!!
-
+        MinecraftForge.EVENT_BUS.register(ScopeJitterHandler.getInstance()); // All built by MayDayMemory part of the Timeless dev team, amazing work!!!!!!!!!!!
         MinecraftForge.EVENT_BUS.register(MovementAdaptationsHandler.get());
+        MinecraftForge.EVENT_BUS.register(AnimationHandler.INSTANCE); //Mainly controls when the animation should play.
+        if (Config.COMMON.development.enableTDev.get()) {
+            MinecraftForge.EVENT_BUS.register(GuiEditor.get());
+            MinecraftForge.EVENT_BUS.register(GunEditor.get());
+            MinecraftForge.EVENT_BUS.register(ScopeEditor.get());
+            MinecraftForge.EVENT_BUS.register(ObjectRenderEditor.get());
+        }
 
-        KeyBinds.register();
+        //ClientRegistry.bindTileEntityRenderer(ModTileEntities.UPGRADE_BENCH.get(), UpgradeBenchRenderUtil::new);
+
+        // Load key binds
+        InputHandler.initKeys();
+        keyBindsFile = new File(mc.gameDir, "config/tac-key-binds.json");
+        if (!keyBindsFile.exists()) {
+            try {
+                keyBindsFile.createNewFile();
+            } catch (IOException e) {
+                GunMod.LOGGER.error("Fail to create key bindings file");
+            }
+            InputHandler.saveTo(keyBindsFile);
+        } else InputHandler.readFrom(keyBindsFile);
 
         setupRenderLayers();
         registerEntityRenders();
         registerColors();
         registerModelOverrides();
         registerScreenFactories();
+
+        AnimationHandler.preloadAnimations();
+        new AnimationRunner(); //preload thread pool
+        new SecondOrderDynamics(1f, 1f, 1f, 1f); //preload thread pool
+
+        Map<String, PlayerRenderer> skins = Minecraft.getInstance().getRenderManager().getSkinMap();
+        addVestLayer(skins.get("default"));
+        addVestLayer(skins.get("slim"));
+    }
+    private static void addVestLayer(PlayerRenderer renderer)
+    {
+        renderer.addLayer(new VestLayerRender<>(renderer));
     }
 
     private static void setupRenderLayers()
     {
+        //RenderTypeLookup.setRenderLayer(ModBlocks.UPGRADE_BENCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.WORKBENCH.get(), RenderType.getCutout());
     }
 
@@ -131,8 +199,14 @@ public class ClientHandler
         ModelOverrides.register(ModItems.COYOTE_SIGHT.get(), new CoyoteSightModel());
         ModelOverrides.register(ModItems.LONGRANGE_8x_SCOPE.get(), new LongRange8xScopeModel());
         ModelOverrides.register(ModItems.VORTEX_LPVO_1_6.get(), new VortexLPVO_1_4xScopeModel());
+        //TODO: Fix up the SLX 2x, give a new reticle, new scope data, new mount and eye pos, pretty much remake the code end.
+        //ModelOverrides.register(ModItems.SLX_2X.get(), new SLX_2X_ScopeModel());
         ModelOverrides.register(ModItems.ACOG_4.get(), new ACOG_4x_ScopeModel());
+        ModelOverrides.register(ModItems.ELCAN_DR_14X.get(), new elcan_14x_ScopeModel());
+        ModelOverrides.register(ModItems.AIMPOINT_T2_SIGHT.get(), new AimpointT2SightModel());
+
         ModelOverrides.register(ModItems.AIMPOINT_T1_SIGHT.get(), new AimpointT1SightModel());
+
         ModelOverrides.register(ModItems.EOTECH_N_SIGHT.get(), new EotechNSightModel());
         ModelOverrides.register(ModItems.VORTEX_UH_1.get(), new VortexUh1SightModel());
         ModelOverrides.register(ModItems.EOTECH_SHORT_SIGHT.get(), new EotechShortSightModel());
@@ -143,15 +217,23 @@ public class ClientHandler
         ModelOverrides.register(ModItems.OLD_LONGRANGE_4x_SCOPE.get(), new OldLongRange4xScopeModel());
 
         ModelOverrides.register(ModItems.MINI_DOT.get(), new MiniDotSightModel());
-        ModelOverrides.register(ModItems.MICRO_HOLO_SIGHT.get(), new MicroHoloSightModel());
-     }
+        //ModelOverrides.register(ModItems.MICRO_HOLO_SIGHT.get(), new MicroHoloSightModel());
+        ModelOverrides.register(ModItems.SRO_DOT.get(), new SroDotSightModel());
+
+        // Armor registry, kept manual cause nice and simple, requires registry on client side only
+        VestLayerRender.registerModel(ModItems.LIGHT_ARMOR.get(), new ModernArmor());
+        VestLayerRender.registerModel(ModItems.MEDIUM_STEEL_ARMOR.get(), new MediumArmor());
+        //VestLayerRender.registerModel(ModItems.CARDBOARD_ARMOR_FUN.get(), new CardboardArmor());
+    }
 
     private static void registerScreenFactories()
     {
         ScreenManager.registerFactory(ModContainers.WORKBENCH.get(), WorkbenchScreen::new);
+        ScreenManager.registerFactory(ModContainers.UPGRADE_BENCH.get(), UpgradeBenchScreen::new);
         ScreenManager.registerFactory(ModContainers.ATTACHMENTS.get(), AttachmentScreen::new);
         ScreenManager.registerFactory(ModContainers.INSPECTION.get(), InspectScreen::new);
-        ScreenManager.registerFactory(ModContainers.COLOR_BENCH.get(), ColorBenchAttachmentScreen::new);
+        ScreenManager.registerFactory(ModContainers.ARMOR_TEST.get(), AmmoPackScreen::new);
+        //ScreenManager.registerFactory(ModContainers.COLOR_BENCH.get(), ColorBenchAttachmentScreen::new);
     }
 
     @SubscribeEvent
@@ -169,7 +251,7 @@ public class ClientHandler
             {
                 OptionsRowList list = (OptionsRowList) mouseOptionsField.get(screen);
                 list.addOption(GunOptions.ADS_SENSITIVITY, GunOptions.CROSSHAIR);
-                list.addOption(GunOptions.TOGGLE_ADS);
+                /*, GunOptions.BURST_MECH);*/
             }
             catch(IllegalAccessException e)
             {
@@ -184,32 +266,51 @@ public class ClientHandler
                 Minecraft.getInstance().displayGuiScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().gameSettings));
             })));
         }
+        /*if(event.getGui() instanceof VideoSettingsScreen)
+        {
+            VideoSettingsScreen screen = (VideoSettingsScreen) event.getGui();
 
+            event.addWidget((new Button(screen.width / 2 - 215, 10, 75, 20, new TranslationTextComponent("tac.options.gui_settings"), (p_213126_1_) -> {
+                Minecraft.getInstance().displayGuiScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().gameSettings));
+            })));
+        }*/
     }
+    
+    private static Screen prevScreen = null;
 
     @SubscribeEvent
-    public static void onKeyPressed(InputEvent.KeyInputEvent event)
+    public static void onGUIChange( GuiOpenEvent evt )
     {
-        Minecraft mc = Minecraft.getInstance();
-        if(mc.player != null && mc.currentScreen == null)
-        {
-            /*if(KeyBinds.KEY_SIGHT_SWITCH.isPressed())
-            {
-                PacketHandler.getPlayChannel().sendToServer(new MessageIronSightSwitch());
-            }*/
-            if(KeyBinds.KEY_ATTACHMENTS.isPressed())
-            {
+    	final Screen gui = evt.getGui();
+    	
+    	// Show key binds if control GUI is activated
+    	if( gui instanceof ControlsScreen )
+    		InputHandler.restoreKeyBinds();
+    	else if( prevScreen instanceof ControlsScreen )
+    		InputHandler.clearKeyBinds( keyBindsFile );
+    	
+    	prevScreen = gui;
+    }
+    
+    static {
+        InputHandler.ATTACHMENTS.addPressCallback(() -> {
+            final Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null && mc.currentScreen == null)
                 PacketHandler.getPlayChannel().sendToServer(new MessageAttachments());
-            }
-            /*else if(KeyBinds.COLOR_BENCH.isPressed())
-            {
-                PacketHandler.getPlayChannel().sendToServer(new MessageColorBench());
-            }*/
-            else if(KeyBinds.KEY_INSPECT.isPressed())
-            {
-                PacketHandler.getPlayChannel().sendToServer(new MessageInspection());
-            }
-        }
+        });
+
+        final Runnable callback = () -> {
+            final Minecraft mc = Minecraft.getInstance();
+            if (
+                    mc.player != null
+                            && mc.currentScreen == null
+                            && GunAnimationController.fromItem(
+                            Minecraft.getInstance().player.inventory.getCurrentItem().getItem()
+                    ) == null
+            ) PacketHandler.getPlayChannel().sendToServer(new MessageInspection());
+        };
+        InputHandler.INSPECT.addPressCallback(callback);
+        InputHandler.CO_INSPECT.addPressCallback(callback);
     }
 
     /* Uncomment for debugging headshot hit boxes */
@@ -228,7 +329,7 @@ public class ClientHandler
                 WorldRenderer.drawBoundingBox(event.getMatrixStack(), event.getBuffers().getBuffer(RenderType.getLines()), box, 1.0F, 1.0F, 0.0F, 1.0F);
 
                 AxisAlignedBB boundingBox = entity.getBoundingBox().offset(entity.getPositionVec().inverse());
-                boundingBox = boundingBox.grow(Config.COMMON.gameplay.growBoundingBoxAmount.get(), 0, Config.COMMON.gameplay.growBoundingBoxAmount.get());
+                boundingBox = boundingBox.grow(Config.COMMON.gameplay.growBoundingBoxAmountV2.get(), 0, Config.COMMON.gameplay.growBoundingBoxAmountV2.get());
                 WorldRenderer.drawBoundingBox(event.getMatrixStack(), event.getBuffers().getBuffer(RenderType.getLines()), boundingBox, 0.0F, 1.0F, 1.0F, 1.0F);
             }
         }

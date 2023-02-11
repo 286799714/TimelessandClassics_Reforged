@@ -1,0 +1,25 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 18
+    },
+    {
+      "item": {
+        "tag": "forge:glass_panes/colorless"
+      },
+      "count": 12
+    },
+    {
+      "item": {
+        "tag": "forge:storage_blocks/redstone"
+      }
+    }
+  ],
+  "result": {
+    "item": "tac:vortex_uh_1"
+  }
+}

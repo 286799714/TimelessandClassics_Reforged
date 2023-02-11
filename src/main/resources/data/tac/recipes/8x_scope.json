@@ -1,0 +1,20 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 36
+    },
+    {
+      "item": {
+        "tag": "forge:glass_panes/colorless"
+      },
+      "count": 20
+    }
+  ],
+  "result": {
+    "item": "tac:8x_scope"
+  }
+}

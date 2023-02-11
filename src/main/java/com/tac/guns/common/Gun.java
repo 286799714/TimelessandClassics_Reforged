@@ -1,20 +1,28 @@
 package com.tac.guns.common;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Ignored;
 import com.tac.guns.annotation.Optional;
+import com.tac.guns.client.handler.command.GunEditor;
+import com.tac.guns.interfaces.TGExclude;
+import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.item.attachment.IScope;
 import com.tac.guns.item.attachment.impl.Scope;
+import com.tac.guns.util.WearableHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 
 import javax.annotation.Nullable;
@@ -69,9 +77,11 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Optional
         private int rate;
         @Optional
+        private int burstRate = 8;
+        @Optional
+        private int burstCount = 3;
+        @Optional
         private int[] rateSelector = new int[]{0,1};
-        @Ignored
-        private GripType gripType = GripType.ONE_HANDED;
         @Optional
         private float recoilAngle = 1.0F;
         @Optional
@@ -83,18 +93,41 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Optional
         private float recoilDuration = 0.25F;
         @Optional
-        private float weaponRecoilDuration = 0.5F; // Recoil up until the weapon cooldown is under this value (0.1 == 10% recoil time left, use to help scale with high firerate weapons and their weapon recoil feel)
+        private float weaponRecoilOffset = 0.5F; // Recoil up until the weapon cooldown is under this value (0.1 == 10% recoil time left, use to help scale with high firerate weapons and their weapon recoil feel)
+        @Optional
+        private float cameraRecoilDuration = 1F; // Percentage
+
+        // this value (0.1 == 10% recoil time left, use to help scale with high firerate weapons and their weapon recoil feel)
+        @Optional
+        private float visualRecoilPercent = 0F; // Percentage
+        // this value (0.1 == 10% recoil time left, use to help scale with high firerate weapons and their weapon recoil feel)
         @Optional
         private float recoilAdsReduction = 0.2F;
         @Optional
         private int projectileAmount = 1;
         @Optional
-        private boolean alwaysSpread = true;
+        private int projToMinAccuracy = 5;
         @Optional
-        private float spread;
+        private int msToAccuracyReset = 425;
+        @Optional
+        private boolean alwaysSpread = false;
+        @Optional
+        private float spread = 1.0f;
+        @Optional
+        private float firstShotSpread = 0.0f;
         @Optional
         private float weightKilo = 0.0F;
-
+        @Ignored
+        @TGExclude
+        private GripType gripType = GripType.ONE_HANDED;
+        @Optional
+        private float movementInaccuracy = 1F;
+        @Optional
+        private float hipFireInaccuracy = 3.25F;
+        @Optional
+        private float levelReq = 300.0F;
+        @Optional
+        private int upgradeBenchMaxUses = 3;
         @Override
         public CompoundNBT serializeNBT()
         {
@@ -102,19 +135,30 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             tag.putBoolean("Auto", this.auto);
             tag.putBoolean("BoltAction", this.boltAction);
             tag.putInt("Rate", this.rate);
+            tag.putInt("BurstRate", this.burstRate);
+            tag.putInt("BurstCount", this.burstCount);
             tag.putIntArray("RateSelector", this.rateSelector);
             tag.putString("GripType", this.gripType.getId().toString());
             tag.putFloat("RecoilAngle", this.recoilAngle); // x2 for quick camera recoil reduction balancing
-            tag.putFloat("RecoilKick", this.recoilKick/1.5f);
-            tag.putFloat("HorizontalRecoilAngle", this.horizontalRecoilAngle/1.5f); // x2 for quick camera recoil reduction balancing
+            tag.putFloat("RecoilKick", this.recoilKick);
+            tag.putFloat("HorizontalRecoilAngle", this.horizontalRecoilAngle); // x2 for quick camera recoil reduction balancing
             tag.putFloat("CameraRecoilModifier", this.cameraRecoilModifier);
             tag.putFloat("RecoilDurationOffset", this.recoilDuration);
-            tag.putFloat("WeaponRecoilDuration", this.weaponRecoilDuration);
+            tag.putFloat("weaponRecoilOffset", this.weaponRecoilOffset);
+            tag.putFloat("CameraRecoilDuration", this.cameraRecoilDuration);
+            tag.putFloat("VisualRecoilDuration", this.visualRecoilPercent);
             tag.putFloat("RecoilAdsReduction", this.recoilAdsReduction);
             tag.putInt("ProjectileAmount", this.projectileAmount);
+            tag.putInt("ProjToMinAccuracy", this.projToMinAccuracy);
+            tag.putInt("MsToAccuracyRest", this.msToAccuracyReset);
             tag.putBoolean("AlwaysSpread", this.alwaysSpread);
             tag.putFloat("Spread", this.spread);
+            tag.putFloat("FirstShotSpread", this.firstShotSpread);
             tag.putFloat("WeightKilo", this.weightKilo);
+            tag.putFloat("LevelReq", this.levelReq);
+            tag.putInt("UpgradeBenchMaxUses", this.upgradeBenchMaxUses);
+            tag.putFloat("MovementInaccuracy", this.movementInaccuracy); // Movement inaccuracy modifier
+            tag.putFloat("HipFireInaccuracy", this.hipFireInaccuracy); // Movement inaccuracy modifier
             return tag;
         }
 
@@ -132,6 +176,14 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             if(tag.contains("Rate", Constants.NBT.TAG_ANY_NUMERIC))
             {
                 this.rate = tag.getInt("Rate");
+            }
+            if(tag.contains("BurstRate", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.burstRate = tag.getInt("BurstRate");
+            }
+            if(tag.contains("BurstCount", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.burstCount = tag.getInt("BurstCount");
             }
             if(tag.contains("RateSelector", Constants.NBT.TAG_INT_ARRAY))
             {
@@ -161,9 +213,17 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 this.recoilDuration = tag.getFloat("RecoilDurationOffset");
             }
-            if(tag.contains("WeaponRecoilDuration", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("weaponRecoilOffset", Constants.NBT.TAG_ANY_NUMERIC))
             {
-                this.weaponRecoilDuration = tag.getFloat("WeaponRecoilDuration");
+                this.weaponRecoilOffset = tag.getFloat("weaponRecoilOffset");
+            }
+            if(tag.contains("CameraRecoilDuration", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.cameraRecoilDuration = tag.getFloat("CameraRecoilDuration");
+            }
+            if(tag.contains("VisualRecoilDuration", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.visualRecoilPercent = tag.getFloat("VisualRecoilDuration");
             }
             if(tag.contains("RecoilAdsReduction", Constants.NBT.TAG_ANY_NUMERIC))
             {
@@ -173,6 +233,18 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 this.projectileAmount = tag.getInt("ProjectileAmount");
             }
+            if(tag.contains("ProjToMinAccuracy", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.projToMinAccuracy = tag.getInt("ProjToMinAccuracy");
+            }
+            if(tag.contains("MsToAccuracyRest", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.msToAccuracyReset = tag.getInt("MsToAccuracyRest");
+            }
+            if(tag.contains("UpgradeBenchMaxUses", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.upgradeBenchMaxUses = tag.getInt("UpgradeBenchMaxUses");
+            }
             if(tag.contains("AlwaysSpread", Constants.NBT.TAG_ANY_NUMERIC))
             {
                 this.alwaysSpread = tag.getBoolean("AlwaysSpread");
@@ -181,9 +253,25 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 this.spread = tag.getFloat("Spread");
             }
+            if(tag.contains("FirstShotSpread", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.firstShotSpread = tag.getFloat("FirstShotSpread");
+            }
             if(tag.contains("WeightKilo", Constants.NBT.TAG_ANY_NUMERIC))
             {
                 this.weightKilo = tag.getFloat("WeightKilo");
+            }
+            if(tag.contains("LevelReq", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.levelReq = tag.getFloat("LevelReq");
+            }
+            if(tag.contains("MovementInaccuracy", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.movementInaccuracy = tag.getFloat("MovementInaccuracy");
+            }
+            if(tag.contains("HipFireInaccuracy", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.hipFireInaccuracy = tag.getFloat("HipFireInaccuracy");
             }
         }
 
@@ -196,6 +284,8 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             general.auto = this.auto;
             general.boltAction = this.boltAction;
             general.rate = this.rate;
+            general.burstRate = this.burstRate;
+            general.burstCount = this.burstCount;
             general.rateSelector = this.rateSelector;
             general.gripType = this.gripType;
             general.recoilAngle = this.recoilAngle;
@@ -203,15 +293,23 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             general.horizontalRecoilAngle = this.horizontalRecoilAngle;
             general.cameraRecoilModifier = this.cameraRecoilModifier;
             general.recoilDuration = this.recoilDuration;
-            general.weaponRecoilDuration = this.weaponRecoilDuration;
+            general.weaponRecoilOffset = this.weaponRecoilOffset;
+            general.cameraRecoilDuration = this.cameraRecoilDuration;
+            general.visualRecoilPercent = this.visualRecoilPercent;
             general.recoilAdsReduction = this.recoilAdsReduction;
             general.projectileAmount = this.projectileAmount;
+            general.projToMinAccuracy = this.projToMinAccuracy;
+            general.msToAccuracyReset = this.msToAccuracyReset;
             general.alwaysSpread = this.alwaysSpread;
             general.spread = this.spread;
+            general.firstShotSpread = this.firstShotSpread;
             general.weightKilo = this.weightKilo;
+            general.levelReq = this.levelReq;
+            general.upgradeBenchMaxUses = this.upgradeBenchMaxUses;
+            general.movementInaccuracy = this.movementInaccuracy;
+            general.hipFireInaccuracy = this.hipFireInaccuracy;
             return general;
         }
-
         /**
          * @return If this gun is automatic or not
          */
@@ -219,7 +317,6 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         {
             return this.auto;
         }
-
         /**
          * @return If the gun exits aim during Cooldown
          */
@@ -227,23 +324,38 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         {
             return this.boltAction;
         }
-
         /**
          * @return The fire rate of this weapon in ticks
          */
         public int getRate()
         {
-            return this.rate;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? (int) (this.rate + GunEditor.get().getRateMod()) : (int)this.rate;
         }
-
         /**
-         * @return The fire modes supported by the weapon, [0,1,2,3,4,5] [Safety, Single, Three round burst, Auto, Special 1, Special 2]
+         * @return The fire rate of this weapon in ticks
+         */
+        public int getUpgradeBenchMaxUses()
+        {
+            return this.upgradeBenchMaxUses;
+        }
+        /**
+         * @return The fire rate of this weapon in ticks
+         */
+        public int getBurstRate()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? (int) (this.burstRate + GunEditor.get().getBurstRateMod()) : (int)this.burstRate;
+        }
+        public int getBurstCount()
+        {
+            return this.burstCount;
+        }
+        /**
+         * @return The fire modes supported by the weapon, [0,1,2,3,4,5] [Safety, Single, Auto, Three round burst, Special 1, Special 2]
          */
         public int[] getRateSelector()
         {
             return this.rateSelector;
         }
-
         /**
          * @return The type of grip this weapon uses
          */
@@ -251,71 +363,59 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         {
             return this.gripType;
         }
-
         /**
          * @return The amount of recoil this gun produces upon firing in degrees
          */
         public float getRecoilAngle()
         {
-            return this.recoilAngle;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.recoilAngle + GunEditor.get().getRecoilAngleMod() : (this.recoilAngle/1.5f);
         }
-
         /**
          * @return The amount of kick this gun produces upon firing
          */
         public float getRecoilKick()
         {
-            return this.recoilKick;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.recoilKick + GunEditor.get().getRecoilKickMod() : (this.recoilKick/1.5f);
         }
-
         /**
          * @return The amount of horizontal kick this gun produces upon firing
          */
-        public float getHorizontalRecoilAngle()
-        {
-            return this.horizontalRecoilAngle;
-        }
-
+        public float getHorizontalRecoilAngle() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.horizontalRecoilAngle + GunEditor.get().getHorizontalRecoilAngleMod() : (this.horizontalRecoilAngle/1.5f);}
         /**
          * @return How much to divide out of camera recoil, use for either softening camera shake while keeping high recoil feeling weapons
          */
-        public float getCameraRecoilModifier()
-        {
-            return this.cameraRecoilModifier;
-        }
-
+        public float getCameraRecoilModifier() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.cameraRecoilModifier + GunEditor.get().getCameraRecoilModifierMod() : this.cameraRecoilModifier;}
         /**
          * @return The duration offset for recoil. This reduces the duration of recoil animation
          */
-        public float getRecoilDuration()
-        {
-            return this.recoilDuration;
-        }
+        public float getRecoilDuration() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.recoilDuration + GunEditor.get().getRecoilDurationMod() : this.recoilDuration;}
+        /**
+         * @return Recoil (the weapon) up until the weapon cooldown is under this value (0.1 == 10% recoil time left, use to help scale with high firerate weapons and their weapon recoil feel)
+         */
+        public float getWeaponRecoilOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.weaponRecoilOffset + GunEditor.get().getWeaponRecoilDurationMod() : this.weaponRecoilOffset;}
+        /**
+         * @return Recoil (the weapon) up until the weapon cooldown is under this value (0.1 == 10% recoil time left, use to help scale with high firerate weapons and their weapon recoil feel)
+         */
+        public float getCameraRecoilDuration() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.cameraRecoilDuration + GunEditor.get().getWeaponRecoilDurationMod() : this.cameraRecoilDuration;}
 
         /**
          * @return Recoil (the weapon) up until the weapon cooldown is under this value (0.1 == 10% recoil time left, use to help scale with high firerate weapons and their weapon recoil feel)
          */
-        public float getWeaponRecoilDuration()
-        {
-            return this.weaponRecoilDuration;
-        }
+        public float getVisualRecoilPercent() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.visualRecoilPercent : this.visualRecoilPercent;}
 
         /**
          * @return The amount of reduction applied when aiming down this weapon's sight
          */
-        public float getRecoilAdsReduction()
-        {
-            return this.recoilAdsReduction;
-        }
+        public float getRecoilAdsReduction() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? (this.recoilAdsReduction + GunEditor.get().getRecoilAdsReductionMod())*2 : (this.recoilAdsReduction)*2;}
 
+        /*public float getRecoilAdsReduction() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? (this.recoilAdsReduction + GunEditor.get().getRecoilAdsReductionMod())*2 : (this.recoilAdsReduction)*2;}*/
         /**
          * @return The amount of projectiles this weapon fires
          */
         public int getProjectileAmount()
         {
-            return this.projectileAmount;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? (int) (this.projectileAmount + GunEditor.get().getProjectileAmountMod()) : this.projectileAmount;
         }
-
         /**
          * @return If this weapon should always spread it's projectiles according to {@link #getSpread()}
          */
@@ -323,23 +423,67 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         {
             return this.alwaysSpread;
         }
-
         /**
          * @return The maximum amount of degrees applied to the initial pitch and yaw direction of
          * the fired projectile.
          */
         public float getSpread()
         {
-            return this.spread;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ?
+                    (this.spread*0.5f + GunEditor.get().getSpreadMod()) : this.spread*0.5f;
         }
-
+        /**
+         * @return The default Kilogram weight of the weapon
+         */
+        public float getWeightKilo()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.weightKilo + GunEditor.get().getWeightKiloMod() : this.weightKilo;//*1.25f;
+        }
         /**
          * @return The maximum amount of degrees applied to the initial pitch and yaw direction of
          * the fired projectile.
          */
-        public float getWeightKilo()
+        public float getLevelReq()
         {
-            return this.weightKilo;//*1.25f;
+            return this.levelReq;//*1.25f;
+        }
+
+        /**
+         * @return Percentage of movement inaccuracy modification ((spread * (movement)) * movementInaccuracy)
+         */
+        public float getMovementInaccuracy()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.movementInaccuracy : this.movementInaccuracy;//*1.25f;
+        }
+        /**
+         * @return Percentage of movement inaccuracy modification ((spread * (movement)) * movementInaccuracy)
+         */
+        public float getHipFireInaccuracy()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.general) ? this.hipFireInaccuracy*1.75f :
+                    this.hipFireInaccuracy*1.75f;//*1.25f;
+        }
+        /**
+         * @return The amount of projectiles the weapon fires before hitting minimum accuracy
+         */
+        public int getProjCountAccuracy()
+        {
+            return this.projToMinAccuracy;
+        }
+        /**
+         * @return The initial amount of degrees applied to the initial pitch and yaw direction of
+         * the fired projectile.
+         */
+        public float getFirstShotSpread()
+        {
+            return this.firstShotSpread;
+        }
+        /**
+         * @return Miliseconds to wait per last fired shot before attempting to reset projectile count for accuracy calculation
+         */
+        public int getMsToAccuracyReset()
+        {
+            return this.msToAccuracyReset;
         }
     }
 
@@ -356,8 +500,6 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         private int reloadAmount = 1;
         @Optional
         private int[] maxAdditionalAmmoPerOC = new int[]{};
-      /*@Optional                                          Impl at some point, allow additional reload times per OC (OverCap)
-        private int[] maxAdditionalAmmoPerOC = new int[]{};*/
         @Optional
         private int preReloadPauseTicks = 0;
         @Optional
@@ -454,23 +596,20 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         /**
          * @return The amount of ammo to add to the weapon each reload cycle
          */
-        public int getReloadAmount()
-        {
-            return this.reloadAmount;
-        }
+        public int getReloadAmount() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.reloads) ? (int) (this.reloadAmount + GunEditor.get().getReloadAmountMod()) : this.reloadAmount;}
         /**
          * @return The amount of ammo to add to the weapon each reload cycle
          */
         public int getReloadMagTimer()
         {
-            return this.reloadMagTimer;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.reloads) ? (int) (this.reloadMagTimer + GunEditor.get().getReloadMagTimerMod()) : this.reloadMagTimer;
         }
         /**
          * @return The amount of ammo to add to the weapon each reload cycle
          */
         public int getAdditionalReloadEmptyMagTimer()
         {
-            return this.additionalReloadEmptyMagTimer;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() &&  GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.reloads) ? (int) (this.additionalReloadEmptyMagTimer + GunEditor.get().getAdditionalReloadEmptyMagTimerMod()) : this.additionalReloadEmptyMagTimer;
         }
         /**
          * @return The amount of ammo to add to the weapon each reload cycle
@@ -481,12 +620,12 @@ public final class Gun implements INBTSerializable<CompoundNBT>
          */
         public int getPreReloadPauseTicks()
         {
-            return this.preReloadPauseTicks;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.reloads) ? (int) (this.preReloadPauseTicks + GunEditor.get().getPreReloadPauseTicksMod()) : this.preReloadPauseTicks;
         }
         /**
          * @return The amount of ammo to add to the weapon each reload cycle
          */
-        public int getinterReloadPauseTicks() {return this.interReloadPauseTicks;}
+        public int getinterReloadPauseTicks() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.reloads) ? (int) (this.interReloadPauseTicks + GunEditor.get().getInterReloadPauseTicksMod()) : this.interReloadPauseTicks;}
         /**
          * @return Does this gun reload all ammunition following a single timer and replenish
          */
@@ -498,13 +637,13 @@ public final class Gun implements INBTSerializable<CompoundNBT>
 
     public static class Projectile implements INBTSerializable<CompoundNBT>
     {
-        private ResourceLocation item = new ResourceLocation(Reference.MOD_ID, "basic_ammo");
+        // ONLY ON INGEST...
         @Optional
         private boolean visible = true;
         @Optional
         private float damage;
-        @Optional
-        private float size;
+        @Ignored
+        private float size = 0.1f;
         @Optional
         private double speed;
         @Optional
@@ -516,10 +655,19 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Optional
         private int trailColor = 0xFFD289;
         @Optional
-        private double trailLengthMultiplier = 1;
+        private double trailLengthMultiplier = 4.35;
+
+        //TODO: Actually use per gun now, currently not in use (UNUSED)
+        @Optional
+        private float trailRotationMultiplier = 0.0175f;
         @Optional
         private boolean ricochet = true;
-
+        @TGExclude
+        private ResourceLocation item = new ResourceLocation(Reference.MOD_ID, "basic_ammo");
+        @Optional
+        private int bulletClass = 1;
+        @Optional
+        private float bluntDamagePercentage = 0.20f;
         @Override
         public CompoundNBT serializeNBT()
         {
@@ -534,7 +682,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             tag.putBoolean("DamageReduceOverLife", this.damageReduceOverLife);
             tag.putInt("TrailColor", this.trailColor);
             tag.putDouble("TrailLengthMultiplier", this.trailLengthMultiplier);
+            tag.putFloat("TrailRotationMultiplier", this.trailRotationMultiplier);
             tag.putBoolean("Ricochet", this.ricochet);
+            tag.putInt("BulletClass", this.bulletClass);
+            tag.putFloat("BluntDamagePercentage", this.bluntDamagePercentage);
             return tag;
         }
 
@@ -581,9 +732,21 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 this.trailLengthMultiplier = tag.getDouble("TrailLengthMultiplier");
             }
+            if(tag.contains("TrailRotationMultiplier", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.trailRotationMultiplier = tag.getFloat("TrailRotationMultiplier");
+            }
             if(tag.contains("Ricochet", Constants.NBT.TAG_ANY_NUMERIC))
             {
                 this.ricochet = tag.getBoolean("Ricochet");
+            }
+            if(tag.contains("BulletClass", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.bulletClass = tag.getInt("BulletClass");
+            }
+            if(tag.contains("BluntDamagePercentage", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.bluntDamagePercentage = tag.getFloat("bluntDamagePercentage");
             }
         }
 
@@ -600,7 +763,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             projectile.damageReduceOverLife = this.damageReduceOverLife;
             projectile.trailColor = this.trailColor;
             projectile.trailLengthMultiplier = this.trailLengthMultiplier;
+            projectile.trailRotationMultiplier = this.trailRotationMultiplier;
             projectile.ricochet = this.ricochet;
+            projectile.bulletClass = this.bulletClass;
+            projectile.bluntDamagePercentage = this.bluntDamagePercentage;
             return projectile;
         }
 
@@ -625,7 +791,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
          */
         public float getDamage()
         {
-            return this.damage;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.damage + GunEditor.get().getDamageMod()) : this.damage;
         }
 
         /**
@@ -633,7 +799,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
          */
         public float getSize()
         {
-            return this.size;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.size + GunEditor.get().getDamageMod()) : this.size;
         }
 
         /**
@@ -641,15 +807,17 @@ public final class Gun implements INBTSerializable<CompoundNBT>
          */
         public double getSpeed()
         {
-            return this.speed;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ?
+                    (this.speed + GunEditor.get().getSpeedMod()) : this.speed/1.15;
         }
 
         /**
-         * @return The amount of ticks before this projectile is removed
+         * @return The amount of ticks before tsis projectile is removed
          */
         public int getLife()
         {
-            return this.life;
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ?
+                    (int) (this.life*1.5 + GunEditor.get().getLifeMod()) : (int)(this.life*1.5);
         }
 
         /**
@@ -684,11 +852,33 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             return this.trailLengthMultiplier;
         }
         /**
+         * @return The multiplier to change the rotation from muzzle to bullet, this helps close bullet trails render properly without purely relying on eye / view position
+         */
+        public float getTrailRotationMultiplier()
+        {
+            return this.trailRotationMultiplier;
+        }
+        /**
          * @return If the bullet will bounce off of hard blocks
          */
         public boolean isRicochet()
         {
             return this.ricochet;
+        }
+        /**
+         * @return The class of the bullet, meaning what tiers of armor can stop it, a class 1 bullet hitting class 1 armor means only blunt damage is applied
+         */
+        public int getBulletClass()
+        {
+            return this.bulletClass;
+        }
+        /**
+         * @return The percentage of damage applied as blunt when an armor class is met, 0 = armor stops all bullet damage.
+         * 100 means all damage passes no matter, unless blunt damage is disabled within TaC config.
+         */
+        public float getBluntDamagePercentage()
+        {
+            return this.bluntDamagePercentage;
         }
     }
 
@@ -696,15 +886,59 @@ public final class Gun implements INBTSerializable<CompoundNBT>
     {
         @Optional
         @Nullable
+        @TGExclude
         private ResourceLocation fire;
         @Optional
         @Nullable
+        @TGExclude
         private ResourceLocation reload;
         @Optional
         @Nullable
+        @TGExclude
+        private ResourceLocation reloadEmpty;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation reloadNormal;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation pump;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation pullBolt;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation reloadIntro;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation reloadLoop;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation reloadEnd;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation reloadEndEmpty;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation draw;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation inspect;
+        @Optional
+        @Nullable
+        @TGExclude
         private ResourceLocation cock;
         @Optional
         @Nullable
+        @TGExclude
         private ResourceLocation silencedFire;
 
         @Override
@@ -726,6 +960,46 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             if(this.silencedFire != null)
             {
                 tag.putString("SilencedFire", this.silencedFire.toString());
+            }
+            if(reloadEmpty != null)
+            {
+                tag.putString("ReloadEmpty", this.reloadEmpty.toString());
+            }
+            if(draw != null)
+            {
+                tag.putString("Draw", this.draw.toString());
+            }
+            if(inspect != null)
+            {
+                tag.putString("Inspect", this.inspect.toString());
+            }
+            if(reloadNormal != null)
+            {
+                tag.putString("ReloadNormal", this.reloadNormal.toString());
+            }
+            if(pump != null)
+            {
+                tag.putString("Pump", this.pump.toString());
+            }
+            if(reloadIntro != null)
+            {
+                tag.putString("ReloadIntro", this.reloadIntro.toString());
+            }
+            if(reloadLoop != null)
+            {
+                tag.putString("ReloadLoop", this.reloadLoop.toString());
+            }
+            if(reloadEnd != null)
+            {
+                tag.putString("ReloadEnd", this.reloadEnd.toString());
+            }
+            if(pullBolt != null)
+            {
+                tag.putString("PullBolt", this.pullBolt.toString());
+            }
+            if(reloadEndEmpty != null)
+            {
+                tag.putString("ReloadEndEmpty", this.reloadEndEmpty.toString());
             }
             return tag;
         }
@@ -749,6 +1023,37 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 this.silencedFire = this.createSound(tag, "SilencedFire");
             }
+            if(tag.contains("ReloadEmpty", Constants.NBT.TAG_STRING))
+            {
+                this.reloadEmpty = this.createSound(tag, "ReloadEmpty");
+            }
+            if(tag.contains("Draw", Constants.NBT.TAG_STRING)){
+                this.draw = this.createSound(tag, "Draw");
+            }
+            if(tag.contains("Inspect", Constants.NBT.TAG_STRING)){
+                this.inspect = this.createSound(tag, "Inspect");
+            }
+            if(tag.contains("ReloadNormal", Constants.NBT.TAG_STRING)){
+                this.reloadNormal = this.createSound(tag, "ReloadNormal");
+            }
+            if(tag.contains("Pump", Constants.NBT.TAG_STRING)){
+                this.pump = this.createSound(tag, "Pump");
+            }
+            if(tag.contains("ReloadIntro", Constants.NBT.TAG_STRING)){
+                this.reloadIntro = this.createSound(tag, "ReloadIntro");
+            }
+            if(tag.contains("ReloadLoop", Constants.NBT.TAG_STRING)){
+                this.reloadLoop = this.createSound(tag, "ReloadLoop");
+            }
+            if(tag.contains("ReloadEnd", Constants.NBT.TAG_STRING)){
+                this.reloadEnd = this.createSound(tag, "ReloadEnd");
+            }
+            if(tag.contains("PullBolt", Constants.NBT.TAG_STRING)){
+                this.pullBolt = this.createSound(tag, "PullBolt");
+            }
+            if(tag.contains("ReloadEndEmpty", Constants.NBT.TAG_STRING)){
+                this.reloadEndEmpty = this.createSound(tag, "ReloadEndEmpty");
+            }
         }
 
         public Sounds copy()
@@ -758,6 +1063,16 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             sounds.reload = this.reload;
             sounds.cock = this.cock;
             sounds.silencedFire = this.silencedFire;
+            sounds.reloadEmpty = this.reloadEmpty;
+            sounds.draw = this.draw;
+            sounds.inspect = this.inspect;
+            sounds.reloadNormal = this.reloadNormal;
+            sounds.pump = this.pump;
+            sounds.reloadIntro = this.reloadIntro;
+            sounds.reloadLoop = this.reloadLoop;
+            sounds.reloadEnd = this.reloadEnd;
+            sounds.pullBolt = this.pullBolt;
+            sounds.reloadEndEmpty = this.reloadEndEmpty;
             return sounds;
         }
 
@@ -778,7 +1093,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         }
 
         /**
-         * @return The registry iid of the sound event when reloading this weapon
+         * @return The registry id of the sound event when reloading this weapon
          */
         @Nullable
         public ResourceLocation getReload()
@@ -787,7 +1102,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         }
 
         /**
-         * @return The registry iid of the sound event when cocking this weapon
+         * @return The registry id of the sound event when cocking this weapon
          */
         @Nullable
         public ResourceLocation getCock()
@@ -796,13 +1111,55 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         }
 
         /**
-         * @return The registry iid of the sound event when silenced firing this weapon
+         * @return The registry id of the sound event when silenced firing this weapon
          */
         @Nullable
         public ResourceLocation getSilencedFire()
         {
             return this.silencedFire;
         }
+
+        /**
+         * @return The registry id of the sound event when reloading firearms with no bullets in the gun
+         */
+        @Nullable
+        public ResourceLocation getReloadEmpty() { return this.reloadEmpty; }
+
+        /**
+         * @return The registry id of the sound event when drawing.
+         */
+        @Nullable
+        public ResourceLocation getDraw() { return this.draw; }
+
+        /**
+         * @return The registry id of the sound event when inspecting.
+         */
+        @Nullable
+        public ResourceLocation getInspect() { return this.inspect; }
+
+        /**
+         * @return The registry id of the sound event when inspecting.
+         */
+        @Nullable
+        public ResourceLocation getReloadNormal() { return this.reloadNormal; }
+
+        @Nullable
+        public ResourceLocation getPump() { return this.pump; }
+
+        @Nullable
+        public ResourceLocation getReloadIntro() { return this.reloadIntro; }
+
+        @Nullable
+        public ResourceLocation getReloadLoop() { return this.reloadLoop; }
+
+        @Nullable
+        public ResourceLocation getReloadEnd() { return this.reloadEnd; }
+
+        @Nullable
+        public ResourceLocation getPullBolt() { return this.pullBolt; }
+
+        @Nullable
+        public ResourceLocation getReloadEndEmpty() { return this.reloadEndEmpty; }
     }
 
     public static class Display implements INBTSerializable<CompoundNBT>
@@ -815,45 +1172,37 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         private int weaponType = 0;
 
         @Optional
-        @Nullable
         private float hipfireScale = 0.75F;
 
         @Optional
-        @Nullable
         private float hipfireMoveScale = 0.5F;
 
         @Optional
-        @Nullable
         private float hipfireRecoilScale = 1.0F;
 
         @Optional
-        @Nullable
         private boolean showDynamicHipfire = true;
 
-        @Nullable
         public float getHipfireScale()
         {
             return this.hipfireScale;
         }
 
-        @Nullable
         public float getHipfireMoveScale()
         {
             return this.hipfireMoveScale;
         }
 
-        @Nullable
         public float getHipfireRecoilScale()
         {
             return this.hipfireRecoilScale;
         }
 
-        @Nullable
         public boolean isDynamicHipfire()
         {
             return this.showDynamicHipfire;
         }
-        @Nullable
+
         public int getWeaponType()
         {
             return this.weaponType;
@@ -870,12 +1219,15 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             private double size = 0.5;
             private double smokeSize = 2.0;
 
+            private double trailAdjust = 1.15;
+
             @Override
             public CompoundNBT serializeNBT()
             {
                 CompoundNBT tag = super.serializeNBT();
-                tag.putDouble("Size", this.size);
+                tag.putDouble("Scale", this.size);
                 tag.putDouble("SmokeSize", this.smokeSize);
+                tag.putDouble("TrailAdjust", this.trailAdjust);
                 return tag;
             }
 
@@ -883,9 +1235,13 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             public void deserializeNBT(CompoundNBT tag)
             {
                 super.deserializeNBT(tag);
-                if(tag.contains("Size", Constants.NBT.TAG_ANY_NUMERIC))
+                if(tag.contains("Scale", Constants.NBT.TAG_ANY_NUMERIC))
                 {
-                    this.size = tag.getDouble("Size");
+                    this.size = tag.getDouble("Scale");
+                }
+                if(tag.contains("TrailAdjust", Constants.NBT.TAG_ANY_NUMERIC))
+                {
+                    this.trailAdjust = tag.getDouble("TrailAdjust");
                 }
                 if(tag.contains("SmokeSize", Constants.NBT.TAG_ANY_NUMERIC))
                 {
@@ -898,6 +1254,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 Flash flash = new Flash();
                 flash.size = this.size;
                 flash.smokeSize = this.smokeSize;
+                flash.trailAdjust = this.trailAdjust;
                 flash.xOffset = this.xOffset;
                 flash.yOffset = this.yOffset;
                 flash.zOffset = this.zOffset;
@@ -907,10 +1264,15 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             /**
              * @return The size/scale of the muzzle flash render
              */
-            public double getSize()
-            {
-                return this.size;
-            }
+            public double getSize() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.flash) ? this.size /*+ GunEditor.get().getSizeMod()*/ : this.size;}
+            @Override
+            public double getXOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.flash) ? this.xOffset + GunEditor.get().getxMod() : this.xOffset;}
+            @Override
+            public double getYOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.flash) ? this.yOffset + GunEditor.get().getyMod() : this.yOffset;}
+            @Override
+            public double getZOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.flash) ? this.zOffset + GunEditor.get().getzMod() : this.zOffset;}
+
+            public double getTrailAdjust() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.flash) ? this.trailAdjust + GunEditor.get().getSizeMod() : this.trailAdjust;}
 
             /**
              * @return The size/scale of the muzzle smoke render
@@ -1008,26 +1370,20 @@ public final class Gun implements INBTSerializable<CompoundNBT>
     {
         @Optional
         @Nullable
-        private Zoom[] zoom = new Zoom[]{};
-
+        private Zoom zoom = new Zoom();
+        @Optional
         private Attachments attachments = new Attachments();
 
-        @Ignored
-        private int zoomOptions;
-
         @Nullable
-
-        public Zoom[] getZoom()
+        public Zoom getZoom()
         {
-            return this.zoom;
+            return this.zoom.copy();
         }
 
         public Attachments getAttachments()
         {
             return this.attachments;
         }
-
-        public int getZoomOptions(){return this.zoomOptions;}
 
         public static class Zoom extends Positioned
         {
@@ -1079,7 +1435,17 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 return this.stabilityOffset;
             }
+
+            //TODO: CLEAN DISGUSTING OVERRIDES, THIS IS FOR DEVELOPMENT TOOLING ONLY, ONLY FOR POSITIONED ENFORCED SYSTEMS!!!
+            @Override
+            public double getXOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.zoom) ? super.getXOffset() + GunEditor.get().getxMod() : super.getXOffset();}
+            @Override
+            public double getYOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.zoom) ?
+                    super.getYOffset() + GunEditor.get().getyMod() : super.getYOffset();}
+            @Override
+            public double getZOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.zoom) ? super.getZOffset() + GunEditor.get().getzMod() : super.getZOffset();}
         }
+
 
 
         public static class Attachments implements INBTSerializable<CompoundNBT>
@@ -1198,11 +1564,11 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 if(tag.contains("Scope", Constants.NBT.TAG_COMPOUND))
                 {
-                    this.scope = this.createScaledPositioned(tag, "Scope");
+                    this.scope = this.createScope(tag, "Scope");
                 }
                 if(tag.contains("Barrel", Constants.NBT.TAG_COMPOUND))
                 {
-                    this.barrel = this.createScaledPositioned(tag, "Barrel");
+                    this.barrel = this.createBarrel(tag, "Barrel");
                 }
                 if(tag.contains("Stock", Constants.NBT.TAG_COMPOUND))
                 {
@@ -1214,7 +1580,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 }
                 if(tag.contains("OldScope", Constants.NBT.TAG_COMPOUND))
                 {
-                    this.oldScope = this.createScaledPositioned(tag, "OldScope");
+                    this.oldScope = this.createOldScope(tag, "OldScope");
                 }
                 if(tag.contains("SideRail", Constants.NBT.TAG_COMPOUND))
                 {
@@ -1226,7 +1592,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 }
                 if(tag.contains("PistolBarrel", Constants.NBT.TAG_COMPOUND))
                 {
-                    this.pistolBarrel = this.createScaledPositioned(tag, "PistolBarrel");
+                    this.pistolBarrel = this.createPistolBarrel(tag, "PistolBarrel");
                 }
             }
 
@@ -1269,46 +1635,87 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             }
 
             @Nullable
-            private ScaledPositioned createScaledPositioned(CompoundNBT tag, String key)
-            {
+            private ScaledPositioned createScaledPositioned(CompoundNBT tag, String key) {
                 CompoundNBT attachment = tag.getCompound(key);
                 return attachment.isEmpty() ? null : new ScaledPositioned(attachment);
             }
-
             @Nullable
-            private PistolScope createPistolScope(CompoundNBT tag, String key)
-            {
+            private PistolScope createPistolScope(CompoundNBT tag, String key) {
                 CompoundNBT attachment = tag.getCompound(key);
-                return attachment.isEmpty() ? null : new PistolScope(attachment);
+                return attachment.isEmpty() ? null : new PistolScope(attachment) {
+                    @Override
+                    public double getXOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolScope) ? super.getXOffset() + GunEditor.get().getxMod() : super.getXOffset();}
+                    @Override
+                    public double getYOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolScope) ? super.getYOffset() + GunEditor.get().getyMod() : super.getYOffset();}
+                    @Override
+                    public double getZOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolScope) ? super.getZOffset() + GunEditor.get().getzMod() : super.getZOffset();}
+                    @Override
+                    public double getScale() {return   (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolScope) ? super.scale + GunEditor.get().getSizeMod() :     super.scale;}
+                };
+            }
+            @Nullable
+            private ScaledPositioned createScope(CompoundNBT tag, String key) {
+                CompoundNBT attachment = tag.getCompound(key);
+                return attachment.isEmpty() ? null : new ScaledPositioned(attachment) {
+                    @Override
+                    public double getXOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.scope) ? super.getXOffset() + GunEditor.get().getxMod() : super.getXOffset();}
+                    @Override
+                    public double getYOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.scope) ? super.getYOffset() + GunEditor.get().getyMod() : super.getYOffset();}
+                    @Override
+                    public double getZOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.scope) ? super.getZOffset() + GunEditor.get().getzMod() : super.getZOffset();}
+                    @Override
+                    public double getScale() {return   (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.scope) ? this.scale + GunEditor.get().getSizeMod() :      this.scale;}
+                };
+            }
+            @Nullable
+            private ScaledPositioned createBarrel(CompoundNBT tag, String key) {
+                CompoundNBT attachment = tag.getCompound(key);
+                return attachment.isEmpty() ? null : new ScaledPositioned(attachment) {
+                    @Override
+                    public double getXOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.barrel) ? super.getXOffset() + GunEditor.get().getxMod() : super.getXOffset();}
+                    @Override
+                    public double getYOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.barrel) ? super.getYOffset() + GunEditor.get().getyMod() : super.getYOffset();}
+                    @Override
+                    public double getZOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.barrel) ? super.getZOffset() + GunEditor.get().getzMod() : super.getZOffset();}
+                    @Override
+                    public double getScale() {return   (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.barrel) ? this.scale + GunEditor.get().getSizeMod() :      this.scale;}
+                };
+            }
+            @Nullable
+            private ScaledPositioned createPistolBarrel(CompoundNBT tag, String key) {
+                CompoundNBT attachment = tag.getCompound(key);
+                return attachment.isEmpty() ? null : new ScaledPositioned(attachment) {
+                    @Override
+                    public double getXOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolBarrel) ? super.getXOffset() + GunEditor.get().getxMod() : super.getXOffset();}
+                    @Override
+                    public double getYOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolBarrel) ? super.getYOffset() + GunEditor.get().getyMod() : super.getYOffset();}
+                    @Override
+                    public double getZOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolBarrel) ? super.getZOffset() + GunEditor.get().getzMod() : super.getZOffset();}
+                    @Override
+                    public double getScale() {return   (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolBarrel) ? this.scale + GunEditor.get().getSizeMod() :       this.scale;}
+                };
+            }
+            @Nullable
+            private ScaledPositioned createOldScope(CompoundNBT tag, String key) {
+                CompoundNBT attachment = tag.getCompound(key);
+                return attachment.isEmpty() ? null : new ScaledPositioned(attachment) {
+                    @Override
+                    public double getXOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.oldScope) ? super.getXOffset() + GunEditor.get().getxMod() : super.getXOffset();}
+                    @Override
+                    public double getYOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.oldScope) ? super.getYOffset() + GunEditor.get().getyMod() : super.getYOffset();}
+                    @Override
+                    public double getZOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.oldScope) ? super.getZOffset() + GunEditor.get().getzMod() : super.getZOffset();}
+                    @Override
+                    public double getScale() {return   (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.oldScope) ? this.scale + GunEditor.get().getSizeMod() :      this.scale;}
+                };
             }
         }
 
-        /*@Override
+        @Override
         public CompoundNBT serializeNBT()
         {
             CompoundNBT tag = new CompoundNBT();
-            //if(!ArrayUtils.isEmpty(this.zoom))
-            //GunMod.LOGGER.log(Level.FATAL, zoom.length);
-            if(this.zoom != null) {
-                //GunMod.LOGGER.log(Level.FATAL, this.zoom[0].getFovModifier());
-                tag.put("Zoom", zoom.clone()[0].serializeNBT());
-            }
-            *//*if(this.zoom != null)
-            {
-
-
-                *//**//*int zoomIterator = 0;
-                for(Zoom sight : this.zoom)
-                {
-
-                    GunMod.LOGGER.log(Level.FATAL, sight.fovModifier);
-                    tag.put("Zoom" + Integer.toString(zoomIterator), sight.serializeNBT());
-                    zoomIterator++;
-                }
-                tag.putInt("ZoomIterator",zoomIterator);*//**//*
-                Zoom test = zoom[0].copy();
-                tag.put("Zoom0",test.serializeNBT());
-            }*//*
+            tag.put("Zoom", this.zoom.serializeNBT());
             tag.put("Attachments", this.attachments.serializeNBT());
             return tag;
         }
@@ -1316,70 +1723,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Override
         public void deserializeNBT(CompoundNBT tag)
         {
-*//*            if(tag.contains("ZoomIterator", Constants.NBT.TAG_ANY_NUMERIC))
-            {
-                this.zoomOptions = tag.getInt("ZoomIterator");
-            }*//*
             if(tag.contains("Zoom", Constants.NBT.TAG_COMPOUND))
             {
-                this.zoom[0].deserializeNBT(tag.getCompound("Zoom"));
+                this.zoom.deserializeNBT(tag.getCompound("Zoom"));
             }
-
-
-            if(tag.contains("Attachments", Constants.NBT.TAG_COMPOUND))
-            {
-                this.attachments.deserializeNBT(tag.getCompound("Attachments"));
-            }
-        }
-
-        public Modules copy()
-        {
-            Modules modules = new Modules();
-            modules.zoomOptions = this.zoomOptions;
-            modules.zoom = this.zoom.clone();
-            modules.attachments = this.attachments.copy();
-            return modules;
-        }*/
-        @Override
-        public CompoundNBT serializeNBT()
-        {
-            CompoundNBT tag = new CompoundNBT();
-
-            int zoomIterator = 0;
-
-            if(!ArrayUtils.isEmpty(this.zoom))
-            {
-                for(Zoom sight : this.zoom)
-                {
-                    tag.put("Zoom" + zoomIterator, sight.serializeNBT());
-                    zoomIterator++;
-                }
-            }
-            tag.putInt("ZoomIterator",zoomIterator);
-            tag.put("Attachments", this.attachments.serializeNBT());
-            return tag;
-        }
-
-        @Override
-        public void deserializeNBT(CompoundNBT tag)
-        {
-            if(ArrayUtils.isEmpty(this.getZoom()))
-            {
-
-                ArrayList<Zoom> zoomArr = new ArrayList<Zoom>(){};
-
-                int zoomItor = tag.getInt("ZoomIterator");
-
-                for(int itor = 0; itor <= zoomItor; itor++)
-                {
-                    Zoom zoom = new Zoom();
-                    zoom.deserializeNBT(tag.getCompound("Zoom" + itor));
-                    zoomArr.add(zoom);
-                }
-
-                this.zoom = zoomArr.toArray(this.zoom).clone();
-            }
-
             if(tag.contains("Attachments", Constants.NBT.TAG_COMPOUND))
             {
                 this.attachments.deserializeNBT(tag.getCompound("Attachments"));
@@ -1388,23 +1735,20 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         public Modules copy()
         {
             Modules modules = new Modules();
-            if(this.zoom != null)
-            {
-                modules.zoom = this.zoom.clone();
-            }
+            modules.zoom = this.zoom.copy();
             modules.attachments = this.attachments.copy();
             return modules;
         }
     }
-
     public static class Positioned implements INBTSerializable<CompoundNBT>
     {
+/*        public Positioned(CompoundNBT tag) {this.deserializeNBT(tag);}*/
         @Optional
-        protected double xOffset;
+        protected double xOffset = 0;
         @Optional
-        protected double yOffset;
+        protected double yOffset = 0;
         @Optional
-        protected double zOffset;
+        protected double zOffset = 0;
 
         @Override
         public CompoundNBT serializeNBT()
@@ -1433,20 +1777,9 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             }
         }
 
-        public double getXOffset()
-        {
-            return this.xOffset;
-        }
-
-        public double getYOffset()
-        {
-            return this.yOffset;
-        }
-
-        public double getZOffset()
-        {
-            return this.zOffset;
-        }
+        public double getXOffset() {return this.xOffset;}
+        public double getYOffset() {return this.yOffset;}
+        public double getZOffset() {return this.zOffset;}
 
         public Positioned copy()
         {
@@ -1488,14 +1821,8 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             }
         }
 
-        public double getScale()
-        {
-            return this.scale;
-        }
-
         @Override
-        public ScaledPositioned copy()
-        {
+        public ScaledPositioned copy() {
             ScaledPositioned positioned = new ScaledPositioned();
             positioned.xOffset = this.xOffset;
             positioned.yOffset = this.yOffset;
@@ -1503,6 +1830,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             positioned.scale = this.scale;
             return positioned;
         }
+        public double getScale() {return this.scale;}
     }
 
     public static class PistolScope extends ScaledPositioned
@@ -1543,6 +1871,14 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 this.doOnSlideMovement = tag.getBoolean("DoOnSlideMovement");
             }
         }
+        @Override
+        public double getXOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolScope) ? super.getXOffset() + GunEditor.get().getxMod() : super.getXOffset();}
+        @Override
+        public double getYOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolScope) ? super.getYOffset() + GunEditor.get().getyMod() : super.getYOffset();}
+        @Override
+        public double getZOffset() {return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolScope) ? super.getZOffset() + GunEditor.get().getzMod() : super.getZOffset();}
+        @Override
+        public double getScale() {return   (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.pistolScope) ? this.scale + GunEditor.get().getSizeMod() :      this.scale;}
 
         public boolean getDoRenderMount()
         {
@@ -1690,7 +2026,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         return this.canAttachType(IAttachment.Type.SCOPE) || this.canAttachType(IAttachment.Type.OLD_SCOPE) || this.canAttachType(IAttachment.Type.PISTOL_SCOPE) || this.modules.zoom != null;
     }
 
-    public static ItemStack getScopeStack(ItemStack gun)
+   /* public static ItemStack getScopeStack(ItemStack gun)
     {
         CompoundNBT compound = gun.getTag();
         if(compound != null && compound.contains("Attachments", Constants.NBT.TAG_COMPOUND))
@@ -1704,9 +2040,13 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 return ItemStack.read(attachment.getCompound("OldScope"));
             }
+            else if(attachment.contains("PistolScope", Constants.NBT.TAG_COMPOUND))
+            {
+                return ItemStack.read(attachment.getCompound("PistolScope"));
+            }
         }
         return ItemStack.EMPTY;
-    }
+    }*/
 
     public static boolean hasAttachmentEquipped(ItemStack stack, Gun gun, IAttachment.Type type)
     {
@@ -1726,41 +2066,38 @@ public final class Gun implements INBTSerializable<CompoundNBT>
     public static Scope getScope(ItemStack gun)
     {
         CompoundNBT compound = gun.getTag();
+        Scope scope = null;
         if(compound != null && compound.contains("Attachments", Constants.NBT.TAG_COMPOUND))
         {
             CompoundNBT attachment = compound.getCompound("Attachments");
             if(attachment.contains("Scope", Constants.NBT.TAG_COMPOUND))
             {
                 ItemStack scopeStack = ItemStack.read(attachment.getCompound("Scope"));
-                Scope scope = null;
                 if(scopeStack.getItem() instanceof IScope)
                 {
                     scope = ((IScope) scopeStack.getItem()).getProperties();
                 }
-                return scope;
+
             }
             else if(attachment.contains("OldScope", Constants.NBT.TAG_COMPOUND))
             {
                 ItemStack OldScopeStack = ItemStack.read(attachment.getCompound("OldScope"));
-                Scope scope = null;
                 if(OldScopeStack.getItem() instanceof IScope)
                 {
                     scope = ((IScope) OldScopeStack.getItem()).getProperties();
                 }
-                return scope;
-            }
+           }
             else if(attachment.contains("PistolScope", Constants.NBT.TAG_COMPOUND))
             {
                 ItemStack OldScopeStack = ItemStack.read(attachment.getCompound("PistolScope"));
-                Scope scope = null;
                 if(OldScopeStack.getItem() instanceof IScope)
                 {
                     scope = ((IScope) OldScopeStack.getItem()).getProperties();
                 }
-                return scope;
             }
         }
-        return null;
+        return scope;
+        //return null;
     }
 
     public static ItemStack getAttachment(IAttachment.Type type, ItemStack gun)
@@ -1785,27 +2122,91 @@ public final class Gun implements INBTSerializable<CompoundNBT>
 
     public static ItemStack[] findAmmo(PlayerEntity player, ResourceLocation id) // Refactor to return multiple stacks, reload to take as much of value as required from hash
     {
+        if(!player.isAlive())
+            return new ItemStack[]{};
         ArrayList<ItemStack> stacks = new ArrayList<>();
-
         if(player.isCreative())
         {
             Item item = ForgeRegistries.ITEMS.getValue(id);
             stacks.add(item != null ? new ItemStack(item, Integer.MAX_VALUE) : ItemStack.EMPTY);
             return stacks.toArray(new ItemStack[]{});
-            //return item != null ? new ItemStack(item, Integer.MAX_VALUE) : ItemStack.EMPTY;
         }
         for(int i = 0; i < player.inventory.getSizeInventory(); ++i)
         {
             ItemStack stack = player.inventory.getStackInSlot(i);
-            if(isAmmo(stack, id))
-            {
+            if(isAmmo(stack, id)) {
                 stacks.add(stack);
+            }
+        }
+        // Get wearable that holds ammo
+        ItemStack wornRig = WearableHelper.PlayerWornRig(player);
+        if(wornRig != null)
+        {
+            ListNBT nbtTagList = (ListNBT) ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").get("Items");
+            for (int i = 0; i < ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").getInt("Size"); i++)
+            {
+                ItemStack ammoStack = ItemStack.read(nbtTagList.getCompound(i));
+                if(isAmmo(ammoStack, id))
+                    stacks.add(ammoStack);
+                //Minecraft.getInstance().player.sendChatMessage(""+ammoStack.getItem().getRegistryName());
+            }
+        }
+
+        return stacks.toArray(new ItemStack[]{});
+    }
+
+    // Only for HuD renderer, maybe reload check before message is sent
+    public static ItemStack[] findAmmoRigOnly(ItemStack rig, ResourceLocation id) // Refactor to return multiple stacks, reload to take as much of value as required from hash
+    {
+        ArrayList<ItemStack> stacks = new ArrayList<>();
+        if(rig != null)
+        {
+            ListNBT nbtTagList = (ListNBT) ((ArmorRigItem)rig.getItem()).getShareTag(rig).getCompound("storage").get("Items");
+            for (int i = 0; i < ((ArmorRigItem)rig.getItem()).getShareTag(rig).getCompound("storage").getInt("Size"); i++)
+            {
+                stacks.add(ItemStack.read(nbtTagList.getCompound(i)));
             }
         }
         return stacks.toArray(new ItemStack[]{});
     }
 
-    private static boolean isAmmo(ItemStack stack, ResourceLocation id)
+    public static int ammoCountInRig(ItemStack rig, ResourceLocation id) // Refactor to return multiple stacks, reload to take as much of value as required from hash
+    {
+        int counter = 0;
+        ItemStack[] stacks = findAmmoRigOnly(rig, id);
+        for (ItemStack x : stacks)
+        {
+            if(x != null && x != ItemStack.EMPTY && x.getCount() != 0 && isAmmo(x, id))
+                counter+=x.getCount();
+        }
+        return counter;
+    }
+
+
+    public static int ammoCountInRig(CompoundNBT rigData, ResourceLocation id) // Refactor to return multiple stacks, reload to take as much of value as required from hash
+    {
+        int counter = 0;
+        ArrayList<ItemStack> stacks = new ArrayList<>();
+        ListNBT nbtTagList = (ListNBT) rigData.getCompound("storage").get("Items");
+        for (int i = 0; i < rigData.getCompound("storage").getInt("Size"); i++)
+        {
+            stacks.add(ItemStack.read(nbtTagList.getCompound(i)));
+        }
+        for (ItemStack x : stacks)
+        {
+            if(x != null && x != ItemStack.EMPTY && x.getCount() != 0 && isAmmo(x, id))
+                counter+=x.getCount();
+        }
+        /*RigSlotsHandler itemHandler = (RigSlotsHandler) rig.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
+        for (ItemStack x : itemHandler.getStacks()) {
+            if(Gun.isAmmo(x, id))
+                counter+=x);
+        }*/
+        return counter;
+    }
+
+
+    public static boolean isAmmo(ItemStack stack, ResourceLocation id)
     {
         return stack != null && stack.getItem().getRegistryName().equals(id);
     }
@@ -1815,4 +2216,15 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         CompoundNBT tag = gunStack.getOrCreateTag();
         return tag.getBoolean("IgnoreAmmo") || tag.getInt("AmmoCount") > 0;
     }
+    public static ExclusionStrategy strategy = new ExclusionStrategy() {
+        @Override
+        public boolean shouldSkipClass(Class<?> clazz) {
+            return false;
+        }
+
+        @Override
+        public boolean shouldSkipField(FieldAttributes field) {
+            return field.getAnnotation(TGExclude.class) != null;
+        }
+    };
 }

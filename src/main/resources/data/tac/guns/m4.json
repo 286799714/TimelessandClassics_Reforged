@@ -1,61 +1,79 @@
 {
   "general": {
     "auto": true,
-    "rate": 2,
-    "rateSelector": [0,1,2],
+    "rate": 720,
+    "rateSelector": [
+      0,
+      1,
+      2
+    ],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 3.425,
-    "horizontalRecoilAngle": 1.375,
-    "recoilKick": 0.8275,
-    "recoilAdsReduction": 0.245,
-    "weaponRecoilDuration": 0.9975,
-    "cameraRecoilModifier": 1.015,
-    "recoilDuration": 0.2125,
-    "alwaysSpread": true,
-    "spread": 2.925,
-    "weightKilo": 3.2
+    "recoilAngle": 3.35,
+    "horizontalRecoilAngle": 1.25,
+    "recoilKick": 1.325,
+    "recoilAdsReduction": 0.225,
+    "weaponRecoilOffset": 0.865,
+    "cameraRecoilDuration": 1.025,
+    "cameraRecoilModifier": 1.125,
+    "recoilDuration": 0.225,
+    "weightKilo": 3.55,
+
+    "spread": 1.4,
+    "firstShotSpread": 0.115,
+    "hipFireInaccuracy": 5.6,
+    "projToMinAccuracy": 6,
+    "msToAccuracyReset": 150,
+    "movementInaccuracy": 0.425
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
-    "reloadMagTimer": 45,
-    "additionalReloadEmptyMagTimer": 20,
-    "maxAdditionalAmmoPerOC": [10, 20, 30],
-    "preReloadPauseTicks": 7
+    "reloadMagTimer": 35,
+    "additionalReloadEmptyMagTimer": 12,
+    "maxAdditionalAmmoPerOC": [
+      10,
+      20,
+      30
+    ],
+    "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:nato_556_bullet",
-    "visible": true,
+    "visible": false,
     "damage": 6.75,
     "size": 0.1,
-    "speed": 38.5,
+    "speed": 34.5,
     "life": 9,
     "ricochet": true
   },
   "sounds": {
-    "fire": "tac:item.fire_m16",
-    "reload": "tac:item.pistol.reload",
+    "fire": "tac:item.m4a1_fire",
+    "reloadNormal": "tac:animation.m4_norm_reload",
+    "reloadEmpty": "tac:animation.m4_empty_reload",
+    "draw": "tac:animation.m4_draw",
+    "inspect": "tac:animation.m4_inspect",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.fire_m16s"
+    "silencedFire": "tac:item.m4a1_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 9.35,
       "zOffset": -17.55,
-      "size": 0.90
+      "size": 0.90,
+      "trailAdjust": 1.1325
     },
     "weaponType": 0
   },
   "modules": {
-    "zoom": [{
+    "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 11.98,
+      "yOffset": 12.58,
       "zOffset": -1.2
-    }],
+    },
     "attachments": {
       "scope": {
-        "yOffset": 10.125,
-        "zOffset": 4.925,
+        "yOffset": 10.455,
+        "zOffset": 5.045,
         "scale": 1.00
       },
       "barrel": {

@@ -1,64 +1,90 @@
 {
   "general": {
-    "rate": 5,
+    "rate": 200,
     "rateSelector": [
       0,
       1
     ],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 10.475,
-    "horizontalRecoilAngle": 4.725,
-    "recoilKick": 2.05,
-    "recoilAdsReduction": 0.35,
-    "weaponRecoilDuration": 0.915,
-    "cameraRecoilModifier": 2.075,
-    "recoilDuration": 0.12,
-    "alwaysSpread": true,
-    "spread": 2.11,
-    "weightKilo": 2.2
+    "recoilAngle": 14.55,
+    "horizontalRecoilAngle": 3.15,
+    "recoilKick": 1.625,
+    "recoilAdsReduction": 0.15,
+    "weaponRecoilOffset": 0.735,
+    "cameraRecoilModifier": 3.175,
+    "recoilDuration": 0.1175,
+    "weightKilo": 2.4,
+
+    "spread": 0.825,
+    "firstShotSpread": 0.085,
+    "hipFireInaccuracy": 3.6,
+    "projToMinAccuracy": 2,
+    "msToAccuracyReset": 330,
+    "movementInaccuracy": 0.25
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 7,
-    "reloadMagTimer": 60,
-    "additionalReloadEmptyMagTimer": 16,
-    "maxAdditionalAmmoPerOC": [1, 3, 6],
-    "preReloadPauseTicks": 4
+    "reloadMagTimer": 25,
+    "additionalReloadEmptyMagTimer": 11,
+    "maxAdditionalAmmoPerOC": [
+      1,
+      3,
+      5
+    ],
+    "preReloadPauseTicks": 0
   },
   "projectile": {
-    "item": "tac:magnumround",
+    "item": "tac:ae50",
     "visible": false,
-    "damage": 14.5,
+    "damage": 16,
     "size": 0.2,
-    "speed": 24.0,
-    "life": 6
+    "speed": 18.0,
+    "life": 32
   },
   "sounds": {
-    "fire": "tac:item.deagle",
-    "reload": "tac:item.pistol.reload",
+    "fire": "tac:item.deagle_fire",
+    "reloadNormal": "tac:animation.deagle_reload_norm",
+    "reloadEmpty": "tac:animation.deagle_reload_empty",
+    "draw": "tac:animation.deagle_draw",
+    "inspect": "tac:animation.deagle_inspect",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.deagles"
+    "silencedFire": "tac:item.deagle_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 11.15,
       "zOffset": -13.32,
-      "size": 1.1
+      "size": 1.1,
+      "trailAdjust": 0.91
     },
-    "weaponType": 2
+    "hipfireScale": 2.5,
+    "hipfireMoveScale": 1.0,
+    "hipfireRecoilScale": 4.00
   },
   "modules": {
-    "zoom": [{
+    "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 13.385,
-      "zOffset": -22.75
-    }],
-    "attachments":
-    {
+      "yOffset": 13.705,
+      "zOffset": -15.15
+    },
+    "attachments": {
       "barrel": {
         "yOffset": -100829.84,
         "zOffset": -11.55,
         "scale": 1.00
+      },
+      "scope": {
+        "yOffset": 11.45,
+        "zOffset": 4.6,
+        "scale": 2.0
+      },
+      "pistolScope": {
+        "yOffset": 11.45,
+        "zOffset": 4.6,
+        "scale": 2.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
       }
     }
   }

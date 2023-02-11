@@ -1,59 +1,72 @@
 {
   "general": {
-    "rate": 20,
+    "rate": 63,
     "rateSelector": [
       0,
       1
     ],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 1.975,
-    "horizontalRecoilAngle": 0.425,
-    "recoilKick": 1.2625,
-    "recoilAdsReduction": 0.155,
-    "cameraRecoilModifier": 0.30,
-    "recoilDuration": 0.205,
-    "alwaysSpread": true,
-    "spread": 10.5,
+    "recoilAngle": 13.175,
+    "horizontalRecoilAngle": 0.55,
+    "recoilKick": 2.2,
+    "recoilAdsReduction": 0.175,
+    "cameraRecoilModifier": 2.175,
+    "weaponRecoilOffset": 0.825,
+    "recoilDuration": 0.125,
     "projectileAmount": 10,
-    "weightKilo": 4.1
+    "weightKilo": 4.1,
+
+    "spread": 4.25,
+    "firstShotSpread": 3.75,
+    "hipFireInaccuracy": 1.25,
+    "projToMinAccuracy": 2,
+    "msToAccuracyReset": 420,
+    "movementInaccuracy": 0.0
   },
   "reloads": {
     "magFed": false,
     "maxAmmo": 8,
     "reloadAmount": 1,
     "preReloadPauseTicks": 12,
-    "interReloadPauseTicks": 20,
+    "interReloadPauseTicks": 15,
     "openBolt": true
   },
   "projectile": {
     "item": "tac:10_gauge_round",
     "visible": false,
-    "damage": 24.5,
-    "size": 0.3,
-    "speed": 23.5,
-    "life": 3,
+    "damage": 26.0,
+    "size": 0.2,
+    "speed": 20.5,
+    "life": 5,
     "ricochet": false
   },
   "sounds": {
-    "fire": "tac:item.m870",
-    "reload": "tac:item.pistol.reload",
+    "fire": "tac:item.m870_fire",
+    "pump": "tac:item.m870_pump",
+    "reloadIntro": "tac:animation.m870_reload_intro",
+    "reloadLoop": "tac:animation.m1014_reload_loop",
+    "reloadEnd": "tac:animation.m870_reload_norm_end",
+    "reloadEndEmpty": "tac:animation.m870_reload_empty_end",
+    "draw": "tac:animation.m870_draw",
+    "inspect": "tac:animation.m870_inspect",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.fire_m16s"
   },
   "display": {
     "flash": {
-      "yOffset": 8.65,
-      "zOffset": -22.85,
-      "size": 1.20
+      "yOffset": 8.07,
+      "zOffset": -24.05,
+      "size": 1.20,
+      "trailAdjust": 1.63
     },
     "weaponType": 3
   },
   "modules": {
-    "zoom": [{
+    "zoom": {
       "fovModifier": 0.9,
-      "yOffset": 9.175,
+      "yOffset": 10.175,
       "zOffset": -2.1
-    }],
+    },
     "attachments": {}
   }
 }

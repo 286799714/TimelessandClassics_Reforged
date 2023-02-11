@@ -3,15 +3,21 @@ package com.tac.guns.item;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.enchantment.EnchantmentTypes;
+import com.tac.guns.init.ModItems;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.KeybindTextComponent;
@@ -22,17 +28,13 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.WeakHashMap;
+import java.util.*;
 
 public class GunItem extends Item implements IColored
 {
     private WeakHashMap<CompoundNBT, Gun> modifiedGunCache = new WeakHashMap<>();
 
     private Gun gun = new Gun();
-
     public GunItem(Item.Properties properties)
     {
         super(properties);
@@ -167,7 +169,33 @@ public class GunItem extends Item implements IColored
         return this.gun;
     }
 
-    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+        if (isSelected)
+        {
+            if (entityIn instanceof PlayerEntity)
+            {
+                PlayerEntity playerEntity = (PlayerEntity) entityIn;
+                if (!isSingleHanded(stack))
+                {
+                    ItemStack offHand = playerEntity.getHeldItemOffhand();
+                    if (!(offHand.getItem() instanceof GunItem) && !offHand.isEmpty()) {
+                        playerEntity.dropItem(offHand, false);
+                        playerEntity.setHeldItem(Hand.OFF_HAND, ItemStack.EMPTY);
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean isSingleHanded(ItemStack stack)
+    {
+        Item item = stack.getItem();
+        return item == ModItems.M1911.get() || item == ModItems.MICRO_UZI.get()
+                || item == ModItems.STI2011.get() || item == ModItems.CZ75.get();
+    }
+
+    /*@Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
     {
         if(enchantment.type == EnchantmentTypes.SEMI_AUTO_GUN)
@@ -188,5 +216,5 @@ public class GunItem extends Item implements IColored
     public int getItemEnchantability()
     {
         return 5;
-    }
+    }*/
 }
