@@ -425,53 +425,48 @@ public class ServerPlayHandler
     public static void handleFireMode(ServerPlayerEntity player)
     {
         ItemStack heldItem = player.getHeldItemMainhand();
-        if(heldItem.getItem() instanceof GunItem)
+        try {
+            if (heldItem.getItem() instanceof GunItem) {
+                if (heldItem.getTag() == null) {
+                    heldItem.getOrCreateTag();
+                }
+                GunItem gunItem = (GunItem) heldItem.getItem();
+                Gun gun = gunItem.getModifiedGun(heldItem.getStack());
+                int[] gunItemFireModes = heldItem.getTag().getIntArray("supportedFireModes");
+                if (ArrayUtils.isEmpty(gunItemFireModes)) {
+                    gunItemFireModes = gun.getGeneral().getRateSelector();
+                    heldItem.getTag().putIntArray("supportedFireModes", gunItemFireModes);
+                } else if (!Arrays.equals(gunItemFireModes, gun.getGeneral().getRateSelector())) {
+                    heldItem.getTag().putIntArray("supportedFireModes", gun.getGeneral().getRateSelector());
+                }
+                int toCheck = ArrayUtils.indexOf(gunItemFireModes, heldItem.getTag().getInt("CurrentFireMode"));
+                if (toCheck >= (heldItem.getTag().getIntArray("supportedFireModes").length)) {
+                    heldItem.getTag().remove("CurrentFireMode");
+                    heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
+                } else {
+                    heldItem.getTag().remove("CurrentFireMode");
+                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[toCheck + 1]);
+                }
+
+                if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1) {
+                    heldItem.getTag().remove("CurrentFireMode");
+                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
+                } else if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0) {
+                    heldItem.getTag().remove("CurrentFireMode");
+                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[0]);
+                }
+
+                ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
+                if (fireModeSound != null && player.isAlive()) {
+                    MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
+                    PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), messageSound);
+                }
+
+            }
+        }
+        catch (Exception e)
         {
-            if(heldItem.getTag() == null)
-            {
-                heldItem.getOrCreateTag();
-            }
-            GunItem gunItem = (GunItem) heldItem.getItem();
-            Gun gun = gunItem.getModifiedGun(heldItem.getStack());
-            int[] gunItemFireModes = heldItem.getTag().getIntArray("supportedFireModes");
-            if(ArrayUtils.isEmpty(gunItemFireModes))
-            {
-                gunItemFireModes = gun.getGeneral().getRateSelector();
-                heldItem.getTag().putIntArray("supportedFireModes", gunItemFireModes);
-            }
-            else if(!Arrays.equals(gunItemFireModes, gun.getGeneral().getRateSelector()))
-            {
-                heldItem.getTag().putIntArray("supportedFireModes", gun.getGeneral().getRateSelector());
-            }
-            int toCheck = ArrayUtils.indexOf(gunItemFireModes, heldItem.getTag().getInt("CurrentFireMode"));
-            if(toCheck >= (heldItem.getTag().getIntArray("supportedFireModes").length))
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
-            }
-            else
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[toCheck+1]);
-            }
-
-            if(!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1)
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
-            }
-            else if(!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0)
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[0]);
-            }
-
-            ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
-            if(fireModeSound != null && player.isAlive())
-            {
-                MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
-                PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() ->(ServerPlayerEntity) player), messageSound);
-            }
+            //TODO: For now the issue seems to be minimal, this will be eventually reworked, while still having server capability
         }
     }
 
@@ -493,56 +488,6 @@ public class ServerPlayHandler
             }
         }
     }
-    //ARCHIVE, THIS MAY CHANGE IN THE FUTURE CAUSE WTF
-    /*public static void handleFireMode(ServerPlayerEntity player)
-    {
-        ItemStack heldItem = player.getHeldItemMainhand();
-        if(heldItem.getItem() instanceof TimelessGunItem)
-        {
-            TimelessGunItem gunItem = (TimelessGunItem) heldItem.getItem();
-            Gun gun = gunItem.getModifiedGun(heldItem.getStack());
-            int[] gunItemFireModes = heldItem.getTag().getIntArray("supportedFireModes");
-            if(ArrayUtils.isEmpty(gunItemFireModes))
-            {
-                gunItemFireModes = gun.getGeneral().getRateSelector();
-                heldItem.getTag().putIntArray("supportedFireModes", gunItemFireModes);
-            }
-            else if(!Arrays.equals(gunItemFireModes, gun.getGeneral().getRateSelector()))
-            {
-                heldItem.getTag().putIntArray("supportedFireModes", gun.getGeneral().getRateSelector());
-            }
-            //int currMode = gun.getGeneral().getRateSelector().length >  ? heldItem.getTag().getInt("CurrentFireMode") : gun.getGeneral().getRateSelector()[0];
-            int toCheck = ArrayUtils.indexOf(gunItemFireModes, heldItem.getTag().getInt("CurrentFireMode"));
-            if(toCheck >= (heldItem.getTag().getIntArray("supportedFireModes").length))
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
-            }
-            else
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[toCheck+1]);
-            }
-
-            if(!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1)
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
-            }
-            else if(!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0)
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[0]);
-            }
-
-            ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
-            if(fireModeSound != null && player.isAlive())
-            {
-                MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
-                PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() ->(ServerPlayerEntity) player), messageSound);
-            }
-        }
-    }*/
 
     /**
      * @param player

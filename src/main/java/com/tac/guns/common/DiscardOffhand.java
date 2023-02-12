@@ -1,8 +1,6 @@
 package com.tac.guns.common;
 
-import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
-import javafx.geometry.Side;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -20,6 +18,9 @@ public class DiscardOffhand {
     public static int TICK_THRESHOLD = 10;
     public static Dictionary<LivingEntity, Integer> mapping = new Hashtable<>();
 
+
+    // TODO: Review if this has to be server side, possibly keep this as a server sided force, but we could likely make this more efficent and customizable for the player by running locally first along with
+    //  applying to inv right away instead of item spawn
     @SubscribeEvent
     public static void onChange(LivingEquipmentChangeEvent event)
     {
