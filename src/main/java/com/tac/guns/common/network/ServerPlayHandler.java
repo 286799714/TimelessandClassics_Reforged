@@ -265,19 +265,15 @@ public class ServerPlayHandler
                 {
                     for(Pair<Ingredient, Integer> stack : materials)
                     {
-                        for(ItemStack itemstack: stack.getFirst().getMatchingStacks()) {
-                            if (!InventoryUtil.hasItemStack(player, itemstack)) {
-                                return;
-                            }
+                        if (!InventoryUtil.hasIngredient(player, stack)) {
+                            return;
                         }
                     }
 
                     for(Pair<Ingredient, Integer> stack : materials)
                     {
-                        for(ItemStack itemstack: stack.getFirst().getMatchingStacks()) {
-                            if(InventoryUtil.removeItemStack(player, itemstack)){
-                                break;
-                            }
+                        if(InventoryUtil.removeItemStackFromIngredient(player, stack)){
+                            break;
                         }
                     }
 
