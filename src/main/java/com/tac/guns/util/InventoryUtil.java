@@ -1,7 +1,9 @@
 package com.tac.guns.util;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -21,26 +23,26 @@ public class InventoryUtil
         return count;
     }
 
-    public static boolean hasItemStack(PlayerEntity player, ItemStack find)
+    public static boolean hasIngredient(PlayerEntity player, Pair<Ingredient, Integer> pair)
     {
         int count = 0;
         for(ItemStack stack : player.inventory.mainInventory)
         {
-            if(!stack.isEmpty() && areItemStacksEqualIgnoreCount(stack, find))
+            if(pair.getFirst().test(stack))
             {
                 count += stack.getCount();
             }
         }
-        return find.getCount() <= count;
+        return pair.getSecond() <= count;
     }
 
-    public static boolean removeItemStack(PlayerEntity player, ItemStack find)
+    public static boolean removeItemStackFromIngredient(PlayerEntity player, Pair<Ingredient, Integer> pair)
     {
-        int amount = find.getCount();
+        int amount = pair.getSecond();
         for(int i = 0; i < player.inventory.getSizeInventory(); i++)
         {
             ItemStack stack = player.inventory.getStackInSlot(i);
-            if(!stack.isEmpty() && areItemStacksEqualIgnoreCount(stack, find))
+            if(pair.getFirst().test(stack))
             {
                 if(amount - stack.getCount() < 0)
                 {

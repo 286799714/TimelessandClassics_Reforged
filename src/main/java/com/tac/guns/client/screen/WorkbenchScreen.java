@@ -536,7 +536,7 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
         {
             if(!this.stack.isEmpty())
             {
-                this.enabled = InventoryUtil.hasItemStack(Minecraft.getInstance().player, this.stack);
+                this.enabled = InventoryUtil.hasIngredient(Minecraft.getInstance().player, new Pair<>(Ingredient.fromStacks(this.stack), this.stack.getCount()));
             }
         }
 
