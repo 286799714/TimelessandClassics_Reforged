@@ -30,7 +30,7 @@
     "damage": 9,
     "size": 0.2,
     "speed": 19.5,
-    "life": 12
+    "life": 22
   },
   "reloads": {
     "magFed": true,

@@ -42,7 +42,7 @@
     "damage": 16,
     "size": 0.15,
     "speed": 18.5,
-    "life": 10,
+    "life": 20,
     "ricochet": true
   },
   "sounds": {

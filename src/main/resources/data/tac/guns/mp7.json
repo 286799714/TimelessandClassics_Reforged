@@ -1,24 +1,24 @@
 {
   "general": {
     "auto": true,
-    "rate": 970,
+    "rate": 1000,
     "rateSelector": [0,1,2],
     "gripType": "tac:two_handed_vector",
-    "recoilAngle": 1.125,
+    "recoilAngle": 1.325,
     "horizontalRecoilAngle": 1.425,
     "recoilKick": 1.945,
-    "recoilAdsReduction": 0.225,
-    "weaponRecoilOffset": 0.915,
+    "recoilAdsReduction": 0.205,
+    "weaponRecoilOffset": 0.945,
     "cameraRecoilModifier": 1.35,
     "recoilDuration": 0.205,
     "weightKilo": 2.1,
 
     "spread": 2.375,
-    "firstShotSpread": 0.175,
+    "firstShotSpread": 0.825,
     "hipFireInaccuracy": 1.5,
-    "projToMinAccuracy": 8,
-    "msToAccuracyReset": 120,
-    "movementInaccuracy": 0.175
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 220,
+    "movementInaccuracy": 0.115
   },
   "reloads": {
     "magFed": true,

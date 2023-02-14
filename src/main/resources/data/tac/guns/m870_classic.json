@@ -1,6 +1,6 @@
 {
   "general": {
-    "rate": 63,
+    "rate": 62,
     "rateSelector": [
       0,
       1
@@ -14,12 +14,12 @@
     "weaponRecoilOffset": 0.825,
     "recoilDuration": 0.125,
     "projectileAmount": 10,
-    "weightKilo": 4.1,
+    "weightKilo": 5.1,
 
-    "spread": 4.25,
-    "firstShotSpread": 3.75,
-    "hipFireInaccuracy": 1.25,
-    "projToMinAccuracy": 2,
+    "spread": 3.15,
+    "firstShotSpread": 2.95,
+    "hipFireInaccuracy": 1.35,
+    "projToMinAccuracy": 1,
     "msToAccuracyReset": 420,
     "movementInaccuracy": 0.0
   },
@@ -35,8 +35,8 @@
     "item": "tac:10_gauge_round",
     "visible": false,
     "damage": 26.0,
-    "size": 0.2,
-    "speed": 20.5,
+    "size": 0.1,
+    "speed": 25.5,
     "life": 5,
     "ricochet": false
   },

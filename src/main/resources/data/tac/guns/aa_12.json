@@ -19,10 +19,10 @@
     "weightKilo": 5.0,
 
     "spread": 7.25,
-    "firstShotSpread": 5.45,
+    "firstShotSpread": 6.05,
     "hipFireInaccuracy": 1.6,
-    "projToMinAccuracy": 2,
-    "msToAccuracyReset": 625,
+    "projToMinAccuracy": 3,
+    "msToAccuracyReset": 925,
     "movementInaccuracy": 0.0
   },
   "reloads": {
@@ -41,10 +41,10 @@
   "projectile": {
     "item": "tac:10_gauge_round",
     "visible": false,
-    "damage": 21,
+    "damage": 20,
     "size": 0.05,
-    "speed": 18.5,
-    "life": 3,
+    "speed": 16.5,
+    "life": 5,
     "ricochet": false
   },
   "sounds": {
