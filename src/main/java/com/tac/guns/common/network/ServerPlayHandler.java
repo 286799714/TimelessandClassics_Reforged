@@ -272,7 +272,9 @@ public class ServerPlayHandler
 
                     for(Pair<Ingredient, Integer> stack : materials)
                     {
-                        InventoryUtil.removeItemStackFromIngredient(player, stack);
+                        if(!InventoryUtil.removeItemStackFromIngredient(player, stack)){
+                            return;
+                        }
                     }
 
                     WorkbenchTileEntity workbenchTileEntity = workbench.getWorkbench();
