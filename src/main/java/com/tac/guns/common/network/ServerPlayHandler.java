@@ -272,8 +272,8 @@ public class ServerPlayHandler
 
                     for(Pair<Ingredient, Integer> stack : materials)
                     {
-                        if(InventoryUtil.removeItemStackFromIngredient(player, stack)){
-                            break;
+                        if(!InventoryUtil.removeItemStackFromIngredient(player, stack)){
+                            return;
                         }
                     }
 
