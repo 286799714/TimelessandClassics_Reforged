@@ -26,8 +26,9 @@ public class InventoryUtil
     public static boolean hasIngredient(PlayerEntity player, Pair<Ingredient, Integer> pair)
     {
         int count = 0;
-        for(ItemStack stack : player.inventory.mainInventory)
+        for(int i = 0; i < player.inventory.getSizeInventory(); i++)
         {
+            ItemStack stack = player.inventory.getStackInSlot(i);
             if(pair.getFirst().test(stack))
             {
                 count += stack.getCount();
@@ -47,12 +48,13 @@ public class InventoryUtil
                 if(amount - stack.getCount() < 0)
                 {
                     stack.shrink(amount);
+                    player.inventory.setInventorySlotContents(i, stack);
                     return true;
                 }
                 else
                 {
                     amount -= stack.getCount();
-                    player.inventory.mainInventory.set(i, ItemStack.EMPTY);
+                    player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
                     if(amount == 0)
                     {
                         return true;
