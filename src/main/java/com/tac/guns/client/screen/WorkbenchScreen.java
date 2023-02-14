@@ -551,9 +551,9 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
                 }
                 this.stack = this.matchingstacks[this.index];
             }
-
             if(this.ingredient!=null)
             {
+                this.stack.setCount(this.count);
                 this.enabled = InventoryUtil.hasIngredient(Minecraft.getInstance().player, new Pair<>(this.ingredient, this.count));
             }
         }
