@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.gson.Gson;
@@ -188,7 +189,9 @@ public final class InputHandler
 	@SubscribeEvent( priority = EventPriority.HIGH )
 	public static void onKeyInput( InputEvent.KeyInputEvent evt )
 	{
-		UNIVERSAL_KEYS.forEach( KeyBind::update );
+		//TODO: Kill the keyboard input pass if a GUI, or text box is open
+		//if(Minecraft.getInstance().is)
+			UNIVERSAL_KEYS.forEach( KeyBind::update );
 		( CO.down ? CO_KEYS : NORMAL_KEYS ).forEach( KeyBind::update );
 		( CO.down ? NORMAL_KEYS : CO_KEYS ).forEach( KeyBind::reset );
 	}
