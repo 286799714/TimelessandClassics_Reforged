@@ -3,6 +3,7 @@ package com.tac.guns.client.handler;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.tac.guns.Config;
+import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.ReloadTracker;
@@ -28,6 +29,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -351,17 +353,30 @@ public class HUDRenderingHandler extends AbstractGui {
                 stack.translate(20, 5, 0);
                 int fireMode;
 
-                if(player.getHeldItemMainhand().getTag() == null)
+                try {
+                    if (player.getHeldItemMainhand().getTag() == null) {
+                        if (!Config.COMMON.gameplay.safetyExistence.get())
+                            fireMode = gun.getGeneral().getRateSelector()[1];
+                        else
+                            fireMode = gun.getGeneral().getRateSelector()[0];
+                    } else if (player.getHeldItemMainhand().getTag().getInt("CurrentFireMode") == 0)
+                        if (!Config.COMMON.gameplay.safetyExistence.get())
+                            fireMode = gun.getGeneral().getRateSelector()[1];
+                        else
+                            fireMode = gun.getGeneral().getRateSelector()[0];
+                    else
+                        fireMode = Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode");
+                }
+                catch (ArrayIndexOutOfBoundsException e)
+                {
                     fireMode = gun.getGeneral().getRateSelector()[0];
-                else if(player.getHeldItemMainhand().getTag().getInt("CurrentFireMode") == 0)
-                    fireMode = gun.getGeneral().getRateSelector()[0];
-                else
-                    fireMode = Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode");
-                //int fireMode = gunItem.getSupportedFireModes()[gunItem.getCurrFireMode()];
-                if (!Config.COMMON.gameplay.safetyExistence.get() && fireMode == 0)
-                    Minecraft.getInstance().getTextureManager().bindTexture(FIREMODE_ICONS[0]); // Render true firemode
-                else
-                    Minecraft.getInstance().getTextureManager().bindTexture(FIREMODE_ICONS[fireMode]); // Render true firemode
+                }
+                catch(Exception e)
+                {
+                    fireMode = 0;
+                    GunMod.LOGGER.log(Level.ERROR, "TaC HUD_RENDERER has failed obtaining the fire mode");
+                }
+                Minecraft.getInstance().getTextureManager().bindTexture(FIREMODE_ICONS[fireMode]); // Render true firemode
 
                 Matrix4f matrix = stack.getLast().getMatrix();
                 buffer.pos(matrix, 0, fireModeSize/2, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();

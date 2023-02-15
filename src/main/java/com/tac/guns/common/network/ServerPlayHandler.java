@@ -436,7 +436,7 @@ public class ServerPlayHandler
                     heldItem.getTag().putIntArray("supportedFireModes", gun.getGeneral().getRateSelector());
                 }
                 int toCheck = ArrayUtils.indexOf(gunItemFireModes, heldItem.getTag().getInt("CurrentFireMode"));
-                if (toCheck >= (heldItem.getTag().getIntArray("supportedFireModes").length)) {
+                if (toCheck >= (heldItem.getTag().getIntArray("supportedFireModes").length-1)) {
                     heldItem.getTag().remove("CurrentFireMode");
                     heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
                 } else {
@@ -449,7 +449,7 @@ public class ServerPlayHandler
                     heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
                 } else if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0) {
                     heldItem.getTag().remove("CurrentFireMode");
-                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[0]);
+                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
                 }
 
                 ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
@@ -462,7 +462,7 @@ public class ServerPlayHandler
         }
         catch (Exception e)
         {
-            //TODO: For now the issue seems to be minimal, this will be eventually reworked, while still having server capability
+            GunMod.LOGGER.log(Level.ERROR, "Fire Mode check did not function properly");//TODO: For now the issue seems to be minimal, this will be eventually reworked, while still having server capability
         }
     }
 
