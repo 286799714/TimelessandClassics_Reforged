@@ -422,6 +422,8 @@ public class ServerPlayHandler
     {
         ItemStack heldItem = player.getHeldItemMainhand();
         try {
+
+            //TODO Fix double click req
             if (heldItem.getItem() instanceof GunItem) {
                 if (heldItem.getTag() == null) {
                     heldItem.getOrCreateTag();
@@ -444,12 +446,12 @@ public class ServerPlayHandler
                     heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[toCheck + 1]);
                 }
 
-                if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1) {
+                if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 2) {
                     heldItem.getTag().remove("CurrentFireMode");
                     heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
                 } else if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0) {
                     heldItem.getTag().remove("CurrentFireMode");
-                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
+                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[0]);
                 }
 
                 ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
