@@ -16,8 +16,7 @@
     "client.MinecraftStaticMixin",
     "client.InventoryScreenMixin",
     "client.MouseHelperMixin",
-    "client.WorldRendererMixin",
-    "client.ShadersFramebufferMixin"
+    "client.WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

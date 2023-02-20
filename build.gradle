@@ -7,6 +7,7 @@ buildscript {
         maven { url = 'https://repo.spongepowered.org/maven' }
         jcenter()
         mavenCentral()
+        mavenLocal()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
@@ -22,7 +23,9 @@ apply plugin: 'org.spongepowered.mixin'
 //apply plugin: 'eclipse'
 //apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
-version = "0.3.5-1.16.5"
+version = "0.3.5.43-1.16.5"
+group = "com.tac"
+archivesBaseName = "tac-a"
 
 
 //name = "tac-a-0.3.0.44-1.16.5"
@@ -38,6 +41,7 @@ mixin {
 minecraft {
     //mappings channel: 'official', version: '1.16.5'
     //mappings channel: 'official', version: '1.16.5'
+
     mappings channel: 'snapshot', version: '20201028-1.16.3'
 
     runs {
@@ -97,22 +101,24 @@ sourceSets.main.resources {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
-    //implementation fg.deobf('curse.maven:obfuscate-289380:3169369')
-    implementation fg.deobf('curse.maven:obfuscate-289380:3336021') // 3740120') // 3336021
     implementation fg.deobf('curse.maven:configured-457570:3434071')
+
+    implementation fg.deobf('curse.maven:tropicraft-254794:3606854')
     //implementation fg.deobf('curse.maven:enchancedvisuals-255389:3419985')
     //implementation fg.deobf('curse.maven:ccore-257814:3419983')
-    //implementation fg.deobf('curse.maven:chisel-and-bits-231095:3593643')
-    //implementation fg.deobf('curse.maven:flashlight-addon-227874:3381556')
-
     //implementation fg.deobf('curse.maven:extra-player-render-481042:3305584')
 
-    //implementation 'com.google.code.gson:gson:2.9.0'
     implementation ('com.fasterxml.jackson.core:jackson-databind:2.12.4')
-    //implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
 
     implementation fg.deobf('curse.maven:curios-309927:3661903')
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+    implementation fg.deobf('curse.maven:obfuscate-289380:3336021')// 3740120') // 3336021
+
+    //runtimeOnly files('lib4/optifine.jar')
+
+    //implementation 'lib.optifine:optifine:1.0.0'
+
+    compileOnly fileTree(dir: 'lib4', include: '*.jar')
 }
 /*repositories {
     maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }

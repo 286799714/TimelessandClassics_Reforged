@@ -30,6 +30,7 @@ import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.item.attachment.IBarrel;
 import com.tac.guns.item.attachment.impl.Barrel;
 import com.tac.guns.item.attachment.impl.Scope;
+import com.tac.guns.mixin.client.ShadersFramebufferMixin;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessagePlayerShake;
 import com.tac.guns.util.GunModifierHelper;
@@ -357,6 +358,15 @@ public class GunRenderingHandler {
     public float translateX = 0f;
     public float translateY = 0f;
     public float translateZ = 0f;
+    /*@SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onRenderPreOverlay(RenderHandEvent event)
+    {
+        if(event.getItemStack().getItem() instanceof GunItem)
+        {
+            ShadersFramebufferMixin.tac_getMappedShaderImage2();
+        }
+    }*/
+
     @SubscribeEvent
     public void onRenderOverlay(RenderHandEvent event)
     {

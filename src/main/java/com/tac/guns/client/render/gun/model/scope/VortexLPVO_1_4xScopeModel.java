@@ -1,6 +1,8 @@
 package com.tac.guns.client.render.gun.model.scope;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
@@ -10,7 +12,9 @@ import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.HUDRenderingHandler;
 import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
+import com.tac.guns.client.render.ScreenTextureState;
 import com.tac.guns.client.render.gun.IOverrideModel;
+import com.tac.guns.client.render.gun.model.scope.scopeUtil.Programs;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.attachment.IAttachment;
@@ -27,9 +31,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
+import net.optifine.shaders.FlipTextures;
+import net.optifine.shaders.Shaders;
+import org.lwjgl.opengl.*;
 
 import static com.tac.guns.client.SpecialModels.LPVO_1_6;
 import static com.tac.guns.client.SpecialModels.LPVO_1_6_FRONT;
+import static com.tac.guns.client.render.ScreenTextureState.MIRROR_TEX;
+import static com.tac.guns.client.render.ScreenTextureState.SCOPE_LIGHTMAP_TEX;
+import static org.lwjgl.opengl.GL11.GL_RGB;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -41,7 +52,7 @@ public class VortexLPVO_1_4xScopeModel implements IOverrideModel
     @Override
     public void render(float partialTicks, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, int overlay) {
         matrixStack.push();
-        if ((OptifineHelper.isShadersEnabled()) || !Config.CLIENT.display.scopeDoubleRender.get() && transformType.isFirstPerson() && entity.equals(Minecraft.getInstance().player)) {
+        if (/*(OptifineHelper.isShadersEnabled()) || */!Config.CLIENT.display.scopeDoubleRender.get() && transformType.isFirstPerson() && entity.equals(Minecraft.getInstance().player)) {
             double prog = 0;
             if(AimingHandler.get().getNormalisedAdsProgress() > 0.375) {
                 prog = (AimingHandler.get().getNormalisedAdsProgress() - 0.375) * 1.6;
@@ -93,13 +104,35 @@ public class VortexLPVO_1_4xScopeModel implements IOverrideModel
 
                 IVertexBuilder builder;
 
-                if(!OptifineHelper.isShadersEnabled() && Config.CLIENT.display.scopeDoubleRender.get())
+                if(Config.CLIENT.display.scopeDoubleRender.get())
                 {
+                    /*RenderSystem.enableTexture();
+                    RenderSystem.bindTexture(ScreenTextureState.instance().getTextureId());
+                      if(OptifineHelper.isRenderingDfb()) {
+                        FlipTextures flipTextures = new FlipTextures(Shaders.activeProgram.getName(), Shaders.activeProgram.getDrawBuffers().capacity());
+
+                        GL43.glCopyImageSubData(3553, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, MIRROR_TEX, GL11.GL_TEXTURE_2D, 0, 0, 0, 0,
+                                ScreenTextureState.instance().lastWidth,
+                                ScreenTextureState.instance().lastHeight,
+                                1);
+                    } else {
+                        GL43.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,0,0,ScreenTextureState.instance().lastWidth, ScreenTextureState.instance().lastHeight,0);
+                    }*/
+
                     builder = renderTypeBuffer.getBuffer(GunRenderType.getScreen());
                     builder.pos(matrix, 0, size, 0).color(color, color, color, 1.0F).tex(texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
                     builder.pos(matrix, 0, 0, 0).color(color, color, color, 1.0F).tex(texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
                     builder.pos(matrix, size, 0, 0).color(color, color, color, 1.0F).tex(1.0F - texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
                     builder.pos(matrix, size, size, 0).color(color, color, color, 1.0F).tex(1.0F - texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    //RenderSystem.disableTexture();
+
+                    /*GlStateManager.bindTexture(ClientProxy.scopeUtils.INSIDE_GUN_TEX);
+                    ClientProxy.scopeUtils.drawScaledCustomSizeModalRectFlipY(0, 0, 0, 0, 1, 1, resolution.getScaledWidth(), resolution.getScaledHeight(), 1, 1);*/
+                    /*builder = renderTypeBuffer.getBuffer(GunRenderType.getScreen());
+                    builder.pos(matrix, 0, size, 0).color(color, color, color, 1.0F).tex(texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, 0, 0, 0).color(color, color, color, 1.0F).tex(texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, size, 0, 0).color(color, color, color, 1.0F).tex(1.0F - texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, size, size, 0).color(color, color, color, 1.0F).tex(1.0F - texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();*/
                 }
 
                 matrixStack.translate(0, 0, 0.0001);
@@ -169,5 +202,14 @@ public class VortexLPVO_1_4xScopeModel implements IOverrideModel
             }
             matrixStack.pop();
         }
+    }
+    public void setupOverlayRendering()
+    {
+        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+        GlStateManager.loadIdentity();
+        GlStateManager.ortho(0.0D, Minecraft.getInstance().getMainWindow().getWidth(), Minecraft.getInstance().getMainWindow().getHeight(), 0.0D, 1000.0D, 3000.0D);
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+        GlStateManager.loadIdentity();
+        GlStateManager.translatef(0.0F, 0.0F, -2000.0F);
     }
 }

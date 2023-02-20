@@ -440,6 +440,7 @@ public class ReloadHandler {
         PlayerEntity player = event.getPlayer();
         if(player == null) return;
         ItemStack stack = player.getHeldItemMainhand();
+        if (!(stack.getItem() instanceof GunItem)) return; // Fails on server instances where all plays must be holding a gun
         Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
         if(GunAnimationController.fromItem(stack.getItem()) instanceof PumpShotgunAnimationController && isReloading()) event.setCanceled(true);
         CompoundNBT tag = stack.getOrCreateTag();
