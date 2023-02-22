@@ -52,7 +52,7 @@ public class VortexLPVO_1_4xScopeModel implements IOverrideModel
     @Override
     public void render(float partialTicks, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, int overlay) {
         matrixStack.push();
-        if (/*(OptifineHelper.isShadersEnabled()) || */!Config.CLIENT.display.scopeDoubleRender.get() && transformType.isFirstPerson() && entity.equals(Minecraft.getInstance().player)) {
+        if (!Config.CLIENT.display.scopeDoubleRender.get() && transformType.isFirstPerson() && entity.equals(Minecraft.getInstance().player)) {
             double prog = 0;
             if(AimingHandler.get().getNormalisedAdsProgress() > 0.375) {
                 prog = (AimingHandler.get().getNormalisedAdsProgress() - 0.375) * 1.6;
@@ -119,21 +119,32 @@ public class VortexLPVO_1_4xScopeModel implements IOverrideModel
                     } else {
                         GL43.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,0,0,ScreenTextureState.instance().lastWidth, ScreenTextureState.instance().lastHeight,0);
                     }*/
+                    if(color <= 0.21)
+                    {
+                        builder = renderTypeBuffer.getBuffer(GunRenderType.getScreenBlack());
+                        builder.pos(matrix, 0, size, 0).color(color, color, color, 1.0F).tex(texU, 1.0F - crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                        builder.pos(matrix, 0, 0, 0).color(color, color, color, 1.0F).tex(texU, crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                        builder.pos(matrix, size, 0, 0).color(color, color, color, 1.0F).tex(1.0F - texU, crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                        builder.pos(matrix, size, size, 0).color(color, color, color, 1.0F).tex(1.0F - texU, 1.0F - crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
 
-                    builder = renderTypeBuffer.getBuffer(GunRenderType.getScreen());
-                    builder.pos(matrix, 0, size, 0).color(color, color, color, 1.0F).tex(texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, 0, 0, 0).color(color, color, color, 1.0F).tex(texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, size, 0, 0).color(color, color, color, 1.0F).tex(1.0F - texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, size, size, 0).color(color, color, color, 1.0F).tex(1.0F - texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    }
+                    else {
+                        RenderSystem.bindTexture(ScreenTextureState.instance().textureId);
+                        builder = renderTypeBuffer.getBuffer(GunRenderType.getScreen());
+                        builder.pos(matrix, 0, size, 0).color(color, color, color, 1.0F).tex(texU, 1.0F - crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                        builder.pos(matrix, 0, 0, 0).color(color, color, color, 1.0F).tex(texU, crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                        builder.pos(matrix, size, 0, 0).color(color, color, color, 1.0F).tex(1.0F - texU, crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                        builder.pos(matrix, size, size, 0).color(color, color, color, 1.0F).tex(1.0F - texU, 1.0F - crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    }
                     //RenderSystem.disableTexture();
 
                     /*GlStateManager.bindTexture(ClientProxy.scopeUtils.INSIDE_GUN_TEX);
                     ClientProxy.scopeUtils.drawScaledCustomSizeModalRectFlipY(0, 0, 0, 0, 1, 1, resolution.getScaledWidth(), resolution.getScaledHeight(), 1, 1);*/
                     /*builder = renderTypeBuffer.getBuffer(GunRenderType.getScreen());
-                    builder.pos(matrix, 0, size, 0).color(color, color, color, 1.0F).tex(texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, 0, 0, 0).color(color, color, color, 1.0F).tex(texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, size, 0, 0).color(color, color, color, 1.0F).tex(1.0F - texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, size, size, 0).color(color, color, color, 1.0F).tex(1.0F - texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();*/
+                    builder.pos(matrix, 0, size, 0).color(color, color, color, 1.0F).tex(texU, 1.0F - crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, 0, 0, 0).color(color, color, color, 1.0F).tex(texU, crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, size, 0, 0).color(color, color, color, 1.0F).tex(1.0F - texU, crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, size, size, 0).color(color, color, color, 1.0F).tex(1.0F - texU, 1.0F - crop).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();*/
                 }
 
                 matrixStack.translate(0, 0, 0.0001);
@@ -177,10 +188,10 @@ public class VortexLPVO_1_4xScopeModel implements IOverrideModel
                 matrixStack.rotate(Vector3f.XP.rotationDegrees((GunRenderingHandler.get().recoilLift*0.02f * GunRenderingHandler.get().recoilReduction) * 0.65F));
                 matrixStack.translate(0, 0, 0.35);
 
-                builder.pos(matrix, 0, (float) (reticleSize / scale), 0).color(red, green, blue, alpha).tex(0.0F, 0.9375F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                builder.pos(matrix, 0, 0, 0).color(red, green, blue, alpha).tex(0.0F, 0.0F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                builder.pos(matrix, (float) (reticleSize / scale), 0, 0).color(red, green, blue, alpha).tex(0.9375F, 0.0F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                builder.pos(matrix, (float) (reticleSize / scale), (float) (reticleSize / scale), 0).color(red, green, blue, alpha).tex(0.9375F, 0.9375F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.pos(matrix, 0, (float) (reticleSize / scale), 0).color(red, green, blue, alpha).tex(0.0F, 0.9375F).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.pos(matrix, 0, 0, 0).color(red, green, blue, alpha).tex(0.0F, 0.0F).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.pos(matrix, (float) (reticleSize / scale), 0, 0).color(red, green, blue, alpha).tex(0.9375F, 0.0F).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.pos(matrix, (float) (reticleSize / scale), (float) (reticleSize / scale), 0).color(red, green, blue, alpha).tex(0.9375F, 0.9375F).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
 
                 if(HUDRenderingHandler.get().hitMarkerTracker > 0)
                 {
@@ -194,10 +205,10 @@ public class VortexLPVO_1_4xScopeModel implements IOverrideModel
                     }
                     float opac = Math.max(Math.min(HUDRenderingHandler.get().hitMarkerTracker / HUDRenderingHandler.hitMarkerRatio, 100f), 0.25f);
                     opac *= (float) AimingHandler.get().getNormalisedAdsProgress();
-                    builder.pos(matrix, 0, (float) (reticleSize / scale), 0).color(red, green, blue, opac).tex(0.0F, 0.9375F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, 0, 0, 0).color(red, green, blue, opac).tex(0.0F, 0.0F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, (float) (reticleSize / scale), 0, 0).color(red, green, blue, opac).tex(0.9375F, 0.0F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, (float) (reticleSize / scale), (float) (reticleSize / scale), 0).color(red, green, blue, opac).tex(0.9375F, 0.9375F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, 0, (float) (reticleSize / scale), 0).color(red, green, blue, opac).tex(0.0F, 0.9375F).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, 0, 0, 0).color(red, green, blue, opac).tex(0.0F, 0.0F).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, (float) (reticleSize / scale), 0, 0).color(red, green, blue, opac).tex(0.9375F, 0.0F).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.pos(matrix, (float) (reticleSize / scale), (float) (reticleSize / scale), 0).color(red, green, blue, opac).tex(0.9375F, 0.9375F).overlay(overlay).lightmap(15528880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
                     
                 }
             }

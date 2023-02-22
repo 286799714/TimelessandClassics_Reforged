@@ -67,7 +67,7 @@ public class ScreenTextureState extends RenderState.TexturingState
         return instance == null ? instance = new ScreenTextureState() : instance;
     }
 
-    private int textureId;
+    public int textureId;
     private int lastWindowWidth;
     private int lastWindowHeight;
     private ScopeGlobal scopeRenderGlobal;
@@ -101,17 +101,17 @@ public class ScreenTextureState extends RenderState.TexturingState
         }*/
         //this.renderEndNanoTime =
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderHUD);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, this::renderTick);
-        //MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, this::onWorldLoad);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::renderTick);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onWorldLoad);
     }
 
     private Field renderEndNanoTime;
-    /*@SubscribeEvent
+    @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         if (!event.getWorld().isRemote()) {
-            scopeRenderGlobal.setWorldAndLoadRenderers((ClientWorld) event.getWorld());
+            mc.worldRenderer.setWorldAndLoadRenderers((ClientWorld) event.getWorld());
         }
-    }*/
+    }
     public int getTextureId()
     {
         if(this.textureId == 0)
@@ -119,10 +119,11 @@ public class ScreenTextureState extends RenderState.TexturingState
             this.textureId = TextureUtil.generateTextureId();
             // Texture params only need to be set once, not once per frame
             RenderSystem.bindTexture(this.textureId);
-            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 9729);
-            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 9729); // This final number may be useful
-            glTexParameteri(3553 , GL_TEXTURE_MIN_FILTER, 9728);
-            glTexParameteri(3553 , GL_TEXTURE_MAG_FILTER, 9728);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 9729);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 9729); // This final number may be useful
+
+            //glTexParameteri(3553 , GL_TEXTURE_MIN_FILTER, 9728);
+            //glTexParameteri(3553 , GL_TEXTURE_MAG_FILTER, 9728);
 
 
             // Can I make optifine Shaders compatible?
@@ -154,7 +155,7 @@ public class ScreenTextureState extends RenderState.TexturingState
 
 
     // Next im guessing i'll have to check this world render, it says the render is incomplete, maybe this code is supposed to complete it for the specific image output?
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void renderTick(TickEvent.RenderTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             if (mc.player != null && mc.currentScreen == null) {
@@ -210,7 +211,8 @@ public class ScreenTextureState extends RenderState.TexturingState
                         lastHeight=mc.getMainWindow().getHeight();
                         GL11.glPopMatrix();
                     }
-                    renderWorld(mc, event.renderTickTime);
+                    if(Gun.getScope(mc.player.getHeldItemMainhand()) != null)
+                        renderWorld(mc, event.renderTickTime);
 
                 }
             }
@@ -236,25 +238,15 @@ public class ScreenTextureState extends RenderState.TexturingState
         isRenderHand0=false;
     }
 
-    public void setupOverlayRendering()
-    {
-        GlStateManager.matrixMode(GL11.GL_PROJECTION);
-        GlStateManager.loadIdentity();
-        GlStateManager.ortho(0.0D, Minecraft.getInstance().getMainWindow().getWidth(), Minecraft.getInstance().getMainWindow().getHeight(), 0.0D, 1000.0D, 3000.0D);
-        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-        GlStateManager.loadIdentity();
-        GlStateManager.translatef(0.0F, 0.0F, -2000.0F); // TODO: Ig is the cam repos?
-    }
     /*public static float getFov() {
         return (50.0f / ((ModelAttachment) itemAttachment.type.model).config.sight.fovZoom);
     }*/
     private static Minecraft mc = Minecraft.getInstance();
-    public void renderWorld(Minecraft mc, float partialTick) {
-
+    public void renderWorld(Minecraft mc, float partialTick)
+    {
         float zoom = 10;
-
         GL11.glPushMatrix();
-        GlStateManager.color4f(1, 1, 1,1);
+        GlStateManager.color4f(1f, 1f, 1f,1f);
 
         WorldRenderer renderBackup = mc.worldRenderer;
         //Save the current settings to be reset later
@@ -264,111 +256,34 @@ public class ScreenTextureState extends RenderState.TexturingState
         RayTraceResult mouseOver = mc.objectMouseOver;
         boolean bobbingBackup = mc.gameSettings.viewBobbing;
         double fovBackup = mc.gameSettings.fov;
-        //float mouseSensitivityBackup = mc.gameSettings.mouseSensitivity;
 
         TACOptifineShadersHelper.setGameRenderer(mc, this.scopeRenderGlobal);
 
         //Change game settings for the Scope
         mc.gameSettings.hideGUI = true;
-        //mc.gameSettings.thirdPersonView = 0;
-        //mc.gameSettings.fovSetting = zoom;
         mc.gameSettings.fov = zoom;
         mc.gameSettings.viewBobbing = false;
-        //Make sure the FOV isn't less than 1
-        //if (mc.gameSettings.fovSetting < 0) {
-        //    mc.gameSettings.fovSetting = 1;
-        //}
 
-        /*if (limit != 0 && renderEndNanoTime != null) {
-            try {
-                endTime = renderEndNanoTime.getLong(mc.entityRenderer);
-            } catch (Exception ignored) {
-            }
-        }
-
-        int fps = Math.max(30, mc.gameSettings.limitFramerate);
-        */
-        //Minecraft.getMinecraft().getFramebuffer().framebufferClear();
-
-        //GlStateManager.bindBuffer(, Minecraft.getInstance().getFramebuffer().framebufferObject);
-
-        //Supplier<Integer> supplier = new AtomicInteger(this.textureId)::incrementAndGet;
         /*RenderSystem*/
         endTime = Util.nanoTime();
 
-        GlStateManager.bindFramebuffer(GlStateManager.getActiveTextureId()/* Minecraft.getInstance().getFramebuffer().func_242996_f()*/, this.textureId);
-        int tex = Minecraft.getInstance().getFramebuffer().func_242996_f();
-        TACOptifineShadersHelper.setFramebufferTexture(Minecraft.getInstance().getFramebuffer(), this.textureId);// = MIRROR_TEX;
-        GL30.glFramebufferTexture2D(/*GlStateManager.getActiveTextureId()*/GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, this.textureId, 0);
+        //GlStateManager bindFramebuffer(GlStateManager.getActiveTextureId(), this.textureId);
+        int tex = mc.getFramebuffer().func_242996_f();
+        TACOptifineShadersHelper.setFramebufferTexture(mc.getFramebuffer(), this.textureId);// = MIRROR_TEX;
+        //GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, this.textureId, 0);
 
         if(mc.worldRenderer != null && mc.gameRenderer != null) {
-            //TODO: need to find how to replace my rerender call without blowing up the game, next fix any debug issues with frame tex id mapping
-            Entity entity = this.mc.getRenderViewEntity();
-            double d0 = entity.lastTickPosX + (entity.getPosX() - entity.lastTickPosX) * (double)partialTick;
-            double d1 = entity.lastTickPosY + (entity.getPosY() - entity.lastTickPosY) * (double)partialTick;
-            double d2 = entity.lastTickPosZ + (entity.getPosZ() - entity.lastTickPosZ) * (double)partialTick;
-            MatrixStack matrixStackWrl = new MatrixStack();
-            matrixStackWrl.translate(d0, d1, d2);
-
-            //mc.gameRenderer.renderWorld(partialTick, endTime, new MatrixStack());
-            mc.gameRenderer.updateCameraAndRender(partialTick, endTime, true);//gameRenderer.renderWorld(partialTick, endTime + (1000000000 / 30), matrixStackWrl);
-            try {
-                //mc.worldRenderer.setDisplayListEntitiesDirty();
-                //mc.getFirstPersonRenderer().
-
-                //TODO DEBUG AND FIGURE OUT WHAT IS MISSING, WITHOUT THIS NEW RENDERER I AM GOING TO HAVE MASSIVE DIFFICULTY HAVING A CLEAN PiP OUTPUT
-                //mc.gameRenderer.renderWorld(partialTick, endTime, new MatrixStack());// renderWorld(partialTick, endTime, matrixStackWrl);
-            }
-            catch (Exception e)
-            {
-                GunMod.LOGGER.log(Level.FATAL, "FATAL NPE DETECTED WITHIN RESET GAME RENDERER");
-
-                // TODO RESET
-                GL20.glUseProgram(0);
-
-                TACOptifineShadersHelper.setFramebufferTexture(Minecraft.getInstance().getFramebuffer(), tex);
-                GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, tex, 0);
-                //GL30.glCopyImageSubData(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, MIRROR_TEX, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, lastWidth, lastHeight, 1);
-
-        /*if (limit != 0 && renderEndNanoTime != null) {
-            try {
-                renderEndNanoTime.setLong(mc.entityRenderer, endTime);
-            } catch (Exception ignored) {
-            }
-        }*/
-
-
-                //Go back to the original Settings
-                mc.objectMouseOver = mouseOver;
-                mc.gameSettings.framerateLimit = limit;
-                mc.gameSettings.hideGUI = hide;
-                mc.gameSettings.viewBobbing = bobbingBackup;
-                mc.gameSettings.fov = fovBackup;
-
-                TACOptifineShadersHelper.setWorldRenderer(mc, renderBackup);
-                //mc.gameRenderer.renderWorld(partialTick, endTime, new MatrixStack());
-                GL11.glPopMatrix();
-                return;
-            }
+            mc.gameRenderer.updateCameraAndRender(partialTick, endTime, true);
+            //mc.gameRenderer.renderWorld(partialTick, endTime, new MatrixStack());//gameRenderer.renderWorld(partialTick, endTime + (1000000000 / 30), matrixStackWrl);
         }
         else
             GunMod.LOGGER.log(Level.FATAL, "Warning gameRender doesn't exist");
 
         GL20.glUseProgram(0);
+        TACOptifineShadersHelper.setFramebufferTexture(mc.getFramebuffer(), tex);
+        //GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, tex, 0);
+        //GL30.glCopyTexSubImage2D(Minecraft.getInstance().getFramebuffer().func_242996_f(), GL11.GL_TEXTURE_2D, 0, 0, 0, 0, MIRROR_TEX, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, lastWidth, lastHeight, 1);
 
-        TACOptifineShadersHelper.setFramebufferTexture(Minecraft.getInstance().getFramebuffer(), tex);
-        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, tex, 0);
-        //GL30.glCopyImageSubData(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, MIRROR_TEX, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, lastWidth, lastHeight, 1);
-
-        /*if (limit != 0 && renderEndNanoTime != null) {
-            try {
-                renderEndNanoTime.setLong(mc.entityRenderer, endTime);
-            } catch (Exception ignored) {
-            }
-        }*/
-
-
-        //Go back to the original Settings
         mc.objectMouseOver = mouseOver;
         mc.gameSettings.framerateLimit = limit;
         mc.gameSettings.hideGUI = hide;
@@ -376,8 +291,6 @@ public class ScreenTextureState extends RenderState.TexturingState
         mc.gameSettings.fov = fovBackup;
 
         TACOptifineShadersHelper.setWorldRenderer(mc, renderBackup);
-        //mc.gameRenderer = renderBackup;
-
 
         GL11.glPopMatrix();
     }
@@ -389,26 +302,36 @@ public class ScreenTextureState extends RenderState.TexturingState
         }
         ItemStack stack=Minecraft.getInstance().player.getHeldItemMainhand();
         if (stack != null && stack.getItem() instanceof GunItem) {
-            GlStateManager.pushMatrix();
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
+            RenderSystem.pushMatrix();
             //GL11.glBindTexture(GL11.GL_TEXTURE_2D, MIRROR_TEX);
-                if(OptifineHelper.isLoaded() && OptifineHelper.isShadersEnabled()) {//OptifineHelper.isRenderingDfb()/* && OptifineHelper.getDfb() != null && TACOptifineShadersHelper.getFlipTextures() != null*/) {
+            //TODO: Figure out why this is never called
+                if(OptifineHelper.isLoaded() && OptifineHelper.isRenderingDfb()) {
                     //TODO: Optifine and OpenGL 2.1 Compatibility ?
 
+                    RenderSystem.bindTexture(this.textureId/*this.getTextureId()*/);
+                    if(mc.getMainWindow().getWidth() != this.lastWindowWidth || mc.getMainWindow().getHeight() != this.lastWindowHeight)
+                    {
+                        // When window resizes the texture needs to be re-initialized and copied, so both are done in the same call
+                        this.lastWindowWidth = mc.getMainWindow().getWidth();
+                        this.lastWindowHeight = mc.getMainWindow().getHeight();
+                        GL43.glCopyTexImage2D(this.textureId, 0, GL_RGB, 0, 0, mc.getMainWindow().getFramebufferWidth(), mc.getMainWindow().getFramebufferHeight(), 0);
+                    }
+                    else
+                    {
+                        // Copy sub-image is faster than copy because the texture does not need to be initialized
+                        GL43.glCopyTexSubImage2D(this.textureId, 0, 0, 0, 0, 0, mc.getMainWindow().getFramebufferWidth(), mc.getMainWindow().getFramebufferHeight());
+                    }
                     //OptifineHelper.getDfb().exists() ? flipTextures.getA(0) : 0
-                    GL43.glCopyImageSubData(TACOptifineShadersHelper.getFlipTextures().getA(0), GL11.GL_TEXTURE_2D, 0, 0, 0, 0, this.textureId, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, Minecraft.getInstance().getMainWindow().getWidth(),
-                            Minecraft.getInstance().getMainWindow().getHeight(), 1);
-                } else {
-                    /*if (Shaders.capabilities.OpenGL30) {
-                        GL30.glCopyImageSubData(Minecraft.getInstance().getFramebuffer().func_242996_f(), GL11.GL_TEXTURE_2D, 0, 0, 0, 0, this.textureId, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, Minecraft.getInstance().getMainWindow().getWidth(), Minecraft.getInstance().getMainWindow().getHeight(), 1);
+                    //TODO: Add customizable resolution scale, AE percent resolution scale for PiP
 
-                    } else {*/
-                        //GL11.glBindTexture(Minecraft.getInstance().getFramebuffer().func_242996_f(), this.textureId);
-                        GL43.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,0,0,Minecraft.getInstance().getMainWindow().getWidth(), Minecraft.getInstance().getMainWindow().getHeight(),0);
-                        //GL11.glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0,  0, 0,0,  Minecraft.getInstance().getMainWindow().getWidth(), Minecraft.getInstance().getMainWindow().getHeight());
-                    //}
+                    //GL43.glCopyImageSubData(TACOptifineShadersHelper.getFlipTextures().getA(0), GL11.GL_TEXTURE_2D, 0, 0, 0, 0, this.textureId, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, Minecraft.getInstance().getMainWindow().getWidth(),
+                            //Minecraft.getInstance().getMainWindow().getHeight(), 1);
+                    GunMod.LOGGER.log(Level.INFO, "GL43 grab with optifine has functioned");
+                } else {
+                    RenderSystem.bindTexture(this.textureId);
+                    GL43.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,0,0,Minecraft.getInstance().getMainWindow().getWidth(), Minecraft.getInstance().getMainWindow().getHeight(),0);
                 }
-                GlStateManager.popMatrix();
+            RenderSystem.popMatrix();
        }
     }
 }
