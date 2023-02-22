@@ -100,6 +100,7 @@ sourceSets.main.resources {
 //}
 
 dependencies {
+    compileOnly fileTree(dir: 'lib4', include: '*.jar')
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
     implementation fg.deobf('curse.maven:configured-457570:3434071')
 
@@ -117,8 +118,6 @@ dependencies {
     //runtimeOnly files('lib4/optifine.jar')
 
     //implementation 'lib.optifine:optifine:1.0.0'
-
-    compileOnly fileTree(dir: 'lib4', include: '*.jar')
 }
 /*repositories {
     maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
