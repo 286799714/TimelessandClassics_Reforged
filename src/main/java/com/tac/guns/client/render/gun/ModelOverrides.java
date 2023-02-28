@@ -1,6 +1,7 @@
 package com.tac.guns.client.render.gun;
 
 import com.tac.guns.Reference;
+import com.tac.guns.client.render.ScreenTextureState;
 import com.tac.guns.item.GunItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -8,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -63,11 +65,16 @@ public class ModelOverrides
         return MODEL_MAP.get(stack.getItem());
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onClientPlayerTick(TickEvent.PlayerTickEvent event)
     {
         if(event.phase == TickEvent.Phase.START && event.side == LogicalSide.CLIENT) //  && event.type == TickEvent.Type.RENDER
         {
+            if(!ScreenTextureState.instance().isRenderGun)
+            {
+                ScreenTextureState.instance().isRenderGun = true;
+                return;
+            }
             tick(event.player);
         }
     }

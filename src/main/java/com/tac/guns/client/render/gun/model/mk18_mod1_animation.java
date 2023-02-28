@@ -2,6 +2,7 @@ package com.tac.guns.client.render.gun.model;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.tac.guns.client.SpecialModels;
+import com.tac.guns.client.render.ScreenTextureState;
 import com.tac.guns.client.render.animation.MK18MOD1AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
