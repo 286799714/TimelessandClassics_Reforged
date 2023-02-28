@@ -1,0 +1,165 @@
+TODO 1.16.2
+ - ChatOptionsScreen
+ - VideoSettingsScreen
+ - GuiDetailSettingsOF
+
+TODO 1.16
+ - debug screen chunk updates
+ - patch FontRenderer
+ X chat shadow
+ X patch ResourceLoadProgressGui
+ X patch VideoSettingsScreen
+ X patch BipedArmorLayer
+ X patch PlayerModel, CapeLayer for cape patch
+ X FluidBlockRenderer - face brightness from BlockState
+ X RenderType - new types
+ - WorldRenderer.setupTerrain() - iteration
+ X I18n patch, Forge hooks
+ X ClientWorld Forge patch
+ X IntegratedServer patch
+ X Lang reloading resources
+ - CEM zombified_piglin (from zombie_pigman/pig_zombie)
+ - mappings
+   - ItemRenderer getBufferGlint()
+   - func_235904_r_,getProperties
+   - func_235901_b_,hasProperty
+   - StateHolder (properties)
+   - Registry, RegistryKey
+   - World.getDimension/getDimensionType
+   - SRespawnPacket, SJoinGamePacket
+   - func_241113_a_,setClearWeather
+   - ServerWorld func_241114_a_,setDayTime
+   - TileEntity: getMaxRenderDistanceSquared -> getMaxRenderDistance
+ 
+TODO 1.15
+ - CEM not existing ender_crystal_no_base, ender_chest
+
+Shaders (1.14 to 1.15)
+ - void rendering
+ - 1.14 leash has no lightmap
+ - normalmatrix for mooshroom mushrooms, particles (1.14 is also strange)
+ - at_tangent on entities/block entities
+ - calculate normal, at_tangent and midtex only when used by the shader pack
+
+FIXME 1.15
+ - fix for 1.14 shader packs in 1.15
+ a) switch TU 1 (lightmap) and 2 (normals)
+ b) replace gl_TextureMatrix[1] -> gl_TextureMatrix[2] 
+ c) replace gl_MultiTexCoord1 -> gl_MultiTexCoord2
+
+Check
+ - GlStateManager - display list methods
+ - multi-texture (AA/AF) with VBOs 
+ - ClientChunkProvider - move ChunkDataOF check in ChunkOF.read() ...
+ - AbstractChunkRenderContainer patch !!!
+ - Replace Direction.values() calls with Direction.VALUES
+ - BlockModelRenderer - separateAoValue, fix update 
+ - BufferBuilder - shaders hooks
+ - ChunkRender 
+   - patch preRenderBlocks()
+   - duplicate playerUpdate
+ - ClippingHelperImpl
+   - isBoxInFrustumRaw() - creates 6 vectors per check !!!
+ - EntityRenderer - patch bindEntityTexture()
+ - ArmorLayer 
+   - renderArmorLayer() patch before bindTexture() and before renderEnchantedGlint()
+   - renderEnchantedGlint() patch
+ - LivingRenderer
+   - is fix for spider eyes z-fighting still needed ???
+   - setBrightness() patch for Shaders.setEntityColor()
+ - RenderModel - display lists
+ - RenderModel - CEM changes
+ - Vertex size 28 -> 32, shaders 56 -> 64
+ - TextureAtlasSprite patch
+ - Tile entity renderers: BeaconTileEntityRenderer, 
+ - Shaders patch "Shaders.enable/disableFog()" to be called by GlStateManager.enable/disableFog() - port to 1.14.4 and below
+ - Shaders patch "Shaders.enable/disableTextue2D()" to be called by GlStateManager.enable/disableTexture2D() - port to 1.14.4 and below
+ - Shaders.preCelestialRotate() to use matrix parameter
+ - WorldRenderer draw horizon patch
+ - WorldRenderer updateChunks() update chunks with needsUpdatePlayer() delayed prioritized ???
+ - WorldRenderer patch for ShadersRender.begin/endBlockDamage(), drawBlockDamageTexture(), drawSelectionBox()
+ - WorldRenderer patch drawBoundingBox() to be shaders friendly
+ - WorldVertexBufferUploader patch
+ - BiomeColors patch 
+ - FirstPersonRenderer - renderOverlays()
+ - ItemRenderer - renderEffect()
+ - GLX.isUsingFBOs() - fast render
+ - AtlasTexture - missing texture
+ - ModelBakery.fixModelLocations() - the path is not being fixed at all
+ - ChunkCacheOF - cache biomes, light caching
+    
+Moved
+  - ChunkRender -> ChunkRenderDispatcher.ChunkRender
+  - Compiledchunk -> ChunkRenderDispatcher.CompiledChunk
+  - EnderDragonEyesLayer inlined in EnderDragonRenderer
+  - EndermanEyesLayer rendering moved to AbstractEyesLayer  
+  - SpiderEyesLayer rendering moved to AbstractEyesLayer
+  - RendererModel -> ModelRenderer
+
+Removed
+  - display lists, always VBOs
+  - direct rendering, always FBO
+  - BakedQuadRetextured
+  - LayeredColorMaskTexture
+  - VboRenderList
+  - CEM models: BannerModel, BedModel, ChestModel, EnderCrystalModel
+  - CEM offsets: ox, oy, oz
+  
+ TODO 1.15 and below
+  - Config.hasResource() to call ResourceManager.hasResource()
+  - All configuration lookups iterating over numbered files (CustomSky, etc.) to use Config.hasResource()
+ 
+ TODO 1.14 and below
+  - ChunkManager patches (1.13 PlayerChunkMap): view distance 64, lazy chunk loading
+  - Fix handheld items with external dynamic light (torch on ground) 
+  - Remove all Reflector references to Config to avoid early initialization
+  - CustomSky - fix source texture parsing to use correct path
+  - TextureAtlasSprite.loadShadersSprite() to check if the resource exsists instead of catching FileNotFoundException 
+  - Remove TextureAtlasSprite.spriteSingle ???
+ 
+ TODO 1.14.4 Forge patch ModelBakery: this.field_217850_G.put(triple, ibakedmodel); !!!
+ TODO Preserve unknown game settings (helps when testing older versions)
+ 
+ TODO shaders shadowmap backface culling only on chunks between the player and the sun/moon ???
+ TODO Optimize dummy shader patches - uploadTexture/Sprite, generateMipmaps, etc. some are proxies which are not needed
+ TODO optional delayed near updates ???
+ TODO Remove unused textures on texture reload (ResourceManager) 
+ TODO Font renderer with degenerate triangles
+ TODO Fix sharp void/sky transitions on y = 62/63 (3 sec transition instead?) 
+ TODO Remove own particles (around the player), option Particles = ON/Other/OFF
+ TODO Fix ghost water/lava ??? 
+      https://bugs.mojang.com/browse/MC-12363
+      https://hypixel.net/threads/forge-1-7-10-1-8-9-ghost-lava-water-fix.2079529/
+ TODO Optimize entity rendering, one render call (GL list) per set of rotation angles 
+
+To check
+- DynamicTexture (normal, specular)
+- Config.getResourcePacks() working with server resource pack
+- main menu panoramas (blur)
+- BlockFluidRenderer - farmland, half-slab rendering
+- BlockFluidRenderer - biome smoothing
+- UTF-8 for all ".properties" files (NBT name matching)
+- FontRenderer 
+  ?  Fix overlapping characters (Misa uses slightly overlapping characters to condense the font)
+  ?  check "enabled"
+  ?  Forge fix unicode shadow
+- TileEntity custom name synchronization
+- TileEntitySkullRenderer model renderers (CEM)
+- resource location parsing to match "doc/properties_files.txt"
+- profiler smoothing depending on FPS
+
+Old -> New
+- WorldProvider -> Dimension
+- BlockStateBase -> BlockState (for the block ID cache)
+- IBlockProperties -> IBlockState (interface)
+- IWorldNameable -> INameable
+- ModelHorse -> ModelHorseArmorBase
+- Chunk.getPrecipitationHeight(pos) -> Chunk.getHeight(Heightmap.Type.MOTION_BLOCKING, pos)
+
+New changed
+- NativeImage
+
+1.14.4
+  ChunkSection.recalculateRefCounts()
+
+  
