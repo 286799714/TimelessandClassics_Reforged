@@ -15,6 +15,8 @@ import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -102,7 +104,7 @@ public class ak47_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.AK47.getModel(), Ak47AnimationController.INDEX_MAGAZINE, transformType, matrices);
-            if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
+            if(GunModifierHelper.getAmmoCapacity(stack) > -1)
             {
                 RenderUtil.renderModel(SpecialModels.AK47_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
@@ -117,7 +119,7 @@ public class ak47_animation implements IOverrideModel {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.AK47.getModel(), Ak47AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
-                if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
+                if(GunModifierHelper.getAmmoCapacity(stack) > -1)
                 {
                     RenderUtil.renderModel(SpecialModels.AK47_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
                 }

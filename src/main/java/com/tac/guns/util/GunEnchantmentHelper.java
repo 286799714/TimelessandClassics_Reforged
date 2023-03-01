@@ -24,9 +24,9 @@ public class GunEnchantmentHelper
         put("Over Pressured",
                 new UpgradeBenchScreen.RequirementItem(new int[]{2,3,3}, new int[]{5,7,10},
                         ModEnchantments.ACCELERATOR.get()));
-        put("Over Capacity",
+        /*put("Over Capacity",
                 new UpgradeBenchScreen.RequirementItem(new int[]{1,2,3}, new int[]{1,3,6},
-                        ModEnchantments.OVER_CAPACITY.get()));
+                        ModEnchantments.OVER_CAPACITY.get()));*/
         put("Advanced Rifling",
                 new UpgradeBenchScreen.RequirementItem(new int[]{1,2,3}, new int[]{4,6,8},
                         ModEnchantments.RIFLING.get()));
@@ -89,7 +89,7 @@ public class GunEnchantmentHelper
         return 0f;
     }
 
-    public static int getAmmoCapacity(ItemStack weapon, Gun modifiedGun)
+    /*public static int getAmmoCapacity(ItemStack weapon, Gun modifiedGun)
     {
         int capacity = modifiedGun.getReloads().isOpenBolt() ? modifiedGun.getReloads().getMaxAmmo() : modifiedGun.getReloads().getMaxAmmo()+1;
         int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), weapon);
@@ -102,7 +102,7 @@ public class GunEnchantmentHelper
             capacity += (capacity / 2) * level-3;
         }
         return capacity;
-    }
+    }*/
 
     public static double getProjectileSpeedModifier(ItemStack weapon)
     {

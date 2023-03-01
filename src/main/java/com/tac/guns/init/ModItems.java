@@ -191,7 +191,11 @@ public class ModItems
     public static final RegistryObject<Item> LIGHT_GRIP = REGISTER.register("light_grip", () -> new UnderBarrelItem(UnderBarrel.create(GunModifiers.LIGHT_GRIP_MODIFIER), new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
     public static final RegistryObject<Item> SPECIALISED_GRIP = REGISTER.register("specialised_grip", () -> new UnderBarrelItem(UnderBarrel.create(GunModifiers.TACTICAL_GRIP_MODIFIER), new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
     /* Side rail Attachments */
-    //public static final RegistryObject<Item> STANDARD_FLASHLIGHT = REGISTER.register("standard_flashlight", () -> new SideRailItem(SideRail.create(), new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
+    public static final RegistryObject<Item> BASIC_LASER = REGISTER.register("basic_laser", () -> new SideRailItem(SideRail.create(GunModifiers.BASIC_LASER), new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
+
+    public static final RegistryObject<Item> SMALL_EXTENDED_MAG = REGISTER.register("small_extended_mag", () -> new ExtendedMagItem(ExtendedMag.create(GunModifiers.SMALL_EXTENDED_MAG), new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
+    public static final RegistryObject<Item> MEDIUM_EXTENDED_MAG = REGISTER.register("medium_extended_mag", () -> new ExtendedMagItem(ExtendedMag.create(GunModifiers.MEDIUM_EXTENDED_MAG), new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
+    public static final RegistryObject<Item> LARGE_EXTENDED_MAG = REGISTER.register("large_extended_mag", () -> new ExtendedMagItem(ExtendedMag.create(GunModifiers.LARGE_EXTENDED_MAG), new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
 
    //public static final RegistryObject<Item> LIGHT_GRENADE = REGISTER.register("light_grenade", () ->  new GrenadeItem(new Item.Properties().group(GunMod.GROUP), 20 * 4, 1.1f));
 

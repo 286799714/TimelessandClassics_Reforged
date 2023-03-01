@@ -18,6 +18,7 @@ import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -116,7 +117,7 @@ public class fn_fal_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.FN_FAL.getModel(), FNFALAnimationController.INDEX_MAGAZINE,transformType,matrices);
-            if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
+            if(GunModifierHelper.getAmmoCapacity(stack) > -1)
             {
                 RenderUtil.renderModel(SpecialModels.FN_FAL_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }

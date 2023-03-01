@@ -14,11 +14,13 @@ import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.vector.Vector3f;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -49,7 +51,18 @@ public class scar_l_animation implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.SCAR_L_TAC_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-
+            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderModel(SpecialModels.SCAR_L_MINI_LASER.getModel(), stack, matrices, renderBuffer, light, overlay);
+                matrices.push();
+                if(transformType.isFirstPerson()) {
+                    matrices.translate(0, 0, -0.25f);
+                    matrices.scale(1, 1, 3f);
+                    matrices.rotate(Vector3f.XP.rotationDegrees(0.75F));
+                    matrices.rotate(Vector3f.ZN.rotationDegrees(1.75F));
+                }
+                RenderUtil.renderModel(SpecialModels.SCAR_L_MINI_LASER_BEAM.getModel(), stack, matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                matrices.pop();
+            }
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
                 matrices.push();
                 matrices.translate(0, 0, -0.0225f);
@@ -70,7 +83,7 @@ public class scar_l_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.SCAR_L_BODY.getModel(), SCAR_LAnimationController.INDEX_MAGAZINE, transformType, matrices);
-            if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 1) {
+            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                 RenderUtil.renderModel(SpecialModels.SCAR_L_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
                 RenderUtil.renderModel(SpecialModels.SCAR_L_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
@@ -82,7 +95,7 @@ public class scar_l_animation implements IOverrideModel {
         {
             if(transformType.isFirstPerson() && controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_NORMAL)) {
                 controller.applySpecialModelTransform(SpecialModels.SCAR_L_BODY.getModel(), SCAR_LAnimationController.INDEX_MAGAZINE2, transformType, matrices);
-                if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 1) {
+                if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                     RenderUtil.renderModel(SpecialModels.SCAR_L_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
                 } else {
                     RenderUtil.renderModel(SpecialModels.SCAR_L_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);

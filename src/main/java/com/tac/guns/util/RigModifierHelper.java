@@ -4,6 +4,7 @@ import com.tac.guns.common.Gun;
 import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 

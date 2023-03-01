@@ -8,6 +8,7 @@ import com.tac.guns.item.GunItem;
 import com.tac.guns.item.IWeaponColorable;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;

@@ -9,6 +9,7 @@ import com.tac.guns.common.container.AttachmentContainer;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

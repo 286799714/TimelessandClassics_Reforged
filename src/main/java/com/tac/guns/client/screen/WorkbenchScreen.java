@@ -16,6 +16,7 @@ import com.tac.guns.init.ModItems;
 import com.tac.guns.item.*;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageCraft;
 import com.tac.guns.tileentity.WorkbenchTileEntity;

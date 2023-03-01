@@ -60,7 +60,7 @@ public class MBPGunItem extends TimelessGunItem {
                 tooltip.add((new TranslationTextComponent("info.tac.ignore_ammo")).mergeStyle(TextFormatting.AQUA));
             } else {
                 int ammoCount = tagCompound.getInt("AmmoCount");
-                tooltip.add((new TranslationTextComponent("info.tac.ammo", new Object[]{TextFormatting.GOLD.toString() + ammoCount + "/" + GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun)})).mergeStyle(TextFormatting.DARK_GRAY));
+                tooltip.add((new TranslationTextComponent("info.tac.ammo", new Object[]{TextFormatting.GOLD.toString() + ammoCount + "/" + GunModifierHelper.getAmmoCapacity(stack, modifiedGun)})).mergeStyle(TextFormatting.DARK_GRAY));
             }
         }
 

@@ -97,7 +97,7 @@ public class GunItem extends Item implements IColored
             else
             {
                 int ammoCount = tagCompound.getInt("AmmoCount");
-                tooltip.add(new TranslationTextComponent("info.tac.ammo", TextFormatting.WHITE.toString() + ammoCount + "/" + GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun)).mergeStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("info.tac.ammo", TextFormatting.WHITE.toString() + ammoCount + "/" + GunModifierHelper.getAmmoCapacity(stack, modifiedGun)).mergeStyle(TextFormatting.GRAY));
             }
         }
 
@@ -132,7 +132,7 @@ public class GunItem extends Item implements IColored
     {
         CompoundNBT tagCompound = stack.getOrCreateTag();
         Gun modifiedGun = this.getModifiedGun(stack);
-        return !tagCompound.getBoolean("IgnoreAmmo") && tagCompound.getInt("AmmoCount") != GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun);
+        return !tagCompound.getBoolean("IgnoreAmmo") && tagCompound.getInt("AmmoCount") != GunModifierHelper.getAmmoCapacity(stack, modifiedGun);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class GunItem extends Item implements IColored
     {
         CompoundNBT tagCompound = stack.getOrCreateTag();
         Gun modifiedGun = this.getModifiedGun(stack);
-        return 1.0 - (tagCompound.getInt("AmmoCount") / (double) GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun));
+        return 1.0 - (tagCompound.getInt("AmmoCount") / (double) GunModifierHelper.getAmmoCapacity(stack, modifiedGun));
     }
 
     @Override

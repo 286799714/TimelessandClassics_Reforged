@@ -12,6 +12,7 @@ import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageLightChange;
 

@@ -8,6 +8,7 @@ import com.tac.guns.common.network.ServerPlayHandler;
 import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.Process;
@@ -80,7 +81,7 @@ public class TimelessGunItem extends GunItem {
                 tooltip.add((new TranslationTextComponent("info.tac.ignore_ammo")).mergeStyle(TextFormatting.AQUA));
             } else {
                 int ammoCount = tagCompound.getInt("AmmoCount");
-                tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + ammoCount + "/" + GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun))).mergeStyle(TextFormatting.DARK_GRAY));
+                tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + ammoCount + "/" + GunModifierHelper.getAmmoCapacity(stack, modifiedGun))).mergeStyle(TextFormatting.DARK_GRAY));
             }
         }
 
@@ -127,7 +128,7 @@ public class TimelessGunItem extends GunItem {
         if (Config.CLIENT.display.weaponAmmoBar.get()) {
             CompoundNBT tagCompound = stack.getOrCreateTag();
             Gun modifiedGun = this.getModifiedGun(stack);
-            return !tagCompound.getBoolean("IgnoreAmmo") && tagCompound.getInt("AmmoCount") != GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun);
+            return !tagCompound.getBoolean("IgnoreAmmo") && tagCompound.getInt("AmmoCount") != GunModifierHelper.getAmmoCapacity(stack, modifiedGun);
         } else
             return false;
     }

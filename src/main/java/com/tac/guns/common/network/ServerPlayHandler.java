@@ -50,6 +50,7 @@ import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageBulletTrail;
 import com.tac.guns.network.message.MessageGunSound;

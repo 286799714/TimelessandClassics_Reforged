@@ -4,6 +4,7 @@ import com.tac.guns.common.Gun;
 import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
@@ -509,6 +510,39 @@ public class GunModifierHelper
         for(IGunModifier modifier : modifiers)
         {
             modifierWeight += modifier.modifyWeaponWeight();
+        }
+        return modifierWeight;
+    }
+
+    public static int getAmmoCapacity(ItemStack weapon, Gun modifiedGun)
+    {
+        int capacity = modifiedGun.getReloads().isOpenBolt() ? modifiedGun.getReloads().getMaxAmmo() : modifiedGun.getReloads().getMaxAmmo()+1;
+        int level = getAmmoCapacity(weapon);
+        if(level > -1 && level < modifiedGun.getReloads().getMaxAdditionalAmmoPerOC().length)
+        {
+            capacity += modifiedGun.getReloads().getMaxAdditionalAmmoPerOC()[level];
+        }
+        else if(level > -1)
+        {
+            capacity += (capacity / 2) * level-3;
+        }
+        return capacity;
+    }
+    public static int getAmmoCapacity(ItemStack weapon)
+    {
+        int modifierWeight = -1;
+        for(int i = 0; i < IAttachment.Type.values().length; i++)
+        {
+            IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
+            for(IGunModifier modifier : modifiers)
+            {
+                modifierWeight = modifier.additionalAmmunition() > modifierWeight ? modifier.additionalAmmunition() : modifierWeight;
+            }
+        }
+        IGunModifier[] modifiers = getModifiers(weapon);
+        for(IGunModifier modifier : modifiers)
+        {
+            modifierWeight = modifier.additionalAmmunition() > modifierWeight ? modifier.additionalAmmunition() : modifierWeight;
         }
         return modifierWeight;
     }

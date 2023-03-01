@@ -11,6 +11,7 @@ import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.item.GunItem;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.OptifineHelper;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -38,7 +39,7 @@ public class de_lisle_animation implements IOverrideModel {
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
     {
         
-        if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
+        if(GunModifierHelper.getAmmoCapacity(stack) > -1)
         {
             RenderUtil.renderModel(SpecialModels.DE_LISLE_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
         }

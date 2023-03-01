@@ -14,6 +14,7 @@ import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -110,7 +111,7 @@ public class mk14_animation implements IOverrideModel {
         {
             controller.applySpecialModelTransform(MK14_BODY.getModel(), MK14AnimationController.INDEX_MAGAZINE, transformType, matrices);
 
-            if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0) {
+            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                 RenderUtil.renderModel(EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
                 RenderUtil.renderModel(STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);

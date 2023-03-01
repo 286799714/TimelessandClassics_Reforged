@@ -270,4 +270,14 @@ public interface IGunModifier
     {
         return 0F;
     }
+
+    /**
+     * Return's the index value to obtain
+     *
+     * @return additional ammunition available to the weapon when loaded
+     */
+    default int additionalAmmunition()
+    {
+        return -1;
+    }
 }

@@ -7,6 +7,7 @@ import com.tac.guns.common.GunModifiers;
 import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.Process;

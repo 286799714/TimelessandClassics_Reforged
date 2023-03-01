@@ -15,6 +15,7 @@ import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.item.GunItem;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -54,7 +55,7 @@ public class type81_x_animation implements IOverrideModel {
         {
             controller.applySpecialModelTransform(SpecialModels.TYPE81_X.getModel(),Type81AnimationController.INDEX_MAGAZINE,transformType,matrices);
 
-            if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
+            if(GunModifierHelper.getAmmoCapacity(stack) > -1)
             {
                 RenderUtil.renderModel(SpecialModels.TYPE81_X_EXT_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }

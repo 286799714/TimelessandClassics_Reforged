@@ -3,6 +3,7 @@ package com.tac.guns.common.container;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModContainers;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;

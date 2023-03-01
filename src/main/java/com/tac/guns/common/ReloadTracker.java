@@ -11,6 +11,7 @@ import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.*;
 import com.tac.guns.util.GunEnchantmentHelper;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -73,7 +74,7 @@ public class ReloadTracker
     private boolean isWeaponFull()
     {
         CompoundNBT tag = this.stack.getOrCreateTag();
-        return tag.getInt("AmmoCount") >= GunEnchantmentHelper.getAmmoCapacity(this.stack, this.gun);
+        return tag.getInt("AmmoCount") >= GunModifierHelper.getAmmoCapacity(this.stack, this.gun);
     }
     /**
      * @return
@@ -129,7 +130,7 @@ public class ReloadTracker
             CompoundNBT tag = this.stack.getTag();
             int amount = Math.min(ammo.getCount(), this.gun.getReloads().getReloadAmount());
             if (tag != null) {
-                int maxAmmo = GunEnchantmentHelper.getAmmoCapacity(this.stack, this.gun);
+                int maxAmmo = GunModifierHelper.getAmmoCapacity(this.stack, this.gun);
                 amount = Math.min(amount, maxAmmo - tag.getInt("AmmoCount"));
                 tag.putInt("AmmoCount", tag.getInt("AmmoCount") + amount);
             }
@@ -207,10 +208,10 @@ public class ReloadTracker
         if(ammoStacks.length > 0)
         {
             CompoundNBT tag = this.stack.getTag();
-            int ammoAmount = Math.min(calcMaxReserveAmmo(ammoStacks), GunEnchantmentHelper.getAmmoCapacity(this.stack, this.gun));
+            int ammoAmount = Math.min(calcMaxReserveAmmo(ammoStacks), GunModifierHelper.getAmmoCapacity(this.stack, this.gun));
             if (tag != null) {
                 int currentAmmo = tag.getInt("AmmoCount");
-                int maxAmmo = GunEnchantmentHelper.getAmmoCapacity(this.stack, this.gun);
+                int maxAmmo = GunModifierHelper.getAmmoCapacity(this.stack, this.gun);
                 int amount = maxAmmo - currentAmmo; //amount < maxAmmo ? maxAmmo - amount :
                 if(currentAmmo == 0 && !this.gun.getReloads().isOpenBolt())
                 {

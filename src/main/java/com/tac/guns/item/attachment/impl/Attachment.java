@@ -3,6 +3,7 @@ package com.tac.guns.item.attachment.impl;
 import com.tac.guns.Reference;
 import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;

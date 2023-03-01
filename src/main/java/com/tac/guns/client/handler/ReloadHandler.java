@@ -17,6 +17,7 @@ import com.tac.guns.network.message.MessageUnload;
 import com.tac.guns.network.message.MessageUpdateGunID;
 import com.tac.guns.util.GunEnchantmentHelper;
 
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -296,7 +297,7 @@ public class ReloadHandler {
                     CompoundNBT tag = stack.getTag();
                     if (tag != null && !tag.contains("IgnoreAmmo", Constants.NBT.TAG_BYTE)) {
                         Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
-                        if (tag.getInt("AmmoCount") >= GunEnchantmentHelper.getAmmoCapacity(stack, gun)) {
+                        if (tag.getInt("AmmoCount") >= GunModifierHelper.getAmmoCapacity(stack, gun)) {
                             return;
                         }
                         ItemStack rig = WearableHelper.PlayerWornRig(player);

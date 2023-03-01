@@ -17,6 +17,7 @@ import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunEnchantmentHelper;
 
+import com.tac.guns.util.GunModifierHelper;
 import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -86,7 +87,7 @@ public enum AnimationHandler {
         if (itemStack.getItem() instanceof GunItem) {
             GunItem gunItem = (GunItem) itemStack.getItem();
             CompoundNBT tag = itemStack.getOrCreateTag();
-            int reloadingAmount = GunEnchantmentHelper.getAmmoCapacity(itemStack, gunItem.getGun()) - tag.getInt("AmmoCount");
+            int reloadingAmount = GunModifierHelper.getAmmoCapacity(itemStack, gunItem.getGun()) - tag.getInt("AmmoCount");
             if (reloadingAmount <= 0) return;
         }
         GunAnimationController controller = GunAnimationController.fromItem(itemStack.getItem());
