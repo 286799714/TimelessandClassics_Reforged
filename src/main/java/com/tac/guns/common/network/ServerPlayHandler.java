@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
+import com.tac.guns.item.SideRailItem;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import org.apache.commons.lang3.ArrayUtils;
@@ -386,7 +387,7 @@ public class ServerPlayHandler
     public static void handleAttachments(ServerPlayerEntity player)
     {
         ItemStack heldItem = player.getHeldItemMainhand();
-        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem)
+        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem || heldItem.getItem() instanceof SideRailItem)
         {
             NetworkHooks.openGui(player, new SimpleNamedContainerProvider((windowId, playerInventory, player1) -> new AttachmentContainer(windowId, playerInventory, heldItem), new TranslationTextComponent("container.tac.attachments")));
         }

@@ -5,6 +5,7 @@ import com.tac.guns.common.container.AttachmentContainer;
 import com.tac.guns.init.ModSounds;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.ScopeItem;
+import com.tac.guns.item.SideRailItem;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -47,11 +48,11 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean isEnabled()
     {
-        if(!(this.weapon.getItem() instanceof GunItem) && !(this.weapon.getItem() instanceof ScopeItem))
+        /*if(!(this.weapon.getItem() instanceof GunItem) || !(this.weapon.getItem() instanceof ScopeItem) && !(this.weapon.getItem() instanceof SideRailItem))
         {
             return false;
-        }
-        if(this.weapon.getItem() instanceof ScopeItem)
+        }*/
+        if(this.weapon.getItem() instanceof ScopeItem || this.weapon.getItem() instanceof SideRailItem)
         {
             return true;
         }
@@ -70,22 +71,13 @@ public class AttachmentSlot extends Slot
             }
             return false;
         }
-        /*GunItem item = (GunItem) this.weapon.getItem();
-        Gun modifiedGun = item.getModifiedGun(this.weapon);
-        return modifiedGun.canAttachType(this.type);*/
     }
 
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-        if(!(this.weapon.getItem() instanceof GunItem) && !(this.weapon.getItem() instanceof ScopeItem) || stack.getItem() instanceof GunItem)
-        {
-            return false;
-        }
-        if(this.weapon.getItem() instanceof ScopeItem)
-        {
+        if(stack.getItem() instanceof DyeItem && !(this.weapon.getItem() instanceof GunItem))
             return true;
-        }
         else
         {
             GunItem item = (GunItem) this.weapon.getItem();

@@ -19,6 +19,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import org.spongepowered.asm.mixin.MixinEnvironment;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -42,9 +43,9 @@ public class AttachmentContainer extends Container
     public static ItemStack[] getAttachments(ItemStack stack)
     {
         ItemStack[] attachments = new ItemStack[IAttachment.Type.values().length];
-        if(stack.getItem() instanceof ScopeItem)
+        if(stack.getItem() instanceof ScopeItem || stack.getItem() instanceof SideRailItem)
         {
-            for (int i = 9; i < attachments.length; i++) {
+            for (int i = 10; i < attachments.length; i++) {
                 attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
             }
         }
@@ -89,7 +90,7 @@ public class AttachmentContainer extends Container
     {
         this(windowId, playerInventory);
         ItemStack[] attachments = new ItemStack[IAttachment.Type.values().length];
-        if(stack.getItem() instanceof ScopeItem)
+        if(stack.getItem() instanceof ScopeItem || stack.getItem() instanceof SideRailItem)
         {
             for (int i = 9; i < attachments.length; i++) {
                 attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
@@ -153,25 +154,25 @@ public class AttachmentContainer extends Container
         this.weapon = playerInventory.getCurrentItem();
         this.playerInventory = playerInventory;
 
-        if(this.weapon.getItem() instanceof ScopeItem)
+        if(this.weapon.getItem() instanceof ScopeItem || this.weapon.getItem() instanceof SideRailItem)
         {
             for (int i = 9; i < IAttachment.Type.values().length; i++)
             {
                 int itorationAdjustment = i;
                 if(i==9)
                 {
-                    itorationAdjustment = i-6;
-                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.values()[i], playerInventory.player, i, 70, 32 + (itorationAdjustment) * 18));
+                    itorationAdjustment = i-7;
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_RETICLE_COLOR, playerInventory.player, i, 70, 32 + (itorationAdjustment) * 18));
                 }
                 if(i==10)
                 {
-                    itorationAdjustment = i-8;
-                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.values()[i], playerInventory.player, i, 40, -1 + (itorationAdjustment) * 18));
-                }
-                if(i==11)
-                {
                     itorationAdjustment = i-9;
-                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.values()[i], playerInventory.player, i, 10, 50 + (itorationAdjustment) * 18));
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_BODY_COLOR, playerInventory.player, i, 40, -1 + (itorationAdjustment) * 18));
+                }
+                if(i==11 /*&& this.weapon.getItem() instanceof ScopeItem*/)
+                {
+                    itorationAdjustment = i-10;
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_GLASS_COLOR, playerInventory.player, i, 10, 50 + (itorationAdjustment) * 18));
                 }
             }
         }
@@ -231,7 +232,7 @@ public class AttachmentContainer extends Container
                     @Override
                     public boolean canTakeStack(PlayerEntity playerIn)
                     {
-                        return false;
+                        return true;
                     }
                 });
             }
@@ -258,7 +259,7 @@ public class AttachmentContainer extends Container
     {
         CompoundNBT attachments = new CompoundNBT();
 
-        if(this.weapon.getItem() instanceof ScopeItem)
+        if(this.weapon.getItem() instanceof ScopeItem || this.weapon.getItem() instanceof SideRailItem)
         {
             for (int i = 0; i < this.getWeaponInventory().getSizeInventory(); i++)
             {
@@ -348,7 +349,7 @@ public class AttachmentContainer extends Container
         ItemStack copyStack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
-        if (this.weapon.getItem() instanceof ScopeItem)
+        if (this.weapon.getItem() instanceof ScopeItem || this.weapon.getItem() instanceof SideRailItem)
         {
             if (slot != null && slot.getHasStack()) {
                 ItemStack slotStack = slot.getStack();
