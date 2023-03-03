@@ -115,11 +115,8 @@ public class ScreenTextureState extends RenderState.TexturingState
             this.textureId = TextureUtil.generateTextureId();
             // Texture params only need to be set once, not once per frame
             RenderSystem.bindTexture(this.textureId);
-            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, mc.getMainWindow().getWidth(), mc.getMainWindow().getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 9728);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 9728);
 
             //glTexParameteri(3553 , GL_TEXTURE_MIN_FILTER, 9728);
             //glTexParameteri(3553 , GL_TEXTURE_MAG_FILTER, 9728);
@@ -358,12 +355,12 @@ public class ScreenTextureState extends RenderState.TexturingState
             // When window resizes the texture needs to be re-initialized and copied, so both are done in the same call
             this.lastWindowWidth = mainWindow.getWidth();
             this.lastWindowHeight = mainWindow.getHeight();
-            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, mainWindow.getFramebufferWidth(), mainWindow.getFramebufferHeight(), 0);
+            GL43.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, mainWindow.getFramebufferWidth(), mainWindow.getFramebufferHeight(), 0);
         }
         else
         {
             // Copy sub-image is faster than copy because the texture does not need to be initialized
-            glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, mainWindow.getFramebufferWidth(), mainWindow.getFramebufferHeight());
+            GL43.glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, mainWindow.getFramebufferWidth(), mainWindow.getFramebufferHeight());
         }
     }
 }

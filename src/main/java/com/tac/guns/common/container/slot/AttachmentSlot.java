@@ -7,8 +7,6 @@ import com.tac.guns.item.GunItem;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.SideRailItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
@@ -52,7 +50,7 @@ public class AttachmentSlot extends Slot
         {
             return false;
         }*/
-        if(this.weapon.getItem() instanceof ScopeItem || this.weapon.getItem() instanceof SideRailItem)
+        if(this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem)
         {
             return true;
         }
@@ -76,7 +74,8 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-        if(stack.getItem() instanceof DyeItem && !(this.weapon.getItem() instanceof GunItem))
+        if((this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && stack.getItem() instanceof DyeItem /*instanceof DyeItem && !(this.weapon.getItem() instanceof
+        GunItem)*/)
             return true;
         else
         {

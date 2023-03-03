@@ -8,6 +8,7 @@ import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessOldRifleGunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessPistolGunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.item.attachment.impl.SideRail;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.item.attachment.IScope;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,9 +44,9 @@ public class AttachmentContainer extends Container
     public static ItemStack[] getAttachments(ItemStack stack)
     {
         ItemStack[] attachments = new ItemStack[IAttachment.Type.values().length];
-        if(stack.getItem() instanceof ScopeItem || stack.getItem() instanceof SideRailItem)
+        if(stack.getItem() instanceof ScopeItem)
         {
-            for (int i = 10; i < attachments.length; i++) {
+            for (int i = 8; i < attachments.length; i++) {
                 attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
             }
         }
@@ -90,7 +91,7 @@ public class AttachmentContainer extends Container
     {
         this(windowId, playerInventory);
         ItemStack[] attachments = new ItemStack[IAttachment.Type.values().length];
-        if(stack.getItem() instanceof ScopeItem || stack.getItem() instanceof SideRailItem)
+        if(this.weapon.getItem() instanceof ScopeItem || this.weapon.getItem() instanceof SideRailItem)
         {
             for (int i = 9; i < attachments.length; i++) {
                 attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
@@ -162,17 +163,35 @@ public class AttachmentContainer extends Container
                 if(i==9)
                 {
                     itorationAdjustment = i-7;
-                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_RETICLE_COLOR, playerInventory.player, i, 70, 32 + (itorationAdjustment) * 18));
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_RETICLE_COLOR, playerInventory.player, i, 70, 32 + (itorationAdjustment) * 18){
+                        @Override
+                        public boolean canTakeStack(PlayerEntity playerIn)
+                        {
+                            return true;
+                        }
+                    });;
                 }
                 if(i==10)
                 {
                     itorationAdjustment = i-9;
-                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_BODY_COLOR, playerInventory.player, i, 40, -1 + (itorationAdjustment) * 18));
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_BODY_COLOR, playerInventory.player, i, 40, -1 + (itorationAdjustment) * 18){
+                        @Override
+                        public boolean canTakeStack(PlayerEntity playerIn)
+                        {
+                            return true;
+                        }
+                    });;
                 }
                 if(i==11 /*&& this.weapon.getItem() instanceof ScopeItem*/)
                 {
                     itorationAdjustment = i-10;
-                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_GLASS_COLOR, playerInventory.player, i, 10, 50 + (itorationAdjustment) * 18));
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_GLASS_COLOR, playerInventory.player, i, 10, 50 + (itorationAdjustment) * 18){
+                        @Override
+                        public boolean canTakeStack(PlayerEntity playerIn)
+                        {
+                            return true;
+                        }
+                    });;
                 }
             }
         }
@@ -238,7 +257,13 @@ public class AttachmentContainer extends Container
             }
             else
             {
-                this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 160));
+                this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 160){
+                    @Override
+                    public boolean canTakeStack(PlayerEntity playerIn)
+                    {
+                        return true;
+                    }
+                });;
             }
         }
     }
@@ -259,7 +284,7 @@ public class AttachmentContainer extends Container
     {
         CompoundNBT attachments = new CompoundNBT();
 
-        if(this.weapon.getItem() instanceof ScopeItem || this.weapon.getItem() instanceof SideRailItem)
+        if(!(this.weapon.getItem() instanceof GunItem)/* ScopeItem || this.weapon.getItem() instanceof SideRailItem*/)
         {
             for (int i = 0; i < this.getWeaponInventory().getSizeInventory(); i++)
             {

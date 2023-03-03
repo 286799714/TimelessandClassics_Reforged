@@ -84,15 +84,15 @@ import java.util.*;
 
 public class GunRenderingHandler {
     private static GunRenderingHandler instance;
-    private final SecondOrderDynamics recoilDynamics = new SecondOrderDynamics(0.7f,0.3f, 2.65f, 0);
-    private final SecondOrderDynamics swayYawDynamics = new SecondOrderDynamics(0.4f,0.5f, 3.75f, 0);
-    private final SecondOrderDynamics swayPitchDynamics = new SecondOrderDynamics(0.3f,0.4f, 4f, 0);
-    private final SecondOrderDynamics aimingDynamics = new SecondOrderDynamics(0.45f,0.8f, 1.2f, 0);
+    private final SecondOrderDynamics recoilDynamics = new SecondOrderDynamics(0.4f,0.5f, 3f, 0);
+    private final SecondOrderDynamics swayYawDynamics = new SecondOrderDynamics(0.7f,0.4f, 3.55f, 0);
+    private final SecondOrderDynamics swayPitchDynamics = new SecondOrderDynamics(0.3f,0.6f, 3f, 0);
+    private final SecondOrderDynamics aimingDynamics = new SecondOrderDynamics(0.35f,0.65f, 1.1f, 0);
     // Standard Sprint Dynamics
     private final SecondOrderDynamics sprintDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
     private final SecondOrderDynamics bobbingDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 1);
     private final SecondOrderDynamics speedUpDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
-    private final SecondOrderDynamics delaySwayDynamics = new SecondOrderDynamics(0.75f,1f, 1.4f, 0);
+    private final SecondOrderDynamics delaySwayDynamics = new SecondOrderDynamics(0.85f,1.35f, 1.2f, 0);
     private final SecondOrderDynamics sprintDynamicsZ = new SecondOrderDynamics(0.22f,0.8f, 0.5f, 0);
     private final SecondOrderDynamics jumpingDynamics =  new SecondOrderDynamics(0.28f,1f, 0.65f, 0);
     // High Speed Sprint Dynamics
@@ -776,14 +776,14 @@ public class GunRenderingHandler {
         if (mc.player != null && mc.player.isCrouching()) {
             this.recoilLift *= 0.875;
         }
-        this.weaponsHorizontalAngle = ((float) (RecoilHandler.get().getGunHorizontalRecoilAngle() * recoilNormal) * (float) RecoilHandler.get().getAdsRecoilReduction(gun));
+        this.weaponsHorizontalAngle = ((float) (RecoilHandler.get().getGunHorizontalRecoilAngle() * recoilNormal) * (float) RecoilHandler.get().getAdsRecoilReduction(gun))*1.25f;
         float newKick = recoilDynamics.update(kickTiming, (float) kick * kickReduction);
 
         matrixStack.translate(0, 0, newKick);
         matrixStack.translate(0, 0, 0.35);
 
         // TODO: have T/Time updatable per gun, weapons like the pistols, especially the deagle benifits from forcing accurate shots and awaiting front sight reset, unlike the m4 which should have little effect
-        newSwayYaw = swayYawDynamics.update(0.09f, newSwayYawYaw * recoilReduction * weaponsHorizontalAngle);
+        newSwayYaw = swayYawDynamics.update(0.12f, newSwayYawYaw * recoilReduction * weaponsHorizontalAngle);
         matrixStack.rotate(Vector3f.YP.rotationDegrees(newSwayPitch * 0.2875f));
         newSwayPitch = swayPitchDynamics.update(0.21f, newSwayYawPitch * recoilReduction * recoilLift);
         matrixStack.rotate(Vector3f.ZN.rotationDegrees(newSwayPitch*0.215f));
