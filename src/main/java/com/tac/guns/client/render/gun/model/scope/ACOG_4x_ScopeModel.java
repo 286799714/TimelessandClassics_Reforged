@@ -80,7 +80,7 @@ public class ACOG_4x_ScopeModel implements IOverrideModel
             float size = scopeSize / 16.0F;
             float reticleSize = scopePrevSize / 16.0F;
             ScopeItem scopeItem = (ScopeItem)stack.getItem();
-            float crop = 0.1f; //scopeItem.getProperties().getAdditionalZoom().getDrCropZoom() + scopeData.getDrZoomCropMod();//0.43F
+            float crop = Config.CLIENT.quality.worldRerenderPiPAlpha.get() ? 0.1f : scopeItem.getProperties().getAdditionalZoom().getDrCropZoom() + scopeData.getDrZoomCropMod();//0.43F 0.1f;
             Minecraft mc = Minecraft.getInstance();
             MainWindow window = mc.getMainWindow();
 

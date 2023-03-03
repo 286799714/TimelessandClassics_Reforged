@@ -95,7 +95,8 @@ public class elcan_14x_ScopeModel implements IOverrideModel
             float scopeSize = 1.65705F + scopeData.getDrZoomSizeMod();
             float size = scopeSize / 16.0F;
             float reticleSize = scopePrevSize / 16.0F;
-            float crop = 0.1f;//scopeItem.getProperties().getAdditionalZoom().getDrCropZoom() + scopeData.getDrZoomCropMod();//0.43F
+            float crop = Config.CLIENT.quality.worldRerenderPiPAlpha.get() ? 0.1f : scopeItem.getProperties().getAdditionalZoom().getDrCropZoom() + scopeData.getDrZoomCropMod();//scopeItem.getProperties().getAdditionalZoom().getDrCropZoom() +
+            // scopeData.getDrZoomCropMod();//0.43F
             Minecraft mc = Minecraft.getInstance();
             MainWindow window = mc.getMainWindow();
 

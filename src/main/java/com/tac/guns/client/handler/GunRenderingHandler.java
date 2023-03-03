@@ -885,28 +885,28 @@ public class GunRenderingHandler {
 
 
     // TODO: Update noises for breathing animation per new weapon held, aka give weapons customization of their breathing, pistols for example should be realatively unstable, along with lighter weapons
-    private final OneDimensionalPerlinNoise noiseX = new OneDimensionalPerlinNoise(-0.003f, 0.003f, 2400);
-    private final OneDimensionalPerlinNoise noiseY = new OneDimensionalPerlinNoise(-0.003f, 0.003f, 2800);
+    private final OneDimensionalPerlinNoise noiseX = new OneDimensionalPerlinNoise(-0.0025f, 0.0025f, 1900);
+    private final OneDimensionalPerlinNoise noiseY = new OneDimensionalPerlinNoise(-0.003f, 0.003f, 1900);
     {
         noiseY.setReverse(true);
     }
 
-    private final OneDimensionalPerlinNoise aimed_noiseX = new OneDimensionalPerlinNoise(-0.00075f, 0.00075f, 1650);
-    private final OneDimensionalPerlinNoise aimed_noiseY = new OneDimensionalPerlinNoise(-0.00135f, 0.00135f, 1650);
+    private final OneDimensionalPerlinNoise aimed_noiseX = new OneDimensionalPerlinNoise(-0.000075f, 0.000075f, 1750);
+    private final OneDimensionalPerlinNoise aimed_noiseY = new OneDimensionalPerlinNoise(-0.00165f, 0.00165f, 1750);
     {
         noiseY.setReverse(true);
     }
 
-    private final OneDimensionalPerlinNoise additionNoiseY = new OneDimensionalPerlinNoise(-0.002f, 0.002f, 1300);
+    private final OneDimensionalPerlinNoise additionNoiseY = new OneDimensionalPerlinNoise(-0.00095f, 0.00095f, 1900);
 
-    private final OneDimensionalPerlinNoise noiseRotationY = new OneDimensionalPerlinNoise(-0.8f, 0.8f, 2000);
-    private final OneDimensionalPerlinNoise aimed_noiseRotationY = new OneDimensionalPerlinNoise(-0.25f, 0.25f, 1600);
+    private final OneDimensionalPerlinNoise noiseRotationY = new OneDimensionalPerlinNoise(-0.675f, 0.675f, 1900);
+    private final OneDimensionalPerlinNoise aimed_noiseRotationY = new OneDimensionalPerlinNoise(-0.375f, 0.375f, 2000);
     public void applyNoiseMovementTransform(MatrixStack matrixStack){
         //matrixStack.translate(noiseX.getValue()* (1 - AimingHandler.get().getNormalisedRepairProgress()), (noiseY.getValue() + additionNoiseY.getValue()) * (1 - AimingHandler.get().getNormalisedRepairProgress()), 0);
         if(AimingHandler.get().getNormalisedAdsProgress() == 1) {
-            matrixStack.translate(aimed_noiseX.getValue(), aimed_noiseY.getValue() + additionNoiseY.getValue(), 0);
-            matrixStack.rotate(Vector3f.YP.rotationDegrees(aimed_noiseRotationY.getValue()));
-            matrixStack.rotate(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue()*0.85)));
+            matrixStack.translate(aimed_noiseX.getValue()/2, aimed_noiseY.getValue() + additionNoiseY.getValue(), 0);
+            matrixStack.rotate(Vector3f.YP.rotationDegrees(aimed_noiseRotationY.getValue()*0.405f));
+            matrixStack.rotate(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue()*0.925)));
         }
         else {
             matrixStack.translate(noiseX.getValue(), noiseY.getValue() + additionNoiseY.getValue(), 0);
@@ -918,12 +918,12 @@ public class GunRenderingHandler {
     public void applyNoiseMovementTransform(MatrixStack matrixStack, float reverser){
         //matrixStack.translate(noiseX.getValue()* (1 - AimingHandler.get().getNormalisedRepairProgress()), (noiseY.getValue() + additionNoiseY.getValue()) * (1 - AimingHandler.get().getNormalisedRepairProgress()), 0);
         if(AimingHandler.get().getNormalisedAdsProgress() == 1) {
-            matrixStack.translate(aimed_noiseX.getValue() * (reverser*2), (aimed_noiseY.getValue() + additionNoiseY.getValue()) * reverser, 0);
-            matrixStack.rotate(Vector3f.YP.rotationDegrees(aimed_noiseRotationY.getValue()*reverser));
-            matrixStack.rotate(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue()*0.85*reverser)));
+            matrixStack.translate(aimed_noiseX.getValue()/2, (aimed_noiseY.getValue() + additionNoiseY.getValue()) * reverser, 0);
+            matrixStack.rotate(Vector3f.YP.rotationDegrees(aimed_noiseRotationY.getValue()*0.405f*reverser));
+            matrixStack.rotate(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue()*0.925*reverser)));
         }
         else {
-            matrixStack.translate(noiseX.getValue() * (reverser*2), (noiseY.getValue() + additionNoiseY.getValue()) * reverser, 0);
+            matrixStack.translate(noiseX.getValue() * (-reverser), (noiseY.getValue() + additionNoiseY.getValue()) * reverser, 0);
             matrixStack.rotate(Vector3f.YP.rotationDegrees(noiseRotationY.getValue() * reverser));
         }
 

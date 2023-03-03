@@ -112,9 +112,22 @@ public class EotechShortSightModel implements IOverrideModel
 
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
 
+
+                /*
                 GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -1f);
-                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.0f);
-                GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.5f);
+                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 0.8f);
+                GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.25f);
+                GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.8f);
+
+                matrixStack.translate(0, 0, -0.35);
+                matrixStack.rotate(Vector3f.YP.rotationDegrees(GunRenderingHandler.get().newSwayYaw*0.5f));
+                matrixStack.rotate(Vector3f.ZN.rotationDegrees(GunRenderingHandler.get().newSwayPitch*0.5f));
+                matrixStack.rotate(Vector3f.XP.rotationDegrees((GunRenderingHandler.get().recoilLift * GunRenderingHandler.get().recoilReduction) * 0.85F));
+                matrixStack.translate(0, 0, 0.35);
+                */
+                GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -1f);
+                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 0.8f);
+                GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.25f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.8f);
 
                 matrixStack.translate(0, 0, -0.35);

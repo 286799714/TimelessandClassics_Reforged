@@ -85,7 +85,7 @@ public class VortexLPVO_1_4xScopeModel implements IOverrideModel
             float size = scopeSize / 16.0F;
             float reticleSize = scopePrevSize / 16.0F;
             //float crop = scopeItem.getProperties().getAdditionalZoom().getDrCropZoom() + scopeData.getDrZoomCropMod();
-            float crop = 0.1f;
+            float crop = Config.CLIENT.quality.worldRerenderPiPAlpha.get() ? 0.1f : scopeItem.getProperties().getAdditionalZoom().getDrCropZoom() + scopeData.getDrZoomCropMod();
             Minecraft mc = Minecraft.getInstance();
             MainWindow window = mc.getMainWindow();
 
