@@ -109,16 +109,16 @@ public class SrsRedDotSightModel implements IOverrideModel
                 /* The new controlled bobbing */
                 if(AimingHandler.get().isAiming())
                     aimed = true;
-                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true);
+                //GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true);
                 double invertZoomProgress = aimed ? 0.0575 : 0.468;//double invertZoomProgress = aimed ? 0.135 : 0.94;//aimed ? 1.0 - AimingHandler.get().getNormalisedAdsProgress() : ;
                 GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -1f);
-                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.25f);
-                GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.5f);
+                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.35f);
+                GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.25f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.8f);
 
                 matrixStack.translate(0, 0, -0.35);
-                matrixStack.rotate(Vector3f.YP.rotationDegrees(GunRenderingHandler.get().newSwayYaw));
-                matrixStack.rotate(Vector3f.ZN.rotationDegrees(GunRenderingHandler.get().newSwayPitch));
+                matrixStack.rotate(Vector3f.YP.rotationDegrees(GunRenderingHandler.get().newSwayYaw*0.8f));
+                matrixStack.rotate(Vector3f.ZN.rotationDegrees(GunRenderingHandler.get().newSwayPitch*0.8f));
                 matrixStack.rotate(Vector3f.XP.rotationDegrees((GunRenderingHandler.get().recoilLift * GunRenderingHandler.get().recoilReduction) * 1.15F));
                 matrixStack.translate(0, 0, 0.35);
 

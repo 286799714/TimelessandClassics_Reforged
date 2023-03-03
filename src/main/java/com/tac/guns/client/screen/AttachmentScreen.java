@@ -202,7 +202,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
                 }
                 else if (i > 3)
                 {
-                    this.blit(matrixStack, left + 155, top + 17 + i * 18, 176, 16 + (i-4) * 16, 16, 16);
+                    this.blit(matrixStack, left + 155, top + 17 + (i-4) * 18, 176, 16 + i * 16, 16, 16);
                 }
                 else if(this.weaponInventory.getStackInSlot(iSkipper).isEmpty())
                 {

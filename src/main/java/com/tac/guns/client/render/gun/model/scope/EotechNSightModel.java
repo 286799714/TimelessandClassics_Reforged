@@ -106,7 +106,7 @@ public class EotechNSightModel implements IOverrideModel
                 double invertZoomProgress = aimed ? 0.0575 : 0.468;//double invertZoomProgress = aimed ? 0.135 : 0.94;//aimed ? 1.0 - AimingHandler.get().getNormalisedAdsProgress() : ;
 
                 GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -1f);
-                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.0f);
+                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.8f);
                 GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.5f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.8f);
 

@@ -112,7 +112,7 @@ public class SroDotSightModel implements IOverrideModel
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
 
                 GunRenderingHandler.get().applyDelayedSwayTransforms(matrixStack, Minecraft.getInstance().player, partialTicks, -1f);
-                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.0f);
+                GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true, 1.8f);
                 GunRenderingHandler.get().applyNoiseMovementTransform(matrixStack, -1.25f);
                 GunRenderingHandler.get().applyJumpingTransforms(matrixStack, partialTicks,-0.65f);
 
