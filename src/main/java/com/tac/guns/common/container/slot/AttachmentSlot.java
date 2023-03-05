@@ -1,11 +1,13 @@
 package com.tac.guns.common.container.slot;
 
+import com.tac.guns.client.handler.ReloadHandler;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.container.AttachmentContainer;
 import com.tac.guns.init.ModSounds;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.SideRailItem;
+import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -50,7 +52,7 @@ public class AttachmentSlot extends Slot
         {
             return false;
         }*/
-        if(this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > 0) {
+        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || ReloadHandler.get().isReloading()) {
             return false;
         }
         if(this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem)
