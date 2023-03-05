@@ -50,6 +50,9 @@ public class AttachmentSlot extends Slot
         {
             return false;
         }*/
+        if(this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > 0) {
+            return false;
+        }
         if(this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem)
         {
             return true;

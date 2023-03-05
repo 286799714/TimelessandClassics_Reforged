@@ -191,7 +191,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
                     //this.blit(matrixStack, left + 10, top + 32 + i * 18, 176, 16 + i * 16, 16, 16);
                 }*/
             }
-        else if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof TimelessOldRifleGunItem))
+        /*else if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof TimelessOldRifleGunItem))
         {
             int iSkipper = 0;
             for(int i = 1; i < IAttachment.Type.values().length-6; i++)
@@ -231,23 +231,29 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
                 iSkipper++;
                 // Redo to display new pistolScope & pistolBarrel icons
             }
-        }
+        }*/
         else
             for(int i = 0; i < IAttachment.Type.values().length-6; i++)
             {
                 if(!this.container.getSlot(i).isEnabled())
                 {
-                    this.blit(matrixStack, left + 5, top + 17 + i * 18, 176, 0, 16, 16);
+                    if (i > 3)
+                        this.blit(matrixStack, left + 155, top + 17 + (i-4) * 18, 176, 0, 16, 16);
+                    else
+                        this.blit(matrixStack, left + 5, top + 17 + i * 18, 176, 0, 16, 16);
                 }
                 else if (i > 3)
                 {
-                    this.blit(matrixStack, left + 155, top + 17 + i * 18, 176, 16 + (i-4) * 16, 16, 16);
+                    this.blit(matrixStack, left + 155, top + 17 + (i-4) * 18, 176, 16 + i * 16, 16, 16);
                 }
                 else if(this.weaponInventory.getStackInSlot(i).isEmpty())
                 {
                     this.blit(matrixStack, left + 5, top + 17 + i * 18, 176, 16 + i * 16, 16, 16);
                 }
             }
+
+
+
 
         /* Draws the icons for each attachment slot. If not applicable
          * for the weapon, it will draw a cross instead. */
@@ -303,7 +309,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
             }
         }
         else{
-            if(RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX + 26, startY + 17, 142, 70))
+            if(RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX + 26, startY + 17, 126, 70))
             {
                 if(!this.mouseGrabbed && (button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
                     this.mouseGrabbed = true;

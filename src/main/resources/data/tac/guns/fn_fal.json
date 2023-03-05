@@ -79,6 +79,11 @@
         "zOffset": -22.05,
         "scale": 0.00
       },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
       "scope": {
         "yOffset": 10.45,
         "zOffset": 7.275,

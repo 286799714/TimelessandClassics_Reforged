@@ -86,6 +86,11 @@
         "doRenderMount": true,
         "doOnSlideMovement": false
       },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
       "underBarrel": {
         "yOffset": 7.799,
         "zOffset": -2.35,

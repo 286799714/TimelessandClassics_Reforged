@@ -79,6 +79,11 @@
         "zOffset": 6.715,
         "scale": 1.0
       },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
       "pistolScope": {
         "yOffset": 10.95,
         "zOffset": 5.35,
