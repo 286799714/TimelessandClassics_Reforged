@@ -55,10 +55,11 @@ public class scar_l_animation implements IOverrideModel {
                 // TODO: Add RenderUtil to render specifically laser and body in order to apply tint, also yk just replace this entire render...
                 RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_MINI_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 matrices.push();
-                if(transformType.isFirstPerson()) {
-                    matrices.rotate(Vector3f.XP.rotationDegrees(1.75F));
-                    matrices.rotate(Vector3f.ZN.rotationDegrees(3.25F));
-                }
+                // needs specific length
+                //if(transformType.isFirstPerson()) {
+                    matrices.translate(0, 0, 4.5);
+                    matrices.scale(1,1,9);
+                //}
                 RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_MINI_LASER_BEAM.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 matrices.pop();
             }

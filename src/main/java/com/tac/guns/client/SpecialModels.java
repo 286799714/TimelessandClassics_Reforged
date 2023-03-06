@@ -587,6 +587,9 @@ public enum SpecialModels
     //MK18_MOD1_DEFAULT_GRIP("mk18_mod1_default_grip"),
     MK18_MOD1_LIGHT_GRIP("mk18_mod1_light_grip"),
     MK18_MOD1_TAC_GRIP("mk18_mod1_tac_grip"),
+
+    MK18_MOD1_IR_DEVICE("mk18_mod1_ir_device"),
+    MK18_MOD1_IR_LASER("mk18_mod1_ir_laser"),
     //Everything from this point on is all scope additions
 
     MINI_DOT_BASE("optics/mini_dot_base"),
