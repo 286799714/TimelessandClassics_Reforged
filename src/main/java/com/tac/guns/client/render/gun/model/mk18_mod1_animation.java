@@ -125,36 +125,4 @@ public class mk18_mod1_animation implements IOverrideModel {
         matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
-
-    // x was the world matrix stack, will this render stack render properly here even if called in this model renderer
-    /*public static void renderLine(MatrixStack x, Vector3d vecStart, Vector3d vecEnd, int lineWidth)
-    {
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        MatrixStack matrixStack = x;
-        Vector3d projectedView = Minecraft.getInstance().gameRenderer.getActiveRenderInfo().getProjectedView();
-
-        matrixStack.push();
-        matrixStack.translate(-projectedView.x, -projectedView.y, -projectedView.z);
-        RenderSystem.lineWidth(lineWidth);
-
-        Matrix4f matrix = matrixStack.getLast().getMatrix();
-
-        bufferbuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-        drawLine(matrix, bufferbuilder, vecStart, vecEnd, new Color4f(0,0,0,1));
-        tessellator.draw();
-
-        GlStateManager.lineWidth(1);
-        matrixStack.pop();
-    }
-
-    private static void drawLine(Matrix4f matrix, BufferBuilder buffer, Vec3d p1, Vec3d p2)
-    {
-        buffer.pos(matrix, (float)p1.x + 0.5f, (float)p1.y + 1.0f, (float)p1.z + 0.5f)
-                .color(0, 0, 0, 1)
-                .endVertex();
-        buffer.pos(matrix, (float)p2.x + 0.5f, (float)p2.y, (float)p2.z + 0.5f)
-                .color(0, 0, 0, 1)
-                .endVertex();
-    }*/
 }
