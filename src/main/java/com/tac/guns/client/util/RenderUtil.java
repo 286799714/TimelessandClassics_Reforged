@@ -3,6 +3,7 @@ package com.tac.guns.client.util;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.tac.guns.common.Gun;
+import com.tac.guns.item.IrDeviceItem;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.SideRailItem;
 import com.tac.guns.item.attachment.IAttachment;
@@ -264,7 +265,7 @@ public class RenderUtil
             float alpha = 1f;
             boolean keepColor = true;
             int color = -1;
-            if(stack.getItem() instanceof SideRailItem)
+            if(stack.getItem() instanceof SideRailItem || stack.getItem() instanceof IrDeviceItem)
             {
                 if(quad.hasTintIndex() && quad.getTintIndex() == 1)
                 {
