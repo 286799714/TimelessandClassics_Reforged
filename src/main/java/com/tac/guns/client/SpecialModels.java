@@ -590,6 +590,9 @@ public enum SpecialModels
 
     MK18_MOD1_IR_DEVICE("mk18_mod1_ir_device"),
     MK18_MOD1_IR_LASER("mk18_mod1_ir_laser"),
+
+    MK18_MOD1_BASIC_LASER_DEVICE("mk18_mod1_b_laser_device"),
+    MK18_MOD1_BASIC_LASER("mk18_mod1_b_laser"),
     //Everything from this point on is all scope additions
 
     MINI_DOT_BASE("optics/mini_dot_base"),

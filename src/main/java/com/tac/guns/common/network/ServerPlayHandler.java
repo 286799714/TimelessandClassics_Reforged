@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
-import com.tac.guns.item.SideRailItem;
+import com.tac.guns.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import org.apache.commons.lang3.ArrayUtils;
@@ -45,9 +45,6 @@ import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.interfaces.IProjectileFactory;
-import com.tac.guns.item.GunItem;
-import com.tac.guns.item.IColored;
-import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.IAttachment;
@@ -387,7 +384,7 @@ public class ServerPlayHandler
     public static void handleAttachments(ServerPlayerEntity player)
     {
         ItemStack heldItem = player.getHeldItemMainhand();
-        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem || heldItem.getItem() instanceof SideRailItem)
+        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem || heldItem.getItem() instanceof SideRailItem || heldItem.getItem() instanceof IrDeviceItem)
         {
             NetworkHooks.openGui(player, new SimpleNamedContainerProvider((windowId, playerInventory, player1) -> new AttachmentContainer(windowId, playerInventory, heldItem), new TranslationTextComponent("container.tac.attachments")));
         }

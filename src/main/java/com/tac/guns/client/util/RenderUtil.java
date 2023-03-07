@@ -268,7 +268,7 @@ public class RenderUtil
             {
                 if(quad.hasTintIndex() && quad.getTintIndex() == 1)
                 {
-                    color = getItemStackColor(stack, parent, IAttachment.Type.SCOPE_BODY_COLOR, quad.getTintIndex());
+                    color = getItemStackColor(stack, parent, IAttachment.Type.SCOPE_RETICLE_COLOR, quad.getTintIndex());
                     keepColor = true;
                 }
                 else if(quad.hasTintIndex() && quad.getTintIndex() == 0)

@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "tac:items/mini_laser"
+    "layer0": "tac:items/ir_laser"
   },
   "display": {
   }

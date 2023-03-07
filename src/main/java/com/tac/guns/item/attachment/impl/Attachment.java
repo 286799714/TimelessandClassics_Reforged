@@ -184,9 +184,9 @@ public abstract class Attachment
                 outputHipFireSpread = modifier.modifyHipFireSpread(outputHipFireSpread);
             }
             if (outputHipFireSpread > inputHipFireSpread) {
-                addPerkN(negativePerks, "perk.tac.projectile_spread_hip.negativev2", String.valueOf(Math.round((10.0F - outputFirstSpread) * 10f)) + "%");
+                addPerkN(negativePerks, "perk.tac.projectile_spread_hip.negativev2", String.valueOf(Math.round((10.0F - outputHipFireSpread) * 10f)) + "%");
             } else if (outputHipFireSpread < inputHipFireSpread) {
-                addPerkP(positivePerks, "perk.tac.projectile_spread_hip.positivev2", String.valueOf(Math.round((10.0F - outputFirstSpread) * 10f)) + "%");
+                addPerkP(positivePerks, "perk.tac.projectile_spread_hip.positivev2", String.valueOf(Math.round((10.0F - outputHipFireSpread) * 10f)) + "%");
             }
 
             /* Test for modified projectile life */

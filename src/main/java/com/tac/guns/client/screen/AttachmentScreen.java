@@ -7,11 +7,13 @@ import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.container.AttachmentContainer;
 import com.tac.guns.item.GunItem;
+import com.tac.guns.item.IrDeviceItem;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.SideRailItem;
 import com.tac.guns.item.TransitionalTypes.TimelessOldRifleGunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessPistolGunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.item.attachment.impl.IrDevice;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -58,7 +60,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
         super.tick();
         if(this.minecraft != null && this.minecraft.player != null)
         {
-            if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem))
+            if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
             {
                 Minecraft.getInstance().displayGuiScreen(null);
             }
@@ -85,7 +87,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
         int left = (this.width - this.xSize) / 2;
         int top = (this.height - this.ySize) / 2;
 
-        if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem))
+        if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
             RenderUtil.scissor(left + 97, top + 17, 67, 67);
         else
             RenderUtil.scissor(left + 26, top + 17, 123, 70);
@@ -111,7 +113,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             IRenderTypeBuffer.Impl buffer = this.minecraft.getRenderTypeBuffers().getBufferSource();
-            if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem))
+            if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem))
             {
                 matrixStack.translate(0.0,0.0,-0.4);
                 GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getHeldItemMainhand(), ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F);
@@ -146,7 +148,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
     {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft minecraft = Minecraft.getInstance();
-        if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem))
+        if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem))
             minecraft.getTextureManager().bindTexture(GUN_GUI_TEXTURES);
         else
             minecraft.getTextureManager().bindTexture(SCOPE_GUI_TEXTURES);
@@ -155,7 +157,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
         int top = (this.height - this.ySize) / 2;
         this.blit(matrixStack, left, top, 0, 0, this.xSize, this.ySize);
 
-        if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem))
+        if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
             for(int i = 9; i < IAttachment.Type.values().length; i++)
             {
                 if(i == 9 && !this.container.getSlot(i).isEnabled())
@@ -296,7 +298,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
     {
         int startX = (this.width - this.xSize) / 2;
         int startY = (this.height - this.ySize) / 2;
-        if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem)) {
+        if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem)) {
             if (RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX + 93, startY + 18, 65, 67)) {
                 if (!this.mouseGrabbed && (button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
                     this.mouseGrabbed = true;
