@@ -60,7 +60,8 @@ public class UpgradeBenchTileEntity extends SyncedTileEntity implements IStorage
 
     public UpgradeBenchTileEntity()
     {
-        super(ModTileEntities.UPGRADE_BENCH.get());
+        //TODO: FIX WITH UPGRADE BENCH
+        super(ModTileEntities.WORKBENCH.get());
     }
 
     @Override

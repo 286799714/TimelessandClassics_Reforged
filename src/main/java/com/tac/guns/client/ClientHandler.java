@@ -124,7 +124,7 @@ public class ClientHandler
             MinecraftForge.EVENT_BUS.register(ObjectRenderEditor.get());
         }
 
-        ClientRegistry.bindTileEntityRenderer(ModTileEntities.UPGRADE_BENCH.get(), UpgradeBenchRenderUtil::new);
+        //ClientRegistry.bindTileEntityRenderer(ModTileEntities.UPGRADE_BENCH.get(), UpgradeBenchRenderUtil::new);
 
         // Load key binds
         InputHandler.initKeys();
@@ -159,7 +159,7 @@ public class ClientHandler
 
     private static void setupRenderLayers()
     {
-        RenderTypeLookup.setRenderLayer(ModBlocks.UPGRADE_BENCH.get(), RenderType.getCutout());
+        //RenderTypeLookup.setRenderLayer(ModBlocks.UPGRADE_BENCH.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.WORKBENCH.get(), RenderType.getCutout());
     }
 
