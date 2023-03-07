@@ -75,11 +75,6 @@
         "zOffset": 2.945,
         "scale": 1.00
       },
-      "extendedMag": {
-        "yOffset": 1000.89,
-        "zOffset": 5.35,
-        "scale": 0.0
-      },
       "pistolScope": {
         "yOffset": 10.475,
         "zOffset": 2.945,
@@ -102,7 +97,17 @@
         "zOffset": -2.35,
         "scale": 0.00
       },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
       "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

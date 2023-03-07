@@ -382,11 +382,32 @@ public class GunModifiers
             return speed * 0.85F;
         }
         @Override
-        public float modifyWeaponWeight() { return 0.15F; }
+        public float modifyWeaponWeight() { return 0.1F; }
         @Override
         public float modifyHipFireSpread(float spread)
         {
-            return spread * 0.20F;
+            return spread * 0.275F;
+        }
+    };
+
+    public static final IGunModifier IR_LASER = new IGunModifier()
+    {
+        @Override
+        public double modifyAimDownSightSpeed(double speed)
+        {
+            return speed * 0.75F;
+        }
+        @Override
+        public float modifyWeaponWeight() { return 0.175F; }
+        @Override
+        public float modifyHipFireSpread(float spread)
+        {
+            return spread * 0.25F;
+        }
+
+        @Override
+        public float modifyProjectileSpread(float spread) {
+            return spread*0.925f;
         }
     };
     public static final IGunModifier SMALL_EXTENDED_MAG = new IGunModifier()

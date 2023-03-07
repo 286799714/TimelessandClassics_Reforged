@@ -65,14 +65,13 @@ public class mk18_mod1_animation implements IOverrideModel {
                 // TODO: Add RenderUtil to render specifically laser and body in order to apply tint, also yk just replace this entire render...
                 RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_IR_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 matrices.push();
-                // IR is FPS only
+                // TODO: IR is FPS only
                 if(transformType.isFirstPerson()) {
-                    //matrices.rotate(Vector3f.XP.rotationDegrees(1.75F));
-                    //matrices.rotate(Vector3f.ZN.rotationDegrees(3.25F));
                     matrices.translate(0, 0, 4.5);
-                    matrices.scale(1,1,9);
+                    matrices.scale(1, 1, 9);
+
+                    RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 }
-                RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 matrices.pop();
             }
 
