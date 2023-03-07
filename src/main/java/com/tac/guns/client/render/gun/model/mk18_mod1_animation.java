@@ -27,6 +27,7 @@ import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.optifine.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
 
 /*
@@ -67,8 +68,10 @@ public class mk18_mod1_animation implements IOverrideModel {
                 matrices.translate(0, 0, 3.25);
                 matrices.scale(1,1,9);
 
+                //RenderSystem.disableLighting();
+                //RenderSystem.
                 RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_BASIC_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
-
+                //RenderSystem.enableLighting();
                 matrices.pop();
             }
             else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
