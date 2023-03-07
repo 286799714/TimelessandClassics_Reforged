@@ -219,6 +219,13 @@
     "item.tac.light_grip": "Light Grip",
     "item.tac.specialised_grip": "Specialised Grip",
 
+    "item.tac.basic_laser": "Basic Laser Device",
+    "item.tac.ir_laser": "IR Laser Device",
+    "item.tac.small_extended_mag": "Small Extended Mag",
+    "item.tac.medium_extended_mag": "Medium Extended Mag",
+    "item.tac.large_extended_mag": "Large Extended Mag",
+
+
     "item.tac.pistol_silencer": "Pistol Suppressor",
 
     "item.minecraft.potion.effect.blinding": "Potion of Blinding",

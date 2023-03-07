@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
+import com.tac.guns.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import org.apache.commons.lang3.ArrayUtils;
@@ -44,12 +45,10 @@ import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.interfaces.IProjectileFactory;
-import com.tac.guns.item.GunItem;
-import com.tac.guns.item.IColored;
-import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageBulletTrail;
 import com.tac.guns.network.message.MessageGunSound;
@@ -96,7 +95,6 @@ import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
-import com.tac.guns.util.GunModifierHelper;
 
 
 /**
@@ -223,7 +221,7 @@ public class ServerPlayHandler
                         if(!tag.getBoolean("IgnoreAmmo"))
                         {
                             int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RECLAIMED.get(), heldItem);
-                            if(level == 0 || player.world.rand.nextInt(9 - MathHelper.clamp(level * 3, 3, 6)) != 0)
+                            if(level == 0 || player.world.rand.nextInt(4 - MathHelper.clamp(level, 1, 2)) != 0)
                             {
                                 tag.putInt("AmmoCount", Math.max(0, tag.getInt("AmmoCount") - 1));
                             }
@@ -386,7 +384,7 @@ public class ServerPlayHandler
     public static void handleAttachments(ServerPlayerEntity player)
     {
         ItemStack heldItem = player.getHeldItemMainhand();
-        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem)
+        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem || heldItem.getItem() instanceof SideRailItem || heldItem.getItem() instanceof IrDeviceItem)
         {
             NetworkHooks.openGui(player, new SimpleNamedContainerProvider((windowId, playerInventory, player1) -> new AttachmentContainer(windowId, playerInventory, heldItem), new TranslationTextComponent("container.tac.attachments")));
         }
@@ -460,6 +458,7 @@ public class ServerPlayHandler
                     MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
                     PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), messageSound);
                 }
+
             }
         }
         catch (Exception e)

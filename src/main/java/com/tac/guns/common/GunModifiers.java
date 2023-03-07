@@ -386,7 +386,7 @@ public class GunModifiers
         @Override
         public float modifyHipFireSpread(float spread)
         {
-            return spread * 0.275F;
+            return spread * 0.185F;
         }
     };
 
@@ -402,7 +402,7 @@ public class GunModifiers
         @Override
         public float modifyHipFireSpread(float spread)
         {
-            return spread * 0.25F;
+            return spread * 0.15F;
         }
 
         @Override

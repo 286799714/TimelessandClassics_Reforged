@@ -61,15 +61,25 @@ public class mk18_mod1_animation implements IOverrideModel {
             }
 
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_BASIC_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                matrices.push();
+                matrices.translate(0, 0, 3.25);
+                matrices.scale(1,1,9);
+
+                RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_BASIC_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+
+                matrices.pop();
+            }
+            else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 // TODO: Add RenderUtil to render specifically laser and body in order to apply tint, also yk just replace this entire render...
-                RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_IR_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_IR_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay);
                 matrices.push();
                 // TODO: IR is FPS only
                 if(transformType.isFirstPerson()) {
                     matrices.translate(0, 0, 4.5);
                     matrices.scale(1, 1, 9);
 
-                    RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                    RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 }
                 matrices.pop();
             }
