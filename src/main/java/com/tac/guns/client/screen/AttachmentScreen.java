@@ -248,7 +248,7 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
             }
         }*/
         else
-            for(int i = 0; i < IAttachment.Type.values().length-6; i++)
+            for(int i = 0; i < IAttachment.Type.values().length-7; i++)
             {
                 if(!this.menu.getSlot(i).isActive())
                 {
