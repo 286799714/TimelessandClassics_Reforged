@@ -11,30 +11,31 @@ import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.item.attachment.impl.SideRail;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.item.attachment.IScope;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import org.spongepowered.asm.mixin.MixinEnvironment;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class AttachmentContainer extends AbstractContainerMenu
+public class AttachmentContainer extends Container
 {
     private ItemStack weapon;
-    private Container playerInventory;
-    private Container weaponInventory = new SimpleContainer(IAttachment.Type.values().length)
+    private IInventory playerInventory;
+    private IInventory weaponInventory = new Inventory(IAttachment.Type.values().length)
     {
         @Override
-        public void setChanged()
+        public void markDirty()
         {
-            super.setChanged();
-            AttachmentContainer.this.slotsChanged(this);
+            super.markDirty();
+            AttachmentContainer.this.onCraftMatrixChanged(this);
         }
     };
 
@@ -88,7 +89,7 @@ public class AttachmentContainer extends AbstractContainerMenu
         }
         return attachments;
     }
-    public AttachmentContainer(int windowId, Inventory playerInventory, ItemStack stack) // reads from attachments inv
+    public AttachmentContainer(int windowId, PlayerInventory playerInventory, ItemStack stack) // reads from attachments inv
     {
         this(windowId, playerInventory);
         ItemStack[] attachments = new ItemStack[IAttachment.Type.values().length];
@@ -113,9 +114,9 @@ public class AttachmentContainer extends AbstractContainerMenu
             for (int i = 0; i < attachments.length-6; i++)
             {
                 if(i==0)
-                    this.weaponInventory.setItem(0, attachments[0]);
+                    this.weaponInventory.setInventorySlotContents(0, attachments[0]);
                 else
-                    this.weaponInventory.setItem(i, attachments[i]);
+                    this.weaponInventory.setInventorySlotContents(i, attachments[i]);
             }
         }
         else if(this.weapon.getItem() instanceof TimelessPistolGunItem)
@@ -131,7 +132,7 @@ public class AttachmentContainer extends AbstractContainerMenu
             }
             for (int i = 0; i < attachments.length-6; i++)
             {
-                this.weaponInventory.setItem(i, attachments[i]);
+                this.weaponInventory.setInventorySlotContents(i, attachments[i]);
             }
         }
         else if (this.weapon.getItem() instanceof TimelessGunItem)
@@ -152,10 +153,10 @@ public class AttachmentContainer extends AbstractContainerMenu
         this.loaded = true;
     }
 
-    public AttachmentContainer(int windowId, Inventory playerInventory)
+    public AttachmentContainer(int windowId, PlayerInventory playerInventory)
     {
         super(ModContainers.ATTACHMENTS.get(), windowId);
-        this.weapon = playerInventory.getSelected();
+        this.weapon = playerInventory.getCurrentItem();
         this.playerInventory = playerInventory;
 
         if(this.weapon.getItem() instanceof ScopeItem || this.weapon.getItem() instanceof SideRailItem || this.weapon.getItem() instanceof IrDeviceItem)
@@ -175,7 +176,7 @@ public class AttachmentContainer extends AbstractContainerMenu
                         }
                     });;
                 }
-                if(i==12 /*&& this.weapon.getItem() instanceof ScopeItem*/)
+                if(i==11)
                 {
                     itorationAdjustment = i-9;
                     this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_BODY_COLOR, playerInventory.player, i, 40, -1 + (itorationAdjustment) * 18){
@@ -251,12 +252,12 @@ public class AttachmentContainer extends AbstractContainerMenu
 
         for(int i = 0; i < 9; i++)
         {
-            if(i == playerInventory.selected)
+            if(i == playerInventory.currentItem)
             {
                 this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 160)
                 {
                     @Override
-                    public boolean mayPickup(Player playerIn)
+                    public boolean canTakeStack(PlayerEntity playerIn)
                     {
                         return true;
                     }
@@ -281,29 +282,29 @@ public class AttachmentContainer extends AbstractContainerMenu
     }
 
     @Override
-    public boolean stillValid(Player playerIn)
+    public boolean canInteractWith(PlayerEntity playerIn)
     {
         return true;
     }
 
     @Override
-    public void slotsChanged(Container inventoryIn) // something with this...
+    public void onCraftMatrixChanged(IInventory inventoryIn) // something with this...
     {
-        CompoundTag attachments = new CompoundTag();
+        CompoundNBT attachments = new CompoundNBT();
 
         if(!(this.weapon.getItem() instanceof GunItem)/* ScopeItem || this.weapon.getItem() instanceof SideRailItem*/)
         {
-            for (int i = 0; i < this.getWeaponInventory().getContainerSize(); i++)
+            for (int i = 0; i < this.getWeaponInventory().getSizeInventory(); i++)
             {
-                ItemStack attachment = this.getSlot(i).getItem();
+                ItemStack attachment = this.getSlot(i).getStack();
                 if(attachment.getItem() instanceof DyeItem)
                 {
                     if(i == 0)
-                        attachments.put(IAttachment.Type.SCOPE_RETICLE_COLOR.getTagKey(), attachment.save(new CompoundTag()));
+                        attachments.put(IAttachment.Type.SCOPE_RETICLE_COLOR.getTagKey(), attachment.write(new CompoundNBT()));
                     if(i == 1)
-                        attachments.put(IAttachment.Type.SCOPE_BODY_COLOR.getTagKey(), attachment.save(new CompoundTag()));
+                        attachments.put(IAttachment.Type.SCOPE_BODY_COLOR.getTagKey(), attachment.write(new CompoundNBT()));
                     if(i == 2)
-                        attachments.put(IAttachment.Type.SCOPE_GLASS_COLOR.getTagKey(), attachment.save(new CompoundTag()));
+                        attachments.put(IAttachment.Type.SCOPE_GLASS_COLOR.getTagKey(), attachment.write(new CompoundNBT()));
                 }
             }
         }
@@ -313,15 +314,15 @@ public class AttachmentContainer extends AbstractContainerMenu
             {
                 if(i == 0)
                 {
-                    ItemStack attachment = this.getSlot(i).getItem();
+                    ItemStack attachment = this.getSlot(i).getStack();
                     if (attachment.getItem() instanceof OldScopeItem) {
-                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.save(new CompoundTag()));
+                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
                     }
                 }
                 else {
-                    ItemStack attachment = this.getSlot(i).getItem();
+                    ItemStack attachment = this.getSlot(i).getStack();
                     if (attachment.getItem() instanceof IAttachment) {
-                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.save(new CompoundTag()));
+                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
                     }
                 }
             }
@@ -332,22 +333,22 @@ public class AttachmentContainer extends AbstractContainerMenu
             {
                 if(i == 0)
                 {
-                    ItemStack attachment = this.getSlot(i).getItem();
+                    ItemStack attachment = this.getSlot(i).getStack();
                     if (attachment.getItem() instanceof PistolScopeItem) {
-                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.save(new CompoundTag()));
+                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
                     }
                 }
                 else if (i == 1)
                 {
-                    ItemStack attachment = this.getSlot(i).getItem();
+                    ItemStack attachment = this.getSlot(i).getStack();
                     if (attachment.getItem() instanceof PistolBarrelItem) {
-                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.save(new CompoundTag()));
+                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
                     }
                 }
                 else {
-                    ItemStack attachment = this.getSlot(i).getItem();
+                    ItemStack attachment = this.getSlot(i).getStack();
                     if (attachment.getItem() instanceof IAttachment) {
-                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.save(new CompoundTag()));
+                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
                     }
                 }
             }
@@ -362,53 +363,53 @@ public class AttachmentContainer extends AbstractContainerMenu
                         attachments.put(((PistolScopeItem) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
                     }
                 } else */{
-                    ItemStack attachment = this.getSlot(i).getItem();
+                    ItemStack attachment = this.getSlot(i).getStack();
                     if (attachment.getItem() instanceof IAttachment)
-                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.save(new CompoundTag()));
+                        attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
                 }
             }
         }
 
 
-        CompoundTag tag = this.weapon.getOrCreateTag();
+        CompoundNBT tag = this.weapon.getOrCreateTag();
         tag.put("Attachments", attachments);
-        super.broadcastChanges();
+        super.detectAndSendChanges();
     }
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index)
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
     {
         ItemStack copyStack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (this.weapon.getItem() instanceof ScopeItem || this.weapon.getItem() instanceof SideRailItem)
         {
-            if (slot != null && slot.hasItem()) {
-                ItemStack slotStack = slot.getItem();
+            if (slot != null && slot.getHasStack()) {
+                ItemStack slotStack = slot.getStack();
                 copyStack = slotStack.copy();
 
                 if (index == 0) {
-                    if (!this.moveItemStackTo(slotStack, 0, 36, true)) {
+                    if (!this.mergeItemStack(slotStack, 0, 36, true)) {
                         return ItemStack.EMPTY;
                     }
                 } else {
                     if (slotStack.getItem() instanceof DyeItem) {
-                        if (!this.moveItemStackTo(slotStack, 0, 3, false)) {
+                        if (!this.mergeItemStack(slotStack, 0, 3, false)) {
                             return ItemStack.EMPTY;
                         }
                     } else if (index < 28) {
-                        if (!this.moveItemStackTo(slotStack, 28, 36, false)) {
+                        if (!this.mergeItemStack(slotStack, 28, 36, false)) {
                             return ItemStack.EMPTY;
                         }
-                    } else if (index <= 36 && !this.moveItemStackTo(slotStack, 0, 28, false)) {
+                    } else if (index <= 36 && !this.mergeItemStack(slotStack, 0, 28, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
 
                 if (slotStack.isEmpty()) {
-                    slot.set(ItemStack.EMPTY);
+                    slot.putStack(ItemStack.EMPTY);
                 } else {
-                    slot.setChanged();
+                    slot.onSlotChanged();
                 }
 
                 if (slotStack.getCount() == copyStack.getCount()) {
@@ -419,20 +420,20 @@ public class AttachmentContainer extends AbstractContainerMenu
             }
         }
         else {
-            if (slot != null && slot.hasItem()) {
-                ItemStack slotStack = slot.getItem();
+            if (slot != null && slot.getHasStack()) {
+                ItemStack slotStack = slot.getStack();
                 copyStack = slotStack.copy();
-                if (index < this.weaponInventory.getContainerSize()) {
-                    if (!this.moveItemStackTo(slotStack, this.weaponInventory.getContainerSize(), this.slots.size(), true)) {
+                if (index < this.weaponInventory.getSizeInventory()) {
+                    if (!this.mergeItemStack(slotStack, this.weaponInventory.getSizeInventory(), this.inventorySlots.size(), true)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.moveItemStackTo(slotStack, 0, this.weaponInventory.getContainerSize(), false)) {
+                } else if (!this.mergeItemStack(slotStack, 0, this.weaponInventory.getSizeInventory(), false)) {
                     return ItemStack.EMPTY;
                 }
                 if (slotStack.isEmpty()) {
-                    slot.set(ItemStack.EMPTY);
+                    slot.putStack(ItemStack.EMPTY);
                 } else {
-                    slot.setChanged();
+                    slot.onSlotChanged();
                 }
             }
         }
@@ -440,12 +441,12 @@ public class AttachmentContainer extends AbstractContainerMenu
         return copyStack;
     }
 
-    public Container getPlayerInventory()
+    public IInventory getPlayerInventory()
     {
         return this.playerInventory;
     }
 
-    public Container getWeaponInventory()
+    public IInventory getWeaponInventory()
     {
         return this.weaponInventory;
     }
