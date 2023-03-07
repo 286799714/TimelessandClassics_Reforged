@@ -231,7 +231,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
             }
         }*/
         else
-            for(int i = 0; i < IAttachment.Type.values().length-6; i++)
+            for(int i = 0; i < IAttachment.Type.values().length-7; i++)
             {
                 if(!this.container.getSlot(i).isEnabled())
                 {

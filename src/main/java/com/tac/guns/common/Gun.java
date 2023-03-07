@@ -1545,6 +1545,9 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             private ScaledPositioned sideRail;
             @Optional
             @Nullable
+            private ScaledPositioned irDevice;
+            @Optional
+            @Nullable
             private ScaledPositioned extendedMag;
             @Optional
             @Nullable
@@ -1585,6 +1588,11 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 return this.sideRail;
             }
 
+            @Nullable
+            public ScaledPositioned getIrDevice()
+            {
+                return this.irDevice;
+            }
             @Nullable
             public ScaledPositioned getExtendedMag()
             {
@@ -1635,6 +1643,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 {
                     tag.put("SideRail", this.sideRail.serializeNBT());
                 }
+                if(this.irDevice != null)
+                {
+                    tag.put("IrDevice", this.irDevice.serializeNBT());
+                }
                 if(this.extendedMag != null)
                 {
                     tag.put("ExtendedMag", this.extendedMag.serializeNBT());
@@ -1677,6 +1689,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 {
                     this.sideRail = this.createScaledPositioned(tag, "SideRail");
                 }
+                if(tag.contains("IrDevice", Constants.NBT.TAG_COMPOUND))
+                {
+                    this.irDevice = this.createScaledPositioned(tag, "IrDevice");
+                }
                 if(tag.contains("ExtendedMag", Constants.NBT.TAG_COMPOUND))
                 {
                     this.extendedMag = this.createScaledPositioned(tag, "ExtendedMag");
@@ -1717,6 +1733,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 if(this.sideRail != null)
                 {
                     attachments.sideRail = this.sideRail.copy();
+                }
+                if(this.irDevice != null)
+                {
+                    attachments.irDevice = this.irDevice.copy();
                 }
                 if(this.extendedMag != null)
                 {
@@ -2081,6 +2101,8 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                     return this.modules.attachments.underBarrel != null;
                 case SIDE_RAIL:
                     return this.modules.attachments.sideRail != null;
+                case IR_DEVICE:
+                    return this.modules.attachments.irDevice != null;
                 case EXTENDED_MAG:
                     return this.modules.attachments.extendedMag != null;
                 case OLD_SCOPE:
@@ -2111,6 +2133,8 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                     return this.modules.attachments.underBarrel;
                 case SIDE_RAIL:
                     return this.modules.attachments.sideRail;
+                case IR_DEVICE:
+                    return this.modules.attachments.irDevice;
                 case EXTENDED_MAG:
                     return this.modules.attachments.extendedMag;
                 case OLD_SCOPE:

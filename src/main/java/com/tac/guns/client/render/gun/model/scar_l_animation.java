@@ -50,15 +50,13 @@ public class scar_l_animation implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.SCAR_L_TAC_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
+            // BASIC LASER RENDER, THE SCAR L RENDERS BOTH MODELS FOR TESTING
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
-                // TODO: Add RenderUtil to render specifically laser and body in order to apply tint, also yk just replace this entire render...
                 RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_MINI_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 matrices.push();
-                // needs specific length
-                //if(transformType.isFirstPerson()) {
-                    matrices.translate(0, 0, 4.5);
-                    matrices.scale(1,1,9);
-                //}
+                //TODO: Works well with the newly updated length, biggest problem is the laser shining through blocks, developing a scaling method so third person view doesn't see the laser shining through blocks
+                matrices.translate(0, 0, 3.25);
+                matrices.scale(1,1,9);
                 RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_MINI_LASER_BEAM.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 matrices.pop();
             }
