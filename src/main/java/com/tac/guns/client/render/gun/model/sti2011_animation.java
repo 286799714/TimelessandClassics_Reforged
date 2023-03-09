@@ -45,15 +45,25 @@ public class sti2011_animation implements IOverrideModel {
                 RenderUtil.renderLaserModuleModel(SpecialModels.STI2011_BASIC_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 matrices.push();
                 matrices.translate(0, 0, -0.35);
-                matrices.scale(1, 1, 11);
+                matrices.scale(1, 1, 9);
                 matrices.translate(0, 0, 0.35);
                 RenderUtil.renderLaserModuleModel(SpecialModels.STI2011_BASIC_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 matrices.pop();
             }
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
-                matrices.translate(0, 0, -0.1825);
-                RenderUtil.renderModel(SpecialModels.STI2011_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-                matrices.translate(0, 0, 0.1825);
+
+                matrices.push();
+                {
+                    ObjectRenderEditor.RENDER_Element element = new ObjectRenderEditor.RENDER_Element(0, 0, 0, 0);
+                    if (ObjectRenderEditor.get().currElement == 1 && ObjectRenderEditor.get().GetFromElements(1) != null) {
+                        element = ObjectRenderEditor.get().GetFromElements(1);
+                        matrices.translate(0, 0, element.getzMod());
+                    }
+
+                    matrices.translate(0, 0, -0.225+0.125);
+                    RenderUtil.renderModel(SpecialModels.STI2011_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
+                }
+                matrices.pop();
             }
 
             RenderUtil.renderModel(SpecialModels.STI2011_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
