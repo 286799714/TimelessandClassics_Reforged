@@ -549,7 +549,11 @@ public enum SpecialModels
     SCAR_L_BRAKE("scar_l_b_muzzle"),
     SCAR_L_TAC_GRIP("scar_l_tac_grip"),
     SCAR_L_LIGHT_GRIP("scar_l_light_grip"),
-
+    // Used for testing the laser module rendering system
+    SCAR_L_MINI_LASER("scar_l_mini_laser"),
+    SCAR_L_MINI_LASER_BEAM("scar_l_mini_laser_beam"),
+    SCAR_L_IR_LASER("scar_l_ir_laser"),
+    SCAR_L_IR_DEVICE("scar_l_ir_device"),
     MK47_BODY("mk47"),
     MK47_BOLT("mk47_bolt"),
     MK47_COMPENSATOR("mk47_c_muzzle"),
