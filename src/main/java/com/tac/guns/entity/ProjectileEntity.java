@@ -235,11 +235,32 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         {
             Vector3d startVec = this.getPositionVec();
             Vector3d endVec = startVec.add(this.getMotion());
+
+            //TODO: Make RayTraceBlocks return the meta class, use end vec as a new start vec if a tracked block was the hit vec, pretty much re-running the raytrace
+
             RayTraceResult result = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
+            BlockRayTraceResult resultB = (BlockRayTraceResult) result;
+            BlockState blockState = world.getBlockState(resultB.getPos());
+            if(blockState.getMaterial() == Material.WOOL)
+            {
+                Predicate<BlockState> IGNORE_BLOCK = input -> input != null && input.getBlock().equals(blockState.getBlock());
+                RayTraceResult result2 = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_BLOCK);
+                if(result2.getType() != RayTraceResult.Type.MISS)
+                {
+                    endVec = result2.getHitVec();
+                }
+            }
+
+            /*RayTraceResult result = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
+
+            BlockRayTraceResult resultB = (BlockRayTraceResult) result;
             if(result.getType() != RayTraceResult.Type.MISS)
             {
                 endVec = result.getHitVec();
             }
+            BlockState blockState = world.getBlockState(resultB.getPos());*/
+            // if(ignorePredicate.test(blockState)) return null;
+
 
             List<EntityResult> hitEntities = null;
             int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.COLLATERAL.get(), this.weapon);
@@ -382,8 +403,23 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         Vector3d grownHitPos = boundingBox.grow(Config.COMMON.gameplay.growBoundingBoxAmountV2.get(), 0, Config.COMMON.gameplay.growBoundingBoxAmountV2.get()).rayTrace(startVec, endVec).orElse(null);
         if(hitPos == null && grownHitPos != null)
         {
-            RayTraceResult raytraceresult = rayTraceBlocks(this.world, new RayTraceContext(startVec, grownHitPos, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
-            if(raytraceresult.getType() == RayTraceResult.Type.BLOCK)
+            RayTraceResult raytraceresult = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
+            BlockRayTraceResult resultB = (BlockRayTraceResult) raytraceresult;
+            BlockState blockState = world.getBlockState(resultB.getPos());
+            if(blockState.getMaterial() == Material.WOOL)
+            {
+                Predicate<BlockState> IGNORE_BLOCK = input -> input != null && input.getBlock().equals(blockState.getBlock());
+                RayTraceResult result2 = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_BLOCK);
+                if(result2.getType() != RayTraceResult.Type.MISS)
+                {
+                    endVec = result2.getHitVec();
+                }
+                if(raytraceresult.getType() == RayTraceResult.Type.BLOCK)
+                {
+                    return null;
+                }
+            }
+            else if(raytraceresult.getType() == RayTraceResult.Type.BLOCK)
             {
                 return null;
             }
@@ -429,7 +465,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if(modifiedGun == null)
             return;
 
-        MinecraftForge.EVENT_BUS.post(new GunProjectileHitEvent(result, this));
+        //MinecraftForge.EVENT_BUS.post(new GunProjectileHitEvent(result, this));
 
         if(result instanceof BlockRayTraceResult)
         {
@@ -463,8 +499,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 this.onHitBlock(blockRayTraceResult);
             }*/
 
-            this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
-
             int fireStarterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
             if(fireStarterLevel > 0 && Config.COMMON.gameplay.enableGunGriefing.get())
             {
@@ -475,9 +509,18 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     this.world.setBlockState(offsetPos, fireState, 11);
                 }
             }
-            //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
-            this.remove();
-            return;
+            // Build pen checks and results per passing through materials
+            if(state.getMaterial() == Material.WOOL || state.getMaterial() == Material.WOOD)
+            {
+                return;
+            }
+            else {
+                this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
+
+                //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
+                this.remove();
+                return;
+            }
         }
 
         if(result instanceof ExtendedEntityRayTraceResult)
@@ -784,41 +827,22 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     }
 
 
-    /**
-     * A custom implementation of
-     * that allows you to pass a predicate to ignore certain blocks when checking for collisions,
-     * along with keeping track if passing through multiple blocks
-     *
-     * Should be used for checking if the first block is wallbangable, and second block being air.
-     *
-     * @param world     the world to perform the ray trace
-     * @param context   the ray trace context
-     * @param ignorePredicate the block state predicate
-     * @return a result of the raytrace
-     */
-
-    private static BlockRayTraceResult rayTraceBlocksPassThrough(World world, RayTraceContext context, Predicate<BlockState> ignorePredicate)
+    private static class BlockRayTraceMeta
     {
-        //TODO: Reperform raytrace after first hit, if the distance of the next hit is between 0-1.1 blocks then end as a block hit, else return wallbang
-        return performRayTrace(context, (rayTraceContext, blockPos) -> {
-            BlockState blockState = world.getBlockState(blockPos);
-            if(ignorePredicate.test(blockState)) return null;
-            FluidState fluidState = world.getFluidState(blockPos);
-            Vector3d startVec = rayTraceContext.getStartVec();
-            Vector3d endVec = rayTraceContext.getEndVec();
-            VoxelShape blockShape = rayTraceContext.getBlockShape(blockState, world, blockPos);
-            BlockRayTraceResult blockResult = world.rayTraceBlocks(startVec, endVec, blockPos, blockShape, blockState);
-            VoxelShape fluidShape = rayTraceContext.getFluidShape(fluidState, world, blockPos);
-            BlockRayTraceResult fluidResult = fluidShape.rayTrace(startVec, endVec, blockPos);
-            double blockDistance = blockResult == null ? Double.MAX_VALUE : rayTraceContext.getStartVec().squareDistanceTo(blockResult.getHitVec());
-            double fluidDistance = fluidResult == null ? Double.MAX_VALUE : rayTraceContext.getStartVec().squareDistanceTo(fluidResult.getHitVec());
-            return blockDistance <= fluidDistance ? blockResult : fluidResult;
-        }, (rayTraceContext) -> {
-            Vector3d Vector3d = rayTraceContext.getStartVec().subtract(rayTraceContext.getEndVec());
-            return BlockRayTraceResult.createMiss(rayTraceContext.getEndVec(), Direction.getFacingFromVector(Vector3d.x, Vector3d.y, Vector3d.z), new BlockPos(rayTraceContext.getEndVec()));
-        });
+        public BlockRayTraceResult blockRayTraceResult;
+        public int wallBangCount = 0;
+        // Wallbang block hit, update count
+        public BlockRayTraceMeta(BlockRayTraceResult blockRayTraceResult, int wallBangCount)
+        {
+            this.wallBangCount = wallBangCount;
+            this.blockRayTraceResult = blockRayTraceResult;
+        }
+        // No wallbang blocks met
+        public BlockRayTraceMeta(BlockRayTraceResult blockRayTraceResult)
+        {
+            this.blockRayTraceResult = blockRayTraceResult;
+        }
     }
-
 
     /**
      * A custom implementation of
@@ -829,9 +853,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
      * @param ignorePredicate the block state predicate
      * @return a result of the raytrace
      */
-    private static BlockRayTraceResult rayTraceBlocks(World world, RayTraceContext context, Predicate<BlockState> ignorePredicate)
+    private static BlockRayTraceResult rayTraceBlocks(World world, RayTraceContext context, Predicate<BlockState> ignorePredicate/*, Predicate<BlockState> wallBangPredicate*/)
     {
-        return performRayTrace(context, (rayTraceContext, blockPos) -> {
+        /*BlockRayTraceResult r =*/ return performRayTrace(context, (rayTraceContext, blockPos) -> {
             BlockState blockState = world.getBlockState(blockPos);
             if(ignorePredicate.test(blockState)) return null;
             FluidState fluidState = world.getFluidState(blockPos);
@@ -843,11 +867,17 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             BlockRayTraceResult fluidResult = fluidShape.rayTrace(startVec, endVec, blockPos);
             double blockDistance = blockResult == null ? Double.MAX_VALUE : rayTraceContext.getStartVec().squareDistanceTo(blockResult.getHitVec());
             double fluidDistance = fluidResult == null ? Double.MAX_VALUE : rayTraceContext.getStartVec().squareDistanceTo(fluidResult.getHitVec());
+            /*if(wallBangPredicate.test(blockState))
+            {
+                return blockResult;
+            }*/
             return blockDistance <= fluidDistance ? blockResult : fluidResult;
         }, (rayTraceContext) -> {
             Vector3d Vector3d = rayTraceContext.getStartVec().subtract(rayTraceContext.getEndVec());
             return BlockRayTraceResult.createMiss(rayTraceContext.getEndVec(), Direction.getFacingFromVector(Vector3d.x, Vector3d.y, Vector3d.z), new BlockPos(rayTraceContext.getEndVec()));
         });
+
+        //return new BlockRayTraceMeta(r);
     }
 
     private static <T> T performRayTrace(RayTraceContext context, BiFunction<RayTraceContext, BlockPos, T> hitFunction, Function<RayTraceContext, T> missFactory)

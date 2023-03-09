@@ -68,6 +68,11 @@
         "zOffset": -4.125
       },
     "attachments": {
+      "pistolBarrel": {
+        "yOffset": -100829.84,
+        "zOffset": -11.55,
+        "scale": 0.00
+      },
       "pistolScope": {
         "yOffset": 10.085,
         "zOffset": 3.635,
