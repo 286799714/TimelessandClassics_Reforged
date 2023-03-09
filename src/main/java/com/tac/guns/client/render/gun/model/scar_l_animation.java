@@ -51,16 +51,29 @@ public class scar_l_animation implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.SCAR_L_TAC_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-            // BASIC LASER RENDER, THE SCAR L RENDERS BOTH MODELS FOR TESTING
+
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_MINI_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 matrices.push();
-                //TODO: Works well with the newly updated length, biggest problem is the laser shining through blocks, developing a scaling method so third person view doesn't see the laser shining through blocks
-                matrices.translate(0, 0, 3.25);
-                matrices.scale(1,1,9);
+                matrices.translate(0, 0, -0.35);
+                matrices.scale(1, 1, 11);
+                matrices.translate(0, 0, 0.35);
                 RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_MINI_LASER_BEAM.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 matrices.pop();
             }
+            else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_IR_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay);
+                matrices.push();
+                if(transformType.isFirstPerson()) {
+                    // TODO: Build some sort of scaler for this
+                    matrices.translate(0, 0, -0.35);
+                    matrices.scale(1, 1, 9);
+                    matrices.translate(0, 0, 0.35);
+                    RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                }
+                matrices.pop();
+            }
+
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
                 matrices.push();
                 matrices.translate(0, 0, -0.0225f);
