@@ -651,6 +651,20 @@ public enum SpecialModels
 
     MK18_MOD1_BASIC_LASER_DEVICE("mk18_mod1_b_laser_device"),
     MK18_MOD1_BASIC_LASER("mk18_mod1_b_laser"),
+
+       MP7_IR_DEVICE("mp7_ir_device"),
+       MP7_IR_LASER("mp7_ir_laser"),
+
+       MP7_BASIC_LASER_DEVICE("mp7_b_laser_device"),
+       MP7_BASIC_LASER("mp7_b_laser"),
+
+    FN_FAL_IR_DEVICE("fn_fal_ir_device"),
+    FN_FAL_IR_LASER("fn_fal_ir_laser"),
+
+    FN_FAL_BASIC_LASER_DEVICE("fn_fal_b_laser_device"),
+    FN_FAL_BASIC_LASER("fn_fal_b_laser"),
+    STI2011_BASIC_LASER_DEVICE("sti2011_b_laser_device"),
+    STI2011_BASIC_LASER("sti2011_b_laser"),
     //Everything from this point on is all scope additions
 
     MINI_DOT_BASE("optics/mini_dot_base"),
