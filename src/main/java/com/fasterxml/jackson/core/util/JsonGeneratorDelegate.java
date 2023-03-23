@@ -9,6 +9,8 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
+
 public class JsonGeneratorDelegate extends JsonGenerator
 {
     /**

@@ -29,26 +29,26 @@ public class m870_classic_animation implements IOverrideModel {
         
         M870AnimationController controller = M870AnimationController.getInstance();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M870_CLASSIC_BODY.getModel(), M870AnimationController.INDEX_BODY, transformType,matrices);
             RenderUtil.renderModel(SpecialModels.M870_CLASSIC_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M870_CLASSIC_BODY.getModel(), M870AnimationController.INDEX_PUMP, transformType,matrices);
             RenderUtil.renderModel(SpecialModels.M870_CLASSIC_PUMP.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M870_CLASSIC_BODY.getModel(), M870AnimationController.INDEX_BULLET, transformType,matrices);
             RenderUtil.renderModel(SpecialModels.M870_CLASSIC_BULLET.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }

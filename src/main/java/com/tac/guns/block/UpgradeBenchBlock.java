@@ -50,6 +50,8 @@ import java.util.*;
 
 import static com.tac.guns.GunMod.LOGGER;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
@@ -68,11 +70,11 @@ public class UpgradeBenchBlock extends RotatedObjectBlock
         {
             return SHAPES.get(state);
         }
-        Direction direction = state.get(HORIZONTAL_FACING);
+        Direction direction = state.getValue(FACING);
         List<VoxelShape> shapes = new ArrayList<>();
-        shapes.add(Block.makeCuboidShape(0.5, 0, 0.5, 15.5, 13, 15.5));
-        shapes.add(Block.makeCuboidShape(0, 13, 0, 16, 15, 16));
-        shapes.add(VoxelShapeHelper.getRotatedShapes(VoxelShapeHelper.rotate(Block.makeCuboidShape(0, 15, 0, 16, 16, 2), Direction.SOUTH))[direction.getHorizontalIndex()]);
+        shapes.add(Block.box(0.5, 0, 0.5, 15.5, 13, 15.5));
+        shapes.add(Block.box(0, 13, 0, 16, 15, 16));
+        shapes.add(VoxelShapeHelper.getRotatedShapes(VoxelShapeHelper.rotate(Block.box(0, 15, 0, 16, 16, 2), Direction.SOUTH))[direction.get2DDataValue()]);
         VoxelShape shape = VoxelShapeHelper.combineAll(shapes);
         SHAPES.put(state, shape);
         return shape;
@@ -85,21 +87,21 @@ public class UpgradeBenchBlock extends RotatedObjectBlock
     }
 
     @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader reader, BlockPos pos)
+    public VoxelShape getOcclusionShape(BlockState state, IBlockReader reader, BlockPos pos)
     {
         return this.getShape(state);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult result)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult result)
     {
-        if(!world.isRemote())
+        if(!world.isClientSide())
         {
-            TileEntity tileEntity = world.getTileEntity(pos);
+            TileEntity tileEntity = world.getBlockEntity(pos);
             if(tileEntity instanceof INamedContainerProvider)
             {
                 PacketHandler.getPlayChannel().sendToServer(new MessageSaveItemUpgradeBench(pos));
-                tileEntity.markDirty();
+                tileEntity.setChanged();
             }
         }
         return ActionResultType.SUCCESS;
@@ -107,14 +109,14 @@ public class UpgradeBenchBlock extends RotatedObjectBlock
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.hasTileEntity() && state.getBlock() != newState.getBlock())
         {
-            spawnAsEntity(worldIn, pos,
-                    ((UpgradeBenchTileEntity)worldIn.getTileEntity(pos)).getInventory().get(0));
-            spawnAsEntity(worldIn, pos,
-                    ((UpgradeBenchTileEntity)worldIn.getTileEntity(pos)).getInventory().get(1));
-            worldIn.removeTileEntity(pos);
+            popResource(worldIn, pos,
+                    ((UpgradeBenchTileEntity)worldIn.getBlockEntity(pos)).getInventory().get(0));
+            popResource(worldIn, pos,
+                    ((UpgradeBenchTileEntity)worldIn.getBlockEntity(pos)).getInventory().get(1));
+            worldIn.removeBlockEntity(pos);
         }
     }
 

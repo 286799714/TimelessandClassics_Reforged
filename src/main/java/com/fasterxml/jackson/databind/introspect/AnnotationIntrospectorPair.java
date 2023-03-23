@@ -19,6 +19,8 @@ import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.fasterxml.jackson.databind.util.NameTransformer;
 
+import com.fasterxml.jackson.databind.AnnotationIntrospector.ReferenceProperty;
+
 /**
  * Helper class that allows using 2 introspectors such that one
  * introspector acts as the primary one to use; and second one

@@ -42,7 +42,7 @@ public class qbz_95_animation implements IOverrideModel {
 
         Type95LAnimationController controller = Type95LAnimationController.getInstance();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.QBZ_95_BODY.getModel(), Type95LAnimationController.INDEX_BODY,transformType,matrices);
 
@@ -65,9 +65,9 @@ public class qbz_95_animation implements IOverrideModel {
 
             RenderUtil.renderModel(SpecialModels.QBZ_95_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.QBZ_95_BODY.getModel(), Type95LAnimationController.INDEX_MAGAZINE,transformType,matrices);
             if(GunModifierHelper.getAmmoCapacity(stack) > -1)
@@ -79,15 +79,15 @@ public class qbz_95_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.QBZ_95_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.QBZ_95_BODY.getModel(), Type95LAnimationController.INDEX_BOLT,transformType,matrices);
 
             Gun gun = ((GunItem) stack.getItem()).getGun();
             float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-            if(transformType.isFirstPerson()) {
+            if(transformType.firstPerson()) {
                 AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
                 boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
                 if (Gun.hasAmmo(stack) || shouldOffset) {
@@ -99,7 +99,7 @@ public class qbz_95_animation implements IOverrideModel {
             }
             RenderUtil.renderModel(SpecialModels.QBZ_95_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }

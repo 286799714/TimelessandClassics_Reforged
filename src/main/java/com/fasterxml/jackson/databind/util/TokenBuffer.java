@@ -12,6 +12,9 @@ import com.fasterxml.jackson.core.util.ByteArrayBuilder;
 import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 import com.fasterxml.jackson.databind.*;
 
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
+import com.fasterxml.jackson.core.JsonParser.NumberType;
+
 /**
  * Utility class used for efficient storage of {@link JsonToken}
  * sequences, needed for temporary buffering.

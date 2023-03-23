@@ -47,10 +47,10 @@ public class FlashlightHandler
     		final PlayerEntity player = mc.player;
     		if(
     			player != null
-    			&& player.getHeldItemMainhand().getItem() instanceof GunItem
+    			&& player.getMainHandItem().getItem() instanceof GunItem
     			&& Gun.getAttachment(
     				IAttachment.Type.SIDE_RAIL,
-    				player.getHeldItemMainhand()
+    				player.getMainHandItem()
     			) != null
     		) this.active = !active;
     	} );
@@ -59,13 +59,13 @@ public class FlashlightHandler
     private boolean isInGame()
     {
         Minecraft mc = Minecraft.getInstance();
-        if(mc.loadingGui != null)
+        if(mc.overlay != null)
             return false;
-        if(mc.currentScreen != null)
+        if(mc.screen != null)
             return false;
-        if(!mc.mouseHelper.isMouseGrabbed())
+        if(!mc.mouseHandler.isMouseGrabbed())
             return false;
-        return mc.isGameFocused();
+        return mc.isWindowActive();
     }
 
     @SubscribeEvent
@@ -78,8 +78,8 @@ public class FlashlightHandler
             return;
 
         if(NetworkGunManager.get() != null && NetworkGunManager.get().StackIds != null) {
-            if (player.getHeldItemMainhand().getItem() instanceof TimelessGunItem && player.getHeldItemMainhand().getTag() != null) {
-                if (!player.getHeldItemMainhand().getTag().contains("ID")) {
+            if (player.getMainHandItem().getItem() instanceof TimelessGunItem && player.getMainHandItem().getTag() != null) {
+                if (!player.getMainHandItem().getTag().contains("ID")) {
                     UUID id;
                     while (true) {
                         LOGGER.log(Level.INFO, "NEW UUID GEN FOR TAC GUN");
@@ -87,13 +87,13 @@ public class FlashlightHandler
                         if (NetworkGunManager.get().Ids.add(id))
                             break;
                     }
-                    player.getHeldItemMainhand().getTag().putUniqueId("ID", id);
-                    NetworkGunManager.get().StackIds.put(id, player.getHeldItemMainhand());
+                    player.getMainHandItem().getTag().putUUID("ID", id);
+                    NetworkGunManager.get().StackIds.put(id, player.getMainHandItem());
                 }
             }
         }
 
-        if (event.phase == Phase.START && (player.getHeldItemMainhand() != null && this.active && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, player.getHeldItemMainhand()) != null))
+        if (event.phase == Phase.START && (player.getMainHandItem() != null && this.active && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, player.getMainHandItem()) != null))
         {
             PacketHandler.getPlayChannel().sendToServer(new MessageLightChange(new int[]{32}));//(new int[]{2,32}));
             //PacketHandler.getPlayChannel().sendToServer(new MessageLightChange(6));

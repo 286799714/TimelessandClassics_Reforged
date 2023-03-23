@@ -10,6 +10,8 @@ import com.fasterxml.jackson.core.io.CharacterEscapes;
 import com.fasterxml.jackson.core.io.IOContext;
 import com.fasterxml.jackson.core.io.NumberOutput;
 
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
+
 /**
  * {@link JsonGenerator} that outputs JSON content using a {@link Writer}
  * which handles character encoding.

@@ -43,7 +43,7 @@ public class InspectScreen extends ContainerScreen<InspectionContainer>
         super(screenContainer, playerInventory, titleIn);
         this.playerInventory = playerInventory;
         //this.weaponInventory = screenContainer.getWeaponInventory();
-        this.ySize = -270; //186
+        this.imageHeight = -270; //186
     }
 
     @Override
@@ -52,9 +52,9 @@ public class InspectScreen extends ContainerScreen<InspectionContainer>
         super.tick();
         if(this.minecraft != null && this.minecraft.player != null)
         {
-            if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem))
+            if(!(this.minecraft.player.getMainHandItem().getItem() instanceof GunItem))
             {
-                Minecraft.getInstance().displayGuiScreen(null);
+                Minecraft.getInstance().setScreen(null);
             }
         }
     }
@@ -64,19 +64,19 @@ public class InspectScreen extends ContainerScreen<InspectionContainer>
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY); //Render tool tips
+        this.renderTooltip(matrixStack, mouseX, mouseY); //Render tool tips
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY)
+    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
-        this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY + 19, 4210752);
+        this.font.draw(matrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
+        this.font.draw(matrixStack, this.playerInventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY + 19, 4210752);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        int left = (this.width - this.xSize) / 2;
-        int top = (this.height - this.ySize) / 2;
+        int left = (this.width - this.imageWidth) / 2;
+        int top = (this.height - this.imageHeight) / 2;
         RenderUtil.scissor(left - 166, top - 277, 650, 1600);
 
         //RenderUtil.scissor(left + 26, top + 17, 142, 70);
@@ -102,9 +102,9 @@ public class InspectScreen extends ContainerScreen<InspectionContainer>
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-            IRenderTypeBuffer.Impl buffer = this.minecraft.getRenderTypeBuffers().getBufferSource();
-            GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getHeldItemMainhand(), ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
-            buffer.finish();
+            IRenderTypeBuffer.Impl buffer = this.minecraft.renderBuffers().bufferSource();
+            GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getMainHandItem(), ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
+            buffer.endBatch();
 
             RenderSystem.disableAlphaTest();
             RenderSystem.disableRescaleNormal();
@@ -123,7 +123,7 @@ public class InspectScreen extends ContainerScreen<InspectionContainer>
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
     {
         /*RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft minecraft = Minecraft.getInstance();
@@ -150,8 +150,8 @@ public class InspectScreen extends ContainerScreen<InspectionContainer>
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
     {
-        int startX = (this.width - this.xSize) / 2;
-        int startY = (this.height - this.ySize) / 2;
+        int startX = (this.width - this.imageWidth) / 2;
+        int startY = (this.height - this.imageHeight) / 2;
         if(RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX - 196, startY - 277, 650, 1600))
         {
             if(scroll < 0 && this.windowZoom > 0)
@@ -171,8 +171,8 @@ public class InspectScreen extends ContainerScreen<InspectionContainer>
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        int startX = (this.width - this.xSize) / 2;
-        int startY = (this.height - this.ySize) / 2;
+        int startX = (this.width - this.imageWidth) / 2;
+        int startY = (this.height - this.imageHeight) / 2;
 
         if(RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX - 196, startY - 277, 650, 1600))
         {

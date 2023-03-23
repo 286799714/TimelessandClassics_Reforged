@@ -16,6 +16,9 @@ import com.fasterxml.jackson.core.util.ByteArrayBuilder;
 import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 import com.fasterxml.jackson.core.util.TextBuffer;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.core.JsonParser.NumberType;
+
 /**
  * Intermediate base class used by all Jackson {@link JsonParser}
  * implementations. Contains most common things that are independent

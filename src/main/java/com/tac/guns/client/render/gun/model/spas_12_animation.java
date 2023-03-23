@@ -32,7 +32,7 @@ public class spas_12_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.SPAS_12_PUMP.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
 
         matrices.translate(0,0,0.35);
         RenderUtil.renderModel(SpecialModels.SPAS_12_STOCK.getModel(), stack, matrices, renderBuffer, light, overlay);
@@ -78,6 +78,6 @@ public class spas_12_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.SPAS_12_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
     }
 }

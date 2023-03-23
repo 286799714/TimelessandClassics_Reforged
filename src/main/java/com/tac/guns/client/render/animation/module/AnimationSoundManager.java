@@ -21,7 +21,7 @@ public enum AnimationSoundManager {
     private final Map<UUID, Map<ResourceLocation, ISound> > soundsMap = new HashMap<>();
 
     public void playerSound(PlayerEntity player, AnimationMeta animationMeta, AnimationSoundMeta soundMeta){
-        Map<ResourceLocation, ISound> map = soundsMap.computeIfAbsent(player.getUniqueID(), k -> new HashMap<>());
+        Map<ResourceLocation, ISound> map = soundsMap.computeIfAbsent(player.getUUID(), k -> new HashMap<>());
         ISound sound = map.get(animationMeta.getResourceLocation());
         if(sound == null) {
             SoundEvent soundEvent = new SoundEvent(soundMeta.getResourceLocation());
@@ -29,30 +29,30 @@ public enum AnimationSoundManager {
         }
         if(sound instanceof EntityTickableSound){
             EntityTickableSound entityTickableSound = (EntityTickableSound) sound;
-            if(entityTickableSound.isDonePlaying()){
+            if(entityTickableSound.isStopped()){
                 SoundEvent soundEvent = new SoundEvent(soundMeta.getResourceLocation());
                 sound = new EntityTickableSound(soundEvent, SoundCategory.PLAYERS, player);
             }
         }
-        if(Minecraft.getInstance().getSoundHandler().isPlaying(sound)) return;
-        Minecraft.getInstance().getSoundHandler().play(sound);
+        if(Minecraft.getInstance().getSoundManager().isActive(sound)) return;
+        Minecraft.getInstance().getSoundManager().play(sound);
         map.put(animationMeta.getResourceLocation(), sound);
     }
 
     public void onPlayerDeath(PlayerEntity player){
-        Map<ResourceLocation, ISound> map = soundsMap.computeIfAbsent(player.getUniqueID(), k -> new HashMap<>());
+        Map<ResourceLocation, ISound> map = soundsMap.computeIfAbsent(player.getUUID(), k -> new HashMap<>());
         for(ISound sound : map.values()){
-            Minecraft.getInstance().getSoundHandler().stop(sound);
+            Minecraft.getInstance().getSoundManager().stop(sound);
         }
-        soundsMap.remove(player.getUniqueID());
+        soundsMap.remove(player.getUUID());
     }
 
     public void interruptSound(PlayerEntity player, AnimationMeta animationMeta){
-        Map<ResourceLocation, ISound> map = soundsMap.get(player.getUniqueID());
+        Map<ResourceLocation, ISound> map = soundsMap.get(player.getUUID());
         if(map != null){
             ISound sound = map.get(animationMeta.getResourceLocation());
             if(sound != null){
-                Minecraft.getInstance().getSoundHandler().stop(sound);
+                Minecraft.getInstance().getSoundManager().stop(sound);
             }
             map.remove(animationMeta.getResourceLocation());
         }

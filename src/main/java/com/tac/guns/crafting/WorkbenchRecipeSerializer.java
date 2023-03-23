@@ -23,19 +23,19 @@ import javax.annotation.Nullable;
 public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<WorkbenchRecipe>
 {
     @Override
-    public WorkbenchRecipe read(ResourceLocation recipeId, JsonObject json)
+    public WorkbenchRecipe fromJson(ResourceLocation recipeId, JsonObject json)
     {
-        String group = JSONUtils.getString(json, "group", "");
+        String group = JSONUtils.getAsString(json, "group", "");
         ImmutableList.Builder<Pair<Ingredient, Integer>> builder = ImmutableList.builder();
-        JsonArray input = JSONUtils.getJsonArray(json, "materials");
+        JsonArray input = JSONUtils.getAsJsonArray(json, "materials");
         for(int i = 0; i < input.size(); i++)
         {
             JsonObject itemObject = input.get(i).getAsJsonObject();
-            Ingredient ingredient = Ingredient.deserialize(itemObject.get("item"));
+            Ingredient ingredient = Ingredient.fromJson(itemObject.get("item"));
 
             int count;
             try {
-                count = JSONUtils.getInt(itemObject, "count");
+                count = JSONUtils.getAsInt(itemObject, "count");
             }
             catch (JsonSyntaxException e){
                 count = 1;
@@ -44,21 +44,21 @@ public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.For
         }if(!json.has("result"))
             throw new JsonSyntaxException("Missing result entry");
 
-        JsonObject resultObject = JSONUtils.getJsonObject(json, "result");
-        ItemStack resultItem = ShapedRecipe.deserializeItem(resultObject);
+        JsonObject resultObject = JSONUtils.getAsJsonObject(json, "result");
+        ItemStack resultItem = ShapedRecipe.itemFromJson(resultObject);
         return new WorkbenchRecipe(recipeId, resultItem, builder.build(), group);
     }
 
     @Nullable
     @Override
-    public WorkbenchRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
+    public WorkbenchRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
     {
-        String group = buffer.readString();
-        ItemStack result = buffer.readItemStack();
+        String group = buffer.readUtf();
+        ItemStack result = buffer.readItem();
         ImmutableList.Builder<Pair<Ingredient, Integer>> builder = ImmutableList.builder();
         int size = buffer.readVarInt();
         for(int i = 0; i < size; i++) {
-            Ingredient ingredient = Ingredient.read(buffer);
+            Ingredient ingredient = Ingredient.fromNetwork(buffer);
             int count = buffer.readByte();
             builder.add(new Pair<>(ingredient, count));
         }
@@ -66,14 +66,14 @@ public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.For
     }
 
     @Override
-    public void write(PacketBuffer buffer, WorkbenchRecipe recipe)
+    public void toNetwork(PacketBuffer buffer, WorkbenchRecipe recipe)
     {
-        buffer.writeString(recipe.getGroup());
-        buffer.writeItemStack(recipe.getItem());
+        buffer.writeUtf(recipe.getGroup());
+        buffer.writeItem(recipe.getItem());
         buffer.writeVarInt(recipe.getMaterials().size());
         for(Pair<Ingredient, Integer> stack : recipe.getMaterials())
         {
-            stack.getFirst().write(buffer);
+            stack.getFirst().toNetwork(buffer);
             buffer.writeByte(stack.getSecond());
         }
     }

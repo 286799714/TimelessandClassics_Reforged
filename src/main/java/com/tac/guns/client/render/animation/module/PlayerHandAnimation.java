@@ -18,14 +18,14 @@ import java.util.Vector;
 @OnlyIn(Dist.CLIENT)
 public class PlayerHandAnimation {
     public static void render(GunAnimationController controller, ItemCameraTransforms.TransformType transformType, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light){
-        if(!transformType.isFirstPerson()) return;
-        matrices.push();
+        if(!transformType.firstPerson()) return;
+        matrices.pushPose();
         {
             controller.applyRightHandTransform(matrices);
             RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HandSide.RIGHT, matrices, renderBuffer, light);
         }
-        matrices.pop();
-        matrices.push();
+        matrices.popPose();
+        matrices.pushPose();
         {
             if(GunRenderingHandler.get() != null)
             {
@@ -42,8 +42,8 @@ public class PlayerHandAnimation {
 
                     float result = GunRenderingHandler.get().sprintDynamicsHSSLeftHand.update(0.15f, transition);
                     //Reverse the left arm rotation
-                    matrices.rotate(Vector3f.XP.rotationDegrees(-90F * result));
-                    matrices.rotate(Vector3f.ZP.rotationDegrees(25f * result));
+                    matrices.mulPose(Vector3f.XP.rotationDegrees(-90F * result));
+                    matrices.mulPose(Vector3f.ZP.rotationDegrees(25f * result));
                     matrices.translate(-1.2 * /*leftHanded **/ result ,
                             -0.8 * result ,
                             0);
@@ -52,6 +52,6 @@ public class PlayerHandAnimation {
             controller.applyLeftHandTransform(matrices);
             RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HandSide.LEFT, matrices, renderBuffer, light);
         }
-        matrices.pop();
+        matrices.popPose();
     }
 }

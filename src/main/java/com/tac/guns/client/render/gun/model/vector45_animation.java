@@ -35,7 +35,7 @@ public class vector45_animation implements IOverrideModel {
     {
         
         Vector45AnimationController controller = Vector45AnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.VECTOR45_BODY.getModel(), Vector45AnimationController.INDEX_BODY, transformType, matrices);
             if(Gun.getScope(stack) == null)
@@ -81,9 +81,9 @@ public class vector45_animation implements IOverrideModel {
             }
             RenderUtil.renderModel(SpecialModels.VECTOR45_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.VECTOR45_BODY.getModel(), Vector45AnimationController.INDEX_MAGAZINE, transformType, matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -92,21 +92,21 @@ public class vector45_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.VECTOR45_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.VECTOR45_BODY.getModel(), Vector45AnimationController.INDEX_BOLT, transformType, matrices);
             RenderUtil.renderModel(SpecialModels.VECTOR45_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.VECTOR45_BODY.getModel(), Vector45AnimationController.INDEX_HANDLE, transformType, matrices);
             RenderUtil.renderModel(SpecialModels.VECTOR45_HANDLE.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 }

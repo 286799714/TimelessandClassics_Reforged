@@ -39,7 +39,7 @@ public class m16a4_animation implements IOverrideModel {
         
         M16A4AnimationController controller = M16A4AnimationController.getInstance();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M16A4_BODY.getModel(), M16A4AnimationController.INDEX_BODY,transformType,matrices);
             if(Gun.getScope(stack) == null)
@@ -68,11 +68,11 @@ public class m16a4_animation implements IOverrideModel {
 
             if(Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem()))
             {
-                matrices.push();
+                matrices.pushPose();
                 matrices.translate(0, 0, -0.3f);
                 RenderUtil.renderModel(SpecialModels.M16A4_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
                 matrices.translate(0, 0, 0.3f);
-                matrices.pop();
+                matrices.popPose();
             }
             else if(Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem()))
             {
@@ -87,9 +87,9 @@ public class m16a4_animation implements IOverrideModel {
 
             RenderUtil.renderModel(SpecialModels.M16A4_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M16A4_BODY.getModel(), M16A4AnimationController.INDEX_MAGAZINE,transformType,matrices);
             if(GunModifierHelper.getAmmoCapacity(stack) > -1)
@@ -101,21 +101,21 @@ public class m16a4_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.M16A4_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M16A4_BODY.getModel(), M16A4AnimationController.INDEX_HANDLE,transformType,matrices);
             RenderUtil.renderModel(SpecialModels.M16A4_PULL_HANDLE.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         controller.applySpecialModelTransform(SpecialModels.M16A4_BODY.getModel(), M16A4AnimationController.INDEX_BODY,transformType,matrices);
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-        if(transformType.isFirstPerson()) {
+        if(transformType.firstPerson()) {
             if (Gun.hasAmmo(stack)) {
                 // Math provided by Bomb787 on GitHub and Curseforge!!!
                 matrices.translate(0, 0, 0.185f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
@@ -129,7 +129,7 @@ public class m16a4_animation implements IOverrideModel {
             }
         }
         RenderUtil.renderModel(SpecialModels.M16A4_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }

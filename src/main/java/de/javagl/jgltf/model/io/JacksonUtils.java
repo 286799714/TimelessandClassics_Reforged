@@ -45,6 +45,8 @@ import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+import com.fasterxml.jackson.databind.Module.SetupContext;
+
 /**
  * Utility methods related to Jackson JSON parsing.<br>
  * <br>

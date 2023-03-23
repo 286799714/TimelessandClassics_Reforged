@@ -49,7 +49,7 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
         super(screenContainer, playerInventory, titleIn);
         this.playerInventory = playerInventory;
         this.weaponInventory = screenContainer.getWeaponInventory();
-        this.ySize = 184;
+        this.imageHeight = 184;
     }
 
     @Override
@@ -58,9 +58,9 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
         super.tick();
         if(this.minecraft != null && this.minecraft.player != null)
         {
-            if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem || this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem))
+            if(!(this.minecraft.player.getMainHandItem().getItem() instanceof GunItem || this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem))
             {
-                Minecraft.getInstance().displayGuiScreen(null);
+                Minecraft.getInstance().setScreen(null);
             }
         }
     }
@@ -71,24 +71,24 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY); //Render tool tips
+        this.renderTooltip(matrixStack, mouseX, mouseY); //Render tool tips
 
-        int startX = (this.width - this.xSize) / 2;
-        int startY = (this.height - this.ySize) / 2;
+        int startX = (this.width - this.imageWidth) / 2;
+        int startY = (this.height - this.imageHeight) / 2;
 
         for(int i = 0; i < IAttachment.Type.values().length; i++)
         {
             if(RenderUtil.isMouseWithin(mouseX, mouseY, startX + 7, startY + 16 + i * 18, 18, 18))
             {
                 IAttachment.Type type = IAttachment.Type.values()[i];
-                if(!this.container.getSlot(i).isEnabled())
+                if(!this.menu.getSlot(i).isActive())
                 {
-                    this.func_243308_b(matrixStack, Arrays.asList(new TranslationTextComponent("slot.tac.attachment." + type.getTranslationKey()), new TranslationTextComponent("slot.tac.attachment.not_applicable")), mouseX, mouseY);
+                    this.renderComponentTooltip(matrixStack, Arrays.asList(new TranslationTextComponent("slot.tac.attachment." + type.getTranslationKey()), new TranslationTextComponent("slot.tac.attachment.not_applicable")), mouseX, mouseY);
                 }
-                else if(this.weaponInventory.getStackInSlot(i).isEmpty())
+                else if(this.weaponInventory.getItem(i).isEmpty())
                 {
 
-                    this.func_243308_b(matrixStack, Collections.singletonList(new TranslationTextComponent("slot.tac.attachment." + type.getTranslationKey())), mouseX, mouseY);
+                    this.renderComponentTooltip(matrixStack, Collections.singletonList(new TranslationTextComponent("slot.tac.attachment." + type.getTranslationKey())), mouseX, mouseY);
                 }
             }
         }
@@ -99,7 +99,7 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX+30, (float)this.titleY, 4210752);
+        this.font.draw(matrixStack, this.title, (float)this.titleX+30, (float)this.titleY, 4210752);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         int left = (this.width - this.xSize) / 2;
@@ -148,24 +148,24 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
     }*/
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
     {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(GUI_TEXTURES);
-        int left = (this.width - this.xSize) / 2;
-        int top = (this.height - this.ySize) / 2;
-        this.blit(matrixStack, left, top, 0, 0, this.xSize, this.ySize);
+        minecraft.getTextureManager().bind(GUI_TEXTURES);
+        int left = (this.width - this.imageWidth) / 2;
+        int top = (this.height - this.imageHeight) / 2;
+        this.blit(matrixStack, left, top, 0, 0, this.imageWidth, this.imageHeight);
 
         /* Draws the icons for each attachment slot. If not applicable
          * for the weapon, it will draw a cross instead. */
         for(int i = 0; i < IAttachment.Type.values().length; i++)
         {
-            if(!this.container.getSlot(i).isEnabled())
+            if(!this.menu.getSlot(i).isActive())
             {
                 this.blit(matrixStack, left + 8, top + 17 + i * 18, 176, 0, 16, 16);
             }
-            else if(this.weaponInventory.getStackInSlot(i).isEmpty())
+            else if(this.weaponInventory.getItem(i).isEmpty())
             {
                 this.blit(matrixStack, left + 8, top + 17 + i * 18, 176, 16 + i * 16, 16, 16);
             }
@@ -175,8 +175,8 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
     {
-        int startX = (this.width - this.xSize) / 2;
-        int startY = (this.height - this.ySize) / 2;
+        int startX = (this.width - this.imageWidth) / 2;
+        int startY = (this.height - this.imageHeight) / 2;
         if(RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX + 26, startY + 17, 142, 70))
         {
             if(scroll < 0 && this.windowZoom > 0)
@@ -196,8 +196,8 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        int startX = (this.width - this.xSize) / 2;
-        int startY = (this.height - this.ySize) / 2;
+        int startX = (this.width - this.imageWidth) / 2;
+        int startY = (this.height - this.imageHeight) / 2;
 
         if(RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX + 26, startY + 17, 142, 70))
         {

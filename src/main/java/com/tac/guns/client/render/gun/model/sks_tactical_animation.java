@@ -43,7 +43,7 @@ public class sks_tactical_animation implements IOverrideModel {
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
         SKSTacticalAnimationController controller = SKSTacticalAnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.SKS_TACTICAL.getModel(), SKSTacticalAnimationController.INDEX_BODY,transformType,matrices);
 
@@ -77,9 +77,9 @@ public class sks_tactical_animation implements IOverrideModel {
             }
             RenderUtil.renderModel(SpecialModels.SKS_TACTICAL.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.SKS_TACTICAL.getModel(), SKSTacticalAnimationController.INDEX_MAGAZINE,transformType,matrices);
 
@@ -92,12 +92,12 @@ public class sks_tactical_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.SKS_TACTICAL_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.SKS_TACTICAL.getModel(), SKSTacticalAnimationController.INDEX_BOLT,transformType,matrices);
-            if(transformType.isFirstPerson()) {
+            if(transformType.firstPerson()) {
                 AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
                 boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
                 if (Gun.hasAmmo(stack) || shouldOffset) {
@@ -110,7 +110,7 @@ public class sks_tactical_animation implements IOverrideModel {
             matrices.translate(0, 0, 0.0225f);
             RenderUtil.renderModel(SpecialModels.SKS_TACTICAL_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }

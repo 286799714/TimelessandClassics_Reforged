@@ -103,7 +103,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ServerPlayHandler
 {
     public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
-    private static final Predicate<LivingEntity> HOSTILE_ENTITIES = entity -> entity.getSoundCategory() == SoundCategory.HOSTILE && !Config.COMMON.aggroMobs.exemptEntities.get().contains(entity.getType().getRegistryName().toString());
+    private static final Predicate<LivingEntity> HOSTILE_ENTITIES = entity -> entity.getSoundSource() == SoundCategory.HOSTILE && !Config.COMMON.aggroMobs.exemptEntities.get().contains(entity.getType().getRegistryName().toString());
 
     /**
      * Fires the weapon the player is currently holding.
@@ -115,8 +115,8 @@ public class ServerPlayHandler
     {
         if(!player.isSpectator())
         {
-            World world = player.world;
-            ItemStack heldItem = player.getHeldItem(Hand.MAIN_HAND);
+            World world = player.level;
+            ItemStack heldItem = player.getItemInHand(Hand.MAIN_HAND);
             if(heldItem.getItem() instanceof GunItem && (Gun.hasAmmo(heldItem) || player.isCreative()))
             {
                 GunItem item = (GunItem) heldItem.getItem();
@@ -127,8 +127,8 @@ public class ServerPlayHandler
                         return;
 
                     /* Updates the yaw and pitch with the clients current yaw and pitch */
-                    player.rotationYaw = message.getRotationYaw();
-                    player.rotationPitch = message.getRotationPitch();
+                    player.yRot = message.getRotationYaw();
+                    player.xRot = message.getRotationPitch();
 
                     // CHECK HERE:
                     //     Old server side fire rate control. This has to be disabled to make the \
@@ -163,14 +163,14 @@ public class ServerPlayHandler
                         ProjectileEntity projectileEntity = factory.create(world, player, heldItem, item, modifiedGun, randP, randY);
                         projectileEntity.setWeapon(heldItem);
                         projectileEntity.setAdditionalDamage(Gun.getAdditionalDamage(heldItem));
-                        world.addEntity(projectileEntity);
+                        world.addFreshEntity(projectileEntity);
                         spawnedProjectiles[i] = projectileEntity;
                         projectileEntity.tick();
                     }
                     if(!projectileProps.isVisible())
                     {
-                        MessageBulletTrail messageBulletTrail = new MessageBulletTrail(spawnedProjectiles, projectileProps, player.getEntityId(), projectileProps.getSize());
-                        PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getPosX(), player.getPosY(), player.getPosZ(), Config.COMMON.network.projectileTrackingRange.get(), player.world.getDimensionKey())), messageBulletTrail);
+                        MessageBulletTrail messageBulletTrail = new MessageBulletTrail(spawnedProjectiles, projectileProps, player.getId(), projectileProps.getSize());
+                        PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getX(), player.getY(), player.getZ(), Config.COMMON.network.projectileTrackingRange.get(), player.level.dimension())), messageBulletTrail);
                     }
 
                     MinecraftForge.EVENT_BUS.post(new GunFireEvent.Post(player, heldItem));
@@ -178,20 +178,20 @@ public class ServerPlayHandler
                     if(Config.COMMON.aggroMobs.enabled.get())
                     {
                         double radius = GunModifierHelper.getModifiedFireSoundRadius(heldItem, Config.COMMON.aggroMobs.range.get());
-                        double x = player.getPosX();
-                        double y = player.getPosY() + 0.5;
-                        double z = player.getPosZ();
+                        double x = player.getX();
+                        double y = player.getY() + 0.5;
+                        double z = player.getZ();
                         AxisAlignedBB box = new AxisAlignedBB(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius);
                         radius *= radius;
                         double dx, dy, dz;
-                        for(LivingEntity entity : world.getEntitiesWithinAABB(LivingEntity.class, box, HOSTILE_ENTITIES))
+                        for(LivingEntity entity : world.getEntitiesOfClass(LivingEntity.class, box, HOSTILE_ENTITIES))
                         {
-                            dx = x - entity.getPosX();
-                            dy = y - entity.getPosY();
-                            dz = z - entity.getPosZ();
+                            dx = x - entity.getX();
+                            dy = y - entity.getY();
+                            dz = z - entity.getZ();
                             if(dx * dx + dy * dy + dz * dz <= radius)
                             {
-                                entity.setRevengeTarget(Config.COMMON.aggroMobs.angerHostileMobs.get() ? player : entity);
+                                entity.setLastHurtByMob(Config.COMMON.aggroMobs.angerHostileMobs.get() ? player : entity);
                             }
                         }
                     }
@@ -200,18 +200,18 @@ public class ServerPlayHandler
                     ResourceLocation fireSound = silenced ? modifiedGun.getSounds().getSilencedFire() : modifiedGun.getSounds().getFire();
                     if(fireSound != null)
                     {
-                        double posX = player.getPosX();
-                        double posY = player.getPosY() + player.getEyeHeight();
-                        double posZ = player.getPosZ();
+                        double posX = player.getX();
+                        double posY = player.getY() + player.getEyeHeight();
+                        double posZ = player.getZ();
                         float volume = GunModifierHelper.getFireSoundVolume(heldItem);
 
                         // PATCH NOTE: Neko required to remove the random pitch effect in sound
-                        final float pitch = 0.9F + world.rand.nextFloat() * 0.125F;
+                        final float pitch = 0.9F + world.random.nextFloat() * 0.125F;
                         
                         double radius = GunModifierHelper.getModifiedFireSoundRadius(heldItem, Config.SERVER.gunShotMaxDistance.get());
                         boolean muzzle = modifiedGun.getDisplay().getFlash() != null;
-                        MessageGunSound messageSound = new MessageGunSound(fireSound, SoundCategory.PLAYERS, (float) posX, (float) posY, (float) posZ, volume, pitch, player.getEntityId(), muzzle, false);
-                        PacketDistributor.TargetPoint targetPoint = new PacketDistributor.TargetPoint(posX, posY, posZ, radius, player.world.getDimensionKey());
+                        MessageGunSound messageSound = new MessageGunSound(fireSound, SoundCategory.PLAYERS, (float) posX, (float) posY, (float) posZ, volume, pitch, player.getId(), muzzle, false);
+                        PacketDistributor.TargetPoint targetPoint = new PacketDistributor.TargetPoint(posX, posY, posZ, radius, player.level.dimension());
                         PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> targetPoint), messageSound);
                     }
 
@@ -220,8 +220,8 @@ public class ServerPlayHandler
                         CompoundNBT tag = heldItem.getOrCreateTag();
                         if(!tag.getBoolean("IgnoreAmmo"))
                         {
-                            int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RECLAIMED.get(), heldItem);
-                            if(level == 0 || player.world.rand.nextInt(4 - MathHelper.clamp(level, 1, 2)) != 0)
+                            int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.RECLAIMED.get(), heldItem);
+                            if(level == 0 || player.level.random.nextInt(4 - MathHelper.clamp(level, 1, 2)) != 0)
                             {
                                 tag.putInt("AmmoCount", Math.max(0, tag.getInt("AmmoCount") - 1));
                             }
@@ -231,7 +231,7 @@ public class ServerPlayHandler
             }
             else
             {
-                world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, 0.8F);
+                world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, 0.8F);
             }
         }
     }
@@ -246,11 +246,11 @@ public class ServerPlayHandler
      */
     public static void handleCraft(ServerPlayerEntity player, ResourceLocation id, BlockPos pos)
     {
-        World world = player.world;
+        World world = player.level;
 
-        if(player.openContainer instanceof WorkbenchContainer)
+        if(player.containerMenu instanceof WorkbenchContainer)
         {
-            WorkbenchContainer workbench = (WorkbenchContainer) player.openContainer;
+            WorkbenchContainer workbench = (WorkbenchContainer) player.containerMenu;
             if(workbench.getPos().equals(pos))
             {
                 WorkbenchRecipe recipe = WorkbenchRecipes.getRecipeById(world, id);
@@ -313,7 +313,7 @@ public class ServerPlayHandler
                             stack.getTag().putIntArray("supportedFireModes", gun.getGeneral().getRateSelector());
                         }
                     }
-                    InventoryHelper.spawnItemStack(world, pos.getX() + 0.5, pos.getY() + 1.125, pos.getZ() + 0.5, stack);
+                    InventoryHelper.dropItemStack(world, pos.getX() + 0.5, pos.getY() + 1.125, pos.getZ() + 0.5, stack);
                 }
             }
         }
@@ -324,7 +324,7 @@ public class ServerPlayHandler
      */
     public static void handleUnload(ServerPlayerEntity player)
     {
-        ItemStack stack = player.getHeldItemMainhand();
+        ItemStack stack = player.getMainHandItem();
         if(stack.getItem() instanceof GunItem)
         {
             CompoundNBT tag = stack.getTag();
@@ -359,8 +359,8 @@ public class ServerPlayHandler
             ResourceLocation reloadSound = gun.getSounds().getCock();
             if(reloadSound != null)
             {
-                MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) player.getPosY() + 1.0F, (float) player.getPosZ(), 1.0F, 1.0F, player.getEntityId(), false, true);
-                PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getPosX(), (player.getPosY() + 1.0), player.getPosZ(), 16.0, player.world.getDimensionKey())), message);
+                MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getX(), (float) player.getY() + 1.0F, (float) player.getZ(), 1.0F, 1.0F, player.getId(), false, true);
+                PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getX(), (player.getY() + 1.0), player.getZ(), 16.0, player.level.dimension())), message);
             }
         }
     }
@@ -371,10 +371,10 @@ public class ServerPlayHandler
      */
     private static void spawnAmmo(ServerPlayerEntity player, ItemStack stack)
     {
-        player.inventory.addItemStackToInventory(stack);
+        player.inventory.add(stack);
         if(stack.getCount() > 0)
         {
-            player.world.addEntity(new ItemEntity(player.world, player.getPosX(), player.getPosY(), player.getPosZ(), stack.copy()));
+            player.level.addFreshEntity(new ItemEntity(player.level, player.getX(), player.getY(), player.getZ(), stack.copy()));
         }
     }
 
@@ -383,7 +383,7 @@ public class ServerPlayHandler
      */
     public static void handleAttachments(ServerPlayerEntity player)
     {
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem || heldItem.getItem() instanceof SideRailItem || heldItem.getItem() instanceof IrDeviceItem)
         {
             NetworkHooks.openGui(player, new SimpleNamedContainerProvider((windowId, playerInventory, player1) -> new AttachmentContainer(windowId, playerInventory, heldItem), new TranslationTextComponent("container.tac.attachments")));
@@ -395,7 +395,7 @@ public class ServerPlayHandler
      */
     public static void handleColorbenchGui(ServerPlayerEntity player)
     {
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem)
         {
             NetworkHooks.openGui(player, new SimpleNamedContainerProvider((windowId, playerInventory, player1) -> new ColorBenchContainer(windowId, playerInventory), new TranslationTextComponent("container.tac.color_bench")));
@@ -407,7 +407,7 @@ public class ServerPlayHandler
      */
     public static void handleInspection(ServerPlayerEntity player)
     {
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         if(heldItem.getItem() instanceof GunItem)
         {
             NetworkHooks.openGui(player, new SimpleNamedContainerProvider((windowId, playerInventory, player1) -> new InspectionContainer(windowId, playerInventory, heldItem), new TranslationTextComponent("container.tac.inspection")));
@@ -419,7 +419,7 @@ public class ServerPlayHandler
      */
     public static void handleFireMode(ServerPlayerEntity player)
     {
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         try {
 
             //TODO Fix double click req
@@ -455,7 +455,7 @@ public class ServerPlayHandler
 
                 ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
                 if (fireModeSound != null && player.isAlive()) {
-                    MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
+                    MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getX(), (float) (player.getY() + 1.0), (float) player.getZ(), 1F, 1F, player.getId(), false, false);
                     PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), messageSound);
                 }
 
@@ -472,7 +472,7 @@ public class ServerPlayHandler
      */
     public static void EmptyMag(ServerPlayerEntity player)
     {
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         if(heldItem.getItem() instanceof GunItem)
         {
             GunItem gunItem = (GunItem) heldItem.getItem();
@@ -480,7 +480,7 @@ public class ServerPlayHandler
             ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
             if(fireModeSound != null && player.isAlive())
             {
-                MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1.2F, 0.75F, player.getEntityId(), false, false);
+                MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getX(), (float) (player.getY() + 1.0), (float) player.getZ(), 1.2F, 0.75F, player.getId(), false, false);
                 PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() ->(ServerPlayerEntity) player), messageSound);
             }
         }
@@ -492,10 +492,10 @@ public class ServerPlayHandler
      */
     public static void handleFlashLight(ServerPlayerEntity player, int[] lookingRange)
     {
-        if(player.getHeldItemMainhand().getItem() instanceof GunItem)
+        if(player.getMainHandItem().getItem() instanceof GunItem)
         {
-            if(Gun.getAttachment(IAttachment.Type.SIDE_RAIL,player.getHeldItemMainhand()) != null) {
-                IWorld world = player.world;
+            if(Gun.getAttachment(IAttachment.Type.SIDE_RAIL,player.getMainHandItem()) != null) {
+                IWorld world = player.level;
                 TileEntity tile = null;
                 for (int itor: lookingRange)
                 {
@@ -504,16 +504,16 @@ public class ServerPlayHandler
                     int z = lookingAt(player, itor).getZ();
                     boolean createLight = false;
                     for (int i = 0; i < 5; ++i) {
-                        tile = world.getTileEntity(new BlockPos(x, y, z));
+                        tile = world.getBlockEntity(new BlockPos(x, y, z));
                         if (tile instanceof FlashLightSource) {
                             createLight = true;
                             break;
                         }
 
-                        if (!world.isAirBlock(new BlockPos(x, y, z))) {
-                            int pX = (int) player.getPositionVec().getX();
-                            int pY = (int) player.getPositionVec().getY();
-                            int pZ = (int) player.getPositionVec().getZ();
+                        if (!world.isEmptyBlock(new BlockPos(x, y, z))) {
+                            int pX = (int) player.position().x();
+                            int pY = (int) player.position().y();
+                            int pZ = (int) player.position().z();
                             if (pX > x) {
                                 ++x;
                             } else if (pX < x) {
@@ -529,20 +529,20 @@ public class ServerPlayHandler
                             } else if (pZ < z) {
                                 --z;
                             }
-                        } else if (world.isAirBlock(new BlockPos(x, y, z))) {
+                        } else if (world.isEmptyBlock(new BlockPos(x, y, z))) {
                             createLight = true;
                             break;
                         }
                     }
 
                     if (createLight) {
-                        tile = world.getTileEntity(new BlockPos(x, y, z));
+                        tile = world.getBlockEntity(new BlockPos(x, y, z));
                         if (tile instanceof FlashLightSource) {
                             ((FlashLightSource) tile).ticks = 0;
                         } else if (world.getBlockState(new BlockPos(x, y, z)).getBlock() != ModBlocks.FLASHLIGHT_BLOCK.get()) { //
-                            world.setBlockState(new BlockPos(x, y, z), (ModBlocks.FLASHLIGHT_BLOCK.get()).getDefaultState(), 3);
+                            world.setBlock(new BlockPos(x, y, z), (ModBlocks.FLASHLIGHT_BLOCK.get()).defaultBlockState(), 3);
                         }
-                        world.setBlockState(new BlockPos(x, y, z), (ModBlocks.FLASHLIGHT_BLOCK.get()).getDefaultState(), 3);
+                        world.setBlock(new BlockPos(x, y, z), (ModBlocks.FLASHLIGHT_BLOCK.get()).defaultBlockState(), 3);
                     }
                 }
             }
@@ -554,7 +554,7 @@ public class ServerPlayHandler
         ///if(entityPos instanceof EntityRayTraceResult)
          //   return new BlockPos(entityPos.getHitVec());
         //else
-            return ((BlockRayTraceResult)player.pick((double)rangeL, 0.0F, false)).getPos();
+            return ((BlockRayTraceResult)player.pick((double)rangeL, 0.0F, false)).getBlockPos();
 
     }
     protected static RayTraceResult lookingAtEntity(PlayerEntity player, int rangeL)
@@ -600,7 +600,7 @@ public class ServerPlayHandler
         if (attributeInstance.getModifier(speedUptId) != null) {
             attributeInstance.removeModifier(speedModifier);
         }
-        attributeInstance.applyPersistentModifier(speedModifier);
+        attributeInstance.addPermanentModifier(speedModifier);
     }
 
     private static void removeGunSpeedMod(ServerPlayerEntity entity, String name, double modifier)
@@ -622,14 +622,14 @@ public class ServerPlayHandler
         if(!player.isAlive())
             return;
 
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         if(player.getAttribute(MOVEMENT_SPEED) != null && MovementAdaptationsHandler.get().isReadyToReset())
         {
             removeGunSpeedMod(player,"GunSpeedMod", 0.1);
             MovementAdaptationsHandler.get().setReadyToReset(false);
             MovementAdaptationsHandler.get().setReadyToUpdate(true);
         }
-        player.sendPlayerAbilities();
+        player.onUpdateAbilities();
 
         if (!(heldItem.getItem() instanceof TimelessGunItem))
             return;
@@ -661,7 +661,7 @@ public class ServerPlayHandler
             }
             else
                 MovementAdaptationsHandler.get().setSpeed((float)player.getAttribute(MOVEMENT_SPEED).getValue());
-        player.sendPlayerAbilities();
+        player.onUpdateAbilities();
 
         MovementAdaptationsHandler.get().setPreviousWeight(gun.getGeneral().getWeightKilo());
         //DEBUGGING AND BALANCE TOOL
@@ -680,8 +680,8 @@ public class ServerPlayHandler
         if(!player.isAlive())
             return;
         if(NetworkGunManager.get() != null && NetworkGunManager.get().StackIds != null) {
-            if (player.getHeldItemMainhand().getItem() instanceof TimelessGunItem && player.getHeldItemMainhand().getTag() != null) {
-                if (regenerate||!player.getHeldItemMainhand().getTag().contains("ID")) {
+            if (player.getMainHandItem().getItem() instanceof TimelessGunItem && player.getMainHandItem().getTag() != null) {
+                if (regenerate||!player.getMainHandItem().getTag().contains("ID")) {
                     UUID id;
                     while (true) {
                         LOGGER.log(Level.INFO, "NEW UUID GEN FOR TAC GUN");
@@ -689,10 +689,10 @@ public class ServerPlayHandler
                         if (NetworkGunManager.get().Ids.add(id))
                             break;
                     }
-                    player.getHeldItemMainhand().getTag().putUniqueId("ID", id);
-                    NetworkGunManager.get().StackIds.put(id, player.getHeldItemMainhand());
+                    player.getMainHandItem().getTag().putUUID("ID", id);
+                    NetworkGunManager.get().StackIds.put(id, player.getMainHandItem());
                 }
-                initLevelTracking(player.getHeldItemMainhand());
+                initLevelTracking(player.getMainHandItem());
             }
         }
     }
@@ -711,58 +711,58 @@ public class ServerPlayHandler
     {
         if(!player.isSpectator())
         {
-            World world = player.world;
-            ItemStack heldItem = player.getHeldItem(Hand.MAIN_HAND);
-            TileEntity tileEntity = world.getTileEntity(message.getPos());
+            World world = player.level;
+            ItemStack heldItem = player.getItemInHand(Hand.MAIN_HAND);
+            TileEntity tileEntity = world.getBlockEntity(message.getPos());
 
             if(player.isCrouching())
             {
-                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
                 return;
             }
-            world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, 0.8F);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, 0.8F);
             //if item is empty or air stack in hand, take weapon, if holding weapon, take or replace weapon
             if (tileEntity != null)
             {
                 // React to adding an extra Module item
                 //if()
 
-                if (!(((UpgradeBenchTileEntity) tileEntity).getStackInSlot(0).getItem() instanceof GunItem) && heldItem.getItem() instanceof GunItem)
+                if (!(((UpgradeBenchTileEntity) tileEntity).getItem(0).getItem() instanceof GunItem) && heldItem.getItem() instanceof GunItem)
                 {
-                    ((UpgradeBenchTileEntity) tileEntity).setInventorySlotContents(0, heldItem);
-                    player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.AIR));
+                    ((UpgradeBenchTileEntity) tileEntity).setItem(0, heldItem);
+                    player.setItemInHand(Hand.MAIN_HAND, new ItemStack(Items.AIR));
                     // I hate this last part, this is used in order to reset the TileRenderer,
                     // without this the item stack is added, but the visual is only reset on
                     // entering GUI, gotta Check what Yor said about this portion.
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
-                    player.closeScreen();
+                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
+                    player.closeContainer();
                 }
-                else if (heldItem.getItem() == ModItems.MODULE.get() && ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).getCount() < 3)
+                else if (heldItem.getItem() == ModItems.MODULE.get() && ((UpgradeBenchTileEntity) tileEntity).getItem(1).getCount() < 3)
                 {
-                    if( ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).getItem() != ModItems.MODULE.get() ) {
-                        ((UpgradeBenchTileEntity) tileEntity).setInventorySlotContents(1,
+                    if( ((UpgradeBenchTileEntity) tileEntity).getItem(1).getItem() != ModItems.MODULE.get() ) {
+                        ((UpgradeBenchTileEntity) tileEntity).setItem(1,
                                 heldItem.copy());
-                        ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).setCount(1);
+                        ((UpgradeBenchTileEntity) tileEntity).getItem(1).setCount(1);
                     }
                     else {
-                        ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).setCount(((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).getCount() + 1);
+                        ((UpgradeBenchTileEntity) tileEntity).getItem(1).setCount(((UpgradeBenchTileEntity) tileEntity).getItem(1).getCount() + 1);
                     }
-                    player.getHeldItem(Hand.MAIN_HAND).setCount(player.getHeldItem(Hand.MAIN_HAND).getCount()-1);
+                    player.getItemInHand(Hand.MAIN_HAND).setCount(player.getItemInHand(Hand.MAIN_HAND).getCount()-1);
                     /// I hate this last part, this is used in order to reset the TileRenderer,
                     // without this the item stack is added, but the visual is only reset on
                     // entering GUI, gotta Check what Yor said about this portion.
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
-                    player.closeScreen();
+                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
+                    player.closeContainer();
                 }
                 else
                 {
-                    player.inventory.addItemStackToInventory(((UpgradeBenchTileEntity) tileEntity).getStackInSlot(0));
-                    ((UpgradeBenchTileEntity) tileEntity).setInventorySlotContents(0, ItemStack.EMPTY);
+                    player.inventory.add(((UpgradeBenchTileEntity) tileEntity).getItem(0));
+                    ((UpgradeBenchTileEntity) tileEntity).setItem(0, ItemStack.EMPTY);
                     // I hate this last part, this is used in order to reset the TileRenderer,
                     // without this the item stack is added, but the visual is only reset on
                     // entering GUI, gotta Check what Yor said about this portion.
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
-                    player.closeScreen();
+                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
+                    player.closeContainer();
                 }
             }
         }
@@ -776,36 +776,36 @@ public class ServerPlayHandler
      */
     public static void handleUpgradeBenchApply(MessageUpgradeBenchApply message, ServerPlayerEntity player)
     {
-        if(player.openContainer instanceof UpgradeBenchContainer)
+        if(player.containerMenu instanceof UpgradeBenchContainer)
         {
-            UpgradeBenchContainer workbench = (UpgradeBenchContainer) player.openContainer;
+            UpgradeBenchContainer workbench = (UpgradeBenchContainer) player.containerMenu;
             UpgradeBenchScreen.RequirementItem req =
                     GunEnchantmentHelper.upgradeableEnchs.get(message.reqKey);
             if(workbench.getPos().equals(message.pos))
             {
                 ItemStack toUpdate = workbench.getBench().getInventory().get(0);
                 int currLevel =
-                        EnchantmentHelper.getEnchantmentLevel(req.enchantment, toUpdate);
+                        EnchantmentHelper.getItemEnchantmentLevel(req.enchantment, toUpdate);
                 if(toUpdate.getTag() == null)
                     return;
                 int currWeaponLevel = toUpdate.getTag().getInt("level");
                 TimelessGunItem gunItem = (TimelessGunItem) toUpdate.getItem();
-                if(workbench.getBench().getStackInSlot(1).getCount() >= req.getModuleCount()[currLevel] && currWeaponLevel >= req.getLevelReq()[currLevel] && gunItem.getGun().getGeneral().getUpgradeBenchMaxUses() > toUpdate.getTag().getInt("upgradeBenchUses"))
+                if(workbench.getBench().getItem(1).getCount() >= req.getModuleCount()[currLevel] && currWeaponLevel >= req.getLevelReq()[currLevel] && gunItem.getGun().getGeneral().getUpgradeBenchMaxUses() > toUpdate.getTag().getInt("upgradeBenchUses"))
                 {
                     if (currLevel > 0) {
                         Map<Enchantment, Integer> listNBT =
-                                EnchantmentHelper.deserializeEnchantments(toUpdate.getEnchantmentTagList());
+                                EnchantmentHelper.deserializeEnchantments(toUpdate.getEnchantmentTags());
                         listNBT.replace(req.enchantment, currLevel + 1);
                         EnchantmentHelper.setEnchantments(listNBT, toUpdate);
                     } else
-                        toUpdate.addEnchantment(req.enchantment, 1);
+                        toUpdate.enchant(req.enchantment, 1);
 
-                    workbench.getBench().getStackInSlot(1).setCount(workbench.getBench().getStackInSlot(1).getCount()-req.getModuleCount()[currLevel]);
+                    workbench.getBench().getItem(1).setCount(workbench.getBench().getItem(1).getCount()-req.getModuleCount()[currLevel]);
                     toUpdate.getTag().putInt("upgradeBenchUses", toUpdate.getTag().getInt(
                             "upgradeBenchUses")+1);
                 }
                 else
-                    player.sendStatusMessage(new TranslationTextComponent("Cannot apply enchants anymore"), true);
+                    player.displayClientMessage(new TranslationTextComponent("Cannot apply enchants anymore"), true);
             }
         }
     }
@@ -818,13 +818,13 @@ public class ServerPlayHandler
         if(WearableHelper.PlayerWornRig(player) != null && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(player)))
         {
             Rig rig = ((ArmorRigItem)WearableHelper.PlayerWornRig(player).getItem()).getRig();
-            if(player.getHeldItemMainhand().getItem().getRegistryName().equals(rig.getRepair().getItem()))
+            if(player.getMainHandItem().getItem().getRegistryName().equals(rig.getRepair().getItem()))
             {
                 WearableHelper.tickRepairCurrentDurability(WearableHelper.PlayerWornRig(player));
-                player.getHeldItemMainhand().setCount(player.getHeldItemMainhand().getCount()-1);
+                player.getMainHandItem().setCount(player.getMainHandItem().getCount()-1);
                 ResourceLocation repairSound = rig.getSounds().getRepair();
                 if (repairSound != null && player.isAlive()) {
-                    MessageGunSound messageSound = new MessageGunSound(repairSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
+                    MessageGunSound messageSound = new MessageGunSound(repairSound, SoundCategory.PLAYERS, (float) player.getX(), (float) (player.getY() + 1.0), (float) player.getZ(), 1F, 1F, player.getId(), false, false);
                     PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), messageSound);
                 }
             }
@@ -840,10 +840,10 @@ public class ServerPlayHandler
         {
             ItemStack rig = WearableHelper.PlayerWornRig(player);
             if(rig != null) {
-                PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, id), ((ServerPlayerEntity)player).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+                PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, id), ((ServerPlayerEntity)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
             }
         }
         else
-            PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(), ((ServerPlayerEntity)player).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+            PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(), ((ServerPlayerEntity)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
     }
 }

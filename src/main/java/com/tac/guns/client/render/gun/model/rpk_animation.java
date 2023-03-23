@@ -40,7 +40,7 @@ public class rpk_animation implements IOverrideModel {
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
         
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.RPK.getModel(),RPKAnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getScope(stack) != null) {
@@ -53,10 +53,10 @@ public class rpk_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.RPK_BUTT_TACTICAL.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.orElse(ItemStack.EMPTY.getItem())) {
-                matrices.push();
+                matrices.pushPose();
                 matrices.translate(0, 0, 0.1835f);
                 RenderUtil.renderModel(SpecialModels.RPK_BUTT_HEAVY.getModel(), stack, matrices, renderBuffer, light, overlay);
-                matrices.pop();
+                matrices.popPose();
             }
             /*if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem()))
             {
@@ -73,10 +73,10 @@ public class rpk_animation implements IOverrideModel {
 
             RenderUtil.renderModel(SpecialModels.RPK.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.RPK.getModel(),RPKAnimationController.INDEX_BOLT,transformType,matrices);
             // Math provided by Bomb787 on GitHub and Curseforge!!!
@@ -85,9 +85,9 @@ public class rpk_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.RPK_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         //Always pop
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.RPK.getModel(),RPKAnimationController.INDEX_MAGAZINE,transformType,matrices);
             if(GunModifierHelper.getAmmoCapacity(stack) > -1)
@@ -99,7 +99,7 @@ public class rpk_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.RPK_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
     //TODO comments

@@ -33,12 +33,12 @@ public class TimelessGunItem extends GunItem {
     private final IGunModifier[] modifiers;
     private Boolean integratedOptic = false;
     public TimelessGunItem(Process<Item.Properties> properties, IGunModifier... modifiers) {
-        super(properties.process(new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
+        super(properties.process(new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
         this.modifiers = modifiers;
     }
 
     public TimelessGunItem(Process<Item.Properties> properties, Boolean integratedOptic, IGunModifier... modifiers) {
-        super(properties.process(new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
+        super(properties.process(new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
         this.modifiers = modifiers;
         this.integratedOptic = integratedOptic;
     }
@@ -52,11 +52,11 @@ public class TimelessGunItem extends GunItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
         Gun modifiedGun = this.getModifiedGun(stack);
         Item ammo = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
         if (ammo != null) {
-            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", new TranslationTextComponent(ammo.getTranslationKey()).mergeStyle(TextFormatting.GOLD)).mergeStyle(TextFormatting.DARK_GRAY)));
+            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", new TranslationTextComponent(ammo.getDescriptionId()).withStyle(TextFormatting.GOLD)).withStyle(TextFormatting.DARK_GRAY)));
         }
 
         String additionalDamageText = "";
@@ -66,52 +66,52 @@ public class TimelessGunItem extends GunItem {
             additionalDamage = tagCompound.getFloat("AdditionalDamage");
             additionalDamage += GunModifierHelper.getAdditionalDamage(stack);
             if (additionalDamage > 0.0F) {
-                additionalDamageText = TextFormatting.GREEN + " +" + ItemStack.DECIMALFORMAT.format(additionalDamage);
+                additionalDamageText = TextFormatting.GREEN + " +" + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
             } else if (additionalDamage < 0.0F) {
-                additionalDamageText = TextFormatting.RED + " " + ItemStack.DECIMALFORMAT.format(additionalDamage);
+                additionalDamageText = TextFormatting.RED + " " + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
             }
         }
 
         additionalDamage = modifiedGun.getProjectile().getDamage();
         additionalDamage = GunModifierHelper.getModifiedProjectileDamage(stack, additionalDamage);
         additionalDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, additionalDamage);
-        tooltip.add((new TranslationTextComponent("info.tac.damage", TextFormatting.GOLD + ItemStack.DECIMALFORMAT.format(additionalDamage) + additionalDamageText)).mergeStyle(TextFormatting.DARK_GRAY));
+        tooltip.add((new TranslationTextComponent("info.tac.damage", TextFormatting.GOLD + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage) + additionalDamageText)).withStyle(TextFormatting.DARK_GRAY));
         if (tagCompound != null) {
             if (tagCompound.getBoolean("IgnoreAmmo")) {
-                tooltip.add((new TranslationTextComponent("info.tac.ignore_ammo")).mergeStyle(TextFormatting.AQUA));
+                tooltip.add((new TranslationTextComponent("info.tac.ignore_ammo")).withStyle(TextFormatting.AQUA));
             } else {
                 int ammoCount = tagCompound.getInt("AmmoCount");
-                tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + ammoCount + "/" + GunModifierHelper.getAmmoCapacity(stack, modifiedGun))).mergeStyle(TextFormatting.DARK_GRAY));
+                tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + ammoCount + "/" + GunModifierHelper.getAmmoCapacity(stack, modifiedGun))).withStyle(TextFormatting.DARK_GRAY));
             }
         }
 
         if (tagCompound != null) {
             if (tagCompound.get("CurrentFireMode") == null) {
             } else if (tagCompound.getInt("CurrentFireMode") == 0)
-                tooltip.add((new TranslationTextComponent("info.tac.firemode_safe", (new KeybindTextComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).mergeStyle(TextFormatting.GREEN));
+                tooltip.add((new TranslationTextComponent("info.tac.firemode_safe", (new KeybindTextComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(TextFormatting.GREEN));
             else if (tagCompound.getInt("CurrentFireMode") == 1)
-                tooltip.add((new TranslationTextComponent("info.tac.firemode_semi", (new KeybindTextComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).mergeStyle(TextFormatting.RED));
+                tooltip.add((new TranslationTextComponent("info.tac.firemode_semi", (new KeybindTextComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(TextFormatting.RED));
             else if (tagCompound.getInt("CurrentFireMode") == 2)
-                tooltip.add((new TranslationTextComponent("info.tac.firemode_auto", (new KeybindTextComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).mergeStyle(TextFormatting.RED));
+                tooltip.add((new TranslationTextComponent("info.tac.firemode_auto", (new KeybindTextComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(TextFormatting.RED));
         }
         GunItem gun = (GunItem) stack.getItem();
         if (tagCompound != null) {
             float speed = ServerPlayHandler.calceldGunWeightSpeed(gun.getGun(), stack);
             speed = Math.max(Math.min(speed, 0.1F), 0.075F);
             if (speed > 0.094f)
-                tooltip.add((new TranslationTextComponent("info.tac.lightWeightGun", new TranslationTextComponent(-((int) ((0.1 - speed) * 1000)) + "%").mergeStyle(TextFormatting.RED)).mergeStyle(TextFormatting.DARK_AQUA)));
+                tooltip.add((new TranslationTextComponent("info.tac.lightWeightGun", new TranslationTextComponent(-((int) ((0.1 - speed) * 1000)) + "%").withStyle(TextFormatting.RED)).withStyle(TextFormatting.DARK_AQUA)));
             else if (speed < 0.095 && speed > 0.0875)
-                tooltip.add((new TranslationTextComponent("info.tac.standardWeightGun", new TranslationTextComponent(-((int) ((0.1 - speed) * 1000)) + "%").mergeStyle(TextFormatting.RED)).mergeStyle(TextFormatting.DARK_GREEN)));
+                tooltip.add((new TranslationTextComponent("info.tac.standardWeightGun", new TranslationTextComponent(-((int) ((0.1 - speed) * 1000)) + "%").withStyle(TextFormatting.RED)).withStyle(TextFormatting.DARK_GREEN)));
             else
-                tooltip.add((new TranslationTextComponent("info.tac.heavyWeightGun", new TranslationTextComponent(-((int) ((0.1 - speed) * 1000)) + "%").mergeStyle(TextFormatting.RED)).mergeStyle(TextFormatting.DARK_RED)));
+                tooltip.add((new TranslationTextComponent("info.tac.heavyWeightGun", new TranslationTextComponent(-((int) ((0.1 - speed) * 1000)) + "%").withStyle(TextFormatting.RED)).withStyle(TextFormatting.DARK_RED)));
 
             float percentageToNextLevel = ( tagCompound.getFloat("levelDmg") * 100) / (modifiedGun.getGeneral().getLevelReq()*(((tagCompound.getInt("level"))*3.0f)));
             tooltip.add((new TranslationTextComponent("info.tac.current_level").append(new TranslationTextComponent( " " + tagCompound.getInt("level") + " : " + String.format("%.2f", percentageToNextLevel)+"%")))
-                    .mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.BOLD));
+                    .withStyle(TextFormatting.GRAY).withStyle(TextFormatting.BOLD));
         }
-        tooltip.add((new TranslationTextComponent("info.tac.attachment_help", (new KeybindTextComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH))).mergeStyle(TextFormatting.YELLOW));
+        tooltip.add((new TranslationTextComponent("info.tac.attachment_help", (new KeybindTextComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH))).withStyle(TextFormatting.YELLOW));
         if(gun.getGun().canAttachType(IAttachment.Type.PISTOL_SCOPE))
-            tooltip.add((new TranslationTextComponent("info.tac.pistolScope", new TranslationTextComponent("MiniScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
+            tooltip.add((new TranslationTextComponent("info.tac.pistolScope", new TranslationTextComponent("MiniScope").withStyle(TextFormatting.BOLD)).withStyle(TextFormatting.LIGHT_PURPLE)));
     }
 
     public IGunModifier[] getModifiers() {
@@ -134,7 +134,7 @@ public class TimelessGunItem extends GunItem {
     }
 
     @Override
-    public boolean hasEffect(ItemStack gunItem) {
+    public boolean isFoil(ItemStack gunItem) {
         return false;
     }
 }

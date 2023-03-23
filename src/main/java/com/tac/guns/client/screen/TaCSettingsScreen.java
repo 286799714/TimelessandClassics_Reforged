@@ -29,43 +29,43 @@ public class TaCSettingsScreen extends SettingsScreen {
 
     protected void init() {
         this.optionsList = new OptionsRowList(this.minecraft, this.width, this.height, 32, this.height - 32, 25);
-        if (InputMappings.func_224790_a()) {
-            this.optionsList.addOptions(Stream.concat(Arrays.stream(OPTIONS), Stream.of()).toArray((p_223702_0_) ->
+        if (InputMappings.isRawMouseInputSupported()) {
+            this.optionsList.addSmall(Stream.concat(Arrays.stream(OPTIONS), Stream.of()).toArray((p_223702_0_) ->
             {
                 return new AbstractOption[p_223702_0_];
             }));
-            this.optionsList.addOption(GunOptions.DOUBLE_RENDER_EXIST/*, GunOptions.REDDOT_SQUISH_EXIST*/);
-            this.optionsList.addOption(GunOptions.SHOW_FPS_TRAILS_EXIST);
+            this.optionsList.addBig(GunOptions.DOUBLE_RENDER_EXIST/*, GunOptions.REDDOT_SQUISH_EXIST*/);
+            this.optionsList.addBig(GunOptions.SHOW_FPS_TRAILS_EXIST);
 
-            this.optionsList.addOption(GunOptions.Fire_Volume);
+            this.optionsList.addBig(GunOptions.Fire_Volume);
 
-            this.optionsList.addOption(GunOptions.SIZE_FIREMODE_POS);
-            this.optionsList.addOption(GunOptions.FIREMODE_EXIST);
-            this.optionsList.addOption(GunOptions.X_FIREMODE_POS);
-            this.optionsList.addOption(GunOptions.Y_FIREMODE_POS);
+            this.optionsList.addBig(GunOptions.SIZE_FIREMODE_POS);
+            this.optionsList.addBig(GunOptions.FIREMODE_EXIST);
+            this.optionsList.addBig(GunOptions.X_FIREMODE_POS);
+            this.optionsList.addBig(GunOptions.Y_FIREMODE_POS);
 
-            this.optionsList.addOption(GunOptions.AMMOCOUNTER_EXIST);
-            this.optionsList.addOption(GunOptions.SIZE_AMMOCOUNTER_POS);
-            this.optionsList.addOption(GunOptions.X_AMMOCOUNTER_POS);
-            this.optionsList.addOption(GunOptions.Y_AMMOCOUNTER_POS);
+            this.optionsList.addBig(GunOptions.AMMOCOUNTER_EXIST);
+            this.optionsList.addBig(GunOptions.SIZE_AMMOCOUNTER_POS);
+            this.optionsList.addBig(GunOptions.X_AMMOCOUNTER_POS);
+            this.optionsList.addBig(GunOptions.Y_AMMOCOUNTER_POS);
 
-            this.optionsList.addOption(GunOptions.WeaponIcon_EXIST);
-            this.optionsList.addOption(GunOptions.SIZE_Icon_POS);
-            this.optionsList.addOption(GunOptions.X_Icon_POS);
-            this.optionsList.addOption(GunOptions.Y_Icon_POS);
+            this.optionsList.addBig(GunOptions.WeaponIcon_EXIST);
+            this.optionsList.addBig(GunOptions.SIZE_Icon_POS);
+            this.optionsList.addBig(GunOptions.X_Icon_POS);
+            this.optionsList.addBig(GunOptions.Y_Icon_POS);
 
-            this.optionsList.addOption(GunOptions.ReloadBar_EXIST);
-            this.optionsList.addOption(GunOptions.SIZE_ReloadBar_POS);
-            this.optionsList.addOption(GunOptions.X_ReloadBar_POS);
-            this.optionsList.addOption(GunOptions.Y_ReloadBar_POS);
+            this.optionsList.addBig(GunOptions.ReloadBar_EXIST);
+            this.optionsList.addBig(GunOptions.SIZE_ReloadBar_POS);
+            this.optionsList.addBig(GunOptions.X_ReloadBar_POS);
+            this.optionsList.addBig(GunOptions.Y_ReloadBar_POS);
         } else {
-            this.optionsList.addOptions(OPTIONS);
+            this.optionsList.addSmall(OPTIONS);
         }
 
         this.children.add(this.optionsList);
         this.addButton(new Button(this.width / 2 - 100, this.height - 27, 200, 20, DialogTexts.GUI_DONE, (p_223703_1_) -> {
-            this.gameSettings.saveOptions();
-            this.minecraft.displayGuiScreen(this.parentScreen);
+            this.options.save();
+            this.minecraft.setScreen(this.lastScreen);
         }));
     }
 

@@ -44,29 +44,29 @@ public class mk18_mod1_animation implements IOverrideModel {
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
     {
         MK18MOD1AnimationController controller = MK18MOD1AnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.MK18_MOD1_BODY.getModel(), MK18MOD1AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_BASIC_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
-                matrices.push();
+                matrices.pushPose();
                 matrices.translate(0, 0, -0.585);
                 matrices.scale(1, 1, 11);
                 matrices.translate(0, 0, 0.585);
                 RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_BASIC_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
-                matrices.pop();
+                matrices.popPose();
             }
             else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_IR_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay);
-                matrices.push();
-                if(transformType.isFirstPerson()) {
+                matrices.pushPose();
+                if(transformType.firstPerson()) {
                     // TODO: Build some sort of scaler for this
                     matrices.translate(0, 0, -0.55);
                     matrices.scale(1, 1, 9);
                     matrices.translate(0, 0, 0.55);
                     RenderUtil.renderLaserModuleModel(SpecialModels.MK18_MOD1_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 }
-                matrices.pop();
+                matrices.popPose();
             }
             if (Gun.getScope(stack) == null) {
                 RenderUtil.renderModel(SpecialModels.MK18_MOD1_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
@@ -103,11 +103,11 @@ public class mk18_mod1_animation implements IOverrideModel {
 
             RenderUtil.renderModel(SpecialModels.MK18_MOD1_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-            matrices.push();
+            matrices.pushPose();
             {
-                if(transformType.isFirstPerson()) {
-                    CooldownTracker tracker = Minecraft.getInstance().player.getCooldownTracker();
-                    float cooldownOg = tracker.getCooldown(stack.getItem(), Minecraft.getInstance().getRenderPartialTicks());
+                if(transformType.firstPerson()) {
+                    CooldownTracker tracker = Minecraft.getInstance().player.getCooldowns();
+                    float cooldownOg = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
 
                     if (Gun.hasAmmo(stack)) {
                         // Math provided by Bomb787 on GitHub and Curseforge!!!
@@ -120,11 +120,11 @@ public class mk18_mod1_animation implements IOverrideModel {
                 }
                 RenderUtil.renderModel(SpecialModels.MK18_MOD1_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-            matrices.pop();
+            matrices.popPose();
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.MK18_MOD1_BODY.getModel(), MK18MOD1AnimationController.INDEX_MAGAZINE, transformType, matrices);
 
@@ -134,7 +134,7 @@ public class mk18_mod1_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.MK18_MOD1_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 

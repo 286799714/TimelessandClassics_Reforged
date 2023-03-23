@@ -42,7 +42,7 @@ public class m24_animation implements IOverrideModel {
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
 
         M24AnimationController controller = M24AnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M24_BODY.getModel(), M24AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
@@ -50,16 +50,16 @@ public class m24_animation implements IOverrideModel {
             }
             RenderUtil.renderModel(SpecialModels.M24_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M24_BODY.getModel(), M24AnimationController.INDEX_BOLT, transformType, matrices);
             RenderUtil.renderModel(SpecialModels.M24_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M24_BODY.getModel(), M24AnimationController.INDEX_MAGAZINE, transformType, matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -68,9 +68,9 @@ public class m24_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.M24_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M24_BODY.getModel(), M24AnimationController.INDEX_BULLET, transformType, matrices);
             RenderUtil.renderModel(SpecialModels.M24_BULLET_SHELL.getModel(), stack, matrices, renderBuffer, light, overlay);
@@ -78,7 +78,7 @@ public class m24_animation implements IOverrideModel {
             boolean onlyShell = bolt != null && bolt.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
             if(!onlyShell) RenderUtil.renderModel(SpecialModels.M24_BULLET_HEAD.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
     }

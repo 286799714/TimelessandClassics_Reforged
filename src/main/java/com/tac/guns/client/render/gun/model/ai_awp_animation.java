@@ -41,18 +41,18 @@ public class ai_awp_animation implements IOverrideModel {
     {
         AWPAnimationController controller = AWPAnimationController.getInstance();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getScope(stack) == null) {
                 RenderUtil.renderModel(SpecialModels.AI_AWP_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
-                matrices.push();
+                matrices.pushPose();
                 matrices.translate(0, 0, -0.4);
                 RenderUtil.renderModel(SpecialModels.AI_AWP_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
                 matrices.translate(0, 0, 0.4);
-                matrices.pop();
+                matrices.popPose();
             } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.AI_AWP_COMPENSATOR.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.orElse(ItemStack.EMPTY.getItem())) {
@@ -60,23 +60,23 @@ public class ai_awp_animation implements IOverrideModel {
             }
             RenderUtil.renderModel(SpecialModels.AI_AWP.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_HANDLE, transformType, matrices);
             RenderUtil.renderModel(SpecialModels.AI_AWP_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_BOLT, transformType, matrices);
             RenderUtil.renderModel(SpecialModels.AI_AWP_BOLT_EXTRA.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_MAGAZINE, transformType, matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -85,16 +85,16 @@ public class ai_awp_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.AI_AWP_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             if(controller.isAnimationRunning()) {
                 controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_BULLET, transformType, matrices);
                 RenderUtil.renderModel(SpecialModels.AI_AWP_BULLET_SHELL.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }

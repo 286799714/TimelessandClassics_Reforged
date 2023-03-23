@@ -8,6 +8,9 @@ import java.math.BigInteger;
 
 import com.fasterxml.jackson.core.*;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.core.JsonParser.NumberType;
+
 /**
  * Helper class that implements
  * <a href="http://en.wikipedia.org/wiki/Delegation_pattern">delegation pattern</a> for {@link JsonParser},

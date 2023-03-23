@@ -94,8 +94,8 @@ public class HUDRenderingHandler extends AbstractGui {
         PlayerEntity player = Minecraft.getInstance().player;
         if(player == null)
             return;
-        if(Minecraft.getInstance().player.getHeldItemMainhand().getItem() instanceof GunItem) {
-            GunItem gunItem = (GunItem) Minecraft.getInstance().player.getHeldItemMainhand().getItem();
+        if(Minecraft.getInstance().player.getMainHandItem().getItem() instanceof GunItem) {
+            GunItem gunItem = (GunItem) Minecraft.getInstance().player.getMainHandItem().getItem();
             this.ammoReserveCount = ReloadTracker.calcMaxReserveAmmo(Gun.findAmmo(Minecraft.getInstance().player, gunItem.getGun().getProjectile().getItem()));
             // Only send if current id doesn't equal previous id, otherwise other serverside actions can force this to change like reloading
             if(player.isCreative())
@@ -116,11 +116,11 @@ public class HUDRenderingHandler extends AbstractGui {
         float jitterX = (float) (Math.sin(time / 1000000000.0) * 0.0005);
         float jitterY = (float) (Math.cos(time / 1000000000.0) * 0.0005);
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        BufferBuilder bufferbuilder = tessellator.getBuilder();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION);//beginWrite(false);
         GL11.glPushMatrix();
         GL11.glTranslatef(jitterX, jitterY, 0);
-        tessellator.draw();
+        tessellator.end();
     }
 
 
@@ -147,14 +147,14 @@ public class HUDRenderingHandler extends AbstractGui {
             RenderSystem.shadeModel(7425);
             RenderSystem.disableFog();
             Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferbuilder = tessellator.getBuffer();
+            BufferBuilder bufferbuilder = tessellator.getBuilder();
 
             bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
-            bufferbuilder.pos(0.0D, (double) Minecraft.getInstance().getMainWindow().getScaledHeight(), -90.0D).endVertex();
-            bufferbuilder.pos((double) Minecraft.getInstance().getMainWindow().getScaledWidth(), (double) Minecraft.getInstance().getMainWindow().getScaledHeight(), -90.0D).endVertex();
-            bufferbuilder.pos((double) Minecraft.getInstance().getMainWindow().getScaledWidth(), 0.0D, -90.0D).endVertex();
-            bufferbuilder.pos(0.0D, 0.0D, -90.0D).endVertex();
-            tessellator.draw();
+            bufferbuilder.vertex(0.0D, (double) Minecraft.getInstance().getWindow().getGuiScaledHeight(), -90.0D).endVertex();
+            bufferbuilder.vertex((double) Minecraft.getInstance().getWindow().getGuiScaledWidth(), (double) Minecraft.getInstance().getWindow().getGuiScaledHeight(), -90.0D).endVertex();
+            bufferbuilder.vertex((double) Minecraft.getInstance().getWindow().getGuiScaledWidth(), 0.0D, -90.0D).endVertex();
+            bufferbuilder.vertex(0.0D, 0.0D, -90.0D).endVertex();
+            tessellator.end();
             RenderSystem.shadeModel(7424);
             RenderSystem.disableBlend();
             RenderSystem.enableTexture();
@@ -174,11 +174,11 @@ public class HUDRenderingHandler extends AbstractGui {
         // Basic force gammed night vision
         if (doNightVision) {
             if(defaultGameGamma == 0)
-                defaultGameGamma = Minecraft.getInstance().gameSettings.gamma;
-            Minecraft.getInstance().gameSettings.gamma = 200;
+                defaultGameGamma = Minecraft.getInstance().options.gamma;
+            Minecraft.getInstance().options.gamma = 200;
         }
         else {
-            Minecraft.getInstance().gameSettings.gamma = defaultGameGamma;
+            Minecraft.getInstance().options.gamma = defaultGameGamma;
         }
     }
 
@@ -197,10 +197,10 @@ public class HUDRenderingHandler extends AbstractGui {
         }
 
         ClientPlayerEntity player = Minecraft.getInstance().player;
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         MatrixStack stack = event.getMatrixStack();
-        float anchorPointX = event.getWindow().getScaledWidth() / 12F * 11F;
-        float anchorPointY = event.getWindow().getScaledHeight() / 10F * 9F;
+        float anchorPointX = event.getWindow().getGuiScaledWidth() / 12F * 11F;
+        float anchorPointY = event.getWindow().getGuiScaledHeight() / 10F * 9F;
 
         float configScaleWeaponCounter = Config.CLIENT.weaponGUI.weaponAmmoCounter.weaponAmmoCounterSize.get().floatValue();
         float configScaleWeaponFireMode = Config.CLIENT.weaponGUI.weaponFireMode.weaponFireModeSize.get().floatValue();
@@ -213,16 +213,16 @@ public class HUDRenderingHandler extends AbstractGui {
         float hitMarkerSize = 128.0F;
 
         RenderSystem.enableAlphaTest();
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        int width = event.getWindow().getWidth();
-        int height = event.getWindow().getHeight();
+        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
+        int width = event.getWindow().getScreenWidth();
+        int height = event.getWindow().getScreenHeight();
 
         // TODO: turn hitMarkerTracker into a float/frame time variable
         if(this.hitMarkerTracker > 0 && ((AimingHandler.get().isAiming() && Gun.getScope(heldItem) == null) || !AimingHandler.get().isAiming()))//Hit Markers
         {
             RenderSystem.enableAlphaTest();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            stack.push();
+            stack.pushPose();
             {
                 stack.translate(width / 2F, height / 2F, 0);
                 //float size = 0.1f;
@@ -235,19 +235,19 @@ public class HUDRenderingHandler extends AbstractGui {
                 else
                     hitMarker = fleshHitMarker;
 
-                Minecraft.getInstance().getTextureManager().bindTexture(hitMarker); // Future options to render bar types
+                Minecraft.getInstance().getTextureManager().bind(hitMarker); // Future options to render bar types
 
                 float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.25f);
 
-                Matrix4f matrix = stack.getLast().getMatrix();
-                buffer.pos(matrix, 0, hitMarkerSize, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.pos(matrix, hitMarkerSize, hitMarkerSize, 0).tex(1, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.pos(matrix, hitMarkerSize, 0, 0).tex(1, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
+                Matrix4f matrix = stack.last().pose();
+                buffer.vertex(matrix, 0, hitMarkerSize, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
+                buffer.vertex(matrix, hitMarkerSize, hitMarkerSize, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
+                buffer.vertex(matrix, hitMarkerSize, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
+                buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
             }
-            buffer.finishDrawing();
-            WorldVertexBufferUploader.draw(buffer);
-            stack.pop();
+            buffer.end();
+            WorldVertexBufferUploader.end(buffer);
+            stack.popPose();
         }
         //this.hitMarkerTracker--;
 
@@ -260,19 +260,19 @@ public class HUDRenderingHandler extends AbstractGui {
                 RenderSystem.enableBlend();
                 RenderSystem.enableTexture();
                 buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-                stack.push();
+                stack.pushPose();
 
-                Minecraft.getInstance().getTextureManager().bindTexture(getNoiseTypeResource(true));
+                Minecraft.getInstance().getTextureManager().bind(getNoiseTypeResource(true));
                 float opacity = 0.25f;//0.125f;// EnchancedVisuals-1.16.5 helped with this one, instead have a fading opacity visual.getOpacity();
-                Matrix4f matrix = stack.getLast().getMatrix();
-                buffer.pos(matrix, 0, width, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, opacity).endVertex();
-                buffer.pos(matrix, width, height, 0).tex(1, 1).color(1.0F, 1.0F, 1.0F, opacity).endVertex();
-                buffer.pos(matrix, width, 0, 0).tex(1, 0).color(1.0F, 1.0F, 1.0F, opacity).endVertex();
-                buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 1.0F, 1.0F, opacity).endVertex();
+                Matrix4f matrix = stack.last().pose();
+                buffer.vertex(matrix, 0, width, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, opacity).endVertex();
+                buffer.vertex(matrix, width, height, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, opacity).endVertex();
+                buffer.vertex(matrix, width, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, opacity).endVertex();
+                buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, opacity).endVertex();
 
-                buffer.finishDrawing();
-                WorldVertexBufferUploader.draw(buffer);
-                stack.pop();
+                buffer.end();
+                WorldVertexBufferUploader.end(buffer);
+                stack.popPose();
             }
         }
 
@@ -282,23 +282,23 @@ public class HUDRenderingHandler extends AbstractGui {
             RenderSystem.enableAlphaTest();
 
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            stack.push();
+            stack.pushPose();
             {
                 stack.translate(anchorPointX - (ReloadBarSize*4.35) / 4F, anchorPointY + (ReloadBarSize*1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
                 stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
                 // stack.translate(0, 0, );
                 stack.scale(2.1F*(1-ArmorInteractionHandler.get().getRepairProgress(event.getPartialTicks(), player)),0.25F,0); // *21F
-                Minecraft.getInstance().getTextureManager().bindTexture(RELOAD_ICONS[0]); // Future options to render bar types
+                Minecraft.getInstance().getTextureManager().bind(RELOAD_ICONS[0]); // Future options to render bar types
 
-                Matrix4f matrix = stack.getLast().getMatrix();
-                buffer.pos(matrix, 0, ReloadBarSize, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, ReloadBarSize, ReloadBarSize, 0).tex(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, ReloadBarSize, 0, 0).tex(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                Matrix4f matrix = stack.last().pose();
+                buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
             }
-            buffer.finishDrawing();
-            WorldVertexBufferUploader.draw(buffer);
-            stack.pop();
+            buffer.end();
+            WorldVertexBufferUploader.end(buffer);
+            stack.popPose();
         }
 
         /*if(ArmorInteractionHandler.get().isRepairing())//Replace with reload bar checker
@@ -328,7 +328,7 @@ public class HUDRenderingHandler extends AbstractGui {
 
 
 
-        if(!(Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND).getItem() instanceof TimelessGunItem))
+        if(!(Minecraft.getInstance().player.getItemInHand(Hand.MAIN_HAND).getItem() instanceof TimelessGunItem))
             return;
         TimelessGunItem gunItem = (TimelessGunItem) heldItem.getItem();
         Gun gun = gunItem.getGun();
@@ -343,9 +343,9 @@ public class HUDRenderingHandler extends AbstractGui {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.defaultAlphaFunc();
-            buffer = Tessellator.getInstance().getBuffer();
+            buffer = Tessellator.getInstance().getBuilder();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            stack.push();
+            stack.pushPose();
             {
                 stack.translate(anchorPointX - (fireModeSize*2) / 4F, anchorPointY - (fireModeSize*2) / 5F * 3F, 0);
                 stack.translate(-fireModeSize + (-62.7) + (-Config.CLIENT.weaponGUI.weaponFireMode.x.get().floatValue()), -fireModeSize + 52.98 + (-Config.CLIENT.weaponGUI.weaponFireMode.y.get().floatValue()), 0);
@@ -354,18 +354,18 @@ public class HUDRenderingHandler extends AbstractGui {
                 int fireMode;
 
                 try {
-                    if (player.getHeldItemMainhand().getTag() == null) {
+                    if (player.getMainHandItem().getTag() == null) {
                         if (!Config.COMMON.gameplay.safetyExistence.get())
                             fireMode = gun.getGeneral().getRateSelector()[1];
                         else
                             fireMode = gun.getGeneral().getRateSelector()[0];
-                    } else if (player.getHeldItemMainhand().getTag().getInt("CurrentFireMode") == 0)
+                    } else if (player.getMainHandItem().getTag().getInt("CurrentFireMode") == 0)
                         if (!Config.COMMON.gameplay.safetyExistence.get())
                             fireMode = gun.getGeneral().getRateSelector()[1];
                         else
                             fireMode = gun.getGeneral().getRateSelector()[0];
                     else
-                        fireMode = Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode");
+                        fireMode = Objects.requireNonNull(player.getMainHandItem().getTag()).getInt("CurrentFireMode");
                 }
                 catch (ArrayIndexOutOfBoundsException e)
                 {
@@ -376,72 +376,72 @@ public class HUDRenderingHandler extends AbstractGui {
                     fireMode = 0;
                     GunMod.LOGGER.log(Level.ERROR, "TaC HUD_RENDERER has failed obtaining the fire mode");
                 }
-                Minecraft.getInstance().getTextureManager().bindTexture(FIREMODE_ICONS[fireMode]); // Render true firemode
+                Minecraft.getInstance().getTextureManager().bind(FIREMODE_ICONS[fireMode]); // Render true firemode
 
-                Matrix4f matrix = stack.getLast().getMatrix();
-                buffer.pos(matrix, 0, fireModeSize/2, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, fireModeSize/2, fireModeSize/2, 0).tex(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, fireModeSize/2, 0, 0).tex(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                Matrix4f matrix = stack.last().pose();
+                buffer.vertex(matrix, 0, fireModeSize/2, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, fireModeSize/2, fireModeSize/2, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, fireModeSize/2, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
             }
-            stack.pop();
-            buffer.finishDrawing();
-            WorldVertexBufferUploader.draw(buffer);
+            stack.popPose();
+            buffer.end();
+            WorldVertexBufferUploader.end(buffer);
         }
         if(Config.CLIENT.weaponGUI.weaponAmmoCounter.showWeaponAmmoCounter.get()) {
             // Text rendering
-            stack.push();
+            stack.pushPose();
             {
                 stack.translate(
                     (anchorPointX - (counterSize*32) / 2) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.x.get().floatValue()),
                     (anchorPointY - (counterSize*32) / 4) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.y.get().floatValue()),
                     0
             );
-            if(player.getHeldItemMainhand().getTag() != null) {
+            if(player.getMainHandItem().getTag() != null) {
                 IFormattableTextComponent currentAmmo;
                 IFormattableTextComponent reserveAmmo;
 
-                int ammo = player.getHeldItemMainhand().getTag().getInt("AmmoCount");
-                if (player.getHeldItemMainhand().getTag().getInt("AmmoCount") <= gun.getReloads().getMaxAmmo() / 4 && this.ammoReserveCount <= gun.getReloads().getMaxAmmo()) {
-                    currentAmmo = byPaddingZeros(ammo).append(new TranslationTextComponent("" + ammo)).mergeStyle(TextFormatting.RED);
+                int ammo = player.getMainHandItem().getTag().getInt("AmmoCount");
+                if (player.getMainHandItem().getTag().getInt("AmmoCount") <= gun.getReloads().getMaxAmmo() / 4 && this.ammoReserveCount <= gun.getReloads().getMaxAmmo()) {
+                    currentAmmo = byPaddingZeros(ammo).append(new TranslationTextComponent("" + ammo)).withStyle(TextFormatting.RED);
                     reserveAmmo =
-                            byPaddingZeros(this.ammoReserveCount > 10000 ? 10000 : this.ammoReserveCount).append(new TranslationTextComponent("" + (this.ammoReserveCount > 10000 ? 9999 : this.ammoReserveCount))).mergeStyle(TextFormatting.RED);
+                            byPaddingZeros(this.ammoReserveCount > 10000 ? 10000 : this.ammoReserveCount).append(new TranslationTextComponent("" + (this.ammoReserveCount > 10000 ? 9999 : this.ammoReserveCount))).withStyle(TextFormatting.RED);
                 } else if (this.ammoReserveCount <= gun.getReloads().getMaxAmmo()) {
-                    currentAmmo = byPaddingZeros(ammo).append(new TranslationTextComponent("" + ammo).mergeStyle(TextFormatting.WHITE));
-                    reserveAmmo = byPaddingZeros(this.ammoReserveCount > 10000 ? 10000 : this.ammoReserveCount).append(new TranslationTextComponent("" + (this.ammoReserveCount > 10000 ? 9999 : this.ammoReserveCount))).mergeStyle(TextFormatting.RED);
-                } else if (player.getHeldItemMainhand().getTag().getInt("AmmoCount") <= gun.getReloads().getMaxAmmo() / 4) {
-                    currentAmmo = byPaddingZeros(ammo).append(new TranslationTextComponent("" + ammo)).mergeStyle(TextFormatting.RED);
-                    reserveAmmo = byPaddingZeros(this.ammoReserveCount > 10000 ? 10000 : this.ammoReserveCount).append(new TranslationTextComponent("" + (this.ammoReserveCount > 10000 ? 9999 : this.ammoReserveCount))).mergeStyle(TextFormatting.GRAY);
+                    currentAmmo = byPaddingZeros(ammo).append(new TranslationTextComponent("" + ammo).withStyle(TextFormatting.WHITE));
+                    reserveAmmo = byPaddingZeros(this.ammoReserveCount > 10000 ? 10000 : this.ammoReserveCount).append(new TranslationTextComponent("" + (this.ammoReserveCount > 10000 ? 9999 : this.ammoReserveCount))).withStyle(TextFormatting.RED);
+                } else if (player.getMainHandItem().getTag().getInt("AmmoCount") <= gun.getReloads().getMaxAmmo() / 4) {
+                    currentAmmo = byPaddingZeros(ammo).append(new TranslationTextComponent("" + ammo)).withStyle(TextFormatting.RED);
+                    reserveAmmo = byPaddingZeros(this.ammoReserveCount > 10000 ? 10000 : this.ammoReserveCount).append(new TranslationTextComponent("" + (this.ammoReserveCount > 10000 ? 9999 : this.ammoReserveCount))).withStyle(TextFormatting.GRAY);
                 } else {
-                    currentAmmo = byPaddingZeros(ammo).append(new TranslationTextComponent("" + ammo).mergeStyle(TextFormatting.WHITE));
-                    reserveAmmo = byPaddingZeros(this.ammoReserveCount > 10000 ? 10000 : this.ammoReserveCount).append(new TranslationTextComponent("" + (this.ammoReserveCount > 10000 ? 9999 : this.ammoReserveCount))).mergeStyle(TextFormatting.GRAY);
+                    currentAmmo = byPaddingZeros(ammo).append(new TranslationTextComponent("" + ammo).withStyle(TextFormatting.WHITE));
+                    reserveAmmo = byPaddingZeros(this.ammoReserveCount > 10000 ? 10000 : this.ammoReserveCount).append(new TranslationTextComponent("" + (this.ammoReserveCount > 10000 ? 9999 : this.ammoReserveCount))).withStyle(TextFormatting.GRAY);
                 }
                 stack.scale(counterSize, counterSize, counterSize);
-                stack.push();
+                stack.pushPose();
                 {
                     stack.translate(-21.15, 0, 0 );
-                    drawString(stack, Minecraft.getInstance().fontRenderer, currentAmmo, 0, 0, 0xffffff); // Gun ammo
+                    drawString(stack, Minecraft.getInstance().font, currentAmmo, 0, 0, 0xffffff); // Gun ammo
                 }
-                stack.pop();
+                stack.popPose();
 
-                stack.push();
+                stack.pushPose();
                 {
                     stack.scale(0.7f, 0.7f, 0.7f);
                     stack.translate(
                             (3.7),
                             (3.4),
                             0 );
-                    drawString(stack, Minecraft.getInstance().fontRenderer, reserveAmmo, 0, 0, 0xffffff); // Reserve ammo
+                    drawString(stack, Minecraft.getInstance().font, reserveAmmo, 0, 0, 0xffffff); // Reserve ammo
                 }
-                stack.pop();
+                stack.popPose();
                 }
             }
-            stack.pop();
+            stack.popPose();
 
 
-            stack.push();
+            stack.pushPose();
             RenderSystem.enableAlphaTest();
-            buffer = Tessellator.getInstance().getBuffer();
+            buffer = Tessellator.getInstance().getBuilder();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
             stack.translate(anchorPointX - (ReloadBarSize*4.35) / 4F, anchorPointY + (ReloadBarSize*1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
@@ -450,26 +450,26 @@ public class HUDRenderingHandler extends AbstractGui {
             stack.translate(-16.25-7.3, 0.15+1.6, 0);
             // stack.translate(0, 0, );
             stack.scale(3.05F,0.028F,0); // *21F
-            Minecraft.getInstance().getTextureManager().bindTexture(RELOAD_ICONS[0]); // Future options to render bar types
+            Minecraft.getInstance().getTextureManager().bind(RELOAD_ICONS[0]); // Future options to render bar types
 
-            Matrix4f matrix = stack.getLast().getMatrix();
-            buffer.pos(matrix, 0, ReloadBarSize, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-            buffer.pos(matrix, ReloadBarSize, ReloadBarSize, 0).tex(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-            buffer.pos(matrix, ReloadBarSize, 0, 0).tex(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-            buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            Matrix4f matrix = stack.last().pose();
+            buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
 
             stack.translate(19.25, (1.5+(-63.4))*10, 0);
             // stack.translate(0, 0, );
             stack.scale(0.0095F,20.028F,0); // *21F
 
-            buffer.pos(matrix, 0, ReloadBarSize, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-            buffer.pos(matrix, ReloadBarSize, ReloadBarSize, 0).tex(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-            buffer.pos(matrix, ReloadBarSize, 0, 0).tex(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-            buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
 
-            buffer.finishDrawing();
-            WorldVertexBufferUploader.draw(buffer);
-            stack.pop();
+            buffer.end();
+            WorldVertexBufferUploader.end(buffer);
+            stack.popPose();
         }
     }
             /*if (Minecraft.getInstance().gameSettings.viewBobbing) {
@@ -504,7 +504,7 @@ public class HUDRenderingHandler extends AbstractGui {
     private static IFormattableTextComponent byPaddingZeros(int number) {
         String text = String.format("%0" + (byPaddingZerosCount(number)+1) + "d", 1);
         text = text.substring(0, text.length()-1);
-        return new TranslationTextComponent(text).mergeStyle(TextFormatting.GRAY);
+        return new TranslationTextComponent(text).withStyle(TextFormatting.GRAY);
     }
     private static int byPaddingZerosCount(int length) {
         if(length < 10)

@@ -15,6 +15,8 @@ import com.fasterxml.jackson.databind.deser.ValueInstantiator;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 
+import com.fasterxml.jackson.databind.Module.SetupContext;
+
 /**
  * Vanilla {@link Module} implementation that allows registration
  * of serializers and deserializers, bean serializer

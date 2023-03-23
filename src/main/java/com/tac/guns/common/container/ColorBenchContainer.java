@@ -29,16 +29,16 @@ public class ColorBenchContainer extends Container
     private IInventory weaponInventory = new Inventory(IWeaponColorable.WeaponColorSegment.values().length)
     {
         @Override
-        public void markDirty()
+        public void setChanged()
         {
-            super.markDirty();
-            ColorBenchContainer.this.onCraftMatrixChanged(this);
+            super.setChanged();
+            ColorBenchContainer.this.slotsChanged(this);
         }
     };
     public ColorBenchContainer(int windowId, PlayerInventory playerInventory)
     {
         super(ModContainers.COLOR_BENCH.get(), windowId);
-        this.weapon = playerInventory.getCurrentItem();
+        this.weapon = playerInventory.getSelected();
         this.playerInventory = playerInventory;
 
         if(this.weapon.getItem() instanceof GunItem)
@@ -59,12 +59,12 @@ public class ColorBenchContainer extends Container
 
         for(int i = 0; i < 9; i++)
         {
-            if(i == playerInventory.currentItem)
+            if(i == playerInventory.selected)
             {
                 this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 160)
                 {
                     @Override
-                    public boolean canTakeStack(PlayerEntity playerIn)
+                    public boolean mayPickup(PlayerEntity playerIn)
                     {
                         return false;
                     }
@@ -78,7 +78,7 @@ public class ColorBenchContainer extends Container
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn)
+    public boolean stillValid(PlayerEntity playerIn)
     {
         return true;
     }
@@ -130,10 +130,10 @@ public class ColorBenchContainer extends Container
     }*/
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
     {
         ItemStack copyStack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
+        Slot slot = this.slots.get(index);
 
 /*        if (this.weapon.getItem() instanceof ScopeItem)
         {
@@ -173,20 +173,20 @@ public class ColorBenchContainer extends Container
             }
         }
         else {*/
-            if (slot != null && slot.getHasStack()) {
-                ItemStack slotStack = slot.getStack();
+            if (slot != null && slot.hasItem()) {
+                ItemStack slotStack = slot.getItem();
                 copyStack = slotStack.copy();
-                if (index < this.weaponInventory.getSizeInventory()) {
-                    if (!this.mergeItemStack(slotStack, this.weaponInventory.getSizeInventory(), this.inventorySlots.size(), true)) {
+                if (index < this.weaponInventory.getContainerSize()) {
+                    if (!this.moveItemStackTo(slotStack, this.weaponInventory.getContainerSize(), this.slots.size(), true)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.mergeItemStack(slotStack, 0, this.weaponInventory.getSizeInventory(), false)) {
+                } else if (!this.moveItemStackTo(slotStack, 0, this.weaponInventory.getContainerSize(), false)) {
                     return ItemStack.EMPTY;
                 }
                 if (slotStack.isEmpty()) {
-                    slot.putStack(ItemStack.EMPTY);
+                    slot.set(ItemStack.EMPTY);
                 } else {
-                    slot.onSlotChanged();
+                    slot.setChanged();
                 }
             }//}
 

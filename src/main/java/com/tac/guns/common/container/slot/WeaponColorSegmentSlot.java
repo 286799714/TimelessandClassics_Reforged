@@ -35,7 +35,7 @@ public class WeaponColorSegmentSlot extends Slot
     }
 
     @Override
-    public boolean isEnabled()
+    public boolean isActive()
     {
         if(this.weapon.getItem() instanceof GunItem)
             return true;
@@ -44,7 +44,7 @@ public class WeaponColorSegmentSlot extends Slot
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack)
+    public boolean mayPlace(ItemStack stack)
     {
         if(this.weapon.getItem() instanceof GunItem)
             return stack.getItem() instanceof DyeItem;
@@ -61,7 +61,7 @@ public class WeaponColorSegmentSlot extends Slot
         }
     }*/
     @Override
-    public int getSlotStackLimit()
+    public int getMaxStackSize()
     {
         return 1;
     }

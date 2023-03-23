@@ -121,7 +121,7 @@ public class glock_17_animation implements IOverrideModel {
         Glock17AnimationController controller = Glock17AnimationController.getInstance();
         GunItem gunItem = ((GunItem) stack.getItem());
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.GLOCK_17.getModel(),Glock17AnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
@@ -129,9 +129,9 @@ public class glock_17_animation implements IOverrideModel {
             }
             RenderUtil.renderModel(SpecialModels.GLOCK_17.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.GLOCK_17.getModel(),Glock17AnimationController.INDEX_MAG,transformType,matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -140,11 +140,11 @@ public class glock_17_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.GLOCK_17_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
         //Always push
-        matrices.push();
+        matrices.pushPose();
         controller.applySpecialModelTransform(SpecialModels.GLOCK_17.getModel(),Glock17AnimationController.INDEX_SLIDE,transformType,matrices);
-        if(transformType.isFirstPerson()) {
+        if(transformType.firstPerson()) {
             Gun gun = ((GunItem) stack.getItem()).getGun();
             float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ?
                     1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -165,7 +165,7 @@ public class glock_17_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.GLOCK_17_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
      

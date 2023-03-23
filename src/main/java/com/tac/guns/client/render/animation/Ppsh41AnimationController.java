@@ -11,6 +11,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.io.IOException;
 
+import com.tac.guns.client.render.animation.module.GunAnimationController.AnimationLabel;
+
 @OnlyIn(Dist.CLIENT)
 public class Ppsh41AnimationController extends GunAnimationController {
     public static int INDEX_BODY = 1;

@@ -10,6 +10,8 @@ import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 
+import com.tac.guns.client.render.animation.module.GunAnimationController.AnimationLabel;
+
 public class DBShotgunAnimationController extends GunAnimationController {
     public static int INDEX_FRONT = 8;
     public static int INDEX_REAR = 5;

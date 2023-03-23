@@ -35,18 +35,18 @@ public class m1851_animation implements IOverrideModel {
 //        if(entity.equals(Minecraft.getInstance().player)) {
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
 
         //We're getting the cooldown tracker for the item - items like the sword, ender pearl, and chorus fruit all have this too.
-        CooldownTracker tracker = Minecraft.getInstance().player.getCooldownTracker();
-        float cooldown = tracker.getCooldown(stack.getItem(), Minecraft.getInstance().getRenderPartialTicks());
+        CooldownTracker tracker = Minecraft.getInstance().player.getCooldowns();
+        float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
         cooldown = (float) easeInOutBack(cooldown);
 
         //Here we're moving the model into position
         matrices.translate(0, -5.0 * 0.0625, 0);
 
         //We rotate the chamber part of the model according to the cooldown variable above, which is manipulated by the method provided below.
-        matrices.rotate(Vector3f.ZN.rotationDegrees(20F * cooldown));
+        matrices.mulPose(Vector3f.ZN.rotationDegrees(20F * cooldown));
         //Then move it
         matrices.translate(0, 5.0 * 0.0625, 0.0);
 
@@ -69,7 +69,7 @@ public class m1851_animation implements IOverrideModel {
         */
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
     }
     private double easeInOutBack(double x) {
         double c1 = 1.70158;

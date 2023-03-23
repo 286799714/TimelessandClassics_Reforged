@@ -40,11 +40,11 @@ public class MessageBulletTrail implements IMessage
         for(int i = 0; i < spawnedProjectiles.length; i++)
         {
             ProjectileEntity projectile = spawnedProjectiles[i];
-            this.positions[i] = projectile.getPositionVec();
-            this.motions[i] = projectile.getMotion();
-            this.shooterYaws[i] = projectile.getShooter().getYaw(1);
-            this.shooterPitches[i] = projectile.getShooter().getPitch(1);
-            this.entityIds[i] = projectile.getEntityId();
+            this.positions[i] = projectile.position();
+            this.motions[i] = projectile.getDeltaMovement();
+            this.shooterYaws[i] = projectile.getShooter().getViewYRot(1);
+            this.shooterPitches[i] = projectile.getShooter().getViewXRot(1);
+            this.entityIds[i] = projectile.getId();
         }
         this.item = spawnedProjectiles[0].getItem();
         this.trailColor = projectileProps.getTrailColor();
@@ -76,7 +76,7 @@ public class MessageBulletTrail implements IMessage
             buffer.writeFloat(this.shooterYaws[i]);
             buffer.writeFloat(this.shooterPitches[i]);
         }
-        buffer.writeItemStack(this.item);
+        buffer.writeItem(this.item);
         buffer.writeVarInt(this.trailColor);
         buffer.writeDouble(this.trailLengthMultiplier);
         buffer.writeInt(this.life);
@@ -102,7 +102,7 @@ public class MessageBulletTrail implements IMessage
             this.shooterYaws[i] = buffer.readFloat();
             this.shooterPitches[i] = buffer.readFloat();
         }
-        this.item = buffer.readItemStack();
+        this.item = buffer.readItem();
         this.trailColor = buffer.readVarInt();
         this.trailLengthMultiplier = buffer.readDouble();
         this.life = buffer.readInt();

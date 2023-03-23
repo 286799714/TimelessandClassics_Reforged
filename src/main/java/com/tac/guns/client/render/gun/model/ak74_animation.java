@@ -69,7 +69,7 @@ public class ak74_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.AK74.getModel(), stack, matrices, renderBuffer, light, overlay);
 
             //Always push
-            matrices.push();
+            matrices.pushPose();
 
             //We're getting the cooldown tracker for the item - items like the sword, ender pearl, and chorus fruit all have this too.
             Gun gun = ((GunItem) stack.getItem()).getGun();
@@ -94,7 +94,7 @@ public class ak74_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.AK47_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
 
             //Always pop
-            matrices.pop();
+            matrices.popPose();
     }
 
      

@@ -105,7 +105,7 @@ public class m4_archive_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.M4_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         //RenderUtil.renderModel(SpecialModels.M4_BOLT_HANDLE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-        matrices.push();
+        matrices.pushPose();
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -127,6 +127,6 @@ public class m4_archive_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.M4_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
 }

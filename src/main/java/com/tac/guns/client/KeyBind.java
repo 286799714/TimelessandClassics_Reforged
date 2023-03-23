@@ -29,7 +29,7 @@ public final class KeyBind
 	private static long getHandle(){
 		long value;
 		try{
-			value = Minecraft.getInstance().getMainWindow().getHandle();
+			value = Minecraft.getInstance().getWindow().getWindow();
 		}
 		catch (NullPointerException e){
 			value = 0;
@@ -79,7 +79,7 @@ public final class KeyBind
 	}
 
 	public int getKeyCode() {
-		return keyCode.getKeyCode();
+		return keyCode.getValue();
 	}
 	
 	/**
@@ -89,8 +89,8 @@ public final class KeyBind
 	{
 		this.$keyCode(
 			keyCode >= 0
-			? ( inputType.length > 0 ? inputType[ 0 ] : Type.KEYSYM ).getOrMakeInput( keyCode )
-			: InputMappings.INPUT_INVALID
+			? ( inputType.length > 0 ? inputType[ 0 ] : Type.KEYSYM ).getOrCreate( keyCode )
+			: InputMappings.UNKNOWN
 		);
 		this.keyBind = new KeyBinding(
 			name,
@@ -100,19 +100,19 @@ public final class KeyBind
 		);
 		
 		// Bind to none to avoid conflict
-		this.keyBind.bind( InputMappings.INPUT_INVALID );
+		this.keyBind.setKey( InputMappings.UNKNOWN );
 		
 		REGISTRY.put( this.name(), this );
 	}
 	
-	public String name() { return this.keyBind.getKeyDescription(); }
+	public String name() { return this.keyBind.getName(); }
 	
 	public Input keyCode() { return this.keyCode; }
 	
 	public void $keyCode( Input code )
 	{
 		this.keyCode = code;
-		if( code == InputMappings.INPUT_INVALID )
+		if( code == InputMappings.UNKNOWN )
 			this.updater = UPDATER_NONE;
 		else switch( code.getType() )
 		{
@@ -135,7 +135,7 @@ public final class KeyBind
 	
 	void update()
 	{
-		if( !this.updater.apply( this.keyCode.getKeyCode() ) )
+		if( !this.updater.apply( this.keyCode.getValue() ) )
 			this.down = false;
 		else if( !this.down )
 		{
@@ -147,7 +147,7 @@ public final class KeyBind
 	
 	void reset() { this.down = false; }
 	
-	void restoreKeyBind() { this.keyBind.bind( this.keyCode ); }
+	void restoreKeyBind() { this.keyBind.setKey( this.keyCode ); }
 	
 	boolean clearKeyBind()
 	{
@@ -156,7 +156,7 @@ public final class KeyBind
 		
 		// Key bind has been changed, update it
 		this.$keyCode( code );
-		this.keyBind.bind( InputMappings.INPUT_INVALID );
+		this.keyBind.setKey( InputMappings.UNKNOWN );
 		return true;
 	}
 	

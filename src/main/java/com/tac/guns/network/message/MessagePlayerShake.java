@@ -40,13 +40,13 @@ public class MessagePlayerShake implements IMessage
     public MessagePlayerShake(float value) {this.attackedAtYaw = value;}
     public MessagePlayerShake(LivingEntity entity)
     {
-        this.attackedAtYaw = entity.attackedAtYaw;
+        this.attackedAtYaw = entity.hurtDir;
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void fromMessage()
     {
-        Minecraft.getInstance().player.attackedAtYaw = 2.0f;
+        Minecraft.getInstance().player.hurtDir = 2.0f;
         Minecraft.getInstance().player.hurtTime = Config.CLIENT.display.cameraShakeOnHit.get();
     }
 
@@ -57,7 +57,7 @@ public class MessagePlayerShake implements IMessage
         if(supplier.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
             return;
 
-        Minecraft.getInstance().deferTask(() ->
+        Minecraft.getInstance().submitAsync(() ->
         {
             fromMessage();
         });

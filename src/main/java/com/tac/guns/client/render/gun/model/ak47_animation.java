@@ -42,7 +42,7 @@ public class ak47_animation implements IOverrideModel {
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
         
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.AK47.getModel(),Ak47AnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getScope(stack) != null) {
@@ -81,10 +81,10 @@ public class ak47_animation implements IOverrideModel {
 
             RenderUtil.renderModel(SpecialModels.AK47.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.AK47.getModel(), Ak47AnimationController.INDEX_BOLT, transformType, matrices);
 
@@ -92,16 +92,16 @@ public class ak47_animation implements IOverrideModel {
             Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
         */
-            if(transformType.isFirstPerson()) {
+            if(transformType.firstPerson()) {
                 // Math provided by Bomb787 on GitHub and Curseforge!!!
                 matrices.translate(0, 0, 0.190f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1));
             }
             RenderUtil.renderModel(SpecialModels.AK47_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         //Always pop
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.AK47.getModel(), Ak47AnimationController.INDEX_MAGAZINE, transformType, matrices);
             if(GunModifierHelper.getAmmoCapacity(stack) > -1)
@@ -113,10 +113,10 @@ public class ak47_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.AK47_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
         if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation()) ){
-            matrices.push();
+            matrices.pushPose();
             {
                 controller.applySpecialModelTransform(SpecialModels.AK47.getModel(), Ak47AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
                 if(GunModifierHelper.getAmmoCapacity(stack) > -1)
@@ -128,7 +128,7 @@ public class ak47_animation implements IOverrideModel {
                     RenderUtil.renderModel(SpecialModels.AK47_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
                 }
             }
-            matrices.pop();
+            matrices.popPose();
         }
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);

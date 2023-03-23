@@ -36,7 +36,7 @@ public class scar_l_animation implements IOverrideModel {
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
     {
         SCAR_LAnimationController controller = SCAR_LAnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.SCAR_L_BODY.getModel(), SCAR_LAnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
@@ -54,32 +54,32 @@ public class scar_l_animation implements IOverrideModel {
 
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_MINI_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
-                matrices.push();
+                matrices.pushPose();
                 matrices.translate(0, 0, -0.35);
                 matrices.scale(1, 1, 11);
                 matrices.translate(0, 0, 0.35);
                 RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_MINI_LASER_BEAM.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
-                matrices.pop();
+                matrices.popPose();
             }
             else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_IR_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay);
-                matrices.push();
-                if(transformType.isFirstPerson()) {
+                matrices.pushPose();
+                if(transformType.firstPerson()) {
                     // TODO: Build some sort of scaler for this
                     matrices.translate(0, 0, -0.35);
                     matrices.scale(1, 1, 9);
                     matrices.translate(0, 0, 0.35);
                     RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_L_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 }
-                matrices.pop();
+                matrices.popPose();
             }
 
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
-                matrices.push();
+                matrices.pushPose();
                 matrices.translate(0, 0, -0.0225f);
                 RenderUtil.renderModel(SpecialModels.SCAR_L_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
                 matrices.translate(0, 0, 0.0225f);
-                matrices.pop();
+                matrices.popPose();
             } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.SCAR_L_COMPENSATOR.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.orElse(ItemStack.EMPTY.getItem())) {
@@ -89,9 +89,9 @@ public class scar_l_animation implements IOverrideModel {
 
             RenderUtil.renderModel(SpecialModels.SCAR_L_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.SCAR_L_BODY.getModel(), SCAR_LAnimationController.INDEX_MAGAZINE, transformType, matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -100,11 +100,11 @@ public class scar_l_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.SCAR_L_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
-            if(transformType.isFirstPerson() && controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_NORMAL)) {
+            if(transformType.firstPerson() && controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_NORMAL)) {
                 controller.applySpecialModelTransform(SpecialModels.SCAR_L_BODY.getModel(), SCAR_LAnimationController.INDEX_MAGAZINE2, transformType, matrices);
                 if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                     RenderUtil.renderModel(SpecialModels.SCAR_L_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
@@ -113,11 +113,11 @@ public class scar_l_animation implements IOverrideModel {
                 }
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
-            if(transformType.isFirstPerson()) {
+            if(transformType.firstPerson()) {
                 controller.applySpecialModelTransform(SpecialModels.SCAR_L_BODY.getModel(), SCAR_LAnimationController.INDEX_BOLT, transformType, matrices);
                 Gun gun = ((GunItem) stack.getItem()).getGun();
                 float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -137,7 +137,7 @@ public class scar_l_animation implements IOverrideModel {
             matrices.translate(0, 0, 0.025f);
             RenderUtil.renderModel(SpecialModels.SCAR_L_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 }

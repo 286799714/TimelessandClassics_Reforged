@@ -11,6 +11,8 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 import com.fasterxml.jackson.core.util.VersionUtil;
 
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
+
 /**
  * Intermediate base class shared by JSON-backed generators
  * like {@link UTF8JsonGenerator} and {@link WriterBasedJsonGenerator}.

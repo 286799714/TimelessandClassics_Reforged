@@ -19,7 +19,7 @@ public class FlashLightBlock extends AirBlock implements ITileEntityProvider
     public static final Material flashLightBlock;
 
     public FlashLightBlock() {
-        super(Properties.create(flashLightBlock).doesNotBlockMovement().noDrops().setAir().zeroHardnessAndResistance().setLightLevel((p_235470_0_) -> {
+        super(Properties.of(flashLightBlock).noCollission().noDrops().air().instabreak().lightLevel((p_235470_0_) -> {
             return 15;
         }));
     }
@@ -31,10 +31,10 @@ public class FlashLightBlock extends AirBlock implements ITileEntityProvider
     }
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new FlashLightSource();
     }
     static {
-        flashLightBlock = (new Builder(MaterialColor.AIR)).doesNotBlockMovement().notSolid().build();
+        flashLightBlock = (new Builder(MaterialColor.NONE)).noCollider().nonSolid().build();
     }
 }

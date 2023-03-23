@@ -36,13 +36,13 @@ public class MicroHoloSightModel implements IOverrideModel
         if(!(parent.getItem() instanceof TimelessPistolGunItem))
             return;
         // Micro holo crashes worlds from previous versions, soon some standard weapons will be able to take micro optics as well, will handle differently if so
-        matrixStack.push();
+        matrixStack.pushPose();
         /*if (Config.CLIENT.display.redDotSquishUpdate.get() && transformType.isFirstPerson() && entity.equals(Minecraft.getInstance().player)) {
             double transition = 1.0D - Math.pow(1.0D - AimingHandler.get().getNormalisedAdsProgress(), 2.0D);
             double zScale = 0.05D + 0.95D * (1.0D - transition);
             matrixStack.scale(1.0F, 1.0F, (float)zScale);
         }*/
-        if (Config.CLIENT.display.redDotSquishUpdate.get() && transformType.isFirstPerson() && entity.equals(Minecraft.getInstance().player)) {
+        if (Config.CLIENT.display.redDotSquishUpdate.get() && transformType.firstPerson() && entity.equals(Minecraft.getInstance().player)) {
             double prog = 0;
             if(AimingHandler.get().getNormalisedAdsProgress() > 0.725) {
                 prog = (AimingHandler.get().getNormalisedAdsProgress() - 0.725) * 3.63;
@@ -54,7 +54,7 @@ public class MicroHoloSightModel implements IOverrideModel
         }
         if(!parent.isEmpty()) {
             GunItem gunItem = ((GunItem) parent.getItem());
-            if (gunItem.getGun().getModules().getAttachments().getPistolScope().getDoOnSlideMovement() && transformType.isFirstPerson()) {
+            if (gunItem.getGun().getModules().getAttachments().getPistolScope().getDoOnSlideMovement() && transformType.firstPerson()) {
                 //matrixStack.translate(0, 0, 0.025F);
                 matrixStack.translate(0, 0, GunRenderingHandler.get().opticMovement * 0.505);
             }
@@ -64,14 +64,14 @@ public class MicroHoloSightModel implements IOverrideModel
         }
         RenderUtil.renderModel(stack, parent, matrixStack, renderTypeBuffer, light, overlay);
         matrixStack.translate(0, -0.049, 0);
-        matrixStack.pop();
+        matrixStack.popPose();
         matrixStack.translate(0, 0.006, 0);
-        if(transformType.isFirstPerson() && entity.equals(Minecraft.getInstance().player))
+        if(transformType.firstPerson() && entity.equals(Minecraft.getInstance().player))
         {
-            matrixStack.push();
+            matrixStack.pushPose();
             {
-                Matrix4f matrix = matrixStack.getLast().getMatrix();
-                Matrix3f normal = matrixStack.getLast().getNormal();
+                Matrix4f matrix = matrixStack.last().pose();
+                Matrix3f normal = matrixStack.last().normal();
 
                 float size = 1.4F / 16.0F;
                 matrixStack.translate(-size / 2, 0.85 * 0.0625, 0.075 * 0.0625);
@@ -95,7 +95,7 @@ public class MicroHoloSightModel implements IOverrideModel
 
                 alpha = (float) (1F * AimingHandler.get().getNormalisedAdsProgress());
 
-                builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
+                builder = renderTypeBuffer.getBuffer(RenderType.entityTranslucent(RED_DOT_RETICLE));
                 // Walking bobbing
                 boolean aimed = false;
                 /* The new controlled bobbing */
@@ -111,12 +111,12 @@ public class MicroHoloSightModel implements IOverrideModel
                 matrixStack.rotate(Vector3f.XP.rotationDegrees((GunRenderingHandler.get().recoilLift * GunRenderingHandler.get().recoilReduction) * 0.85F));
                 matrixStack.translate(0, 0, 0.35);
 */
-                builder.pos(matrix, 0, (float) (size / scale), 0).color(red, green, blue, alpha).tex(0.0F, 0.9375F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                builder.pos(matrix, 0, 0, 0).color(red, green, blue, alpha).tex(0.0F, 0.0F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                builder.pos(matrix, (float) (size / scale), 0, 0).color(red, green, blue, alpha).tex(0.9375F, 0.0F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                builder.pos(matrix, (float) (size / scale), (float) (size / scale), 0).color(red, green, blue, alpha).tex(0.9375F, 0.9375F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.vertex(matrix, 0, (float) (size / scale), 0).color(red, green, blue, alpha).uv(0.0F, 0.9375F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.vertex(matrix, 0, 0, 0).color(red, green, blue, alpha).uv(0.0F, 0.0F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.vertex(matrix, (float) (size / scale), 0, 0).color(red, green, blue, alpha).uv(0.9375F, 0.0F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.vertex(matrix, (float) (size / scale), (float) (size / scale), 0).color(red, green, blue, alpha).uv(0.9375F, 0.9375F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
             }
-            matrixStack.pop();
+            matrixStack.popPose();
         }
     }
 }

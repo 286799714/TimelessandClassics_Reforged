@@ -43,11 +43,11 @@ public class m16a1_animation implements IOverrideModel {
 
         if(Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem()))
         {
-            matrices.push();
+            matrices.pushPose();
             matrices.translate(0,0,-0.225);
             RenderUtil.renderModel(SpecialModels.M16_A1_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
             matrices.translate(0,0,0.225);
-            matrices.pop();
+            matrices.popPose();
         }
         else if(Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem()))
         {
@@ -64,7 +64,7 @@ public class m16a1_animation implements IOverrideModel {
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
         
 
-        matrices.push();
+        matrices.pushPose();
         if(Gun.hasAmmo(stack))
         {
             // Math provided by Bomb787 on GitHub and Curseforge!!!
@@ -83,6 +83,6 @@ public class m16a1_animation implements IOverrideModel {
         }
         matrices.translate(0, 0, 0.025f);
         RenderUtil.renderModel(SpecialModels.M16_A1_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
 }

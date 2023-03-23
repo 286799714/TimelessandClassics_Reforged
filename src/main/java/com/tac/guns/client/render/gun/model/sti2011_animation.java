@@ -37,21 +37,21 @@ public class sti2011_animation implements IOverrideModel {
     @Override
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
         STI2011AnimationController controller = STI2011AnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(),STI2011AnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.STI2011_BASIC_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
-                matrices.push();
+                matrices.pushPose();
                 matrices.translate(0, 0, -0.35);
                 matrices.scale(1, 1, 9);
                 matrices.translate(0, 0, 0.35);
                 RenderUtil.renderLaserModuleModel(SpecialModels.STI2011_BASIC_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
-                matrices.pop();
+                matrices.popPose();
             }
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
 
-                matrices.push();
+                matrices.pushPose();
                 {
                     ObjectRenderEditor.RENDER_Element element = new ObjectRenderEditor.RENDER_Element(0, 0, 0, 0);
                     if (ObjectRenderEditor.get().currElement == 1 && ObjectRenderEditor.get().GetFromElements(1) != null) {
@@ -62,14 +62,14 @@ public class sti2011_animation implements IOverrideModel {
                     matrices.translate(0, 0, -0.225+0.125);
                     RenderUtil.renderModel(SpecialModels.STI2011_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
                 }
-                matrices.pop();
+                matrices.popPose();
             }
 
             RenderUtil.renderModel(SpecialModels.STI2011_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(),STI2011AnimationController.INDEX_MAG,transformType,matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -78,11 +78,11 @@ public class sti2011_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.STI2011_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
-            if(transformType.isFirstPerson()) {
+            if(transformType.firstPerson()) {
                 controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_SLIDE, transformType, matrices);
                 Gun gun = ((GunItem) stack.getItem()).getGun();
                 float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 :
@@ -107,7 +107,7 @@ public class sti2011_animation implements IOverrideModel {
             matrices.translate(0.00, 0.0, -0.008);
             RenderUtil.renderModel(SpecialModels.STI2011_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 }

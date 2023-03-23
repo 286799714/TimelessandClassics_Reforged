@@ -40,8 +40,8 @@ public class LootTableGen extends ForgeLootTableProvider
         @Override
         protected void addTables()
         {
-            this.registerDropSelfLootTable(ModBlocks.WORKBENCH.get());
-            this.registerDropSelfLootTable(ModBlocks.UPGRADE_BENCH.get());
+            this.dropSelf(ModBlocks.WORKBENCH.get());
+            this.dropSelf(ModBlocks.UPGRADE_BENCH.get());
         }
 
         @Override

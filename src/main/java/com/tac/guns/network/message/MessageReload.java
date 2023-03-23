@@ -59,7 +59,7 @@ public class MessageReload implements IMessage
                 if(!this.reload)
                     return;
 
-                ItemStack gun = player.getHeldItemMainhand();
+                ItemStack gun = player.getMainHandItem();
                 if(MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Pre(player, gun)))
                 {
                     SyncedPlayerData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
@@ -70,8 +70,8 @@ public class MessageReload implements IMessage
                 ResourceLocation reloadSound = ((GunItem)gun.getItem()).getGun().getSounds().getCock();
                 if(reloadSound != null)
                 {
-                    MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) player.getPosY() + 1.0F, (float) player.getPosZ(), 1.0F, 1.0F, player.getEntityId(), false, true);
-                    PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player,player.getPosX(), (player.getPosY() + 1.0), player.getPosZ(), 16.0, player.world.getDimensionKey())), message);
+                    MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getX(), (float) player.getY() + 1.0F, (float) player.getZ(), 1.0F, 1.0F, player.getId(), false, true);
+                    PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player,player.getX(), (player.getY() + 1.0), player.getZ(), 16.0, player.level.dimension())), message);
                 }
             }
         });

@@ -98,7 +98,7 @@ public class WearableHelper
         else if (og - proj.getDamage() < 0) {
             ResourceLocation brokenSound = ((ArmorRigItem)rig.getItem()).getRig().getSounds().getBroken();
             if (brokenSound != null) {
-                MessageGunSound messageSound = new MessageGunSound(brokenSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1.5F, 1F, player.getEntityId(), false, false);
+                MessageGunSound messageSound = new MessageGunSound(brokenSound, SoundCategory.PLAYERS, (float) player.getX(), (float) (player.getY() + 1.0), (float) player.getZ(), 1.5F, 1F, player.getId(), false, false);
                 PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), messageSound);
             }
             rig.getTag().putFloat("RigDurability", 0);

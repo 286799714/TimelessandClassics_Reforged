@@ -53,7 +53,7 @@ public class pkp_penchenberg_animation implements IOverrideModel {
 
         RenderUtil.renderModel(SpecialModels.PKP_PENCHENNBERG.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-        matrices.push();
+        matrices.pushPose();
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -75,6 +75,6 @@ public class pkp_penchenberg_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.PKP_PENCHENNBERG_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
 }

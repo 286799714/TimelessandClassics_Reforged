@@ -30,7 +30,7 @@ public class m1a1_smg_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.M1A1_SMG_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
 
         //We're getting the cooldown tracker for the item - items like the sword, ender pearl, and chorus fruit all have this too.
         Gun gun = ((GunItem) stack.getItem()).getGun();
@@ -57,7 +57,7 @@ public class m1a1_smg_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.M1A1_SMG_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
     }
 
      

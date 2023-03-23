@@ -42,7 +42,7 @@ public class smle_iii_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.SMLE_III.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.push();
+        matrices.pushPose();
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -63,13 +63,13 @@ public class smle_iii_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.SMLE_III_BOLT_EXTRA.getModel(), stack, matrices, renderBuffer, light, overlay);
 
             matrices.translate(-0.039, -0.038, 0.00);
-            matrices.rotate(Vector3f.ZN.rotationDegrees(-90F));
+            matrices.mulPose(Vector3f.ZN.rotationDegrees(-90F));
         }
         else
             RenderUtil.renderModel(SpecialModels.SMLE_III_BOLT_EXTRA.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         RenderUtil.renderModel(SpecialModels.SMLE_III_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
     //Same method from GrenadeLauncherModel, to make a smooth rotation of the chamber.
     private double easeInOutBack(double x) {

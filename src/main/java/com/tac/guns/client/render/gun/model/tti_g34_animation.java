@@ -52,7 +52,7 @@ public class tti_g34_animation implements IOverrideModel {
         TtiG34AnimationController controller = TtiG34AnimationController.getInstance();
         GunItem gunItem = ((GunItem) stack.getItem());
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.TTI_G34.getModel(),TtiG34AnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
@@ -60,9 +60,9 @@ public class tti_g34_animation implements IOverrideModel {
             }
             RenderUtil.renderModel(SpecialModels.TTI_G34.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.TTI_G34.getModel(),TtiG34AnimationController.INDEX_MAG,transformType,matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -71,11 +71,11 @@ public class tti_g34_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.TTI_G34_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
         // reload norm mag
-        if(transformType.isFirstPerson() && controller.isAnimationRunning()) {
-            matrices.push();
+        if(transformType.firstPerson() && controller.isAnimationRunning()) {
+            matrices.pushPose();
             {
 
                 controller.applySpecialModelTransform(SpecialModels.TTI_G34.getModel(), TtiG34AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
@@ -86,12 +86,12 @@ public class tti_g34_animation implements IOverrideModel {
                 }
 
             }
-            matrices.pop();
+            matrices.popPose();
         }
 
         //Always push
-        matrices.push();
-        if(transformType.isFirstPerson()) {
+        matrices.pushPose();
+        if(transformType.firstPerson()) {
             controller.applySpecialModelTransform(SpecialModels.TTI_G34.getModel(), TtiG34AnimationController.INDEX_SLIDE, transformType, matrices);
             Gun gun = ((GunItem) stack.getItem()).getGun();
             float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -111,7 +111,7 @@ public class tti_g34_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.TTI_G34_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
      

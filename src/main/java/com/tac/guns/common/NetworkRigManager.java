@@ -116,7 +116,7 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
         buffer.writeVarInt(this.registeredRigs.size());
         this.registeredRigs.forEach((id, rig) -> {
             buffer.writeResourceLocation(id);
-            buffer.writeCompoundTag(rig.serializeNBT());
+            buffer.writeNbt(rig.serializeNBT());
         });
     }
 
@@ -135,7 +135,7 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
             for(int i = 0; i < size; i++)
             {
                 ResourceLocation id = buffer.readResourceLocation();
-                Rig rig = Rig.create(buffer.readCompoundTag());
+                Rig rig = Rig.create(buffer.readNbt());
                 builder.put(id, rig);
             }
             return builder.build();

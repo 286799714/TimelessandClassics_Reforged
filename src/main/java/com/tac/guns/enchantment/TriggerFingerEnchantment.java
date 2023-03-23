@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import net.minecraft.enchantment.Enchantment.Rarity;
+
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
@@ -22,7 +24,7 @@ public class TriggerFingerEnchantment extends GunEnchantment
     }
 
     @Override
-    public int getMinEnchantability(int level)
+    public int getMinCost(int level)
     {
         return 0;
     }
@@ -33,8 +35,8 @@ public class TriggerFingerEnchantment extends GunEnchantment
     }
 
     @Override
-    public int getMaxEnchantability(int level)
+    public int getMaxCost(int level)
     {
-        return this.getMinEnchantability(level) + 40;
+        return this.getMinCost(level) + 40;
     }
 }

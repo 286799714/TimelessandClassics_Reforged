@@ -12,6 +12,8 @@ import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 
 import static com.fasterxml.jackson.core.JsonTokenId.*;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
+
 /**
  * Intermediate base class for non-blocking JSON parsers.
  */

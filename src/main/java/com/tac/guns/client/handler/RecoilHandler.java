@@ -121,30 +121,30 @@ public class RecoilHandler
         if(mc.player == null)
             return;
 
-        float cameraRecoilModifer = mc.player.getHeldItemMainhand().getItem() instanceof GunItem ? ((GunItem) mc.player.getHeldItemMainhand().getItem()).getGun().getGeneral().getCameraRecoilModifier() : 1.0F;
+        float cameraRecoilModifer = mc.player.getMainHandItem().getItem() instanceof GunItem ? ((GunItem) mc.player.getMainHandItem().getItem()).getGun().getGeneral().getCameraRecoilModifier() : 1.0F;
 
-        float recoilAmount = this.cameraRecoil * mc.getTickLength() * 0.2F;//0.25F;//0.1F;
-        float HorizontalRecoilAmount = this.horizontalCameraRecoil * mc.getTickLength() * 0.1F;//0.25F;//* 0.1F;
+        float recoilAmount = this.cameraRecoil * mc.getDeltaFrameTime() * 0.2F;//0.25F;//0.1F;
+        float HorizontalRecoilAmount = this.horizontalCameraRecoil * mc.getDeltaFrameTime() * 0.1F;//0.25F;//* 0.1F;
         float startProgress = (this.progressCameraRecoil / this.cameraRecoil);
         float endProgress = ((this.progressCameraRecoil + recoilAmount) / this.cameraRecoil);
 
-        float progressForward = mc.player.getHeldItemMainhand().getItem() instanceof GunItem ? ((GunItem) mc.player.getHeldItemMainhand().getItem()).getGun().getGeneral().getRecoilDuration() *
-                GunModifierHelper.getRecoilSmootheningTime(mc.player.getHeldItemMainhand()) : 0.25F;
+        float progressForward = mc.player.getMainHandItem().getItem() instanceof GunItem ? ((GunItem) mc.player.getMainHandItem().getItem()).getGun().getGeneral().getRecoilDuration() *
+                GunModifierHelper.getRecoilSmootheningTime(mc.player.getMainHandItem()) : 0.25F;
         if(startProgress < progressForward) // && startProgress > 0.125F
         {
-            mc.player.rotationPitch -= ((endProgress - startProgress) / progressForward) * this.cameraRecoil / cameraRecoilModifer;
+            mc.player.xRot -= ((endProgress - startProgress) / progressForward) * this.cameraRecoil / cameraRecoilModifer;
             if(recoilRand == 1)
-                mc.player.rotationYaw -= ((endProgress - startProgress) / progressForward) * this.horizontalCameraRecoil / cameraRecoilModifer;
+                mc.player.yRot -= ((endProgress - startProgress) / progressForward) * this.horizontalCameraRecoil / cameraRecoilModifer;
             else
-                mc.player.rotationYaw -= ((endProgress - startProgress) / progressForward) * -this.horizontalCameraRecoil / cameraRecoilModifer;
+                mc.player.yRot -= ((endProgress - startProgress) / progressForward) * -this.horizontalCameraRecoil / cameraRecoilModifer;
         }
         else if(startProgress > progressForward)
         {
-            mc.player.rotationPitch += ((endProgress - startProgress) / (1-progressForward) ) * this.cameraRecoil / (cameraRecoilModifer*1.025); // 0.75F
+            mc.player.xRot += ((endProgress - startProgress) / (1-progressForward) ) * this.cameraRecoil / (cameraRecoilModifer*1.025); // 0.75F
             if(recoilRand == 1)
-                mc.player.rotationYaw -= ((endProgress - startProgress) / (1-progressForward)) * -this.horizontalCameraRecoil / (cameraRecoilModifer*1.025);
+                mc.player.yRot -= ((endProgress - startProgress) / (1-progressForward)) * -this.horizontalCameraRecoil / (cameraRecoilModifer*1.025);
             else
-                mc.player.rotationYaw -= ((endProgress - startProgress) / (1-progressForward)) * this.horizontalCameraRecoil / (cameraRecoilModifer*1.025);
+                mc.player.yRot -= ((endProgress - startProgress) / (1-progressForward)) * this.horizontalCameraRecoil / (cameraRecoilModifer*1.025);
         }
 
         this.progressCameraRecoil += recoilAmount;

@@ -3,6 +3,8 @@ package com.tac.guns.enchantment;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.enchantment.Enchantment.Rarity;
+
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
@@ -24,14 +26,14 @@ public class OverCapacityEnchantment extends GunEnchantment
         return false;
     }
     @Override
-    public int getMinEnchantability(int level)
+    public int getMinCost(int level)
     {
         return 5 + (level - 1) * 10;
     }
 
     @Override
-    public int getMaxEnchantability(int level)
+    public int getMaxCost(int level)
     {
-        return super.getMinEnchantability(level) + 50;
+        return super.getMinCost(level) + 50;
     }
 }

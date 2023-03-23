@@ -64,9 +64,9 @@ public class ColorBenchAttachmentScreen extends Screen
         super.tick();
         if(this.minecraft != null && this.minecraft.player != null)
         {
-            if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem || this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem))
+            if(!(this.minecraft.player.getMainHandItem().getItem() instanceof GunItem || this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem))
             {
-                Minecraft.getInstance().displayGuiScreen(null);
+                Minecraft.getInstance().setScreen(null);
             }
         }
     }
@@ -182,9 +182,9 @@ public class ColorBenchAttachmentScreen extends Screen
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-            IRenderTypeBuffer.Impl buffer = this.minecraft.getRenderTypeBuffers().getBufferSource();
-            GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getHeldItemMainhand(), ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F);
-            buffer.finish();
+            IRenderTypeBuffer.Impl buffer = this.minecraft.renderBuffers().bufferSource();
+            GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getMainHandItem(), ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F);
+            buffer.endBatch();
 
             RenderSystem.disableAlphaTest();
             RenderSystem.disableRescaleNormal();

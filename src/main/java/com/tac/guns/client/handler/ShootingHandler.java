@@ -83,13 +83,13 @@ public class  ShootingHandler
         Minecraft mc = Minecraft.getInstance();
         if(mc == null || mc.player == null)
             return false;
-        if(mc.loadingGui != null)
+        if(mc.overlay != null)
             return false;
-        if(mc.currentScreen != null)
+        if(mc.screen != null)
             return false;
-        if(!mc.mouseHelper.isMouseGrabbed())
+        if(!mc.mouseHandler.isMouseGrabbed())
             return false;
-        return mc.isGameFocused();
+        return mc.isWindowActive();
     }
 
     @SubscribeEvent
@@ -106,7 +106,7 @@ public class  ShootingHandler
         if(player == null)
             return;
 
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         if(heldItem.getItem() instanceof GunItem)
         {
             int button = event.getButton();
@@ -126,7 +126,7 @@ public class  ShootingHandler
                     fire(player, heldItem);
 
                 if(!(heldItem.getTag().getInt("AmmoCount") > 0)) {
-                    player.sendStatusMessage(new TranslationTextComponent("info.tac.out_of_ammo").mergeStyle(TextFormatting.UNDERLINE).mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.RED), true);
+                    player.displayClientMessage(new TranslationTextComponent("info.tac.out_of_ammo").withStyle(TextFormatting.UNDERLINE).withStyle(TextFormatting.BOLD).withStyle(TextFormatting.RED), true);
                     PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
                 }
             }
@@ -216,9 +216,9 @@ public class  ShootingHandler
 
         // Upper is to handle rendering, bellow is handling animation calls and burst tracking
 
-        if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getHeldItemMainhand().getItem() instanceof GunItem)
+        if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getMainHandItem().getItem() instanceof GunItem)
             return;
-        GunAnimationController controller = GunAnimationController.fromItem(Minecraft.getInstance().player.getHeldItemMainhand().getItem());
+        GunAnimationController controller = GunAnimationController.fromItem(Minecraft.getInstance().player.getMainHandItem().getItem());
         if(controller == null)
             return;
         else if (controller.isAnimationRunning() && (shootMsGap < 0F && this.burstTracker != 0))
@@ -247,12 +247,12 @@ public class  ShootingHandler
         	// CHECK HERE: Reduce by 1F in each tick until it is less than 0F
         	shootTickGapLeft -= shootTickGapLeft > 0F ? 1F : 0F;
         	
-            ItemStack heldItem = player.getHeldItemMainhand();
+            ItemStack heldItem = player.getMainHandItem();
             if(heldItem.getItem() instanceof GunItem && (Gun.hasAmmo(heldItem) || player.isCreative()))
             {
-                final float dist = Math.abs( player.moveForward ) / 2.5F
-                	+ Math.abs( player.moveStrafing ) / 1.25F
-                    + ( player.getMotion().y > 0D ? 0.5F : 0F );
+                final float dist = Math.abs( player.zza ) / 2.5F
+                	+ Math.abs( player.xxa ) / 1.25F
+                    + ( player.getDeltaMovement().y > 0D ? 0.5F : 0F );
                 PacketHandler.getPlayChannel().sendToServer( new MessageUpdateMoveInacc( dist ) );
                 
                 // Update #shooting state if it has changed
@@ -302,7 +302,7 @@ public class  ShootingHandler
         Minecraft mc = Minecraft.getInstance();
         PlayerEntity player = mc.player;
         if(player != null)
-        {   ItemStack heldItem = player.getHeldItemMainhand();
+        {   ItemStack heldItem = player.getMainHandItem();
             if(heldItem.getItem() instanceof TimelessGunItem)
             {
                 if(heldItem.getTag() == null) {
@@ -385,7 +385,7 @@ public class  ShootingHandler
             shootMsGap = calcShootTickGap((int) rpm);
             RecoilHandler.get().lastRandPitch = RecoilHandler.get().lastRandPitch;
             RecoilHandler.get().lastRandYaw = RecoilHandler.get().lastRandYaw;
-            PacketHandler.getPlayChannel().sendToServer(new MessageShoot(player.getYaw(1), player.getPitch(1), RecoilHandler.get().lastRandPitch, RecoilHandler.get().lastRandYaw));
+            PacketHandler.getPlayChannel().sendToServer(new MessageShoot(player.getViewYRot(1), player.getViewXRot(1), RecoilHandler.get().lastRandPitch, RecoilHandler.get().lastRandYaw));
 
             if(Config.CLIENT.controls.burstPress.get()) this.burstTracker--;
             else this.burstTracker++;

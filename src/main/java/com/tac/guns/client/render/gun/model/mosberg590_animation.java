@@ -46,7 +46,7 @@ public class mosberg590_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.MOSBERG590_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -71,6 +71,6 @@ public class mosberg590_animation implements IOverrideModel {
         }
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
     }
 }

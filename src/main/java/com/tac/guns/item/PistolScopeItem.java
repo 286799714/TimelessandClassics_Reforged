@@ -12,6 +12,9 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import com.tac.guns.item.attachment.IAttachment.Type;
+import net.minecraft.item.Item.Properties;
+
 /**
  * A basic scope attachment item implementation with color support
  *
@@ -29,9 +32,9 @@ public class PistolScopeItem extends ScopeItem
         return Type.PISTOL_SCOPE;
     }
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
-        super.addInformation(stack, worldIn, tooltip, flag);
-        tooltip.add((new TranslationTextComponent("info.tac.pistolScope_type").mergeStyle(TextFormatting.LIGHT_PURPLE).mergeStyle(TextFormatting.BOLD)));
+        super.appendHoverText(stack, worldIn, tooltip, flag);
+        tooltip.add((new TranslationTextComponent("info.tac.pistolScope_type").withStyle(TextFormatting.LIGHT_PURPLE).withStyle(TextFormatting.BOLD)));
     }
 }

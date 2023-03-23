@@ -89,7 +89,7 @@ public class x95r_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.X95R_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
 
-        matrices.push();
+        matrices.pushPose();
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -111,6 +111,6 @@ public class x95r_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.X95R_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
 }

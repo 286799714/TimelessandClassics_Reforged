@@ -44,7 +44,7 @@ public class mk14_animation implements IOverrideModel {
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
     {
         MK14AnimationController controller = MK14AnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(MK14_BODY.getModel(), MK14AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) != null) {
@@ -67,10 +67,10 @@ public class mk14_animation implements IOverrideModel {
 
             RenderUtil.renderModel(MK14_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-        } matrices.pop();
+        } matrices.popPose();
 
 
-        matrices.push();
+        matrices.pushPose();
         {
 
             controller.applySpecialModelTransform(MK14_BODY.getModel(), MK14AnimationController.INDEX_BOLT, transformType, matrices);
@@ -80,7 +80,7 @@ public class mk14_animation implements IOverrideModel {
 
             AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
             boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
-            if(transformType.isFirstPerson()) {
+            if(transformType.firstPerson()) {
                 if (Gun.hasAmmo(stack) || shouldOffset) {
                     //RenderUtil.renderModel(SpecialModels.M1_GARAND.getModel(), stack, matrices, renderBuffer, light, overlay);
                     // Math provided by Bomb787 on GitHub and Curseforge!!!
@@ -93,7 +93,7 @@ public class mk14_animation implements IOverrideModel {
             }
             RenderUtil.renderModel(BOLT_HANDLE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-            if(transformType.isFirstPerson()) {
+            if(transformType.firstPerson()) {
                 if (Gun.hasAmmo(stack) || shouldOffset) {
                     // Math provided by Bomb787 on GitHub and Curseforge!!!
                     matrices.translate(0, -0.0335f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0), 0);
@@ -104,10 +104,10 @@ public class mk14_animation implements IOverrideModel {
                 }
             }
             RenderUtil.renderModel(BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        } matrices.pop();
+        } matrices.popPose();
 
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(MK14_BODY.getModel(), MK14AnimationController.INDEX_MAGAZINE, transformType, matrices);
 
@@ -116,12 +116,12 @@ public class mk14_animation implements IOverrideModel {
             } else {
                 RenderUtil.renderModel(STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-        } matrices.pop();
+        } matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             matrices.translate(0, 0, 0.2175f);
             PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
-        }matrices.pop();
+        }matrices.popPose();
     }
 }

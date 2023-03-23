@@ -22,7 +22,7 @@ public class ScopeGlobal extends GameRenderer {
     private boolean shouldLoadRenderers = true;
 
     public ScopeGlobal(Minecraft mcIn) {
-        super(mcIn, mcIn.getResourceManager(), mcIn.getRenderTypeBuffers());
+        super(mcIn, mcIn.getResourceManager(), mcIn.renderBuffers());
     }
 
     /*public ScopeGlobal(Minecraft mcIn) {

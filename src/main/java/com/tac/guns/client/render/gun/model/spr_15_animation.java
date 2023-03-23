@@ -34,7 +34,7 @@ public class spr_15_animation implements IOverrideModel {
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
         SPR15AnimationController controller = SPR15AnimationController.getInstance();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.SPR_15_BODY.getModel(), SPR15AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
@@ -50,10 +50,10 @@ public class spr_15_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.SPR_15_HEAVY_STOCK.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
-                matrices.push();
+                matrices.pushPose();
                 matrices.translate(0, 0, -0.335);
                 RenderUtil.renderModel(SpecialModels.SPR_15_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-                matrices.pop();
+                matrices.popPose();
             } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.SPR_15_COMPENSATOR.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.orElse(ItemStack.EMPTY.getItem())) {
@@ -72,11 +72,11 @@ public class spr_15_animation implements IOverrideModel {
 
             RenderUtil.renderModel(SpecialModels.SPR_15_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-            matrices.push();
+            matrices.pushPose();
             {
                 Gun gun = ((GunItem) stack.getItem()).getGun();
                 float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-                if(transformType.isFirstPerson()) {
+                if(transformType.firstPerson()) {
                     if (Gun.hasAmmo(stack)) {
                         // Math provided by Bomb787 on GitHub and Curseforge!!!
                         matrices.translate(0, 0, 0.185f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
@@ -88,11 +88,11 @@ public class spr_15_animation implements IOverrideModel {
                 }
                 RenderUtil.renderModel(SpecialModels.SPR_15_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-            matrices.pop();
+            matrices.popPose();
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.SPR_15_BODY.getModel(), SPR15AnimationController.INDEX_MAGAZINE, transformType, matrices);
 
@@ -102,10 +102,10 @@ public class spr_15_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.SPR_15_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
         //if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_NORMAL)) {
-            matrices.push();
+            matrices.pushPose();
             {
                 controller.applySpecialModelTransform(SpecialModels.SPR_15_BODY.getModel(), SPR15AnimationController.INDEX_EXTRA_MAGAZINE, transformType, matrices);
 
@@ -115,15 +115,15 @@ public class spr_15_animation implements IOverrideModel {
                     RenderUtil.renderModel(SpecialModels.SPR_15_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
                 }
             }
-            matrices.pop();
+            matrices.popPose();
         //}
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.SPR_15_BODY.getModel(), SPR15AnimationController.INDEX_HANDLE, transformType, matrices);
             RenderUtil.renderModel(SpecialModels.SPR_15_PULL_HANDLE.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
     }

@@ -32,7 +32,7 @@ public class RecipeGen extends RecipeProvider
     }
 
     @Override
-    protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
         // Dye Item
         /*if(Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER)
             return;*/
@@ -63,54 +63,54 @@ public class RecipeGen extends RecipeProvider
             }
         });*/
 
-        ShapedRecipeBuilder.shapedRecipe(ModBlocks.WORKBENCH.get())
-                .patternLine("###")
-                .patternLine("iIi")
-                .patternLine("i i")
-                .key('#', ItemTags.LOGS)
-                .key('I', Tags.Items.STORAGE_BLOCKS_IRON)
-                .key('i', Tags.Items.INGOTS_IRON)
-                .addCriterion("has_iron", hasItem(Tags.Items.STORAGE_BLOCKS_IRON))
-                .build(consumer);
+        ShapedRecipeBuilder.shaped(ModBlocks.WORKBENCH.get())
+                .pattern("###")
+                .pattern("iIi")
+                .pattern("i i")
+                .define('#', ItemTags.LOGS)
+                .define('I', Tags.Items.STORAGE_BLOCKS_IRON)
+                .define('i', Tags.Items.INGOTS_IRON)
+                .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
+                .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(ModItems.LIGHT_ARMOR_REPAIR_PLATE.get())
-                .patternLine("# #")
-                .patternLine("III")
-                .patternLine("iIi")
-                .key('#', Tags.Items.LEATHER)
-                .key('I', Tags.Items.NUGGETS_IRON)
-                .key('i', Tags.Items.INGOTS_IRON)
-                .addCriterion("has_iron", hasItem(Tags.Items.STORAGE_BLOCKS_IRON))
-                .build(consumer);
+        ShapedRecipeBuilder.shaped(ModItems.LIGHT_ARMOR_REPAIR_PLATE.get())
+                .pattern("# #")
+                .pattern("III")
+                .pattern("iIi")
+                .define('#', Tags.Items.LEATHER)
+                .define('I', Tags.Items.NUGGETS_IRON)
+                .define('i', Tags.Items.INGOTS_IRON)
+                .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
+                .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(ModItems.LIGHT_ARMOR.get())
-                .patternLine("# #")
-                .patternLine("iIi")
-                .patternLine("iii")
-                .key('#', Tags.Items.LEATHER)
-                .key('I', Tags.Items.STORAGE_BLOCKS_IRON)
-                .key('i', Tags.Items.INGOTS_IRON)
-                .addCriterion("has_iron", hasItem(Tags.Items.STORAGE_BLOCKS_IRON))
-                .build(consumer);
+        ShapedRecipeBuilder.shaped(ModItems.LIGHT_ARMOR.get())
+                .pattern("# #")
+                .pattern("iIi")
+                .pattern("iii")
+                .define('#', Tags.Items.LEATHER)
+                .define('I', Tags.Items.STORAGE_BLOCKS_IRON)
+                .define('i', Tags.Items.INGOTS_IRON)
+                .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
+                .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(ModItems.MEDIUM_STEEL_ARMOR.get())
-                .patternLine("i i")
-                .patternLine("III")
-                .key('I', Tags.Items.STORAGE_BLOCKS_IRON)
-                .key('i', Tags.Items.INGOTS_IRON)
-                .addCriterion("has_iron", hasItem(Tags.Items.STORAGE_BLOCKS_IRON))
-                .build(consumer);
+        ShapedRecipeBuilder.shaped(ModItems.MEDIUM_STEEL_ARMOR.get())
+                .pattern("i i")
+                .pattern("III")
+                .define('I', Tags.Items.STORAGE_BLOCKS_IRON)
+                .define('i', Tags.Items.INGOTS_IRON)
+                .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
+                .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(ModItems.MODULE.get(), 3)
-                .patternLine("#I#")
-                .patternLine("D#D")
-                .patternLine("GDG")
-                .key('#', Tags.Items.GLASS)
-                .key('I', Tags.Items.STORAGE_BLOCKS_IRON)
-                .key('D', Tags.Items.GEMS_DIAMOND)
-                .key('G', Tags.Items.INGOTS_GOLD)
-                .addCriterion("has_diamond", hasItem(Tags.Items.GEMS_DIAMOND))
-                .build(consumer);
+        ShapedRecipeBuilder.shaped(ModItems.MODULE.get(), 3)
+                .pattern("#I#")
+                .pattern("D#D")
+                .pattern("GDG")
+                .define('#', Tags.Items.GLASS)
+                .define('I', Tags.Items.STORAGE_BLOCKS_IRON)
+                .define('D', Tags.Items.GEMS_DIAMOND)
+                .define('G', Tags.Items.INGOTS_GOLD)
+                .unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND))
+                .save(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.AI_AWP.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 150)

@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
@@ -58,8 +60,8 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
         super(container, playerInventory, title);
         this.playerInventory = playerInventory;
         this.workbench = container.getBench();
-        this.xSize = 256;
-        this.ySize = 184;
+        this.imageWidth = 256;
+        this.imageHeight = 184;
         this.requirements = new ArrayList<>();
     }
     @Override
@@ -73,9 +75,9 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
                 data = GuiEditor.get().GetFromElements(GuiEditor.get().currElement);
         }
 
-        this.addButton(new GuiEnchantmentApplyButton(this.guiLeft + 9+ data.getxMod()+152+74 , this.guiTop + 18 + data.getyMod()+96+50, 23+data.getSizeXMod(), 15+data.getSizeYMod(), 44, 15, button ->
+        this.addButton(new GuiEnchantmentApplyButton(this.leftPos + 9+ data.getxMod()+152+74 , this.topPos + 18 + data.getyMod()+96+50, 23+data.getSizeXMod(), 15+data.getSizeYMod(), 44, 15, button ->
         {
-            PacketHandler.getPlayChannel().sendToServer(new MessageUpgradeBenchApply(this.workbench.getPos(), this.btnSelected));
+            PacketHandler.getPlayChannel().sendToServer(new MessageUpgradeBenchApply(this.workbench.getBlockPos(), this.btnSelected));
         }));
 
         GunEnchantmentHelper.upgradeableEnchs.forEach((key, value) ->
@@ -92,12 +94,12 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
             {
                 return;
             }
-            this.addButton(new GuiEnchantmentOptionButton(this.guiLeft + 9+152+74-170,
-                    this.guiTop + 18+96+20-100+((lmbdaTmp+scroll)*34),
-                    this.guiLeft + 9+152+74, this.guiTop + 18+96+20,
+            this.addButton(new GuiEnchantmentOptionButton(this.leftPos + 9+152+74-170,
+                    this.topPos + 18+96+20-100+((lmbdaTmp+scroll)*34),
+                    this.leftPos + 9+152+74, this.topPos + 18+96+20,
                     76*2, 16*2,
                     value,
-                    3, lmbdaTmp, key, EnchantmentHelper.getEnchantmentLevel(value.enchantment, this.workbench.getInventory().get(0)), button ->
+                    3, lmbdaTmp, key, EnchantmentHelper.getItemEnchantmentLevel(value.enchantment, this.workbench.getInventory().get(0)), button ->
             {
                 this.setSelectedBtn(key);
             }));
@@ -138,10 +140,10 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
 
-        int startX = this.guiLeft;
-        int startY = this.guiTop;
+        int startX = this.leftPos;
+        int startY = this.topPos;
 
         /*if (this.filteredMaterials == null)
             return;
@@ -162,13 +164,13 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
     {
         /* Fixes partial ticks to use percentage from 0 to 1 */
-        partialTicks = Minecraft.getInstance().getRenderPartialTicks();
+        partialTicks = Minecraft.getInstance().getFrameTime();
 
-        int startX = this.guiLeft;
-        int startY = this.guiTop;
+        int startX = this.leftPos;
+        int startY = this.topPos;
 
         RenderSystem.enableBlend();
 
@@ -180,7 +182,7 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
             if(GuiEditor.get().currElement == 1 && GuiEditor.get().GetFromElements(GuiEditor.get().currElement) != null)
                 data = GuiEditor.get().GetFromElements(GuiEditor.get().currElement);
         }
-        this.minecraft.getTextureManager().bindTexture(GUI_BASE);
+        this.minecraft.getTextureManager().bind(GUI_BASE);
         //matrixStack.scale(4f, 4f, 0);
         //this.blit(matrixStack, startX, startY, 0, 0, 496, 175);
 /*        "xMod": -225.0,
@@ -193,7 +195,7 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
         //this.blit(matrixStack, startX-112, startY-30, 0, 0, 496, 175);
         //matrixStack.pop();
 
-        ItemStack currentItem = this.workbench.getStackInSlot(0);//this.displayStack;
+        ItemStack currentItem = this.workbench.getItem(0);//this.displayStack;
         if(currentItem == null)
             return;
 
@@ -201,14 +203,14 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         RenderUtil.scissor(startX + 8 -114, startY + 17 -6, 160, 70);
 
-        IRenderTypeBuffer.Impl buffer = this.minecraft.getRenderTypeBuffers().getBufferSource();
+        IRenderTypeBuffer.Impl buffer = this.minecraft.renderBuffers().bufferSource();
         RenderSystem.pushMatrix();
         {
 
             RenderSystem.translatef(startX+ 88 -118, startY + 60 -10, 100);
             RenderSystem.scalef(50F, -50F, 50F);
             RenderSystem.rotatef(5F, 1, 0, 0);
-            RenderSystem.rotatef(Minecraft.getInstance().player.ticksExisted + partialTicks, 0, 1, 0);
+            RenderSystem.rotatef(Minecraft.getInstance().player.tickCount + partialTicks, 0, 1, 0);
 
             RenderSystem.enableRescaleNormal();
             RenderSystem.enableAlphaTest();
@@ -217,12 +219,12 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-            buffer = this.minecraft.getRenderTypeBuffers().getBufferSource();
+            buffer = this.minecraft.renderBuffers().bufferSource();
 
             GunRenderingHandler.get().renderWeapon(Minecraft.getInstance().player, currentItem, ItemCameraTransforms.TransformType.FIXED, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY);
             //Minecraft.getInstance().getItemRenderer().renderItem(currentItem, ItemCameraTransforms.TransformType.FIXED, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(currentItem));
 
-            buffer.finish();
+            buffer.endBatch();
 
             RenderSystem.disableAlphaTest();
             RenderSystem.disableRescaleNormal();
@@ -237,8 +239,8 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
             return;
         {
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.minecraft.getTextureManager().bindTexture(GUI_PARTS);
-            int currLevel = EnchantmentHelper.getEnchantmentLevel(requirementItem.enchantment,currentItem);
+            this.minecraft.getTextureManager().bind(GUI_PARTS);
+            int currLevel = EnchantmentHelper.getItemEnchantmentLevel(requirementItem.enchantment,currentItem);
             int moduleCount = requirementItem.moduleCounts.length-1;
             int levelReq = requirementItem.moduleCounts.length-1;
             if(currLevel != requirementItem.enchantment.getMaxLevel()) {
@@ -248,7 +250,7 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
             // Handle Module Items
             if(moduleCount > 0)
             {
-                RenderHelper.disableStandardItemLighting();
+                RenderHelper.turnOff();
                 if(this.workbench.getInventory().get(1).getCount() < moduleCount)
                 {
                     //Red req
@@ -265,16 +267,16 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
                 if(moduleRender == null || moduleRender.isEmpty())
                     moduleRender = new ItemStack(ModItems.MODULE.get().getItem());
                 moduleRender.setCount(moduleCount);
-                Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(moduleRender, startX, startY);
-                Minecraft.getInstance().getItemRenderer().renderItemOverlayIntoGUI(this.font, moduleRender, startX, startY, null);
+                Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(moduleRender, startX, startY);
+                Minecraft.getInstance().getItemRenderer().renderGuiItemDecorations(this.font, moduleRender, startX, startY, null);
             }
 
             // Handle Levels
-            this.minecraft.getTextureManager().bindTexture(GUI_PARTS);
+            this.minecraft.getTextureManager().bind(GUI_PARTS);
             CompoundNBT gunTag = this.workbench.getInventory().get(0).getTag();
             if(levelReq > 0 && gunTag != null)
             {
-                RenderHelper.disableStandardItemLighting();
+                RenderHelper.turnOff();
                 if(gunTag.getInt("level") < levelReq)
                 {
                     //Red req
@@ -286,7 +288,7 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
                 }
 
                 RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                this.font.drawString(matrixStack, "Required level "+levelReq, startX, startY, Color.WHITE.getRGB());
+                this.font.draw(matrixStack, "Required level "+levelReq, startX, startY, Color.WHITE.getRGB());
 
             }
         }
@@ -330,9 +332,9 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
 
     protected void drawText(MatrixStack matrixStack, int x, int y, ITextComponent text)
     {
-        int startX = this.guiLeft;
-        int startY = this.guiTop;
-        this.font.drawString(matrixStack, text.getString(), startX+x, startY+y,
+        int startX = this.leftPos;
+        int startY = this.topPos;
+        this.font.draw(matrixStack, text.getString(), startX+x, startY+y,
                 Color.WHITE.getRGB());
         // What in the hell? Not scalable, how to make this scale on gui scale?
 
@@ -384,7 +386,7 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
 
             /// EDITOR
 
-            mc.getTextureManager().bindTexture(GUI_PARTS);
+            mc.getTextureManager().bind(GUI_PARTS);
             boolean btnSelectedYet = btnSelected != null;
             if (this.enchLevel == this.maxEnchLevel)
             {
@@ -417,12 +419,12 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
             {
                 //Render blue
                 if(this.enchLevel > i) {
-                    mc.ingameGUI.blit(matrixStack, this.u + data.getxMod()+88 - 174-84 + (i*12),
+                    mc.gui.blit(matrixStack, this.u + data.getxMod()+88 - 174-84 + (i*12),
                             this.v +13+ data.getyMod() - 4 - 10 - 50-21+((this.itorInt+scrollItor)*33), 0, 101,
                             12, 3);
                 }
                 else {
-                    mc.ingameGUI.blit(matrixStack, this.u + data.getxMod()+88 - 174-84 + (i*12),
+                    mc.gui.blit(matrixStack, this.u + data.getxMod()+88 - 174-84 + (i*12),
                             this.v +13+ data.getyMod() - 4 - 10 - 50-21+((this.itorInt+scrollItor)*33), 0, 98,
                             12, 3);
                 }
@@ -446,7 +448,7 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
                 return;
             }
             GuiEditor.GUI_Element data = new GuiEditor.GUI_Element(0,0,0,0);
-            mc.getTextureManager().bindTexture(GUI_PARTS);
+            mc.getTextureManager().bind(GUI_PARTS);
             if(this.isHovered)
             {
                 blit(matrixStack, this.x + data.getxMod()+173 - 74 - 26 - 74,

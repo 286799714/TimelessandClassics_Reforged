@@ -39,7 +39,7 @@ public class m1_garand_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.M1_GARAND.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.push();
+        matrices.pushPose();
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -81,7 +81,7 @@ public class m1_garand_animation implements IOverrideModel {
             }
         }
         RenderUtil.renderModel(SpecialModels.M1_GARAND_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay); // BOLT
-        matrices.pop();
+        matrices.popPose();
     }
     //Same method from GrenadeLauncherModel, to make a smooth rotation of the chamber.
     private double easeInOutBack(double x) {

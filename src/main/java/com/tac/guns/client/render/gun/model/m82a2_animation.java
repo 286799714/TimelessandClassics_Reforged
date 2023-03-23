@@ -61,7 +61,7 @@ public class m82a2_animation implements IOverrideModel {
 
         RenderUtil.renderModel(SpecialModels.M82A2.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-        matrices.push();
+        matrices.pushPose();
 
         matrices.translate(0, 0, 0.025F);
         Gun gun = ((GunItem) stack.getItem()).getGun();
@@ -105,6 +105,6 @@ public class m82a2_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.M82A2_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
 }

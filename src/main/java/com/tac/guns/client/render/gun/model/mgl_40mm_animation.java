@@ -58,10 +58,10 @@ public class mgl_40mm_animation implements IOverrideModel
         }
         RenderUtil.renderModel(SpecialModels.MGL_40MM.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-        CooldownTracker tracker = Minecraft.getInstance().player.getCooldownTracker();
-        float cooldown = tracker.getCooldown(stack.getItem(), Minecraft.getInstance().getRenderPartialTicks());
+        CooldownTracker tracker = Minecraft.getInstance().player.getCooldowns();
+        float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
 
-        matrices.push();
+        matrices.pushPose();
         matrices.translate(0, 0.2875, -0.2075);
         if(cooldown < 0.74)
         {
@@ -70,22 +70,22 @@ public class mgl_40mm_animation implements IOverrideModel
             //cooldown = (float) easeInOutBack(cooldown);
 
             if (cooldown < 0.74) {
-                matrices.rotate(Vector3f.ZN.rotationDegrees(-45F * (cooldown * 1.74F))); //.74
+                matrices.mulPose(Vector3f.ZN.rotationDegrees(-45F * (cooldown * 1.74F))); //.74
                 matrices.translate(-0.15 * (cooldown * 1.74F) * 0.0625, 0, 0); //-2
             }
             matrices.translate(0, 5.8 * 0.0625, 0);
         }
         RenderUtil.renderModel(SpecialModels.MGL_40MM_CYLINDER.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
 
         ///
         /// SCOPE AUTO RENDER
         ///
         matrices.translate(0, 0.017, 0);
-        if(transformType.isFirstPerson() && entity.equals(Minecraft.getInstance().player))
+        if(transformType.firstPerson() && entity.equals(Minecraft.getInstance().player))
         {
             ScopeData scopeData = ScopeEditor.get().getScopeData() == null || ScopeEditor.get().getScopeData().getTagName() == "item.tac.mgl_40mm" ? new ScopeData("") : ScopeEditor.get().getScopeData();
-            if(entity.getPrimaryHand() == HandSide.LEFT)
+            if(entity.getMainArm() == HandSide.LEFT)
             {
                 matrices.scale(-1, 1, 1);
             }
@@ -95,15 +95,15 @@ public class mgl_40mm_animation implements IOverrideModel
             float reticleSize = scopePrevSize / 16.0F;
             float crop = 0.429F + scopeData.getDrZoomCropMod();//0.43F
             Minecraft mc = Minecraft.getInstance();
-            MainWindow window = mc.getMainWindow();
+            MainWindow window = mc.getWindow();
 
-            float texU = ((window.getWidth() - window.getHeight() + window.getHeight() * crop * 2.0F) / 2.0F) / window.getWidth();
+            float texU = ((window.getScreenWidth() - window.getScreenHeight() + window.getScreenHeight() * crop * 2.0F) / 2.0F) / window.getScreenWidth();
 
             //matrixStack.rotate(Vector3f.ZP.rotationDegrees(-GunRenderingHandler.get().immersiveWeaponRoll));
-            matrices.push();
+            matrices.pushPose();
             {
-                Matrix4f matrix = matrices.getLast().getMatrix();
-                Matrix3f normal = matrices.getLast().getNormal();
+                Matrix4f matrix = matrices.last().pose();
+                Matrix3f normal = matrices.last().normal();
 
                 matrices.translate((-size / 2) + scopeData.getDrXZoomMod(), (0.0936175+0.3275) + scopeData.getDrYZoomMod() , Config.CLIENT.display.scopeDoubleRender.get() ? (3.915-3.605 + scopeData.getDrZZoomMod()) * 0.0625 : (3.075-3.605 + scopeData.getDrZZoomMod()) * 0.0625); //3.275
 
@@ -115,10 +115,10 @@ public class mgl_40mm_animation implements IOverrideModel
                 {
                     builder = renderBuffer.getBuffer(GunRenderType.getScreen());
                     //matrix.mul(Vector3f.ZP.rotationDegrees(-GunRenderingHandler.get().immersiveWeaponRoll));
-                    builder.pos(matrix, 0, size, 0).color(color, color, color, 1.0F).tex(texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, 0, 0, 0).color(color, color, color, 1.0F).tex(texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, size, 0, 0).color(color, color, color, 1.0F).tex(1.0F - texU, crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.pos(matrix, size, size, 0).color(color, color, color, 1.0F).tex(1.0F - texU, 1.0F - crop).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.vertex(matrix, 0, size, 0).color(color, color, color, 1.0F).uv(texU, 1.0F - crop).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.vertex(matrix, 0, 0, 0).color(color, color, color, 1.0F).uv(texU, crop).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.vertex(matrix, size, 0, 0).color(color, color, color, 1.0F).uv(1.0F - texU, crop).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                    builder.vertex(matrix, size, size, 0).color(color, color, color, 1.0F).uv(1.0F - texU, 1.0F - crop).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
                 }
 
                 matrices.translate(0, 0, 0.0001);
@@ -147,7 +147,7 @@ public class mgl_40mm_animation implements IOverrideModel
                 matrices.translate((-0.00335715-0.00375-0.00428) + scopeData.getReticleXMod(), (-0.0035055-0.00315) + scopeData.getReticleYMod(), 0.0000 + scopeData.getReticleZMod());
 
 
-                builder = renderBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
+                builder = renderBuffer.getBuffer(RenderType.entityTranslucent(RED_DOT_RETICLE));
                 // Walking bobbing
                 boolean aimed = false;
                 /* The new controlled bobbing */
@@ -162,17 +162,17 @@ public class mgl_40mm_animation implements IOverrideModel
                 matrices.translate(0, 0, -0.35);
                 //matrices.rotate(Vector3f.YN.rotationDegrees((GunRenderingHandler.get().reco * GunRenderingHandler.get().recoilReduction)*0.0955f));//0.192f
                 //matrixStack.rotate(Vector3f.ZN.rotationDegrees((GunRenderingHandler.get().newSwayYaw * GunRenderingHandler.get().weaponsHorizontalAngle * 0.65f * GunRenderingHandler.get().recoilReduction)*0.0955f)); // seems to be interesting to increase the force of
-                matrices.rotate(Vector3f.XP.rotationDegrees((GunRenderingHandler.get().recoilLift * GunRenderingHandler.get().recoilReduction) * 0.04775F));
+                matrices.mulPose(Vector3f.XP.rotationDegrees((GunRenderingHandler.get().recoilLift * GunRenderingHandler.get().recoilReduction) * 0.04775F));
                 matrices.translate(0, 0, 0.35);
 
                 int lightmapValue = 15728880;
                 //alpha *= 0.6;
-                builder.pos(matrix, 0, (float) (reticleSize / scale), 0).color(red, green, blue, alpha).tex(0.0F, 0.9375F).overlay(overlay).lightmap(lightmapValue).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                builder.pos(matrix, 0, 0, 0).color(red, green, blue, alpha).tex(0.0F, 0.0F).overlay(overlay).lightmap(lightmapValue).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                builder.pos(matrix, (float) (reticleSize / scale), 0, 0).color(red, green, blue, alpha).tex(0.9375F, 0.0F).overlay(overlay).lightmap(lightmapValue).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                builder.pos(matrix, (float) (reticleSize / scale), (float) (reticleSize / scale), 0).color(red, green, blue, alpha).tex(0.9375F, 0.9375F).overlay(overlay).lightmap(lightmapValue).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.vertex(matrix, 0, (float) (reticleSize / scale), 0).color(red, green, blue, alpha).uv(0.0F, 0.9375F).overlayCoords(overlay).uv2(lightmapValue).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.vertex(matrix, 0, 0, 0).color(red, green, blue, alpha).uv(0.0F, 0.0F).overlayCoords(overlay).uv2(lightmapValue).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.vertex(matrix, (float) (reticleSize / scale), 0, 0).color(red, green, blue, alpha).uv(0.9375F, 0.0F).overlayCoords(overlay).uv2(lightmapValue).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+                builder.vertex(matrix, (float) (reticleSize / scale), (float) (reticleSize / scale), 0).color(red, green, blue, alpha).uv(0.9375F, 0.9375F).overlayCoords(overlay).uv2(lightmapValue).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
             }
-            matrices.pop();
+            matrices.popPose();
         }
     }
 }

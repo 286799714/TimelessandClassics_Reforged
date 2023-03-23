@@ -31,18 +31,18 @@ public class m1917_animation implements IOverrideModel {
         
         RenderUtil.renderModel(SpecialModels.M1917.getModel(), stack, matrices, renderBuffer, light, overlay);
         //Always push
-        matrices.push();
+        matrices.pushPose();
 
         //We're getting the cooldown tracker for the item - items like the sword, ender pearl, and chorus fruit all have this too.
-        CooldownTracker tracker = Minecraft.getInstance().player.getCooldownTracker();
-        float cooldown = tracker.getCooldown(stack.getItem(), Minecraft.getInstance().getRenderPartialTicks());
+        CooldownTracker tracker = Minecraft.getInstance().player.getCooldowns();
+        float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
         cooldown = (float) easeInOutBack(cooldown);
 
         //Here we're moving the model into position
         matrices.translate(-0.570*cooldown, -5.0 * 0.0625, 0);
 
         //We rotate the chamber part of the model according to the cooldown variable above, which is manipulated by the method provided below.
-        matrices.rotate(Vector3f.ZN.rotationDegrees(45F * cooldown));
+        matrices.mulPose(Vector3f.ZN.rotationDegrees(45F * cooldown));
         //Then move it
         matrices.translate(0.0, 5.0 * 0.0625, 0.0);
 
@@ -54,7 +54,7 @@ public class m1917_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.M1917_CYLINDER.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
     }
 
     //Same method from GrenadeLauncherModel, to make a smooth rotation of the chamber.

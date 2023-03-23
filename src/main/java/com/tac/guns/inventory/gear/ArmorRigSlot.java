@@ -14,7 +14,7 @@ public class ArmorRigSlot extends SlotItemHandler {
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
         return stack.getItem() instanceof ArmorRigItem;
     }
 }

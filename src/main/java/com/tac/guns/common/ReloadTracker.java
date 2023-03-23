@@ -51,9 +51,9 @@ public class ReloadTracker
 
     private ReloadTracker(PlayerEntity player)
     {
-        this.startTick = player.ticksExisted;
-        this.slot = player.inventory.currentItem;
-        this.stack = player.inventory.getCurrentItem();
+        this.startTick = player.tickCount;
+        this.slot = player.inventory.selected;
+        this.stack = player.inventory.getSelected();
         this.gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
     }
 
@@ -65,7 +65,7 @@ public class ReloadTracker
      */
     private boolean isSameWeapon(PlayerEntity player)
     {
-        return !this.stack.isEmpty() && player.inventory.currentItem == this.slot && player.inventory.getCurrentItem() == this.stack;
+        return !this.stack.isEmpty() && player.inventory.selected == this.slot && player.inventory.getSelected() == this.stack;
     }
 
     /**
@@ -96,26 +96,26 @@ public class ReloadTracker
         Gun gun = ((GunItem)this.stack.getItem()).getGun();
         ItemStack rig = WearableHelper.PlayerWornRig(player);
         if(rig != null) {
-            PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, gun.getProjectile().getItem()), ((ServerPlayerEntity)player).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+            PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, gun.getProjectile().getItem()), ((ServerPlayerEntity)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
         if(gun.getReloads().isMagFed())
         {
             if(this.isWeaponEmpty())
             {
-                int deltaTicks = player.ticksExisted - this.startTick;
+                int deltaTicks = player.tickCount - this.startTick;
                 int interval = gun.getReloads().getReloadMagTimer()+gun.getReloads().getAdditionalReloadEmptyMagTimer()+this.gun.getReloads().getPreReloadPauseTicks();//GunEnchantmentHelper.getReloadInterval(this.stack);
                 reload = deltaTicks > interval; // deltaTicks > 0 &&
             }
             else
             {
-                int deltaTicks = player.ticksExisted - this.startTick;
+                int deltaTicks = player.tickCount - this.startTick;
                 int interval = gun.getReloads().getReloadMagTimer()+this.gun.getReloads().getPreReloadPauseTicks();//GunEnchantmentHelper.getReloadInterval(this.stack);
                 reload = deltaTicks > interval; // deltaTicks > 0 &&
             }
         }
         else
         {
-            int deltaTicks = player.ticksExisted - this.startTick;
+            int deltaTicks = player.tickCount - this.startTick;
             int interval = GunEnchantmentHelper.getReloadInterval(this.stack);
             reload = deltaTicks > 0 && deltaTicks % interval == 0;
         }
@@ -141,8 +141,8 @@ public class ReloadTracker
         ResourceLocation reloadSound = this.gun.getSounds().getReload();
         if(reloadSound != null)
         {
-            MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) player.getPosY() + 1.0F, (float) player.getPosZ(), 1.0F, 1.0F, player.getEntityId(), false, true);
-            PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getPosX(), (player.getPosY() + 1.0), player.getPosZ(), 16.0, player.world.getDimensionKey())), message);
+            MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getX(), (float) player.getY() + 1.0F, (float) player.getZ(), 1.0F, 1.0F, player.getId(), false, true);
+            PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getX(), (player.getY() + 1.0), player.getZ(), 16.0, player.level.dimension())), message);
         }
     }
 
@@ -240,22 +240,22 @@ public class ReloadTracker
         ResourceLocation reloadSound = this.gun.getSounds().getReload();
         if(reloadSound != null)
         {
-            MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) player.getPosY() + 1.0F, (float) player.getPosZ(), 1.0F, 1.0F, player.getEntityId(), false, true);
-            PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getPosX(), (player.getPosY() + 1.0), player.getPosZ(), 16.0, player.world.getDimensionKey())), message);
+            MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getX(), (float) player.getY() + 1.0F, (float) player.getZ(), 1.0F, 1.0F, player.getId(), false, true);
+            PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getX(), (player.getY() + 1.0), player.getZ(), 16.0, player.level.dimension())), message);
         }
     }
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event)
     {
-        if(event.phase == TickEvent.Phase.START && !event.player.world.isRemote)
+        if(event.phase == TickEvent.Phase.START && !event.player.level.isClientSide)
         {
             PlayerEntity player = event.player;
             if(SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING))
             {
                 if(!RELOAD_TRACKER_MAP.containsKey(player))
                 {
-                    if(!(player.inventory.getCurrentItem().getItem() instanceof GunItem))
+                    if(!(player.inventory.getSelected().getItem() instanceof GunItem))
                     {
                         SyncedPlayerData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
                         SyncedPlayerData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, false);

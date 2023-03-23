@@ -73,41 +73,41 @@ public class UpgradeBenchTileEntity extends SyncedTileEntity implements IStorage
     public CompoundNBT getUpdateTag()
     {
         CompoundNBT nbtTagCompound = new CompoundNBT();
-        this.write(nbtTagCompound);
+        this.save(nbtTagCompound);
         return nbtTagCompound;
     }
     @Override
     public void handleUpdateTag(BlockState blockState, CompoundNBT tag)
     {
-        this.read(blockState, tag);
+        this.load(blockState, tag);
     }
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        BlockState blockState = world.getBlockState(pos);
-        this.read(blockState, pkt.getNbtCompound());   // read from the nbt in the packet
+        BlockState blockState = level.getBlockState(worldPosition);
+        this.load(blockState, pkt.getTag());   // read from the nbt in the packet
     }
     @Override
     @Nullable
     public SUpdateTileEntityPacket getUpdatePacket()
     {
         CompoundNBT nbtTagCompound = new CompoundNBT();
-        this.write(nbtTagCompound);
+        this.save(nbtTagCompound);
         int tileEntityType = 42;  // arbitrary number; only used for vanilla TileEntities.
-        return new SUpdateTileEntityPacket(this.pos, tileEntityType, nbtTagCompound);
+        return new SUpdateTileEntityPacket(this.worldPosition, tileEntityType, nbtTagCompound);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound)
+    public CompoundNBT save(CompoundNBT compound)
     {
-        super.write(compound);
+        super.save(compound);
 
         CompoundNBT weaponBt = new CompoundNBT();
-        this.inventory.get(0).write(weaponBt);
+        this.inventory.get(0).save(weaponBt);
         if(this.inventory.get(0).getTag() != null)
             compound.put("weapon", weaponBt);
 
         CompoundNBT modules = new CompoundNBT();
-        this.inventory.get(1).write(modules);
+        this.inventory.get(1).save(modules);
         if(this.inventory.get(1).getOrCreateTag() != null)
             compound.put("modules", modules);
 
@@ -115,27 +115,27 @@ public class UpgradeBenchTileEntity extends SyncedTileEntity implements IStorage
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound)
+    public void load(BlockState state, CompoundNBT compound)
     {
-        super.read(state, compound);
+        super.load(state, compound);
         if(compound.contains("weapon"))
-            this.inventory.set(0, ItemStack.read(compound.getCompound("weapon")));
+            this.inventory.set(0, ItemStack.of(compound.getCompound("weapon")));
 
         CompoundNBT itemStackNBT = compound.getCompound("modules");
-        ItemStack readItemStack = ItemStack.read(itemStackNBT);
+        ItemStack readItemStack = ItemStack.of(itemStackNBT);
         this.inventory.set(1, readItemStack);
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack)
+    public boolean canPlaceItem(int index, ItemStack stack)
     {
         return true;
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player)
+    public boolean stillValid(PlayerEntity player)
     {
-        return this.world.getTileEntity(this.pos) == this && player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) <= 64.0;
+        return this.level.getBlockEntity(this.worldPosition) == this && player.distanceToSqr(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5) <= 64.0;
     }
 
     @Override

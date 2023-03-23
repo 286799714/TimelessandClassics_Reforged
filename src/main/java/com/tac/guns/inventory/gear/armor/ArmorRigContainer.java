@@ -22,7 +22,7 @@ public class ArmorRigContainer extends Container {
         this.item = item;
 
         RigSlotsHandler itemHandler = (RigSlotsHandler) this.item.getCapability(InventoryListener.RIG_HANDLER_CAPABILITY).resolve().get();
-        this.numRows = ((ArmorRigItem)inv.player.getHeldItemMainhand().getItem()).getNumOfRows();
+        this.numRows = ((ArmorRigItem)inv.player.getMainHandItem().getItem()).getNumOfRows();
         int i = (this.numRows - 4) * 18;
         //RigSlotsHandler itemHandler = new RigSlotsHandler(maxSlots);
 
@@ -77,38 +77,38 @@ public class ArmorRigContainer extends Container {
 
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
 
     @Override
-    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
-        if(slotId <= 0) return super.slotClick(slotId, dragType, clickTypeIn, player);
-        Slot slot = this.inventorySlots.get(slotId);
-        if(slot.getHasStack()) {
-            if(slot.getStack().getItem() instanceof ArmorRigItem) return ItemStack.EMPTY;
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+        if(slotId <= 0) return super.clicked(slotId, dragType, clickTypeIn, player);
+        Slot slot = this.slots.get(slotId);
+        if(slot.hasItem()) {
+            if(slot.getItem().getItem() instanceof ArmorRigItem) return ItemStack.EMPTY;
         }
-        return super.slotClick(slotId, dragType, clickTypeIn, player);
+        return super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index < this.numRows * 9) {
-                if (!this.mergeItemStack(itemstack1, this.numRows * 9, this.inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, this.numRows * 9, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, this.numRows * 9, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, this.numRows * 9, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
 

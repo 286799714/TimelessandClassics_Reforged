@@ -65,19 +65,19 @@ public class WorkbenchRecipeBuilder
      */
     public WorkbenchRecipeBuilder addIngredient(IItemProvider item, int quantity)
     {
-        this.materials.add(new Pair<>(Ingredient.fromItems(item), quantity));
+        this.materials.add(new Pair<>(Ingredient.of(item), quantity));
         return this;
     }
 
     public WorkbenchRecipeBuilder addIngredient(ITag.INamedTag<Item> item, int quantity)
     {
-        this.materials.add(new Pair<>(Ingredient.fromTag(item), quantity));
+        this.materials.add(new Pair<>(Ingredient.of(item), quantity));
         return this;
     }
 
     public WorkbenchRecipeBuilder addIngredient(ITag.INamedTag<Item> item)
     {
-        this.materials.add(new Pair<>(Ingredient.fromTag(item), 1));
+        this.materials.add(new Pair<>(Ingredient.of(item), 1));
         return this;
     }
 
@@ -161,7 +161,7 @@ public class WorkbenchRecipeBuilder
         }
 
         @Override
-        public void serialize(JsonObject json)
+        public void serializeRecipeData(JsonObject json)
         {
             if(!this.group.isEmpty())
                 json.addProperty("group", this.group);
@@ -170,7 +170,7 @@ public class WorkbenchRecipeBuilder
             for(Pair<Ingredient, Integer> material : this.materials)
             {
                 JsonObject resultObject = new JsonObject();
-                resultObject.add("item", material.getFirst().serialize());
+                resultObject.add("item", material.getFirst().toJson());
                 if(material.getSecond() > 1)
                     resultObject.addProperty("count", material.getSecond());
                 input.add(resultObject);
@@ -185,25 +185,25 @@ public class WorkbenchRecipeBuilder
         }
 
         @Override
-        public ResourceLocation getID()
+        public ResourceLocation getId()
         {
             return id;
         }
 
         @Override
-        public IRecipeSerializer<?> getSerializer()
+        public IRecipeSerializer<?> getType()
         {
             return ModRecipeSerializers.WORKBENCH.get();
         }
 
         @Override
-        public JsonObject getAdvancementJson()
+        public JsonObject serializeAdvancement()
         {
             return null;
         }
 
         @Override
-        public ResourceLocation getAdvancementID()
+        public ResourceLocation getAdvancementId()
         {
             return null;
         }

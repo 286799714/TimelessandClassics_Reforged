@@ -72,7 +72,7 @@ public abstract class GunAnimationController {
                     animationMeta.getResourceLocation(),
                     soundMeta.getResourceLocation(),
                     true,
-                    player.getUniqueID());
+                    player.getUUID());
             PacketHandler.getPlayChannel().sendToServer(message);
             previousSound = soundMeta;
         }
@@ -97,7 +97,7 @@ public abstract class GunAnimationController {
                     previousAnimation.getResourceLocation(),
                     previousSound.getResourceLocation(),
                     false,
-                    player.getUniqueID());
+                    player.getUUID());
             PacketHandler.getPlayChannel().sendToServer(message);
         }
     }
@@ -135,21 +135,21 @@ public abstract class GunAnimationController {
     }
 
     public void applyAttachmentsTransform(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, LivingEntity entity, MatrixStack matrixStack){
-        boolean isFirstPerson = transformType.isFirstPerson();
+        boolean isFirstPerson = transformType.firstPerson();
         if( isFirstPerson ) Animations.pushNode(previousAnimation, getAttachmentsNodeIndex());
         Animations.applyAnimationTransform(itemStack, ItemCameraTransforms.TransformType.NONE, entity, matrixStack);
         if( isFirstPerson ) Animations.popNode();
     }
 
     public void applySpecialModelTransform(IBakedModel model, int index, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack){
-        boolean isFirstPerson = transformType.isFirstPerson();
+        boolean isFirstPerson = transformType.firstPerson();
         if( isFirstPerson ) Animations.pushNode(previousAnimation, index);
         Animations.applyAnimationTransform(model, ItemCameraTransforms.TransformType.NONE, matrixStack);
         if( isFirstPerson ) Animations.popNode();
     }
 
     public void applyTransform(ItemStack itemStack, int index, ItemCameraTransforms.TransformType transformType, LivingEntity entity, MatrixStack matrixStack){
-        boolean isFirstPerson = transformType.isFirstPerson();
+        boolean isFirstPerson = transformType.firstPerson();
         if( isFirstPerson ) Animations.pushNode(previousAnimation, index);
         Animations.applyAnimationTransform(itemStack, ItemCameraTransforms.TransformType.NONE, entity, matrixStack);
         if( isFirstPerson ) Animations.popNode();
@@ -162,7 +162,7 @@ public abstract class GunAnimationController {
             matrixStack.translate(-0.5,-0.5,-0.5);
             Matrix4f animationTransition = new Matrix4f(Animations.peekNodeModel().computeGlobalTransform(null));
             animationTransition.transpose();
-            matrixStack.getLast().getMatrix().mul(animationTransition);
+            matrixStack.last().pose().multiply(animationTransition);
             Animations.popNode();
         }
     }
@@ -174,7 +174,7 @@ public abstract class GunAnimationController {
             matrixStack.translate(-0.5,-0.5,-0.5);
             Matrix4f animationTransition = new Matrix4f(Animations.peekNodeModel().computeGlobalTransform(null));
             animationTransition.transpose();
-            matrixStack.getLast().getMatrix().mul(animationTransition);
+            matrixStack.last().pose().multiply(animationTransition);
             Animations.popNode();
         }
     }

@@ -14,6 +14,8 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.io.IOException;
 
+import com.tac.guns.client.render.animation.module.GunAnimationController.AnimationLabel;
+
 @OnlyIn(Dist.CLIENT)
 public class Ak47AnimationController extends GunAnimationController {
     public static int INDEX_BODY = 3;

@@ -85,7 +85,7 @@ public class CustomRigLoader extends JsonReloadListener
         buffer.writeVarInt(this.customRigMap.size());
         this.customRigMap.forEach((id, rig) -> {
             buffer.writeResourceLocation(id);
-            buffer.writeCompoundTag(rig.serializeNBT());
+            buffer.writeNbt(rig.serializeNBT());
         });
     }
 
@@ -105,7 +105,7 @@ public class CustomRigLoader extends JsonReloadListener
             {
                 ResourceLocation id = buffer.readResourceLocation();
                 CustomRig customRig = new CustomRig();
-                customRig.deserializeNBT(buffer.readCompoundTag());
+                customRig.deserializeNBT(buffer.readNbt());
                 builder.put(id, customRig);
             }
             return builder.build();

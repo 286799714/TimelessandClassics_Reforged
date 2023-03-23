@@ -3,6 +3,8 @@ package com.tac.guns.enchantment;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.enchantment.Enchantment.Rarity;
+
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
@@ -20,7 +22,7 @@ public class QuickHandsEnchantment extends GunEnchantment
     }
 
     @Override
-    public int getMinEnchantability(int level)
+    public int getMinCost(int level)
     {
         return 1 + 10 * (level - 1);
     }
@@ -29,8 +31,8 @@ public class QuickHandsEnchantment extends GunEnchantment
         return false;
     }
     @Override
-    public int getMaxEnchantability(int level)
+    public int getMaxCost(int level)
     {
-        return super.getMinEnchantability(level) + 50;
+        return super.getMinCost(level) + 50;
     }
 }

@@ -12,6 +12,8 @@ import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.sym.ByteQuadsCanonicalizer;
 import com.fasterxml.jackson.core.util.VersionUtil;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
+
 /**
  * Non-blocking parser implementation for JSON content.
  *<p>

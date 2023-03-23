@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.introspect.ObjectIdInfo;
 import com.fasterxml.jackson.databind.ser.*;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerator.IdKey;
+
 public class PropertyBasedObjectIdGenerator
     extends ObjectIdGenerators.PropertyGenerator
 {

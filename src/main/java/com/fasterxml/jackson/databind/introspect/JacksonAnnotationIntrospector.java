@@ -23,6 +23,8 @@ import com.fasterxml.jackson.databind.type.MapLikeType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.*;
 
+import com.fasterxml.jackson.databind.AnnotationIntrospector.ReferenceProperty;
+
 /**
  * {@link AnnotationIntrospector} implementation that handles standard
  * Jackson annotations.

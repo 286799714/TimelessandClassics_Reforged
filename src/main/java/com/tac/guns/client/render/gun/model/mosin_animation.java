@@ -35,7 +35,7 @@ public class mosin_animation implements IOverrideModel {
 
         
         RenderUtil.renderModel(SpecialModels.MOSIN.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.push();
+        matrices.pushPose();
 
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
@@ -63,7 +63,7 @@ public class mosin_animation implements IOverrideModel {
         if (cooldownOg != 0 && cooldownOg < 0.86)
         {
             matrices.translate(0.088, 0.08, 0.00);
-            matrices.rotate(Vector3f.ZN.rotationDegrees(-90F));
+            matrices.mulPose(Vector3f.ZN.rotationDegrees(-90F));
 
             // matrices.translate(0, 0, 0.318f * (-4.5 * Math.pow(cooldownOg +0.19 -0.5, 2) + 1));
 
@@ -80,7 +80,7 @@ public class mosin_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.MOSIN_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
     //Same method from GrenadeLauncherModel, to make a smooth rotation of the chamber.
     private double easeInOutBack(double x) {

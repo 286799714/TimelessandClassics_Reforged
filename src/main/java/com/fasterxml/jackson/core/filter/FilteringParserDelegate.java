@@ -11,6 +11,8 @@ import com.fasterxml.jackson.core.util.JsonParserDelegate;
 
 import static com.fasterxml.jackson.core.JsonTokenId.*;
 
+import com.fasterxml.jackson.core.JsonParser.NumberType;
+
 /**
  * Specialized {@link JsonParserDelegate} that allows use of
  * {@link TokenFilter} for outputting a subset of content that

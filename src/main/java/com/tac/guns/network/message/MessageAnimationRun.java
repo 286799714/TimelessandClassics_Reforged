@@ -34,7 +34,7 @@ public class MessageAnimationRun implements IMessage{
         buffer.writeResourceLocation(animationResource);
         buffer.writeResourceLocation(soundResource);
         buffer.writeBoolean(play);
-        buffer.writeUniqueId(fromWho);
+        buffer.writeUUID(fromWho);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class MessageAnimationRun implements IMessage{
         animationResource = buffer.readResourceLocation();
         soundResource = buffer.readResourceLocation();
         play = buffer.readBoolean();
-        fromWho = buffer.readUniqueId();
+        fromWho = buffer.readUUID();
     }
 
     @Override

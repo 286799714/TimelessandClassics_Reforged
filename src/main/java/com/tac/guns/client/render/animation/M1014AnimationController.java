@@ -7,6 +7,8 @@ import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 
+import com.tac.guns.client.render.animation.module.GunAnimationController.AnimationLabel;
+
 public class M1014AnimationController extends PumpShotgunAnimationController {
 
     public static final int INDEX_BOLT = 0;

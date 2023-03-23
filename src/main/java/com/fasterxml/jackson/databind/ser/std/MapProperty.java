@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 
+import com.fasterxml.jackson.databind.BeanProperty.Bogus;
+
 /**
  * Helper class needed to support flexible filtering of Map properties
  * with generic JSON Filter functionality. Since {@link java.util.Map}s

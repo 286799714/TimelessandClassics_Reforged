@@ -45,7 +45,7 @@ public class kar98_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.KAR98_MOUNT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         RenderUtil.renderModel(SpecialModels.KAR98.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.push();
+        matrices.pushPose();
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -66,13 +66,13 @@ public class kar98_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.KAR98_BOLT_EXTRA.getModel(), stack, matrices, renderBuffer, light, overlay);
 
             matrices.translate(-0.04925, -0.04925, 0.00);
-            matrices.rotate(Vector3f.ZN.rotationDegrees(-90F));
+            matrices.mulPose(Vector3f.ZN.rotationDegrees(-90F));
         }
         else
             RenderUtil.renderModel(SpecialModels.KAR98_BOLT_EXTRA.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         RenderUtil.renderModel(SpecialModels.KAR98_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
     //Same method from GrenadeLauncherModel, to make a smooth rotation of the chamber.
     private double easeInOutBack(double x) {

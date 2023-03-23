@@ -26,20 +26,20 @@ public class UpgradeBenchContainer extends Container
     {
         super(ModContainers.UPGRADE_BENCH.get(), windowId);
         this.upgradeBench = workbench;
-        this.pos = workbench.getPos();
+        this.pos = workbench.getBlockPos();
 
-        int offset = WorkbenchRecipes.isEmpty(workbench.getWorld()) ? 0 : 28;
+        int offset = WorkbenchRecipes.isEmpty(workbench.getLevel()) ? 0 : 28;
 
         this.addSlot(new Slot(workbench, 0, 17400, 40000)
         {
             @Override
-            public boolean isItemValid(ItemStack stack)
+            public boolean mayPlace(ItemStack stack)
             {
                 return true;
             }
 
             @Override
-            public int getSlotStackLimit()
+            public int getMaxStackSize()
             {
                 return 1;
             }
@@ -47,13 +47,13 @@ public class UpgradeBenchContainer extends Container
         this.addSlot(new Slot(workbench, 1, 17600, 50000)
         {
             @Override
-            public boolean isItemValid(ItemStack stack)
+            public boolean mayPlace(ItemStack stack)
             {
                 return true;
             }
 
             @Override
-            public int getSlotStackLimit()
+            public int getMaxStackSize()
             {
                 return 10;
             }
@@ -74,25 +74,25 @@ public class UpgradeBenchContainer extends Container
 
     }
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn)
+    public boolean stillValid(PlayerEntity playerIn)
     {
-        return upgradeBench.isUsableByPlayer(playerIn);
+        return upgradeBench.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
     {
         ItemStack stack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
+        Slot slot = this.slots.get(index);
 
-        if(slot != null && slot.getHasStack())
+        if(slot != null && slot.hasItem())
         {
-            ItemStack slotStack = slot.getStack();
+            ItemStack slotStack = slot.getItem();
             stack = slotStack.copy();
 
             if(index == 0)
             {
-                if(!this.mergeItemStack(slotStack, 1, 36, true))
+                if(!this.moveItemStackTo(slotStack, 1, 36, true))
                 {
                     return ItemStack.EMPTY;
                 }
@@ -101,19 +101,19 @@ public class UpgradeBenchContainer extends Container
             {
                 if(slotStack.getItem() instanceof DyeItem)
                 {
-                    if(!this.mergeItemStack(slotStack, 0, 1, false))
+                    if(!this.moveItemStackTo(slotStack, 0, 1, false))
                     {
                         return ItemStack.EMPTY;
                     }
                 }
                 else if(index < 28)
                 {
-                    if(!this.mergeItemStack(slotStack, 28, 36, false))
+                    if(!this.moveItemStackTo(slotStack, 28, 36, false))
                     {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if(index <= 36 && !this.mergeItemStack(slotStack, 1, 28, false))
+                else if(index <= 36 && !this.moveItemStackTo(slotStack, 1, 28, false))
                 {
                     return ItemStack.EMPTY;
                 }
@@ -121,11 +121,11 @@ public class UpgradeBenchContainer extends Container
 
             if(slotStack.isEmpty())
             {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             }
             else
             {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if(slotStack.getCount() == stack.getCount())

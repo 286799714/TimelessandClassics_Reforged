@@ -49,7 +49,7 @@ public class mk23_animation implements IOverrideModel
         RenderUtil.renderModel(SpecialModels.MK23.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -85,7 +85,7 @@ public class mk23_animation implements IOverrideModel
         RenderUtil.renderModel(SpecialModels.MK23_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
     }
      
 

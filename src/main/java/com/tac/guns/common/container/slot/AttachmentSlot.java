@@ -47,7 +47,7 @@ public class AttachmentSlot extends Slot
     }
 
     @Override
-    public boolean isEnabled()
+    public boolean isActive()
     {
         /*if(!(this.weapon.getItem() instanceof GunItem) || !(this.weapon.getItem() instanceof ScopeItem) && !(this.weapon.getItem() instanceof SideRailItem))
         {
@@ -56,7 +56,7 @@ public class AttachmentSlot extends Slot
         if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || ReloadHandler.get().isReloading()) {
             return false;
         }
-        if(this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem || this.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem)
+        if(this.player.getMainHandItem().getItem() instanceof ScopeItem || this.player.getMainHandItem().getItem() instanceof SideRailItem || this.player.getMainHandItem().getItem() instanceof IrDeviceItem)
         {
             return true;
         }
@@ -78,12 +78,12 @@ public class AttachmentSlot extends Slot
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack)
+    public boolean mayPlace(ItemStack stack)
     {
         if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || ReloadHandler.get().isReloading()) {
             return false;
         }
-        if((this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem || this.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem) && stack.getItem() instanceof DyeItem /*instanceof DyeItem && !(this.weapon.getItem() instanceof
+        if((this.player.getMainHandItem().getItem() instanceof ScopeItem || this.player.getMainHandItem().getItem() instanceof SideRailItem || this.player.getMainHandItem().getItem() instanceof IrDeviceItem) && stack.getItem() instanceof DyeItem /*instanceof DyeItem && !(this.weapon.getItem() instanceof
         GunItem)*/)
             return true;
         else
@@ -103,22 +103,22 @@ public class AttachmentSlot extends Slot
     }
 
     @Override
-    public void onSlotChanged()
+    public void setChanged()
     {
         if(this.container.isLoaded())
         {
-            this.player.world.playSound(null, this.player.getPosX(), this.player.getPosY() + 1.0, this.player.getPosZ(), ModSounds.UI_WEAPON_ATTACH.get(), SoundCategory.PLAYERS, 0.5F, this.getHasStack() ? 1.0F : 0.75F);
+            this.player.level.playSound(null, this.player.getX(), this.player.getY() + 1.0, this.player.getZ(), ModSounds.UI_WEAPON_ATTACH.get(), SoundCategory.PLAYERS, 0.5F, this.hasItem() ? 1.0F : 0.75F);
         }
     }
 
     @Override
-    public int getSlotStackLimit()
+    public int getMaxStackSize()
     {
         return 1;
     }
 
     @Override
-    public boolean canTakeStack(PlayerEntity player)
+    public boolean mayPickup(PlayerEntity player)
     {
         //ItemStack itemstack = this.getStack();
         return true;

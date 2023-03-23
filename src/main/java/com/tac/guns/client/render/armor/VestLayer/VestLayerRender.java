@@ -71,7 +71,7 @@ public class VestLayerRender<T extends PlayerEntity, M extends BipedModel<T>> ex
         if(WearableHelper.PlayerWornRig(player) != null && Config.COMMON.gameplay.renderTaCArmor.get())
         {
             ItemStack armor = WearableHelper.PlayerWornRig(player);
-            stack.push();
+            stack.pushPose();
             {
                 Item modelName = armor.getItem();
                 ArmorBase model = MODELS.get(modelName);
@@ -79,15 +79,15 @@ public class VestLayerRender<T extends PlayerEntity, M extends BipedModel<T>> ex
                 {
                     model = new ModernArmor();
                 }
-                model.rotateToPlayerBody(this.getEntityModel().bipedBody); // Default rotation, keep for now? It's a global, maybe force more work on the model implementation side rather then core?
-                if(this.getEntityModel().isSneak)
+                model.rotateToPlayerBody(this.getParentModel().body); // Default rotation, keep for now? It's a global, maybe force more work on the model implementation side rather then core?
+                if(this.getParentModel().crouching)
                 {
                     stack.translate(0,-0.15,0.7475); //TODO: Rebuild all armor files to a more proper Y: position to line up with player body, this will allow the rotate sync above to work properly.
                 }
-                IVertexBuilder builder = ItemRenderer.getBuffer(renderTypeBuffer, model.getRenderType(model.getTexture()), false, false);
-                model.render(stack, builder, p_225628_3_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                IVertexBuilder builder = ItemRenderer.getFoilBuffer(renderTypeBuffer, model.renderType(model.getTexture()), false, false);
+                model.renderToBuffer(stack, builder, p_225628_3_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
-            stack.pop();
+            stack.popPose();
         }
     }
 }

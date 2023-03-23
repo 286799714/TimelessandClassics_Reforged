@@ -24,7 +24,7 @@ public class ModContainers
     public static final DeferredRegister<ContainerType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Reference.MOD_ID);
 
     public static final RegistryObject<ContainerType<WorkbenchContainer>> WORKBENCH = register("workbench", (IContainerFactory<WorkbenchContainer>) (windowId, playerInventory, data) -> {
-        WorkbenchTileEntity workstation = (WorkbenchTileEntity) playerInventory.player.world.getTileEntity(data.readBlockPos());
+        WorkbenchTileEntity workstation = (WorkbenchTileEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
         return new WorkbenchContainer(windowId, playerInventory, workstation);
     });
 
@@ -34,7 +34,7 @@ public class ModContainers
 
     public static final RegistryObject<ContainerType<ColorBenchContainer>> COLOR_BENCH = register("color_bench", ColorBenchContainer::new);
     public static final RegistryObject<ContainerType<UpgradeBenchContainer>> UPGRADE_BENCH = register("upgrade_bench", (IContainerFactory<UpgradeBenchContainer>) (windowId, playerInventory, data) -> {
-        UpgradeBenchTileEntity workstation = (UpgradeBenchTileEntity) playerInventory.player.world.getTileEntity(data.readBlockPos());
+        UpgradeBenchTileEntity workstation = (UpgradeBenchTileEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
         return new UpgradeBenchContainer(windowId, playerInventory, workstation);
     });
     public static final RegistryObject<ContainerType<ArmorRigContainer>> ARMOR_TEST = REGISTER.register("armor_test", () -> IForgeContainerType.create((windowId, inv, data) -> new ArmorRigContainer(windowId, inv)));

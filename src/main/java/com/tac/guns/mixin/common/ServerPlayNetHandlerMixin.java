@@ -17,7 +17,7 @@ public class ServerPlayNetHandlerMixin {
     @Shadow
     public ServerPlayerEntity player;
 
-    @Inject(at = @At("HEAD"), method = "processPlayerDigging")
+    @Inject(at = @At("HEAD"), method = "handlePlayerAction")
     public void applyDraw(CPlayerDiggingPacket packetIn, CallbackInfo ci){
         CPlayerDiggingPacket.Action action = packetIn.getAction();
         if(action.name().equals("SWAP_ITEM_WITH_OFFHAND") && !player.isSpectator()){

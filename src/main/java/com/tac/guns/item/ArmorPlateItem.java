@@ -2,6 +2,8 @@ package com.tac.guns.item;
 
 import net.minecraft.item.Item;
 
+import net.minecraft.item.Item.Properties;
+
 /**
  * A basic item class that implements {@link IArmorPlate} to indicate this item is a Plate
  *

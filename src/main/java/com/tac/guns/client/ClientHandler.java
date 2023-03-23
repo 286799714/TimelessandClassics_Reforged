@@ -128,7 +128,7 @@ public class ClientHandler
 
         // Load key binds
         InputHandler.initKeys();
-        keyBindsFile = new File(mc.gameDir, "config/tac-key-binds.json");
+        keyBindsFile = new File(mc.gameDirectory, "config/tac-key-binds.json");
         if (!keyBindsFile.exists()) {
             try {
                 keyBindsFile.createNewFile();
@@ -148,7 +148,7 @@ public class ClientHandler
         new AnimationRunner(); //preload thread pool
         new SecondOrderDynamics(1f, 1f, 1f, 1f); //preload thread pool
 
-        Map<String, PlayerRenderer> skins = Minecraft.getInstance().getRenderManager().getSkinMap();
+        Map<String, PlayerRenderer> skins = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
         addVestLayer(skins.get("default"));
         addVestLayer(skins.get("slim"));
     }
@@ -159,8 +159,8 @@ public class ClientHandler
 
     private static void setupRenderLayers()
     {
-        RenderTypeLookup.setRenderLayer(ModBlocks.UPGRADE_BENCH.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.WORKBENCH.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.UPGRADE_BENCH.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.WORKBENCH.get(), RenderType.cutout());
     }
 
     private static void registerEntityRenders()
@@ -228,11 +228,11 @@ public class ClientHandler
 
     private static void registerScreenFactories()
     {
-        ScreenManager.registerFactory(ModContainers.WORKBENCH.get(), WorkbenchScreen::new);
-        ScreenManager.registerFactory(ModContainers.UPGRADE_BENCH.get(), UpgradeBenchScreen::new);
-        ScreenManager.registerFactory(ModContainers.ATTACHMENTS.get(), AttachmentScreen::new);
-        ScreenManager.registerFactory(ModContainers.INSPECTION.get(), InspectScreen::new);
-        ScreenManager.registerFactory(ModContainers.ARMOR_TEST.get(), AmmoPackScreen::new);
+        ScreenManager.register(ModContainers.WORKBENCH.get(), WorkbenchScreen::new);
+        ScreenManager.register(ModContainers.UPGRADE_BENCH.get(), UpgradeBenchScreen::new);
+        ScreenManager.register(ModContainers.ATTACHMENTS.get(), AttachmentScreen::new);
+        ScreenManager.register(ModContainers.INSPECTION.get(), InspectScreen::new);
+        ScreenManager.register(ModContainers.ARMOR_TEST.get(), AmmoPackScreen::new);
         //ScreenManager.registerFactory(ModContainers.COLOR_BENCH.get(), ColorBenchAttachmentScreen::new);
     }
 
@@ -244,13 +244,13 @@ public class ClientHandler
             MouseSettingsScreen screen = (MouseSettingsScreen) event.getGui();
             if(mouseOptionsField == null)
             {
-                mouseOptionsField = ObfuscationReflectionHelper.findField(MouseSettingsScreen.class, "field_213045_b");
+                mouseOptionsField = ObfuscationReflectionHelper.findField(MouseSettingsScreen.class, "list");
                 mouseOptionsField.setAccessible(true);
             }
             try
             {
                 OptionsRowList list = (OptionsRowList) mouseOptionsField.get(screen);
-                list.addOption(GunOptions.ADS_SENSITIVITY, GunOptions.CROSSHAIR);
+                list.addSmall(GunOptions.ADS_SENSITIVITY, GunOptions.CROSSHAIR);
                 /*, GunOptions.BURST_MECH);*/
             }
             catch(IllegalAccessException e)
@@ -263,7 +263,7 @@ public class ClientHandler
             VideoSettingsScreen screen = (VideoSettingsScreen) event.getGui();
 
             event.addWidget((new Button(screen.width / 2 - 215, 10, 75, 20, new TranslationTextComponent("tac.options.gui_settings"), (p_213126_1_) -> {
-                Minecraft.getInstance().displayGuiScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().gameSettings));
+                Minecraft.getInstance().setScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().options));
             })));
         }
         /*if(event.getGui() instanceof VideoSettingsScreen)
@@ -295,7 +295,7 @@ public class ClientHandler
     static {
         InputHandler.ATTACHMENTS.addPressCallback(() -> {
             final Minecraft mc = Minecraft.getInstance();
-            if (mc.player != null && mc.currentScreen == null)
+            if (mc.player != null && mc.screen == null)
                 PacketHandler.getPlayChannel().sendToServer(new MessageAttachments());
         });
 
@@ -303,9 +303,9 @@ public class ClientHandler
             final Minecraft mc = Minecraft.getInstance();
             if (
                     mc.player != null
-                            && mc.currentScreen == null
+                            && mc.screen == null
                             && GunAnimationController.fromItem(
-                            Minecraft.getInstance().player.inventory.getCurrentItem().getItem()
+                            Minecraft.getInstance().player.inventory.getSelected().getItem()
                     ) == null
             ) PacketHandler.getPlayChannel().sendToServer(new MessageInspection());
         };

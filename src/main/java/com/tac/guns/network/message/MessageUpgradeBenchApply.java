@@ -37,7 +37,7 @@ public class MessageUpgradeBenchApply implements IMessage
     public void encode(PacketBuffer buffer)
     {
         buffer.writeBlockPos(this.pos);
-        buffer.writeString(this.reqKey);
+        buffer.writeUtf(this.reqKey);
 
 
     }
@@ -46,7 +46,7 @@ public class MessageUpgradeBenchApply implements IMessage
     public void decode(PacketBuffer buffer)
     {
         this.pos = buffer.readBlockPos();
-        this.reqKey = buffer.readString();
+        this.reqKey = buffer.readUtf();
     }
 
     @Override

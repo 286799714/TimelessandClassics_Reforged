@@ -51,7 +51,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
         super(screenContainer, playerInventory, titleIn);
         this.playerInventory = playerInventory;
         this.weaponInventory = screenContainer.getWeaponInventory();
-        this.ySize = 184;
+        this.imageHeight = 184;
     }
 
     @Override
@@ -60,9 +60,9 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
         super.tick();
         if(this.minecraft != null && this.minecraft.player != null)
         {
-            if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
+            if(!(this.minecraft.player.getMainHandItem().getItem() instanceof GunItem) && !(this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) && !(this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem) && !(this.minecraft.player.getMainHandItem().getItem() instanceof IrDeviceItem))
             {
-                Minecraft.getInstance().displayGuiScreen(null);
+                Minecraft.getInstance().setScreen(null);
             }
         }
     }
@@ -73,21 +73,21 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY); //Render tool tips
+        this.renderTooltip(matrixStack, mouseX, mouseY); //Render tool tips
     }
 
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY)
+    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX+30, (float)this.titleY, 4210752);
+        this.font.draw(matrixStack, this.title, (float)this.titleLabelX+30, (float)this.titleLabelY, 4210752);
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        int left = (this.width - this.xSize) / 2;
-        int top = (this.height - this.ySize) / 2;
+        int left = (this.width - this.imageWidth) / 2;
+        int top = (this.height - this.imageHeight) / 2;
 
-        if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
+        if((this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof IrDeviceItem))
             RenderUtil.scissor(left + 97, top + 17, 67, 67);
         else
             RenderUtil.scissor(left + 26, top + 17, 123, 70);
@@ -112,20 +112,20 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-            IRenderTypeBuffer.Impl buffer = this.minecraft.getRenderTypeBuffers().getBufferSource();
-            if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem))
+            IRenderTypeBuffer.Impl buffer = this.minecraft.renderBuffers().bufferSource();
+            if((this.minecraft.player.getMainHandItem().getItem() instanceof GunItem))
             {
                 matrixStack.translate(0.0,0.0,-0.4);
-                GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getHeldItemMainhand(), ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F);
+                GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getMainHandItem(), ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F);
             }
             else
             {
-                matrixStack.push();
+                matrixStack.pushPose();
                 matrixStack.scale(1.25f,1.25f,1.25f);
-                GunRenderingHandler.get().renderScope(this.minecraft.player, this.minecraft.player.getHeldItemMainhand(), ItemCameraTransforms.TransformType.FIXED, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
-                matrixStack.pop();
+                GunRenderingHandler.get().renderScope(this.minecraft.player, this.minecraft.player.getMainHandItem(), ItemCameraTransforms.TransformType.FIXED, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
+                matrixStack.popPose();
             }
-            buffer.finish();
+            buffer.endBatch();
 
             RenderSystem.disableAlphaTest();
             RenderSystem.disableRescaleNormal();
@@ -138,49 +138,49 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
         {
             RenderSystem.pushMatrix();
             RenderSystem.scalef(0.5F, 0.5F, 0.5F);
-            minecraft.fontRenderer.drawString(matrixStack, I18n.format("container.tac.attachments.window_help"), 56, 38, 0xFFFFFF);
+            minecraft.font.draw(matrixStack, I18n.get("container.tac.attachments.window_help"), 56, 38, 0xFFFFFF);
             RenderSystem.popMatrix();
         }
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
     {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft minecraft = Minecraft.getInstance();
-        if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem))
-            minecraft.getTextureManager().bindTexture(GUN_GUI_TEXTURES);
+        if(!(this.minecraft.player.getMainHandItem().getItem() instanceof IrDeviceItem) && !(this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem) && !(this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem))
+            minecraft.getTextureManager().bind(GUN_GUI_TEXTURES);
         else
-            minecraft.getTextureManager().bindTexture(SCOPE_GUI_TEXTURES);
+            minecraft.getTextureManager().bind(SCOPE_GUI_TEXTURES);
 
-        int left = (this.width - this.xSize) / 2;
-        int top = (this.height - this.ySize) / 2;
-        this.blit(matrixStack, left, top, 0, 0, this.xSize, this.ySize);
+        int left = (this.width - this.imageWidth) / 2;
+        int top = (this.height - this.imageHeight) / 2;
+        this.blit(matrixStack, left, top, 0, 0, this.imageWidth, this.imageHeight);
 
-        if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
+        if((this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof IrDeviceItem))
             for(int i = 9; i < IAttachment.Type.values().length; i++)
             {
-                if(i == 9 && !this.container.getSlot(i).isEnabled())
+                if(i == 9 && !this.menu.getSlot(i).isActive())
                 {
                     this.blit(matrixStack, left + 70, top + 50 + (i-8) * 18, 176, 16, 16, 16);
                 }
-                else if(i == 9 && this.weaponInventory.getStackInSlot(i).isEmpty())
+                else if(i == 9 && this.weaponInventory.getItem(i).isEmpty())
                 {
                     this.blit(matrixStack, left + 70, top + 50 + (i-8) * 18, 176, 16, 16, 16);
                 }
-                if(i == 11 && !this.container.getSlot(i).isEnabled())
+                if(i == 11 && !this.menu.getSlot(i).isActive())
                 {
                     this.blit(matrixStack, left + 40, top + 50 + (i-10) * 18, 176, 32, 16, 16);
                 }
-                else if(i == 11 && this.weaponInventory.getStackInSlot(i).isEmpty())
+                else if(i == 11 && this.weaponInventory.getItem(i).isEmpty())
                 {
                     this.blit(matrixStack, left + 10, top + 50 + (i-10) * 18, 176, 32, 16, 16);
                 }
-                if(i == 10 && !this.container.getSlot(i).isEnabled())
+                if(i == 10 && !this.menu.getSlot(i).isActive())
                 {
                     this.blit(matrixStack, left + 10, top + 53 + (i-12) * 18, 176, 0, 16, 16);
                 }
-                else if(i == 10 && this.weaponInventory.getStackInSlot(i).isEmpty())
+                else if(i == 10 && this.weaponInventory.getItem(i).isEmpty())
                 {
                     this.blit(matrixStack, left + 40, top + 53 + (i-12) * 18, 176, 0, 16, 16);
                 }
@@ -237,7 +237,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
         else
             for(int i = 0; i < IAttachment.Type.values().length-7; i++)
             {
-                if(!this.container.getSlot(i).isEnabled())
+                if(!this.menu.getSlot(i).isActive())
                 {
                     if (i > 3)
                         this.blit(matrixStack, left + 155, top + 17 + (i-4) * 18, 176, 0, 16, 16);
@@ -248,7 +248,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
                 {
                     this.blit(matrixStack, left + 155, top + 17 + (i-4) * 18, 176, 16 + i * 16, 16, 16);
                 }
-                else if(this.weaponInventory.getStackInSlot(i).isEmpty())
+                else if(this.weaponInventory.getItem(i).isEmpty())
                 {
                     this.blit(matrixStack, left + 5, top + 17 + i * 18, 176, 16 + i * 16, 16, 16);
                 }
@@ -275,8 +275,8 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
     {
-        int startX = (this.width - this.xSize) / 2;
-        int startY = (this.height - this.ySize) / 2;
+        int startX = (this.width - this.imageWidth) / 2;
+        int startY = (this.height - this.imageHeight) / 2;
         if(RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX + 26, startY + 17, 142, 70))
         {
             if(scroll < 0 && this.windowZoom > 0)
@@ -296,9 +296,9 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        int startX = (this.width - this.xSize) / 2;
-        int startY = (this.height - this.ySize) / 2;
-        if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem)) {
+        int startX = (this.width - this.imageWidth) / 2;
+        int startY = (this.height - this.imageHeight) / 2;
+        if((this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof IrDeviceItem)) {
             if (RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX + 93, startY + 18, 65, 67)) {
                 if (!this.mouseGrabbed && (button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
                     this.mouseGrabbed = true;

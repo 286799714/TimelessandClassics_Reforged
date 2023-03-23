@@ -66,7 +66,7 @@ public class HandshakeHandler
         else
         {
             GunMod.LOGGER.error("Failed to synchronize gun properties from server");
-            c.get().getNetworkManager().closeChannel(new StringTextComponent("Connection closed - [Timeless and Classics Mod] Failed to synchronize gun properties from server"));
+            c.get().getNetworkManager().disconnect(new StringTextComponent("Connection closed - [Timeless and Classics Mod] Failed to synchronize gun properties from server"));
         }
     }
 
@@ -109,7 +109,7 @@ public class HandshakeHandler
         else
         {
             GunMod.LOGGER.error("Failed to synchronize rig properties from server");
-            c.get().getNetworkManager().closeChannel(new StringTextComponent("Connection closed - [Timeless and Classics Mod] Failed to synchronize rig properties from server"));
+            c.get().getNetworkManager().disconnect(new StringTextComponent("Connection closed - [Timeless and Classics Mod] Failed to synchronize rig properties from server"));
         }
     }
 }

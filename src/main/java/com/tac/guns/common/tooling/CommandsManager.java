@@ -36,7 +36,7 @@ public class CommandsManager
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> tacCommander
                 = Commands.literal("tdev")
-                .requires((commandSource) -> commandSource.hasPermissionLevel(1))
+                .requires((commandSource) -> commandSource.hasPermission(1))
 
                 .then(Commands.literal("setCat").then(Commands.argument("catToSet", MessageArgument.message())
                         .executes(commandContext -> {
@@ -44,7 +44,7 @@ public class CommandsManager
                             int responseCat;
                             try
                             {
-                                responseCat = Integer.parseInt(iTextComponent.getUnformattedComponentText());
+                                responseCat = Integer.parseInt(iTextComponent.getContents());
                                 manageCat(commandContext, responseCat);
                             }
                             catch (Exception e)
@@ -69,7 +69,7 @@ public class CommandsManager
                                     CommandsHandler.get().setCatCurrentIndex(1);
                                     GunEditor.TaCWeaponDevModes mode;
                                     try {
-                                        mode = GunEditor.TaCWeaponDevModes.valueOf(MessageArgument.getMessage(commandContext, "modeName").getUnformattedComponentText());
+                                        mode = GunEditor.TaCWeaponDevModes.valueOf(MessageArgument.getMessage(commandContext, "modeName").getContents());
                                     }
                                     catch (Exception e)
                                     {
@@ -124,7 +124,7 @@ public class CommandsManager
                                             ITextComponent iTextComponent = MessageArgument.getMessage(commandContext, "modeName");
                                             try
                                             {
-                                                GuiEditor.get().currElement = Integer.parseInt(iTextComponent.getUnformattedComponentText());
+                                                GuiEditor.get().currElement = Integer.parseInt(iTextComponent.getContents());
                                             }
                                             catch (Exception e)
                                             {
@@ -169,7 +169,7 @@ public class CommandsManager
                                             ITextComponent iTextComponent = MessageArgument.getMessage(commandContext, "modeName");
                                             try
                                             {
-                                                ObjectRenderEditor.get().currElement = Integer.parseInt(iTextComponent.getUnformattedComponentText());
+                                                ObjectRenderEditor.get().currElement = Integer.parseInt(iTextComponent.getContents());
                                             }
                                             catch (Exception e)
                                             {
@@ -259,10 +259,10 @@ public class CommandsManager
 
         Entity entity = commandContext.getSource().getEntity();
         if (entity != null) {
-            commandContext.getSource().getServer().getPlayerList().func_232641_a_(finalText, ChatType.CHAT, entity.getUniqueID());
-            //func_232641_a_ is sendMessage()
+            commandContext.getSource().getServer().getPlayerList().broadcastMessage(finalText, ChatType.CHAT, entity.getUUID());
+            //broadcastMessage is sendMessage()
         } else {
-            commandContext.getSource().getServer().getPlayerList().func_232641_a_(finalText, ChatType.SYSTEM, Util.DUMMY_UUID);
+            commandContext.getSource().getServer().getPlayerList().broadcastMessage(finalText, ChatType.SYSTEM, Util.NIL_UUID);
         }
         return 1;
     }
@@ -273,10 +273,10 @@ public class CommandsManager
 
         Entity entity = commandContext.getSource().getEntity();
         if (entity != null) {
-            commandContext.getSource().getServer().getPlayerList().func_232641_a_(finalText, ChatType.CHAT, entity.getUniqueID());
-            //func_232641_a_ is sendMessage()
+            commandContext.getSource().getServer().getPlayerList().broadcastMessage(finalText, ChatType.CHAT, entity.getUUID());
+            //broadcastMessage is sendMessage()
         } else {
-            commandContext.getSource().getServer().getPlayerList().func_232641_a_(finalText, ChatType.SYSTEM, Util.DUMMY_UUID);
+            commandContext.getSource().getServer().getPlayerList().broadcastMessage(finalText, ChatType.SYSTEM, Util.NIL_UUID);
         }
         return 1;
     }

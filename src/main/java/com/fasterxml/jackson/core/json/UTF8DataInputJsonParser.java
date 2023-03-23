@@ -12,6 +12,8 @@ import com.fasterxml.jackson.core.util.*;
 
 import static com.fasterxml.jackson.core.JsonTokenId.*;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
+
 /**
  * This is a concrete implementation of {@link JsonParser}, which is
  * based on a {@link DataInput} as the input source.

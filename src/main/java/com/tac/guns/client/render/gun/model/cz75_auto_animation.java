@@ -44,7 +44,7 @@ public class cz75_auto_animation implements IOverrideModel
         CZ75AutoAnimationController controller = CZ75AutoAnimationController.getInstance();
         GunItem gunItem = ((GunItem) stack.getItem());
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.CZ75_AUTO.getModel(),CZ75AutoAnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
@@ -56,9 +56,9 @@ public class cz75_auto_animation implements IOverrideModel
             }
             RenderUtil.renderModel(SpecialModels.CZ75_AUTO.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.CZ75_AUTO.getModel(),CZ75AutoAnimationController.INDEX_MAG,transformType,matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -67,19 +67,19 @@ public class cz75_auto_animation implements IOverrideModel
                 RenderUtil.renderModel(SpecialModels.CZ75_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
         controller.applySpecialModelTransform(SpecialModels.CZ75_AUTO.getModel(),CZ75AutoAnimationController.INDEX_SLIDE,transformType,matrices);
 
-        if(transformType.isFirstPerson()) {
+        if(transformType.firstPerson()) {
             Gun gun = ((GunItem) stack.getItem()).getGun();
             float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
             AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
             boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
-            if(transformType.isFirstPerson()) {
+            if(transformType.firstPerson()) {
                 if (Gun.hasAmmo(stack) || shouldOffset) {
                     matrices.translate(0, 0, 0.2075f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
                 } else if (!Gun.hasAmmo(stack)) {
@@ -93,7 +93,7 @@ public class cz75_auto_animation implements IOverrideModel
         RenderUtil.renderModel(SpecialModels.CZ75_AUTO_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }

@@ -24,10 +24,12 @@ import java.util.List;
 import java.util.Locale;
 
 
+import net.minecraft.item.Item.Properties;
+
 public class M1GunItem extends TimelessOldRifleGunItem {
     public M1GunItem(Process<Properties> properties, IGunModifier... modifiers)
     {
-        super(properties1 -> properties.process(new Properties().maxStackSize(1).group(GunMod.GROUP)), modifiers);
+        super(properties1 -> properties.process(new Properties().stacksTo(1).tab(GunMod.GROUP)), modifiers);
     }
 
     public M1GunItem() {

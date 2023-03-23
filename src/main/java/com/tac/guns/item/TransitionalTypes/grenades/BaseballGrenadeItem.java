@@ -7,6 +7,8 @@ import com.tac.guns.item.GrenadeItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
 
+import net.minecraft.item.Item.Properties;
+
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */

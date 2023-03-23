@@ -27,21 +27,23 @@ import java.util.List;
 import java.util.Locale;
 
 
+import net.minecraft.item.Item.Properties;
+
 public class TimelessOldRifleGunItem extends TimelessGunItem {
     public TimelessOldRifleGunItem(Process<Properties> properties, IGunModifier... modifiers)
     {
-        super(properties1 -> properties.process(new Properties().maxStackSize(1).group(GunMod.GROUP)), modifiers);
+        super(properties1 -> properties.process(new Properties().stacksTo(1).tab(GunMod.GROUP)), modifiers);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
         Gun modifiedGun = this.getModifiedGun(stack);
         CompoundNBT tagCompound = stack.getTag();
-        super.addInformation(stack, worldIn, tooltip, flag);
+        super.appendHoverText(stack, worldIn, tooltip, flag);
         if(tagCompound != null)
         {
             //tooltip.add((new TranslationTextComponent("info.tac.oldRifle", new TranslationTextComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).mergeStyle(TextFormatting.GREEN)));
-            tooltip.add((new TranslationTextComponent("info.tac.oldRifleScope", new TranslationTextComponent("OldScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
+            tooltip.add((new TranslationTextComponent("info.tac.oldRifleScope", new TranslationTextComponent("OldScope").withStyle(TextFormatting.BOLD)).withStyle(TextFormatting.LIGHT_PURPLE)));
         }
     }
 

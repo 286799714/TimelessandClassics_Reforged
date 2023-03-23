@@ -32,13 +32,13 @@ public class dp28_animation implements IOverrideModel {
     {
         
         Dp28AnimationController controller = Dp28AnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.DP_28.getModel(), Dp28AnimationController.INDEX_BODY,transformType,matrices);
             RenderUtil.renderModel(SpecialModels.DP_28.getModel(), stack, matrices, renderBuffer, light, overlay);
             //Always push
-            matrices.push();
-            if(transformType.isFirstPerson()) {
+            matrices.pushPose();
+            if(transformType.firstPerson()) {
                 //We're getting the cooldown tracker for the item - items like the sword, ender pearl, and chorus fruit all have this too.
                 Gun gun = ((GunItem) stack.getItem()).getGun();
                 float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -55,16 +55,16 @@ public class dp28_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.DP_28_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
 
             //Always pop
-            matrices.pop();
+            matrices.popPose();
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.DP_28.getModel(), Dp28AnimationController.INDEX_MAGAZINE,transformType,matrices);
             RenderUtil.renderModel(SpecialModels.DP_28_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }

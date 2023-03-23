@@ -13,7 +13,7 @@ public class InventoryUtil
     public static int getItemStackAmount(PlayerEntity player, ItemStack find)
     {
         int count = 0;
-        for(ItemStack stack : player.inventory.mainInventory)
+        for(ItemStack stack : player.inventory.items)
         {
             if(!stack.isEmpty() && areItemStacksEqualIgnoreCount(stack, find))
             {
@@ -26,9 +26,9 @@ public class InventoryUtil
     public static boolean hasIngredient(PlayerEntity player, Pair<Ingredient, Integer> pair)
     {
         int count = 0;
-        for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+        for(int i = 0; i < player.inventory.getContainerSize(); i++)
         {
-            ItemStack stack = player.inventory.getStackInSlot(i);
+            ItemStack stack = player.inventory.getItem(i);
             if(pair.getFirst().test(stack))
             {
                 count += stack.getCount();
@@ -40,21 +40,21 @@ public class InventoryUtil
     public static boolean removeItemStackFromIngredient(PlayerEntity player, Pair<Ingredient, Integer> pair)
     {
         int amount = pair.getSecond();
-        for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+        for(int i = 0; i < player.inventory.getContainerSize(); i++)
         {
-            ItemStack stack = player.inventory.getStackInSlot(i);
+            ItemStack stack = player.inventory.getItem(i);
             if(pair.getFirst().test(stack))
             {
                 if(amount - stack.getCount() < 0)
                 {
                     stack.shrink(amount);
-                    player.inventory.setInventorySlotContents(i, stack);
+                    player.inventory.setItem(i, stack);
                     return true;
                 }
                 else
                 {
                     amount -= stack.getCount();
-                    player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+                    player.inventory.setItem(i, ItemStack.EMPTY);
                     if(amount == 0)
                     {
                         return true;
@@ -71,7 +71,7 @@ public class InventoryUtil
         {
             return false;
         }
-        else if(source.getDamage() != target.getDamage())
+        else if(source.getDamageValue() != target.getDamageValue())
         {
             return false;
         }

@@ -35,7 +35,7 @@ public class m4_animation implements IOverrideModel {
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
     {
         M4AnimationController controller = M4AnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M4_BODY.getModel(), M4AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
@@ -80,9 +80,9 @@ public class m4_animation implements IOverrideModel {
 
             RenderUtil.renderModel(SpecialModels.M4_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-            matrices.push();
+            matrices.pushPose();
             {
-                if(transformType.isFirstPerson()) {
+                if(transformType.firstPerson()) {
                     Gun gun = ((GunItem) stack.getItem()).getGun();
                     float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -97,11 +97,11 @@ public class m4_animation implements IOverrideModel {
                 }
                 RenderUtil.renderModel(SpecialModels.M4_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-            matrices.pop();
+            matrices.popPose();
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M4_BODY.getModel(), M4AnimationController.INDEX_MAGAZINE, transformType, matrices);
 
@@ -111,7 +111,7 @@ public class m4_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.M4_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 }

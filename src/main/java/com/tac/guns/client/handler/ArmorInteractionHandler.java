@@ -167,13 +167,13 @@ public class ArmorInteractionHandler
         if(mc.player.isSpectator())
             return false;
 
-        if(mc.currentScreen != null)
+        if(mc.screen != null)
             return false;
 
         if(WearableHelper.PlayerWornRig(mc.player) == null)
             return false;
         Rig rig = ((ArmorRigItem)WearableHelper.PlayerWornRig(mc.player).getItem()).getRig();
-        return this.repairTime != 0 && mc.player.getHeldItemMainhand().getItem().getRegistryName().equals(rig.getRepair().getItem()) && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player));
+        return this.repairTime != 0 && mc.player.getMainHandItem().getItem().getRegistryName().equals(rig.getRepair().getItem()) && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player));
     }
 
     public double getNormalisedRepairProgress()

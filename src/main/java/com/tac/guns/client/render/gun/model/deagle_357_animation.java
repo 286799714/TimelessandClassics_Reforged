@@ -40,7 +40,7 @@ public class deagle_357_animation implements IOverrideModel {
     {
         
         Deagle50AnimationController controller = Deagle50AnimationController.getInstance();
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(),Deagle50AnimationController.INDEX_MAG,transformType,matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -49,10 +49,10 @@ public class deagle_357_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.DEAGLE_50_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
         if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_NORMAL)) {
-            matrices.push();
+            matrices.pushPose();
             {
                 controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(), Deagle50AnimationController.EXTRA_MAG, transformType, matrices);
                 if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -61,10 +61,10 @@ public class deagle_357_animation implements IOverrideModel {
                     RenderUtil.renderModel(SpecialModels.DEAGLE_50_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
                 }
             }
-            matrices.pop();
+            matrices.popPose();
         }
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(),Deagle50AnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
@@ -77,12 +77,12 @@ public class deagle_357_animation implements IOverrideModel {
 
             RenderUtil.renderModel(SpecialModels.DEAGLE_50.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
         //Always push
-        matrices.push(); // push();
+        matrices.pushPose(); // push();
         controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(),Deagle50AnimationController.INDEX_SLIDE,transformType,matrices);
 
-        if(transformType.isFirstPerson()) {
+        if(transformType.firstPerson()) {
             Gun gun = ((GunItem) stack.getItem()).getGun();
             float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -106,7 +106,7 @@ public class deagle_357_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.DEAGLE_50_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
             //Always pop
-            matrices.pop();
+            matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 

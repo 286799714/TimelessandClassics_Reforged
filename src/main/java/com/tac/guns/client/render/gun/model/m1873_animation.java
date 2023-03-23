@@ -31,10 +31,10 @@ public class m1873_animation implements IOverrideModel {
         
         RenderUtil.renderModel(SpecialModels.M1873.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-        CooldownTracker tracker = Minecraft.getInstance().player.getCooldownTracker();
-        float cooldown = tracker.getCooldown(stack.getItem(), Minecraft.getInstance().getRenderPartialTicks());
+        CooldownTracker tracker = Minecraft.getInstance().player.getCooldowns();
+        float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
 
-        matrices.push();
+        matrices.pushPose();
         matrices.translate(0, 0.4375, -0.1875);
         if(cooldown < 0.64)
         {
@@ -43,26 +43,26 @@ public class m1873_animation implements IOverrideModel {
             //cooldown = (float) easeInOutBack(cooldown);
 
             if (cooldown < 0.74) {
-                matrices.rotate(Vector3f.ZN.rotationDegrees(-45F * (cooldown * 1.74F))); //.74
+                matrices.mulPose(Vector3f.ZN.rotationDegrees(-45F * (cooldown * 1.74F))); //.74
                 matrices.translate(-0.15 * (cooldown * 1.74F) * 0.0625, 0, 0); //-2
             }
             matrices.translate(0, 5.8 * 0.0625, 0);
         }
         RenderUtil.renderModel(SpecialModels.M1873_CYLINDER.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         //cooldown = 0.95F;
         matrices.translate(0, 0.3525, -0.0405); //-0.1875
         //if(cooldown != 0)
         //{
             matrices.translate(0, -5.8 * 0.0625, 0);
             matrices.translate(0, -5.15 * (cooldown) * 0.0625, 3.2725 * (cooldown) * 0.0625); //-2 -4.025 * (cooldown) * 0.0625 ----------Adjustable----------
-            matrices.rotate(Vector3f.XP.rotationDegrees(-90F * (cooldown))); // * 1.74F
+            matrices.mulPose(Vector3f.XP.rotationDegrees(-90F * (cooldown))); // * 1.74F
             matrices.translate(0, 5.8 * 0.0625, 0);
         //}
         RenderUtil.renderModel(SpecialModels.M1873_HAMMER.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
     private double easeInOutBack(double x) {
         double c1 = 1.70158;

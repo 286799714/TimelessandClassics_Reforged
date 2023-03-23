@@ -29,6 +29,15 @@ import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.tac.guns.Reference;
+import com.tac.guns.event.GunFireEvent;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.Level;
+
 /**
  * This class will be used for all shooting events that I will utilise.
  * The gun mod provides 3 events for firing guns check out {@link com.mrcrayfish.guns.event.GunFireEvent} for what they are
@@ -87,7 +96,7 @@ public class TacEventListeners {
             }
             if (!confirmed) {
                 if (status.status == VersionChecker.Status.OUTDATED || status.status == VersionChecker.Status.BETA_OUTDATED) {
-                    ((PlayerEntity) e.getEntity()).sendStatusMessage(new TranslationTextComponent("updateCheck.tac", status.target, status.url), false);
+                    ((PlayerEntity) e.getEntity()).displayClientMessage(new TranslationTextComponent("updateCheck.tac", status.target, status.url), false);
                     confirmed = true;
                 }
             }
@@ -104,7 +113,7 @@ public class TacEventListeners {
     public void onPartialLevel(LevelUpEvent.Post event)
     {
         PlayerEntity player = event.getPlayer();
-        event.getPlayer().getEntityWorld().playSound(player, player.getPosition(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.experience_orb.pickup")), SoundCategory.PLAYERS,4.0F, 1.0F);
+        event.getPlayer().getCommandSenderWorld().playSound(player, player.blockPosition(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.experience_orb.pickup")), SoundCategory.PLAYERS,4.0F, 1.0F);
     }
 
     // TODO: remaster method to play empty fire sound on most-all guns
@@ -112,14 +121,14 @@ public class TacEventListeners {
     @SubscribeEvent
     public static void postShoot(GunFireEvent.Post event) {
         PlayerEntity player = event.getPlayer();
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         if(!(heldItem.getItem() instanceof M1GunItem))
             return;
         CompoundNBT tag = heldItem.getTag();
         if(tag != null)
         {
             if(tag.getInt("AmmoCount") == 1)
-                event.getPlayer().getEntityWorld().playSound(player, player.getPosition(), ModSounds.M1_PING.get()/*.GARAND_PING.get()*/, SoundCategory.MASTER, 3.0F, 1.0F);
+                event.getPlayer().getCommandSenderWorld().playSound(player, player.blockPosition(), ModSounds.M1_PING.get()/*.GARAND_PING.get()*/, SoundCategory.MASTER, 3.0F, 1.0F);
         }
     }
 

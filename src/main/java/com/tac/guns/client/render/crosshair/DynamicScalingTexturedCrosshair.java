@@ -66,11 +66,11 @@ public class DynamicScalingTexturedCrosshair extends TexturedCrosshair implement
         ClientPlayerEntity playerEntity = mc.player;
         if(playerEntity == null)
             return;
-        if(playerEntity.getHeldItemMainhand().getItem() == null || playerEntity.getHeldItemMainhand().getItem() == Items.AIR)
+        if(playerEntity.getMainHandItem().getItem() == null || playerEntity.getMainHandItem().getItem() == Items.AIR)
             return;
-        if(playerEntity.getHeldItemMainhand().getItem() instanceof TimelessGunItem)
+        if(playerEntity.getMainHandItem().getItem() instanceof TimelessGunItem)
         {
-            TimelessGunItem gunItem = (TimelessGunItem) playerEntity.getHeldItemMainhand().getItem();
+            TimelessGunItem gunItem = (TimelessGunItem) playerEntity.getMainHandItem().getItem();
             if (gunItem.getGun().getDisplay().isDynamicHipfire()) {
                 float alpha = 1.0F - (float) AimingHandler.get().getNormalisedAdsProgress();
                 float size = 8.0F;
@@ -78,36 +78,36 @@ public class DynamicScalingTexturedCrosshair extends TexturedCrosshair implement
                 RenderSystem.enableBlend();
                 RenderSystem.enableAlphaTest();
                 RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+                BufferBuilder buffer = Tessellator.getInstance().getBuilder();
 
-                stack.push();
+                stack.pushPose();
                 {
                     stack.translate(windowWidth / 2F, windowHeight / 2F, 0);
                     float scale = 1F + MathHelper.lerp(partialTicks, this.prevScale, this.scale);
 
-                    mc.getTextureManager().bindTexture(this.texture);
+                    mc.getTextureManager().bind(this.texture);
                     buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
                     for (int f = 0; f < getFractal(); f++) {
-                        stack.push();
+                        stack.pushPose();
                         {
-                            stack.rotate(Vector3f.ZP.rotationDegrees(360F * f / getFractal()));
+                            stack.mulPose(Vector3f.ZP.rotationDegrees(360F * f / getFractal()));
                             stack.translate(-size * scale / 2F, -size / 2F, 0);
-                            Matrix4f matrix = stack.getLast().getMatrix();
-                            buffer.pos(matrix, 0, size, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
-                            buffer.pos(matrix, size, size, 0).tex(1, 1).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
-                            buffer.pos(matrix, size, 0, 0).tex(1, 0).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
-                            buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
+                            Matrix4f matrix = stack.last().pose();
+                            buffer.vertex(matrix, 0, size, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
+                            buffer.vertex(matrix, size, size, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
+                            buffer.vertex(matrix, size, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
+                            buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
 
                         }
-                        stack.pop();
+                        stack.popPose();
                     }
 
-                    buffer.finishDrawing();
+                    buffer.end();
                     RenderSystem.enableAlphaTest();
-                    WorldVertexBufferUploader.draw(buffer);
+                    WorldVertexBufferUploader.end(buffer);
                 }
-                stack.pop();
+                stack.popPose();
             }
         }
     }
@@ -121,17 +121,17 @@ public class DynamicScalingTexturedCrosshair extends TexturedCrosshair implement
         float scale = this.getInitialScale();
         TimelessGunItem gunItem;
 
-        if(playerEntity.getHeldItemMainhand().getItem() instanceof TimelessGunItem)
+        if(playerEntity.getMainHandItem().getItem() instanceof TimelessGunItem)
         {
-            gunItem = (TimelessGunItem) playerEntity.getHeldItemMainhand().getItem();
+            gunItem = (TimelessGunItem) playerEntity.getMainHandItem().getItem();
 
-            if (playerEntity.getPosX() != playerEntity.prevPosX || playerEntity.getPosZ() != playerEntity.prevPosZ)
+            if (playerEntity.getX() != playerEntity.xo || playerEntity.getZ() != playerEntity.zo)
                 scale += this.getHorizontalMovementScale() * gunItem.getGun().getDisplay().getHipfireMoveScale();
-            if (playerEntity.getPosY() != playerEntity.prevPosY)
+            if (playerEntity.getY() != playerEntity.yo)
                 scale += this.getVerticalMovementScale() * gunItem.getGun().getDisplay().getHipfireMoveScale();
 
-            this.scale(scale * (gunItem.getGun().getGeneral().getHipFireInaccuracy()) * (gunItem.getGun().getDisplay().getHipfireScale()) * ((GunModifierHelper.getModifiedSpread(playerEntity.getHeldItemMainhand(),
-                    gunItem.getGun().getGeneral().getSpread()/2f))*GunEnchantmentHelper.getSpreadModifier(playerEntity.getHeldItemMainhand())));
+            this.scale(scale * (gunItem.getGun().getGeneral().getHipFireInaccuracy()) * (gunItem.getGun().getDisplay().getHipfireScale()) * ((GunModifierHelper.getModifiedSpread(playerEntity.getMainHandItem(),
+                    gunItem.getGun().getGeneral().getSpread()/2f))*GunEnchantmentHelper.getSpreadModifier(playerEntity.getMainHandItem())));
             //this.scale *= GunModifierHelper.getModifiedSpread(playerEntity.getMainHandItem(), gunItem.getGun().getGeneral().getSpread());
         }
     }

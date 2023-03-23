@@ -72,25 +72,25 @@ public class GunMod
     public static final ItemGroup GROUP = new  ItemGroup(Reference.MOD_ID)
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             ItemStack stack = new ItemStack(ModItems.VORTEX_LPVO_1_6.get());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             CustomGunManager.fill(items);
             CustomRigManager.fill(items);
         }
-    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN, EnchantmentTypes.SEMI_AUTO_GUN);
+    }.setEnchantmentCategories(EnchantmentTypes.GUN, EnchantmentTypes.SEMI_AUTO_GUN);
 
     public static final ItemGroup PISTOL = new  ItemGroup("Pistols")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             ItemStack stack = new ItemStack(ModItems.GLOCK_17.get());
             stack.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem)ModItems.GLOCK_17.get()).getGun().getReloads().getMaxAmmo());
@@ -100,16 +100,16 @@ public class GunMod
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             CustomGunManager.fill(items);
         }
     };
     public static final ItemGroup SMG = new  ItemGroup("SMGs")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             ItemStack stack = new ItemStack(ModItems.VECTOR45.get());
             stack.getOrCreateTag().putInt("AmmoCount", ModItems.VECTOR45.get().getGun().getReloads().getMaxAmmo());
@@ -117,16 +117,16 @@ public class GunMod
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             CustomGunManager.fill(items);
         }
     };
     public static final ItemGroup RIFLE = new  ItemGroup("AssaultRifles")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             ItemStack stack = new ItemStack(ModItems.AK47.get());
             stack.getOrCreateTag().putInt("AmmoCount", ModItems.AK47.get().getGun().getReloads().getMaxAmmo());
@@ -134,16 +134,16 @@ public class GunMod
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             CustomGunManager.fill(items);
         }
     };
     public static final ItemGroup SNIPER = new  ItemGroup("MarksmanRifles")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             ItemStack stack = new ItemStack(ModItems.AI_AWP.get());
             stack.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem)ModItems.AI_AWP.get()).getGun().getReloads().getMaxAmmo());
@@ -151,16 +151,16 @@ public class GunMod
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             CustomGunManager.fill(items);
         }
     };
     public static final ItemGroup SHOTGUN = new  ItemGroup("Shotguns")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             ItemStack stack = new ItemStack(ModItems.M1014.get());
             stack.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem)ModItems.M1014.get()).getGun().getReloads().getMaxAmmo());
@@ -168,16 +168,16 @@ public class GunMod
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             CustomGunManager.fill(items);
         }
     };
     public static final ItemGroup HEAVY_MATERIAL = new  ItemGroup("HeavyWeapons")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             ItemStack stack = new ItemStack(ModItems.M60.get());
             stack.getOrCreateTag().putInt("AmmoCount", ModItems.M60.get().getGun().getReloads().getMaxAmmo());
@@ -185,32 +185,32 @@ public class GunMod
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             CustomGunManager.fill(items);
         }
     };
     public static final ItemGroup AMMO = new  ItemGroup("Ammo")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             ItemStack stack = new ItemStack(ModItems.BULLET_308.get());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             CustomGunManager.fill(items);
         }
     };
     public static final ItemGroup EXPLOSIVES = new  ItemGroup(Reference.MOD_ID)
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             ItemStack stack = new ItemStack(ModItems.BASEBALL_GRENADE.get());
             //stack.getOrCreateTag().putInt("AmmoCount", ModItems.BASEBALL_GRENADE.get().getGun().getReloads().getMaxAmmo());
@@ -218,9 +218,9 @@ public class GunMod
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             CustomGunManager.fill(items);
         }
     };
@@ -281,7 +281,7 @@ public class GunMod
                     if (!stack.isEmpty()) {
                         CompoundNBT itemTag = new CompoundNBT();
                         itemTag.putInt("Slot", i);
-                        stack.write(itemTag);
+                        stack.save(itemTag);
                         nbtTagList.add(itemTag);
                     }
                 }
@@ -299,7 +299,7 @@ public class GunMod
                     int j = itemTags.getInt("Slot");
 
                     if (j >= 0 && j < instance.getSlots()) {
-                        itemHandlerModifiable.setStackInSlot(j, ItemStack.read(itemTags));
+                        itemHandlerModifiable.setStackInSlot(j, ItemStack.of(itemTags));
                     }
                 }
             }
@@ -315,7 +315,7 @@ public class GunMod
                     if (!stack.isEmpty()) {
                         CompoundNBT itemTag = new CompoundNBT();
                         itemTag.putInt("Slot", i);
-                        stack.write(itemTag);
+                        stack.save(itemTag);
                         nbtTagList.add(itemTag);
                     }
                 }
@@ -333,7 +333,7 @@ public class GunMod
                     int j = itemTags.getInt("Slot");
 
                     if (j >= 0 && j < instance.getSlots()) {
-                        itemHandlerModifiable.setStackInSlot(j, ItemStack.read(itemTags));
+                        itemHandlerModifiable.setStackInSlot(j, ItemStack.of(itemTags));
                     }
                 }
             }

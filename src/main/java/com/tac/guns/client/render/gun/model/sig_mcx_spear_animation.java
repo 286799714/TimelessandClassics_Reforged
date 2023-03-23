@@ -38,7 +38,7 @@ public class sig_mcx_spear_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.MCX_SPEAR.getModel(), stack, matrices, renderBuffer, light, overlay);
         //RenderUtil.renderModel(SpecialModels.M4_BOLT_HANDLE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-        matrices.push();
+        matrices.pushPose();
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -60,6 +60,6 @@ public class sig_mcx_spear_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.MCX_SPEAR_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
 }

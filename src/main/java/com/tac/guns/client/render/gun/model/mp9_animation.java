@@ -42,7 +42,7 @@ public class mp9_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.MP9_STOCK_EXTENDED.getModel(), stack, matrices, renderBuffer, light, overlay);
         RenderUtil.renderModel(SpecialModels.MP9.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-        matrices.push();
+        matrices.pushPose();
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -64,6 +64,6 @@ public class mp9_animation implements IOverrideModel {
         }
         matrices.translate(0, 0, 0.025F);
         RenderUtil.renderModel(SpecialModels.MP9_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
 }

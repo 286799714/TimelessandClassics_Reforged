@@ -26,7 +26,7 @@ public class RigEnchantmentHelper
     }*/
     public static float getModifiedDurability(ItemStack rig, Rig modifiedRig)
     {
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RIFLING.get(), rig);
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.RIFLING.get(), rig);
         if(level > 0)
         {
             return modifiedRig.getRepair().getDurability() * (1.0f + (0.0334f * level));
@@ -36,7 +36,7 @@ public class RigEnchantmentHelper
     public static int getRate(ItemStack weapon, Gun modifiedGun)
     {
         int rate = modifiedGun.getGeneral().getRate();
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
         if(level > 0)
         {
             float newRate = rate * (0.25F * level);
@@ -47,7 +47,7 @@ public class RigEnchantmentHelper
 
     public static double getAimDownSightSpeed(ItemStack weapon)
     {
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get(), weapon);
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get(), weapon);
         if(level > 0)
         {
             return 1.0 + (0.075 * level);
@@ -56,7 +56,7 @@ public class RigEnchantmentHelper
     }
     public static float getSpreadModifier(ItemStack weapon)
     {
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RIFLING.get(), weapon);
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.RIFLING.get(), weapon);
         if(level > 0)
         {
             return 1.0f - (0.0333f * level);
@@ -65,7 +65,7 @@ public class RigEnchantmentHelper
     }
     public static float getWeightModifier(ItemStack weapon)
     {
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get(), weapon);
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get(), weapon);
         if(level > 0)
         {
             return 0.4f * level;
@@ -75,7 +75,7 @@ public class RigEnchantmentHelper
 
     public static double getProjectileSpeedModifier(ItemStack weapon)
     {
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), weapon);
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), weapon);
         if(level > 0)
         {
             return 1.0 + 0.075 * level;
@@ -85,7 +85,7 @@ public class RigEnchantmentHelper
 
     public static float getAcceleratorDamage(ItemStack weapon, float damage)
     {
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), weapon);
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), weapon);
         if(level > 0)
         {
             return damage + damage * (0.0875F * level);
@@ -94,7 +94,7 @@ public class RigEnchantmentHelper
     }
     public static float getBufferedRecoil(ItemStack weapon)
     {
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BUFFERED.get(), weapon);
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BUFFERED.get(), weapon);
         if(level > 0)
         {
             return (1-(0.03F * level));
@@ -103,7 +103,7 @@ public class RigEnchantmentHelper
     }
     public static float getPuncturingChance(ItemStack weapon)
     {
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.PUNCTURING.get(), weapon);
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.PUNCTURING.get(), weapon);
         return level * 0.05F;
     }
 }

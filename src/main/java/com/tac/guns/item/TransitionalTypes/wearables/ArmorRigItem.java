@@ -46,6 +46,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.WeakHashMap;
 
+import net.minecraft.item.Item.Properties;
+import top.theillusivec4.curios.api.type.capability.ICurio.DropRule;
+import top.theillusivec4.curios.api.type.capability.ICurio.SoundInfo;
+
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class ArmorRigItem extends Item implements IArmoredRigItem {
     public ArmorRigItem(Properties properties) {
@@ -67,13 +71,13 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
     }
     private ArmorRigContainerProvider containerProvider;
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        if(world.isRemote) return super.onItemRightClick(world, player, hand);
-        if(hand != Hand.MAIN_HAND) return ActionResult.resultPass(player.getHeldItem(hand));
-        containerProvider = new ArmorRigContainerProvider(player.getHeldItem(hand));
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        if(world.isClientSide) return super.use(world, player, hand);
+        if(hand != Hand.MAIN_HAND) return ActionResult.pass(player.getItemInHand(hand));
+        containerProvider = new ArmorRigContainerProvider(player.getItemInHand(hand));
         NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider);
-        super.onItemRightClick(world, player, hand);
-        return ActionResult.resultPass(player.getHeldItem(hand));
+        super.use(world, player, hand);
+        return ActionResult.pass(player.getItemInHand(hand));
     }
 
     @Override
@@ -93,7 +97,7 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
             @Override
             public SoundInfo getEquipSound(SlotContext slotContext)
             {
-                return new SoundInfo(SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 1.0F, 1.0F);
+                return new SoundInfo(SoundEvents.ARMOR_EQUIP_CHAIN, 1.0F, 1.0F);
             }
 
             @Override
@@ -146,7 +150,7 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
     }*/
 
     @Override
-    public boolean shouldSyncTag() {return true;}
+    public boolean shouldOverrideMultiplayerNbt() {return true;}
 
     @Nullable
     @Override
@@ -171,9 +175,9 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks)
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> stacks)
     {
-        if(this.isInGroup(group))
+        if(this.allowdedIn(group))
         {
             ItemStack stack = new ItemStack(this);
             stack.getOrCreateTag();

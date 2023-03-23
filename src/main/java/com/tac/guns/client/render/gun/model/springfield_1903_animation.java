@@ -42,7 +42,7 @@ public class springfield_1903_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.SPRINGFIELD_1903.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.push();
+        matrices.pushPose();
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -51,7 +51,7 @@ public class springfield_1903_animation implements IOverrideModel {
         if (cooldownOg != 0 && cooldownOg < 0.83)
         {
             matrices.translate(-0.039, -0.038, 0.00);
-            matrices.rotate(Vector3f.ZN.rotationDegrees(-90F));
+            matrices.mulPose(Vector3f.ZN.rotationDegrees(-90F));
 
             // matrices.translate(0, 0, 0.318f * (-4.5 * Math.pow(cooldownOg +0.19 -0.5, 2) + 1));
 
@@ -68,7 +68,7 @@ public class springfield_1903_animation implements IOverrideModel {
         }
 
         RenderUtil.renderModel(SpecialModels.SPRINGFIELD_1903_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();
+        matrices.popPose();
     }
     //Same method from GrenadeLauncherModel, to make a smooth rotation of the chamber.
     private double easeInOutBack(double x) {

@@ -36,15 +36,15 @@ public class ppsh_41_animation implements IOverrideModel {
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.PPSH_41.getModel(),Ppsh41AnimationController.INDEX_BODY,transformType,matrices);
 
             RenderUtil.renderModel(SpecialModels.PPSH_41.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.PPSH_41.getModel(),Ppsh41AnimationController.INDEX_MAGAZINE,transformType,matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
@@ -53,9 +53,9 @@ public class ppsh_41_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.PPSH_41_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.PPSH_41.getModel(),Ppsh41AnimationController.INDEX_BODY,transformType,matrices);
             //matrices.translate(0, 0, -0.04);
@@ -66,7 +66,7 @@ public class ppsh_41_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.PPSH_41_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         //Always pop
-        matrices.pop();
+        matrices.popPose();
 
         /*matrices.push();
         {

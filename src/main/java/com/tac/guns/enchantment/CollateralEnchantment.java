@@ -3,6 +3,8 @@ package com.tac.guns.enchantment;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.enchantment.Enchantment.Rarity;
+
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
@@ -17,14 +19,14 @@ public class CollateralEnchantment extends GunEnchantment
         return false;
     }
     @Override
-    public int getMinEnchantability(int level)
+    public int getMinCost(int level)
     {
         return 10;
     }
 
     @Override
-    public int getMaxEnchantability(int level)
+    public int getMaxCost(int level)
     {
-        return this.getMinEnchantability(level) + 20;
+        return this.getMinCost(level) + 20;
     }
 }

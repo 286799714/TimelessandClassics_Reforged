@@ -52,14 +52,14 @@ public final class InputHandler
 			Type.MOUSE
 		),
 		AIM_HOLD = new KeyBind( "key.tac.aim_hold", GLFW.GLFW_MOUSE_BUTTON_RIGHT, Type.MOUSE ),
-		AIM_TOGGLE = new KeyBind( "key.tac.aim_toggle", InputMappings.INPUT_INVALID.getKeyCode() );
+		AIM_TOGGLE = new KeyBind( "key.tac.aim_toggle", InputMappings.UNKNOWN.getValue() );
 	
 	/**
 	 * Normal keys. These keys will update when {@link #CO} is not down.
 	 */
 	public static final KeyBind
 		RELOAD = new KeyBind( "key.tac.reload", GLFW.GLFW_KEY_R ),
-		UNLOAD = new KeyBind( "key.tac.unload", InputMappings.INPUT_INVALID.getKeyCode() ),
+		UNLOAD = new KeyBind( "key.tac.unload", InputMappings.UNKNOWN.getValue() ),
 		ATTACHMENTS = new KeyBind( "key.tac.attachments", GLFW.GLFW_KEY_Z ),
 		
 		FIRE_SELECT = new KeyBind( "key.tac.fireSelect", GLFW.GLFW_KEY_G ),
@@ -199,7 +199,7 @@ public final class InputHandler
 	private static KeyBind oriAimKey;
 	static void restoreKeyBinds()
 	{
-		oriAimKey = AIM_HOLD.keyCode() != InputMappings.INPUT_INVALID ? AIM_HOLD : AIM_TOGGLE;
+		oriAimKey = AIM_HOLD.keyCode() != InputMappings.UNKNOWN ? AIM_HOLD : AIM_TOGGLE;
 		KeyBind.REGISTRY.values().forEach( KeyBind::restoreKeyBind );
 	}
 	
@@ -210,7 +210,7 @@ public final class InputHandler
 			flag |= key.clearKeyBind();
 
 		// Make sure only one aim key is bounden
-		final Input none = InputMappings.INPUT_INVALID;
+		final Input none = InputMappings.UNKNOWN;
 		if( AIM_HOLD.keyCode() != none && AIM_TOGGLE.keyCode() != none )
 		{
 			oriAimKey.$keyCode( none );
@@ -218,7 +218,7 @@ public final class InputHandler
 		}
 		
 		// Do not forget to update key bind hash
-		KeyBinding.resetKeyBindingArrayAndHash();
+		KeyBinding.resetMapping();
 		
 		// If any key bind has changed, save it to the file
 		if( flag )
@@ -252,7 +252,7 @@ public final class InputHandler
 				try
 				{
 					KeyBind.REGISTRY.get( e.getKey() )
-						.$keyCode( InputMappings.getInputByName( e.getValue().getAsString() ) );
+						.$keyCode( InputMappings.getKey( e.getValue().getAsString() ) );
 				}
 				catch( NullPointerException ee ) {
 					GunMod.LOGGER.error( "Key bind " + e.getKey() + " do not exist" );

@@ -65,7 +65,7 @@ public class TacShootingEvent
             }
             else // Safety clicks
             {
-                event.getPlayer().sendStatusMessage(new TranslationTextComponent("info." + Reference.MOD_ID + ".gun_safety_lock", new KeybindTextComponent("key.tac.fireSelect").getString().toUpperCase(Locale.ENGLISH)).mergeStyle(TextFormatting.GREEN) ,true);
+                event.getPlayer().displayClientMessage(new TranslationTextComponent("info." + Reference.MOD_ID + ".gun_safety_lock", new KeybindTextComponent("key.tac.fireSelect").getString().toUpperCase(Locale.ENGLISH)).withStyle(TextFormatting.GREEN) ,true);
                 event.setCanceled(true);
             }
 

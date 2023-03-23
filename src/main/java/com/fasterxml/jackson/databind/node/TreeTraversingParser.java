@@ -10,6 +10,8 @@ import com.fasterxml.jackson.core.base.ParserMinimalBase;
 import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import com.fasterxml.jackson.core.JsonParser.NumberType;
+
 /**
  * Facade over {@link JsonNode} that implements {@link JsonParser} to allow
  * accessing contents of JSON tree in alternate form (stream of tokens).

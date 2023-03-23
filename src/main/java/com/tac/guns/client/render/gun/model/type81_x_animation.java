@@ -41,7 +41,7 @@ public class type81_x_animation implements IOverrideModel {
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
         
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.TYPE81_X.getModel(),Type81AnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getScope(stack) != null) {
@@ -49,9 +49,9 @@ public class type81_x_animation implements IOverrideModel {
             }
             RenderUtil.renderModel(SpecialModels.TYPE81_X.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-        matrices.pop();
+        matrices.popPose();
 
-        matrices.push();
+        matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.TYPE81_X.getModel(),Type81AnimationController.INDEX_MAGAZINE,transformType,matrices);
 
@@ -65,12 +65,12 @@ public class type81_x_animation implements IOverrideModel {
             }
 
         }
-        matrices.pop();
+        matrices.popPose();
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
         {
-            if(transformType.isFirstPerson()) {
+            if(transformType.firstPerson()) {
                 controller.applySpecialModelTransform(SpecialModels.TYPE81_X.getModel(), Type81AnimationController.INDEX_BOLT, transformType, matrices);
                 AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
                 boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
@@ -101,7 +101,7 @@ public class type81_x_animation implements IOverrideModel {
             }
         * */
         //Always pop
-        matrices.pop();
+        matrices.popPose();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
 /*

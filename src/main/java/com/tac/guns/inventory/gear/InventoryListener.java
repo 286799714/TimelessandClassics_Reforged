@@ -39,7 +39,7 @@ public class InventoryListener {
 
         PlayerEntity player = (PlayerEntity) event.getEntity();
         if(addSlotMethod == null) {
-            addSlotMethod = ObfuscationReflectionHelper.findMethod(Container.class, "func_75146_a", Slot.class);
+            addSlotMethod = ObfuscationReflectionHelper.findMethod(Container.class, "addSlot", Slot.class);
         }
     //    GearSlotsHandler wearableItemHandler = (GearSlotsHandler) player.getCapability(ITEM_HANDLER_CAPABILITY).resolve().get();
     //    addSlotMethod.invoke(player.container, new ArmorRigSlot(wearableItemHandler, 0, 170, 84)); // Rig

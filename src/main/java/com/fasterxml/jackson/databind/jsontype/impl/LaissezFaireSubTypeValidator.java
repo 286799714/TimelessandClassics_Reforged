@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator.Validity;
+
 /**
  * Default {@link PolymorphicTypeValidator} used unless explicit one is constructed
  * (and, in 2.11, {@link com.fasterxml.jackson.databind.MapperFeature#BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES}

@@ -47,7 +47,7 @@ public class vz61_animation implements IOverrideModel
         RenderUtil.renderModel(SpecialModels.VZ61.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
         GunItem gunItem = ((GunItem) stack.getItem());
@@ -74,7 +74,7 @@ public class vz61_animation implements IOverrideModel
         RenderUtil.renderModel(SpecialModels.VZ61_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
     }
      
 

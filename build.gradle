@@ -43,7 +43,7 @@ minecraft {
     //mappings channel: 'official', version: '1.16.5'
     //mappings channel: 'official', version: '1.16.5'
 
-    mappings channel: 'snapshot', version: '20201028-1.16.3'
+    mappings channel: 'official', version: '1.16.5'
 
     runs {
         client {
@@ -101,7 +101,6 @@ sourceSets.main.resources {
 //}
 
 dependencies {
-    compileOnly fileTree(dir: 'lib4', include: '*.jar')
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
     implementation fg.deobf('curse.maven:configured-457570:3434071')
 
@@ -115,7 +114,7 @@ dependencies {
     implementation fg.deobf('curse.maven:curios-309927:3661903')
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
     implementation fg.deobf('curse.maven:obfuscate-289380:3336021')// 3740120') // 3336021
-
+    compileOnly fg.deobf(fileTree(dir: 'lib4', include: '*.jar'))
     //runtimeOnly files('lib4/optifine.jar')
 
     //implementation 'lib.optifine:optifine:1.0.0'

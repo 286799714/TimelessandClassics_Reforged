@@ -7,6 +7,8 @@ import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 
+import com.tac.guns.client.render.animation.module.GunAnimationController.AnimationLabel;
+
 public class M24AnimationController extends BoltActionAnimationController {
     public static int INDEX_BODY = 5;
     public static int INDEX_LEFT_HAND = 7;
