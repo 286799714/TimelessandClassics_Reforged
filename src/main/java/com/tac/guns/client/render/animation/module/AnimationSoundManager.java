@@ -24,13 +24,13 @@ public enum AnimationSoundManager {
         SoundInstance sound = map.get(animationMeta.getResourceLocation());
         if(sound == null) {
             SoundEvent soundEvent = new SoundEvent(soundMeta.getResourceLocation());
-            sound = new EntityBoundSoundInstance(soundEvent, SoundSource.PLAYERS, player);
+            sound = new EntityBoundSoundInstance(soundEvent, SoundSource.PLAYERS, sound.getVolume(), sound.getPitch(), player);
         }
         if(sound instanceof EntityBoundSoundInstance){
             EntityBoundSoundInstance entityTickableSound = (EntityBoundSoundInstance) sound;
             if(entityTickableSound.isStopped()){
                 SoundEvent soundEvent = new SoundEvent(soundMeta.getResourceLocation());
-                sound = new EntityBoundSoundInstance(soundEvent, SoundSource.PLAYERS, player);
+                sound = new EntityBoundSoundInstance(soundEvent, SoundSource.PLAYERS, sound.getVolume(), sound.getPitch(), player);
             }
         }
         if(Minecraft.getInstance().getSoundManager().isActive(sound)) return;

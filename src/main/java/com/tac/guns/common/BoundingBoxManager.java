@@ -38,7 +38,7 @@ public class BoundingBoxManager
             if(entity.isSwimming())
             {
                 headBox = headBox.move(0, 3 * 0.0625, 0);
-                Vec3 pos = Vec3.directionFromRotation(entity.xRot, entity.yBodyRot).normalize().scale(0.8);
+                Vec3 pos = Vec3.directionFromRotation(entity.getXRot(), entity.yBodyRot).normalize().scale(0.8);
                 headBox = headBox.move(pos);
             }
             else

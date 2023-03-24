@@ -41,6 +41,7 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.WeakHashMap;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
@@ -89,13 +90,15 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
             @Override
             public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @org.jetbrains.annotations.Nullable Direction side) {
 
-                T provider = null;
+                T provider;
                 if(CompatUtil.isCuriohere){
                     provider = CurioCompatUtil.getCurioCapability(cap, stack);
+                } else {
+                    provider = null;
                 }
 
                 if(provider != null){
-                    return LazyOptional.of(()-> );
+                    return LazyOptional.of(() -> provider);
                 }
 
                 return LazyOptional.empty();

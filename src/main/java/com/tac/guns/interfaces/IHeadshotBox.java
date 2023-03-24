@@ -1,6 +1,5 @@
 package com.tac.guns.interfaces;
 
-import net.minecraft.entity.EntityType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 

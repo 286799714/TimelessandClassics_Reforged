@@ -8,6 +8,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -43,8 +44,8 @@ public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.For
             throw new JsonSyntaxException("Missing result entry");
 
         JsonObject resultObject = GsonHelper.getAsJsonObject(json, "result");
-        ItemStack resultItem = ShapedRecipe.itemFromJson(resultObject);
-        return new WorkbenchRecipe(recipeId, resultItem, builder.build(), group);
+        Item resultItem = ShapedRecipe.itemFromJson(resultObject);
+        return new WorkbenchRecipe(recipeId, new ItemStack(resultItem), builder.build(), group);
     }
 
     @Nullable

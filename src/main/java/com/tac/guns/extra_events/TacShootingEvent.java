@@ -39,7 +39,7 @@ public class TacShootingEvent
     {
         ItemStack gunItem = event.getStack();
         int[] gunItemFireModes = gunItem.getTag().getIntArray("supportedFireModes");
-        Gun gun = ((GunItem) gunItem.getItem()).getModifiedGun(gunItem.getStack()); // Quick patch up, will create static method for handling null supported modes
+        Gun gun = ((GunItem) gunItem.getItem()).getModifiedGun(gunItem); // Quick patch up, will create static method for handling null supported modes
 
 
 

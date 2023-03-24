@@ -61,6 +61,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
@@ -102,8 +103,8 @@ public class ServerPlayHandler
                         return;
 
                     /* Updates the yaw and pitch with the clients current yaw and pitch */
-                    player.yRot = message.getRotationYaw();
-                    player.xRot = message.getRotationPitch();
+                    player.setYRot(message.getRotationYaw());
+                    player.setXRot(message.getRotationPitch());
 
                     // CHECK HERE:
                     //     Old server side fire rate control. This has to be disabled to make the \
