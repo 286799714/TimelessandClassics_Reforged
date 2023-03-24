@@ -4,10 +4,6 @@
  */
 package com.fasterxml.jackson.core;
 
-import java.io.*;
-import java.lang.ref.SoftReference;
-import java.net.URL;
-
 import com.fasterxml.jackson.core.format.InputAccessor;
 import com.fasterxml.jackson.core.format.MatchStrength;
 import com.fasterxml.jackson.core.io.*;
@@ -19,6 +15,10 @@ import com.fasterxml.jackson.core.util.BufferRecycler;
 import com.fasterxml.jackson.core.util.BufferRecyclers;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.JacksonFeature;
+
+import java.io.*;
+import java.lang.ref.SoftReference;
+import java.net.URL;
 
 /**
  * The main factory class of Jackson package, used to configure and

@@ -1,16 +1,15 @@
 package com.tac.guns.network.message;
 
 
+import com.mrcrayfish.framework.api.network.PlayMessage;
 import com.tac.guns.Config;
-import com.tac.guns.common.network.ServerPlayHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -20,18 +19,18 @@ import java.util.function.Supplier;
  */
 
 
-public class MessagePlayerShake implements IMessage
+public class MessagePlayerShake extends PlayMessage<MessagePlayerShake>
 {
     @Override
-    public void encode(PacketBuffer buffer)
+    public void encode(MessagePlayerShake messagePlayerShake, FriendlyByteBuf buffer)
     {
-        buffer.writeFloat(attackedAtYaw);
+        buffer.writeFloat(messagePlayerShake.attackedAtYaw);
     }
 
     @Override
-    public void decode(PacketBuffer buffer)
+    public MessagePlayerShake decode(FriendlyByteBuf buffer)
     {
-        this.attackedAtYaw = buffer.readFloat();
+        return new MessagePlayerShake(buffer.readFloat());
     }
 
     public float attackedAtYaw;
@@ -51,7 +50,7 @@ public class MessagePlayerShake implements IMessage
     }
 
     @Override
-    public void handle(Supplier<NetworkEvent.Context> supplier)
+    public void handle(MessagePlayerShake messagePlayerShake, Supplier<NetworkEvent.Context> supplier)
     {
         supplier.get().setPacketHandled(true);
         if(supplier.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)

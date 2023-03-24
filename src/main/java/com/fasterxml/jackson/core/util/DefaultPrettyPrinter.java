@@ -1,9 +1,12 @@
 package com.fasterxml.jackson.core.util;
 
-import java.io.*;
-
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.PrettyPrinter;
+import com.fasterxml.jackson.core.SerializableString;
 import com.fasterxml.jackson.core.io.SerializedString;
+
+import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Default {@link PrettyPrinter} implementation that uses 2-space

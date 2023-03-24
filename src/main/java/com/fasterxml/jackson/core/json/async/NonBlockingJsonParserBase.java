@@ -1,7 +1,5 @@
 package com.fasterxml.jackson.core.json.async;
 
-import java.io.*;
-
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.base.ParserBase;
 import com.fasterxml.jackson.core.io.IOContext;
@@ -10,9 +8,11 @@ import com.fasterxml.jackson.core.sym.ByteQuadsCanonicalizer;
 import com.fasterxml.jackson.core.util.ByteArrayBuilder;
 import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 
-import static com.fasterxml.jackson.core.JsonTokenId.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
 
-import com.fasterxml.jackson.core.JsonParser.Feature;
+import static com.fasterxml.jackson.core.JsonTokenId.*;
 
 /**
  * Intermediate base class for non-blocking JSON parsers.

@@ -5,11 +5,11 @@
 
 package com.fasterxml.jackson.core;
 
-import java.io.IOException;
-import java.util.Iterator;
-
 import com.fasterxml.jackson.core.type.ResolvedType;
 import com.fasterxml.jackson.core.type.TypeReference;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Abstract class that defines the interface that {@link JsonParser} and

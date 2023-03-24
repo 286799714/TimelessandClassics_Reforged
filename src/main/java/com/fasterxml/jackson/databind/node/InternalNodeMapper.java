@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.node;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+
+import java.io.IOException;
 
 /**
  * Helper class used to implement <code>toString()</code> method for

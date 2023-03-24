@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.introspect;
 
+import com.fasterxml.jackson.databind.util.Annotations;
+
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import com.fasterxml.jackson.databind.util.Annotations;
 
 /**
  * Helper class used to collect annotations to be stored as

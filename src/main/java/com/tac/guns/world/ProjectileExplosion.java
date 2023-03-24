@@ -1,45 +1,45 @@
 package com.tac.guns.world;
 
 import com.google.common.collect.Sets;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.ProtectionEnchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.TNTEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.ExplosionContext;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.enchantment.ProtectionEnchantment;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.ExplosionDamageCalculator;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import net.minecraft.world.Explosion.Mode;
+import net.minecraft.world.level.Explosion.BlockInteraction;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 public class ProjectileExplosion extends Explosion
 {
-    private static final ExplosionContext DEFAULT_CONTEXT = new ExplosionContext();
+    private static final ExplosionDamageCalculator DEFAULT_CONTEXT = new ExplosionDamageCalculator();
 
-    private final World world;
+    private final Level world;
     private final double x;
     private final double y;
     private final double z;
     private final float size;
     private final Entity exploder;
-    private final ExplosionContext context;
+    private final ExplosionDamageCalculator context;
 
-    public ProjectileExplosion(World world, Entity exploder, @Nullable DamageSource source, @Nullable ExplosionContext context, double x, double y, double z, float size, boolean causesFire, Mode mode)
+    public ProjectileExplosion(Level world, Entity exploder, @Nullable DamageSource source, @Nullable ExplosionDamageCalculator context, double x, double y, double z, float size, boolean causesFire, BlockInteraction mode)
     {
         super(world, exploder, source, context, x, y, z, size, causesFire, mode);
         this.world = world;
@@ -103,31 +103,31 @@ public class ProjectileExplosion extends Explosion
         this.getToBlow().addAll(set);
 
         float radius = this.size * 2.0F;
-        int minX = MathHelper.floor(this.x - (double) radius - 1.0D);
-        int maxX = MathHelper.floor(this.x + (double) radius + 1.0D);
-        int minY = MathHelper.floor(this.y - (double) radius - 1.0D);
-        int maxY = MathHelper.floor(this.y + (double) radius + 1.0D);
-        int minZ = MathHelper.floor(this.z - (double) radius - 1.0D);
-        int maxZ = MathHelper.floor(this.z + (double) radius + 1.0D);
+        int minX = Mth.floor(this.x - (double) radius - 1.0D);
+        int maxX = Mth.floor(this.x + (double) radius + 1.0D);
+        int minY = Mth.floor(this.y - (double) radius - 1.0D);
+        int maxY = Mth.floor(this.y + (double) radius + 1.0D);
+        int minZ = Mth.floor(this.z - (double) radius - 1.0D);
+        int maxZ = Mth.floor(this.z + (double) radius + 1.0D);
 
-        List<Entity> entities = this.world.getEntities(this.exploder, new AxisAlignedBB((double) minX, (double) minY, (double) minZ, (double) maxX, (double) maxY, (double) maxZ));
+        List<Entity> entities = this.world.getEntities(this.exploder, new AABB((double) minX, (double) minY, (double) minZ, (double) maxX, (double) maxY, (double) maxZ));
 
         net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.world, this, entities, radius);
 
-        Vector3d explosionPos = new Vector3d(this.x, this.y, this.z);
+        Vec3 explosionPos = new Vec3(this.x, this.y, this.z);
         for(Entity entity : entities)
         {
             if(entity.ignoreExplosion())
                 continue;
 
-            double strength = (double) (MathHelper.sqrt(entity.distanceToSqr(explosionPos)) / radius);
+            double strength = (Mth.sqrt((float) entity.distanceToSqr(explosionPos)) / radius);
             if(strength > 1.0D)
                 continue;
 
             double deltaX = entity.getX() - this.x;
-            double deltaY = (entity instanceof TNTEntity ? entity.getY() : entity.getEyeY()) - this.y;
+            double deltaY = (entity instanceof PrimedTnt ? entity.getY() : entity.getEyeY()) - this.y;
             double deltaZ = entity.getZ() - this.z;
-            double distanceToExplosion = (double) MathHelper.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+            double distanceToExplosion = Mth.sqrt((float) (deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ));
 
             if(distanceToExplosion != 0.0D)
             {
@@ -154,12 +154,12 @@ public class ProjectileExplosion extends Explosion
             }
             entity.setDeltaMovement(entity.getDeltaMovement().add(deltaX * blastDamage, deltaY * blastDamage, deltaZ * blastDamage));
 
-            if(entity instanceof PlayerEntity)
+            if(entity instanceof Player)
             {
-                PlayerEntity player = (PlayerEntity) entity;
-                if(!player.isSpectator() && (!player.isCreative() || !player.abilities.flying))
+                Player player = (Player) entity;
+                if(!player.isSpectator() && (!player.isCreative() || !player.getAbilities().flying))
                 {
-                    this.getHitPlayers().put(player, new Vector3d(deltaX * damage, deltaY * damage, deltaZ * damage));
+                    this.getHitPlayers().put(player, new Vec3(deltaX * damage, deltaY * damage, deltaZ * damage));
                 }
             }
         }

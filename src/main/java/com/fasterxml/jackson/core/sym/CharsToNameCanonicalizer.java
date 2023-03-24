@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.core.sym;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.util.InternCache;
+
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.concurrent.atomic.AtomicReference;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.util.InternCache;
 
 /**
  * This class is a kind of specialized type-safe Map, from char array to

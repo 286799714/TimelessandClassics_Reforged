@@ -5,20 +5,20 @@ import com.tac.guns.inventory.gear.GearSlotsHandler;
 import com.tac.guns.inventory.gear.WearableCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.AmmoSlot;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class BackpackContainer extends Container {
+public class BackpackContainer extends AbstractContainerMenu {
 
     private ItemStack item;
     private int numRows = 2;
 
-    public BackpackContainer(int windowId, PlayerInventory inv, ItemStack item) {
+    public BackpackContainer(int windowId, Inventory inv, ItemStack item) {
         super(ModContainers.ARMOR_TEST.get(), windowId);
         this.item = item;
         GearSlotsHandler itemHandler = (GearSlotsHandler)this.item.getCapability(WearableCapabilityProvider.capability).resolve().get();
@@ -43,7 +43,7 @@ public class BackpackContainer extends Container {
         //this.setAll(itemHandler.getStacks());
     }
 
-    public BackpackContainer(int windowId, PlayerInventory inv) {
+    public BackpackContainer(int windowId, Inventory inv) {
         super(ModContainers.ARMOR_TEST.get(), windowId);
         this.item = item;
         int i = (this.numRows - 4) * 18;
@@ -68,12 +68,12 @@ public class BackpackContainer extends Container {
 
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
         if(slotId <= 0) return super.clicked(slotId, dragType, clickTypeIn, player);
         Slot slot = this.slots.get(slotId);
         if(slot.hasItem()) {
@@ -82,7 +82,7 @@ public class BackpackContainer extends Container {
         return super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

@@ -1,26 +1,15 @@
 package com.tac.guns.datagen;
 
-import com.google.gson.JsonObject;
-import com.tac.guns.Reference;
 import com.tac.guns.crafting.WorkbenchRecipeBuilder;
 import com.tac.guns.init.ModBlocks;
 import com.tac.guns.init.ModItems;
-import com.tac.guns.init.ModRecipeSerializers;
-import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 //@OnlyIn(Dist.DEDICATED_SERVER)
@@ -32,7 +21,7 @@ public class RecipeGen extends RecipeProvider
     }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
         // Dye Item
         /*if(Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER)
             return;*/

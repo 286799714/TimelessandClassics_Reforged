@@ -2,9 +2,9 @@ package com.tac.guns.item;
 
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -83,7 +83,7 @@ public interface IWeaponColorable
      */
     default boolean hasWeaponColor(ItemStack stack)
     {
-        CompoundNBT tagCompound = stack.getOrCreateTag();
+        CompoundTag tagCompound = stack.getOrCreateTag();
         boolean hasColor = false;
         for (WeaponColorSegment colorSegment: IWeaponColorable.WeaponColorSegment.values())
         {
@@ -101,7 +101,7 @@ public interface IWeaponColorable
      */
     default int[] getWeaponColors(ItemStack stack)
     {
-        CompoundNBT tagCompound = stack.getOrCreateTag();
+        CompoundTag tagCompound = stack.getOrCreateTag();
         int[] colors = new int[IWeaponColorable.WeaponColorSegment.values().length];
         int iterator = 0;
         for (WeaponColorSegment colorSegment: IWeaponColorable.WeaponColorSegment.values())
@@ -118,7 +118,7 @@ public interface IWeaponColorable
      */
     default void setWeaponColor(ItemStack stack, IWeaponColorable.WeaponColorSegment segment, int color)
     {
-        CompoundNBT tagCompound = stack.getOrCreateTag();
+        CompoundTag tagCompound = stack.getOrCreateTag();
         tagCompound.putInt(segment.colorTranslationKey, color);
     }
 
@@ -129,7 +129,7 @@ public interface IWeaponColorable
      */
     default void removeWeaponColor(ItemStack stack, IWeaponColorable.WeaponColorSegment segment)
     {
-        CompoundNBT tagCompound = stack.getOrCreateTag();
+        CompoundTag tagCompound = stack.getOrCreateTag();
         tagCompound.remove(segment.colorTranslationKey);
     }
 
@@ -141,7 +141,7 @@ public interface IWeaponColorable
      */
     default int getWeaponColorBySegment(ItemStack stack, IWeaponColorable.WeaponColorSegment segment)
     {
-        CompoundNBT tagCompound = stack.getOrCreateTag();
+        CompoundTag tagCompound = stack.getOrCreateTag();
         return tagCompound.getInt(segment.colorTranslationKey);
     }
 

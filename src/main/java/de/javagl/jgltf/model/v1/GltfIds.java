@@ -26,11 +26,11 @@
  */
 package de.javagl.jgltf.model.v1;
 
+import de.javagl.jgltf.impl.v1.GlTF;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-
-import de.javagl.jgltf.impl.v1.GlTF;
 
 /**
  * Utility methods for generating IDs for {@link GlTF} objects

@@ -1,36 +1,40 @@
 package com.tac.guns.client.util;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.IrDeviceItem;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.SideRailItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.item.attachment.impl.SideRail;
-import com.tac.guns.util.GunModifierHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BreakableBlock;
-import net.minecraft.block.StainedGlassPaneBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.PlayerRenderer;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.*;
-import net.minecraft.util.Direction;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HalfTransparentBlock;
+import net.minecraft.world.level.block.StainedGlassPaneBlock;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.RenderProperties;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -46,77 +50,77 @@ public class RenderUtil
         GL11.glScissor(x * scale, mc.getWindow().getScreenHeight() - y * scale - height * scale, Math.max(0, width * scale), Math.max(0, height * scale));
     }
 
-    public static IBakedModel getModel(Item item)
+    public static BakedModel getModel(Item item)
     {
         return Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(new ItemStack(item));
     }
 
-    public static IBakedModel getModel(ItemStack item)
+    public static BakedModel getModel(ItemStack item)
     {
         return Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(item);
     }
 
-    public static void rotateZ(MatrixStack matrixStack, float xOffset, float yOffset, float rotation)
+    public static void rotateZ(PoseStack matrixStack, float xOffset, float yOffset, float rotation)
     {
         matrixStack.translate(xOffset, yOffset, 0);
         matrixStack.mulPose(Vector3f.ZN.rotationDegrees(rotation));
         matrixStack.translate(-xOffset, -yOffset, 0);
     }
 
-    public static void renderModel(ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, @Nullable LivingEntity entity)
+    public static void renderModel(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay, @Nullable LivingEntity entity)
     {
-        renderModel(stack, ItemCameraTransforms.TransformType.NONE, matrixStack, buffer, light, overlay, entity);
+        renderModel(stack, ItemTransforms.TransformType.NONE, matrixStack, buffer, light, overlay, entity);
     }
 
-    public static void renderModel(ItemStack child, ItemStack parent, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    public static void renderModel(ItemStack child, ItemStack parent, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay)
     {
-        IBakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(child);
-        renderModel(model, ItemCameraTransforms.TransformType.NONE, null, child, parent, matrixStack, buffer, light, overlay, false);
+        BakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(child);
+        renderModel(model, ItemTransforms.TransformType.NONE, null, child, parent, matrixStack, buffer, light, overlay, false);
     }
 
-    public static void renderModel(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, @Nullable LivingEntity entity)
+    public static void renderModel(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay, @Nullable LivingEntity entity)
     {
-        IBakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(stack);
+        BakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(stack);
         if(entity != null)
         {
-            model = Minecraft.getInstance().getItemRenderer().getModel(stack, entity.level, entity);
+            model = Minecraft.getInstance().getItemRenderer().getModel(stack, entity.level, entity, entity.getId());
         }
         renderModel(model, transformType, stack, matrixStack, buffer, light, overlay);
     }
 
-    public static void renderModel(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, @Nullable World world, @Nullable LivingEntity entity)
+    public static void renderModel(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay, @Nullable Level world, @Nullable LivingEntity entity)
     {
-        IBakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, world, entity);
+        BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, world, entity, entity.getId());
         renderModel(model, transformType, stack, matrixStack, buffer, light, overlay);
     }
 
 
-    public static void renderModel(IBakedModel model, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    public static void renderModel(BakedModel model, ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay)
     {
-        renderModel(model, ItemCameraTransforms.TransformType.NONE, stack, matrixStack, buffer, light, overlay);
+        renderModel(model, ItemTransforms.TransformType.NONE, stack, matrixStack, buffer, light, overlay);
     }
 
-    public static void renderLaserModuleModel(IBakedModel model, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    public static void renderLaserModuleModel(BakedModel model, ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay)
     {
-        renderLaserModuleModel(model, ItemCameraTransforms.TransformType.NONE, stack, matrixStack, buffer, light, overlay);
+        renderLaserModuleModel(model, ItemTransforms.TransformType.NONE, stack, matrixStack, buffer, light, overlay);
     }
-    public static void renderLaserModuleModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    public static void renderLaserModuleModel(BakedModel model, ItemTransforms.TransformType transformType, ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay)
     {
         renderModel(model, transformType, null, stack, ItemStack.EMPTY, matrixStack, buffer, light, overlay, true);
     }
 
-    public static void renderModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    public static void renderModel(BakedModel model, ItemTransforms.TransformType transformType, ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay)
     {
         renderModel(model, transformType, null, stack, ItemStack.EMPTY, matrixStack, buffer, light, overlay, false);
     }
 
-    public static void renderModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, @Nullable Transform transform, ItemStack stack, ItemStack parent, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay,
+    public static void renderModel(BakedModel model, ItemTransforms.TransformType transformType, @Nullable Transform transform, ItemStack stack, ItemStack parent, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay,
                                    boolean renderWithPersonalColor)
     {
         if(!stack.isEmpty())
         {
             matrixStack.pushPose();
-            boolean flag = transformType == ItemCameraTransforms.TransformType.GUI || transformType == ItemCameraTransforms.TransformType.GROUND || transformType == ItemCameraTransforms.TransformType.FIXED;
+            boolean flag = transformType == ItemTransforms.TransformType.GUI || transformType == ItemTransforms.TransformType.GROUND || transformType == ItemTransforms.TransformType.FIXED;
             if(stack.getItem() == Items.TRIDENT && flag)
             {
                 model = Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation("minecraft:trident#inventory"));
@@ -127,10 +131,10 @@ public class RenderUtil
             if(!model.isCustomRenderer() && (stack.getItem() != Items.TRIDENT || flag))
             {
                 boolean flag1;
-                if(transformType != ItemCameraTransforms.TransformType.GUI && !transformType.firstPerson() && stack.getItem() instanceof BlockItem)
+                if(transformType != ItemTransforms.TransformType.GUI && !transformType.firstPerson() && stack.getItem() instanceof BlockItem)
                 {
                     Block block = ((BlockItem) stack.getItem()).getBlock();
-                    flag1 = !(block instanceof BreakableBlock) && !(block instanceof StainedGlassPaneBlock);
+                    flag1 = !(block instanceof HalfTransparentBlock) && !(block instanceof StainedGlassPaneBlock);
                 }
                 else
                 {
@@ -144,12 +148,12 @@ public class RenderUtil
                 else
                 {
                     RenderType renderType = getRenderType(stack, !flag1);
-                    IVertexBuilder builder;
+                    VertexConsumer builder;
                     if(stack.getItem() == Items.COMPASS && stack.hasFoil())
                     {
                         matrixStack.pushPose();
-                        MatrixStack.Entry entry = matrixStack.last();
-                        if(transformType == ItemCameraTransforms.TransformType.GUI)
+                        PoseStack.Pose entry = matrixStack.last();
+                        if(transformType == ItemTransforms.TransformType.GUI)
                         {
                             entry.pose().multiply(0.5F);
                         }
@@ -186,7 +190,7 @@ public class RenderUtil
             }
             else
             {
-                stack.getItem().getItemStackTileEntityRenderer().renderByItem(stack, transformType, matrixStack, buffer, light, overlay);
+                RenderProperties.get(stack.getItem()).getItemStackRenderer().renderByItem(stack, transformType, matrixStack, buffer, light, overlay);
             }
 
             matrixStack.popPose();
@@ -203,7 +207,7 @@ public class RenderUtil
      * @param light
      * @param overlay
      */
-    private static void renderModelPersonallyColored(IBakedModel model, ItemStack stack, ItemStack parent, @Nullable Transform transform, MatrixStack matrixStack, IVertexBuilder buffer, int light, int overlay)
+    private static void renderModelPersonallyColored(BakedModel model, ItemStack stack, ItemStack parent, @Nullable Transform transform, PoseStack matrixStack, VertexConsumer buffer, int light, int overlay)
     {
         if(transform != null)
         {
@@ -229,7 +233,7 @@ public class RenderUtil
      * @param light
      * @param overlay
      */
-    private static void renderModel(IBakedModel model, ItemStack stack, ItemStack parent, @Nullable Transform transform, MatrixStack matrixStack, IVertexBuilder buffer, int light, int overlay)
+    private static void renderModel(BakedModel model, ItemStack stack, ItemStack parent, @Nullable Transform transform, PoseStack matrixStack, VertexConsumer buffer, int light, int overlay)
     {
         if(transform != null)
         {
@@ -257,9 +261,9 @@ public class RenderUtil
      * @param light
      * @param overlay
      */
-    private static void renderPersonalizedQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, ItemStack stack, ItemStack parent, int light, int overlay)
+    private static void renderPersonalizedQuads(PoseStack matrixStack, VertexConsumer buffer, List<BakedQuad> quads, ItemStack stack, ItemStack parent, int light, int overlay)
     {
-        MatrixStack.Entry entry = matrixStack.last();
+        PoseStack.Pose entry = matrixStack.last();
         for(BakedQuad quad : quads)
         {
             float alpha = 1f;
@@ -295,7 +299,7 @@ public class RenderUtil
             float green = (float) (color >> 8 & 255) / 255.0F;
             float blue = (float) (color & 255) / 255.0F;
 
-            buffer.addVertexData(entry, quad, red, green, blue, alpha, light, overlay, keepColor);
+            buffer.putBulkData(entry, quad, red, green, blue, alpha, light, overlay, keepColor);
         }
     }
 
@@ -335,9 +339,9 @@ public class RenderUtil
      * @param light
      * @param overlay
      */
-    private static void renderQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, ItemStack stack, ItemStack parent, int light, int overlay)
+    private static void renderQuads(PoseStack matrixStack, VertexConsumer buffer, List<BakedQuad> quads, ItemStack stack, ItemStack parent, int light, int overlay)
     {
-        MatrixStack.Entry entry = matrixStack.last();
+        PoseStack.Pose entry = matrixStack.last();
         for(BakedQuad quad : quads)
         {
             float alpha = 1f;
@@ -358,7 +362,7 @@ public class RenderUtil
             float green = (float) (color >> 8 & 255) / 255.0F;
             float blue = (float) (color & 255) / 255.0F;
 
-            buffer.addVertexData(entry, quad, red, green, blue, alpha, light, overlay, keepColor);
+            buffer.putBulkData(entry, quad, red, green, blue, alpha, light, overlay, keepColor);
         }
     }
 
@@ -374,7 +378,7 @@ public class RenderUtil
         }
         if(stack != null && !Gun.getAttachment(IAttachment.Type.SCOPE_BODY_COLOR, stack).isEmpty())
         {
-            color = ((DyeItem)Gun.getAttachment(IAttachment.Type.SCOPE_BODY_COLOR, stack).getItem()).getDyeColor().getColorValue();
+            color = ((DyeItem)Gun.getAttachment(IAttachment.Type.SCOPE_BODY_COLOR, stack).getItem()).getDyeColor().getTextColor();
         }
         return color;
     }
@@ -385,15 +389,15 @@ public class RenderUtil
         if(stack != null && !Gun.getAttachment(attachmentType, stack).isEmpty())
         {
             if(Gun.getAttachment(attachmentType, stack).getItem() instanceof DyeItem)
-                color = ((DyeItem)Gun.getAttachment(attachmentType, stack).getItem()).getDyeColor().getColorValue();
+                color = ((DyeItem)Gun.getAttachment(attachmentType, stack).getItem()).getDyeColor().getTextColor();
         }
         return color;
     }
 
-    public static void applyTransformType(ItemStack stack, MatrixStack matrixStack, ItemCameraTransforms.TransformType transformType, LivingEntity entity)
+    public static void applyTransformType(ItemStack stack, PoseStack matrixStack, ItemTransforms.TransformType transformType, LivingEntity entity)
     {
-        IBakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, entity.level, entity);
-        boolean leftHanded = transformType == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND || transformType == ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND;
+        BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, entity.level, entity, entity.getId());
+        boolean leftHanded = transformType == ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND || transformType == ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND;
         ForgeHooksClient.handleCameraTransforms(matrixStack, model, transformType, leftHanded);
 
         /* Flips the model and normals if left handed. */
@@ -406,10 +410,10 @@ public class RenderUtil
         }
     }
 
-    public static void applyTransformTypeIB(IBakedModel model, MatrixStack matrixStack, ItemCameraTransforms.TransformType transformType, LivingEntity entity)
+    public static void applyTransformTypeIB(BakedModel model, PoseStack matrixStack, ItemTransforms.TransformType transformType, LivingEntity entity)
     {
         /*IBakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, entity.world, entity);*/
-        boolean leftHanded = transformType == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND || transformType == ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND;
+        boolean leftHanded = transformType == ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND || transformType == ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND;
         ForgeHooksClient.handleCameraTransforms(matrixStack, model, transformType, leftHanded);
 
         /* Flips the model and normals if left handed. */
@@ -432,13 +436,14 @@ public class RenderUtil
         return mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height;
     }
 
-    public static void renderFirstPersonArm(ClientPlayerEntity player, HandSide hand, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight)
+    public static void renderFirstPersonArm(LocalPlayer player, HumanoidArm hand, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight)
     {
         Minecraft mc = Minecraft.getInstance();
-        EntityRendererManager renderManager = mc.getEntityRenderDispatcher();
+        EntityRenderDispatcher renderManager = mc.getEntityRenderDispatcher();
         PlayerRenderer renderer = (PlayerRenderer) renderManager.getRenderer(player);
-        mc.getTextureManager().bind(player.getSkinTextureLocation());
-        if(hand == HandSide.RIGHT)
+        RenderSystem.setShaderTexture(0, player.getSkinTextureLocation());
+
+        if(hand == HumanoidArm.RIGHT)
         {
             renderer.renderRightHand(matrixStack, buffer, combinedLight, player);
         }
@@ -454,8 +459,8 @@ public class RenderUtil
         if(item instanceof BlockItem)
         {
             Block block = ((BlockItem) item).getBlock();
-            return RenderTypeLookup.getRenderType(block.defaultBlockState(), !entity);
+            return ItemBlockRenderTypes.getRenderType(block.defaultBlockState(), !entity);
         }
-        return entity ? Atlases.translucentItemSheet() : RenderType.entityTranslucent(PlayerContainer.BLOCK_ATLAS);
+        return entity ? Sheets.translucentItemSheet() : RenderType.entityTranslucent(InventoryMenu.BLOCK_ATLAS);
     }
 }

@@ -1,15 +1,14 @@
 package com.fasterxml.jackson.databind.introspect;
 
-import java.lang.reflect.Modifier;
-import java.util.*;
-
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
-
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.cfg.HandlerInstantiator;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Helper class used for aggregating information about all possible

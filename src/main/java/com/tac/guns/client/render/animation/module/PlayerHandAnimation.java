@@ -1,28 +1,24 @@
 package com.tac.guns.client.render.animation.module;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.tac.guns.client.handler.GunRenderingHandler;
-import com.tac.guns.client.handler.command.ObjectRenderEditor;
 import com.tac.guns.client.util.RenderUtil;
-import com.tac.guns.common.Gun;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Vector;
-
 @OnlyIn(Dist.CLIENT)
 public class PlayerHandAnimation {
-    public static void render(GunAnimationController controller, ItemCameraTransforms.TransformType transformType, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light){
+    public static void render(GunAnimationController controller, ItemTransforms.TransformType transformType, PoseStack matrices, MultiBufferSource renderBuffer, int light){
         if(!transformType.firstPerson()) return;
         matrices.pushPose();
         {
             controller.applyRightHandTransform(matrices);
-            RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HandSide.RIGHT, matrices, renderBuffer, light);
+            RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.RIGHT, matrices, renderBuffer, light);
         }
         matrices.popPose();
         matrices.pushPose();
@@ -50,7 +46,7 @@ public class PlayerHandAnimation {
                 }
             }
             controller.applyLeftHandTransform(matrices);
-            RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HandSide.LEFT, matrices, renderBuffer, light);
+            RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.LEFT, matrices, renderBuffer, light);
         }
         matrices.popPose();
     }

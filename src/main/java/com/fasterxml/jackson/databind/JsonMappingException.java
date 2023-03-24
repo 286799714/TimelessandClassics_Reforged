@@ -1,15 +1,16 @@
 package com.fasterxml.jackson.databind;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonLocation;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.util.ClassUtil;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import com.fasterxml.jackson.core.*;
-
-import com.fasterxml.jackson.databind.util.ClassUtil;
 
 /**
  * Checked exception used to signal fatal problems with mapping of

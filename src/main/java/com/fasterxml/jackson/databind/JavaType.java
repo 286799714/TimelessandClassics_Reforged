@@ -1,12 +1,12 @@
 package com.fasterxml.jackson.databind;
 
-import java.lang.reflect.Modifier;
-import java.util.List;
-
 import com.fasterxml.jackson.core.type.ResolvedType;
 import com.fasterxml.jackson.databind.type.TypeBindings;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.lang.reflect.Modifier;
+import java.util.List;
 
 /**
  * Base class for type token classes used both to contain information

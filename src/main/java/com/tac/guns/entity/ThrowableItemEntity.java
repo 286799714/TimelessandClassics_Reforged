@@ -1,28 +1,28 @@
 package com.tac.guns.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public abstract class ThrowableItemEntity extends ThrowableEntity implements IEntityAdditionalSpawnData
+public abstract class ThrowableItemEntity extends ThrowableProjectile implements IEntityAdditionalSpawnData
 {
     private ItemStack item = ItemStack.EMPTY;
     private boolean shouldBounce;
@@ -31,17 +31,17 @@ public abstract class ThrowableItemEntity extends ThrowableEntity implements IEn
     /* The max life of the entity. If -1, will stay alive forever and will need to be explicitly removed. */
     private int maxLife = 20 * 10;
 
-    public ThrowableItemEntity(EntityType<? extends ThrowableItemEntity> entityType, World worldIn)
+    public ThrowableItemEntity(EntityType<? extends ThrowableItemEntity> entityType, Level worldIn)
     {
         super(entityType, worldIn);
     }
 
-    public ThrowableItemEntity(EntityType<? extends ThrowableItemEntity> entityType, World world, LivingEntity player)
+    public ThrowableItemEntity(EntityType<? extends ThrowableItemEntity> entityType, Level world, LivingEntity player)
     {
         super(entityType, player, world);
     }
 
-    public ThrowableItemEntity(EntityType<? extends ThrowableItemEntity> entityType, World world, double x, double y, double z)
+    public ThrowableItemEntity(EntityType<? extends ThrowableItemEntity> entityType, Level world, double x, double y, double z)
     {
         super(entityType, x, y, z, world);
     }
@@ -91,12 +91,12 @@ public abstract class ThrowableItemEntity extends ThrowableEntity implements IEn
     public void onDeath() {}
 
     @Override
-    protected void onHit(RayTraceResult result)
+    protected void onHit(HitResult result)
     {
         switch(result.getType())
         {
             case BLOCK:
-                BlockRayTraceResult blockResult = (BlockRayTraceResult) result;
+                BlockHitResult blockResult = (BlockHitResult) result;
                 if(this.shouldBounce)
                 {
                     BlockPos resultPos = blockResult.getBlockPos();
@@ -105,7 +105,7 @@ public abstract class ThrowableItemEntity extends ThrowableEntity implements IEn
                     double speed = this.getDeltaMovement().length();
                     if(speed > 0.1)
                     {
-                        this.level.playSound(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, event, SoundCategory.AMBIENT, 1.0F, 1.0F);
+                        this.level.playSound(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, event, SoundSource.AMBIENT, 1.0F, 1.0F);
                     }
                     Direction direction = blockResult.getDirection();
                     switch(direction.getAxis())
@@ -132,7 +132,7 @@ public abstract class ThrowableItemEntity extends ThrowableEntity implements IEn
                 }
                 break;
             case ENTITY:
-                EntityRayTraceResult entityResult = (EntityRayTraceResult) result;
+                EntityHitResult entityResult = (EntityHitResult) result;
                 Entity entity = entityResult.getEntity();
                 if(entity != null)
                 {
@@ -151,7 +151,7 @@ public abstract class ThrowableItemEntity extends ThrowableEntity implements IEn
     }
 
     @Override
-    public void writeSpawnData(PacketBuffer buffer)
+    public void writeSpawnData(FriendlyByteBuf buffer)
     {
         buffer.writeBoolean(this.shouldBounce);
         buffer.writeFloat(this.gravityVelocity);
@@ -159,7 +159,7 @@ public abstract class ThrowableItemEntity extends ThrowableEntity implements IEn
     }
 
     @Override
-    public void readSpawnData(PacketBuffer buffer)
+    public void readSpawnData(FriendlyByteBuf buffer)
     {
         this.shouldBounce = buffer.readBoolean();
         this.gravityVelocity = buffer.readFloat();
@@ -167,7 +167,7 @@ public abstract class ThrowableItemEntity extends ThrowableEntity implements IEn
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket()
+    public Packet<?> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }

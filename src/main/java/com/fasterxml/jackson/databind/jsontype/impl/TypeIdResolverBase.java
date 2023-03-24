@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.jsontype.impl;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import java.io.IOException;
 
 /**
  * Partial base implementation of {@link TypeIdResolver}: all custom implementations

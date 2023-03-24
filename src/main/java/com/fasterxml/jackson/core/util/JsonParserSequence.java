@@ -1,9 +1,11 @@
 package com.fasterxml.jackson.core.util;
 
-import java.io.IOException;
-import java.util.*;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 
-import com.fasterxml.jackson.core.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper class that can be used to sequence multiple physical

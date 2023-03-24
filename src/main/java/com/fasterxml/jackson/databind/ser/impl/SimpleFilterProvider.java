@@ -1,8 +1,11 @@
 package com.fasterxml.jackson.databind.ser.impl;
 
-import java.util.*;
+import com.fasterxml.jackson.databind.ser.BeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.PropertyFilter;
 
-import com.fasterxml.jackson.databind.ser.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Simple {@link FilterProvider} implementation that just stores

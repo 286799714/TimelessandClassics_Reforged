@@ -1,8 +1,6 @@
 package com.tac.guns.item;
 
-import net.minecraft.item.Item;
-
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item;
 
 /**
  * A basic item class that implements {@link IAmmo} to indicate this item is ammunition

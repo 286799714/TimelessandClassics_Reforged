@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 
-import com.fasterxml.jackson.core.JsonGenerator.Feature;
-
 /**
  * This base class implements part of API that a JSON generator exposes
  * to applications, adds shared internal methods that sub-classes

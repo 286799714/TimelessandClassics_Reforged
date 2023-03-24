@@ -1,9 +1,10 @@
 package com.fasterxml.jackson.core.io;
 
-import java.io.*;
-
 import com.fasterxml.jackson.core.util.BufferRecycler;
 import com.fasterxml.jackson.core.util.TextBuffer;
+
+import java.io.StringWriter;
+import java.io.Writer;
 
 /**
  * Efficient alternative to {@link StringWriter}, based on using segmented

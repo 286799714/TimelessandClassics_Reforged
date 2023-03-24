@@ -4,17 +4,12 @@ import com.tac.guns.GunMod;
 import com.tac.guns.client.render.animation.module.*;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
-import com.tac.guns.network.PacketHandler;
-import com.tac.guns.network.message.MessageAnimationRun;
-import de.javagl.jgltf.model.animation.AnimationManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.io.IOException;
-
-import com.tac.guns.client.render.animation.module.GunAnimationController.AnimationLabel;
 
 public class M60AnimationController extends MachineGunAnimationController {
     public static int INDEX_BODY = 4;
@@ -56,7 +51,7 @@ public class M60AnimationController extends MachineGunAnimationController {
 
     @Override
     public AnimationMeta getAnimationFromLabel(AnimationLabel label) {
-        ClientPlayerEntity player = Minecraft.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
         switch (label){
             case RELOAD_EMPTY: {
                 if(player != null){

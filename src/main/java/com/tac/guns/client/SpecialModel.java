@@ -2,30 +2,28 @@ package com.tac.guns.client;
 
 import com.tac.guns.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpecialModel {
     private ResourceLocation modelLocation;
-    private IBakedModel cachedModel;
+    private BakedModel cachedModel;
 
     public SpecialModel(String modelName)
     {
         this.modelLocation = new ResourceLocation(Reference.MOD_ID, "special/" + modelName);
     }
     @OnlyIn(Dist.CLIENT)
-    public IBakedModel getModel()
+    public BakedModel getModel()
     {
         if(this.cachedModel == null)
         {
-            IBakedModel model = Minecraft.getInstance().getModelManager().getModel(this.modelLocation);
+            BakedModel model = Minecraft.getInstance().getModelManager().getModel(this.modelLocation);
             if(model == Minecraft.getInstance().getModelManager().getMissingModel())
             {
                 ModelLoader.addSpecialModel(this.modelLocation);

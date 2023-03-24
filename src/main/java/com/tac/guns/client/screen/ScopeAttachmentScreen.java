@@ -1,27 +1,20 @@
 package com.tac.guns.client.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.tac.guns.client.handler.GunRenderingHandler;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.container.AttachmentContainer;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,12 +22,12 @@ import java.util.Collections;
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
+public class ScopeAttachmentScreen extends AbstractContainerScreen<AttachmentContainer>
 {
     private static final ResourceLocation GUI_TEXTURES = new ResourceLocation("tac:textures/gui/attachments.png");
 
-    private final PlayerInventory playerInventory;
-    private final IInventory weaponInventory;
+    private final Inventory playerInventory;
+    private final Container weaponInventory;
 
     private boolean showHelp = true;
     private int windowZoom = 10;
@@ -44,7 +37,7 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
     private int mouseGrabbedButton;
     private int mouseClickedX, mouseClickedY;
 
-    public ScopeAttachmentScreen(AttachmentContainer screenContainer, PlayerInventory playerInventory, ITextComponent titleIn)
+    public ScopeAttachmentScreen(AttachmentContainer screenContainer, Inventory playerInventory, Component titleIn)
     {
         super(screenContainer, playerInventory, titleIn);
         this.playerInventory = playerInventory;
@@ -53,9 +46,9 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
     }
 
     @Override
-    public void tick()
+    public void containerTick()
     {
-        super.tick();
+        super.containerTick();
         if(this.minecraft != null && this.minecraft.player != null)
         {
             if(!(this.minecraft.player.getMainHandItem().getItem() instanceof GunItem || this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem))
@@ -67,7 +60,7 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
 
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -83,12 +76,12 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
                 IAttachment.Type type = IAttachment.Type.values()[i];
                 if(!this.menu.getSlot(i).isActive())
                 {
-                    this.renderComponentTooltip(matrixStack, Arrays.asList(new TranslationTextComponent("slot.tac.attachment." + type.getTranslationKey()), new TranslationTextComponent("slot.tac.attachment.not_applicable")), mouseX, mouseY);
+                    this.renderComponentTooltip(matrixStack, Arrays.asList(new TranslatableComponent("slot.tac.attachment." + type.getTranslationKey()), new TranslatableComponent("slot.tac.attachment.not_applicable")), mouseX, mouseY);
                 }
                 else if(this.weaponInventory.getItem(i).isEmpty())
                 {
 
-                    this.renderComponentTooltip(matrixStack, Collections.singletonList(new TranslationTextComponent("slot.tac.attachment." + type.getTranslationKey())), mouseX, mouseY);
+                    this.renderComponentTooltip(matrixStack, Collections.singletonList(new TranslatableComponent("slot.tac.attachment." + type.getTranslationKey())), mouseX, mouseY);
                 }
             }
         }
@@ -148,11 +141,10 @@ public class ScopeAttachmentScreen extends ContainerScreen<AttachmentContainer>
     }*/
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY)
     {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bind(GUI_TEXTURES);
+        RenderSystem.setShaderTexture(0, GUI_TEXTURES);
         int left = (this.width - this.imageWidth) / 2;
         int top = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, left, top, 0, 0, this.imageWidth, this.imageHeight);

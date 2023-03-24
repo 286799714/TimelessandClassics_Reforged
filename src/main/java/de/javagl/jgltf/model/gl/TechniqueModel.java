@@ -26,9 +26,9 @@
  */
 package de.javagl.jgltf.model.gl;
 
-import java.util.Map;
-
 import de.javagl.jgltf.model.NamedModelElement;
+
+import java.util.Map;
 
 /**
  * Interface for a rendering technique. Such a technique may be part of a 

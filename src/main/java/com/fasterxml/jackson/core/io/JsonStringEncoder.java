@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.core.io;
 
-import java.util.Arrays;
-
 import com.fasterxml.jackson.core.util.ByteArrayBuilder;
 import com.fasterxml.jackson.core.util.TextBuffer;
+
+import java.util.Arrays;
 
 /**
  * Helper class used for efficient encoding of JSON String values (including

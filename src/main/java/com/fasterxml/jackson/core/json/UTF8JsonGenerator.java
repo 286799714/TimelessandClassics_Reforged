@@ -1,16 +1,17 @@
 package com.fasterxml.jackson.core.json;
 
-import java.io.*;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.io.CharTypes;
 import com.fasterxml.jackson.core.io.CharacterEscapes;
 import com.fasterxml.jackson.core.io.IOContext;
 import com.fasterxml.jackson.core.io.NumberOutput;
 
-import com.fasterxml.jackson.core.JsonGenerator.Feature;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class UTF8JsonGenerator
     extends JsonGeneratorImpl

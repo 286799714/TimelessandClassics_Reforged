@@ -1,22 +1,23 @@
 package com.tac.guns.client.render.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.tac.guns.entity.GrenadeEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 public class GrenadeRenderer extends EntityRenderer<GrenadeEntity>
 {
-    public GrenadeRenderer(EntityRendererManager renderManager)
+    public GrenadeRenderer(EntityRendererProvider.Context renderManager)
     {
         super(renderManager);
     }
@@ -28,7 +29,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity>
     }
 
     @Override
-    public void render(GrenadeEntity entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light)
+    public void render(GrenadeEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light)
     {
         if(!entity.getProjectile().isVisible() || entity.tickCount <= 1)
         {
@@ -38,7 +39,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity>
         matrixStack.pushPose();
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(entityYaw));
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(entity.xRot));
+        matrixStack.mulPose(Vector3f.XP.rotationDegrees(entity.getXRot()));
 
         /* Offsets to the center of the grenade before applying rotation */
         float rotation = entity.tickCount + partialTicks;
@@ -48,7 +49,7 @@ public class GrenadeRenderer extends EntityRenderer<GrenadeEntity>
 
         matrixStack.translate(0.0, 0.5, 0.0);
 
-        Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(), ItemCameraTransforms.TransformType.NONE, light, OverlayTexture.NO_OVERLAY, matrixStack, renderTypeBuffer);
+        Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(), ItemTransforms.TransformType.NONE, light, OverlayTexture.NO_OVERLAY, matrixStack, renderTypeBuffer, entity.getId());
         matrixStack.popPose();
     }
 }

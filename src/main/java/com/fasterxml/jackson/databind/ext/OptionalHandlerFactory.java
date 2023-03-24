@@ -1,13 +1,13 @@
 package com.fasterxml.jackson.databind.ext;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Helper class used for isolating details of handling optional+external types

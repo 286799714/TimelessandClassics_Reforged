@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.annotation;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerator.IdKey;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.ObjectIdGenerator.IdKey;
 
 /**
  * Simple implementation of {@link ObjectIdResolver}

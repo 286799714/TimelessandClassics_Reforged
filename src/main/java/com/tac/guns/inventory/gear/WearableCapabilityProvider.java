@@ -1,10 +1,7 @@
 package com.tac.guns.inventory.gear;
 
-import com.tac.guns.inventory.gear.armor.IAmmoItemHandler;
-import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
-import com.tac.guns.util.WearableHelper;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.ListTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -13,7 +10,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class WearableCapabilityProvider implements ICapabilitySerializable<ListNBT> {
+public class WearableCapabilityProvider implements ICapabilitySerializable<ListTag> {
 
     @CapabilityInject(IWearableItemHandler.class)
     public static Capability<IWearableItemHandler> capability = InventoryListener.ITEM_HANDLER_CAPABILITY;
@@ -50,12 +47,12 @@ public class WearableCapabilityProvider implements ICapabilitySerializable<ListN
     }*/
 
     @Override
-    public ListNBT serializeNBT() {
-        return (ListNBT) capability.getStorage().writeNBT(capability, itemHandler, null);
+    public ListTag serializeNBT() {
+        return (ListTag) capability.getStorage().writeNBT(capability, itemHandler, null);
     }
 
     @Override
-    public void deserializeNBT(ListNBT nbt) {
+    public void deserializeNBT(ListTag nbt) {
         capability.getStorage().readNBT(capability, itemHandler, null, nbt);
     }
 }

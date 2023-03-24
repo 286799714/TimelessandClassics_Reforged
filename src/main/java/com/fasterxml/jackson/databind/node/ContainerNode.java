@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.node;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.RawValue;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * This intermediate base class is used for all container nodes,

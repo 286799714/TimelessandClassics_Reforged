@@ -1,8 +1,8 @@
 package com.tac.guns.crafting;
 
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.stream.Collectors;
@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
  */
 public class WorkbenchRecipes
 {
-    public static boolean isEmpty(World world)
+    public static boolean isEmpty(Level world)
     {
         return world.getRecipeManager().getRecipes().stream().noneMatch(recipe -> recipe.getType() == RecipeType.WORKBENCH);
     }
 
-    public static NonNullList<WorkbenchRecipe> getAll(World world)
+    public static NonNullList<WorkbenchRecipe> getAll(Level world)
     {
         return world.getRecipeManager().getRecipes().stream()
                 .filter(recipe -> recipe.getType() == RecipeType.WORKBENCH)
@@ -26,7 +26,7 @@ public class WorkbenchRecipes
     }
 
     @Nullable
-    public static WorkbenchRecipe getRecipeById(World world, ResourceLocation id)
+    public static WorkbenchRecipe getRecipeById(Level world, ResourceLocation id)
     {
         return world.getRecipeManager().getRecipes().stream()
                 .filter(recipe -> recipe.getType() == RecipeType.WORKBENCH)

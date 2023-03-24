@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind.deser.std;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ValueInstantiator;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AtomicReferenceDeserializer
     extends ReferenceTypeDeserializer<AtomicReference<Object>>

@@ -26,13 +26,12 @@
  */
 package de.javagl.jgltf.model.io;
 
+import javax.imageio.ImageReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageReader;
 
 /**
  * Utility methods to related to the MIME type from data URLs or image data

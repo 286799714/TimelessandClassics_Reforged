@@ -1,8 +1,10 @@
 package com.fasterxml.jackson.core.format;
 
-import java.io.*;
-
 import com.fasterxml.jackson.core.JsonFactory;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Interface used to expose beginning of a data file to data format

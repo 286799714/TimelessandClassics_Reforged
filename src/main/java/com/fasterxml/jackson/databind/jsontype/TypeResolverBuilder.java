@@ -1,12 +1,12 @@
 package com.fasterxml.jackson.databind.jsontype;
 
-import java.util.Collection;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.SerializationConfig;
+
+import java.util.Collection;
 
 /**
  * Interface that defines builders that are configured based on

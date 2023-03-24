@@ -26,9 +26,9 @@
  */
 package de.javagl.jgltf.model.gl;
 
-import java.nio.ByteBuffer;
-
 import de.javagl.jgltf.model.NamedModelElement;
+
+import java.nio.ByteBuffer;
 
 /**
  * Interface for a shader 

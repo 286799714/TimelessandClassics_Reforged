@@ -1,8 +1,8 @@
 package com.fasterxml.jackson.core.io;
 
-import java.util.Arrays;
-
 import com.fasterxml.jackson.core.SerializableString;
+
+import java.util.Arrays;
 
 /**
  * Abstract base class that defines interface for customizing character

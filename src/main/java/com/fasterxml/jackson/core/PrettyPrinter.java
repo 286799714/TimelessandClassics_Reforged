@@ -5,10 +5,10 @@
 
 package com.fasterxml.jackson.core;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.io.SerializedString;
 import com.fasterxml.jackson.core.util.Separators;
+
+import java.io.IOException;
 
 /**
  * Interface for objects that implement pretty printer functionality, such

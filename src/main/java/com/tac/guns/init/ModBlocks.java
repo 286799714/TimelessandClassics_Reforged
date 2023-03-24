@@ -5,18 +5,14 @@ import com.tac.guns.Reference;
 import com.tac.guns.block.FlashLightBlock;
 import com.tac.guns.block.UpgradeBenchBlock;
 import com.tac.guns.block.WorkbenchBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
@@ -49,7 +45,7 @@ public class ModBlocks
 
     private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier, boolean grouped)
     {
-        return register(id, blockSupplier, block1 -> new BlockItem(block1, grouped ? new Item.Properties().tab(GunMod.GROUP) : new Item.Properties().tab(ItemGroup.TAB_SEARCH)));
+        return register(id, blockSupplier, block1 -> new BlockItem(block1, grouped ? new Item.Properties().tab(GunMod.GROUP) : new Item.Properties().tab(CreativeModeTab.TAB_SEARCH)));
     }
 
     private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier, @Nullable Function<T, BlockItem> supplier)

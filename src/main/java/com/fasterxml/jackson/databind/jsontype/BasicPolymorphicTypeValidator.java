@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.jsontype;
 
-import java.util.*;
-import java.util.regex.Pattern;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Standard {@link BasicPolymorphicTypeValidator} implementation that users may want

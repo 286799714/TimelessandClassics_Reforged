@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.core.util;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.PrettyPrinter;
+
+import java.io.IOException;
 
 /**
  * {@link PrettyPrinter} implementation that adds no indentation,

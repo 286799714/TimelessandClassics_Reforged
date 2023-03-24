@@ -1,13 +1,13 @@
 package com.fasterxml.jackson.databind.ser.std;
 
-import java.io.IOException;
-import java.util.*;
-
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.ContainerSerializer;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 @JacksonStdImpl
 @SuppressWarnings("serial")

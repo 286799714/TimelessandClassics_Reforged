@@ -1,8 +1,8 @@
 package com.fasterxml.jackson.core.util;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
+
+import java.io.IOException;
 
 /**
  * Default linefeed-based indenter, used by {@link DefaultPrettyPrinter} (unless

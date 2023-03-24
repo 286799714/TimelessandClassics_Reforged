@@ -1,7 +1,8 @@
 package com.tac.guns.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.TextureUtil;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.net.optifine.shaders.TACOptifineShadersHelper;
 import com.tac.guns.Config;
@@ -9,57 +10,37 @@ import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.render.gun.model.scope.scopeUtil.ScopeGlobal;
 import com.tac.guns.common.Gun;
-import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.item.GunItem;
-import net.minecraft.client.MainWindow;
+import com.tac.guns.util.OptifineHelper;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.RenderState;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.brain.task.FarmTask;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-
-import com.tac.guns.util.OptifineHelper;
-
+import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.optifine.shaders.FlipTextures;
-import net.optifine.shaders.Program;
 import net.optifine.shaders.Shaders;
 import org.apache.logging.log4j.Level;
-import org.lwjgl.opengl.*;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL43;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.IntSupplier;
-import java.util.function.Supplier;
 
-import static net.minecraft.client.settings.PointOfView.FIRST_PERSON;
 import static org.lwjgl.opengl.GL11.*;
-
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
-public class ScreenTextureState extends RenderState.TexturingState
+public class ScreenTextureState extends RenderStateShard.TexturingStateShard
 {
     private static ScreenTextureState instance = null;
 
@@ -88,7 +69,7 @@ public class ScreenTextureState extends RenderState.TexturingState
             RenderSystem.disableBlend();
         });
         if(Config.CLIENT.quality.worldRerenderPiPAlpha.get()) {
-            ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener(this.scopeRenderGlobal);
+            ((ReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener(this.scopeRenderGlobal);
             scopeRenderGlobal = new ScopeGlobal(mc);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, this::onRenderHUD);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::renderTick);
@@ -108,27 +89,15 @@ public class ScreenTextureState extends RenderState.TexturingState
             mc.worldRenderer.setWorldAndLoadRenderers((ClientWorld) event.getWorld());
         }
     }*/
-    public int getTextureId()
+    private int getTextureId()
     {
         if(this.textureId == 0)
         {
             this.textureId = TextureUtil.generateTextureId();
             // Texture params only need to be set once, not once per frame
             RenderSystem.bindTexture(this.textureId);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 9728);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 9728);
-
-            //glTexParameteri(3553 , GL_TEXTURE_MIN_FILTER, 9728);
-            //glTexParameteri(3553 , GL_TEXTURE_MAG_FILTER, 9728);
-
-
-            // Can I make optifine Shaders compatible?
-            /*int wrap = true ? 33071 : 10497;
-            glTexParameteri(3553, 10242, wrap);
-            glTexParameteri(3553, 10243, wrap);
-            glTexParameteri(3553, 10240, 9728);
-            glTexParameteri(3553, 10241, 9728);
-*/
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         }
         return this.textureId;
     }
@@ -244,8 +213,9 @@ public class ScreenTextureState extends RenderState.TexturingState
     public static boolean isRenderHand0=false;
     public static boolean needRenderHand1=false;
     public boolean isRenderGun=false;
+    @SuppressWarnings("removal")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onRenderWorldLast(RenderWorldLastEvent event) {
+    public void onRenderWorldLast(RenderLevelLastEvent event) {
         //genMirror();
         isRenderHand0=false;
         isRenderGun=false;
@@ -262,14 +232,13 @@ public class ScreenTextureState extends RenderState.TexturingState
         GL43.glDeleteTextures(ScreenTextureState.instance().textureId);
         GL43.glDeleteBuffers(ScreenTextureState.instance().textureId);
         RenderSystem.bindTexture(ScreenTextureState.instance().regen());
-        GlStateManager._color4f(1f, 1f, 1f,1f);
 
-        WorldRenderer renderBackup = mc.levelRenderer;
+        LevelRenderer renderBackup = mc.levelRenderer;
         //Save the current settings to be reset later
         long endTime = 0;
         boolean hide = mc.options.hideGui;
         int limit = mc.options.framerateLimit;
-        RayTraceResult mouseOver = mc.hitResult;
+        HitResult mouseOver = mc.hitResult;
         boolean bobbingBackup = mc.options.bobView;
         double fovBackup = mc.options.fov;
 
@@ -343,9 +312,10 @@ public class ScreenTextureState extends RenderState.TexturingState
     }
 
     @SubscribeEvent
-    public void onRenderWorldLastLegacy(RenderWorldLastEvent event)
+    @SuppressWarnings("removal")
+    public void onRenderWorldLastLegacy(RenderLevelLastEvent event)
     {
-        MainWindow mainWindow = Minecraft.getInstance().getWindow();
+        Window mainWindow = Minecraft.getInstance().getWindow();
         if(mainWindow.getScreenWidth() <= 0 || mainWindow.getScreenHeight() <= 0)
             return;
 

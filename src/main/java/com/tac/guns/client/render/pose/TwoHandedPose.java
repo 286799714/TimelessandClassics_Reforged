@@ -1,21 +1,20 @@
 package com.tac.guns.client.render.pose;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
 import com.tac.guns.client.handler.ReloadHandler;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.GripType;
-import com.tac.guns.item.GunItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -53,14 +52,14 @@ public class TwoHandedPose extends WeaponPose
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void applyPlayerModelRotation(PlayerEntity player, PlayerModel model, Hand hand, float aimProgress)
+    public void applyPlayerModelRotation(Player player, PlayerModel model, InteractionHand hand, float aimProgress)
     {
         if(Config.CLIENT.display.oldAnimations.get())
         {
             Minecraft mc = Minecraft.getInstance();
-            boolean right = mc.options.mainHand == HandSide.RIGHT ? hand == Hand.MAIN_HAND : hand == Hand.OFF_HAND;
-            ModelRenderer mainArm = right ? model.rightArm : model.leftArm;
-            ModelRenderer secondaryArm = right ? model.leftArm : model.rightArm;
+            boolean right = mc.options.mainHand == HumanoidArm.RIGHT ? hand == InteractionHand.MAIN_HAND : hand == InteractionHand.OFF_HAND;
+            ModelPart mainArm = right ? model.rightArm : model.leftArm;
+            ModelPart secondaryArm = right ? model.leftArm : model.rightArm;
             mainArm.xRot = model.head.xRot;
             mainArm.yRot = model.head.yRot;
             mainArm.zRot = model.head.zRot;
@@ -82,13 +81,13 @@ public class TwoHandedPose extends WeaponPose
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void applyPlayerPreRender(PlayerEntity player, Hand hand, float aimProgress, MatrixStack matrixStack, IRenderTypeBuffer buffer)
+    public void applyPlayerPreRender(Player player, InteractionHand hand, float aimProgress, PoseStack matrixStack, MultiBufferSource buffer)
     {
         if(Config.CLIENT.display.oldAnimations.get())
         {
-            boolean right = Minecraft.getInstance().options.mainHand == HandSide.RIGHT ? hand == Hand.MAIN_HAND : hand == Hand.OFF_HAND;
+            boolean right = Minecraft.getInstance().options.mainHand == HumanoidArm.RIGHT ? hand == InteractionHand.MAIN_HAND : hand == InteractionHand.OFF_HAND;
             player.yBodyRotO = player.yRotO + (right ? 25F : -25F) + aimProgress * (right ? 20F : -20F);
-            player.yBodyRot = player.yRot + (right ? 25F : -25F) + aimProgress * (right ? 20F : -20F);
+            player.yBodyRot = player.getYRot() + (right ? 25F : -25F) + aimProgress * (right ? 20F : -20F);
         }
         else
         {
@@ -98,13 +97,13 @@ public class TwoHandedPose extends WeaponPose
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void applyHeldItemTransforms(PlayerEntity player, Hand hand, float aimProgress, MatrixStack matrixStack, IRenderTypeBuffer buffer)
+    public void applyHeldItemTransforms(Player player, InteractionHand hand, float aimProgress, PoseStack matrixStack, MultiBufferSource buffer)
     {
         if(Config.CLIENT.display.oldAnimations.get())
         {
-            if(hand == Hand.MAIN_HAND)
+            if(hand == InteractionHand.MAIN_HAND)
             {
-                boolean right = Minecraft.getInstance().options.mainHand == HandSide.RIGHT ? hand == Hand.MAIN_HAND : hand == Hand.OFF_HAND;
+                boolean right = Minecraft.getInstance().options.mainHand == HumanoidArm.RIGHT ? hand == InteractionHand.MAIN_HAND : hand == InteractionHand.OFF_HAND;
                 matrixStack.translate(0, 0, 0.05);
                 float invertRealProgress = 1.0F - aimProgress;
                 matrixStack.mulPose(Vector3f.ZP.rotationDegrees((25F * invertRealProgress) * (right ? 1F : -1F)));
@@ -119,7 +118,7 @@ public class TwoHandedPose extends WeaponPose
     }
 
     @Override
-    public void renderFirstPersonArms(ClientPlayerEntity player, HandSide hand, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, float partialTicks)
+    public void renderFirstPersonArms(LocalPlayer player, HumanoidArm hand, ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, float partialTicks)
     {
         matrixStack.translate(0, 0, -1);
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
@@ -129,10 +128,10 @@ public class TwoHandedPose extends WeaponPose
         float reloadProgress = ReloadHandler.get().getReloadProgress(partialTicks, stack);
         matrixStack.translate(reloadProgress * 0.5, -reloadProgress, -reloadProgress * 0.5);
 
-        int side = hand.getOpposite() == HandSide.RIGHT ? 1 : -1;
+        int side = hand.getOpposite() == HumanoidArm.RIGHT ? 1 : -1;
         matrixStack.translate(6 * side * 0.0625, -0.585, -0.5);
 
-        if(Minecraft.getInstance().player.getModelName().equals("slim") && hand.getOpposite() == HandSide.LEFT)
+        if(Minecraft.getInstance().player.getModelName().equals("slim") && hand.getOpposite() == HumanoidArm.LEFT)
         {
             matrixStack.translate(0.03125F * -side, 0, 0);
         }
@@ -150,9 +149,9 @@ public class TwoHandedPose extends WeaponPose
         double centerOffset = 2.5;
         if(Minecraft.getInstance().player.getModelName().equals("slim"))
         {
-            centerOffset += hand == HandSide.RIGHT ? 0.2 : 0.8;
+            centerOffset += hand == HumanoidArm.RIGHT ? 0.2 : 0.8;
         }
-        centerOffset = hand == HandSide.RIGHT ? -centerOffset : centerOffset;
+        centerOffset = hand == HumanoidArm.RIGHT ? -centerOffset : centerOffset;
         matrixStack.translate(centerOffset * 0.0625, -0.4, -0.975);
 
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(80F));
@@ -162,7 +161,7 @@ public class TwoHandedPose extends WeaponPose
     }
 
     @Override
-    public boolean applyOffhandTransforms(PlayerEntity player, PlayerModel model, ItemStack stack, MatrixStack matrixStack, float partialTicks)
+    public boolean applyOffhandTransforms(Player player, PlayerModel model, ItemStack stack, PoseStack matrixStack, float partialTicks)
     {
         return GripType.applyBackTransforms(player, matrixStack);
     }

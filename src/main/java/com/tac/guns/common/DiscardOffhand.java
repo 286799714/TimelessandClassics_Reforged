@@ -1,9 +1,9 @@
 package com.tac.guns.common;
 
 import com.tac.guns.Reference;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -25,9 +25,9 @@ public class DiscardOffhand {
     public static void onChange(LivingEquipmentChangeEvent event)
     {
         LivingEntity entity = event.getEntityLiving();
-        if (entity instanceof PlayerEntity && !entity.getCommandSenderWorld().isClientSide)
+        if (entity instanceof Player && !entity.getCommandSenderWorld().isClientSide)
         {
-            if (event.getSlot() == EquipmentSlotType.MAINHAND)
+            if (event.getSlot() == EquipmentSlot.MAINHAND)
             {
                 //  Whenever the player changes his main hand item,
                 //he enters a short safe-time where offhand item won't be discarded.
@@ -70,7 +70,7 @@ public class DiscardOffhand {
         }
     }
 
-    public static boolean isSafeTime(PlayerEntity entity)
+    public static boolean isSafeTime(Player entity)
     {
         Integer safeTime = mapping.get(entity);
         if (safeTime == null)

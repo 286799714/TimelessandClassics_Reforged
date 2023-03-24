@@ -1,12 +1,11 @@
 package com.fasterxml.jackson.databind.ser.std;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
+
 import java.io.IOException;
 import java.text.DateFormat;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 
 /**
  * Compared to regular {@link java.util.Date} serialization, we do use String

@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind.deser.impl;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+
+import java.io.IOException;
 
 /**
  * Special bogus "serializer" that will throw

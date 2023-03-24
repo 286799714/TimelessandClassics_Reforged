@@ -1,14 +1,13 @@
 package com.fasterxml.jackson.databind.deser.std;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.UUID;
-
 import com.fasterxml.jackson.core.Base64Variants;
-
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.UUID;
 
 public class UUIDDeserializer extends FromStringDeserializer<UUID>
 {

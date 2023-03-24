@@ -1,11 +1,13 @@
 package com.fasterxml.jackson.core.util;
 
-import java.io.*;
-import java.util.Properties;
-import java.util.regex.Pattern;
-
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.Versioned;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.regex.Pattern;
 
 /**
  * Functionality for supporting exposing of component {@link Version}s.

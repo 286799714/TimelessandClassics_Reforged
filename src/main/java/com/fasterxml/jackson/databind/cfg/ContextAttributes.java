@@ -1,6 +1,8 @@
 package com.fasterxml.jackson.databind.cfg;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Helper class used for storing and accessing per-call attributes.

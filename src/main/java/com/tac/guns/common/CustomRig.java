@@ -1,14 +1,12 @@
 package com.tac.guns.common;
 
-import com.tac.guns.annotation.Ignored;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class CustomRig implements INBTSerializable<CompoundNBT>
+public class CustomRig implements INBTSerializable<CompoundTag>
 {
     public Rig rig;
 
@@ -18,15 +16,15 @@ public class CustomRig implements INBTSerializable<CompoundNBT>
     }
 
     @Override
-    public CompoundNBT serializeNBT()
+    public CompoundTag serializeNBT()
     {
-        CompoundNBT compound = new CompoundNBT();
+        CompoundTag compound = new CompoundTag();
         compound.put("Rig", this.rig.serializeNBT());
         return compound;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT compound)
+    public void deserializeNBT(CompoundTag compound)
     {
         this.rig = Rig.create(compound.getCompound("Rig"));
     }

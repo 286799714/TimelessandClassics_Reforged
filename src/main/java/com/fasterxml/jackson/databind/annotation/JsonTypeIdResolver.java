@@ -1,13 +1,12 @@
 package com.fasterxml.jackson.databind.annotation;
 
+import com.fasterxml.jackson.annotation.JacksonAnnotation;
+import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-
-import com.fasterxml.jackson.annotation.JacksonAnnotation;
-import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 
 /**
  * Annotation that can be used to plug a custom type identifier handler

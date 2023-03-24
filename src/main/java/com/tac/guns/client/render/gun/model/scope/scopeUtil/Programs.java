@@ -1,11 +1,7 @@
 package com.tac.guns.client.render.gun.model.scope.scopeUtil;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
-import org.lwjgl.opengl.GL30;
 
 public class Programs {
     public static int normalProgram;

@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.databind;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+
+import java.io.IOException;
 
 /**
  * Interface that can be implemented by objects that know how to

@@ -1,16 +1,18 @@
 package com.fasterxml.jackson.databind.type;
 
-import java.io.IOException;
-import java.lang.reflect.TypeVariable;
-import java.util.*;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonToken;
-
 import com.fasterxml.jackson.core.type.WritableTypeId;
-
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonSerializable;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+
+import java.io.IOException;
+import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class TypeBase
     extends JavaType

@@ -2,8 +2,8 @@ package com.tac.guns.network;
 
 import com.google.common.collect.ImmutableMap;
 import com.tac.guns.common.*;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.Validate;
 
 import javax.annotation.Nullable;
@@ -37,9 +37,9 @@ public class HandshakeMessages
 
     static class C2SAcknowledge extends LoginIndexedMessage
     {
-        void encode(PacketBuffer buf) {}
+        void encode(FriendlyByteBuf buf) {}
 
-        static C2SAcknowledge decode(PacketBuffer buf)
+        static C2SAcknowledge decode(FriendlyByteBuf buf)
         {
             return new C2SAcknowledge();
         }
@@ -52,7 +52,7 @@ public class HandshakeMessages
 
         public S2CUpdateGuns() {}
 
-        void encode(PacketBuffer buffer)
+        void encode(FriendlyByteBuf buffer)
         {
             /* This shouldn't be null as it's encoded from the logical server but
              * it's just here to avoiding IDE warnings */
@@ -62,7 +62,7 @@ public class HandshakeMessages
             CustomGunLoader.get().writeCustomGuns(buffer);
         }
 
-        static S2CUpdateGuns decode(PacketBuffer buffer)
+        static S2CUpdateGuns decode(FriendlyByteBuf buffer)
         {
             S2CUpdateGuns message = new S2CUpdateGuns();
             message.registeredGuns = NetworkGunManager.readRegisteredGuns(buffer);
@@ -93,7 +93,7 @@ public class HandshakeMessages
 
         public S2CUpdateRigs() {}
 
-        void encode(PacketBuffer buffer)
+        void encode(FriendlyByteBuf buffer)
         {
             Validate.notNull(NetworkRigManager.get());
             NetworkRigManager.get().writeRegisteredRigs(buffer);
@@ -101,7 +101,7 @@ public class HandshakeMessages
             CustomRigLoader.get().writeCustomRigs(buffer);
         }
 
-        static S2CUpdateRigs decode(PacketBuffer buffer)
+        static S2CUpdateRigs decode(FriendlyByteBuf buffer)
         {
             S2CUpdateRigs message = new S2CUpdateRigs();
             message.registeredRigs = NetworkRigManager.readRegisteredRigs(buffer);

@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind.introspect;
 
-import java.lang.reflect.Type;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeBindings;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import java.lang.reflect.Type;
 
 /**
  * Interface that defines API used by members (like {@link AnnotatedMethod})

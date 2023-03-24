@@ -3,9 +3,9 @@ package com.tac.guns.util;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.Rig;
 import com.tac.guns.init.ModEnchantments;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -40,7 +40,7 @@ public class RigEnchantmentHelper
         if(level > 0)
         {
             float newRate = rate * (0.25F * level);
-            rate -= MathHelper.clamp(newRate, 0, rate);
+            rate -= Mth.clamp(newRate, 0, rate);
         }
         return rate;
     }

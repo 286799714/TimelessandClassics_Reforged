@@ -1,20 +1,18 @@
 package com.tac.guns.extra_events;
 
 
-import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
-import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.KeybindTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.KeybindComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -65,7 +63,7 @@ public class TacShootingEvent
             }
             else // Safety clicks
             {
-                event.getPlayer().displayClientMessage(new TranslationTextComponent("info." + Reference.MOD_ID + ".gun_safety_lock", new KeybindTextComponent("key.tac.fireSelect").getString().toUpperCase(Locale.ENGLISH)).withStyle(TextFormatting.GREEN) ,true);
+                event.getPlayer().displayClientMessage(new TranslatableComponent("info." + Reference.MOD_ID + ".gun_safety_lock", new KeybindComponent("key.tac.fireSelect").getString().toUpperCase(Locale.ENGLISH)).withStyle(ChatFormatting.GREEN) ,true);
                 event.setCanceled(true);
             }
 

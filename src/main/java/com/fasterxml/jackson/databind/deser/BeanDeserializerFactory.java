@@ -1,7 +1,5 @@
 package com.fasterxml.jackson.databind.deser;
 
-import java.util.*;
-
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -16,6 +14,8 @@ import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.fasterxml.jackson.databind.util.IgnorePropertiesUtil;
 import com.fasterxml.jackson.databind.util.SimpleBeanPropertyDefinition;
+
+import java.util.*;
 
 /**
  * Concrete deserializer factory class that adds full Bean deserializer

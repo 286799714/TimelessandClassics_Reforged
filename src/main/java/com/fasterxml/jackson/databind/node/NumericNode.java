@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.databind.node;
 
+import com.fasterxml.jackson.core.JsonParser;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
-import com.fasterxml.jackson.core.JsonParser;
 
 /**
  * Intermediate value node used for numeric nodes.

@@ -1,8 +1,7 @@
 package com.fasterxml.jackson.databind.introspect;
 
 import com.fasterxml.jackson.core.Version;
-
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
 
 /**
  * Dummy, "no-operation" implementation of {@link AnnotationIntrospector}.

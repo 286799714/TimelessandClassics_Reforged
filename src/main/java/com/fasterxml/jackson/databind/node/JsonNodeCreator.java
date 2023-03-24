@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.databind.node;
 
+import com.fasterxml.jackson.databind.util.RawValue;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
-import com.fasterxml.jackson.databind.util.RawValue;
 
 /**
  * Interface that defines common "creator" functionality implemented

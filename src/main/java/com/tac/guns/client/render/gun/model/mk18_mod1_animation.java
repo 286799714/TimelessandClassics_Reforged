@@ -1,34 +1,21 @@
 package com.tac.guns.client.render.gun.model;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.SpecialModels;
-import com.tac.guns.client.render.ScreenTextureState;
 import com.tac.guns.client.render.animation.MK18MOD1AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
-import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.CooldownTracker;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
-import net.optifine.render.RenderUtils;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemCooldowns;
+import net.minecraft.world.item.ItemStack;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -41,7 +28,7 @@ import org.lwjgl.opengl.GL11;
 public class mk18_mod1_animation implements IOverrideModel {
 
     @Override
-    public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
+    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay)
     {
         MK18MOD1AnimationController controller = MK18MOD1AnimationController.getInstance();
         matrices.pushPose();
@@ -106,7 +93,7 @@ public class mk18_mod1_animation implements IOverrideModel {
             matrices.pushPose();
             {
                 if(transformType.firstPerson()) {
-                    CooldownTracker tracker = Minecraft.getInstance().player.getCooldowns();
+                    ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
                     float cooldownOg = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
 
                     if (Gun.hasAmmo(stack)) {

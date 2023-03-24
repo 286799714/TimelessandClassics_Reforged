@@ -1,32 +1,25 @@
 package com.tac.guns.common.container;
 
-import com.tac.guns.common.Gun;
-import com.tac.guns.common.container.slot.AttachmentSlot;
 import com.tac.guns.common.container.slot.WeaponColorSegmentSlot;
 import com.tac.guns.init.ModContainers;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.IWeaponColorable;
-import com.tac.guns.item.ScopeItem;
-import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class ColorBenchContainer extends Container
+public class ColorBenchContainer extends AbstractContainerMenu
 {
     private ItemStack weapon;
-    private IInventory playerInventory;
-    private IInventory weaponInventory = new Inventory(IWeaponColorable.WeaponColorSegment.values().length)
+    private Container playerInventory;
+    private Container weaponInventory = new SimpleContainer(IWeaponColorable.WeaponColorSegment.values().length)
     {
         @Override
         public void setChanged()
@@ -35,7 +28,7 @@ public class ColorBenchContainer extends Container
             ColorBenchContainer.this.slotsChanged(this);
         }
     };
-    public ColorBenchContainer(int windowId, PlayerInventory playerInventory)
+    public ColorBenchContainer(int windowId, Inventory playerInventory)
     {
         super(ModContainers.COLOR_BENCH.get(), windowId);
         this.weapon = playerInventory.getSelected();
@@ -64,7 +57,7 @@ public class ColorBenchContainer extends Container
                 this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 160)
                 {
                     @Override
-                    public boolean mayPickup(PlayerEntity playerIn)
+                    public boolean mayPickup(Player playerIn)
                     {
                         return false;
                     }
@@ -78,7 +71,7 @@ public class ColorBenchContainer extends Container
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn)
+    public boolean stillValid(Player playerIn)
     {
         return true;
     }
@@ -130,7 +123,7 @@ public class ColorBenchContainer extends Container
     }*/
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(Player playerIn, int index)
     {
         ItemStack copyStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -193,7 +186,7 @@ public class ColorBenchContainer extends Container
         return copyStack;
     }
 
-    public IInventory getPlayerInventory()
+    public Container getPlayerInventory()
     {
         return this.playerInventory;
     }

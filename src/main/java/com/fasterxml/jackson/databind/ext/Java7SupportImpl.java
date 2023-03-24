@@ -1,12 +1,12 @@
 package com.fasterxml.jackson.databind.ext;
 
-import java.beans.ConstructorProperties;
-import java.beans.Transient;
-
 import com.fasterxml.jackson.databind.PropertyName;
 import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.AnnotatedWithParams;
+
+import java.beans.ConstructorProperties;
+import java.beans.Transient;
 
 /**
  * @since 2.8

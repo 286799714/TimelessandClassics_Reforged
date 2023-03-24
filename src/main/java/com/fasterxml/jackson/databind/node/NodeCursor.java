@@ -1,9 +1,11 @@
 package com.fasterxml.jackson.databind.node;
 
-import java.util.*;
-
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonStreamContext;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Helper class used by {@link TreeTraversingParser} to keep track

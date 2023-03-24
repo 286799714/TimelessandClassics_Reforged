@@ -1,8 +1,8 @@
 package com.fasterxml.jackson.databind.type;
 
-import java.lang.reflect.Type;
-
 import com.fasterxml.jackson.databind.JavaType;
+
+import java.lang.reflect.Type;
 
 /**
  * Class that defines API that can be used to modify details of

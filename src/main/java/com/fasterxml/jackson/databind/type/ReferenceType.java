@@ -1,8 +1,8 @@
 package com.fasterxml.jackson.databind.type;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.databind.JavaType;
+
+import java.util.Objects;
 
 /**
  * Specialized {@link SimpleType} for types that are referential types,

@@ -1,13 +1,18 @@
 package com.fasterxml.jackson.core.json;
 
-import java.io.*;
-
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.format.InputAccessor;
 import com.fasterxml.jackson.core.format.MatchStrength;
-import com.fasterxml.jackson.core.io.*;
+import com.fasterxml.jackson.core.io.IOContext;
+import com.fasterxml.jackson.core.io.MergedStream;
+import com.fasterxml.jackson.core.io.UTF32Reader;
 import com.fasterxml.jackson.core.sym.ByteQuadsCanonicalizer;
 import com.fasterxml.jackson.core.sym.CharsToNameCanonicalizer;
+
+import java.io.*;
 
 /**
  * This class is used to determine the encoding of byte stream

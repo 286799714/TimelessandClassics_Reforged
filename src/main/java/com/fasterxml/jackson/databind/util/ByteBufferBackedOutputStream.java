@@ -1,6 +1,7 @@
 package com.fasterxml.jackson.databind.util;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 /**

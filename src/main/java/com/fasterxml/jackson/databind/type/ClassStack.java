@@ -1,8 +1,8 @@
 package com.fasterxml.jackson.databind.type;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.databind.JavaType;
+
+import java.util.ArrayList;
 
 /**
  * Simple helper class used to keep track of 'call stack' for classes being referenced

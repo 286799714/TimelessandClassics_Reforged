@@ -7,15 +7,11 @@ import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.render.pose.*;
 import com.tac.guns.common.BoundingBoxManager;
+import com.tac.guns.common.GripType;
 import com.tac.guns.common.tooling.CommandsHandler;
 import com.tac.guns.common.tooling.CommandsManager;
-import com.tac.guns.common.GripType;
-import com.tac.guns.common.ProjectileManager;
 import com.tac.guns.datagen.*;
 import com.tac.guns.enchantment.EnchantmentTypes;
-import com.tac.guns.entity.GrenadeEntity;
-import com.tac.guns.entity.MissileEntity;
-import com.tac.guns.extra_events.TacEventListeners;
 import com.tac.guns.init.*;
 import com.tac.guns.inventory.gear.GearSlotsHandler;
 import com.tac.guns.inventory.gear.IWearableItemHandler;
@@ -23,17 +19,16 @@ import com.tac.guns.inventory.gear.armor.IAmmoItemHandler;
 import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -69,7 +64,7 @@ public class GunMod
     public static String curiosRigSlotId = "armor_rig";
     public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
 
-    public static final ItemGroup GROUP = new  ItemGroup(Reference.MOD_ID)
+    public static final CreativeModeTab GROUP = new  CreativeModeTab(Reference.MOD_ID)
     {
         @Override
         public ItemStack makeIcon()
@@ -87,7 +82,7 @@ public class GunMod
         }
     }.setEnchantmentCategories(EnchantmentTypes.GUN, EnchantmentTypes.SEMI_AUTO_GUN);
 
-    public static final ItemGroup PISTOL = new  ItemGroup("Pistols")
+    public static final CreativeModeTab PISTOL = new  CreativeModeTab("Pistols")
     {
         @Override
         public ItemStack makeIcon()
@@ -106,7 +101,7 @@ public class GunMod
             CustomGunManager.fill(items);
         }
     };
-    public static final ItemGroup SMG = new  ItemGroup("SMGs")
+    public static final CreativeModeTab SMG = new  CreativeModeTab("SMGs")
     {
         @Override
         public ItemStack makeIcon()
@@ -123,7 +118,7 @@ public class GunMod
             CustomGunManager.fill(items);
         }
     };
-    public static final ItemGroup RIFLE = new  ItemGroup("AssaultRifles")
+    public static final CreativeModeTab RIFLE = new  CreativeModeTab("AssaultRifles")
     {
         @Override
         public ItemStack makeIcon()
@@ -140,7 +135,7 @@ public class GunMod
             CustomGunManager.fill(items);
         }
     };
-    public static final ItemGroup SNIPER = new  ItemGroup("MarksmanRifles")
+    public static final CreativeModeTab SNIPER = new  CreativeModeTab("MarksmanRifles")
     {
         @Override
         public ItemStack makeIcon()
@@ -157,7 +152,7 @@ public class GunMod
             CustomGunManager.fill(items);
         }
     };
-    public static final ItemGroup SHOTGUN = new  ItemGroup("Shotguns")
+    public static final CreativeModeTab SHOTGUN = new  CreativeModeTab("Shotguns")
     {
         @Override
         public ItemStack makeIcon()
@@ -174,7 +169,7 @@ public class GunMod
             CustomGunManager.fill(items);
         }
     };
-    public static final ItemGroup HEAVY_MATERIAL = new  ItemGroup("HeavyWeapons")
+    public static final CreativeModeTab HEAVY_MATERIAL = new  CreativeModeTab("HeavyWeapons")
     {
         @Override
         public ItemStack makeIcon()
@@ -191,7 +186,7 @@ public class GunMod
             CustomGunManager.fill(items);
         }
     };
-    public static final ItemGroup AMMO = new  ItemGroup("Ammo")
+    public static final CreativeModeTab AMMO = new  CreativeModeTab("Ammo")
     {
         @Override
         public ItemStack makeIcon()
@@ -207,7 +202,7 @@ public class GunMod
             CustomGunManager.fill(items);
         }
     };
-    public static final ItemGroup EXPLOSIVES = new  ItemGroup(Reference.MOD_ID)
+    public static final CreativeModeTab EXPLOSIVES = new  CreativeModeTab(Reference.MOD_ID)
     {
         @Override
         public ItemStack makeIcon()
@@ -273,13 +268,13 @@ public class GunMod
         // First separate, cause only the held ammo is not synced serverToClient, but the wearable is held fine, just use damned Curios next time.
         CapabilityManager.INSTANCE.register(IWearableItemHandler.class, new Capability.IStorage<IWearableItemHandler>() {
             @Override
-            public INBT writeNBT(Capability<IWearableItemHandler> capability, IWearableItemHandler instance, Direction side) {
-                ListNBT nbtTagList = new ListNBT();
+            public Tag writeNBT(Capability<IWearableItemHandler> capability, IWearableItemHandler instance, Direction side) {
+                ListTag nbtTagList = new ListTag();
                 int size = instance.getSlots();
                 for (int i = 0; i < size; i++) {
                     ItemStack stack = instance.getStackInSlot(i);
                     if (!stack.isEmpty()) {
-                        CompoundNBT itemTag = new CompoundNBT();
+                        CompoundTag itemTag = new CompoundTag();
                         itemTag.putInt("Slot", i);
                         stack.save(itemTag);
                         nbtTagList.add(itemTag);
@@ -289,13 +284,13 @@ public class GunMod
             }
 
             @Override
-            public void readNBT(Capability<IWearableItemHandler> capability, IWearableItemHandler instance, Direction side, INBT base) {
+            public void readNBT(Capability<IWearableItemHandler> capability, IWearableItemHandler instance, Direction side, Tag base) {
                 if (!(instance instanceof IItemHandlerModifiable))
                     throw new RuntimeException("IItemHandler instance does not implement IItemHandlerModifiable_TaC");
                 IItemHandlerModifiable itemHandlerModifiable = (IItemHandlerModifiable) instance;
-                ListNBT tagList = (ListNBT) base;
+                ListTag tagList = (ListTag) base;
                 for (int i = 0; i < tagList.size(); i++) {
-                    CompoundNBT itemTags = tagList.getCompound(i);
+                    CompoundTag itemTags = tagList.getCompound(i);
                     int j = itemTags.getInt("Slot");
 
                     if (j >= 0 && j < instance.getSlots()) {
@@ -307,13 +302,13 @@ public class GunMod
 
         CapabilityManager.INSTANCE.register(IAmmoItemHandler.class, new Capability.IStorage<IAmmoItemHandler>() {
             @Override
-            public INBT writeNBT(Capability<IAmmoItemHandler> capability, IAmmoItemHandler instance, Direction side) {
-                ListNBT nbtTagList = new ListNBT();
+            public Tag writeNBT(Capability<IAmmoItemHandler> capability, IAmmoItemHandler instance, Direction side) {
+                ListTag nbtTagList = new ListTag();
                 int size = instance.getSlots();
                 for (int i = 0; i < size; i++) {
                     ItemStack stack = instance.getStackInSlot(i);
                     if (!stack.isEmpty()) {
-                        CompoundNBT itemTag = new CompoundNBT();
+                        CompoundTag itemTag = new CompoundTag();
                         itemTag.putInt("Slot", i);
                         stack.save(itemTag);
                         nbtTagList.add(itemTag);
@@ -323,13 +318,13 @@ public class GunMod
             }
 
             @Override
-            public void readNBT(Capability<IAmmoItemHandler> capability, IAmmoItemHandler instance, Direction side, INBT base) {
+            public void readNBT(Capability<IAmmoItemHandler> capability, IAmmoItemHandler instance, Direction side, Tag base) {
                 if (!(instance instanceof IItemHandlerModifiable))
                     throw new RuntimeException("IItemHandler instance does not implement IItemHandlerModifiable_TaC");
                 IItemHandlerModifiable itemHandlerModifiable = (IItemHandlerModifiable) instance;
-                ListNBT tagList = (ListNBT) base;
+                ListTag tagList = (ListTag) base;
                 for (int i = 0; i < tagList.size(); i++) {
-                    CompoundNBT itemTags = tagList.getCompound(i);
+                    CompoundTag itemTags = tagList.getCompound(i);
                     int j = itemTags.getInt("Slot");
 
                     if (j >= 0 && j < instance.getSlots()) {

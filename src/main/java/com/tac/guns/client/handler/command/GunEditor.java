@@ -1,16 +1,5 @@
 package com.tac.guns.client.handler.command;
 
-import static com.tac.guns.GunMod.LOGGER;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-
-import com.tac.guns.client.KeyBind;
-import org.apache.logging.log4j.Level;
-import org.lwjgl.glfw.GLFW;
-
 import com.google.gson.GsonBuilder;
 import com.tac.guns.Config;
 import com.tac.guns.client.InputHandler;
@@ -18,17 +7,24 @@ import com.tac.guns.common.Gun;
 import com.tac.guns.common.tooling.CommandsHandler;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
-
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.apache.logging.log4j.Level;
+import org.lwjgl.glfw.GLFW;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+
+import static com.tac.guns.GunMod.LOGGER;
 
 public class GunEditor
 {
@@ -180,7 +176,7 @@ public class GunEditor
         boolean isControlDown = InputHandler.CONTROLLY.down || InputHandler.CONTROLLYR.down; // Increase Module Size
         boolean isShiftDown = InputHandler.SHIFTY.down || InputHandler.SHIFTYR.down; // Increase Step Size
         boolean isAltDown = InputHandler.ALTY.down || InputHandler.ALTYR.down; // Swap X -> Z modify
-        PlayerEntity player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         Gun gunTmp = gunItem.getGun();
         if(InputHandler.P.down)
         {
@@ -188,80 +184,80 @@ public class GunEditor
                 stepModifier*=10;
             if(isControlDown)
                 stepModifier/=10;
-            player.displayClientMessage(new TranslationTextComponent("VerticalRecoilAngle: "+gunTmp.getGeneral().getRecoilAngle()+" | HorizontalRecoilAngle: "+gunTmp.getGeneral().getHorizontalRecoilAngle()+" | RecoilKick: "+gunTmp.getGeneral().getRecoilKick()), true);
+            player.displayClientMessage(new TranslatableComponent("VerticalRecoilAngle: "+gunTmp.getGeneral().getRecoilAngle()+" | HorizontalRecoilAngle: "+gunTmp.getGeneral().getHorizontalRecoilAngle()+" | RecoilKick: "+gunTmp.getGeneral().getRecoilKick()), true);
             if (isLeft) {
                 this.horizontalRecoilAngleMod += 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("HorizontalRecoilAngle: "+gunTmp.getGeneral().getHorizontalRecoilAngle()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("HorizontalRecoilAngle: "+gunTmp.getGeneral().getHorizontalRecoilAngle()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isRight) {
                 this.horizontalRecoilAngleMod -= 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("HorizontalRecoilAngle: "+gunTmp.getGeneral().getHorizontalRecoilAngle()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("HorizontalRecoilAngle: "+gunTmp.getGeneral().getHorizontalRecoilAngle()).withStyle(ChatFormatting.DARK_RED), true);
             }
             else if (isUp && isAltDown) {
                 this.recoilKickMod += 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("RecoilKick: "+gunTmp.getGeneral().getRecoilKick()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("RecoilKick: "+gunTmp.getGeneral().getRecoilKick()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown && isAltDown) {
                 this.recoilKickMod -= 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("RecoilKick: "+gunTmp.getGeneral().getRecoilKick()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("RecoilKick: "+gunTmp.getGeneral().getRecoilKick()).withStyle(ChatFormatting.DARK_RED), true);
             }
             else if (isUp) {
                 this.recoilAngleMod += 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("VerticalRecoilAngle: "+gunTmp.getGeneral().getRecoilAngle()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("VerticalRecoilAngle: "+gunTmp.getGeneral().getRecoilAngle()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.recoilAngleMod -= 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("VerticalRecoilAngle: "+gunTmp.getGeneral().getRecoilAngle()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("VerticalRecoilAngle: "+gunTmp.getGeneral().getRecoilAngle()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.L.down)
         {
             if(isShiftDown)
                 stepModifier*=5;
-            player.displayClientMessage(new TranslationTextComponent("weaponRecoilOffset: "+gunTmp.getGeneral().getWeaponRecoilOffset()+" | RecoilDuration: "+gunTmp.getGeneral().getRecoilDuration()), true);
+            player.displayClientMessage(new TranslatableComponent("weaponRecoilOffset: "+gunTmp.getGeneral().getWeaponRecoilOffset()+" | RecoilDuration: "+gunTmp.getGeneral().getRecoilDuration()), true);
             if (isLeft) {
                 this.weaponRecoilDurationMod += 0.0025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("weaponRecoilOffset: "+gunTmp.getGeneral().getWeaponRecoilOffset()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("weaponRecoilOffset: "+gunTmp.getGeneral().getWeaponRecoilOffset()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isRight) {
                 this.weaponRecoilDurationMod -= 0.0025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("weaponRecoilOffset: "+gunTmp.getGeneral().getWeaponRecoilOffset()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("weaponRecoilOffset: "+gunTmp.getGeneral().getWeaponRecoilOffset()).withStyle(ChatFormatting.DARK_RED), true);
             }
             else if (isUp) {
                 this.recoilDurationMod += 0.0025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("RecoilDuration: "+gunTmp.getGeneral().getRecoilDuration()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("RecoilDuration: "+gunTmp.getGeneral().getRecoilDuration()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.recoilDurationMod -= 0.0025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("RecoilDuration: "+gunTmp.getGeneral().getRecoilDuration()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("RecoilDuration: "+gunTmp.getGeneral().getRecoilDuration()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.O.down)
         {
             if(isShiftDown)
                 stepModifier*=5;
-            player.displayClientMessage(new TranslationTextComponent("CameraRecoilModifier: "+gunTmp.getGeneral().getCameraRecoilModifier()),true);
+            player.displayClientMessage(new TranslatableComponent("CameraRecoilModifier: "+gunTmp.getGeneral().getCameraRecoilModifier()),true);
             if (isUp) {
                 this.cameraRecoilModifierMod += 0.0025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("CameraRecoilModifier: "+gunTmp.getGeneral().getCameraRecoilModifier()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("CameraRecoilModifier: "+gunTmp.getGeneral().getCameraRecoilModifier()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.cameraRecoilModifierMod -= 0.0025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("CameraRecoilModifier: "+gunTmp.getGeneral().getCameraRecoilModifier()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("CameraRecoilModifier: "+gunTmp.getGeneral().getCameraRecoilModifier()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.K.down)
         {
             if(isShiftDown)
                 stepModifier*=5;
-            player.displayClientMessage(new TranslationTextComponent("RecoilAdsReduction: "+gunTmp.getGeneral().getRecoilAdsReduction()),true);
+            player.displayClientMessage(new TranslatableComponent("RecoilAdsReduction: "+gunTmp.getGeneral().getRecoilAdsReduction()),true);
             if (isUp) {
                 this.recoilAdsReductionMod += 0.001 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("RecoilAdsReduction: "+gunTmp.getGeneral().getRecoilAdsReduction()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("RecoilAdsReduction: "+gunTmp.getGeneral().getRecoilAdsReduction()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.recoilAdsReductionMod -= 0.001 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("RecoilAdsReduction: "+gunTmp.getGeneral().getRecoilAdsReduction()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("RecoilAdsReduction: "+gunTmp.getGeneral().getRecoilAdsReduction()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.M.down)
@@ -270,14 +266,14 @@ public class GunEditor
                 stepModifier*=10;
             if(isControlDown)
                 stepModifier/=10;
-            player.displayClientMessage(new TranslationTextComponent("Inaccuracy in Degrees: "+gunTmp.getGeneral().getSpread()),true);
+            player.displayClientMessage(new TranslatableComponent("Inaccuracy in Degrees: "+gunTmp.getGeneral().getSpread()),true);
             if (isUp) {
                 this.spreadMod += 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Inaccuracy in Degrees: "+gunTmp.getGeneral().getSpread()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("Inaccuracy in Degrees: "+gunTmp.getGeneral().getSpread()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.spreadMod -= 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Inaccuracy in Degrees: "+gunTmp.getGeneral().getSpread()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("Inaccuracy in Degrees: "+gunTmp.getGeneral().getSpread()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.I.down)
@@ -286,50 +282,50 @@ public class GunEditor
                 stepModifier*=10;
             if(isControlDown)
                 stepModifier/=10;
-            player.displayClientMessage(new TranslationTextComponent("Weight in Kilograms: "+gunTmp.getGeneral().getWeightKilo()),true);
+            player.displayClientMessage(new TranslatableComponent("Weight in Kilograms: "+gunTmp.getGeneral().getWeightKilo()),true);
             if (isUp) {
                 this.weightKiloMod += 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Weight in Kilograms: "+gunTmp.getGeneral().getWeightKilo()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("Weight in Kilograms: "+gunTmp.getGeneral().getWeightKilo()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.weightKiloMod -= 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Weight in Kilograms: "+gunTmp.getGeneral().getWeightKilo()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("Weight in Kilograms: "+gunTmp.getGeneral().getWeightKilo()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.J.down)
         {
-            player.displayClientMessage(new TranslationTextComponent("Rate in Ticks: "+gunTmp.getGeneral().getRate()+" | Burst Rate in Ticks:: "+gunTmp.getGeneral().getBurstRate()),true);
+            player.displayClientMessage(new TranslatableComponent("Rate in Ticks: "+gunTmp.getGeneral().getRate()+" | Burst Rate in Ticks:: "+gunTmp.getGeneral().getBurstRate()),true);
             if (isLeft) {
                 this.burstRateMod += 0.5 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Burst Rate in Ticks: "+gunTmp.getGeneral().getBurstRate()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("Burst Rate in Ticks: "+gunTmp.getGeneral().getBurstRate()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isRight) {
                 this.burstRateMod -= 0.5 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Burst Rate in Ticks: "+gunTmp.getGeneral().getBurstRate()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("Burst Rate in Ticks: "+gunTmp.getGeneral().getBurstRate()).withStyle(ChatFormatting.DARK_RED), true);
             }
             else if (isUp) {
                 this.rateMod += 0.5;
-                player.displayClientMessage(new TranslationTextComponent("Rate in Ticks: "+gunTmp.getGeneral().getRate()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("Rate in Ticks: "+gunTmp.getGeneral().getRate()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.rateMod -= 0.5;
-                player.displayClientMessage(new TranslationTextComponent("Rate in Ticks: "+gunTmp.getGeneral().getRate()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("Rate in Ticks: "+gunTmp.getGeneral().getRate()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.N.down)
         {
-            player.displayClientMessage(new TranslationTextComponent("Projectile Amount: "+gunTmp.getGeneral().getProjectileAmount()),true);
+            player.displayClientMessage(new TranslatableComponent("Projectile Amount: "+gunTmp.getGeneral().getProjectileAmount()),true);
             if (isUp) {
                 this.projectileAmountMod += 0.5;
-                player.displayClientMessage(new TranslationTextComponent("Projectile Amount: "+gunTmp.getGeneral().getProjectileAmount()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("Projectile Amount: "+gunTmp.getGeneral().getProjectileAmount()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.projectileAmountMod -= 0.5;
-                player.displayClientMessage(new TranslationTextComponent("Projectile Amount: "+gunTmp.getGeneral().getProjectileAmount()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("Projectile Amount: "+gunTmp.getGeneral().getProjectileAmount()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
 
-        CompoundNBT gun = getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); // Copy to ensure we are grabbing a copy of this data. new CompoundNBT();//
+        CompoundTag gun = getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); // Copy to ensure we are grabbing a copy of this data. new CompoundNBT();//
         gun.getCompound("General").remove("Rate");
         gun.getCompound("General").remove("RecoilAngle");
         gun.getCompound("General").remove("RecoilKick");
@@ -371,7 +367,7 @@ public class GunEditor
         boolean isDown = event.getKey() == GLFW.GLFW_KEY_DOWN;
         boolean isControlDown = InputHandler.CONTROLLY.down || InputHandler.CONTROLLYR.down; // Increase Module Size
         boolean isShiftDown = InputHandler.SHIFTY.down || InputHandler.SHIFTYR.down; // Increase Step Size
-        PlayerEntity player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         Gun gunTmp = gunItem.getGun();
         if(InputHandler.P.down)
         {
@@ -379,14 +375,14 @@ public class GunEditor
                 stepModifier*=10;
             if(isControlDown)
                 stepModifier/=10;
-            player.displayClientMessage(new TranslationTextComponent("Damage: "+gunTmp.getProjectile().getDamage()), true);
+            player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getDamage()), true);
             if (isUp) {
                 this.damageMod += 0.025f * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Damage: "+gunTmp.getProjectile().getDamage()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getDamage()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.damageMod -= 0.025f * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Damage: "+gunTmp.getProjectile().getDamage()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getDamage()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.L.down)
@@ -395,44 +391,44 @@ public class GunEditor
                 stepModifier*=10;
             if(isControlDown)
                 stepModifier/=10;
-            player.displayClientMessage(new TranslationTextComponent("Projectile size: "+gunTmp.getProjectile().getSize()), true);
+            player.displayClientMessage(new TranslatableComponent("Projectile size: "+gunTmp.getProjectile().getSize()), true);
             if (isUp) {
                 this.sizePrjMod += 0.025f * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Projectile size: "+gunTmp.getProjectile().getSize()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("Projectile size: "+gunTmp.getProjectile().getSize()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.sizePrjMod -= 0.025f * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Projectile size: "+gunTmp.getProjectile().getSize()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("Projectile size: "+gunTmp.getProjectile().getSize()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.O.down)
         {
             if(isShiftDown)
                 stepModifier*=10;
-            player.displayClientMessage(new TranslationTextComponent("Speed: "+gunTmp.getProjectile().getSpeed()), true);
+            player.displayClientMessage(new TranslatableComponent("Speed: "+gunTmp.getProjectile().getSpeed()), true);
             if (isUp) {
                 this.speedMod += 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Speed: "+gunTmp.getProjectile().getSpeed()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("Speed: "+gunTmp.getProjectile().getSpeed()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.speedMod -= 0.025 * stepModifier;
-                player.displayClientMessage(new TranslationTextComponent("Speed: "+gunTmp.getProjectile().getSpeed()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("Speed: "+gunTmp.getProjectile().getSpeed()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.K.down)
         {
-            player.displayClientMessage(new TranslationTextComponent("Ticks bullet Exists for: "+gunTmp.getProjectile().getLife()), true);
+            player.displayClientMessage(new TranslatableComponent("Ticks bullet Exists for: "+gunTmp.getProjectile().getLife()), true);
             if (isUp) {
                 this.lifeMod += 0.5;
-                player.displayClientMessage(new TranslationTextComponent("Ticks bullet Exists for: "+gunTmp.getProjectile().getLife()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("Ticks bullet Exists for: "+gunTmp.getProjectile().getLife()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.lifeMod -= 0.5;
-                player.displayClientMessage(new TranslationTextComponent("Ticks bullet Exists for: "+gunTmp.getProjectile().getLife()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("Ticks bullet Exists for: "+gunTmp.getProjectile().getLife()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
 
-        CompoundNBT gun = getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); // Copy to ensure we are grabbing a copy of this data. new CompoundNBT();//
+        CompoundTag gun = getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); // Copy to ensure we are grabbing a copy of this data. new CompoundNBT();//
         gun.getCompound("Projectile").remove("Damage");
         gun.getCompound("Projectile").remove("Size");
         gun.getCompound("Projectile").remove("Speed");
@@ -460,69 +456,69 @@ public class GunEditor
         double stepModifier = 1;
         boolean isUp = event.getKey() == GLFW.GLFW_KEY_UP;
         boolean isDown = event.getKey() == GLFW.GLFW_KEY_DOWN;
-        PlayerEntity player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         Gun gunTmp = gunItem.getGun();
         if(InputHandler.P.down)
         {
-            player.displayClientMessage(new TranslationTextComponent("ReloadMagTimer: "+gunTmp.getReloads().getReloadMagTimer()), true);
+            player.displayClientMessage(new TranslatableComponent("ReloadMagTimer: "+gunTmp.getReloads().getReloadMagTimer()), true);
             if (isUp) {
                 this.reloadMagTimerMod += 0.5;
-                player.displayClientMessage(new TranslationTextComponent("ReloadMagTimer: "+gunTmp.getReloads().getReloadMagTimer()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("ReloadMagTimer: "+gunTmp.getReloads().getReloadMagTimer()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.reloadMagTimerMod -= 0.5;
-                player.displayClientMessage(new TranslationTextComponent("ReloadMagTimer: "+gunTmp.getReloads().getReloadMagTimer()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("ReloadMagTimer: "+gunTmp.getReloads().getReloadMagTimer()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.L.down)
         {
-            player.displayClientMessage(new TranslationTextComponent("AdditionalReloadEmptyMagTimer: "+gunTmp.getReloads().getAdditionalReloadEmptyMagTimer()), true);
+            player.displayClientMessage(new TranslatableComponent("AdditionalReloadEmptyMagTimer: "+gunTmp.getReloads().getAdditionalReloadEmptyMagTimer()), true);
             if (isUp) {
                 this.additionalReloadEmptyMagTimerMod += 0.5;
-                player.displayClientMessage(new TranslationTextComponent("AdditionalReloadEmptyMagTimer: "+gunTmp.getReloads().getAdditionalReloadEmptyMagTimer()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("AdditionalReloadEmptyMagTimer: "+gunTmp.getReloads().getAdditionalReloadEmptyMagTimer()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.additionalReloadEmptyMagTimerMod -= 0.5;
-                player.displayClientMessage(new TranslationTextComponent("AdditionalReloadEmptyMagTimer: "+gunTmp.getReloads().getAdditionalReloadEmptyMagTimer()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("AdditionalReloadEmptyMagTimer: "+gunTmp.getReloads().getAdditionalReloadEmptyMagTimer()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.O.down)
         {
-            player.displayClientMessage(new TranslationTextComponent("ReloadAmount: "+gunTmp.getReloads().getReloadAmount()), true);
+            player.displayClientMessage(new TranslatableComponent("ReloadAmount: "+gunTmp.getReloads().getReloadAmount()), true);
             if (isUp) {
                 this.reloadAmountMod += 0.5;
-                player.displayClientMessage(new TranslationTextComponent("ReloadAmount: "+gunTmp.getReloads().getReloadAmount()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("ReloadAmount: "+gunTmp.getReloads().getReloadAmount()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.reloadAmountMod -= 0.5;
-                player.displayClientMessage(new TranslationTextComponent("ReloadAmount: "+gunTmp.getReloads().getReloadAmount()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("ReloadAmount: "+gunTmp.getReloads().getReloadAmount()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.K.down)
         {
-            player.displayClientMessage(new TranslationTextComponent("PreReloadPauseTicks: "+gunTmp.getReloads().getPreReloadPauseTicks()), true);
+            player.displayClientMessage(new TranslatableComponent("PreReloadPauseTicks: "+gunTmp.getReloads().getPreReloadPauseTicks()), true);
             if (isUp) {
                 this.preReloadPauseTicksMod += 0.5;
-                player.displayClientMessage(new TranslationTextComponent("PreReloadPauseTicks: "+gunTmp.getReloads().getPreReloadPauseTicks()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("PreReloadPauseTicks: "+gunTmp.getReloads().getPreReloadPauseTicks()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.preReloadPauseTicksMod -= 0.5;
-                player.displayClientMessage(new TranslationTextComponent("PreReloadPauseTicks: "+gunTmp.getReloads().getPreReloadPauseTicks()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("PreReloadPauseTicks: "+gunTmp.getReloads().getPreReloadPauseTicks()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(InputHandler.M.down)
         {
-            player.displayClientMessage(new TranslationTextComponent("InterReloadPauseTicks: "+gunTmp.getReloads().getinterReloadPauseTicks()), true);
+            player.displayClientMessage(new TranslatableComponent("InterReloadPauseTicks: "+gunTmp.getReloads().getinterReloadPauseTicks()), true);
             if (isUp) {
                 this.interReloadPauseTicksMod += 0.5;
-                player.displayClientMessage(new TranslationTextComponent("InterReloadPauseTicks: "+gunTmp.getReloads().getinterReloadPauseTicks()).withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("InterReloadPauseTicks: "+gunTmp.getReloads().getinterReloadPauseTicks()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.interReloadPauseTicksMod -= 0.5;
-                player.displayClientMessage(new TranslationTextComponent("InterReloadPauseTicks: "+gunTmp.getReloads().getinterReloadPauseTicks()).withStyle(TextFormatting.DARK_RED), true);
+                player.displayClientMessage(new TranslatableComponent("InterReloadPauseTicks: "+gunTmp.getReloads().getinterReloadPauseTicks()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
-        CompoundNBT gun = getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); // Copy to ensure we are grabbing a copy of this data. new CompoundNBT();//
+        CompoundTag gun = getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); // Copy to ensure we are grabbing a copy of this data. new CompoundNBT();//
         gun.getCompound("Reloads").remove("ReloadSpeed");
         gun.getCompound("Reloads").remove("ReloadMagTimer");
         gun.getCompound("Reloads").remove("AdditionalReloadEmptyMagTimer");
@@ -596,7 +592,7 @@ public class GunEditor
         else if (isDown)
             this.yMod -= 0.1*stepModifier;
 
-        CompoundNBT gun = this.getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); // Copy to ensure we are grabbing a copy of this data. new CompoundNBT();//
+        CompoundTag gun = this.getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); // Copy to ensure we are grabbing a copy of this data. new CompoundNBT();//
         if(this.mode == TaCWeaponDevModes.flash) // Flash was apparently brought out of Display, I don't wish to break every gun at this point in time.
         {
             gun.getCompound("Display").getCompound(this.mode.tagName).remove("XOffset");
@@ -661,7 +657,7 @@ public class GunEditor
             else if (isDown)
                 this.sizeMod -= 0.0075 * stepModifier;
         }
-        CompoundNBT gun = getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); //new CompoundNBT();//
+        CompoundTag gun = getMapItem(gunItem.getDescriptionId(), gunItem.getGun()).serializeNBT(); //new CompoundNBT();//
         if(this.mode == TaCWeaponDevModes.flash) // Flash was apparently brought out of Display, I don't wish to break every gun at this point in time.
         {
             gun.getCompound("Display").getCompound(this.mode.tagName).remove("Scale");

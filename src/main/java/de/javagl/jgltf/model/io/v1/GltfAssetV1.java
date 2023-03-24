@@ -26,16 +26,6 @@
  */
 package de.javagl.jgltf.model.io.v1;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
-
 import de.javagl.jgltf.impl.v1.Buffer;
 import de.javagl.jgltf.impl.v1.GlTF;
 import de.javagl.jgltf.impl.v1.Image;
@@ -46,6 +36,12 @@ import de.javagl.jgltf.model.io.GltfAsset;
 import de.javagl.jgltf.model.io.GltfReference;
 import de.javagl.jgltf.model.io.IO;
 import de.javagl.jgltf.model.v1.BinaryGltfV1;
+
+import java.nio.ByteBuffer;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * Implementation of the {@link GltfAsset} interface for glTF 1.0.

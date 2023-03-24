@@ -1,12 +1,9 @@
 package com.fasterxml.jackson.databind.cfg;
 
-import java.text.DateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
-
 import com.fasterxml.jackson.core.Base64Variant;
-
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.AccessorNamingStrategy;
 import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
 import com.fasterxml.jackson.databind.introspect.ClassIntrospector;
@@ -15,6 +12,10 @@ import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
+
+import java.text.DateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Immutable container class used to store simple configuration

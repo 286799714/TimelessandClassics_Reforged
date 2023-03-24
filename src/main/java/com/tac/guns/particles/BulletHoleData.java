@@ -5,17 +5,17 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.tac.guns.init.ModParticleTypes;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class BulletHoleData implements IParticleData
+public class BulletHoleData implements ParticleOptions
 {
     public static final Codec<BulletHoleData> CODEC = RecordCodecBuilder.create((builder) -> {
         return builder.group(Codec.INT.fieldOf("dir").forGetter((data) -> {
@@ -25,7 +25,7 @@ public class BulletHoleData implements IParticleData
         })).apply(builder, BulletHoleData::new);
     });
 
-    public static final IParticleData.IDeserializer<BulletHoleData> DESERIALIZER = new IParticleData.IDeserializer<BulletHoleData>()
+    public static final ParticleOptions.Deserializer<BulletHoleData> DESERIALIZER = new ParticleOptions.Deserializer<BulletHoleData>()
     {
         @Override
         public BulletHoleData fromCommand(ParticleType<BulletHoleData> particleType, StringReader reader) throws CommandSyntaxException
@@ -38,7 +38,7 @@ public class BulletHoleData implements IParticleData
         }
 
         @Override
-        public BulletHoleData fromNetwork(ParticleType<BulletHoleData> particleType, PacketBuffer buffer)
+        public BulletHoleData fromNetwork(ParticleType<BulletHoleData> particleType, FriendlyByteBuf buffer)
         {
             return new BulletHoleData(buffer.readInt(), buffer.readLong());
         }
@@ -76,7 +76,7 @@ public class BulletHoleData implements IParticleData
     }
 
     @Override
-    public void writeToNetwork(PacketBuffer buffer)
+    public void writeToNetwork(FriendlyByteBuf buffer)
     {
         buffer.writeEnum(this.direction);
         buffer.writeBlockPos(this.pos);

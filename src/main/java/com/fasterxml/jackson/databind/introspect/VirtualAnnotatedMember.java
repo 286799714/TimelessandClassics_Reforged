@@ -1,9 +1,10 @@
 package com.fasterxml.jackson.databind.introspect;
 
-import java.lang.reflect.*;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 
 /**
  * Placeholder used by virtual properties as placeholder for

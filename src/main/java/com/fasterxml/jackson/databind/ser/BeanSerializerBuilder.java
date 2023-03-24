@@ -1,11 +1,15 @@
 package com.fasterxml.jackson.databind.ser;
 
-import java.util.*;
-
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.ser.impl.ObjectIdWriter;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Builder class used for aggregating deserialization information about

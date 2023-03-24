@@ -1,8 +1,5 @@
 package com.fasterxml.jackson.databind.deser.impl;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.NullValueProvider;
@@ -11,6 +8,9 @@ import com.fasterxml.jackson.databind.deser.UnresolvedForwardReference;
 import com.fasterxml.jackson.databind.deser.impl.ReadableObjectId.Referring;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.ObjectIdInfo;
+
+import java.io.IOException;
+import java.lang.annotation.Annotation;
 
 public class ObjectIdReferenceProperty extends SettableBeanProperty
 {

@@ -1,15 +1,10 @@
 package com.fasterxml.jackson.databind.deser;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.fasterxml.jackson.databind.type.ArrayType;
-import com.fasterxml.jackson.databind.type.CollectionLikeType;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import com.fasterxml.jackson.databind.type.MapLikeType;
-import com.fasterxml.jackson.databind.type.MapType;
-import com.fasterxml.jackson.databind.type.ReferenceType;
+import com.fasterxml.jackson.databind.type.*;
+
+import java.util.List;
 
 /**
  * Abstract class that defines API for objects that can be registered

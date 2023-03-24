@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind.jsontype;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
+
+import java.io.IOException;
 
 /**
  * Interface that defines standard API for converting types

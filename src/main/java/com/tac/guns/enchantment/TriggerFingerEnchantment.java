@@ -1,11 +1,7 @@
 package com.tac.guns.enchantment;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-
-import net.minecraft.enchantment.Enchantment.Rarity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -14,7 +10,7 @@ public class TriggerFingerEnchantment extends GunEnchantment
 {
     public TriggerFingerEnchantment()
     {
-        super(Rarity.RARE, EnchantmentTypes.SEMI_AUTO_GUN, new EquipmentSlotType[]{EquipmentSlotType.MAINHAND}, Type.WEAPON);
+        super(Rarity.RARE, EnchantmentTypes.SEMI_AUTO_GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.WEAPON);
     }
 
     @Override

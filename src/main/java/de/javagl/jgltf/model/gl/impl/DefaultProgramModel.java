@@ -26,11 +26,11 @@
  */
 package de.javagl.jgltf.model.gl.impl;
 
-import java.util.Objects;
-
 import de.javagl.jgltf.model.gl.ProgramModel;
 import de.javagl.jgltf.model.gl.ShaderModel;
 import de.javagl.jgltf.model.impl.AbstractNamedModelElement;
+
+import java.util.Objects;
 
 /**
  * Implementation of a {@link ProgramModel}

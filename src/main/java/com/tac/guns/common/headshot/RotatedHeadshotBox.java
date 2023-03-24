@@ -1,8 +1,8 @@
 package com.tac.guns.common.headshot;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -33,12 +33,12 @@ public class RotatedHeadshotBox<T extends LivingEntity> extends BasicHeadshotBox
 
     @Nullable
     @Override
-    public AxisAlignedBB getHeadshotBox(T entity)
+    public AABB getHeadshotBox(T entity)
     {
-        AxisAlignedBB headBox = super.getHeadshotBox(entity);
+        AABB headBox = super.getHeadshotBox(entity);
         if(headBox != null)
         {
-            headBox = headBox.move(Vector3d.directionFromRotation(this.rotatePitch ? entity.xRot : 0.0F, this.rotateYaw ? entity.yBodyRot : 0.0F).normalize().scale(this.headZOffset * 0.0625));
+            headBox = headBox.move(Vec3.directionFromRotation(this.rotatePitch ? entity.xRot : 0.0F, this.rotateYaw ? entity.yBodyRot : 0.0F).normalize().scale(this.headZOffset * 0.0625));
             return headBox;
         }
         return null;

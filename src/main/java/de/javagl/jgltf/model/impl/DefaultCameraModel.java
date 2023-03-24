@@ -26,17 +26,17 @@
  */
 package de.javagl.jgltf.model.impl;
 
-import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.function.DoubleSupplier;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import de.javagl.jgltf.impl.v1.Camera;
 import de.javagl.jgltf.impl.v1.Node;
 import de.javagl.jgltf.model.CameraModel;
 import de.javagl.jgltf.model.NodeModel;
 import de.javagl.jgltf.model.Suppliers;
+
+import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.DoubleSupplier;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Implementation of a {@link CameraModel}  

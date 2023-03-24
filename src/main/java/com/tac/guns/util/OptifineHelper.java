@@ -2,15 +2,16 @@ package com.tac.guns.util;
 
 //import org.apache.commons.beanutils.PropertyUtils;
 
+import com.tac.guns.GunMod;
+import net.optifine.shaders.DrawBuffers;
+import net.optifine.shaders.Program;
+import net.optifine.shaders.Shaders;
+import net.optifine.shaders.ShadersFramebuffer;
+import org.apache.logging.log4j.Level;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import com.net.optifine.shaders.TACOptifineShadersHelper;
-import com.tac.guns.GunMod;
-import net.minecraft.client.Minecraft;
-import net.optifine.shaders.*;
-import org.apache.logging.log4j.Level;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

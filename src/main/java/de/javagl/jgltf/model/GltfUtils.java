@@ -26,10 +26,10 @@
  */
 package de.javagl.jgltf.model;
 
-import java.util.Objects;
-
 import de.javagl.jgltf.impl.v1.Asset;
 import de.javagl.jgltf.impl.v1.GlTF;
+
+import java.util.Objects;
 
 /**
  * Utility methods related to {@link GlTF} instances

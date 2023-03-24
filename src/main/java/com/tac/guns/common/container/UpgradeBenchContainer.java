@@ -1,28 +1,25 @@
 package com.tac.guns.common.container;
 
-import com.tac.guns.client.handler.command.GuiEditor;
 import com.tac.guns.crafting.WorkbenchRecipes;
 import com.tac.guns.init.ModContainers;
-import com.tac.guns.item.GunItem;
 import com.tac.guns.tileentity.UpgradeBenchTileEntity;
-import com.tac.guns.tileentity.WorkbenchTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class UpgradeBenchContainer extends Container
+public class UpgradeBenchContainer extends AbstractContainerMenu
 {
     private UpgradeBenchTileEntity upgradeBench;
     private BlockPos pos;
 
-    public UpgradeBenchContainer(int windowId, IInventory playerInventory, UpgradeBenchTileEntity workbench)
+    public UpgradeBenchContainer(int windowId, Container playerInventory, UpgradeBenchTileEntity workbench)
     {
         super(ModContainers.UPGRADE_BENCH.get(), windowId);
         this.upgradeBench = workbench;
@@ -74,13 +71,13 @@ public class UpgradeBenchContainer extends Container
 
     }
     @Override
-    public boolean stillValid(PlayerEntity playerIn)
+    public boolean stillValid(Player playerIn)
     {
         return upgradeBench.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(Player playerIn, int index)
     {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);

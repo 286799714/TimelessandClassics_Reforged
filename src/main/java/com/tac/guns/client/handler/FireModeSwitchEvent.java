@@ -4,7 +4,6 @@ package com.tac.guns.client.handler;
 import com.tac.guns.client.InputHandler;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageFireMode;
-
 import net.minecraft.client.Minecraft;
 
 

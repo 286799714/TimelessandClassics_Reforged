@@ -1,8 +1,9 @@
 package com.fasterxml.jackson.databind;
 
-import java.util.*;
-
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract class that defines API for objects that provide value to

@@ -1,20 +1,19 @@
 package com.tac.guns.client.render.animation.module;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageAnimationRun;
-import com.tac.guns.network.message.MessageAnimationSound;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -64,7 +63,7 @@ public abstract class GunAnimationController {
             previousAnimation = animationMeta;
         }
         if(animationMeta != null && soundMeta != null) {
-            ClientPlayerEntity player = Minecraft.getInstance().player;
+            LocalPlayer player = Minecraft.getInstance().player;
             if(player == null) return;
             if(animationMeta.getResourceLocation() == null || soundMeta.getResourceLocation() == null)
                 return;
@@ -91,7 +90,7 @@ public abstract class GunAnimationController {
             Animations.stopAnimation(previousAnimation);
         }
         if(previousAnimation != null && previousSound != null){
-            ClientPlayerEntity player = Minecraft.getInstance().player;
+            LocalPlayer player = Minecraft.getInstance().player;
             if(player == null) return;
             MessageAnimationRun message = new MessageAnimationRun(
                     previousAnimation.getResourceLocation(),
@@ -134,28 +133,28 @@ public abstract class GunAnimationController {
         return null;
     }
 
-    public void applyAttachmentsTransform(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, LivingEntity entity, MatrixStack matrixStack){
+    public void applyAttachmentsTransform(ItemStack itemStack, ItemTransforms.TransformType transformType, LivingEntity entity, PoseStack matrixStack){
         boolean isFirstPerson = transformType.firstPerson();
         if( isFirstPerson ) Animations.pushNode(previousAnimation, getAttachmentsNodeIndex());
-        Animations.applyAnimationTransform(itemStack, ItemCameraTransforms.TransformType.NONE, entity, matrixStack);
+        Animations.applyAnimationTransform(itemStack, ItemTransforms.TransformType.NONE, entity, matrixStack);
         if( isFirstPerson ) Animations.popNode();
     }
 
-    public void applySpecialModelTransform(IBakedModel model, int index, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack){
+    public void applySpecialModelTransform(BakedModel model, int index, ItemTransforms.TransformType transformType, PoseStack matrixStack){
         boolean isFirstPerson = transformType.firstPerson();
         if( isFirstPerson ) Animations.pushNode(previousAnimation, index);
-        Animations.applyAnimationTransform(model, ItemCameraTransforms.TransformType.NONE, matrixStack);
+        Animations.applyAnimationTransform(model, ItemTransforms.TransformType.NONE, matrixStack);
         if( isFirstPerson ) Animations.popNode();
     }
 
-    public void applyTransform(ItemStack itemStack, int index, ItemCameraTransforms.TransformType transformType, LivingEntity entity, MatrixStack matrixStack){
+    public void applyTransform(ItemStack itemStack, int index, ItemTransforms.TransformType transformType, LivingEntity entity, PoseStack matrixStack){
         boolean isFirstPerson = transformType.firstPerson();
         if( isFirstPerson ) Animations.pushNode(previousAnimation, index);
-        Animations.applyAnimationTransform(itemStack, ItemCameraTransforms.TransformType.NONE, entity, matrixStack);
+        Animations.applyAnimationTransform(itemStack, ItemTransforms.TransformType.NONE, entity, matrixStack);
         if( isFirstPerson ) Animations.popNode();
     }
 
-    public void applyRightHandTransform(MatrixStack matrixStack)
+    public void applyRightHandTransform(PoseStack matrixStack)
     {
         if(previousAnimation != null) {
             Animations.pushNode(previousAnimation,getRightHandNodeIndex());
@@ -167,7 +166,7 @@ public abstract class GunAnimationController {
         }
     }
 
-    public void applyLeftHandTransform(MatrixStack matrixStack)
+    public void applyLeftHandTransform(PoseStack matrixStack)
     {
         if(previousAnimation != null) {
             Animations.pushNode(previousAnimation,getLeftHandNodeIndex());

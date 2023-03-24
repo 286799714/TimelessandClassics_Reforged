@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.core.io;
 
+import com.fasterxml.jackson.core.SerializableString;
+
 import java.io.*;
 import java.nio.ByteBuffer;
-
-import com.fasterxml.jackson.core.SerializableString;
 
 /**
  * String token that can lazily serialize String contained and then reuse that

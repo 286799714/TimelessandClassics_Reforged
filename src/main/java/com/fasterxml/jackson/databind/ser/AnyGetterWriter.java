@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.ser;
 
-import java.util.Map;
-
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.ser.std.MapSerializer;
+
+import java.util.Map;
 
 /**
  * Class similar to {@link BeanPropertyWriter}, but that will be used

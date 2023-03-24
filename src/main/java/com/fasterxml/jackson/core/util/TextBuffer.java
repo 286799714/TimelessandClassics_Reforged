@@ -1,10 +1,12 @@
 package com.fasterxml.jackson.core.util;
 
-import java.io.*;
-import java.math.BigDecimal;
-import java.util.*;
-
 import com.fasterxml.jackson.core.io.NumberInput;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * TextBuffer is a class similar to {@link StringBuffer}, with

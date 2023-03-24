@@ -1,11 +1,13 @@
 package com.fasterxml.jackson.databind.node;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.SerializerProvider;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.SerializerProvider;
 
 /**
  * Numeric node that contains simple 64-bit integer values.

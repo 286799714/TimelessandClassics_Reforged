@@ -1,8 +1,8 @@
 package com.fasterxml.jackson.databind.type;
 
-import java.lang.reflect.Array;
-
 import com.fasterxml.jackson.databind.JavaType;
+
+import java.lang.reflect.Array;
 
 /**
  * Array types represent Java arrays, both primitive and object valued.

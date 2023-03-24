@@ -1,15 +1,12 @@
 package com.tac.guns.client.handler;
 
-import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
-import com.tac.guns.Config;
-import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageUpdatePlayerMovement;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.PointOfView;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.event.FOVModifierEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -71,10 +68,10 @@ public class MovementAdaptationsHandler
     private MovementAdaptationsHandler() { }
 
     @SubscribeEvent(priority = EventPriority.LOW)
-    public void onFovUpdate(FOVUpdateEvent event)
+    public void onFovUpdate(FOVModifierEvent event)
     {
         Minecraft mc = Minecraft.getInstance();
-        if(mc.player != null && !mc.player.getMainHandItem().isEmpty() && mc.options.getCameraType() == PointOfView.FIRST_PERSON && mc.options.fovEffectScale > 0)
+        if(mc.player != null && !mc.player.getMainHandItem().isEmpty() && mc.options.getCameraType() == CameraType.FIRST_PERSON && mc.options.fovEffectScale > 0)
         {
             ItemStack heldItem = mc.player.getMainHandItem();
             if(heldItem.getItem() instanceof TimelessGunItem)

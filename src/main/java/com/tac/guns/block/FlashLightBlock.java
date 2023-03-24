@@ -1,20 +1,17 @@
 package com.tac.guns.block;
 
 import com.tac.guns.tileentity.FlashLightSource;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.AbstractBlock.Properties;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.block.material.Material.Builder;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.Material.Builder;
+import net.minecraft.world.level.material.MaterialColor;
 
-import javax.annotation.Nullable;
-
-public class FlashLightBlock extends AirBlock implements ITileEntityProvider
+public class FlashLightBlock extends AirBlock implements EntityBlock
 {
     public static final Material flashLightBlock;
 
@@ -23,16 +20,17 @@ public class FlashLightBlock extends AirBlock implements ITileEntityProvider
             return 15;
         }));
     }
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+    public int getLightValue(BlockState state, BlockGetter world, BlockPos pos) {
         return 15;
     }
     public boolean hasTileEntity(BlockState state) {
         return true;
     }
-    @Nullable
+
+    @org.jetbrains.annotations.Nullable
     @Override
-    public TileEntity newBlockEntity(IBlockReader worldIn) {
-        return new FlashLightSource();
+    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
+        return new FlashLightSource(p_153215_, p_153216_);
     }
     static {
         flashLightBlock = (new Builder(MaterialColor.NONE)).noCollider().nonSolid().build();

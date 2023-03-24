@@ -5,16 +5,16 @@
 
 package com.fasterxml.jackson.core;
 
-import java.io.*;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Iterator;
-
 import com.fasterxml.jackson.core.async.NonBlockingInputFeeder;
 import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 import com.fasterxml.jackson.core.util.RequestPayload;
+
+import java.io.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Iterator;
 
 /**
  * Base class that defines public API for reading JSON content.

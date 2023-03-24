@@ -1,12 +1,12 @@
 package com.fasterxml.jackson.databind.introspect;
 
-import java.util.Collection;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.type.SimpleType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class BasicClassIntrospector
     extends ClassIntrospector

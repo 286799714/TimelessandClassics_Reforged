@@ -1,13 +1,12 @@
 package com.fasterxml.jackson.databind.jsontype.impl;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
-import com.fasterxml.jackson.core.*;
-
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.io.IOException;
 
 /**
  * Type wrapper that tries to use an extra JSON Object, with a single

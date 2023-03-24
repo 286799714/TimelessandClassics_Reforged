@@ -1,7 +1,9 @@
 package com.fasterxml.jackson.databind.introspect;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Simple helper class used to keep track of collection of

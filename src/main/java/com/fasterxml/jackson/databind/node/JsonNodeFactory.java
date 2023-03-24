@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind.node;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.RawValue;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Base class that specifies methods for getting access to

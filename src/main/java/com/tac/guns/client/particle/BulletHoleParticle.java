@@ -1,29 +1,29 @@
 package com.tac.guns.client.particle;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.texture.MissingTextureSprite;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class BulletHoleParticle extends SpriteTexturedParticle
+public class BulletHoleParticle extends TextureSheetParticle
 {
     private final Direction direction;
     private final BlockPos pos;
@@ -31,7 +31,7 @@ public class BulletHoleParticle extends SpriteTexturedParticle
     private int vOffset;
     private float textureDensity;
 
-    public BulletHoleParticle(ClientWorld world, double x, double y, double z, Direction direction, BlockPos pos)
+    public BulletHoleParticle(ClientLevel world, double x, double y, double z, Direction direction, BlockPos pos)
     {
         super(world, x, y, z);
         this.setSprite(this.getSprite(pos));
@@ -44,7 +44,7 @@ public class BulletHoleParticle extends SpriteTexturedParticle
 
         /* Expire the particle straight away if the block is air */
         BlockState state = world.getBlockState(pos);
-        if (world.getBlockState(pos).isAir(world, pos))
+        if (world.getBlockState(pos).isAir())
             this.remove();
 
         int color = this.getBlockColor(state, world, pos, direction);
@@ -54,7 +54,7 @@ public class BulletHoleParticle extends SpriteTexturedParticle
         this.alpha = 0.9F;
     }
 
-    private int getBlockColor(BlockState state, World world, BlockPos pos, Direction direction)
+    private int getBlockColor(BlockState state, Level world, BlockPos pos, Direction direction)
     {
         //Add an exception for grass blocks
         if (state.getBlock() == Blocks.GRASS_BLOCK)
@@ -74,13 +74,13 @@ public class BulletHoleParticle extends SpriteTexturedParticle
     private TextureAtlasSprite getSprite(BlockPos pos)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        World world = minecraft.level;
+        Level world = minecraft.level;
         if (world != null)
         {
             BlockState state = world.getBlockState(pos);
             return Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getParticleIcon(state);
         }
-        return Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(MissingTextureSprite.getLocation());
+        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(MissingTextureAtlasSprite.getLocation());
     }
 
     @Override
@@ -111,19 +111,19 @@ public class BulletHoleParticle extends SpriteTexturedParticle
     public void tick()
     {
         super.tick();
-        if (this.level.getBlockState(this.pos).isAir(this.level, this.pos))
+        if (this.level.getBlockState(this.pos).isAir())
         {
             this.remove();
         }
     }
 
     @Override
-    public void render(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks)
+    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks)
     {
-        Vector3d view = renderInfo.getPosition();
-        float particleX = (float) (MathHelper.lerp((double) partialTicks, this.xo, this.x) - view.x());
-        float particleY = (float) (MathHelper.lerp((double) partialTicks, this.yo, this.y) - view.y());
-        float particleZ = (float) (MathHelper.lerp((double) partialTicks, this.zo, this.z) - view.z());
+        Vec3 view = renderInfo.getPosition();
+        float particleX = (float) (Mth.lerp((double) partialTicks, this.xo, this.x) - view.x());
+        float particleY = (float) (Mth.lerp((double) partialTicks, this.yo, this.y) - view.y());
+        float particleZ = (float) (Mth.lerp((double) partialTicks, this.zo, this.z) - view.z());
         Quaternion quaternion = this.direction.getRotation();
         Vector3f[] points = new Vector3f[]{new Vector3f(-1.0F, 0.0F, -1.0F), new Vector3f(-1.0F, 0.0F, 1.0F), new Vector3f(1.0F, 0.0F, 1.0F), new Vector3f(1.0F, 0.0F, -1.0F)};
         float scale = this.getQuadSize(partialTicks);
@@ -149,8 +149,8 @@ public class BulletHoleParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public IParticleRenderType getRenderType()
+    public ParticleRenderType getRenderType()
     {
-        return IParticleRenderType.TERRAIN_SHEET;
+        return ParticleRenderType.TERRAIN_SHEET;
     }
 }

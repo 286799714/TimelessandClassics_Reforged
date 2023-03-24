@@ -1,10 +1,6 @@
 package com.fasterxml.jackson.databind.ser.std;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-
-import com.fasterxml.jackson.core.*;
-
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,6 +8,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 
 /**
  * This is the special serializer for regular {@link String}s.

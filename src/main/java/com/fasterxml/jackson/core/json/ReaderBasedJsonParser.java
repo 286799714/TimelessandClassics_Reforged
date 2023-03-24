@@ -1,17 +1,20 @@
 package com.fasterxml.jackson.core.json;
 
-import java.io.*;
-
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.base.ParserBase;
 import com.fasterxml.jackson.core.io.CharTypes;
 import com.fasterxml.jackson.core.io.IOContext;
 import com.fasterxml.jackson.core.sym.CharsToNameCanonicalizer;
-import com.fasterxml.jackson.core.util.*;
+import com.fasterxml.jackson.core.util.ByteArrayBuilder;
+import com.fasterxml.jackson.core.util.JacksonFeatureSet;
+import com.fasterxml.jackson.core.util.TextBuffer;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 
 import static com.fasterxml.jackson.core.JsonTokenId.*;
-
-import com.fasterxml.jackson.core.JsonParser.Feature;
 
 /**
  * This is a concrete implementation of {@link JsonParser}, which is

@@ -26,15 +26,15 @@
  */
 package de.javagl.jgltf.model.impl.creation;
 
+import de.javagl.jgltf.model.BufferModel;
+import de.javagl.jgltf.model.io.GltfReference;
+
 import java.nio.ByteBuffer;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
-
-import de.javagl.jgltf.model.BufferModel;
-import de.javagl.jgltf.model.io.GltfReference;
 
 /**
  * Utility methods related to {@link BufferStructure} instances.

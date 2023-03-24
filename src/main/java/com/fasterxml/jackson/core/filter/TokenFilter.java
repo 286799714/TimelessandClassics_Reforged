@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.core.filter;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
 
 /**
  * Strategy class that can be implemented to specify actual inclusion/exclusion

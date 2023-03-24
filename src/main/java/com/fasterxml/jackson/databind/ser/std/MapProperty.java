@@ -1,10 +1,6 @@
 package com.fasterxml.jackson.databind.ser.std;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-
 import com.fasterxml.jackson.core.JsonGenerator;
-
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
@@ -12,7 +8,8 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 
-import com.fasterxml.jackson.databind.BeanProperty.Bogus;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
 
 /**
  * Helper class needed to support flexible filtering of Map properties

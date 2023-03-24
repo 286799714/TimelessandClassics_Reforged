@@ -1,12 +1,12 @@
 package com.fasterxml.jackson.databind.ser.std;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
-
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 
 /**
  * Standard serializer for {@link Calendar}.

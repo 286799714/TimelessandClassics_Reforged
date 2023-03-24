@@ -1,8 +1,8 @@
 package com.fasterxml.jackson.core.util;
 
-import java.lang.ref.SoftReference;
-
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
+
+import java.lang.ref.SoftReference;
 
 /**
  * Helper entity used to control access to simple buffer recyling scheme used for

@@ -26,16 +26,16 @@
  */
 package de.javagl.jgltf.model.io.v1;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
 import de.javagl.jgltf.impl.v1.GlTF;
 import de.javagl.jgltf.model.io.GltfAssetWriter;
 import de.javagl.jgltf.model.io.GltfModelWriter;
 import de.javagl.jgltf.model.io.GltfWriter;
 import de.javagl.jgltf.model.v1.GltfModelV1;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A class for writing a {@link GltfModelV1}. This class contains  

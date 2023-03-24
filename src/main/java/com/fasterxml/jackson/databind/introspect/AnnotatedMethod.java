@@ -1,9 +1,11 @@
 package com.fasterxml.jackson.databind.introspect;
 
-import java.lang.reflect.*;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 public final class AnnotatedMethod
     extends AnnotatedWithParams

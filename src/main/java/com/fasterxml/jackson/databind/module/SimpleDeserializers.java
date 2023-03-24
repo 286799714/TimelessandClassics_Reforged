@@ -1,11 +1,13 @@
 package com.fasterxml.jackson.databind.module;
 
-import java.util.*;
-
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import com.fasterxml.jackson.databind.type.*;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Simple implementation {@link Deserializers} which allows registration of

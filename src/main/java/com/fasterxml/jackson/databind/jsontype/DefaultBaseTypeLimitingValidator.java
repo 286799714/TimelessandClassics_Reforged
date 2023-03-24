@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind.jsontype;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * {@link PolymorphicTypeValidator} that will only allow polymorphic handling if

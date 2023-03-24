@@ -1,6 +1,9 @@
 package com.fasterxml.jackson.core.exc;
 
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonLocation;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * Intermediate base class for all read-side streaming processing problems, including

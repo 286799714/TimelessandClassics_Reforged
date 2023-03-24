@@ -26,17 +26,13 @@
  */
 package de.javagl.jgltf.model.impl.creation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.javagl.jgltf.impl.v2.Accessor;
 import de.javagl.jgltf.impl.v2.Buffer;
 import de.javagl.jgltf.impl.v2.BufferView;
-import de.javagl.jgltf.model.AccessorData;
-import de.javagl.jgltf.model.AccessorDatas;
-import de.javagl.jgltf.model.AccessorModel;
-import de.javagl.jgltf.model.BufferModel;
-import de.javagl.jgltf.model.BufferViewModel;
+import de.javagl.jgltf.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility methods for creating the glTF 2.0 elements that correspond to

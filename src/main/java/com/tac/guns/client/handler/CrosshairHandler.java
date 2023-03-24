@@ -1,19 +1,19 @@
 package com.tac.guns.client.handler;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.client.render.crosshair.DynamicScalingTexturedCrosshair;
 import com.tac.guns.client.render.crosshair.TechCrosshair;
 import com.tac.guns.client.render.crosshair.TexturedCrosshair;
-import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -108,9 +108,9 @@ public class CrosshairHandler
     }
 
     @SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent event)
+    public void onRenderOverlay(RenderGameOverlayEvent.PreLayer event)
     {
-        if(event.getType() != RenderGameOverlayEvent.ElementType.CROSSHAIRS)
+        if(event.getOverlay() != ForgeIngameGui.CROSSHAIR_ELEMENT)
             return;
 
         Crosshair crosshair = this.getCurrentCrosshair();
@@ -131,7 +131,7 @@ public class CrosshairHandler
         if(!mc.options.getCameraType().isFirstPerson())
             return;
 
-        MatrixStack stack = event.getMatrixStack();
+        PoseStack stack = event.getMatrixStack();
         stack.pushPose();
         int scaledWidth = event.getWindow().getGuiScaledWidth();
         int scaledHeight = event.getWindow().getGuiScaledHeight();

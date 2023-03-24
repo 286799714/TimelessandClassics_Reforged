@@ -26,6 +26,18 @@
  */
 package de.javagl.jgltf.model.v1.gl;
 
+import de.javagl.jgltf.impl.v1.*;
+import de.javagl.jgltf.model.MaterialModel;
+import de.javagl.jgltf.model.NodeModel;
+import de.javagl.jgltf.model.Optionals;
+import de.javagl.jgltf.model.gl.*;
+import de.javagl.jgltf.model.gl.ShaderModel.ShaderType;
+import de.javagl.jgltf.model.gl.impl.*;
+import de.javagl.jgltf.model.gl.impl.v1.DefaultTechniqueStatesFunctionsModelV1;
+import de.javagl.jgltf.model.impl.DefaultMaterialModel;
+import de.javagl.jgltf.model.io.Buffers;
+import de.javagl.jgltf.model.io.IO;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,32 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
-
-import de.javagl.jgltf.impl.v1.Material;
-import de.javagl.jgltf.impl.v1.Shader;
-import de.javagl.jgltf.impl.v1.Technique;
-import de.javagl.jgltf.impl.v1.TechniqueParameters;
-import de.javagl.jgltf.impl.v1.TechniqueStates;
-import de.javagl.jgltf.impl.v1.TechniqueStatesFunctions;
-import de.javagl.jgltf.model.MaterialModel;
-import de.javagl.jgltf.model.NodeModel;
-import de.javagl.jgltf.model.Optionals;
-import de.javagl.jgltf.model.gl.ProgramModel;
-import de.javagl.jgltf.model.gl.ShaderModel;
-import de.javagl.jgltf.model.gl.TechniqueModel;
-import de.javagl.jgltf.model.gl.TechniqueParametersModel;
-import de.javagl.jgltf.model.gl.TechniqueStatesFunctionsModel;
-import de.javagl.jgltf.model.gl.TechniqueStatesModel;
-import de.javagl.jgltf.model.gl.ShaderModel.ShaderType;
-import de.javagl.jgltf.model.gl.impl.DefaultProgramModel;
-import de.javagl.jgltf.model.gl.impl.DefaultShaderModel;
-import de.javagl.jgltf.model.gl.impl.DefaultTechniqueModel;
-import de.javagl.jgltf.model.gl.impl.DefaultTechniqueParametersModel;
-import de.javagl.jgltf.model.gl.impl.DefaultTechniqueStatesModel;
-import de.javagl.jgltf.model.gl.impl.v1.DefaultTechniqueStatesFunctionsModelV1;
-import de.javagl.jgltf.model.impl.DefaultMaterialModel;
-import de.javagl.jgltf.model.io.Buffers;
-import de.javagl.jgltf.model.io.IO;
 
 /**
  * A class containing the default {@link TechniqueModel} and 

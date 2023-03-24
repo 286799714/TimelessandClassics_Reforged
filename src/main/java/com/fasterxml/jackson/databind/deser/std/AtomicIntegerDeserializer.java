@@ -1,13 +1,12 @@
 package com.fasterxml.jackson.databind.deser.std;
 
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.fasterxml.jackson.core.JsonParser;
-
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.type.LogicalType;
+
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 // @since 2.12
 public class AtomicIntegerDeserializer extends StdScalarDeserializer<AtomicInteger>

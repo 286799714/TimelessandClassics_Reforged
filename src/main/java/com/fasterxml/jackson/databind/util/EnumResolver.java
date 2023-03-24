@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.util;
 
-import java.util.*;
-
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+
+import java.util.*;
 
 /**
  * Helper class used to resolve String values (either JSON Object field

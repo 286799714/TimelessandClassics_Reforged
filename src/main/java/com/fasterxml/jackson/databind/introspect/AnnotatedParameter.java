@@ -1,9 +1,11 @@
 package com.fasterxml.jackson.databind.introspect;
 
-import java.lang.reflect.*;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Member;
+import java.lang.reflect.Type;
 
 /**
  * Object that represents method parameters, mostly so that associated

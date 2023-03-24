@@ -7,31 +7,25 @@ import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.GunItem;
-import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
-import com.tac.guns.network.message.*;
+import com.tac.guns.network.message.MessageGunSound;
+import com.tac.guns.network.message.MessageRigInvToClient;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.PacketDistributor;
-import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.common.capability.CurioItemCapability;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -42,14 +36,14 @@ import java.util.WeakHashMap;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class ReloadTracker
 {
-    private static final Map<PlayerEntity, ReloadTracker> RELOAD_TRACKER_MAP = new WeakHashMap<>();
+    private static final Map<Player, ReloadTracker> RELOAD_TRACKER_MAP = new WeakHashMap<>();
 
     private final int startTick;
     private final int slot;
     private final ItemStack stack;
     private final Gun gun;
 
-    private ReloadTracker(PlayerEntity player)
+    private ReloadTracker(Player player)
     {
         this.startTick = player.tickCount;
         this.slot = player.inventory.selected;
@@ -63,7 +57,7 @@ public class ReloadTracker
      * @param player the player to check
      * @return True if it's the same weapon and slot
      */
-    private boolean isSameWeapon(PlayerEntity player)
+    private boolean isSameWeapon(Player player)
     {
         return !this.stack.isEmpty() && player.inventory.selected == this.slot && player.inventory.getSelected() == this.stack;
     }
@@ -73,7 +67,7 @@ public class ReloadTracker
      */
     private boolean isWeaponFull()
     {
-        CompoundNBT tag = this.stack.getOrCreateTag();
+        CompoundTag tag = this.stack.getOrCreateTag();
         return tag.getInt("AmmoCount") >= GunModifierHelper.getAmmoCapacity(this.stack, this.gun);
     }
     /**
@@ -81,22 +75,22 @@ public class ReloadTracker
      */
     private boolean isWeaponEmpty()
     {
-        CompoundNBT tag = this.stack.getOrCreateTag();
+        CompoundTag tag = this.stack.getOrCreateTag();
         return tag.getInt("AmmoCount") == 0;
     }
 
-    private boolean hasNoAmmo(PlayerEntity player)
+    private boolean hasNoAmmo(Player player)
     {
         return Gun.findAmmo(player, this.gun.getProjectile().getItem()).length == 0 ? true : Gun.findAmmo(player, this.gun.getProjectile().getItem())[0].isEmpty();
     }
 
-    private boolean canReload(PlayerEntity player)
+    private boolean canReload(Player player)
     {
         boolean reload;
         Gun gun = ((GunItem)this.stack.getItem()).getGun();
         ItemStack rig = WearableHelper.PlayerWornRig(player);
         if(rig != null) {
-            PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, gun.getProjectile().getItem()), ((ServerPlayerEntity)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+            PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, gun.getProjectile().getItem()), ((ServerPlayer)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
         if(gun.getReloads().isMagFed())
         {
@@ -122,12 +116,12 @@ public class ReloadTracker
         return reload;
     }
 
-    private void increaseAmmo(PlayerEntity player)
+    private void increaseAmmo(Player player)
     {
         ItemStack ammo = Gun.findAmmo(player, this.gun.getProjectile().getItem())[0];
         if(!ammo.isEmpty())
         {
-            CompoundNBT tag = this.stack.getTag();
+            CompoundTag tag = this.stack.getTag();
             int amount = Math.min(ammo.getCount(), this.gun.getReloads().getReloadAmount());
             if (tag != null) {
                 int maxAmmo = GunModifierHelper.getAmmoCapacity(this.stack, this.gun);
@@ -141,7 +135,7 @@ public class ReloadTracker
         ResourceLocation reloadSound = this.gun.getSounds().getReload();
         if(reloadSound != null)
         {
-            MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getX(), (float) player.getY() + 1.0F, (float) player.getZ(), 1.0F, 1.0F, player.getId(), false, true);
+            MessageGunSound message = new MessageGunSound(reloadSound, SoundSource.PLAYERS, (float) player.getX(), (float) player.getY() + 1.0F, (float) player.getZ(), 1.0F, 1.0F, player.getId(), false, true);
             PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getX(), (player.getY() + 1.0), player.getZ(), 16.0, player.level.dimension())), message);
         }
     }
@@ -154,7 +148,7 @@ public class ReloadTracker
         return result;
     }
 
-    private void shrinkFromAmmoPool(ItemStack[] ammoStacks, PlayerEntity player, int shrinkAmount)
+    private void shrinkFromAmmoPool(ItemStack[] ammoStacks, Player player, int shrinkAmount)
     {
         int shrinkAmt = shrinkAmount;
         ArrayList<ItemStack> stacks = new ArrayList<>();
@@ -192,7 +186,7 @@ public class ReloadTracker
         }
     }
 
-    private void increaseMagAmmo(PlayerEntity player)
+    private void increaseMagAmmo(Player player)
     {
         /*ItemStack rig = WearableHelper.PlayerWornRig(player);
         if(rig != null) {
@@ -207,7 +201,7 @@ public class ReloadTracker
         //ItemStack ammo = Gun.findAmmo(player, this.gun.getProjectile().getItem());
         if(ammoStacks.length > 0)
         {
-            CompoundNBT tag = this.stack.getTag();
+            CompoundTag tag = this.stack.getTag();
             int ammoAmount = Math.min(calcMaxReserveAmmo(ammoStacks), GunModifierHelper.getAmmoCapacity(this.stack, this.gun));
             if (tag != null) {
                 int currentAmmo = tag.getInt("AmmoCount");
@@ -240,7 +234,7 @@ public class ReloadTracker
         ResourceLocation reloadSound = this.gun.getSounds().getReload();
         if(reloadSound != null)
         {
-            MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float) player.getX(), (float) player.getY() + 1.0F, (float) player.getZ(), 1.0F, 1.0F, player.getId(), false, true);
+            MessageGunSound message = new MessageGunSound(reloadSound, SoundSource.PLAYERS, (float) player.getX(), (float) player.getY() + 1.0F, (float) player.getZ(), 1.0F, 1.0F, player.getId(), false, true);
             PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getX(), (player.getY() + 1.0), player.getZ(), 16.0, player.level.dimension())), message);
         }
     }
@@ -250,7 +244,7 @@ public class ReloadTracker
     {
         if(event.phase == TickEvent.Phase.START && !event.player.level.isClientSide)
         {
-            PlayerEntity player = event.player;
+            Player player = event.player;
             if(SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING))
             {
                 if(!RELOAD_TRACKER_MAP.containsKey(player))
@@ -273,12 +267,12 @@ public class ReloadTracker
                 }
                 if(tracker.canReload(player))
                 {
-                    final PlayerEntity finalPlayer = player;
+                    final Player finalPlayer = player;
                     final Gun gun = tracker.gun;
                     if(gun.getReloads().isMagFed())
                     {
                         tracker.increaseMagAmmo(player);
-                        ServerPlayHandler.handleRigAmmoCount((ServerPlayerEntity)player, gun.getProjectile().getItem());
+                        ServerPlayHandler.handleRigAmmoCount((ServerPlayer)player, gun.getProjectile().getItem());
                         RELOAD_TRACKER_MAP.remove(player);
                         SyncedPlayerData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
                         SyncedPlayerData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, false);
@@ -293,7 +287,7 @@ public class ReloadTracker
                     }
                     else {
                         tracker.increaseAmmo(player);
-                        ServerPlayHandler.handleRigAmmoCount((ServerPlayerEntity)player, gun.getProjectile().getItem());
+                        ServerPlayHandler.handleRigAmmoCount((ServerPlayer)player, gun.getProjectile().getItem());
                         if (tracker.isWeaponFull() || tracker.hasNoAmmo(player)) {
                             RELOAD_TRACKER_MAP.remove(player);
                             SyncedPlayerData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
@@ -317,7 +311,7 @@ public class ReloadTracker
         }
     }
 
-    public static boolean isPlayerReload(PlayerEntity player){
+    public static boolean isPlayerReload(Player player){
         return RELOAD_TRACKER_MAP.containsKey(player);
     }
 

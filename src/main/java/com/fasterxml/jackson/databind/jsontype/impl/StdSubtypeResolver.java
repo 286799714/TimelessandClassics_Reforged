@@ -1,14 +1,16 @@
 package com.fasterxml.jackson.databind.jsontype.impl;
 
-import java.lang.reflect.Modifier;
-import java.util.*;
-
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
-import com.fasterxml.jackson.databind.introspect.*;
+import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
+import com.fasterxml.jackson.databind.introspect.AnnotatedClassResolver;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.jsontype.SubtypeResolver;
+
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Standard {@link SubtypeResolver} implementation.

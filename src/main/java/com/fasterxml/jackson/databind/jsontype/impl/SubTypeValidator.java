@@ -1,13 +1,13 @@
 package com.fasterxml.jackson.databind.jsontype.impl;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Helper class used to encapsulate rules that determine subtypes that

@@ -1,6 +1,8 @@
 package com.fasterxml.jackson.core.io;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PushbackInputStream;
 
 /**
  * Simple {@link InputStream} implementation that is used to "unwind" some

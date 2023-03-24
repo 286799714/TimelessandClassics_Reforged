@@ -1,6 +1,7 @@
 package com.fasterxml.jackson.core.json;
 
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.FormatFeature;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 /**
  * Token writer features specific to JSON backend.

@@ -1,9 +1,10 @@
 package com.fasterxml.jackson.databind.type;
 
-import java.lang.reflect.TypeVariable;
-import java.util.*;
-
 import com.fasterxml.jackson.databind.JavaType;
+
+import java.lang.reflect.TypeVariable;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Type that represents Map-like types; things that consist of key/value pairs

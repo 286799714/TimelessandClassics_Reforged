@@ -1,16 +1,14 @@
 package com.fasterxml.jackson.databind.node;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.base.ParserMinimalBase;
 import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import com.fasterxml.jackson.core.JsonParser.NumberType;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Facade over {@link JsonNode} that implements {@link JsonParser} to allow

@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.databind.ext;
 
-import java.nio.file.Path;
-
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
+
+import java.nio.file.Path;
 
 /**
  * @since 2.10

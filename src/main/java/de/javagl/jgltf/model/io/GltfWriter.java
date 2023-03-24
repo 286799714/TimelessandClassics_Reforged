@@ -26,12 +26,12 @@
  */
 package de.javagl.jgltf.model.io;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A class for writing a glTF as JSON

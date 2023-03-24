@@ -6,14 +6,21 @@ import com.tac.guns.client.audio.StunRingingSound;
 import com.tac.guns.init.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.*;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.resources.sounds.Sound;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.resources.sounds.TickableSoundInstance;
+import net.minecraft.client.sounds.ChannelAccess;
+import net.minecraft.client.sounds.SoundEngine;
+import net.minecraft.client.sounds.WeighedSoundEvents;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -35,7 +42,7 @@ public class SoundHandler
         return instance;
     }
 
-    private final Map<ISound, Float> soundVolumes = new ConcurrentHashMap<>();
+    private final Map<SoundInstance, Float> soundVolumes = new ConcurrentHashMap<>();
     private boolean isDeafened;
     private Field playingSounds;
     private SoundEngine soundEngine;
@@ -49,7 +56,7 @@ public class SoundHandler
     private void initReflection()
     {
         // Relection Error, will make crash log report, currently instanceToChannel is never detected
-        this.playingSounds = ObfuscationReflectionHelper.findField(SoundEngine.class, "instanceToChannel");
+        this.playingSounds = ObfuscationReflectionHelper.findField(SoundEngine.class, "f_120226_");
     }
 
     @SubscribeEvent
@@ -61,7 +68,7 @@ public class SoundHandler
         }
 
         /* If deafened, play ringing sound if not already playing, otherwise return */
-        EffectInstance effect = Minecraft.getInstance().player.getEffect(ModEffects.DEAFENED.get());
+        MobEffectInstance effect = Minecraft.getInstance().player.getEffect(ModEffects.DEAFENED.get());
         if(effect == null)
         {
             if(!this.isDeafened)
@@ -78,10 +85,10 @@ public class SoundHandler
         }
 
         // Access the sound manager's sound system and list of playing sounds
-        Map<ISound, ChannelManager.Entry> playingSounds;
+        Map<SoundInstance, ChannelAccess.ChannelHandle> playingSounds;
         try
         {
-            playingSounds = (Map<ISound, ChannelManager.Entry>) this.playingSounds.get(this.soundEngine);
+            playingSounds = (Map<SoundInstance, ChannelAccess.ChannelHandle>) this.playingSounds.get(this.soundEngine);
         }
         catch(IllegalArgumentException | IllegalAccessException e)
         {
@@ -95,7 +102,7 @@ public class SoundHandler
                 playingSounds.forEach((sound, entry) ->
                 {
                     /* Exempt tickable sounds and stun grenade explosions from per-tick muting */
-                    if(sound == null || sound instanceof ITickableSound || isStunGrenade(sound.getSound().getLocation()))
+                    if(sound == null || sound instanceof TickableSoundInstance || isStunGrenade(sound.getSound().getLocation()))
                     {
                         return;
                     }
@@ -116,9 +123,9 @@ public class SoundHandler
         {
             // Restore sound levels to initial values
             this.isDeafened = false;
-            for(Entry<ISound, Float> entry : this.soundVolumes.entrySet())
+            for(Entry<SoundInstance, Float> entry : this.soundVolumes.entrySet())
             {
-                ChannelManager.Entry entry1 = playingSounds.get(entry.getKey());
+                ChannelAccess.ChannelHandle entry1 = playingSounds.get(entry.getKey());
                 if(entry1 != null)
                 {
                     entry1.execute(soundSource -> soundSource.setVolume(entry.getValue()));
@@ -134,17 +141,17 @@ public class SoundHandler
     {
         if(this.soundEngine == null)
         {
-            this.soundEngine = event.getManager();
+            this.soundEngine = event.getEngine();
         }
 
-        if(!this.isDeafened || Minecraft.getInstance().player == null || event.getSound() instanceof ITickableSound)
+        if(!this.isDeafened || Minecraft.getInstance().player == null || event.getSound() instanceof TickableSoundInstance)
         {
             return;
         }
 
         // Exempt initial explosion from muting
         ResourceLocation loc = event.getSound().getLocation();
-        EffectInstance effect = Minecraft.getInstance().player.getEffect(ModEffects.DEAFENED.get());
+        MobEffectInstance effect = Minecraft.getInstance().player.getEffect(ModEffects.DEAFENED.get());
         int duration = effect != null ? effect.getDuration() : 0;
         boolean isStunGrenade = isStunGrenade(loc);
         if(duration == 0 && isStunGrenade) return;
@@ -152,7 +159,7 @@ public class SoundHandler
         // Reduce volume to full value when duration is above threshold
         // When below threshold, fade to original sound level as duration approaches 0
         event.getSound().resolve(Minecraft.getInstance().getSoundManager());
-        event.setResultSound(new SoundMuted(event.getSound(), duration, isStunGrenade));
+        event.setSound(new SoundMuted(event.getSound(), duration, isStunGrenade));
     }
 
     private boolean isStunGrenade(ResourceLocation loc)
@@ -167,15 +174,15 @@ public class SoundHandler
         return volumeMin + (1 - percent) * (volumeBase - volumeMin);
     }
 
-    public static class SoundMuted implements ISound
+    public static class SoundMuted implements SoundInstance
     {
-        private ISound parent;
+        private SoundInstance parent;
         private float volume, volumeInitial;
 
-        public SoundMuted(ISound parent, int duration, boolean isStunGrenade)
+        public SoundMuted(SoundInstance parent, int duration, boolean isStunGrenade)
         {
             this.parent = parent;
-            this.volumeInitial = MathHelper.clamp(parent.getVolume(), 0, 1);
+            this.volumeInitial = Mth.clamp(parent.getVolume(), 0, 1);
             this.volume = SoundHandler.get().getMutedVolume(duration, this.volumeInitial);
             if(isStunGrenade)
             {
@@ -202,7 +209,7 @@ public class SoundHandler
 
         @Override
         @Nullable
-        public SoundEventAccessor resolve(net.minecraft.client.audio.SoundHandler handler)
+        public WeighedSoundEvents resolve(net.minecraft.client.sounds.SoundManager handler)
         {
             return this.parent.resolve(handler);
         }
@@ -214,7 +221,7 @@ public class SoundHandler
         }
 
         @Override
-        public SoundCategory getSource()
+        public SoundSource getSource()
         {
             return this.parent.getSource();
         }
@@ -262,7 +269,7 @@ public class SoundHandler
         }
 
         @Override
-        public ISound.AttenuationType getAttenuation()
+        public SoundInstance.Attenuation getAttenuation()
         {
             return parent.getAttenuation();
         }

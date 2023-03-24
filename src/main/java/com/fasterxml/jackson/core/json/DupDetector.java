@@ -1,8 +1,11 @@
 package com.fasterxml.jackson.core.json;
 
-import java.util.*;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonLocation;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 
-import com.fasterxml.jackson.core.*;
+import java.util.HashSet;
 
 /**
  * Helper class used if

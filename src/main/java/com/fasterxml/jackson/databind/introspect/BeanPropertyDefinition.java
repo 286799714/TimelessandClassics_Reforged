@@ -1,12 +1,11 @@
 package com.fasterxml.jackson.databind.introspect;
 
-import java.util.Iterator;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.fasterxml.jackson.databind.util.Named;
+
+import java.util.Iterator;
 
 /**
  * Simple value classes that contain definitions of properties,

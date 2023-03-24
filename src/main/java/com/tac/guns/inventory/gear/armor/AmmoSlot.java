@@ -1,7 +1,7 @@
 package com.tac.guns.inventory.gear.armor;
 
 import com.tac.guns.item.IAmmo;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 

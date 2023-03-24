@@ -26,9 +26,6 @@
  */
 package de.javagl.jgltf.model.io.v1;
 
-import java.nio.ByteBuffer;
-import java.util.Base64;
-
 import de.javagl.jgltf.impl.v1.Buffer;
 import de.javagl.jgltf.impl.v1.GlTF;
 import de.javagl.jgltf.impl.v1.Image;
@@ -43,6 +40,9 @@ import de.javagl.jgltf.model.io.IO;
 import de.javagl.jgltf.model.io.MimeTypes;
 import de.javagl.jgltf.model.v1.BinaryGltfV1;
 import de.javagl.jgltf.model.v1.GltfModelV1;
+
+import java.nio.ByteBuffer;
+import java.util.Base64;
 
 /**
  * A class for creating a {@link GltfAssetV1} with an "embedded" data 

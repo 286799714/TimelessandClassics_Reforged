@@ -2,8 +2,8 @@ package com.fasterxml.jackson.core.util;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
-
-import java.util.*;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

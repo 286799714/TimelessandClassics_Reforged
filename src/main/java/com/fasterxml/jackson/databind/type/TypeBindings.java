@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind.type;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.lang.reflect.TypeVariable;
+import java.util.*;
 
 /**
  * Helper class used for resolving type parameters for given class

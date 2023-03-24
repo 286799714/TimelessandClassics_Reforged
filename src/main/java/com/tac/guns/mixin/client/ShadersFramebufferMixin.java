@@ -1,13 +1,8 @@
 package com.tac.guns.mixin.client;
 
-import com.tac.guns.GunMod;
 import com.tac.guns.client.render.ScreenTextureState;
-import com.tac.guns.util.OptifineHelper;
-import net.minecraft.client.Minecraft;
-import org.apache.logging.log4j.Level;
 import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

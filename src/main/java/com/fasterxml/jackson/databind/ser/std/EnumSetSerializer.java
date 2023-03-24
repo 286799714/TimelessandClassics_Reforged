@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.ser.std;
 
-import java.io.IOException;
-import java.util.*;
-
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+
+import java.io.IOException;
+import java.util.EnumSet;
 
 @SuppressWarnings("serial")
 public class EnumSetSerializer

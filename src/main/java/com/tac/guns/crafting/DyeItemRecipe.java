@@ -2,14 +2,14 @@ package com.tac.guns.crafting;
 
 import com.tac.guns.init.ModRecipeSerializers;
 import com.tac.guns.item.IColored;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class DyeItemRecipe extends SpecialRecipe
+public class DyeItemRecipe extends CustomRecipe
 {
     public DyeItemRecipe(ResourceLocation id)
     {
@@ -25,7 +25,7 @@ public class DyeItemRecipe extends SpecialRecipe
     }
 
     @Override
-    public boolean matches(CraftingInventory inventory, World worldIn)
+    public boolean matches(CraftingContainer inventory, Level worldIn)
     {
         ItemStack item = ItemStack.EMPTY;
         List<ItemStack> dyes = new ArrayList<>();
@@ -58,7 +58,7 @@ public class DyeItemRecipe extends SpecialRecipe
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inventory)
+    public ItemStack assemble(CraftingContainer inventory)
     {
         ItemStack item = ItemStack.EMPTY;
         List<DyeItem> dyes = new ArrayList<>();
@@ -103,13 +103,13 @@ public class DyeItemRecipe extends SpecialRecipe
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer()
+    public RecipeSerializer<?> getSerializer()
     {
         return ModRecipeSerializers.DYE_ITEM.get();
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inventory)
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inventory)
     {
         NonNullList<ItemStack> remainingItems = NonNullList.withSize(inventory.getContainerSize(), ItemStack.EMPTY);
         for(int i = 0; i < remainingItems.size(); ++i)

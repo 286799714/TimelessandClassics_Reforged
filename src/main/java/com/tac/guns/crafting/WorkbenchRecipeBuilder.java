@@ -5,15 +5,14 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.tac.guns.Reference;
 import com.tac.guns.init.ModRecipeSerializers;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ public class WorkbenchRecipeBuilder
     private final List<Pair<Ingredient, Integer>> materials;
     private String group;
 
-    public WorkbenchRecipeBuilder(IItemProvider item, int count)
+    public WorkbenchRecipeBuilder(ItemLike item, int count)
     {
         this.result = item.asItem();
         this.count = count;
@@ -39,7 +38,7 @@ public class WorkbenchRecipeBuilder
     /**
      * Creates a new builder for a workbench recipe.
      */
-    public static WorkbenchRecipeBuilder workbenchRecipe(IItemProvider resultIn)
+    public static WorkbenchRecipeBuilder workbenchRecipe(ItemLike resultIn)
     {
         return new WorkbenchRecipeBuilder(resultIn, 1);
     }
@@ -47,7 +46,7 @@ public class WorkbenchRecipeBuilder
     /**
      * Creates a new builder for a workbench recipe.
      */
-    public static WorkbenchRecipeBuilder workbenchRecipe(IItemProvider resultIn, int countIn)
+    public static WorkbenchRecipeBuilder workbenchRecipe(ItemLike resultIn, int countIn)
     {
         return new WorkbenchRecipeBuilder(resultIn, countIn);
     }
@@ -55,7 +54,7 @@ public class WorkbenchRecipeBuilder
     /**
      * Adds an ingredient of the given item.
      */
-    public WorkbenchRecipeBuilder addIngredient(IItemProvider itemIn)
+    public WorkbenchRecipeBuilder addIngredient(ItemLike itemIn)
     {
         return this.addIngredient(itemIn, 1);
     }
@@ -63,19 +62,19 @@ public class WorkbenchRecipeBuilder
     /**
      * Adds the given ingredient multiple times.
      */
-    public WorkbenchRecipeBuilder addIngredient(IItemProvider item, int quantity)
+    public WorkbenchRecipeBuilder addIngredient(ItemLike item, int quantity)
     {
         this.materials.add(new Pair<>(Ingredient.of(item), quantity));
         return this;
     }
 
-    public WorkbenchRecipeBuilder addIngredient(ITag.INamedTag<Item> item, int quantity)
+    public WorkbenchRecipeBuilder addIngredient(Tag.Named<Item> item, int quantity)
     {
         this.materials.add(new Pair<>(Ingredient.of(item), quantity));
         return this;
     }
 
-    public WorkbenchRecipeBuilder addIngredient(ITag.INamedTag<Item> item)
+    public WorkbenchRecipeBuilder addIngredient(Tag.Named<Item> item)
     {
         this.materials.add(new Pair<>(Ingredient.of(item), 1));
         return this;
@@ -109,7 +108,7 @@ public class WorkbenchRecipeBuilder
     /**
      * Builds this recipe into an {@link IFinishedRecipe}.
      */
-    public void build(Consumer<IFinishedRecipe> consumerIn)
+    public void build(Consumer<FinishedRecipe> consumerIn)
     {
         this.build(consumerIn, Registry.ITEM.getKey(this.result));
     }
@@ -118,12 +117,12 @@ public class WorkbenchRecipeBuilder
      * Builds this recipe into an {@link IFinishedRecipe}. Use {@link #build(Consumer)} if save is the same as the ID for
      * the result.
      */
-    public void build(Consumer<IFinishedRecipe> consumerIn, String save)
+    public void build(Consumer<FinishedRecipe> consumerIn, String save)
     {
         this.build(consumerIn, Reference.MOD_ID, save);
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, String modid, String save)
+    public void build(Consumer<FinishedRecipe> consumerIn, String modid, String save)
     {
         ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
         if(new ResourceLocation(Reference.MOD_ID, save).equals(resourcelocation))
@@ -139,11 +138,11 @@ public class WorkbenchRecipeBuilder
     /**
      * Builds this recipe into an {@link IFinishedRecipe}.
      */
-    public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id)
+    public void build(Consumer<FinishedRecipe> consumerIn, ResourceLocation id)
     {
         consumerIn.accept(new Result(id, this.result, this.count, this.group == null ? "" : this.group, this.materials));
     }
-    public static class Result implements IFinishedRecipe
+    public static class Result implements FinishedRecipe
     {
         private final ResourceLocation id;
         private final Item item;
@@ -151,7 +150,7 @@ public class WorkbenchRecipeBuilder
         private final String group;
         private final List<Pair<Ingredient, Integer>> materials;
 
-        public Result(ResourceLocation id, IItemProvider item, int count, String group, List<Pair<Ingredient, Integer>> materials)
+        public Result(ResourceLocation id, ItemLike item, int count, String group, List<Pair<Ingredient, Integer>> materials)
         {
             this.id = id;
             this.item = item.asItem();
@@ -191,7 +190,7 @@ public class WorkbenchRecipeBuilder
         }
 
         @Override
-        public IRecipeSerializer<?> getType()
+        public RecipeSerializer<?> getType()
         {
             return ModRecipeSerializers.WORKBENCH.get();
         }

@@ -1,9 +1,7 @@
 package com.fasterxml.jackson.core.json.async;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.async.ByteArrayFeeder;
 import com.fasterxml.jackson.core.async.NonBlockingInputFeeder;
 import com.fasterxml.jackson.core.io.CharTypes;
@@ -12,7 +10,8 @@ import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.sym.ByteQuadsCanonicalizer;
 import com.fasterxml.jackson.core.util.VersionUtil;
 
-import com.fasterxml.jackson.core.JsonParser.Feature;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Non-blocking parser implementation for JSON content.

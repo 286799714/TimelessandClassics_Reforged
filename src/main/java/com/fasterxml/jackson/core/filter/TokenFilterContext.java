@@ -1,8 +1,11 @@
 package com.fasterxml.jackson.core.filter;
 
-import java.io.IOException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonStreamContext;
+import com.fasterxml.jackson.core.JsonToken;
 
-import com.fasterxml.jackson.core.*;
+import java.io.IOException;
 
 /**
  * Alternative variant of {@link JsonStreamContext}, used when filtering

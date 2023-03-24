@@ -4,30 +4,28 @@ import com.tac.guns.Config;
 import com.tac.guns.init.ModEffects;
 import com.tac.guns.init.ModSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.TickableSound;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Player;
 
-import net.minecraft.client.audio.ISound.AttenuationType;
-
-public class StunRingingSound extends TickableSound
+public class StunRingingSound extends AbstractTickableSoundInstance
 {
     public StunRingingSound()
     {
-        super(ModSounds.ENTITY_STUN_GRENADE_RING.get(), SoundCategory.MASTER);
+        super(ModSounds.ENTITY_STUN_GRENADE_RING.get(), SoundSource.MASTER);
         this.looping = true;
-        this.attenuation = AttenuationType.NONE;
+        this.attenuation = Attenuation.NONE;
         this.tick();
     }
 
     @Override
     public void tick()
     {
-        PlayerEntity player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if(player != null && player.isAlive())
         {
-            EffectInstance effect = player.getEffect(ModEffects.DEAFENED.get());
+            MobEffectInstance effect = player.getEffect(ModEffects.DEAFENED.get());
             if(effect != null)
             {
                 this.x = (float) player.getX();

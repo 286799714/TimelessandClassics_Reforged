@@ -1,15 +1,11 @@
 package com.fasterxml.jackson.databind.util;
 
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
+import com.fasterxml.jackson.core.io.NumberInput;
+
+import java.text.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.fasterxml.jackson.core.io.NumberInput;
 
 /**
  * Jackson's internal {@link DateFormat} implementation used by standard Date

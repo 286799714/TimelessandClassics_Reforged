@@ -1,9 +1,9 @@
 package com.tac.guns.util;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Collection;
 
@@ -14,10 +14,10 @@ public class VoxelShapeHelper
 {
     public static VoxelShape combineAll(Collection<VoxelShape> shapes)
     {
-        VoxelShape result = VoxelShapes.empty();
+        VoxelShape result = Shapes.empty();
         for(VoxelShape shape : shapes)
         {
-            result = VoxelShapes.joinUnoptimized(result, shape, IBooleanFunction.OR);
+            result = Shapes.joinUnoptimized(result, shape, BooleanOp.OR);
         }
         return result.optimize();
     }
@@ -34,7 +34,7 @@ public class VoxelShapeHelper
     public static VoxelShape rotate(VoxelShape source, Direction direction)
     {
         double[] adjustedValues = adjustValues(direction, source.min(Direction.Axis.X), source.min(Direction.Axis.Z), source.max(Direction.Axis.X), source.max(Direction.Axis.Z));
-        return VoxelShapes.box(adjustedValues[0], source.min(Direction.Axis.Y), adjustedValues[1], adjustedValues[2], source.max(Direction.Axis.Y), adjustedValues[3]);
+        return Shapes.box(adjustedValues[0], source.min(Direction.Axis.Y), adjustedValues[1], adjustedValues[2], source.max(Direction.Axis.Y), adjustedValues[3]);
     }
 
     private static double[] adjustValues(Direction direction, double var1, double var2, double var3, double var4)

@@ -1,12 +1,12 @@
 package com.fasterxml.jackson.databind.annotation;
 
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.util.Converter;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.util.Converter;
 
 /**
  * Annotation used for configuring serialization aspects, by attaching

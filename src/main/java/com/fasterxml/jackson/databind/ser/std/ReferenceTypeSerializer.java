@@ -1,7 +1,5 @@
 package com.fasterxml.jackson.databind.ser.std;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
@@ -15,6 +13,8 @@ import com.fasterxml.jackson.databind.type.ReferenceType;
 import com.fasterxml.jackson.databind.util.ArrayBuilders;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.fasterxml.jackson.databind.util.NameTransformer;
+
+import java.io.IOException;
 
 /**
  * Base implementation for values of {@link ReferenceType}.

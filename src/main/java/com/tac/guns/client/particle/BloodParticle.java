@@ -1,15 +1,15 @@
 package com.tac.guns.client.particle;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -17,9 +17,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 @OnlyIn(Dist.CLIENT)
-public class BloodParticle extends SpriteTexturedParticle
+public class BloodParticle extends TextureSheetParticle
 {
-    public BloodParticle(ClientWorld world, double x, double y, double z)
+    public BloodParticle(ClientLevel world, double x, double y, double z)
     {
         super(world, x, y, z, 0.1, 0.1, 0.1);
         this.setColor(0.541F, 0.027F, 0.027F);
@@ -29,9 +29,9 @@ public class BloodParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public IParticleRenderType getRenderType()
+    public ParticleRenderType getRenderType()
     {
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override
@@ -47,12 +47,12 @@ public class BloodParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public void render(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks)
+    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks)
     {
-        Vector3d projectedView = renderInfo.getPosition();
-        float x = (float) (MathHelper.lerp((double) partialTicks, this.xo, this.x) - projectedView.x());
-        float y = (float) (MathHelper.lerp((double) partialTicks, this.yo, this.y) - projectedView.y());
-        float z = (float) (MathHelper.lerp((double) partialTicks, this.zo, this.z) - projectedView.z());
+        Vec3 projectedView = renderInfo.getPosition();
+        float x = (float) (Mth.lerp((double) partialTicks, this.xo, this.x) - projectedView.x());
+        float y = (float) (Mth.lerp((double) partialTicks, this.yo, this.y) - projectedView.y());
+        float z = (float) (Mth.lerp((double) partialTicks, this.zo, this.z) - projectedView.z());
 
         if(this.onGround)
         {
@@ -70,7 +70,7 @@ public class BloodParticle extends SpriteTexturedParticle
         else
         {
             rotation = new Quaternion(renderInfo.rotation());
-            float angle = MathHelper.lerp(partialTicks, this.oRoll, this.roll);
+            float angle = Mth.lerp(partialTicks, this.oRoll, this.roll);
             rotation.mul(Vector3f.ZP.rotation(angle));
         }
 
@@ -102,16 +102,16 @@ public class BloodParticle extends SpriteTexturedParticle
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class Factory implements IParticleFactory<BasicParticleType>
+    public static class Factory implements ParticleProvider<SimpleParticleType>
     {
-        private final IAnimatedSprite spriteSet;
+        private final SpriteSet spriteSet;
 
-        public Factory(IAnimatedSprite spriteSet)
+        public Factory(SpriteSet spriteSet)
         {
             this.spriteSet = spriteSet;
         }
 
-        public Particle createParticle(BasicParticleType typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
             BloodParticle particle = new BloodParticle(worldIn, x, y, z);
             particle.pickSprite(this.spriteSet);

@@ -1,11 +1,6 @@
 package com.fasterxml.jackson.databind.ser.impl;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.WritableTypeId;
@@ -17,6 +12,10 @@ import com.fasterxml.jackson.databind.ser.ContainerSerializer;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.fasterxml.jackson.databind.util.ArrayBuilders;
 import com.fasterxml.jackson.databind.util.BeanUtil;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @since 2.5

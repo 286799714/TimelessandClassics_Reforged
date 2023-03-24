@@ -1,12 +1,12 @@
 package com.fasterxml.jackson.databind.module;
 
-import java.util.HashMap;
-
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.deser.ValueInstantiator;
 import com.fasterxml.jackson.databind.deser.ValueInstantiators;
 import com.fasterxml.jackson.databind.type.ClassKey;
+
+import java.util.HashMap;
 
 public class SimpleValueInstantiators
     extends ValueInstantiators.Base

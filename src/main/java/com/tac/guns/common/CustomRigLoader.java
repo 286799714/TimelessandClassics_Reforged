@@ -7,17 +7,15 @@ import com.google.gson.JsonElement;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Validator;
-import com.tac.guns.client.CustomGunManager;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.io.InvalidObjectException;
@@ -28,7 +26,7 @@ import java.util.Map;
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
-public class CustomRigLoader extends JsonReloadListener
+public class CustomRigLoader extends SimpleJsonResourceReloadListener
 {
     private static final Gson GSON_INSTANCE = Util.make(() -> {
         GsonBuilder builder = new GsonBuilder();
@@ -45,7 +43,7 @@ public class CustomRigLoader extends JsonReloadListener
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> objects, IResourceManager manager, IProfiler profiler)
+    protected void apply(Map<ResourceLocation, JsonElement> objects, ResourceManager manager, ProfilerFiller profiler)
     {
         ImmutableMap.Builder<ResourceLocation, CustomRig> builder = ImmutableMap.builder();
         objects.forEach((resourceLocation, object) ->
@@ -80,7 +78,7 @@ public class CustomRigLoader extends JsonReloadListener
      *
      * @param buffer a packet buffer get
      */
-    public void writeCustomRigs(PacketBuffer buffer)
+    public void writeCustomRigs(FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(this.customRigMap.size());
         this.customRigMap.forEach((id, rig) -> {
@@ -95,7 +93,7 @@ public class CustomRigLoader extends JsonReloadListener
      * @param buffer a packet buffer get
      * @return a map of registered guns from the server
      */
-    public static ImmutableMap<ResourceLocation, CustomRig> readCustomRigs(PacketBuffer buffer)
+    public static ImmutableMap<ResourceLocation, CustomRig> readCustomRigs(FriendlyByteBuf buffer)
     {
         int size = buffer.readVarInt();
         if(size > 0)

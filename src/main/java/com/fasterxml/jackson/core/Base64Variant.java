@@ -4,9 +4,9 @@
  */
 package com.fasterxml.jackson.core;
 
-import java.util.Arrays;
-
 import com.fasterxml.jackson.core.util.ByteArrayBuilder;
+
+import java.util.Arrays;
 
 /**
  * Class used to define specific details of which

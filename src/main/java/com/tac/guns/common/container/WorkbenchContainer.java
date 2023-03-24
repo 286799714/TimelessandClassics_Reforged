@@ -3,23 +3,23 @@ package com.tac.guns.common.container;
 import com.tac.guns.crafting.WorkbenchRecipes;
 import com.tac.guns.init.ModContainers;
 import com.tac.guns.tileentity.WorkbenchTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class WorkbenchContainer extends Container
+public class WorkbenchContainer extends AbstractContainerMenu
 {
     private WorkbenchTileEntity workbench;
     private BlockPos pos;
 
-    public WorkbenchContainer(int windowId, IInventory playerInventory, WorkbenchTileEntity workbench)
+    public WorkbenchContainer(int windowId, Container playerInventory, WorkbenchTileEntity workbench)
     {
         super(ModContainers.WORKBENCH.get(), windowId);
         this.workbench = workbench;
@@ -57,13 +57,13 @@ public class WorkbenchContainer extends Container
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn)
+    public boolean stillValid(Player playerIn)
     {
         return workbench.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(Player playerIn, int index)
     {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);

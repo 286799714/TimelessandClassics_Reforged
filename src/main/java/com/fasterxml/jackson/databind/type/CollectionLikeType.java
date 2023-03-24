@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.databind.type;
 
+import com.fasterxml.jackson.databind.JavaType;
+
 import java.lang.reflect.TypeVariable;
 import java.util.Collection;
-
-import com.fasterxml.jackson.databind.JavaType;
 
 /**
  * Type that represents things that act similar to {@link Collection};

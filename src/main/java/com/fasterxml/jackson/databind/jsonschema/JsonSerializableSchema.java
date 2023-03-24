@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.jsonschema;
 
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Retention;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
-
 import com.fasterxml.jackson.annotation.JacksonAnnotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Annotation that can be used to define JSON Schema definition for

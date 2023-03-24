@@ -13,8 +13,9 @@
   "client": [
     "client.FirstPersonRendererMixin",
     "client.GameRendererMixin",
-    "client.MinecraftStaticMixin",
     "client.InventoryScreenMixin",
+    "client.LivingRendererMixin",
+    "client.MinecraftStaticMixin",
     "client.MouseHelperMixin",
     "client.WorldRendererMixin"
   ],

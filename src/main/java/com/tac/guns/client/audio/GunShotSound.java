@@ -2,28 +2,26 @@ package com.tac.guns.client.audio;
 
 import com.tac.guns.Config;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.LocatableSound;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-
-import net.minecraft.client.audio.ISound.AttenuationType;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.resources.sounds.AbstractSoundInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class GunShotSound extends LocatableSound
+public class GunShotSound extends AbstractSoundInstance
 {
-    public GunShotSound(ResourceLocation soundIn, SoundCategory categoryIn, float x, float y, float z, float volume, float pitch, boolean reload)
+    public GunShotSound(ResourceLocation soundIn, SoundSource categoryIn, float x, float y, float z, float volume, float pitch, boolean reload)
     {
         super(soundIn, categoryIn);
         this.x = x;
         this.y = y;
         this.z = z;
         this.pitch = pitch;
-        this.attenuation = AttenuationType.NONE;
+        this.attenuation = Attenuation.NONE;
 
-        ClientPlayerEntity player = Minecraft.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
         if(player != null)
         {
             float distance = reload ? 16.0F : Config.SERVER.gunShotMaxDistance.get().floatValue();

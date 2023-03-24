@@ -26,9 +26,9 @@
  */
 package de.javagl.jgltf.model;
 
-import java.util.Map;
-
 import de.javagl.jgltf.model.gl.TechniqueModel;
+
+import java.util.Map;
 
 /**
  * Interface for a material model

@@ -4,12 +4,10 @@ import com.tac.guns.client.screen.UpgradeBenchScreen;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.item.GunItem;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -56,7 +54,7 @@ public class GunEnchantmentHelper
         if(level > 0)
         {
             float newRate = rate * (0.25F * level);
-            rate -= MathHelper.clamp(newRate, 0, rate);
+            rate -= Mth.clamp(newRate, 0, rate);
         }
         return rate;
     }

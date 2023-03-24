@@ -1,26 +1,22 @@
 package com.tac.guns.client.util;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.tileentity.UpgradeBenchTileEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.item.ItemStack;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class UpgradeBenchRenderUtil extends TileEntityRenderer<UpgradeBenchTileEntity>
-{
-    public UpgradeBenchRenderUtil(TileEntityRendererDispatcher tileEntityRendererDispatcher) {
-        super(tileEntityRendererDispatcher);
-    }
+public class UpgradeBenchRenderUtil implements BlockEntityRenderer<UpgradeBenchTileEntity> {
 
 
     /**
@@ -39,7 +35,7 @@ public class UpgradeBenchRenderUtil extends TileEntityRenderer<UpgradeBenchTileE
      *                        CreeperRenderer.getOverlayProgress()
      */
     @Override
-    public void render(UpgradeBenchTileEntity tileEntityMBE21, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers,
+    public void render(UpgradeBenchTileEntity tileEntityMBE21, float partialTicks, PoseStack matrixStack, MultiBufferSource renderBuffers,
                        int combinedLight, int combinedOverlay) {
         //ItemCameraTransforms.TransformType.GROUND,
         matrixStack.pushPose();
@@ -48,9 +44,9 @@ public class UpgradeBenchRenderUtil extends TileEntityRenderer<UpgradeBenchTileE
 
         matrixStack.translate(-0.14, -0.4200001, 0);
         if(!(tileEntityMBE21.getItem(0).getItem() instanceof TimelessGunItem))
-            GunRenderingHandler.get().renderWeapon(Minecraft.getInstance().player, ItemStack.of(tileEntityMBE21.getUpdateTag().getCompound("weapon")), ItemCameraTransforms.TransformType.GROUND, matrixStack, renderBuffers, combinedLight, combinedOverlay);
+            GunRenderingHandler.get().renderWeapon(Minecraft.getInstance().player, ItemStack.of(tileEntityMBE21.getUpdateTag().getCompound("weapon")), ItemTransforms.TransformType.GROUND, matrixStack, renderBuffers, combinedLight, combinedOverlay);
         else
-            GunRenderingHandler.get().renderWeapon(Minecraft.getInstance().player, tileEntityMBE21.getItem(0), ItemCameraTransforms.TransformType.GROUND, matrixStack, renderBuffers, combinedLight, combinedOverlay);
+            GunRenderingHandler.get().renderWeapon(Minecraft.getInstance().player, tileEntityMBE21.getItem(0), ItemTransforms.TransformType.GROUND, matrixStack, renderBuffers, combinedLight, combinedOverlay);
         matrixStack.popPose();
 
         matrixStack.pushPose();
@@ -63,15 +59,15 @@ public class UpgradeBenchRenderUtil extends TileEntityRenderer<UpgradeBenchTileE
         if(tileEntityMBE21.getItem(1).getItem() == ModItems.MODULE.get())
         {
             if(tileEntityMBE21.getItem(1).getCount() > 0) {
-                Minecraft.getInstance().getItemRenderer().renderStatic(tileEntityMBE21.getItem(1), ItemCameraTransforms.TransformType.GROUND, combinedLight, combinedOverlay, matrixStack, renderBuffers);
+                Minecraft.getInstance().getItemRenderer().renderStatic(tileEntityMBE21.getItem(1), ItemTransforms.TransformType.GROUND, combinedLight, combinedOverlay, matrixStack, renderBuffers, 0);
             }
             if(tileEntityMBE21.getItem(1).getCount() > 1) {
                 matrixStack.translate(0.12, 0, 0);
-                Minecraft.getInstance().getItemRenderer().renderStatic(tileEntityMBE21.getItem(1), ItemCameraTransforms.TransformType.GROUND, combinedLight, combinedOverlay, matrixStack, renderBuffers);
+                Minecraft.getInstance().getItemRenderer().renderStatic(tileEntityMBE21.getItem(1), ItemTransforms.TransformType.GROUND, combinedLight, combinedOverlay, matrixStack, renderBuffers, 0);
             }
             if(tileEntityMBE21.getItem(1).getCount() > 2) {
                 matrixStack.translate(0.12, 0, 0);
-                Minecraft.getInstance().getItemRenderer().renderStatic(tileEntityMBE21.getItem(1), ItemCameraTransforms.TransformType.GROUND, combinedLight, combinedOverlay, matrixStack, renderBuffers);
+                Minecraft.getInstance().getItemRenderer().renderStatic(tileEntityMBE21.getItem(1), ItemTransforms.TransformType.GROUND, combinedLight, combinedOverlay, matrixStack, renderBuffers, 0);
             }
         }
 

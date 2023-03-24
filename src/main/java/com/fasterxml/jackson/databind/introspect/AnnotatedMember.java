@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind.introspect;
 
+import com.fasterxml.jackson.databind.util.ClassUtil;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
 import java.util.Collections;
-
-import com.fasterxml.jackson.databind.util.ClassUtil;
 
 /**
  * Intermediate base class for annotated entities that are members of

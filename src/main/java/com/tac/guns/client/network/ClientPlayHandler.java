@@ -12,42 +12,31 @@ import com.tac.guns.client.handler.ReloadHandler;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.AnimationSoundManager;
 import com.tac.guns.client.render.animation.module.AnimationSoundMeta;
-import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.common.NetworkRigManager;
 import com.tac.guns.init.ModParticleTypes;
-import com.tac.guns.inventory.gear.InventoryListener;
-import com.tac.guns.inventory.gear.armor.ArmorRigInventoryCapability;
-import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
-import com.tac.guns.item.GunItem;
 import com.tac.guns.network.message.*;
 import com.tac.guns.particles.BulletHoleData;
-import com.tac.guns.util.WearableHelper;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -69,19 +58,19 @@ public class ClientPlayHandler
 
         if(message.getShooterId() == mc.player.getId())
         {
-            Minecraft.getInstance().getSoundManager().play(new SimpleSound(message.getId(), SoundCategory.PLAYERS, (float) (message.getVolume()*Config.CLIENT.sounds.weaponsVolume.get()), message.getPitch(), false, 0, ISound.AttenuationType.LINEAR, 0, 0, 0,
+            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(message.getId(), SoundSource.PLAYERS, (float) (message.getVolume()*Config.CLIENT.sounds.weaponsVolume.get()), message.getPitch(), false, 0, SoundInstance.Attenuation.LINEAR, 0, 0, 0,
                     true));
         }
         else
         {
-            Minecraft.getInstance().getSoundManager().play(new GunShotSound(message.getId(), SoundCategory.PLAYERS, message.getX(), message.getY(), message.getZ(), message.getVolume(), message.getPitch(), message.isReload()));
+            Minecraft.getInstance().getSoundManager().play(new GunShotSound(message.getId(), SoundSource.PLAYERS, message.getX(), message.getY(), message.getZ(), message.getVolume(), message.getPitch(), message.isReload()));
         }
     }
 
     public static void handleMessageAnimationSound(UUID fromWho, ResourceLocation animationResource, ResourceLocation soundResource, boolean play){
-        World world = Minecraft.getInstance().level;
+        Level world = Minecraft.getInstance().level;
         if(world == null) return;
-        PlayerEntity player = world.getPlayerByUUID(fromWho);
+        Player player = world.getPlayerByUUID(fromWho);
         if (player == null) return;
         if (animationResource == null || soundResource == null) return;
         AnimationMeta animationMeta = new AnimationMeta(animationResource);
@@ -96,7 +85,7 @@ public class ClientPlayHandler
         {
             return;
         }
-        World world = Minecraft.getInstance().level;
+        Level world = Minecraft.getInstance().level;
         if(world != null)
         {
             for(int i = 0; i < 10; i++)
@@ -108,12 +97,12 @@ public class ClientPlayHandler
 
     public static void handleMessageBulletTrail(MessageBulletTrail message)
     {
-        World world = Minecraft.getInstance().level;
+        Level world = Minecraft.getInstance().level;
         if(world != null)
         {
             int[] entityIds = message.getEntityIds();
-            Vector3d[] positions = message.getPositions();
-            Vector3d[] motions = message.getMotions();
+            Vec3[] positions = message.getPositions();
+            Vec3[] motions = message.getMotions();
             float[] shooterYaws = message.getShooterYaws();
             float[] shooterPitch = message.getShooterPitches();
             ItemStack item = message.getItem();
@@ -124,7 +113,7 @@ public class ClientPlayHandler
             int shooterId = message.getShooterId();
             for(int i = 0; i < message.getCount(); i++)
             {
-                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i], shooterYaws[i], shooterPitch[i], item, trailColor, trailLengthMultiplier, life, gravity, shooterId, message.getSize()));
+                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i], shooterYaws[i], shooterPitch[i], item, trailColor, trailLengthMultiplier, life, gravity, shooterId, message.getCount()));
             }
         }
     }
@@ -132,8 +121,8 @@ public class ClientPlayHandler
     public static void handleExplosionStunGrenade(MessageStunGrenade message)
     {
         Minecraft mc = Minecraft.getInstance();
-        ParticleManager particleManager = mc.particleEngine;
-        World world = mc.level;
+        ParticleEngine particleManager = mc.particleEngine;
+        Level world = mc.level;
         double x = message.getX();
         double y = message.getY();
         double z = message.getZ();
@@ -153,7 +142,7 @@ public class ClientPlayHandler
         }
     }
 
-    private static Particle spawnParticle(ParticleManager manager, IParticleData data, double x, double y, double z, Random rand, double velocityMultiplier)
+    private static Particle spawnParticle(ParticleEngine manager, ParticleOptions data, double x, double y, double z, Random rand, double velocityMultiplier)
     {
         //if(GunMod.cabLoaded)
             //deleteBitOnHit();
@@ -171,7 +160,7 @@ public class ClientPlayHandler
     public static void handleProjectileHitBlock(MessageProjectileHitBlock message)
     {
         Minecraft mc = Minecraft.getInstance();
-        World world = mc.level;
+        Level world = mc.level;
         if (world != null) {
             BlockState state = world.getBlockState(message.getPos());
             double holeX = message.getX() + 0.005 * message.getFace().getStepX();
@@ -180,10 +169,10 @@ public class ClientPlayHandler
             double distance = Math.sqrt(mc.player.distanceToSqr(message.getX(), message.getY(), message.getZ()));
             world.addParticle(new BulletHoleData(message.getFace(), message.getPos()), false, holeX, holeY, holeZ, 0, 0, 0);
             if (distance < 16.0) {
-                world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, state), false, message.getX(), message.getY(), message.getZ(), 0, 0, 0);
+                world.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), false, message.getX(), message.getY(), message.getZ(), 0, 0, 0);
             }
             if (distance < 32.0) {
-                world.playLocalSound(message.getX(), message.getY(), message.getZ(), state.getSoundType().getBreakSound(), SoundCategory.BLOCKS, 0.75F, 2.0F, false);
+                world.playLocalSound(message.getX(), message.getY(), message.getZ(), state.getSoundType().getBreakSound(), SoundSource.BLOCKS, 0.75F, 2.0F, false);
             }
         }
     }
@@ -191,7 +180,7 @@ public class ClientPlayHandler
     public static void handleProjectileHitEntity(MessageProjectileHitEntity message)
     {
         Minecraft mc = Minecraft.getInstance();
-        World world = mc.level;
+        Level world = mc.level;
         if(world == null)
             return;
 
@@ -202,7 +191,7 @@ public class ClientPlayHandler
         if(event == null)
             return;
 
-        mc.getSoundManager().play(SimpleSound.forUI(event, 1.0F, 1.0F + world.random.nextFloat() * 0.2F));
+        mc.getSoundManager().play(SimpleSoundInstance.forUI(event, 1.0F, 1.0F + world.random.nextFloat() * 0.2F));
     }
 
     @Nullable

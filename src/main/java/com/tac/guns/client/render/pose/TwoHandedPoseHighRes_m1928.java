@@ -1,15 +1,14 @@
 package com.tac.guns.client.render.pose;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.tac.guns.client.handler.ReloadHandler;
 import com.tac.guns.client.util.RenderUtil;
-import com.tac.guns.item.GunItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemStack;
 
 
 /**
@@ -17,7 +16,7 @@ import net.minecraft.util.math.vector.Vector3f;
  */
 public class TwoHandedPoseHighRes_m1928 extends TwoHandedPose {
 	@Override
-	public void renderFirstPersonArms(ClientPlayerEntity player, HandSide hand, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, float partialTicks) {
+	public void renderFirstPersonArms(LocalPlayer player, HumanoidArm hand, ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, float partialTicks) {
 		matrixStack.translate(0, 0, -1);
 		matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
 		
@@ -26,10 +25,10 @@ public class TwoHandedPoseHighRes_m1928 extends TwoHandedPose {
 		float reloadProgress = ReloadHandler.get().getReloadProgress(partialTicks, stack);
 		matrixStack.translate(reloadProgress * 1.5, -reloadProgress, -reloadProgress * 1.5);
 		
-		int side = hand.getOpposite() == HandSide.RIGHT ? 1 : -1;
+		int side = hand.getOpposite() == HumanoidArm.RIGHT ? 1 : -1;
 		matrixStack.translate(7.0 * side * 0.0625, -1.195, -0.2);
 		
-		if (Minecraft.getInstance().player.getModelName().equals("slim") && hand.getOpposite() == HandSide.LEFT) {
+		if (Minecraft.getInstance().player.getModelName().equals("slim") && hand.getOpposite() == HumanoidArm.LEFT) {
 			matrixStack.translate(0.03125F * -side, 0, 0);
 		}
 		
@@ -45,9 +44,9 @@ public class TwoHandedPoseHighRes_m1928 extends TwoHandedPose {
 		
 		double centerOffset = 2.5;
 		if (Minecraft.getInstance().player.getModelName().equals("slim")) {
-			centerOffset += hand == HandSide.RIGHT ? 0.2 : 0.8;
+			centerOffset += hand == HumanoidArm.RIGHT ? 0.2 : 0.8;
 		}
-		centerOffset = hand == HandSide.RIGHT ? -centerOffset : centerOffset;
+		centerOffset = hand == HumanoidArm.RIGHT ? -centerOffset : centerOffset;
 		matrixStack.translate(centerOffset * 0.0605, -0.65, -1.475);
 		
 		matrixStack.mulPose(Vector3f.XP.rotationDegrees(80F));

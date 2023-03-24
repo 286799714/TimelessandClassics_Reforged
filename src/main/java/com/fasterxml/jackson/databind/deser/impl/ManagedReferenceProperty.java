@@ -1,12 +1,13 @@
 package com.fasterxml.jackson.databind.deser.impl;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 
 /**
  * Wrapper property that is used to handle managed (forward) properties

@@ -1,12 +1,8 @@
 package com.fasterxml.jackson.databind.ser.impl;
 
-import java.util.Arrays;
+import com.fasterxml.jackson.databind.*;
 
-import com.fasterxml.jackson.databind.BeanProperty;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import java.util.Arrays;
 
 /**
  * Helper container used for resolving serializers for dynamic (possibly but not

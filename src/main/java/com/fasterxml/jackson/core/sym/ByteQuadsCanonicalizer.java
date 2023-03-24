@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.core.sym;
 
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.util.InternCache;
+
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Replacement for <code>BytesToNameCanonicalizer</code> which aims at more localized

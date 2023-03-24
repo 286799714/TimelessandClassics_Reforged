@@ -26,16 +26,16 @@
  */
 package de.javagl.jgltf.model.io;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.function.Consumer;
-
 import de.javagl.jgltf.model.GltfModel;
 import de.javagl.jgltf.model.io.v1.GltfAssetV1;
 import de.javagl.jgltf.model.io.v2.GltfAssetV2;
 import de.javagl.jgltf.model.v1.GltfModelV1;
 import de.javagl.jgltf.model.v2.GltfModelV2;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.function.Consumer;
 
 /**
  * A class for reading a {@link GltfModel} from a URI.

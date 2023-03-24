@@ -1,16 +1,20 @@
 package com.fasterxml.jackson.databind.ext;
 
-import java.io.IOException;
-import java.util.*;
-
-import javax.xml.datatype.*;
-import javax.xml.namespace.QName;
-
-import com.fasterxml.jackson.core.*;
-
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Container deserializers that handle "core" XML types: ones included in standard

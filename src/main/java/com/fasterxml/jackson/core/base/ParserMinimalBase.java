@@ -1,15 +1,15 @@
 package com.fasterxml.jackson.core.base;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.exc.InputCoercionException;
 import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.fasterxml.jackson.core.io.NumberInput;
 import com.fasterxml.jackson.core.util.ByteArrayBuilder;
 import com.fasterxml.jackson.core.util.VersionUtil;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import static com.fasterxml.jackson.core.JsonTokenId.*;
 

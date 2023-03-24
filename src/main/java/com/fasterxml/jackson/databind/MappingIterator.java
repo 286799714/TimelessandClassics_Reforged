@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind;
 
+import com.fasterxml.jackson.core.*;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.*;
-
-import com.fasterxml.jackson.core.*;
 
 /**
  * Iterator exposed by {@link ObjectMapper} when binding sequence of

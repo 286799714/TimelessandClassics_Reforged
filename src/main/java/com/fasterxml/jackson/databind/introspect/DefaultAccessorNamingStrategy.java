@@ -1,14 +1,14 @@
 package com.fasterxml.jackson.databind.introspect;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.jdk14.JDK14Util;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Default {@link AccessorNamingStrategy} used by Jackson: to be used either as-is,

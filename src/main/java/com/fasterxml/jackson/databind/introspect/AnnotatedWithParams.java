@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.databind.introspect;
 
+import com.fasterxml.jackson.databind.JavaType;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-
-import com.fasterxml.jackson.databind.JavaType;
 
 /**
  * Intermediate base class that encapsulates features that

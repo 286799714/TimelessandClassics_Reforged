@@ -1,21 +1,15 @@
 package com.fasterxml.jackson.databind.module;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.ValueInstantiator;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 
-import com.fasterxml.jackson.databind.Module.SetupContext;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Vanilla {@link Module} implementation that allows registration

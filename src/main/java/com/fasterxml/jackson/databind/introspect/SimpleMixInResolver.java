@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.databind.introspect;
 
+import com.fasterxml.jackson.databind.type.ClassKey;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.fasterxml.jackson.databind.type.ClassKey;
 
 /**
  * Simple implementation of {@link ClassIntrospector.MixInResolver}

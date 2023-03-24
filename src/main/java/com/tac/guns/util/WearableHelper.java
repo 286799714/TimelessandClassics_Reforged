@@ -8,13 +8,12 @@ import com.tac.guns.inventory.gear.InventoryListener;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageGunSound;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -31,7 +30,7 @@ public class WearableHelper
     // Helpers, to maintain speed and efficency, we need to check if the tag is populated BEFORE running the helper methods
 
     @Nullable
-    public static ItemStack PlayerWornRig(PlayerEntity player)
+    public static ItemStack PlayerWornRig(Player player)
     {
         // Change slot for body
         if(GunMod.curiosLoaded)
@@ -85,7 +84,7 @@ public class WearableHelper
         return false;
     }
 
-    public static boolean tickFromCurrentDurability(PlayerEntity player, ProjectileEntity proj)
+    public static boolean tickFromCurrentDurability(Player player, ProjectileEntity proj)
     {
         ItemStack rig = PlayerWornRig(player);
         float og = rig.getTag().getFloat("RigDurability");
@@ -98,8 +97,8 @@ public class WearableHelper
         else if (og - proj.getDamage() < 0) {
             ResourceLocation brokenSound = ((ArmorRigItem)rig.getItem()).getRig().getSounds().getBroken();
             if (brokenSound != null) {
-                MessageGunSound messageSound = new MessageGunSound(brokenSound, SoundCategory.PLAYERS, (float) player.getX(), (float) (player.getY() + 1.0), (float) player.getZ(), 1.5F, 1F, player.getId(), false, false);
-                PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), messageSound);
+                MessageGunSound messageSound = new MessageGunSound(brokenSound, SoundSource.PLAYERS, (float) player.getX(), (float) (player.getY() + 1.0), (float) player.getZ(), 1.5F, 1F, player.getId(), false, false);
+                PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), messageSound);
             }
             rig.getTag().putFloat("RigDurability", 0);
             return false;

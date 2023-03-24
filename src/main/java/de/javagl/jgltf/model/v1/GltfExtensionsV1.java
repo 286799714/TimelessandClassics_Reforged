@@ -26,15 +26,14 @@
  */
 package de.javagl.jgltf.model.v1;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.javagl.jgltf.impl.v1.GlTF;
+import de.javagl.jgltf.impl.v1.GlTFProperty;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import de.javagl.jgltf.impl.v1.GlTF;
-import de.javagl.jgltf.impl.v1.GlTFProperty;
 
 /**
  * Utility methods related to glTF extensions for glTF 1.0

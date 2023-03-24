@@ -1,32 +1,30 @@
 package com.tac.guns.client.handler;
 
-import com.tac.guns.client.render.animation.module.GunAnimationController;
-import com.tac.guns.mixin.client.MinecraftStaticMixin;
-import net.minecraftforge.eventbus.api.EventPriority;
-import org.lwjgl.glfw.GLFW;
-
 import com.tac.guns.Config;
 import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.mixin.client.MinecraftStaticMixin;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageEmptyMag;
 import com.tac.guns.network.message.MessageShoot;
 import com.tac.guns.network.message.MessageShooting;
 import com.tac.guns.network.message.MessageUpdateMoveInacc;
-
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 
 import static net.minecraftforge.event.TickEvent.Type.RENDER;
 
@@ -83,7 +81,7 @@ public class  ShootingHandler
         Minecraft mc = Minecraft.getInstance();
         if(mc == null || mc.player == null)
             return false;
-        if(mc.overlay != null)
+        if(mc.getOverlay() != null)
             return false;
         if(mc.screen != null)
             return false;
@@ -102,7 +100,7 @@ public class  ShootingHandler
             return;
 
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
+        Player player = mc.player;
         if(player == null)
             return;
 
@@ -126,7 +124,7 @@ public class  ShootingHandler
                     fire(player, heldItem);
 
                 if(!(heldItem.getTag().getInt("AmmoCount") > 0)) {
-                    player.displayClientMessage(new TranslationTextComponent("info.tac.out_of_ammo").withStyle(TextFormatting.UNDERLINE).withStyle(TextFormatting.BOLD).withStyle(TextFormatting.RED), true);
+                    player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
                     PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
                 }
             }
@@ -241,7 +239,7 @@ public class  ShootingHandler
             return;
 
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
+        Player player = mc.player;
         if( player != null )
         {
         	// CHECK HERE: Reduce by 1F in each tick until it is less than 0F
@@ -286,7 +284,7 @@ public class  ShootingHandler
         if (!isInGame())
             return;
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
+        Player player = mc.player;
         if (player != null)
             if(this.burstCooldown > 0)
                 this.burstCooldown -= 1;
@@ -300,7 +298,7 @@ public class  ShootingHandler
         if(!isInGame())
             return;
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
+        Player player = mc.player;
         if(player != null)
         {   ItemStack heldItem = player.getMainHandItem();
             if(heldItem.getItem() instanceof TimelessGunItem)
@@ -351,7 +349,7 @@ public class  ShootingHandler
         }
     }
 
-    public void fire(PlayerEntity player, ItemStack heldItem)
+    public void fire(Player player, ItemStack heldItem)
     {
         if(!(heldItem.getItem() instanceof GunItem))
             return;

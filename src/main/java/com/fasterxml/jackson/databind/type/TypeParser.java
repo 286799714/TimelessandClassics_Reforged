@@ -1,9 +1,11 @@
 package com.fasterxml.jackson.databind.type;
 
-import java.util.*;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Simple recursive-descent parser for parsing canonical {@link JavaType}

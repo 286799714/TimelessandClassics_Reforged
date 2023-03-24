@@ -1,26 +1,23 @@
 package com.tac.guns.client.handler;
 
-import static com.tac.guns.GunMod.LOGGER;
-
-import java.util.UUID;
-
-import org.apache.logging.log4j.Level;
-
 import com.tac.guns.client.InputHandler;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageLightChange;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.apache.logging.log4j.Level;
+
+import java.util.UUID;
+
+import static com.tac.guns.GunMod.LOGGER;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -44,7 +41,7 @@ public class FlashlightHandler
     {
     	InputHandler.ACTIVATE_SIDE_RAIL.addPressCallback( () -> {
     		final Minecraft mc = Minecraft.getInstance();
-    		final PlayerEntity player = mc.player;
+    		final Player player = mc.player;
     		if(
     			player != null
     			&& player.getMainHandItem().getItem() instanceof GunItem
@@ -59,7 +56,7 @@ public class FlashlightHandler
     private boolean isInGame()
     {
         Minecraft mc = Minecraft.getInstance();
-        if(mc.overlay != null)
+        if(mc.getOverlay() != null)
             return false;
         if(mc.screen != null)
             return false;
@@ -73,7 +70,7 @@ public class FlashlightHandler
     {
         if(!isInGame())
             return;
-        PlayerEntity player = event.player;
+        Player player = event.player;
         if(player == null)
             return;
 

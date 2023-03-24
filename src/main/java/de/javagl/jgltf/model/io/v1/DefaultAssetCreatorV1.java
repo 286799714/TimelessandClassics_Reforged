@@ -26,13 +26,6 @@
  */
 package de.javagl.jgltf.model.io.v1;
 
-import java.nio.ByteBuffer;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import de.javagl.jgltf.impl.v1.Buffer;
 import de.javagl.jgltf.impl.v1.GlTF;
 import de.javagl.jgltf.impl.v1.Image;
@@ -48,6 +41,13 @@ import de.javagl.jgltf.model.io.IO;
 import de.javagl.jgltf.model.v1.BinaryGltfV1;
 import de.javagl.jgltf.model.v1.GltfExtensionsV1;
 import de.javagl.jgltf.model.v1.GltfModelV1;
+
+import java.nio.ByteBuffer;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A class for creating a {@link GltfAssetV1} with a default data 

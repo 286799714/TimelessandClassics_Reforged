@@ -26,12 +26,7 @@
  */
 package de.javagl.jgltf.model.impl;
 
-import de.javagl.jgltf.model.AccessorData;
-import de.javagl.jgltf.model.AccessorDatas;
-import de.javagl.jgltf.model.AccessorModel;
-import de.javagl.jgltf.model.Accessors;
-import de.javagl.jgltf.model.BufferViewModel;
-import de.javagl.jgltf.model.ElementType;
+import de.javagl.jgltf.model.*;
 
 /**
  * Implementation of an {@link AccessorModel}

@@ -1,17 +1,17 @@
 package com.tac.guns.client.render.pose;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
 import com.tac.guns.common.GripType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -51,13 +51,13 @@ public class MiniGunPose extends WeaponPose
     }
 
     @Override
-    public void applyPlayerModelRotation(PlayerEntity player, PlayerModel model, Hand hand, float aimProgress)
+    public void applyPlayerModelRotation(Player player, PlayerModel model, InteractionHand hand, float aimProgress)
     {
         if(Config.CLIENT.display.oldAnimations.get())
         {
-            boolean right = Minecraft.getInstance().options.mainHand == HandSide.RIGHT ? hand == Hand.MAIN_HAND : hand == Hand.OFF_HAND;
-            ModelRenderer mainArm = right ? model.rightArm : model.leftArm;
-            ModelRenderer secondaryArm = right ? model.leftArm : model.rightArm;
+            boolean right = Minecraft.getInstance().options.mainHand == HumanoidArm.RIGHT ? hand == InteractionHand.MAIN_HAND : hand == InteractionHand.OFF_HAND;
+            ModelPart mainArm = right ? model.rightArm : model.leftArm;
+            ModelPart secondaryArm = right ? model.leftArm : model.rightArm;
             mainArm.xRot = (float) Math.toRadians(-15F);
             mainArm.yRot = (float) Math.toRadians(-45F) * (right ? 1F : -1F);
             mainArm.zRot = (float) Math.toRadians(0F);
@@ -72,13 +72,13 @@ public class MiniGunPose extends WeaponPose
     }
 
     @Override
-    public void applyPlayerPreRender(PlayerEntity player, Hand hand, float aimProgress, MatrixStack matrixStack, IRenderTypeBuffer buffer)
+    public void applyPlayerPreRender(Player player, InteractionHand hand, float aimProgress, PoseStack matrixStack, MultiBufferSource buffer)
     {
         if(Config.CLIENT.display.oldAnimations.get())
         {
-            boolean right = Minecraft.getInstance().options.mainHand == HandSide.RIGHT ? hand == Hand.MAIN_HAND : hand == Hand.OFF_HAND;
+            boolean right = Minecraft.getInstance().options.mainHand == HumanoidArm.RIGHT ? hand == InteractionHand.MAIN_HAND : hand == InteractionHand.OFF_HAND;
             player.yBodyRotO = player.yRotO + 45F * (right ? 1F : -1F);
-            player.yBodyRot = player.yRot + 45F * (right ? 1F : -1F);
+            player.yBodyRot = player.getYRot() + 45F * (right ? 1F : -1F);
         }
         else
         {
@@ -88,11 +88,11 @@ public class MiniGunPose extends WeaponPose
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void applyHeldItemTransforms(PlayerEntity player, Hand hand, float aimProgress, MatrixStack matrixStack, IRenderTypeBuffer buffer)
+    public void applyHeldItemTransforms(Player player, InteractionHand hand, float aimProgress, PoseStack matrixStack, MultiBufferSource buffer)
     {
         if(Config.CLIENT.display.oldAnimations.get())
         {
-            if(hand == Hand.OFF_HAND)
+            if(hand == InteractionHand.OFF_HAND)
             {
                 matrixStack.translate(0, -10 * 0.0625F, 0);
                 matrixStack.translate(0, 0, -2 * 0.0625F);
@@ -105,7 +105,7 @@ public class MiniGunPose extends WeaponPose
     }
 
     @Override
-    public boolean applyOffhandTransforms(PlayerEntity player, PlayerModel model, ItemStack stack, MatrixStack matrixStack, float partialTicks)
+    public boolean applyOffhandTransforms(Player player, PlayerModel model, ItemStack stack, PoseStack matrixStack, float partialTicks)
     {
         return GripType.applyBackTransforms(player, matrixStack);
     }

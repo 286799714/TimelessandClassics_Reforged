@@ -1,9 +1,9 @@
 package com.fasterxml.jackson.databind.deser.impl;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.databind.deser.SettableAnyProperty;
 import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
+
+import java.io.IOException;
 
 /**
  * Base class for property values that need to be buffered during

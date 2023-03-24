@@ -1,7 +1,5 @@
 package com.fasterxml.jackson.core.json;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.base.GeneratorBase;
 import com.fasterxml.jackson.core.io.CharTypes;
@@ -11,7 +9,7 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.JacksonFeatureSet;
 import com.fasterxml.jackson.core.util.VersionUtil;
 
-import com.fasterxml.jackson.core.JsonGenerator.Feature;
+import java.io.IOException;
 
 /**
  * Intermediate base class shared by JSON-backed generators

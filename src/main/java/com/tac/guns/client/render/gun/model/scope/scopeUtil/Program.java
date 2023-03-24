@@ -1,9 +1,9 @@
 package com.tac.guns.client.render.gun.model.scope.scopeUtil;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.IResource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.world.phys.Vec2;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -71,7 +71,7 @@ public class Program {
             if(shader == 0)
                 throw new Exception("glCreateShaderObjectARB failed");
 
-            IResource resource = Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
+            Resource resource = Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
             try (InputStream is = resource.getInputStream()) {
                 glShaderSourceARB(shader, IOUtils.toString(is));
             }
@@ -123,7 +123,7 @@ public class Program {
             ARBShaderObjects.glUniform1iARB(location, integer);
         }
 
-        public void setVector(Vector2f vector) {
+        public void setVector(Vec2 vector) {
             ARBShaderObjects.glUniform2fARB(location, vector.x, vector.y);
         }
 

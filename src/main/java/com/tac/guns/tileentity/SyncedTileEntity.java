@@ -1,36 +1,37 @@
 package com.tac.guns.tileentity;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.stream.Stream;
+import java.util.List;
 
-public class SyncedTileEntity extends TileEntity
+public class SyncedTileEntity extends BlockEntity
 {
-    public SyncedTileEntity(TileEntityType<?> tileEntityTypeIn)
+    public SyncedTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(tileEntityTypeIn);
+        super(type, pos, state);
     }
 
-    // Why protected?
-    public void syncToClient()
+    protected void syncToClient()
     {
         this.setChanged();
         if(this.level != null && !this.level.isClientSide)
         {
-            if(this.level instanceof ServerWorld)
+            if(this.level instanceof ServerLevel)
             {
-                SUpdateTileEntityPacket packet = this.getUpdatePacket();
+                ClientboundBlockEntityDataPacket packet = this.getUpdatePacket();
                 if(packet != null)
                 {
-                    ServerWorld server = (ServerWorld) this.level;
-                    Stream<ServerPlayerEntity> players = server.getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false);
+                    ServerLevel server = (ServerLevel) this.level;
+                    List<ServerPlayer> players = server.getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false);
                     players.forEach(player -> player.connection.send(packet));
                 }
             }
@@ -38,19 +39,19 @@ public class SyncedTileEntity extends TileEntity
     }
 
     @Override
-    public CompoundNBT getUpdateTag()
+    public CompoundTag getUpdateTag()
     {
-        return this.save(new CompoundNBT());
+        return this.saveWithFullMetadata();
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket()
+    public ClientboundBlockEntityDataPacket getUpdatePacket()
     {
-        return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void onDataPacket(final NetworkManager net, final SUpdateTileEntityPacket pkt)
+    public void onDataPacket(final Connection net, final ClientboundBlockEntityDataPacket pkt)
     {
         this.deserializeNBT(pkt.getTag());
     }

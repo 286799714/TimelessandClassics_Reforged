@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.databind.exc;
 
-import java.util.*;
-
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
+
+import java.util.Collection;
 
 /**
  * Specialized {@link JsonMappingException} sub-class used to indicate

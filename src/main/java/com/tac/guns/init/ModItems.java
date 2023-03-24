@@ -2,20 +2,19 @@ package com.tac.guns.init;
 
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
-import com.tac.guns.client.render.armor.models.CardboardArmor;
-import com.tac.guns.client.render.armor.models.MediumArmor;
-import com.tac.guns.client.render.armor.models.ModernArmor;
 import com.tac.guns.common.GunModifiers;
 import com.tac.guns.item.*;
-import com.tac.guns.item.TransitionalTypes.*;
+import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
+import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.item.TransitionalTypes.TimelessPistolGunItem;
 import com.tac.guns.item.TransitionalTypes.grenades.BaseballGrenadeItem;
 import com.tac.guns.item.TransitionalTypes.grenades.LightGrenadeItem;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.impl.*;
-import net.minecraft.item.Item;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ModItems
 {

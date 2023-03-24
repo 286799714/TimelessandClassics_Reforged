@@ -26,15 +26,14 @@
  */
 package de.javagl.jgltf.model.io.v2;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.function.Consumer;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.javagl.jgltf.impl.v2.GlTF;
 import de.javagl.jgltf.model.io.JacksonUtils;
 import de.javagl.jgltf.model.io.JsonError;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.function.Consumer;
 
 /**
  * A class for reading a version 2.0 {@link GlTF} from an input stream

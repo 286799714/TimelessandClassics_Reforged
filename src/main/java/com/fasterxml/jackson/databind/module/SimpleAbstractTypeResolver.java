@@ -1,13 +1,14 @@
 package com.fasterxml.jackson.databind.module;
 
-import java.lang.reflect.Modifier;
-import java.util.*;
-
 import com.fasterxml.jackson.databind.AbstractTypeResolver;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.ClassKey;
+
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Simple {@link AbstractTypeResolver} implementation, which is

@@ -1,11 +1,11 @@
 package com.fasterxml.jackson.databind.annotation;
 
+import com.fasterxml.jackson.databind.deser.ValueInstantiator;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.fasterxml.jackson.databind.deser.ValueInstantiator;
 
 /**
  * Annotation that can be used to indicate a {@link ValueInstantiator} to use

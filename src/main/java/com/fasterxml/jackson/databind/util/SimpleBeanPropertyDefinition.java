@@ -1,14 +1,16 @@
 package com.fasterxml.jackson.databind.util;
 
-import java.util.Collections;
-import java.util.Iterator;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.PropertyMetadata;
+import com.fasterxml.jackson.databind.PropertyName;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.*;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Simple immutable {@link BeanPropertyDefinition} implementation that can

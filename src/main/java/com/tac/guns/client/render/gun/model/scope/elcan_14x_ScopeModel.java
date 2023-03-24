@@ -1,7 +1,11 @@
 package com.tac.guns.client.render.gun.model.scope;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
@@ -14,20 +18,14 @@ import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
-import com.tac.guns.util.OptifineHelper;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -38,7 +36,7 @@ public class elcan_14x_ScopeModel implements IOverrideModel
     private static final ResourceLocation HIT_MARKER = new ResourceLocation(Reference.MOD_ID, "textures/items/timeless_scopes/hit_marker/razor_lpvo_reticle.png");
 
     @Override
-    public void render(float partialTicks, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, int overlay)
+    public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light, int overlay)
     {
         matrixStack.pushPose();
 
@@ -85,7 +83,7 @@ public class elcan_14x_ScopeModel implements IOverrideModel
         if(transformType.firstPerson() && entity.equals(Minecraft.getInstance().player))
         {
             ScopeData scopeData = ScopeEditor.get().getScopeData() == null || ScopeEditor.get().getScopeData().getTagName() != "elcan14x" ? new ScopeData("") : ScopeEditor.get().getScopeData();
-            if(entity.getMainArm() == HandSide.LEFT)
+            if(entity.getMainArm() == HumanoidArm.LEFT)
             {
                 matrixStack.scale(-1, 1, 1);
             }
@@ -98,7 +96,7 @@ public class elcan_14x_ScopeModel implements IOverrideModel
             float crop = Config.CLIENT.quality.worldRerenderPiPAlpha.get() ? 0.1f : scopeItem.getProperties().getAdditionalZoom().getDrCropZoom() + scopeData.getDrZoomCropMod();//scopeItem.getProperties().getAdditionalZoom().getDrCropZoom() +
             // scopeData.getDrZoomCropMod();//0.43F
             Minecraft mc = Minecraft.getInstance();
-            MainWindow window = mc.getWindow();
+            Window window = mc.getWindow();
 
             float texU = ((window.getScreenWidth() - window.getScreenHeight() + window.getScreenHeight() * crop * 2.0F) / 2.0F) / window.getScreenWidth();
 
@@ -112,7 +110,7 @@ public class elcan_14x_ScopeModel implements IOverrideModel
 
                 float color = (float) AimingHandler.get().getNormalisedAdsProgress() * 0.8F + 0.2F;
 
-                IVertexBuilder builder;
+                VertexConsumer builder;
 
                 if(Config.CLIENT.display.scopeDoubleRender.get())
                 {

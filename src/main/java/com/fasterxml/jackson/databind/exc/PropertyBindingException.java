@@ -1,12 +1,12 @@
 package com.fasterxml.jackson.databind.exc;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Base class for {@link JsonMappingException}s that are specifically related

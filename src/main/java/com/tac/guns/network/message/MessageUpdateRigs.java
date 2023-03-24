@@ -2,9 +2,12 @@ package com.tac.guns.network.message;
 
 import com.google.common.collect.ImmutableMap;
 import com.tac.guns.client.network.ClientPlayHandler;
-import com.tac.guns.common.*;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import com.tac.guns.common.CustomRig;
+import com.tac.guns.common.CustomRigLoader;
+import com.tac.guns.common.NetworkRigManager;
+import com.tac.guns.common.Rig;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 import org.apache.commons.lang3.Validate;
 
@@ -21,7 +24,7 @@ public class MessageUpdateRigs implements IMessage, NetworkRigManager.IRigProvid
     public MessageUpdateRigs() {}
 
     @Override
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         Validate.notNull(NetworkRigManager.get());
         Validate.notNull(CustomRigLoader.get());
@@ -30,7 +33,7 @@ public class MessageUpdateRigs implements IMessage, NetworkRigManager.IRigProvid
     }
 
     @Override
-    public void decode(PacketBuffer buffer)
+    public void decode(FriendlyByteBuf buffer)
     {
         this.registeredRigs = NetworkRigManager.readRegisteredRigs(buffer);
         this.customRigs = CustomRigLoader.readCustomRigs(buffer);

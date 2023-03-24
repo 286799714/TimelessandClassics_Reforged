@@ -26,18 +26,13 @@
  */
 package de.javagl.jgltf.model.v1;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
-import javax.imageio.ImageReader;
-
-import de.javagl.jgltf.impl.v1.Buffer;
-import de.javagl.jgltf.impl.v1.BufferView;
-import de.javagl.jgltf.impl.v1.GlTFProperty;
-import de.javagl.jgltf.impl.v1.Image;
-import de.javagl.jgltf.impl.v1.Shader;
+import de.javagl.jgltf.impl.v1.*;
 import de.javagl.jgltf.model.GltfException;
 import de.javagl.jgltf.model.io.ImageReaders;
+
+import javax.imageio.ImageReader;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * Utility methods related to the binary glTF extension of glTF 1.0

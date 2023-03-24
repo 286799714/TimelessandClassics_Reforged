@@ -5,29 +5,30 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mrcrayfish.framework.api.data.login.ILoginData;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Validator;
 import com.tac.guns.item.GunItem;
-import net.minecraft.client.resources.ReloadListener;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
+import com.tac.guns.network.message.MessageUpdateGuns;
+import net.minecraft.Util;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.Validate;
-import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -38,7 +39,7 @@ import java.util.*;
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
-public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
+public class NetworkGunManager extends SimplePreparableReloadListener<Map<GunItem, Gun>>
 {
 
     private static final Gson GSON_INSTANCE = Util.make(() -> {
@@ -55,7 +56,7 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
     public HashSet<UUID> Ids = new HashSet<>();
     public Map<UUID, ItemStack> StackIds = new HashMap<>();
     @Override
-    protected Map<GunItem, Gun> prepare(IResourceManager resourceManager, IProfiler profiler)
+    protected Map<GunItem, Gun> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
     {
         Map<GunItem, Gun> map = Maps.newHashMap();
         GunMod.LOGGER.info("YO_DATA_GUN");
@@ -65,10 +66,10 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
             if(id != null)
             {
                 ResourceLocation resourceLocation = new ResourceLocation(String.format("%s:guns/%s.json", id.getNamespace(), id.getPath()));
-                try(IResource resource = resourceManager.getResource(resourceLocation); InputStream is = resource.getInputStream();
+                try(Resource resource = resourceManager.getResource(resourceLocation); InputStream is = resource.getInputStream();
                     Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
                 {
-                    Gun gun = JSONUtils.fromJson(GSON_INSTANCE, reader, Gun.class);
+                    Gun gun = GsonHelper.fromJson(GSON_INSTANCE, reader, Gun.class);
                     if(gun != null && Validator.isValidObject(gun))
                     {
                         map.put((GunItem) item, gun);
@@ -98,7 +99,7 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
     }
 
     @Override
-    protected void apply(Map<GunItem, Gun> objects, IResourceManager resourceManager, IProfiler profiler)
+    protected void apply(Map<GunItem, Gun> objects, ResourceManager resourceManager, ProfilerFiller profiler)
     {
         ImmutableMap.Builder<ResourceLocation, Gun> builder = ImmutableMap.builder();
         objects.forEach((item, gun) -> {
@@ -114,7 +115,7 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
      *
      * @param buffer a packet buffer get
      */
-    public void writeRegisteredGuns(PacketBuffer buffer)
+    public void writeRegisteredGuns(FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(this.registeredGuns.size());
         this.registeredGuns.forEach((id, gun) -> {
@@ -129,7 +130,7 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
      * @param buffer a packet buffer get
      * @return a map of registered guns from the server
      */
-    public static ImmutableMap<ResourceLocation, Gun> readRegisteredGuns(PacketBuffer buffer)
+    public static ImmutableMap<ResourceLocation, Gun> readRegisteredGuns(FriendlyByteBuf buffer)
     {
         int size = buffer.readVarInt();
         if(size > 0)
@@ -146,17 +147,21 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
         return ImmutableMap.of();
     }
 
+    public static boolean updateRegisteredGuns(MessageUpdateGuns message)
+    {
+        return updateRegisteredGuns(message.getRegisteredGuns());
+    }
+
+
     /**
      * Updates registered guns from data provided by the server
      *
-     * @param message an update guns message
      * @return true if all registered guns were able to update their corresponding gun item
      */
     @OnlyIn(Dist.CLIENT)
-    public static boolean updateRegisteredGuns(IGunProvider message)
+    public static boolean updateRegisteredGuns(Map<ResourceLocation, Gun> registeredGuns)
     {
         clientRegisteredGuns.clear();
-        Map<ResourceLocation, Gun> registeredGuns = message.getRegisteredGuns();
         if(registeredGuns != null)
         {
             for(Map.Entry<ResourceLocation, Gun> entry : registeredGuns.entrySet())
@@ -195,7 +200,7 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
     }
 
     @SubscribeEvent
-    public static void onServerStopped(FMLServerStoppedEvent event)
+    public static void onServerStopped(ServerStoppedEvent event)
     {
         NetworkGunManager.instance = null;
     }
@@ -244,6 +249,24 @@ public class NetworkGunManager extends ReloadListener<Map<GunItem, Gun>>
         public Gun getGun()
         {
             return this.gun;
+        }
+    }
+
+    public static class LoginData implements ILoginData
+    {
+        @Override
+        public void writeData(FriendlyByteBuf buffer)
+        {
+            Validate.notNull(NetworkGunManager.get());
+            NetworkGunManager.get().writeRegisteredGuns(buffer);
+        }
+
+        @Override
+        public Optional<String> readData(FriendlyByteBuf buffer)
+        {
+            Map<ResourceLocation, Gun> registeredGuns = NetworkGunManager.readRegisteredGuns(buffer);
+            NetworkGunManager.updateRegisteredGuns(registeredGuns);
+            return Optional.empty();
         }
     }
 }

@@ -1,11 +1,12 @@
 package com.fasterxml.jackson.databind.ser.std;
 
-import java.util.concurrent.atomic.AtomicReference;
-
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.type.ReferenceType;
 import com.fasterxml.jackson.databind.util.NameTransformer;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AtomicReferenceSerializer
     extends ReferenceTypeSerializer<AtomicReference<?>>

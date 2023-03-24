@@ -1,9 +1,10 @@
 package com.fasterxml.jackson.databind.jsonFormatVisitors;
 
-import java.util.*;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public enum JsonFormatTypes
 {

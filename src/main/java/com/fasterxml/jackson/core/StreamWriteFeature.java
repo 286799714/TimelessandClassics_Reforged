@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.core;
 
+import com.fasterxml.jackson.core.util.JacksonFeature;
+
 import java.io.OutputStream;
 import java.io.Writer;
 import java.math.BigDecimal;
-
-import com.fasterxml.jackson.core.util.JacksonFeature;
 
 /**
  * Token writer (generator) features not-specific to any particular format backend.
