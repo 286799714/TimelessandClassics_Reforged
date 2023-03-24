@@ -66,7 +66,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
         {
             if(SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING))
             {
-                if(this.reloadingSlot != player.inventory.currentItem)
+                if(this.reloadingSlot != player.getInventory().currentItem)
                 {
                     this.setReloading(false);
                 }
@@ -128,7 +128,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
                             return;
                         SyncedEntityData.instance().set(player, ModSyncedDataKeys.RELOADING, true);
                         PacketHandler.getPlayChannel().sendToServer(new MessageReload(true));
-                        this.reloadingSlot = player.inventory.currentItem;
+                        this.reloadingSlot = player.getInventory().currentItem;
                         MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Post(player, stack));
                     }
                 }

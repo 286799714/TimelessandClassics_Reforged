@@ -7,7 +7,8 @@ import com.tac.guns.item.TransitionalTypes.wearables.IArmoredRigItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,11 +18,9 @@ import java.lang.reflect.InvocationTargetException;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class InventoryListener {
 
-    @CapabilityInject(IWearableItemHandler.class)
-    public static Capability<IWearableItemHandler> ITEM_HANDLER_CAPABILITY = null;
+    public static Capability<IWearableItemHandler> ITEM_HANDLER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});;
 
-    @CapabilityInject(IAmmoItemHandler.class)
-    public static Capability<IAmmoItemHandler> RIG_HANDLER_CAPABILITY = null;
+    public static Capability<IAmmoItemHandler> RIG_HANDLER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});;
     /*public static Method addSlotMethod;
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

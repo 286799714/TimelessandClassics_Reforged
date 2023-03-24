@@ -118,12 +118,13 @@ public class TimelessGunItem extends GunItem {
     }
 
     @Override
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
+    public int getBarColor(ItemStack p_150901_) {
         return Objects.requireNonNull(ChatFormatting.GOLD.getColor());
     }
 
+
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         if (Config.CLIENT.display.weaponAmmoBar.get()) {
             CompoundTag tagCompound = stack.getOrCreateTag();
             Gun modifiedGun = this.getModifiedGun(stack);

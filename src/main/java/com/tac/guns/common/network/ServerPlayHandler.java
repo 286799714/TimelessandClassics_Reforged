@@ -32,6 +32,7 @@ import com.tac.guns.util.InventoryUtil;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -61,6 +62,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
@@ -70,6 +74,9 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
+
+import static net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED;
+import static org.apache.logging.log4j.Level.ERROR;
 
 
 /**
@@ -102,8 +109,8 @@ public class ServerPlayHandler
                         return;
 
                     /* Updates the yaw and pitch with the clients current yaw and pitch */
-                    player.yRot = message.getRotationYaw();
-                    player.xRot = message.getRotationPitch();
+                    player.setYRot(message.getRotationYaw());
+                    player.setXRot(message.getRotationPitch());
 
                     // CHECK HERE:
                     //     Old server side fire rate control. This has to be disabled to make the \
@@ -259,7 +266,7 @@ public class ServerPlayHandler
                     if(dyeStack.getItem() instanceof DyeItem)
                     {
                         DyeItem dyeItem = (DyeItem) dyeStack.getItem();
-                        int color = dyeItem.getDyeColor().getColorValue();
+                        int color = dyeItem.getDyeColor().getTextColor();
 
                         if(stack.getItem() instanceof IColored && ((IColored) stack.getItem()).canColor(stack))
                         {
@@ -305,7 +312,7 @@ public class ServerPlayHandler
             CompoundTag tag = stack.getTag();
             GunItem gunItem = (GunItem) stack.getItem();
             Gun gun = gunItem.getModifiedGun(stack);
-            if(tag != null && tag.contains("AmmoCount", Constants.NBT.TAG_INT))
+            if(tag != null && tag.contains("AmmoCount", Tag.TAG_INT))
             {
                 int count = tag.getInt("AmmoCount");
                 tag.putInt("AmmoCount", 0);
@@ -346,7 +353,7 @@ public class ServerPlayHandler
      */
     private static void spawnAmmo(ServerPlayer player, ItemStack stack)
     {
-        player.inventory.add(stack);
+        player.getInventory().add(stack);
         if(stack.getCount() > 0)
         {
             player.level.addFreshEntity(new ItemEntity(player.level, player.getX(), player.getY(), player.getZ(), stack.copy()));
@@ -403,7 +410,7 @@ public class ServerPlayHandler
                     heldItem.getOrCreateTag();
                 }
                 GunItem gunItem = (GunItem) heldItem.getItem();
-                Gun gun = gunItem.getModifiedGun(heldItem.getStack());
+                Gun gun = gunItem.getModifiedGun(heldItem);
                 int[] gunItemFireModes = heldItem.getTag().getIntArray("supportedFireModes");
                 if (ArrayUtils.isEmpty(gunItemFireModes)) {
                     gunItemFireModes = gun.getGeneral().getRateSelector();
@@ -438,7 +445,7 @@ public class ServerPlayHandler
         }
         catch (Exception e)
         {
-            GunMod.LOGGER.log(Level.ERROR, "Fire Mode check did not function properly");//TODO: For now the issue seems to be minimal, this will be eventually reworked, while still having server capability
+            GunMod.LOGGER.log(ERROR, "Fire Mode check did not function properly");//TODO: For now the issue seems to be minimal, this will be eventually reworked, while still having server capability
         }
     }
 
@@ -451,7 +458,7 @@ public class ServerPlayHandler
         if(heldItem.getItem() instanceof GunItem)
         {
             GunItem gunItem = (GunItem) heldItem.getItem();
-            Gun gun = gunItem.getModifiedGun(heldItem.getStack());
+            Gun gun = gunItem.getModifiedGun(heldItem);
             ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
             if(fireModeSound != null && player.isAlive())
             {
@@ -659,7 +666,7 @@ public class ServerPlayHandler
                 if (regenerate||!player.getMainHandItem().getTag().contains("ID")) {
                     UUID id;
                     while (true) {
-                        LOGGER.log(Level.INFO, "NEW UUID GEN FOR TAC GUN");
+                        LOGGER.log(org.apache.logging.log4j.Level.INFO, "NEW UUID GEN FOR TAC GUN");
                         id = UUID.randomUUID();
                         if (NetworkGunManager.get().Ids.add(id))
                             break;
@@ -731,7 +738,7 @@ public class ServerPlayHandler
                 }
                 else
                 {
-                    player.inventory.add(((UpgradeBenchTileEntity) tileEntity).getItem(0));
+                    player.getInventory().add(((UpgradeBenchTileEntity) tileEntity).getItem(0));
                     ((UpgradeBenchTileEntity) tileEntity).setItem(0, ItemStack.EMPTY);
                     // I hate this last part, this is used in order to reset the TileRenderer,
                     // without this the item stack is added, but the visual is only reset on

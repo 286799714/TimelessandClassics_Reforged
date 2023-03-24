@@ -7,7 +7,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.client.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.HashMap;
@@ -62,7 +62,7 @@ public final class KeyBind
 	
 	/**
 	 * The corresponding vanilla key bind object. Its key bind will be set to
-	 * {@link InputMappings#INPUT_INVALID} to avoid key conflict in game.
+	 *  to avoid key conflict in game.
 	 */
 	private KeyMapping keyBind;
 	

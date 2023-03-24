@@ -52,8 +52,8 @@ public class TacEventListeners {
                 }
             }
             if (!confirmed) {
-                if (status.status == VersionChecker.Status.OUTDATED || status.status == VersionChecker.Status.BETA_OUTDATED) {
-                    ((Player) e.getEntity()).displayClientMessage(new TranslatableComponent("updateCheck.tac", status.target, status.url), false);
+                if (status.status() == VersionChecker.Status.OUTDATED || status.status() == VersionChecker.Status.BETA_OUTDATED) {
+                    ((Player) e.getEntity()).displayClientMessage(new TranslatableComponent("updateCheck.tac", status.target(), status.url()), false);
                     confirmed = true;
                 }
             }
@@ -63,7 +63,7 @@ public class TacEventListeners {
             GunMod.LOGGER.log(Level.ERROR, ev.getMessage());
             return;
         }
-        GunMod.LOGGER.log(Level.INFO, status.status);
+        GunMod.LOGGER.log(Level.INFO, status.status());
     }
 
     @SubscribeEvent

@@ -1,10 +1,8 @@
 package com.tac.guns.client.settings;
 
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.ProgressOption;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.FormattedCharSequence;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;

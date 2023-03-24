@@ -5,7 +5,6 @@ import com.tac.guns.Reference;
 import com.tac.guns.client.audio.StunRingingSound;
 import com.tac.guns.init.ModEffects;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.*;
 import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.resources.sounds.TickableSoundInstance;
@@ -19,7 +18,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;

@@ -1,5 +1,6 @@
 package com.tac.guns.client.handler;
 
+import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.client.InputHandler;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.Rig;
@@ -124,14 +125,14 @@ public class ArmorInteractionHandler
         {
             if(!this.repairing)
             {
-                SyncedPlayerData.instance().set(player, ModSyncedDataKeys.QREPAIRING, true);
+                SyncedEntityData.instance().set(player, ModSyncedDataKeys.QREPAIRING, true);
                 PacketHandler.getPlayChannel().sendToServer(new MessageArmorRepair(true, false));
                 this.repairing = true;
             }
         }
         else if(this.repairing && !InputHandler.AIM_HOLD.down)
         {
-            SyncedPlayerData.instance().set(player, ModSyncedDataKeys.QREPAIRING, false);
+            SyncedEntityData.instance().set(player, ModSyncedDataKeys.QREPAIRING, false);
             PacketHandler.getPlayChannel().sendToServer(new MessageArmorRepair(false, false));
             this.repairing = false;
         }

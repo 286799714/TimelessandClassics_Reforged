@@ -1,17 +1,16 @@
 package com.tac.guns.client.render.crosshair;
 
-import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.AimingHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

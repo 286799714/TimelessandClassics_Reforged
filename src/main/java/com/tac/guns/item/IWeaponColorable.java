@@ -1,27 +1,13 @@
 package com.tac.guns.item;
 
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-/**
- * A simple interface to allow items to be colored. Implementing this on an item will automatically
- * register an {@link IItemColor} into {@link ItemColors}. If the item this is implemented on is an
- * attachment, it will colored automatically by the color of the weapon if the item does not explicitly
- * have a color set.
- *
- * Timeless changes - IColored will now also provide methods for the 8 new color segments.
- *
- *
- * <p>
- * Author: Forked from MrCrayfish, continued by Timeless devs, Timeless Development team (ClumsyAlien)
- */
 public interface IWeaponColorable
 {
     /**
@@ -87,7 +73,7 @@ public interface IWeaponColorable
         boolean hasColor = false;
         for (WeaponColorSegment colorSegment: IWeaponColorable.WeaponColorSegment.values())
         {
-            if(tagCompound.contains(colorSegment.colorTranslationKey, Constants.NBT.TAG_INT))
+            if(tagCompound.contains(colorSegment.colorTranslationKey, Tag.TAG_INT))
                 hasColor = true;
         }
         return hasColor;

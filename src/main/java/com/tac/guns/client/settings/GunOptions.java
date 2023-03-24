@@ -1,18 +1,5 @@
 package com.tac.guns.client.settings;
 
-import com.tac.guns.Config;
-import com.tac.guns.client.handler.CrosshairHandler;
-import com.tac.guns.client.render.crosshair.Crosshair;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Option;
-import net.minecraft.client.ProgressOption;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-
-import java.text.DecimalFormat;
-
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */

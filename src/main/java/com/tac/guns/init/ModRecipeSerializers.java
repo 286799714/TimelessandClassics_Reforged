@@ -5,9 +5,9 @@ import com.tac.guns.crafting.DyeItemRecipe;
 import com.tac.guns.crafting.WorkbenchRecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

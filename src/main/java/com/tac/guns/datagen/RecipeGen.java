@@ -21,7 +21,7 @@ public class RecipeGen extends RecipeProvider
     }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         // Dye Item
         /*if(Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER)
             return;*/

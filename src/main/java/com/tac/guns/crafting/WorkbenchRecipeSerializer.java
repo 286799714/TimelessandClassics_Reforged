@@ -43,7 +43,7 @@ public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.For
             throw new JsonSyntaxException("Missing result entry");
 
         JsonObject resultObject = GsonHelper.getAsJsonObject(json, "result");
-        ItemStack resultItem = ShapedRecipe.itemFromJson(resultObject);
+        ItemStack resultItem = ShapedRecipe.itemFromJson(resultObject).getDefaultInstance();
         return new WorkbenchRecipe(recipeId, resultItem, builder.build(), group);
     }
 

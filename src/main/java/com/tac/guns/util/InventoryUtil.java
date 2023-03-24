@@ -13,7 +13,7 @@ public class InventoryUtil
     public static int getItemStackAmount(Player player, ItemStack find)
     {
         int count = 0;
-        for(ItemStack stack : player.inventory.items)
+        for(ItemStack stack : player.getInventory().items)
         {
             if(!stack.isEmpty() && areItemStacksEqualIgnoreCount(stack, find))
             {
@@ -26,9 +26,9 @@ public class InventoryUtil
     public static boolean hasIngredient(Player player, Pair<Ingredient, Integer> pair)
     {
         int count = 0;
-        for(int i = 0; i < player.inventory.getContainerSize(); i++)
+        for(int i = 0; i < player.getInventory().getContainerSize(); i++)
         {
-            ItemStack stack = player.inventory.getItem(i);
+            ItemStack stack = player.getInventory().getItem(i);
             if(pair.getFirst().test(stack))
             {
                 count += stack.getCount();
@@ -40,21 +40,21 @@ public class InventoryUtil
     public static boolean removeItemStackFromIngredient(Player player, Pair<Ingredient, Integer> pair)
     {
         int amount = pair.getSecond();
-        for(int i = 0; i < player.inventory.getContainerSize(); i++)
+        for(int i = 0; i < player.getInventory().getContainerSize(); i++)
         {
-            ItemStack stack = player.inventory.getItem(i);
+            ItemStack stack = player.getInventory().getItem(i);
             if(pair.getFirst().test(stack))
             {
                 if(amount - stack.getCount() < 0)
                 {
                     stack.shrink(amount);
-                    player.inventory.setItem(i, stack);
+                    player.getInventory().setItem(i, stack);
                     return true;
                 }
                 else
                 {
                     amount -= stack.getCount();
-                    player.inventory.setItem(i, ItemStack.EMPTY);
+                    player.getInventory().setItem(i, ItemStack.EMPTY);
                     if(amount == 0)
                     {
                         return true;

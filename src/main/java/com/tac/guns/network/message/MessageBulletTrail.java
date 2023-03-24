@@ -84,7 +84,7 @@ public class MessageBulletTrail extends PlayMessage<MessageBulletTrail>
         buffer.writeInt(messageBulletTrail.life);
         buffer.writeDouble(messageBulletTrail.gravity);
         buffer.writeInt(messageBulletTrail.shooterId);
-        buffer.writeFloat(messageBulletTrail.size)
+        buffer.writeFloat(messageBulletTrail.size);
     }
 
     @Override
@@ -111,8 +111,8 @@ public class MessageBulletTrail extends PlayMessage<MessageBulletTrail>
             projectileEntity.modifiedGravity = gravity;
         }
         int shooterId = buffer.readInt();
-        float size = buffer.readFloat();
-        return new MessageBulletTrail(projectileEntities, projectile, shooterId, size);
+        float projsize = buffer.readFloat();
+        return new MessageBulletTrail(projectileEntities, projectile, shooterId, projsize);
     }
 
     @Override

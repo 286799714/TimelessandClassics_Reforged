@@ -2,7 +2,6 @@ package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
-import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Config;
 import com.tac.guns.GunMod;
 import com.tac.guns.client.InputHandler;
@@ -31,7 +30,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.FOVModifierEvent;
-import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.common.Tags;
@@ -119,7 +117,7 @@ public class AimingHandler
     @Nullable
     private AimTracker getAimTracker(Player player)
     {
-        if(SyncedPlayerData.instance().get(player, ModSyncedDataKeys.AIMING) && !this.aimingMap.containsKey(player))
+        if(SyncedEntityData.instance().get(player, ModSyncedDataKeys.AIMING) && !this.aimingMap.containsKey(player))
         {
             this.aimingMap.put(player, new AimTracker());
         }

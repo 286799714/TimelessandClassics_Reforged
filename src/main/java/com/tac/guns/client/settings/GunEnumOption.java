@@ -1,14 +1,6 @@
 package com.tac.guns.client.settings;
 
-import net.minecraft.client.Option;
-import net.minecraft.client.Options;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
-
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

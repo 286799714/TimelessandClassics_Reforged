@@ -3,9 +3,9 @@ package com.tac.guns.init;
 import com.tac.guns.Reference;
 import com.tac.guns.enchantment.*;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

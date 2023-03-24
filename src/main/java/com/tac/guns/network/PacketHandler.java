@@ -3,12 +3,12 @@ package com.tac.guns.network;
 import com.mrcrayfish.framework.api.FrameworkAPI;
 import com.mrcrayfish.framework.api.network.FrameworkChannelBuilder;
 import com.tac.guns.Reference;
+import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.common.NetworkRigManager;
 import com.tac.guns.network.message.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.simple.SimpleChannel;
-import com.tac.guns.common.NetworkGunManager;
 
 public class PacketHandler
 {
@@ -28,6 +28,7 @@ public class PacketHandler
             .registerPlayMessage(MessageInspection.class, NetworkDirection.PLAY_TO_SERVER)
             .registerPlayMessage(MessageColorBench.class, NetworkDirection.PLAY_TO_SERVER)
             .registerPlayMessage(MessageUpdateGuns.class, NetworkDirection.PLAY_TO_CLIENT)
+            .registerPlayMessage(MessageUpdateRigs.class, NetworkDirection.PLAY_TO_CLIENT)
             .registerPlayMessage(MessageBlood.class, NetworkDirection.PLAY_TO_CLIENT)
             .registerPlayMessage(MessageShooting.class, NetworkDirection.PLAY_TO_SERVER)
             .registerPlayMessage(MessageGunSound.class, NetworkDirection.PLAY_TO_CLIENT)

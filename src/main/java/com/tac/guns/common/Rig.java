@@ -6,9 +6,9 @@ import com.tac.guns.Reference;
 import com.tac.guns.annotation.Optional;
 import com.tac.guns.interfaces.TGExclude;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
@@ -59,19 +59,19 @@ public final class Rig implements INBTSerializable<CompoundTag>
         @Override
         public void deserializeNBT(CompoundTag tag)
         {
-            if(tag.contains("ArmorClass", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("ArmorClass", Tag.TAG_ANY_NUMERIC))
             {
                 this.armorClass = tag.getInt("ArmorClass");
             }
-            if(tag.contains("Ergonomics", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("Ergonomics", Tag.TAG_ANY_NUMERIC))
             {
                 this.ergonomics = tag.getInt("Ergonomics");
             }
-            if(tag.contains("SpeedReduction", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("SpeedReduction", Tag.TAG_ANY_NUMERIC))
             {
                 this.speedReduction = tag.getFloat("SpeedReduction");
             }
-            if(tag.contains("MovementInaccuracy", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("MovementInaccuracy", Tag.TAG_ANY_NUMERIC))
             {
                 this.movementInaccuracy = tag.getFloat("MovementInaccuracy");
             }
@@ -139,23 +139,23 @@ public final class Rig implements INBTSerializable<CompoundTag>
         @Override
         public void deserializeNBT(CompoundTag tag)
         {
-            if(tag.contains("RepairItem", Constants.NBT.TAG_STRING))
+            if(tag.contains("RepairItem", Tag.TAG_STRING))
             {
                 this.repairItem = new ResourceLocation(tag.getString("RepairItem"));
             }
-            if(tag.contains("TicksToRepair", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("TicksToRepair", Tag.TAG_ANY_NUMERIC))
             {
                 this.ticksToRepair = tag.getInt("TicksToRepair");
             }
-            if(tag.contains("Durability", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("Durability", Tag.TAG_ANY_NUMERIC))
             {
                 this.durability = tag.getFloat("Durability");
             }
-            if(tag.contains("QuickRepairability", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("QuickRepairability", Tag.TAG_ANY_NUMERIC))
             {
                 this.quickRepairability = tag.getFloat("QuickRepairability");
             }
-            if(tag.contains("QuickRepairable", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("QuickRepairable", Tag.TAG_ANY_NUMERIC))
             {
                 this.quickRepairable = tag.getBoolean("QuickRepairable");
             }
@@ -264,27 +264,27 @@ public final class Rig implements INBTSerializable<CompoundTag>
         @Override
         public void deserializeNBT(CompoundTag tag)
         {
-            if(tag.contains("Step", Constants.NBT.TAG_STRING))
+            if(tag.contains("Step", Tag.TAG_STRING))
             {
                 this.step = this.createSound(tag, "Step");
             }
-            if(tag.contains("On", Constants.NBT.TAG_STRING))
+            if(tag.contains("On", Tag.TAG_STRING))
             {
                 this.on = this.createSound(tag, "On");
             }
-            if(tag.contains("Off", Constants.NBT.TAG_STRING))
+            if(tag.contains("Off", Tag.TAG_STRING))
             {
                 this.off = this.createSound(tag, "Off");
             }
-            if(tag.contains("Hit", Constants.NBT.TAG_STRING))
+            if(tag.contains("Hit", Tag.TAG_STRING))
             {
                 this.hit = this.createSound(tag, "Hit");
             }
-            if(tag.contains("Broken", Constants.NBT.TAG_STRING))
+            if(tag.contains("Broken", Tag.TAG_STRING))
             {
                 this.broken = this.createSound(tag, "Broken");
             }
-            if(tag.contains("Repair", Constants.NBT.TAG_STRING)){
+            if(tag.contains("Repair", Tag.TAG_STRING)){
                 this.repair = this.createSound(tag, "Repair");
             }
         }
@@ -326,19 +326,19 @@ public final class Rig implements INBTSerializable<CompoundTag>
     @Override
     public void deserializeNBT(CompoundTag tag)
     {
-        if(tag.contains("General", Constants.NBT.TAG_COMPOUND))
+        if(tag.contains("General", Tag.TAG_COMPOUND))
         {
             this.general.deserializeNBT(tag.getCompound("General"));
         }
-        if(tag.contains("Repair", Constants.NBT.TAG_COMPOUND))
+        if(tag.contains("Repair", Tag.TAG_COMPOUND))
         {
             this.repair.deserializeNBT(tag.getCompound("Repair"));
         }
-        if(tag.contains("Sounds", Constants.NBT.TAG_COMPOUND))
+        if(tag.contains("Sounds", Tag.TAG_COMPOUND))
         {
             this.sounds.deserializeNBT(tag.getCompound("Sounds"));
         }
-        /*if(tag.contains("Display", Constants.NBT.TAG_COMPOUND))
+        /*if(tag.contains("Display", Tag.TAG_COMPOUND))
         {
             this.display.deserializeNBT(tag.getCompound("Display"));
         }*/
