@@ -14,6 +14,8 @@ import com.tac.guns.crafting.RecipeType;
 import com.tac.guns.datagen.*;
 import com.tac.guns.enchantment.EnchantmentTypes;
 import com.tac.guns.init.*;
+import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
+import com.tac.guns.inventory.gear.armor.IAmmoItemHandler;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
 import net.minecraft.client.Minecraft;
@@ -24,6 +26,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -259,7 +262,6 @@ public class GunMod
         {
             MinecraftForge.EVENT_BUS.register(new BoundingBoxManager());
         }
-
         // First separate, cause only the held ammo is not synced serverToClient, but the wearable is held fine, just use damned Curios next time.
         /*
         CapabilityManager.INSTANCE.register(IWearableItemHandler.class, new Capability.IStorage<IWearableItemHandler>() {
@@ -402,29 +404,6 @@ public class GunMod
     public void onCapabilitySetup(RegisterCapabilitiesEvent event)
     {
         // Too much to keep in Gunmod file
-        ClientHandler.setup(Minecraft.getInstance());
-
-
-        // Auto register code animation files, such as firing, animation mapping is called in these files too
-        for (Field field : ModItems.class.getDeclaredFields()) {
-            RegistryObject<?> object;
-            try {
-                object = (RegistryObject<?>) field.get(null);
-            } catch (ClassCastException | IllegalAccessException e) {
-                continue;
-            }
-            if (TimelessGunItem.class.isAssignableFrom(object.get().getClass())) {
-                try {
-                    ModelOverrides.register(
-                            (Item) object.get(),
-                            (IOverrideModel) Class.forName("com.tac.guns.client.render.gun.model." + field.getName().toLowerCase(Locale.ENGLISH) + "_animation").newInstance()
-                    );
-                } catch (ClassNotFoundException e) {
-                    LOGGER.warn("Could not load animations for gun - " + field.getName());
-                } catch (IllegalAccessException | InstantiationException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        event.register(IAmmoItemHandler.class);
     }
 }
