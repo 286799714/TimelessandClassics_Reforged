@@ -43,6 +43,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
@@ -80,7 +81,7 @@ public class ClientHandler
         MinecraftForge.EVENT_BUS.register(RecoilHandler.get());
         MinecraftForge.EVENT_BUS.register(ReloadHandler.get());
         MinecraftForge.EVENT_BUS.register(ShootingHandler.get());
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::registerEntityRenders);
+        registerEntityRenders();
         MinecraftForge.EVENT_BUS.register(SoundHandler.get());
         MinecraftForge.EVENT_BUS.register(HUDRenderingHandler.get());
         MinecraftForge.EVENT_BUS.register(FireModeSwitchEvent.get()); // Technically now a handler but, yes I need some naming reworks
@@ -138,14 +139,14 @@ public class ClientHandler
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WORKBENCH.get(), RenderType.cutout());
     }
 
-    private static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event)
+    private static void registerEntityRenders()
     {
-        event.registerEntityRenderer(ModEntities.PROJECTILE.get(), ProjectileRenderer::new);
-        event.registerEntityRenderer(ModEntities.GRENADE.get(), GrenadeRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_GRENADE.get(), ThrowableGrenadeRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_STUN_GRENADE.get(), ThrowableGrenadeRenderer::new);
-        //RenderingRegistry.registerEntityRenderingHandler(ModEntities.MISSILE.get(), MissileRenderer::new);
-        event.registerEntityRenderer(ModEntities.RPG7_MISSILE.get(), MissileRenderer::new);
+        EntityRenderers.register(ModEntities.PROJECTILE.get(), ProjectileRenderer::new);
+        EntityRenderers.register(ModEntities.GRENADE.get(), GrenadeRenderer::new);
+        EntityRenderers.register(ModEntities.THROWABLE_GRENADE.get(), ThrowableGrenadeRenderer::new);
+        EntityRenderers.register(ModEntities.THROWABLE_STUN_GRENADE.get(), ThrowableGrenadeRenderer::new);
+        //EntityRenderers.register(ModEntities.MISSILE.get(), MissileRenderer::new);
+        EntityRenderers.register(ModEntities.RPG7_MISSILE.get(), MissileRenderer::new);
     }
 
     private static void registerColors()

@@ -401,6 +401,7 @@ public class GunMod
         }
     }
 
+
     @SubscribeEvent
     public void onCapabilitySetup(RegisterCapabilitiesEvent event)
     {
