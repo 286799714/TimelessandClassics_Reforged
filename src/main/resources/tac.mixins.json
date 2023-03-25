@@ -11,6 +11,7 @@
     "common.SittingPhaseMixin"
   ],
   "client": [
+    "client.FirstPersonRendererMixin",
     "client.GameRendererMixin",
     "client.ItemEntityRendererMixin",
     "client.ItemFrameRendererMixin",
@@ -18,6 +19,7 @@
     "client.ItemInHandRendererMixin",
     "client.ItemRendererMixin",
     "client.LivingRendererMixin",
+    "client.MinecraftStaticMixin",
     "client.MouseHelperMixin",
     "client.PlayerModelMixin",
     "client.WorldRendererMixin"
