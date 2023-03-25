@@ -1,6 +1,6 @@
 package com.tac.guns.common;
 
-import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
+import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Reference;
 import com.tac.guns.common.network.ServerPlayHandler;
 import com.tac.guns.init.ModSyncedDataKeys;
@@ -24,6 +24,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -46,8 +48,8 @@ public class ReloadTracker
     private ReloadTracker(Player player)
     {
         this.startTick = player.tickCount;
-        this.slot = player.inventory.selected;
-        this.stack = player.inventory.getSelected();
+        this.slot = player.getInventory().selected;
+        this.stack = player.getInventory().getSelected();
         this.gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
     }
 
@@ -59,7 +61,7 @@ public class ReloadTracker
      */
     private boolean isSameWeapon(Player player)
     {
-        return !this.stack.isEmpty() && player.inventory.selected == this.slot && player.inventory.getSelected() == this.stack;
+        return !this.stack.isEmpty() && player.getInventory().selected == this.slot && player.getInventory().getSelected() == this.stack;
     }
 
     /**
@@ -245,14 +247,14 @@ public class ReloadTracker
         if(event.phase == TickEvent.Phase.START && !event.player.level.isClientSide)
         {
             Player player = event.player;
-            if(SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING))
+            if(SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING))
             {
                 if(!RELOAD_TRACKER_MAP.containsKey(player))
                 {
-                    if(!(player.inventory.getSelected().getItem() instanceof GunItem))
+                    if(!(player.getInventory().getSelected().getItem() instanceof GunItem))
                     {
-                        SyncedPlayerData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
-                        SyncedPlayerData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, false);
+                        SyncedEntityData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
+                        SyncedEntityData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, false);
                         return;
                     }
                     RELOAD_TRACKER_MAP.put(player, new ReloadTracker(player));
@@ -261,8 +263,8 @@ public class ReloadTracker
                 if(!tracker.isSameWeapon(player) || tracker.isWeaponFull() || tracker.hasNoAmmo(player))
                 {
                     RELOAD_TRACKER_MAP.remove(player);
-                    SyncedPlayerData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
-                    SyncedPlayerData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, true);
+                    SyncedEntityData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
+                    SyncedEntityData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, true);
                     return;
                 }
                 if(tracker.canReload(player))
@@ -274,8 +276,8 @@ public class ReloadTracker
                         tracker.increaseMagAmmo(player);
                         ServerPlayHandler.handleRigAmmoCount((ServerPlayer)player, gun.getProjectile().getItem());
                         RELOAD_TRACKER_MAP.remove(player);
-                        SyncedPlayerData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
-                        SyncedPlayerData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, false);
+                        SyncedEntityData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
+                        SyncedEntityData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, false);
                         /*DelayedTask.runAfter(2, () ->
                         {
                             ResourceLocation cockSound = gun.getSounds().getCock();
@@ -290,8 +292,8 @@ public class ReloadTracker
                         ServerPlayHandler.handleRigAmmoCount((ServerPlayer)player, gun.getProjectile().getItem());
                         if (tracker.isWeaponFull() || tracker.hasNoAmmo(player)) {
                             RELOAD_TRACKER_MAP.remove(player);
-                            SyncedPlayerData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
-                            SyncedPlayerData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, false);
+                            SyncedEntityData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
+                            SyncedEntityData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, false);
                             /*DelayedTask.runAfter(4, () ->
                             {
                                 ResourceLocation cockSound = gun.getSounds().getCock();

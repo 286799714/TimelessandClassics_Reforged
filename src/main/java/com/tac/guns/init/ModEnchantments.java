@@ -26,4 +26,6 @@ public class ModEnchantments
     public static final RegistryObject<Enchantment> RIFLING = REGISTER.register("rifling", AdvancedRiflingEnchantment::new);
     public static final RegistryObject<Enchantment> BUFFERED = REGISTER.register("buffered", BufferedEnchantment::new);
     //public static final RegistryObject<Enchantment> Reliability = REGISTER.register("reliability", AcceleratorEnchantment::new); // TO-RENAME
+
+    public static void init(){};
 }

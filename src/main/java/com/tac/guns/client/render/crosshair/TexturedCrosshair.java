@@ -7,7 +7,6 @@ import com.mojang.math.Matrix4f;
 import com.tac.guns.client.handler.AimingHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -44,10 +43,8 @@ public class TexturedCrosshair extends Crosshair
         //float alpha = 1.0F * Math.abs((stepping-1)*0.5f) ;
         float size = 8.0F;
         stack.translate((windowWidth - size) / 2F, (windowHeight - size) / 2F, 0);
-
-        mc.getTextureManager().bindForSetup(this.texture);
+        RenderSystem.setShaderTexture(0, this.texture);
         RenderSystem.enableBlend();
-        RenderSystem.enableAlphaTest();
 
         if(this.blend)
         {
@@ -62,7 +59,6 @@ public class TexturedCrosshair extends Crosshair
         buffer.vertex(matrix, size, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
         buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
         buffer.end();
-        RenderSystem.enableAlphaTest();
         BufferUploader.end(buffer);
 
         if(this.blend)
@@ -78,9 +74,8 @@ public class TexturedCrosshair extends Crosshair
         float size = 8.0F;
         stack.translate((windowWidth - size) / 2F, (windowHeight - size) / 2F, 0);
 
-        mc.getTextureManager().bindForSetup(this.texture);
+        RenderSystem.setShaderTexture(0, this.texture);
         RenderSystem.enableBlend();
-        RenderSystem.enableAlphaTest();
 
         if(this.blend)
         {
@@ -95,7 +90,7 @@ public class TexturedCrosshair extends Crosshair
         buffer.vertex(matrix, size, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
         buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, alpha).endVertex();
         buffer.end();
-        RenderSystem.enableAlphaTest();
+        RenderSystem.setShaderTexture(0, this.texture);
         BufferUploader.end(buffer);
 
         if(this.blend)

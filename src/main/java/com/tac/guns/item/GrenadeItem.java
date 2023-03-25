@@ -83,7 +83,7 @@ public class GrenadeItem extends AmmoItem
                 if(!(entityLiving instanceof Player) || !((Player) entityLiving).isCreative())
                     stack.shrink(1);
                 ThrowableGrenadeEntity grenade = this.create(worldIn, entityLiving, this.maxCookTime - duration);
-                grenade.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, Math.min(1.0F, duration / 20F)*this.speed, 1.5F);
+                grenade.shootFromRotation(entityLiving, entityLiving.getXRot(), entityLiving.getYRot(), 0.0F, Math.min(1.0F, duration / 20F)*this.speed, 1.5F);
                 worldIn.addFreshEntity(grenade);
                 this.onThrown(worldIn, grenade);
             }

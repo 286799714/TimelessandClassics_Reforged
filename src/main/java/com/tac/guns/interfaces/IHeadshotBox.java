@@ -1,13 +1,14 @@
 package com.tac.guns.interfaces;
 
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 
 /**
  * This interface used to create hit box definitions of an entity's head. This has to be registered with
- * {@link com.tac.guns.common.BoundingBoxManager#registerHeadshotBox(EntityType, IHeadshotBox)}
+ * {@link com.tac.guns.common.BoundingBoxManager#registerHeadshotBox(EntityType, IHeadshotBox)} (EntityType, IHeadshotBox)}
  * in order for projectiles to be able to perform a headshot on the given entity.
  * <p>
  * Author: Forked from MrCrayfish, continued by Timeless devs

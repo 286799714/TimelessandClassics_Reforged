@@ -8,7 +8,7 @@ import com.tac.guns.init.ModRecipeSerializers;
 import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -68,13 +68,13 @@ public class WorkbenchRecipeBuilder
         return this;
     }
 
-    public WorkbenchRecipeBuilder addIngredient(Tag.Named<Item> item, int quantity)
+    public WorkbenchRecipeBuilder addIngredient(TagKey<Item> item, int quantity)
     {
         this.materials.add(new Pair<>(Ingredient.of(item), quantity));
         return this;
     }
 
-    public WorkbenchRecipeBuilder addIngredient(Tag.Named<Item> item)
+    public WorkbenchRecipeBuilder addIngredient(TagKey<Item> item)
     {
         this.materials.add(new Pair<>(Ingredient.of(item), 1));
         return this;

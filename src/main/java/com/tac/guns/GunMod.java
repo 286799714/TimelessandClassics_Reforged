@@ -10,30 +10,24 @@ import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.GripType;
 import com.tac.guns.common.tooling.CommandsHandler;
 import com.tac.guns.common.tooling.CommandsManager;
+import com.tac.guns.crafting.RecipeType;
 import com.tac.guns.datagen.*;
 import com.tac.guns.enchantment.EnchantmentTypes;
 import com.tac.guns.init.*;
-import com.tac.guns.inventory.gear.GearSlotsHandler;
-import com.tac.guns.inventory.gear.IWearableItemHandler;
-import com.tac.guns.inventory.gear.armor.IAmmoItemHandler;
-import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
-import net.minecraft.core.Direction;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -43,10 +37,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.forgespi.language.IModInfo;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
@@ -65,10 +61,9 @@ public class GunMod
     public static final CreativeModeTab GROUP = new  CreativeModeTab(Reference.MOD_ID)
     {
         @Override
-        public ItemStack makeIcon()
+        public @NotNull ItemStack makeIcon()
         {
-            ItemStack stack = new ItemStack(ModItems.VORTEX_LPVO_1_6.get());
-            return stack;
+            return new ItemStack(ModItems.VORTEX_LPVO_1_6.get());
         }
 
         @Override
@@ -224,7 +219,7 @@ public class GunMod
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         // Do so right away, I want to make sure I hit this during Curios load
-        bus.addListener(this::onEnqueueIMC);
+        ModBlocks.init();
         ModBlocks.REGISTER.register(bus);
         ModContainers.REGISTER.register(bus);
         ModEffects.REGISTER.register(bus);
@@ -239,6 +234,7 @@ public class GunMod
         bus.addListener(this::onCommonSetup);
         bus.addListener(this::onClientSetup);
         bus.addListener(this::dataSetup);
+        bus.addListener(this::onEnqueueIMC);
         controllableLoaded = ModList.get().isLoaded("controllable");
         curiosLoaded = ModList.get().isLoaded("curios");
         modInfo = ModLoadingContext.get().getActiveContainer().getModInfo();
@@ -256,6 +252,7 @@ public class GunMod
 
         // Register all custom networking
         PacketHandler.init();
+        RecipeType.init();
 
         // Updated hitboxes for better serverside feel
         if(Config.COMMON.gameplay.improvedHitboxes.get())
@@ -264,6 +261,7 @@ public class GunMod
         }
 
         // First separate, cause only the held ammo is not synced serverToClient, but the wearable is held fine, just use damned Curios next time.
+        /*
         CapabilityManager.INSTANCE.register(IWearableItemHandler.class, new Capability.IStorage<IWearableItemHandler>() {
             @Override
             public Tag writeNBT(Capability<IWearableItemHandler> capability, IWearableItemHandler instance, Direction side) {
@@ -332,6 +330,8 @@ public class GunMod
             }
         }, RigSlotsHandler::new);
 
+         */
+
         GripType.registerType(new GripType(new ResourceLocation("tac", "one_handed_m1911"), new OneHandedPoseHighRes_m1911()));
         GripType.registerType(new GripType(new ResourceLocation("tac", "one_handed_m1851"), new OneHandedPoseHighRes_m1851()));
         GripType.registerType(new GripType(new ResourceLocation("tac", "two_handed_m1894"), new TwoHandedPoseHighRes_m1894()));
@@ -372,7 +372,37 @@ public class GunMod
     private void onClientSetup(FMLClientSetupEvent event)
     {
         // Too much to keep in Gunmod file
-        ClientHandler.setup(event.getMinecraftSupplier().get());
+        ClientHandler.setup(Minecraft.getInstance());
+
+
+        // Auto register code animation files, such as firing, animation mapping is called in these files too
+        for (Field field : ModItems.class.getDeclaredFields()) {
+            RegistryObject<?> object;
+            try {
+                object = (RegistryObject<?>) field.get(null);
+            } catch (ClassCastException | IllegalAccessException e) {
+                continue;
+            }
+            if (TimelessGunItem.class.isAssignableFrom(object.get().getClass())) {
+                try {
+                    ModelOverrides.register(
+                            (Item) object.get(),
+                            (IOverrideModel) Class.forName("com.tac.guns.client.render.gun.model." + field.getName().toLowerCase(Locale.ENGLISH) + "_animation").newInstance()
+                    );
+                } catch (ClassNotFoundException e) {
+                    LOGGER.warn("Could not load animations for gun - " + field.getName());
+                } catch (IllegalAccessException | InstantiationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onCapabilitySetup(RegisterCapabilitiesEvent event)
+    {
+        // Too much to keep in Gunmod file
+        ClientHandler.setup(Minecraft.getInstance());
 
 
         // Auto register code animation files, such as firing, animation mapping is called in these files too

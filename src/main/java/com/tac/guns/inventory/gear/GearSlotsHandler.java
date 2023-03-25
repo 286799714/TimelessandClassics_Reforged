@@ -3,8 +3,8 @@ package com.tac.guns.inventory.gear;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -181,8 +181,8 @@ public class GearSlotsHandler implements IWearableItemHandler, IItemHandlerModif
     @Override
     public void deserializeNBT(CompoundTag nbt)
     {
-        setSize(nbt.contains("Size", Constants.NBT.TAG_INT) ? nbt.getInt("Size") : stacks.size());
-        ListTag tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        setSize(nbt.contains("Size", Tag.TAG_INT) ? nbt.getInt("Size") : stacks.size());
+        ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
         for (int i = 0; i < tagList.size(); i++)
         {
             CompoundTag itemTags = tagList.getCompound(i);

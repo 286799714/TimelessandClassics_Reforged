@@ -57,9 +57,25 @@ public class MessageBulletTrail extends PlayMessage<MessageBulletTrail>
         this.size = size;
     }
 
-    @Override
-    public void encode(MessageBulletTrail messageBulletTrail, FriendlyByteBuf buffer)
+    public MessageBulletTrail(Vec3[] position, Vec3[] motions, float[] shooteryaws, float[]shooterPitches, int[] entityIds, ItemStack item, int color, double trailLengthMultiplier,
+                              int life, double gravity, int shooterId, float size)
     {
+        this.positions = position;
+        this.motions = motions;
+        this.shooterYaws = shooteryaws;
+        this.shooterPitches = shooterPitches;
+        this.entityIds = entityIds;
+        this.item = item;
+        this.trailColor = color;
+        this.trailLengthMultiplier = trailLengthMultiplier;
+        this.life = life;
+        this.gravity = gravity; //It's possible that projectiles have different gravity
+        this.shooterId = shooterId;
+        this.size = size;
+    }
+
+    @Override
+    public void encode(MessageBulletTrail messageBulletTrail, FriendlyByteBuf buffer) {
         buffer.writeInt(messageBulletTrail.entityIds.length);
         for(int i = 0; i < messageBulletTrail.entityIds.length; i++)
         {
@@ -88,39 +104,37 @@ public class MessageBulletTrail extends PlayMessage<MessageBulletTrail>
     }
 
     @Override
-    public MessageBulletTrail decode(FriendlyByteBuf buffer)
-    {
+    public MessageBulletTrail decode(FriendlyByteBuf buffer) {
         int size = buffer.readInt();
-        ProjectileEntity[] projectileEntities = new ProjectileEntity[size];
+        int[] entityIds = new int[size];
+        Vec3[] positions = new Vec3[size];
+        Vec3[] motions = new Vec3[size];
+        float[] shooterYaws = new float[size];
+        float[] shooterPitches = new float[size];
         for(int i = 0; i < size; i++)
         {
-            projectileEntities[i] = (ProjectileEntity) Minecraft.getInstance().level.getEntity(buffer.readInt());
-            projectileEntities[i].setPos(new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()));
-            projectileEntities[i].setDeltaMovement(new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()));
-            projectileEntities[i].getShooter().setYRot(buffer.readFloat());
-            projectileEntities[i].getShooter().setXRot(buffer.readFloat());
+            entityIds[i] = buffer.readInt();
+            positions[i] = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+            motions[i] = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+            shooterYaws[i] = buffer.readFloat();
+            shooterPitches[i] = buffer.readFloat();
         }
-        Gun.Projectile projectile = new Gun.Projectile();
         ItemStack item = buffer.readItem();
-        projectile.trailColor = buffer.readVarInt();
-        projectile.trailLengthMultiplier = buffer.readDouble();
-        projectile.life = buffer.readInt();
+        int trailColor = buffer.readVarInt();
+        double trailLengthMultiplier = buffer.readDouble();
+        int life = buffer.readInt();
         double gravity = buffer.readDouble();
-        for (ProjectileEntity projectileEntity : projectileEntities) {
-            projectileEntity.setItem(item);
-            projectileEntity.modifiedGravity = gravity;
-        }
         int shooterId = buffer.readInt();
-        float buffer_float_size = buffer.readFloat();
-        return new MessageBulletTrail(projectileEntities, projectile, shooterId, buffer_float_size);
+        float scale = buffer.readFloat();
+        return new MessageBulletTrail(positions,motions, shooterYaws, shooterPitches, entityIds, item, trailColor, trailLengthMultiplier, life, gravity, shooterId, scale);
     }
 
     @Override
-    public void handle(MessageBulletTrail messageBulletTrail, Supplier<NetworkEvent.Context> supplier)
-    {
+    public void handle(MessageBulletTrail messageBulletTrail, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> ClientPlayHandler.handleMessageBulletTrail(messageBulletTrail));
         supplier.get().setPacketHandled(true);
     }
+
 
     public int getCount()
     {
@@ -175,4 +189,5 @@ public class MessageBulletTrail extends PlayMessage<MessageBulletTrail>
     public float[] getShooterYaws() { return shooterYaws; }
 
     public float[] getShooterPitches() { return shooterPitches; }
+    public float getSize() { return size; }
 }

@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.minecraftforge.network.NetworkHooks;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -83,7 +83,7 @@ public abstract class ThrowableItemEntity extends ThrowableProjectile implements
         super.tick();
         if(this.shouldBounce && this.tickCount >= this.maxLife)
         {
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
             this.onDeath();
         }
     }
@@ -127,7 +127,7 @@ public abstract class ThrowableItemEntity extends ThrowableProjectile implements
                 }
                 else
                 {
-                    this.remove();
+                    this.remove(RemovalReason.DISCARDED);
                     this.onDeath();
                 }
                 break;

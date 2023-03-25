@@ -195,7 +195,7 @@ public class Animations {
 
     public static void applyAnimationTransform(ItemStack itemStack, ItemTransforms.TransformType transformType, LivingEntity entity, PoseStack matrixStack){
         if(itemStack != null && entity != null) {
-            BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(itemStack, entity.level, entity);
+            BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(itemStack, entity.level, entity, entity.getId());
             applyAnimationTransform(model, transformType, matrixStack);
         }
     }

@@ -33,10 +33,10 @@ public class FirstPersonRendererMixin {
         GunAnimationController controller = GunAnimationController.fromItem(mainHandItemStack.getItem());
         GunAnimationController controller1 = GunAnimationController.fromItem(this.prevItemStack.getItem());
         if(prevItemStack.sameItem(mainHandItemStack)
-                && (prevSlot == Minecraft.getInstance().player.inventory.selected && !CommonStateBox.isSwapped ) )
+                && (prevSlot == Minecraft.getInstance().player.getInventory().selected && !CommonStateBox.isSwapped ) )
             return;
         prevItemStack = mainHandItemStack;
-        prevSlot = Minecraft.getInstance().player.inventory.selected;
+        prevSlot = Minecraft.getInstance().player.getInventory().selected;
         CommonStateBox.isSwapped = false;
         //if(isSameWeapon(Minecraft.getInstance().player)) return;
         if(controller1 != null && controller1.isAnimationRunning()) {

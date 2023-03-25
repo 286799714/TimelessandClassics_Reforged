@@ -10,7 +10,6 @@ import com.tac.guns.Config;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
@@ -166,7 +165,6 @@ public final class InputHandler
 	 * Original TAC implementation seems to try to prevent gun from destroying block and bobbing on
 	 * use by canceling the {@link RawMouseEvent} event. Hence to receive the update, we need a
 	 * higher priority to receive event ahead. But I have to say this kind of implementation is a
-	 * bit of ugly. There are actually methods on {@link Item} that can be override to control the
 	 * behavior of item on mouse input.
 	 * 
 	 * TODO: maybe refactor this part

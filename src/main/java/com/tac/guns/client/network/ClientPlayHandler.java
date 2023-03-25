@@ -100,6 +100,7 @@ public class ClientPlayHandler
         Level world = Minecraft.getInstance().level;
         if(world != null)
         {
+
             int[] entityIds = message.getEntityIds();
             Vec3[] positions = message.getPositions();
             Vec3[] motions = message.getMotions();

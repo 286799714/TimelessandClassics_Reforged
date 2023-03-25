@@ -265,7 +265,7 @@ public enum AnimationHandler {
     public void onRenderHand(RenderHandEvent event){
         ClientPlayerEntity player = Minecraft.getInstance().player;
         if(player == null) return;
-        ItemStack itemStack = player.inventory.getCurrentItem();
+        ItemStack itemStack = player.getInventory().getCurrentItem();
         GunAnimationController controller = GunAnimationController.fromItem(itemStack.getItem());
         if(controller == null) return;
         if(controller.isAnimationRunning()){

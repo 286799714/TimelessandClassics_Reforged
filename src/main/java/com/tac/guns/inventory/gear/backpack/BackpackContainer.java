@@ -73,13 +73,13 @@ public class BackpackContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-        if(slotId <= 0) return super.clicked(slotId, dragType, clickTypeIn, player);
+    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+        if(slotId <= 0) super.clicked(slotId, dragType, clickTypeIn, player);
         Slot slot = this.slots.get(slotId);
         if(slot.hasItem()) {
-            if(slot.getItem().getItem() instanceof ArmorRigItem) return ItemStack.EMPTY;
+            if(slot.getItem().getItem() instanceof ArmorRigItem) return;
         }
-        return super.clicked(slotId, dragType, clickTypeIn, player);
+        super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
     public ItemStack quickMoveStack(Player playerIn, int index) {

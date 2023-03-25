@@ -472,7 +472,7 @@ public class GunRenderingHandler {
         }
 
         LocalPlayer entity = mc.player;
-        BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(overrideModel.isEmpty() ? heldItem : overrideModel, entity.level, entity, entity.getId());
+        BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(overrideModel.isEmpty() ? heldItem : overrideModel, entity.level, entity, entity==null?0:entity.getId());
         float scaleX = model.getTransforms().firstPersonRightHand.scale.x();
         float scaleY = model.getTransforms().firstPersonRightHand.scale.y();
         float scaleZ = model.getTransforms().firstPersonRightHand.scale.z();
@@ -1326,25 +1326,14 @@ public class GunRenderingHandler {
         if (muzzleFlash == null)
             return;
 
-        displayX = muzzleFlash.getXOffset();
-        displayY = muzzleFlash.getYOffset();
-        displayZ = (muzzleFlash.getZOffset()+this.muzzleExtraOnEnch);
+        double displayX = muzzleFlash.getXOffset() * 0.0625;
+        double displayY = muzzleFlash.getYOffset() * 0.0625;
+        double displayZ = (muzzleFlash.getZOffset()+this.muzzleExtraOnEnch) * 0.0625;
 
-        //GunRenderingHandler.get().adjustedTrailZ = muzzleFlash.get
-
-        double displayXv = displayX * 0.0625;
-        double displayYv = displayY * 0.0625;
-        double displayZv = displayZ * 0.0625;
         if(GunRenderingHandler.get().muzzleExtraOnEnch != 0)
             this.muzzleExtraOnEnch = 0;
 
-        displayX *= 0.0625;
-        displayY *= 0.0625;
-        displayZ *= 0.0625;
-
-        adjustedTrailZ = modifiedGun.getDisplay().getFlash().getTrailAdjust();
-
-        matrixStack.translate(displayXv, displayYv, displayZv);
+        matrixStack.translate(displayX, displayY, displayZ);
         matrixStack.translate(0, -0.5, 0);
 
         ItemStack barrelStack = Gun.getAttachment(IAttachment.Type.BARREL, weapon);
@@ -1364,11 +1353,6 @@ public class GunRenderingHandler {
         matrixStack.mulPose(Vector3f.ZP.rotationDegrees(360F * random));
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(flip ? 180F : 0F));
         matrixStack.translate(-size / 2, -size / 2, 0);
-
-        float sizeForTrail = (float) (1 - partialSize + partialSize);
-        //sizeForTrail = (float) GunModifierHelper.getMuzzleFlashSize(weapon, sizeForTrail);
-
-        sizeZ = -sizeForTrail;
 
         Matrix4f matrix = matrixStack.last().pose();
         VertexConsumer builder = buffer.getBuffer(GunRenderType.getMuzzleFlash());

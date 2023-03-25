@@ -1,6 +1,5 @@
 package com.tac.guns.item;
 
-import com.tac.guns.Config;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.nbt.CompoundTag;

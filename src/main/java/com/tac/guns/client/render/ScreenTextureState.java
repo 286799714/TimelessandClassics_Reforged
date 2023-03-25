@@ -1,6 +1,5 @@
 package com.tac.guns.client.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -22,13 +21,12 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.optifine.shaders.Shaders;
+//import net.optifine.shaders.Shaders;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL43;
@@ -37,7 +35,6 @@ import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_NEAREST;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
 public class ScreenTextureState extends RenderStateShard.TexturingStateShard
@@ -207,7 +204,7 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
     public void onPreRenderHand1() {
         if(needRenderHand1) {
             needRenderHand1=false;
-            Shaders.setHandsRendered(false, true);
+            //Shaders.setHandsRendered(false, true);
         }
     }
     public static boolean isRenderHand0=false;
@@ -242,7 +239,7 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
         boolean bobbingBackup = mc.options.bobView;
         double fovBackup = mc.options.fov;
 
-        TACOptifineShadersHelper.setGameRenderer(mc, this.scopeRenderGlobal);
+        //TACOptifineShadersHelper.setGameRenderer(mc, this.scopeRenderGlobal);
 
         //Change game settings for the Scope
         mc.options.hideGui = true;
@@ -255,7 +252,7 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
         //GL30.glBindFramebuffer(mc.getFramebuffer().getColorTextureId(), this.textureId);
         //GL30.glBindTexture(mc.getFramebuffer().getColorTextureId(), this.textureId);
         int tex = mc.getMainRenderTarget().getColorTextureId();
-        TACOptifineShadersHelper.setFramebufferTexture(mc.getMainRenderTarget(), this.textureId);// = MIRROR_TEX;
+        //TACOptifineShadersHelper.setFramebufferTexture(mc.getMainRenderTarget(), this.textureId);// = MIRROR_TEX;
         //GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, this.textureId, 0);
         if(mc.levelRenderer != null && mc.gameRenderer != null) {
             mc.gameRenderer.render(partialTick, endTime, true);
@@ -265,7 +262,7 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
             GunMod.LOGGER.log(Level.FATAL, "Warning gameRender doesn't exist");
 
         //GL20.glUseProgram(0);
-        TACOptifineShadersHelper.setFramebufferTexture(mc.getMainRenderTarget(), tex);
+        //TACOptifineShadersHelper.setFramebufferTexture(mc.getMainRenderTarget(), tex);
         //GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, tex, 0);
         //GL30.glCopyTexSubImage2D(Minecraft.getInstance().getFramebuffer().getColorTextureId(), GL11.GL_TEXTURE_2D, 0, 0, 0, 0, MIRROR_TEX, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, lastWidth, lastHeight, 1);
 
@@ -278,7 +275,7 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
         mc.options.bobView = bobbingBackup;
         mc.options.fov = fovBackup;
 
-        TACOptifineShadersHelper.setWorldRenderer(mc, renderBackup);
+        //TACOptifineShadersHelper.setWorldRenderer(mc, renderBackup);
 
         GL11.glPopMatrix();
     }
@@ -300,8 +297,11 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
                     /*if(this.textureId == 0)
                         this.getTextureId();
                     RenderSystem.bindTexture(this.textureId);*/
-                    GL43.glCopyImageSubData(Shaders.activeProgram.getDrawBuffersCustom().get(0) /*TACOptifineShadersHelper.getFlipTextures().getA(0)*/, 3553, 0,0,0, 0, this.textureId, 3553,0,0,0,0, mc.getWindow().getScreenWidth(),
+                /*
+                    GL43.glCopyImageSubData(Shaders.activeProgram.getDrawBuffersCustom().get(0) TACOptifineShadersHelper.getFlipTextures().getA(0), 3553, 0,0,0, 0, this.textureId, 3553,0,0,0,0, mc.getWindow().getScreenWidth(),
                             mc.getWindow().getScreenHeight(),1);
+
+                 */
                     GunMod.LOGGER.log(Level.INFO, "GL43 grab with optifine has functioned");
                 } else {
                     //RenderSystem.bindTexture(this.textureId);

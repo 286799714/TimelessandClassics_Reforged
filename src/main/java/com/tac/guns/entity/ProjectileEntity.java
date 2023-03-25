@@ -2,7 +2,7 @@ package com.tac.guns.entity;
 
 //import com.sun.tools.jdi.Packet;
 
-import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
+import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.Gun;
@@ -23,18 +23,16 @@ import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
 import com.tac.guns.util.math.ExtendedEntityRayTraceResult;
 import com.tac.guns.world.ProjectileExplosion;
-import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.util.math.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -51,11 +49,10 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -122,7 +119,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             int customModelData = -1;
             if(weapon.getTag() != null)
             {
-                if(weapon.getTag().contains("Model", Constants.NBT.TAG_COMPOUND))
+                if(weapon.getTag().contains("Model", Tag.TAG_COMPOUND))
                 {
                     ItemStack model = ItemStack.of(weapon.getTag().getCompound("Model"));
                     if(model.getTag() != null && model.getTag().contains("CustomModelData"))
@@ -155,7 +152,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         if(gunSpread == 0F)
         {
-            return this.getVectorFromRotation(shooter.xRot, shooter.yRot);
+            return this.getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
         }
 
         if(shooter instanceof Player)
@@ -170,15 +167,15 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     gunSpread = GunModifierHelper.getModifiedFirstShotSpread(weapon, gunSpread);
                 }
             }
-            if(!SyncedPlayerData.instance().get((Player) shooter, ModSyncedDataKeys.AIMING))
+            if(!SyncedEntityData.instance().get((Player) shooter, ModSyncedDataKeys.AIMING))
             {
                 if(gunSpread < 0.5)
                     gunSpread+=0.5f;
                 gunSpread *= modifiedGun.getGeneral().getHipFireInaccuracy();
                 gunSpread = GunModifierHelper.getModifiedHipFireSpread(weapon, gunSpread);
-                if(SyncedPlayerData.instance().get((Player) shooter, ModSyncedDataKeys.MOVING) != 0)
+                if(SyncedEntityData.instance().get((Player) shooter, ModSyncedDataKeys.MOVING) != 0)
                 {
-                    gunSpread *= Math.max(1 , (2F * ( 1 + SyncedPlayerData.instance().get((Player) shooter, ModSyncedDataKeys.MOVING))) * modifiedGun.getGeneral().getMovementInaccuracy());
+                    gunSpread *= Math.max(1 , (2F * ( 1 + SyncedEntityData.instance().get((Player) shooter, ModSyncedDataKeys.MOVING))) * modifiedGun.getGeneral().getMovementInaccuracy());
                 }
             }
             if(((Player) shooter).isCrouching() && modifiedGun.getGeneral().getProjectileAmount() == 1)
@@ -187,7 +184,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             }
         }
 
-        return this.getVectorFromRotation(shooter.xRot - (gunSpread / 2.0F) + random.nextFloat() * gunSpread, shooter.yRot - (gunSpread / 2.0F) + random.nextFloat() * gunSpread);
+        return this.getVectorFromRotation(shooter.getXRot() - (gunSpread / 2.0F) + random.nextFloat() * gunSpread, shooter.getYRot() - (gunSpread / 2.0F) + random.nextFloat() * gunSpread);
     }
 
     public void setWeapon(ItemStack weapon)
@@ -322,7 +319,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             {
                 this.onExpired();
             }
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -521,7 +518,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 this.onHitBlock(state, pos, blockRayTraceResult.getDirection(), hitVec.x, hitVec.y, hitVec.z);
 
                 //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
-                this.remove();
+                this.remove(RemovalReason.DISCARDED);
                 return;
             }
         }
@@ -551,7 +548,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 int collateralLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.COLLATERAL.get(), weapon);
                 if(collateralLevel == 0)
                 {
-                    this.remove();
+                    this.remove(RemovalReason.DISCARDED);
                 }
 
                 entity.invulnerableTime = 0;
@@ -742,11 +739,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     public void updateHeading()
     {
-        float f = Mth.sqrt(this.getDeltaMovement().x() * this.getDeltaMovement().x() + this.getDeltaMovement().z() * this.getDeltaMovement().z());
-        this.yRot = (float) (Mth.atan2(this.getDeltaMovement().x(), this.getDeltaMovement().z()) * (180D / Math.PI));
-        this.xRot = (float) (Mth.atan2(this.getDeltaMovement().y(), (double) f) * (180D / Math.PI));
-        this.yRotO = this.yRot;
-        this.xRotO = this.xRot;
+        float f = Mth.sqrt((float) (this.getDeltaMovement().x() * this.getDeltaMovement().x() + this.getDeltaMovement().z() * this.getDeltaMovement().z()));
+        this.setYRot((float) (Mth.atan2(this.getDeltaMovement().x(), this.getDeltaMovement().z()) * (180D / Math.PI)));
+        this.setXRot((float) (Mth.atan2(this.getDeltaMovement().y(), (double) f) * (180D / Math.PI)));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
     }
 
     public Projectile getProjectile()

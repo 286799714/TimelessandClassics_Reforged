@@ -21,18 +21,18 @@ description='''
 [[dependencies.tac]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.3,1.17)"
+    versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.tac]]
-    modId="obfuscate"
+    modId="framework"
     mandatory=true
-    versionRange="[0.6.0,)"
+    versionRange="[0.2.3,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.tac]]
     modId="curios"
     mandatory=true
-    versionRange="[1.16.5-4.0.8.1,)"
+    versionRange="[1.18.2-5.0.9.0,)"
     ordering="NONE"
     side="BOTH"

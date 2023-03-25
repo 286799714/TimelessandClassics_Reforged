@@ -19,9 +19,10 @@ import com.tac.guns.client.render.entity.ThrowableGrenadeRenderer;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.render.gun.model.scope.*;
 import com.tac.guns.client.screen.*;
-import com.tac.guns.client.settings.GunOptions;
-import com.tac.guns.client.util.UpgradeBenchRenderUtil;
-import com.tac.guns.init.*;
+import com.tac.guns.init.ModBlocks;
+import com.tac.guns.init.ModContainers;
+import com.tac.guns.init.ModEntities;
+import com.tac.guns.init.ModItems;
 import com.tac.guns.item.IColored;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageAttachments;
@@ -39,13 +40,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.VideoSettingsScreen;
 import net.minecraft.client.gui.screens.controls.ControlsScreen;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -82,7 +81,7 @@ public class ClientHandler
         MinecraftForge.EVENT_BUS.register(RecoilHandler.get());
         MinecraftForge.EVENT_BUS.register(ReloadHandler.get());
         MinecraftForge.EVENT_BUS.register(ShootingHandler.get());
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::registerEntityRenders);
+        registerEntityRenders();
         MinecraftForge.EVENT_BUS.register(SoundHandler.get());
         MinecraftForge.EVENT_BUS.register(HUDRenderingHandler.get());
         MinecraftForge.EVENT_BUS.register(FireModeSwitchEvent.get()); // Technically now a handler but, yes I need some naming reworks
@@ -140,14 +139,14 @@ public class ClientHandler
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WORKBENCH.get(), RenderType.cutout());
     }
 
-    private static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event)
+    private static void registerEntityRenders()
     {
-        event.registerEntityRenderer(ModEntities.PROJECTILE.get(), ProjectileRenderer::new);
-        event.registerEntityRenderer(ModEntities.GRENADE.get(), GrenadeRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_GRENADE.get(), ThrowableGrenadeRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_STUN_GRENADE.get(), ThrowableGrenadeRenderer::new);
-        //RenderingRegistry.registerEntityRenderingHandler(ModEntities.MISSILE.get(), MissileRenderer::new);
-        event.registerEntityRenderer(ModEntities.RPG7_MISSILE.get(), MissileRenderer::new);
+        EntityRenderers.register(ModEntities.PROJECTILE.get(), ProjectileRenderer::new);
+        EntityRenderers.register(ModEntities.GRENADE.get(), GrenadeRenderer::new);
+        EntityRenderers.register(ModEntities.THROWABLE_GRENADE.get(), ThrowableGrenadeRenderer::new);
+        EntityRenderers.register(ModEntities.THROWABLE_STUN_GRENADE.get(), ThrowableGrenadeRenderer::new);
+        //EntityRenderers.register(ModEntities.MISSILE.get(), MissileRenderer::new);
+        EntityRenderers.register(ModEntities.RPG7_MISSILE.get(), MissileRenderer::new);
     }
 
     private static void registerColors()
@@ -290,6 +289,7 @@ public class ClientHandler
         InputHandler.INSPECT.addPressCallback(callback);
         InputHandler.CO_INSPECT.addPressCallback(callback);
     }
+
 
     /* Uncomment for debugging headshot hit boxes */
 

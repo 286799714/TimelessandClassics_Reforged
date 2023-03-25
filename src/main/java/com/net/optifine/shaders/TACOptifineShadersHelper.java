@@ -6,8 +6,8 @@ import com.tac.guns.util.OptifineHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.optifine.shaders.FlipTextures;
-import net.optifine.shaders.ShadersFramebuffer;
+//import net.optifine.shaders.FlipTextures;
+//import net.optifine.shaders.ShadersFramebuffer;
 import org.apache.logging.log4j.Level;
 
 import java.lang.reflect.Field;
@@ -19,6 +19,7 @@ import java.lang.reflect.Modifier;
  * */
 public class TACOptifineShadersHelper
 {
+    /*
     public static Field fliptCheck;
     public static FlipTextures flipt;
     // TODO: Learn how to obtain private field from instance object
@@ -150,4 +151,5 @@ public class TACOptifineShadersHelper
     public static IntBuffer getDFBDepthTextures() {
         return Shaders.dfbDepthTextures;
     }*/
+
 }

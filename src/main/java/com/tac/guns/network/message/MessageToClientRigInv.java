@@ -18,6 +18,8 @@ public class MessageToClientRigInv extends PlayMessage<MessageToClientRigInv>
 		return this.id;
 	}
 
+	public MessageToClientRigInv(){}
+
 	public MessageToClientRigInv(ResourceLocation id)
 	{
 		this.id = id;
