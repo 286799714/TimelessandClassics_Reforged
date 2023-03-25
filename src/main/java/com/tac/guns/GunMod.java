@@ -14,6 +14,7 @@ import com.tac.guns.crafting.RecipeType;
 import com.tac.guns.datagen.*;
 import com.tac.guns.enchantment.EnchantmentTypes;
 import com.tac.guns.init.*;
+import com.tac.guns.inventory.gear.IWearableItemHandler;
 import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.IAmmoItemHandler;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
@@ -405,5 +406,6 @@ public class GunMod
     {
         // Too much to keep in Gunmod file
         event.register(IAmmoItemHandler.class);
+        event.register(IWearableItemHandler.class);
     }
 }
