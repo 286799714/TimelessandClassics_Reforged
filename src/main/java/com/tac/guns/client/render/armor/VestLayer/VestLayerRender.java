@@ -41,7 +41,7 @@ public class VestLayerRender<T extends Player, M extends HumanoidModel<T>> exten
         super(renderer);
     }
 
-    private static final Map<Item, ArmorBase> MODELS = new HashMap<>();
+    public static final Map<Item, ArmorBase> MODELS = new HashMap<>();
 
     public synchronized static <T extends ArmorBase> void registerModel(Item item, T model)
     {

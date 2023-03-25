@@ -121,7 +121,9 @@ public class MediumArmor extends ArmorBase {
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		Bulletproofvest_2.y=24F;
 		Bulletproofvest_2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+
 	}
 
 	@Override

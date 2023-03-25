@@ -3,6 +3,7 @@ package com.tac.guns;
 import com.tac.guns.client.ClientHandler;
 import com.tac.guns.client.CustomGunManager;
 import com.tac.guns.client.CustomRigManager;
+import com.tac.guns.client.render.armor.VestLayer.ArmorCurioRenderer;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.render.pose.*;
@@ -50,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
@@ -376,7 +378,8 @@ public class GunMod
     {
         // Too much to keep in Gunmod file
         ClientHandler.setup(Minecraft.getInstance());
-
+        CuriosRendererRegistry.register(ModItems.LIGHT_ARMOR.get(), ArmorCurioRenderer::new);
+        CuriosRendererRegistry.register(ModItems.MEDIUM_STEEL_ARMOR.get(), ArmorCurioRenderer::new);
 
         // Auto register code animation files, such as firing, animation mapping is called in these files too
         for (Field field : ModItems.class.getDeclaredFields()) {
