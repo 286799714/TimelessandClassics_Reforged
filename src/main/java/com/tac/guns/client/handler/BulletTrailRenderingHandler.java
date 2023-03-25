@@ -187,7 +187,7 @@ public class BulletTrailRenderingHandler
             buffer1.vertex(matrix4f, -0.035F, 0, -trailLength).color(red, green, blue, alpha).endVertex();
             Minecraft.getInstance().renderBuffers().bufferSource().endBatch(bulletType);
         }
-
+        /*
         if(!bulletTrail.getItem().isEmpty())
         {
             matrixStack.mulPose(Vector3f.YP.rotationDegrees((bulletTrail.getAge() + partialTicks) * (float) 50));
@@ -197,6 +197,8 @@ public class BulletTrailRenderingHandler
             ItemStack stack = bulletTrail.getItem();
             RenderUtil.renderModel(stack, ItemTransforms.TransformType.NONE, matrixStack, renderTypeBuffer, combinedLight, OverlayTexture.NO_OVERLAY, null, null);
         }
+
+         */
 
         matrixStack.popPose();
     }

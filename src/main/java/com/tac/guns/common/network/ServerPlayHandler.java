@@ -189,7 +189,7 @@ public class ServerPlayHandler
 
                         // PATCH NOTE: Neko required to remove the random pitch effect in sound
                         final float pitch = 0.9F + world.random.nextFloat() * 0.125F;
-                        
+
                         double radius = GunModifierHelper.getModifiedFireSoundRadius(heldItem, Config.SERVER.gunShotMaxDistance.get());
                         boolean muzzle = modifiedGun.getDisplay().getFlash() != null;
                         MessageGunSound messageSound = new MessageGunSound(fireSound, SoundSource.PLAYERS, (float) posX, (float) posY, (float) posZ, volume, pitch, player.getId(), muzzle, false);

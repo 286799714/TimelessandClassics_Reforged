@@ -289,6 +289,7 @@ public class ClientHandler
         InputHandler.CO_INSPECT.addPressCallback(callback);
     }
 
+
     /* Uncomment for debugging headshot hit boxes */
 
     /*@SubscribeEvent
