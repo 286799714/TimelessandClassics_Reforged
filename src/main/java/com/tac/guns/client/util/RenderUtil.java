@@ -90,7 +90,7 @@ public class RenderUtil
 
     public static void renderModel(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay, @Nullable Level world, @Nullable LivingEntity entity)
     {
-        BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, world, entity, entity.getId());
+        BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, world, entity, entity == null? 0:entity.getId());
         renderModel(model, transformType, stack, matrixStack, buffer, light, overlay);
     }
 
