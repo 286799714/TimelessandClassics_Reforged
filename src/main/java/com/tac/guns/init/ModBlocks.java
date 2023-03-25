@@ -48,6 +48,8 @@ public class ModBlocks
         return register(id, blockSupplier, block1 -> new BlockItem(block1, grouped ? new Item.Properties().tab(GunMod.GROUP) : new Item.Properties().tab(CreativeModeTab.TAB_SEARCH)));
     }
 
+    public static void init(){};
+
     private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier, @Nullable Function<T, BlockItem> supplier)
     {
         T block = blockSupplier.get();

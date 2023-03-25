@@ -3,10 +3,10 @@ package com.tac.guns.util;
 //import org.apache.commons.beanutils.PropertyUtils;
 
 import com.tac.guns.GunMod;
-import net.optifine.shaders.DrawBuffers;
-import net.optifine.shaders.Program;
-import net.optifine.shaders.Shaders;
-import net.optifine.shaders.ShadersFramebuffer;
+//import net.optifine.shaders.DrawBuffers;
+//import net.optifine.shaders.Program;
+//import net.optifine.shaders.Shaders;
+//import net.optifine.shaders.ShadersFramebuffer;
 import org.apache.logging.log4j.Level;
 
 import java.lang.reflect.Field;
@@ -18,10 +18,13 @@ import java.lang.reflect.Method;
  */
 public class OptifineHelper
 {
+    public static boolean isShadersEnabled() {
+        return false;
+    }
     /*public static FlipTextures getFlipTextures() {
         return Shaders.ProgramTerrain.getDrawBuffers();
     }*/
-
+/*
     private static Boolean loaded = null;
     private static Field programIdField;
 
@@ -67,6 +70,7 @@ public class OptifineHelper
     public static ShadersFramebuffer dfb;
     public static ShadersFramebuffer getDfb()
     {
+
         try
         {
             Class<?> clazz = Class.forName("net.optifine.shaders.Shaders");
@@ -197,7 +201,7 @@ public class OptifineHelper
         }
         return Minecraft.getInstance().getFramebuffer().framebufferObject;
     }*/
-
+/*
     public static int getPixelFormat(int internalFormat) {
         switch (internalFormat) {
             case 33333:
@@ -231,5 +235,8 @@ public class OptifineHelper
         }
         return null;
     }
+
+ */
+
 
 }

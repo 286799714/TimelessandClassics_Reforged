@@ -42,6 +42,7 @@ import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
@@ -60,10 +61,9 @@ public class GunMod
     public static final CreativeModeTab GROUP = new  CreativeModeTab(Reference.MOD_ID)
     {
         @Override
-        public ItemStack makeIcon()
+        public @NotNull ItemStack makeIcon()
         {
-            ItemStack stack = new ItemStack(ModItems.VORTEX_LPVO_1_6.get());
-            return stack;
+            return new ItemStack(ModItems.VORTEX_LPVO_1_6.get());
         }
 
         @Override
@@ -219,7 +219,7 @@ public class GunMod
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         // Do so right away, I want to make sure I hit this during Curios load
-        bus.addListener(this::onEnqueueIMC);
+        ModBlocks.init();
         ModBlocks.REGISTER.register(bus);
         ModContainers.REGISTER.register(bus);
         ModEffects.REGISTER.register(bus);
@@ -234,6 +234,7 @@ public class GunMod
         bus.addListener(this::onCommonSetup);
         bus.addListener(this::onClientSetup);
         bus.addListener(this::dataSetup);
+        bus.addListener(this::onEnqueueIMC);
         controllableLoaded = ModList.get().isLoaded("controllable");
         curiosLoaded = ModList.get().isLoaded("curios");
         modInfo = ModLoadingContext.get().getActiveContainer().getModInfo();
@@ -398,7 +399,7 @@ public class GunMod
     }
 
     @SubscribeEvent
-    private void onCapabilitySetup(RegisterCapabilitiesEvent event)
+    public void onCapabilitySetup(RegisterCapabilitiesEvent event)
     {
         // Too much to keep in Gunmod file
         ClientHandler.setup(Minecraft.getInstance());

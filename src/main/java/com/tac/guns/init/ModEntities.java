@@ -33,6 +33,8 @@ public class ModEntities
         return REGISTER.register(id, () -> type);
     }
 
+    public static void init(){};
+
     /**
      * Entity registration that prevents the entity from being sent and tracked by clients. Projectiles
      * are rendered separately from Minecraft's entity rendering system and their logic is handled

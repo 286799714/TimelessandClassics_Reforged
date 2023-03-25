@@ -4,27 +4,31 @@ import groovy.json.JsonSlurper
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.parchmentmc.org' }
         maven { url = 'https://repo.spongepowered.org/maven' }
         jcenter()
         mavenCentral()
-        mavenLocal()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         //classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
+        classpath 'org.parchmentmc:librarian:1.+'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
         classpath 'org.codehaus.groovy:groovy-all:2.4.15'
     }
 }
 
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
-//apply plugin: 'eclipse'
-//apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+apply plugin: 'eclipse'
 
-version = "0.3.5.163-1.16.5"
+version = "0.3.5.163-1.18.2"
 group = "com.tac"
 archivesBaseName = "tac-a"
 
@@ -38,6 +42,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 mixin {
     add sourceSets.main, "tac.refmap.json"
+    config "tac.mixins.json"
 }
 
 minecraft {
@@ -52,7 +57,6 @@ minecraft {
             property 'mixin.env.disableRefMap', 'true'
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            arg '-mixin.config=tac.mixins.json'
             mods {
                 tac {
                     source sourceSets.main
@@ -65,7 +69,6 @@ minecraft {
             property 'mixin.env.disableRefMap', 'true'
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            arg '-mixin.config=tac.mixins.json'
             mods {
                 tac {
                     source sourceSets.main
@@ -79,12 +82,19 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             args '--mod', 'tac', '--all', '--output', file('src/generated/resources/')
-            arg '-mixin.config=tac.mixins.json'
             mods {
                 tac {
                     source sourceSets.main
                 }
             }
+        }
+    }
+}
+
+processResources {
+    doLast {
+        fileTree(dir: outputs.files.asPath, include: "**/*.json").each {
+            File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
         }
     }
 }
@@ -110,14 +120,14 @@ dependencies {
     //implementation fg.deobf('curse.maven:ccore-257814:3419983')
     //implementation fg.deobf('curse.maven:extra-player-render-481042:3305584')
 
-    implementation ('com.fasterxml.jackson.core:jackson-databind:2.12.4')
     implementation fg.deobf('curse.maven:framework-549225:3723144')
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'// 3740120') // 3336021
-    compileOnly fg.deobf(fileTree(dir: 'lib4', include: '*.jar'))
+    //compileOnly fg.deobf(fileTree(dir: 'lib4', include: '*.jar'))
     //runtimeOnly files('lib4/optifine.jar')
 
     //implementation 'lib.optifine:optifine:1.0.0'
+    minecraftLibrary 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 /*repositories {
     maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
@@ -169,3 +179,26 @@ publishing {
         }
     }
 }
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+
+shadowJar {
+    dependencies {
+        include(dependency("com.fasterxml.jackson.core:jackson-databind:2.12.4"))
+        include(dependency("com.fasterxml.jackson.core:jackson-annotations:2.12.4"))
+        include(dependency("com.fasterxml.jackson.core:jackson-core:2.12.4"))
+    }
+}
+
+reobf {
+    shadowJar {} // Re-obfuscate the shadowed JAR
+}
+
+jar.finalizedBy('reobfJar')
+shadowJar.finalizedBy('reobfShadowJar')
+
+publish.dependsOn('reobfJar')
+publish.dependsOn('reobfShadowJar')

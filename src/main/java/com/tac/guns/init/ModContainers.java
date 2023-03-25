@@ -43,6 +43,8 @@ public class ModContainers
         put(ARMOR_TEST.get(), ModItems.ARMOR_TEST.get());
     }};*/
 
+    public static void init(){}
+
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> register(String id, MenuType.MenuSupplier<T> factory)
     {
         return REGISTER.register(id, () -> new MenuType<>(factory));
