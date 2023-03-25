@@ -1,5 +1,6 @@
 package com.tac.guns.client.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.inventory.gear.armor.ArmorRigContainer;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -29,5 +30,12 @@ public class AmmoPackScreen extends AbstractContainerScreen<ArmorRigContainer> i
     }
 
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+        RenderSystem.setShaderTexture(0, CHEST_GUI_TEXTURE);
+        int i = (this.width - this.imageWidth) / 2;
+        int j = (this.height - this.imageHeight) / 2;
+
+        // Draw for ammo pack, current issue is the number of slots not being drawn correctly, we can't cut this off either due to the background, get design team to create alternative off generic_54.png baseline
+        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, (this.rows) * 18 + 17);
+        this.blit(matrixStack, i, j + (this.rows) * 18 + 17, 0, 126, this.imageWidth, 96);
     }
 }
