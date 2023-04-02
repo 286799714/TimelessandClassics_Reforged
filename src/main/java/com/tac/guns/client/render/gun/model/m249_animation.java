@@ -2,6 +2,9 @@ package com.tac.guns.client.render.gun.model;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.tac.guns.client.SpecialModels;
+import com.tac.guns.client.render.animation.M249AnimationController;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -25,44 +28,52 @@ public class m249_animation implements IOverrideModel {
     @Override
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
     {
-        /*if(Gun.getScope(stack) != null)
+        M249AnimationController controller = M249AnimationController.getInstance();
+        matrices.push();
         {
-            RenderUtil.renderModel(SpecialModels.PKP_PENCHENNBERG_MOUNT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        }*/
-
-        if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem()))
-        {
-            RenderUtil.renderModel(SpecialModels.M249_TACTICAL_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
-        }
-        if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem()))
-        {
-            RenderUtil.renderModel(SpecialModels.M249_LIGHT_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
-        }
-
-        RenderUtil.renderModel(SpecialModels.M249.getModel(), stack, matrices, renderBuffer, light, overlay);
-
-        /*matrices.push();
-        Gun gun = ((GunItem) stack.getItem()).getGun();
-        float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-
-        if(Gun.hasAmmo(stack))
-        {
-            // Math provided by Bomb787 on GitHub and Curseforge!!!
-            matrices.translate(0, 0, 0.175f * (-4.5 * Math.pow(cooldownOg-0.5, 2) + 1.0));
-        }
-        else if(!Gun.hasAmmo(stack))
-        {
-            if(cooldownOg > 0.5){
-                // Math provided by Bomb787 on GitHub and Curseforge!!!
-                matrices.translate(0, 0, 0.175f * (-4.5 * Math.pow(cooldownOg-0.5, 2) + 1.0));
+            controller.applySpecialModelTransform(SpecialModels.M249.getModel(),M249AnimationController.INDEX_BODY,transformType,matrices);
+            if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderModel(SpecialModels.M249_TACTICAL_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-            else
-            {
-                matrices.translate(0, 0, 0.175f * (-4.5 * Math.pow(0.5-0.5, 2) + 1.0));
+            if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderModel(SpecialModels.M249_LIGHT_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
+            }
+
+            RenderUtil.renderModel(SpecialModels.M249.getModel(), stack, matrices, renderBuffer, light, overlay);
+        }
+        matrices.pop();
+
+        matrices.push();
+        {
+            controller.applySpecialModelTransform(SpecialModels.M249.getModel(),M249AnimationController.INDEX_MAGAZINE,transformType,matrices);
+            RenderUtil.renderModel(SpecialModels.M249_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+        }
+        matrices.pop();
+
+        matrices.push();
+        {
+            controller.applySpecialModelTransform(SpecialModels.M249.getModel(),M249AnimationController.INDEX_CAPS,transformType,matrices);
+            RenderUtil.renderModel(SpecialModels.M249_CAP.getModel(), stack, matrices, renderBuffer, light, overlay);
+        }
+        matrices.pop();
+
+        matrices.push();
+        {
+            controller.applySpecialModelTransform(SpecialModels.M249.getModel(),M249AnimationController.INDEX_HANDLE,transformType,matrices);
+            RenderUtil.renderModel(SpecialModels.M249_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
+        }
+        matrices.pop();
+
+        matrices.push();
+        {
+            controller.applySpecialModelTransform(SpecialModels.M249.getModel(),M249AnimationController.INDEX_CHAIN,transformType,matrices);
+            if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_EMPTY)
+                    || Gun.hasAmmo(stack)) {
+                RenderUtil.renderModel(SpecialModels.M249_BULLET_CHAIN.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
+        matrices.pop();
 
-        RenderUtil.renderModel(SpecialModels.PKP_PENCHENNBERG_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        matrices.pop();*/
+        PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 }

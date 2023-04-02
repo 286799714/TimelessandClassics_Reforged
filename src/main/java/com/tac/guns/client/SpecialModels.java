@@ -431,6 +431,9 @@ public enum SpecialModels
     M1014_SHELL("m1014_shell"),
     M249("m249"),
     M249_BOLT("m249_bolt"),
+    M249_BULLET_CHAIN("m249_bullet_chain"),
+    M249_MAG("m249_mag"),
+    M249_CAP("m249_cap"),
     M249_TACTICAL_GRIP("m249_tactical_grip"),
     M249_LIGHT_GRIP("m249_light_grip"),
 

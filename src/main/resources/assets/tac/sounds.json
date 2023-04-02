@@ -1747,5 +1747,30 @@
       "sounds": [
          { "name": "tac:animation/sks_tactical_reload_empty"}
       ]
+   },
+
+   "animation.m249_draw": {
+      "subtitle": "animation.m249_draw",
+      "sounds": [
+         { "name": "tac:animation/m249_draw"}
+      ]
+   },
+   "animation.m249_reload_norm": {
+      "subtitle": "animation.m249_reload_norm",
+      "sounds": [
+         { "name": "tac:animation/m249_reload_norm"}
+      ]
+   },
+   "animation.m249_inspect": {
+      "subtitle": "animation.m249_inspect",
+      "sounds": [
+         { "name": "tac:animation/m249_inspect"}
+      ]
+   },
+   "animation.m249_reload_empty": {
+      "subtitle": "animation.m249_reload_empty",
+      "sounds": [
+         { "name": "tac:animation/m249_reload_empty"}
+      ]
    }
 }

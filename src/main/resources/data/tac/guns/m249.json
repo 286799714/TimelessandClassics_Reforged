@@ -37,7 +37,10 @@
   },
   "sounds": {
     "fire": "tac:item.fire_m60",
-    "reload": "tac:item.pistol.reload",
+    "reloadNormal": "tac:animation.m249_reload_norm",
+    "reloadEmpty": "tac:animation.m249_reload_empty",
+    "draw": "tac:animation.m249_draw",
+    "inspect": "tac:animation.m249_inspect",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.pistol.silenced_fire"
   },

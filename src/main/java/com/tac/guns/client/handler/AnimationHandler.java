@@ -78,6 +78,7 @@ public enum AnimationHandler {
         M24AnimationController.getInstance();
         //TODO: RPK redo due to static animation issue
         RPKAnimationController.getInstance();
+        M249AnimationController.getInstance();
     }
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {
