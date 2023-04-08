@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -45,11 +47,7 @@ public final class InputHandler
 	 * Universal keys. These keys will always update
 	 */
 	public static final KeyBind
-		PULL_TRIGGER = new KeyBind(
-			"key.tac.pull_trigger",
-			GLFW.GLFW_MOUSE_BUTTON_LEFT,
-			Type.MOUSE
-		),
+		PULL_TRIGGER = new KeyBind( "key.tac.pull_trigger", GLFW.GLFW_MOUSE_BUTTON_LEFT, Type.MOUSE ),
 		AIM_HOLD = new KeyBind( "key.tac.aim_hold", GLFW.GLFW_MOUSE_BUTTON_RIGHT, Type.MOUSE ),
 		AIM_TOGGLE = new KeyBind( "key.tac.aim_toggle", InputMappings.INPUT_INVALID.getKeyCode() );
 	
@@ -66,9 +64,6 @@ public final class InputHandler
 		SIGHT_SWITCH = new KeyBind( "key.tac.sight_switch", GLFW.GLFW_KEY_V ),
 		ACTIVATE_SIDE_RAIL = new KeyBind( "key.tac.activateSideRail", GLFW.GLFW_KEY_B ),
 		ARMOR_REPAIRING = new KeyBind( "key.tac.armor_repairing", GLFW.GLFW_KEY_K);
-		
-		// TODO: remove this key maybe? At least not used now. #(line: 129)
-//		COLOR_BENCH = new KeyBind( "key.tac.color_bench", GLFW.GLFW_KEY_PAGE_DOWN );
 	
 	/**
 	 * Co-keys. These keys will update when {@link #CO} is down.
@@ -99,16 +94,21 @@ public final class InputHandler
 		I = new KeyBind( "key.tac.i", GLFW.GLFW_KEY_I ),
 		J = new KeyBind( "key.tac.j", GLFW.GLFW_KEY_J ),
 		N = new KeyBind( "key.tac.n", GLFW.GLFW_KEY_N ),
-			UP = new KeyBind( "key.tac.bbb", GLFW.GLFW_KEY_UP ),
-			RIGHT = new KeyBind( "key.tac.vvv", GLFW.GLFW_KEY_RIGHT ),
-			LEFT = new KeyBind( "key.tac.ccc", GLFW.GLFW_KEY_LEFT ),
-			DOWN = new KeyBind( "key.tac.zzz", GLFW.GLFW_KEY_DOWN );
+		
+		UP = new KeyBind( "key.tac.bbb", GLFW.GLFW_KEY_UP ),
+		RIGHT = new KeyBind( "key.tac.vvv", GLFW.GLFW_KEY_RIGHT ),
+		LEFT = new KeyBind( "key.tac.ccc", GLFW.GLFW_KEY_LEFT ),
+		DOWN = new KeyBind( "key.tac.zzz", GLFW.GLFW_KEY_DOWN );
 	
-	private static final ArrayList< KeyBind > UNIVERSAL_KEYS = new ArrayList<>();
+	private static final ArrayList< KeyBind >
+		GLOBAL_KEYS = new ArrayList<>(),
+		INCO_KEYS = new ArrayList<>(),
+		CO_KEYS = new ArrayList<>();
 	
-	private static final ArrayList< KeyBind > NORMAL_KEYS = new ArrayList<>();
-	
-	private static final ArrayList< KeyBind > CO_KEYS = new ArrayList<>();
+	private static final HashMultimap< Input, KeyBind >
+		GLOBAL_MAPPER = HashMultimap.create(),
+		INCO_MAPPER = HashMultimap.create(),
+		CO_MAPPER = HashMultimap.create();
 	
 	/**
 	 * Is used to save and read key bindings
@@ -118,7 +118,7 @@ public final class InputHandler
 	public static void initKeys()
 	{
 		regisAll(
-			UNIVERSAL_KEYS,
+			GLOBAL_KEYS,
 			
 			PULL_TRIGGER,
 
@@ -128,7 +128,7 @@ public final class InputHandler
 		);
 		
 		regisAll(
-			NORMAL_KEYS,
+			INCO_KEYS,
 			
 			RELOAD,
 			UNLOAD,
@@ -138,7 +138,6 @@ public final class InputHandler
 			SIGHT_SWITCH,
 			ACTIVATE_SIDE_RAIL,
 			ARMOR_REPAIRING
-//			, COLOR_BENCH
 		);
 		
 		regisAll(
@@ -149,10 +148,10 @@ public final class InputHandler
 		);
 		
 		// Only register dev keys for dev mode
-		if( Config.COMMON.development.enableTDev.get() )
+		if ( Config.COMMON.development.enableTDev.get() )
 		{
 			regisAll(
-				UNIVERSAL_KEYS,
+				GLOBAL_KEYS,
 				
 				SHIFTY,
 				CONTROLLY,
@@ -163,11 +162,11 @@ public final class InputHandler
 				SIZE_OPT,
 				
 				P, L, O, K, M, I, J, N,
-					UP, RIGHT, LEFT, DOWN
+				UP, RIGHT, LEFT, DOWN
 			);
 		}
 	}
-
+	
 	/**
 	 * Original TAC implementation seems to try to prevent gun from destroying block and bobbing on
 	 * use by canceling the {@link RawMouseEvent} event. Hence to receive the update, we need a
@@ -180,17 +179,23 @@ public final class InputHandler
 	@SubscribeEvent( priority = EventPriority.HIGH )
 	public static void onMouseInput( InputEvent.RawMouseEvent evt )
 	{
-		UNIVERSAL_KEYS.forEach( KeyBind::update );
-		( CO.down ? CO_KEYS : NORMAL_KEYS ).forEach( KeyBind::update );
-		( CO.down ? NORMAL_KEYS : CO_KEYS ).forEach( KeyBind::reset );
+		final Input button = InputMappings.Type.MOUSE.getOrMakeInput( evt.getButton() );
+		final boolean down = evt.getAction() == GLFW.GLFW_PRESS;
+		GLOBAL_MAPPER.get( button ).forEach( kb -> kb.update( down ) );
+		( CO.down ? CO_MAPPER : INCO_MAPPER ).get( button ).forEach( kb -> kb.update( down ) );
+		( CO.down ? INCO_MAPPER : CO_MAPPER ).get( button )
+			.forEach( kb -> kb.inactiveUpdate( down ) );
 	}
-
+	
 	@SubscribeEvent( priority = EventPriority.HIGH )
 	public static void onKeyInput( InputEvent.KeyInputEvent evt )
 	{
-		UNIVERSAL_KEYS.forEach( KeyBind::update );
-		( CO.down ? CO_KEYS : NORMAL_KEYS ).forEach( KeyBind::update );
-		( CO.down ? NORMAL_KEYS : CO_KEYS ).forEach( KeyBind::reset );
+		final Input key = InputMappings.Type.KEYSYM.getOrMakeInput( evt.getKey() );
+		final boolean down = evt.getAction() != GLFW.GLFW_RELEASE;
+		GLOBAL_MAPPER.get( key ).forEach( kb -> kb.update( down ) );
+		( CO.down ? CO_MAPPER : INCO_MAPPER ).get( key ).forEach( kb -> kb.update( down ) );
+		( CO.down ? INCO_MAPPER : CO_MAPPER ).get( key )
+			.forEach( kb -> kb.inactiveUpdate( down ) );
 	}
 	
 	private static KeyBind oriAimKey;
@@ -203,14 +208,15 @@ public final class InputHandler
 	static void clearKeyBinds( File file )
 	{
 		boolean flag = false;
-		for( KeyBind key : KeyBind.REGISTRY.values())
+		for ( KeyBind key : KeyBind.REGISTRY.values()) {
 			flag |= key.clearKeyBind();
-
+		}
+		
 		// Make sure only one aim key is bounden
 		final Input none = InputMappings.INPUT_INVALID;
-		if( AIM_HOLD.keyCode() != none && AIM_TOGGLE.keyCode() != none )
+		if ( AIM_HOLD.keyCode() != none && AIM_TOGGLE.keyCode() != none )
 		{
-			oriAimKey.$keyCode( none );
+			oriAimKey.setKeyCode( none );
 			flag = true;
 		}
 		
@@ -218,8 +224,11 @@ public final class InputHandler
 		KeyBinding.resetKeyBindingArrayAndHash();
 		
 		// If any key bind has changed, save it to the file
-		if( flag )
+		if ( flag )
+		{
+			updateMappers();
 			saveTo( file );
+		}
 	}
 	
 	/**
@@ -227,14 +236,13 @@ public final class InputHandler
 	 */
 	static void saveTo( File file )
 	{
-		final HashMap< String, String > mapper = new HashMap<>();
-		try( FileWriter out = new FileWriter( file ) )
+		try ( FileWriter out = new FileWriter( file ) )
 		{
-			KeyBind.REGISTRY.values()
-				.forEach( kb -> mapper.put( kb.name(), kb.keyCode().toString() ) );
+			final HashMap< String, String > mapper = new HashMap<>();
+			KeyBind.REGISTRY.values().forEach( kb -> mapper.put( kb.name(), "" + kb.keyCode() ) );
 			out.write( GSON.toJson( mapper ) );
 		}
-		catch( IOException e ) { GunMod.LOGGER.error( "Fail write key bindings", e ); }
+		catch ( IOException e ) { GunMod.LOGGER.error( "Fail write key bindings", e ); }
 	}
 	
 	/**
@@ -242,24 +250,45 @@ public final class InputHandler
 	 */
 	static void readFrom( File file )
 	{
-		try( FileReader in = new FileReader( file ) )
+		try ( FileReader in = new FileReader( file ) )
 		{
 			final JsonObject obj = GSON.fromJson( in, JsonObject.class );
 			obj.entrySet().forEach( e -> {
 				try
 				{
-					KeyBind.REGISTRY.get( e.getKey() )
-						.$keyCode( InputMappings.getInputByName( e.getValue().getAsString() ) );
+					final KeyBind keyBind = KeyBind.REGISTRY.get( e.getKey() );
+					final Input input = InputMappings.getInputByName( e.getValue().getAsString() );
+					keyBind.setKeyCode( input );
 				}
-				catch( NullPointerException ee ) {
+				catch ( NullPointerException ee ) {
 					GunMod.LOGGER.error( "Key bind " + e.getKey() + " do not exist" );
 				}
-				catch( IllegalArgumentException ee ) {
+				catch ( IllegalArgumentException ee ) {
 					GunMod.LOGGER.error( "Bad key code: " + e );
 				}
 			} );
 		}
-		catch( IOException e ) { GunMod.LOGGER.error( "Fail read key bind", e ); }
+		catch ( IOException e ) { GunMod.LOGGER.error( "Fail read key bind", e ); }
+		
+		updateMappers();
+	}
+	
+	public static void updateMappers()
+	{
+		updateMapper( GLOBAL_KEYS, GLOBAL_MAPPER );
+		updateMapper( CO_KEYS, CO_MAPPER );
+		updateMapper( INCO_KEYS, INCO_MAPPER );
+	}
+	
+	private static void updateMapper(
+		Collection< KeyBind > group,
+		Multimap< Input, KeyBind > mapper
+	) {
+		mapper.clear();
+		group.forEach( kb -> {
+			final Input code = kb.keyCode();
+			if ( code != InputMappings.INPUT_INVALID ) { mapper.put( code, kb ); }
+		} );
 	}
 	
 	private static void regisAll( Collection< KeyBind > updateGroup, KeyBind... keys )
