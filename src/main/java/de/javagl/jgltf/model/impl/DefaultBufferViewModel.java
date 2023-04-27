@@ -26,12 +26,12 @@
  */
 package de.javagl.jgltf.model.impl;
 
-import java.nio.ByteBuffer;
-import java.util.function.Consumer;
-
 import de.javagl.jgltf.model.BufferModel;
 import de.javagl.jgltf.model.BufferViewModel;
 import de.javagl.jgltf.model.io.Buffers;
+
+import java.nio.ByteBuffer;
+import java.util.function.Consumer;
 
 /**
  * Implementation of a {@link BufferViewModel}

@@ -26,11 +26,11 @@
  */
 package de.javagl.jgltf.model.gl.impl.v1;
 
-import java.util.Objects;
-
 import de.javagl.jgltf.impl.v1.TechniqueStatesFunctions;
 import de.javagl.jgltf.model.Optionals;
 import de.javagl.jgltf.model.gl.TechniqueStatesFunctionsModel;
+
+import java.util.Objects;
 
 /**
  * Default implementation of a {@link TechniqueStatesFunctionsModel}, 

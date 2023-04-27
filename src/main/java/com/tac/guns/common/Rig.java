@@ -2,22 +2,19 @@ package com.tac.guns.common;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
-import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Optional;
-import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.interfaces.TGExclude;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 
 import javax.annotation.Nullable;
 
 
-public final class Rig implements INBTSerializable<CompoundNBT>
+public final class Rig implements INBTSerializable<CompoundTag>
 {
     private General general = new General();
     private Repair repair = new Repair();
@@ -37,7 +34,7 @@ public final class Rig implements INBTSerializable<CompoundNBT>
     public Sounds getSounds() {return this.sounds;}
     /*public Display getDisplay() {return this.display;}*/
 
-    public static class General implements INBTSerializable<CompoundNBT>
+    public static class General implements INBTSerializable<CompoundTag>
     {
         @Optional
         private int armorClass = 1;
@@ -49,9 +46,9 @@ public final class Rig implements INBTSerializable<CompoundNBT>
         @Optional
         private float movementInaccuracy = 1F;
         @Override
-        public CompoundNBT serializeNBT()
+        public CompoundTag serializeNBT()
         {
-            CompoundNBT tag = new CompoundNBT();
+            CompoundTag tag = new CompoundTag();
             tag.putInt("ArmorClass", armorClass);
             tag.putInt("Ergonomics", ergonomics);
             tag.putFloat("SpeedReduction", speedReduction);
@@ -60,21 +57,21 @@ public final class Rig implements INBTSerializable<CompoundNBT>
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT tag)
+        public void deserializeNBT(CompoundTag tag)
         {
-            if(tag.contains("ArmorClass", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("ArmorClass", Tag.TAG_ANY_NUMERIC))
             {
                 this.armorClass = tag.getInt("ArmorClass");
             }
-            if(tag.contains("Ergonomics", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("Ergonomics", Tag.TAG_ANY_NUMERIC))
             {
                 this.ergonomics = tag.getInt("Ergonomics");
             }
-            if(tag.contains("SpeedReduction", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("SpeedReduction", Tag.TAG_ANY_NUMERIC))
             {
                 this.speedReduction = tag.getFloat("SpeedReduction");
             }
-            if(tag.contains("MovementInaccuracy", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("MovementInaccuracy", Tag.TAG_ANY_NUMERIC))
             {
                 this.movementInaccuracy = tag.getFloat("MovementInaccuracy");
             }
@@ -114,7 +111,7 @@ public final class Rig implements INBTSerializable<CompoundNBT>
         }
     }
 
-    public static class Repair implements INBTSerializable<CompoundNBT>
+    public static class Repair implements INBTSerializable<CompoundTag>
     {
         @Optional
         private int ticksToRepair = 40;
@@ -128,9 +125,9 @@ public final class Rig implements INBTSerializable<CompoundNBT>
         private ResourceLocation repairItem = new ResourceLocation(Reference.MOD_ID, "armor_plate");
 
         @Override
-        public CompoundNBT serializeNBT()
+        public CompoundTag serializeNBT()
         {
-            CompoundNBT tag = new CompoundNBT();
+            CompoundTag tag = new CompoundTag();
             tag.putString("RepairItem", this.repairItem.toString());
             tag.putInt("TicksToRepair", this.ticksToRepair);
             tag.putFloat("Durability", this.durability);
@@ -140,25 +137,25 @@ public final class Rig implements INBTSerializable<CompoundNBT>
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT tag)
+        public void deserializeNBT(CompoundTag tag)
         {
-            if(tag.contains("RepairItem", Constants.NBT.TAG_STRING))
+            if(tag.contains("RepairItem", Tag.TAG_STRING))
             {
                 this.repairItem = new ResourceLocation(tag.getString("RepairItem"));
             }
-            if(tag.contains("TicksToRepair", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("TicksToRepair", Tag.TAG_ANY_NUMERIC))
             {
                 this.ticksToRepair = tag.getInt("TicksToRepair");
             }
-            if(tag.contains("Durability", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("Durability", Tag.TAG_ANY_NUMERIC))
             {
                 this.durability = tag.getFloat("Durability");
             }
-            if(tag.contains("QuickRepairability", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("QuickRepairability", Tag.TAG_ANY_NUMERIC))
             {
                 this.quickRepairability = tag.getFloat("QuickRepairability");
             }
-            if(tag.contains("QuickRepairable", Constants.NBT.TAG_ANY_NUMERIC))
+            if(tag.contains("QuickRepairable", Tag.TAG_ANY_NUMERIC))
             {
                 this.quickRepairable = tag.getBoolean("QuickRepairable");
             }
@@ -191,7 +188,7 @@ public final class Rig implements INBTSerializable<CompoundNBT>
         }
     }
 
-    public static class Sounds implements INBTSerializable<CompoundNBT>
+    public static class Sounds implements INBTSerializable<CompoundTag>
     {
         @Optional
         @Nullable
@@ -234,9 +231,9 @@ public final class Rig implements INBTSerializable<CompoundNBT>
         public ResourceLocation getRepair() {return repair;}
 
         @Override
-        public CompoundNBT serializeNBT()
+        public CompoundTag serializeNBT()
         {
-            CompoundNBT tag = new CompoundNBT();
+            CompoundTag tag = new CompoundTag();
             if(this.step != null)
             {
                 tag.putString("Step", this.step.toString());
@@ -265,29 +262,29 @@ public final class Rig implements INBTSerializable<CompoundNBT>
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT tag)
+        public void deserializeNBT(CompoundTag tag)
         {
-            if(tag.contains("Step", Constants.NBT.TAG_STRING))
+            if(tag.contains("Step", Tag.TAG_STRING))
             {
                 this.step = this.createSound(tag, "Step");
             }
-            if(tag.contains("On", Constants.NBT.TAG_STRING))
+            if(tag.contains("On", Tag.TAG_STRING))
             {
                 this.on = this.createSound(tag, "On");
             }
-            if(tag.contains("Off", Constants.NBT.TAG_STRING))
+            if(tag.contains("Off", Tag.TAG_STRING))
             {
                 this.off = this.createSound(tag, "Off");
             }
-            if(tag.contains("Hit", Constants.NBT.TAG_STRING))
+            if(tag.contains("Hit", Tag.TAG_STRING))
             {
                 this.hit = this.createSound(tag, "Hit");
             }
-            if(tag.contains("Broken", Constants.NBT.TAG_STRING))
+            if(tag.contains("Broken", Tag.TAG_STRING))
             {
                 this.broken = this.createSound(tag, "Broken");
             }
-            if(tag.contains("Repair", Constants.NBT.TAG_STRING)){
+            if(tag.contains("Repair", Tag.TAG_STRING)){
                 this.repair = this.createSound(tag, "Repair");
             }
         }
@@ -305,7 +302,7 @@ public final class Rig implements INBTSerializable<CompoundNBT>
         }
 
         @Nullable
-        private ResourceLocation createSound(CompoundNBT tag, String key)
+        private ResourceLocation createSound(CompoundTag tag, String key)
         {
             String sound = tag.getString(key);
             return sound.isEmpty() ? null : new ResourceLocation(sound);
@@ -316,9 +313,9 @@ public final class Rig implements INBTSerializable<CompoundNBT>
     }
 
     @Override
-    public CompoundNBT serializeNBT()
+    public CompoundTag serializeNBT()
     {
-        CompoundNBT tag = new CompoundNBT();
+        CompoundTag tag = new CompoundTag();
         tag.put("General", this.general.serializeNBT());
         tag.put("Repair", this.repair.serializeNBT());
         tag.put("Sounds", this.sounds.serializeNBT());
@@ -327,21 +324,21 @@ public final class Rig implements INBTSerializable<CompoundNBT>
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT tag)
+    public void deserializeNBT(CompoundTag tag)
     {
-        if(tag.contains("General", Constants.NBT.TAG_COMPOUND))
+        if(tag.contains("General", Tag.TAG_COMPOUND))
         {
             this.general.deserializeNBT(tag.getCompound("General"));
         }
-        if(tag.contains("Repair", Constants.NBT.TAG_COMPOUND))
+        if(tag.contains("Repair", Tag.TAG_COMPOUND))
         {
             this.repair.deserializeNBT(tag.getCompound("Repair"));
         }
-        if(tag.contains("Sounds", Constants.NBT.TAG_COMPOUND))
+        if(tag.contains("Sounds", Tag.TAG_COMPOUND))
         {
             this.sounds.deserializeNBT(tag.getCompound("Sounds"));
         }
-        /*if(tag.contains("Display", Constants.NBT.TAG_COMPOUND))
+        /*if(tag.contains("Display", Tag.TAG_COMPOUND))
         {
             this.display.deserializeNBT(tag.getCompound("Display"));
         }*/
@@ -349,7 +346,7 @@ public final class Rig implements INBTSerializable<CompoundNBT>
 
 
 
-    public static Rig create(CompoundNBT tag)
+    public static Rig create(CompoundTag tag)
     {
         Rig gun = new Rig();
         gun.deserializeNBT(tag);

@@ -1,25 +1,23 @@
 package com.tac.guns.client.handler.command;
 
-import static com.tac.guns.GunMod.LOGGER;
+import com.google.gson.GsonBuilder;
+import com.tac.guns.Config;
+import com.tac.guns.client.InputHandler;
+import com.tac.guns.common.Gun;
+import com.tac.guns.common.tooling.CommandsHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.apache.logging.log4j.Level;
+import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.apache.logging.log4j.Level;
-import org.lwjgl.glfw.GLFW;
-
-import com.google.gson.GsonBuilder;
-import com.tac.guns.Config;
-import com.tac.guns.client.InputHandler;
-import com.tac.guns.common.Gun;
-import com.tac.guns.common.tooling.CommandsHandler;
-
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import static com.tac.guns.GunMod.LOGGER;
 
 public class GuiEditor
 {
@@ -64,7 +62,7 @@ public class GuiEditor
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onKeyPressed(GuiScreenEvent.KeyboardKeyEvent event) {
+    public void onKeyPressed(ScreenEvent.KeyboardKeyEvent event) {
         // Basics overview
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null)

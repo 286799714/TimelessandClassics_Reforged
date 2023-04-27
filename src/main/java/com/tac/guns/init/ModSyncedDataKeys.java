@@ -1,46 +1,48 @@
 package com.tac.guns.init;
 
-import com.mrcrayfish.obfuscate.common.data.Serializers;
-import com.mrcrayfish.obfuscate.common.data.SyncedDataKey;
-import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
+import com.mrcrayfish.framework.api.data.sync.Serializers;
+import com.mrcrayfish.framework.api.data.sync.SyncedClassKey;
+import com.mrcrayfish.framework.api.data.sync.SyncedDataKey;
+import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Reference;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 public class ModSyncedDataKeys
 {
-    public static final SyncedDataKey<Boolean> AIMING = SyncedDataKey.builder(Serializers.BOOLEAN)
+    public static final SyncedDataKey<LivingEntity, Boolean> AIMING = SyncedDataKey.builder(SyncedClassKey.LIVING_ENTITY, Serializers.BOOLEAN)
             .id(new ResourceLocation(Reference.MOD_ID, "aiming"))
             .defaultValueSupplier(() -> false)
             .resetOnDeath()
             .build();
 
-    public static final SyncedDataKey<Boolean> SHOOTING = SyncedDataKey.builder(Serializers.BOOLEAN)
+    public static final SyncedDataKey<LivingEntity, Boolean> SHOOTING = SyncedDataKey.builder(SyncedClassKey.LIVING_ENTITY, Serializers.BOOLEAN)
             .id(new ResourceLocation(Reference.MOD_ID, "shooting"))
             .defaultValueSupplier(() -> false)
             .resetOnDeath()
             .build();
 
-    public static final SyncedDataKey<Boolean> RELOADING = SyncedDataKey.builder(Serializers.BOOLEAN)
+    public static final SyncedDataKey<LivingEntity, Boolean> RELOADING = SyncedDataKey.builder(SyncedClassKey.LIVING_ENTITY, Serializers.BOOLEAN)
             .id(new ResourceLocation(Reference.MOD_ID, "reloading"))
             .defaultValueSupplier(() -> false)
             .resetOnDeath()
             .build();
 
-    public static final SyncedDataKey<Boolean> STOP_ANIMA = SyncedDataKey.builder(Serializers.BOOLEAN)
+    public static final SyncedDataKey<LivingEntity, Boolean> STOP_ANIMA = SyncedDataKey.builder(SyncedClassKey.LIVING_ENTITY, Serializers.BOOLEAN)
             .id(new ResourceLocation(Reference.MOD_ID, "stop_anima"))
             .defaultValueSupplier(() -> true)
             .resetOnDeath()
             .build();
-    public static final SyncedDataKey<Float> MOVING = SyncedDataKey.builder(Serializers.FLOAT)
+    public static final SyncedDataKey<LivingEntity, Float> MOVING = SyncedDataKey.builder(SyncedClassKey.LIVING_ENTITY, Serializers.FLOAT)
             .id(new ResourceLocation(Reference.MOD_ID, "moving"))
             .defaultValueSupplier(() -> 0f)
             .resetOnDeath()
             .build();
 
-    public static final SyncedDataKey<Boolean> QREPAIRING = SyncedDataKey.builder(Serializers.BOOLEAN)
+    public static final SyncedDataKey<LivingEntity, Boolean> QREPAIRING = SyncedDataKey.builder(SyncedClassKey.LIVING_ENTITY, Serializers.BOOLEAN)
             .id(new ResourceLocation(Reference.MOD_ID, "qrepairing"))
             .defaultValueSupplier(() -> false)
             .resetOnDeath()
@@ -48,11 +50,11 @@ public class ModSyncedDataKeys
 
     public static void register()
     {
-        SyncedPlayerData.instance().registerKey(AIMING);
-        SyncedPlayerData.instance().registerKey(SHOOTING);
-        SyncedPlayerData.instance().registerKey(RELOADING);
-        SyncedPlayerData.instance().registerKey(MOVING);
-        SyncedPlayerData.instance().registerKey(STOP_ANIMA);
-        SyncedPlayerData.instance().registerKey(QREPAIRING);
+        SyncedEntityData.instance().registerDataKey(AIMING);
+        SyncedEntityData.instance().registerDataKey(SHOOTING);
+        SyncedEntityData.instance().registerDataKey(RELOADING);
+        SyncedEntityData.instance().registerDataKey(MOVING);
+        SyncedEntityData.instance().registerDataKey(STOP_ANIMA);
+        SyncedEntityData.instance().registerDataKey(QREPAIRING);
     }
 }

@@ -1,7 +1,5 @@
 package com.tac.guns.client.render.gun.model.scope.scopeUtil;
 
-import net.minecraft.crash.CrashReport;
-
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;

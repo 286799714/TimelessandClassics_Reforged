@@ -5,48 +5,48 @@ import com.tac.guns.common.container.*;
 import com.tac.guns.inventory.gear.armor.ArmorRigContainer;
 import com.tac.guns.tileentity.UpgradeBenchTileEntity;
 import com.tac.guns.tileentity.WorkbenchTileEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Dictionary;
-import java.util.HashMap;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 public class ModContainers
 {
-    public static final DeferredRegister<ContainerType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Reference.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Reference.MOD_ID);
 
-    public static final RegistryObject<ContainerType<WorkbenchContainer>> WORKBENCH = register("workbench", (IContainerFactory<WorkbenchContainer>) (windowId, playerInventory, data) -> {
-        WorkbenchTileEntity workstation = (WorkbenchTileEntity) playerInventory.player.world.getTileEntity(data.readBlockPos());
+    public static final RegistryObject<MenuType<WorkbenchContainer>> WORKBENCH = register("workbench", (IContainerFactory<WorkbenchContainer>) (windowId, playerInventory, data) -> {
+        WorkbenchTileEntity workstation = (WorkbenchTileEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
         return new WorkbenchContainer(windowId, playerInventory, workstation);
     });
 
-    public static final RegistryObject<ContainerType<AttachmentContainer>> ATTACHMENTS = register("attachments", AttachmentContainer::new);
+    public static final RegistryObject<MenuType<AttachmentContainer>> ATTACHMENTS = register("attachments", AttachmentContainer::new);
     
-    public static final RegistryObject<ContainerType<InspectionContainer>> INSPECTION = register("inspection", InspectionContainer::new);
+    public static final RegistryObject<MenuType<InspectionContainer>> INSPECTION = register("inspection", InspectionContainer::new);
 
-    public static final RegistryObject<ContainerType<ColorBenchContainer>> COLOR_BENCH = register("color_bench", ColorBenchContainer::new);
-    public static final RegistryObject<ContainerType<UpgradeBenchContainer>> UPGRADE_BENCH = register("upgrade_bench", (IContainerFactory<UpgradeBenchContainer>) (windowId, playerInventory, data) -> {
-        UpgradeBenchTileEntity workstation = (UpgradeBenchTileEntity) playerInventory.player.world.getTileEntity(data.readBlockPos());
+    public static final RegistryObject<MenuType<ColorBenchContainer>> COLOR_BENCH = register("color_bench", ColorBenchContainer::new);
+    public static final RegistryObject<MenuType<UpgradeBenchContainer>> UPGRADE_BENCH = register("upgrade_bench", (IContainerFactory<UpgradeBenchContainer>) (windowId, playerInventory, data) -> {
+        UpgradeBenchTileEntity workstation = (UpgradeBenchTileEntity) playerInventory.player.level.getBlockEntity(data.readBlockPos());
         return new UpgradeBenchContainer(windowId, playerInventory, workstation);
     });
-    public static final RegistryObject<ContainerType<ArmorRigContainer>> ARMOR_TEST = REGISTER.register("armor_test", () -> IForgeContainerType.create((windowId, inv, data) -> new ArmorRigContainer(windowId, inv)));
 
+    public static final RegistryObject<MenuType<ArmorRigContainer>> ARMOR_TEST = register("armor_test", (IContainerFactory<ArmorRigContainer>) (windowId, playerInventory, data) -> {
+        return new ArmorRigContainer(windowId, playerInventory);
+    });
     // ITEM -> CONTAINER
     /*public static final HashMap<RegistryObject, RegistryObject> containerVitem = new HashMap()
     {{
         put(ARMOR_TEST.get(), ModItems.ARMOR_TEST.get());
     }};*/
 
-    private static <T extends Container> RegistryObject<ContainerType<T>> register(String id, ContainerType.IFactory<T> factory)
+    public static void init(){}
+
+    private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> register(String id, MenuType.MenuSupplier<T> factory)
     {
-        return REGISTER.register(id, () -> new ContainerType<>(factory));
+        return REGISTER.register(id, () -> new MenuType<>(factory));
     }
 }

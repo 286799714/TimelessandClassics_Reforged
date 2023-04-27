@@ -1,16 +1,16 @@
 package com.tac.guns.inventory.gear.armor;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public class ArmorRigContainerProvider implements INamedContainerProvider {
+public class ArmorRigContainerProvider implements MenuProvider {
 
     private ItemStack item;
 
@@ -20,13 +20,13 @@ public class ArmorRigContainerProvider implements INamedContainerProvider {
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent("AmmoPack");
+    public Component getDisplayName() {
+        return new TextComponent("AmmoPack");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
         this.container = new ArmorRigContainer(windowId, inv, this.item);
         return container;
     }

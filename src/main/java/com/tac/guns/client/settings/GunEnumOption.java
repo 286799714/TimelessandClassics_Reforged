@@ -1,28 +1,20 @@
 package com.tac.guns.client.settings;
 
-import net.minecraft.client.AbstractOption;
-import net.minecraft.client.GameSettings;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.OptionButton;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.text.ITextComponent;
-
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import net.minecraft.util.StringRepresentable;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class GunEnumOption<E extends Enum<E> & IStringSerializable> extends AbstractOption
+public class GunEnumOption<E extends Enum<E> & StringRepresentable>
 {
+    /*
     private Class<E> enumClass;
     private int ordinal = 0;
-    private Function<GameSettings, E> getter;
-    private BiConsumer<GameSettings, E> setter;
-    private BiFunction<GameSettings, GunEnumOption<E>, ITextComponent> displayNameGetter;
+    private Function<Options, E> getter;
+    private BiConsumer<Options, E> setter;
+    private BiFunction<Options, GunEnumOption<E>, Component> displayNameGetter;
 
-    public GunEnumOption(String title, Class<E> enumClass, Function<GameSettings, E> getter, BiConsumer<GameSettings, E> setter, BiFunction<GameSettings, GunEnumOption<E>, ITextComponent> displayNameGetter)
+    public GunEnumOption(String title, Class<E> enumClass, Function<Options, E> getter, BiConsumer<Options, E> setter, BiFunction<Options, GunEnumOption<E>, Component> displayNameGetter)
     {
         super(title);
         this.enumClass = enumClass;
@@ -31,25 +23,25 @@ public class GunEnumOption<E extends Enum<E> & IStringSerializable> extends Abst
         this.displayNameGetter = displayNameGetter;
     }
 
-    private void nextEnum(GameSettings options)
+    private void nextEnum(Options options)
     {
         this.set(options, this.getEnum(++this.ordinal));
     }
 
-    public void set(GameSettings options, E e)
+    public void set(Options options, E e)
     {
         this.setter.accept(options, e);
         this.ordinal = e.ordinal();
     }
 
-    public E get(GameSettings options)
+    public E get(Options options)
     {
         E e = this.getter.apply(options);
         this.ordinal = e.ordinal();
         return e;
     }
 
-    public Widget createWidget(GameSettings options, int x, int y, int width)
+    public AbstractWidget createButton(Options options, int x, int y, int width)
     {
         return new OptionButton(x, y, width, 20, this, this.getTitle(options), (button) -> {
             this.nextEnum(options);
@@ -57,7 +49,7 @@ public class GunEnumOption<E extends Enum<E> & IStringSerializable> extends Abst
         });
     }
 
-    public ITextComponent getTitle(GameSettings options)
+    public Component getTitle(Options options)
     {
         return this.displayNameGetter.apply(options, this);
     }
@@ -71,4 +63,6 @@ public class GunEnumOption<E extends Enum<E> & IStringSerializable> extends Abst
         }
         return e[ordinal];
     }
+
+     */
 }

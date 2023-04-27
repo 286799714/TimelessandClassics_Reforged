@@ -1,15 +1,13 @@
 package com.net.optifine.shaders;
 
+import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.tac.guns.GunMod;
 import com.tac.guns.util.OptifineHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.shader.Framebuffer;
-import net.optifine.shaders.FlipTextures;
-import net.optifine.shaders.Program;
-import net.optifine.shaders.Shaders;
-import net.optifine.shaders.ShadersFramebuffer;
+import net.minecraft.client.renderer.LevelRenderer;
+//import net.optifine.shaders.FlipTextures;
+//import net.optifine.shaders.ShadersFramebuffer;
 import org.apache.logging.log4j.Level;
 
 import java.lang.reflect.Field;
@@ -21,6 +19,7 @@ import java.lang.reflect.Modifier;
  * */
 public class TACOptifineShadersHelper
 {
+    /*
     public static Field fliptCheck;
     public static FlipTextures flipt;
     // TODO: Learn how to obtain private field from instance object
@@ -47,7 +46,7 @@ public class TACOptifineShadersHelper
     public static Field FramebufferTextureCheck;
     public static int FramebufferTexturet;
     // TODO: Learn how to obtain private field from instance object
-    public static void setFramebufferTexture(Framebuffer bufferToPull, int txtRef) {
+    public static void setFramebufferTexture(RenderTarget bufferToPull, int txtRef) {
         try
         {
             FramebufferTextureCheck = bufferToPull.getClass().getDeclaredField("framebufferTexture");
@@ -105,7 +104,7 @@ public class TACOptifineShadersHelper
     public static Field WorldRendererCheck;
     public static int WorldRenderert;
     // TODO: What the fuck am I doing... Is there a better way to do this without profanity?
-    public static void setWorldRenderer(Minecraft mc, WorldRenderer newRenderer) {
+    public static void setWorldRenderer(Minecraft mc, LevelRenderer newRenderer) {
         try
         {
             WorldRendererCheck = mc.getClass().getDeclaredField("worldRenderer");
@@ -152,4 +151,5 @@ public class TACOptifineShadersHelper
     public static IntBuffer getDFBDepthTextures() {
         return Shaders.dfbDepthTextures;
     }*/
+
 }

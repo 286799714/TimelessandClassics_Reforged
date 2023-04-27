@@ -26,18 +26,14 @@
  */
 package de.javagl.jgltf.model.impl.creation;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import de.javagl.jgltf.impl.v1.Accessor;
 import de.javagl.jgltf.impl.v1.Buffer;
 import de.javagl.jgltf.impl.v1.BufferView;
-import de.javagl.jgltf.model.AccessorData;
-import de.javagl.jgltf.model.AccessorDatas;
-import de.javagl.jgltf.model.AccessorModel;
-import de.javagl.jgltf.model.BufferModel;
-import de.javagl.jgltf.model.BufferViewModel;
+import de.javagl.jgltf.model.*;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Utility methods for creating the glTF 1.0 elements that correspond to

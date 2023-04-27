@@ -1,25 +1,19 @@
 package com.tac.guns.client.handler;
 
-import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
+import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.client.InputHandler;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.Rig;
 import com.tac.guns.init.ModSyncedDataKeys;
-import com.tac.guns.item.ArmorPlateItem;
-import com.tac.guns.item.IArmorPlate;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageArmorRepair;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
@@ -56,7 +50,7 @@ public class ArmorInteractionHandler
 	}
 
 
-    public float getRepairProgress(float partialTicks, PlayerEntity player) {
+    public float getRepairProgress(float partialTicks, Player player) {
         return this.repairTime != 0 ? ((this.prevRepairTime + ((this.repairTime - this.prevRepairTime) * partialTicks)) / (float) ((ArmorRigItem)WearableHelper.PlayerWornRig(player).getItem()).getRig().getRepair().getTicksToRepair()) : 1F;
     }
 
@@ -113,7 +107,7 @@ public class ArmorInteractionHandler
         if(event.phase != TickEvent.Phase.START)
             return;
 
-        PlayerEntity player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if(player == null)
             return;
 
@@ -131,14 +125,14 @@ public class ArmorInteractionHandler
         {
             if(!this.repairing)
             {
-                SyncedPlayerData.instance().set(player, ModSyncedDataKeys.QREPAIRING, true);
+                SyncedEntityData.instance().set(player, ModSyncedDataKeys.QREPAIRING, true);
                 PacketHandler.getPlayChannel().sendToServer(new MessageArmorRepair(true, false));
                 this.repairing = true;
             }
         }
         else if(this.repairing && !InputHandler.AIM_HOLD.down)
         {
-            SyncedPlayerData.instance().set(player, ModSyncedDataKeys.QREPAIRING, false);
+            SyncedEntityData.instance().set(player, ModSyncedDataKeys.QREPAIRING, false);
             PacketHandler.getPlayChannel().sendToServer(new MessageArmorRepair(false, false));
             this.repairing = false;
         }
@@ -148,11 +142,11 @@ public class ArmorInteractionHandler
      * I think was supposed to be used to replace current crosshair with a repair crosshair, disable for now
      */
     //@SubscribeEvent(receiveCanceled = true)
-    public void onRenderOverlay(RenderGameOverlayEvent event)
+    public void onRenderOverlay(RenderGameOverlayEvent.PreLayer event)
     {
         //this.normalisedRepairProgress = this.localTracker.getNormalProgress(event.getPartialTicks());
         Crosshair crosshair = CrosshairHandler.get().getCurrentCrosshair();
-        if(this.repairing && event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS && (crosshair == null || crosshair.isDefault()))
+        if(this.repairing && event.getOverlay() == ForgeIngameGui.CROSSHAIR_ELEMENT && (crosshair == null || crosshair.isDefault()))
         {
             event.setCanceled(true);
         }
@@ -167,13 +161,13 @@ public class ArmorInteractionHandler
         if(mc.player.isSpectator())
             return false;
 
-        if(mc.currentScreen != null)
+        if(mc.screen != null)
             return false;
 
         if(WearableHelper.PlayerWornRig(mc.player) == null)
             return false;
         Rig rig = ((ArmorRigItem)WearableHelper.PlayerWornRig(mc.player).getItem()).getRig();
-        return this.repairTime != 0 && mc.player.getHeldItemMainhand().getItem().getRegistryName().equals(rig.getRepair().getItem()) && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player));
+        return this.repairTime != 0 && mc.player.getMainHandItem().getItem().getRegistryName().equals(rig.getRepair().getItem()) && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player));
     }
 
     public double getNormalisedRepairProgress()

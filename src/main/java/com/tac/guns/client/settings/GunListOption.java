@@ -1,36 +1,21 @@
 package com.tac.guns.client.settings;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.tac.guns.interfaces.IResourceLocation;
-import net.minecraft.client.AbstractOption;
-import net.minecraft.client.GameSettings;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.OptionButton;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class GunListOption<E extends IResourceLocation> extends AbstractOption
-{
+public class GunListOption<E extends IResourceLocation>
+{   /*
     private String title;
     private ResourceLocation selected;
     private Supplier<List<E>> supplier;
     private Supplier<ResourceLocation> getter;
     private Consumer<ResourceLocation> setter;
-    private Function<E, ITextComponent> displayNameGetter;
+    private Function<E, Component> displayNameGetter;
     private IAdditionalRenderer renderer = (button, matrixStack, partialTicks) -> {};
 
-    public GunListOption(String title, Supplier<List<E>> supplier, Supplier<ResourceLocation> getter, Consumer<ResourceLocation> setter, Function<E, ITextComponent> displayNameGetter)
+    public GunListOption(String title, Supplier<List<E>> supplier, Supplier<ResourceLocation> getter, Consumer<ResourceLocation> setter, Function<E, Component> displayNameGetter)
     {
         super(title);
         this.title = title;
@@ -47,7 +32,7 @@ public class GunListOption<E extends IResourceLocation> extends AbstractOption
     }
 
     @Override
-    public Widget createWidget(GameSettings options, int x, int y, int width)
+    public AbstractWidget createButton(Options options, int x, int y, int width)
     {
         return new OptionButton(x, y, width, 20, this, this.getTitle(), (button) -> {
             List<E> list = this.supplier.get();
@@ -57,7 +42,7 @@ public class GunListOption<E extends IResourceLocation> extends AbstractOption
             button.setMessage(this.getTitle());
         }) {
             @Override
-            public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+            public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
             {
                 List<E> list = GunListOption.this.supplier.get();
                 this.active = !list.isEmpty();
@@ -106,19 +91,20 @@ public class GunListOption<E extends IResourceLocation> extends AbstractOption
         }
     }
 
-    public ITextComponent getTitle()
+    public Component getTitle()
     {
-        ITextComponent component = new TranslationTextComponent("tac.option_list.no_items");
+        Component component = new TranslatableComponent("tac.option_list.no_items");
         E e = this.get();
         if(e != null)
         {
             component = this.displayNameGetter.apply(e);
         }
-        return new TranslationTextComponent(this.title + ".format", component);
+        return new TranslatableComponent(this.title + ".format", component);
     }
 
     public interface IAdditionalRenderer
     {
-        void render(OptionButton button, MatrixStack matrixStack, float partialTicks);
+        void render(OptionButton button, PoseStack matrixStack, float partialTicks);
     }
+    */
 }

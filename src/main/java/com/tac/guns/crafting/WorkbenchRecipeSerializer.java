@@ -5,37 +5,35 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 
 import javax.annotation.Nullable;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<WorkbenchRecipe>
+public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<WorkbenchRecipe>
 {
     @Override
-    public WorkbenchRecipe read(ResourceLocation recipeId, JsonObject json)
+    public WorkbenchRecipe fromJson(ResourceLocation recipeId, JsonObject json)
     {
-        String group = JSONUtils.getString(json, "group", "");
+        String group = GsonHelper.getAsString(json, "group", "");
         ImmutableList.Builder<Pair<Ingredient, Integer>> builder = ImmutableList.builder();
-        JsonArray input = JSONUtils.getJsonArray(json, "materials");
+        JsonArray input = GsonHelper.getAsJsonArray(json, "materials");
         for(int i = 0; i < input.size(); i++)
         {
             JsonObject itemObject = input.get(i).getAsJsonObject();
-            Ingredient ingredient = Ingredient.deserialize(itemObject.get("item"));
+            Ingredient ingredient = Ingredient.fromJson(itemObject.get("item"));
 
             int count;
             try {
-                count = JSONUtils.getInt(itemObject, "count");
+                count = GsonHelper.getAsInt(itemObject, "count");
             }
             catch (JsonSyntaxException e){
                 count = 1;
@@ -44,21 +42,21 @@ public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.For
         }if(!json.has("result"))
             throw new JsonSyntaxException("Missing result entry");
 
-        JsonObject resultObject = JSONUtils.getJsonObject(json, "result");
-        ItemStack resultItem = ShapedRecipe.deserializeItem(resultObject);
+        JsonObject resultObject = GsonHelper.getAsJsonObject(json, "result");
+        ItemStack resultItem = ShapedRecipe.itemFromJson(resultObject).getDefaultInstance();
         return new WorkbenchRecipe(recipeId, resultItem, builder.build(), group);
     }
 
     @Nullable
     @Override
-    public WorkbenchRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
+    public WorkbenchRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
     {
-        String group = buffer.readString();
-        ItemStack result = buffer.readItemStack();
+        String group = buffer.readUtf();
+        ItemStack result = buffer.readItem();
         ImmutableList.Builder<Pair<Ingredient, Integer>> builder = ImmutableList.builder();
         int size = buffer.readVarInt();
         for(int i = 0; i < size; i++) {
-            Ingredient ingredient = Ingredient.read(buffer);
+            Ingredient ingredient = Ingredient.fromNetwork(buffer);
             int count = buffer.readByte();
             builder.add(new Pair<>(ingredient, count));
         }
@@ -66,14 +64,14 @@ public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.For
     }
 
     @Override
-    public void write(PacketBuffer buffer, WorkbenchRecipe recipe)
+    public void toNetwork(FriendlyByteBuf buffer, WorkbenchRecipe recipe)
     {
-        buffer.writeString(recipe.getGroup());
-        buffer.writeItemStack(recipe.getItem());
+        buffer.writeUtf(recipe.getGroup());
+        buffer.writeItem(recipe.getItem());
         buffer.writeVarInt(recipe.getMaterials().size());
         for(Pair<Ingredient, Integer> stack : recipe.getMaterials())
         {
-            stack.getFirst().write(buffer);
+            stack.getFirst().toNetwork(buffer);
             buffer.writeByte(stack.getSecond());
         }
     }

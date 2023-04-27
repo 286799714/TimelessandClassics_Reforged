@@ -4,13 +4,10 @@ import com.tac.guns.GunMod;
 import com.tac.guns.client.render.animation.module.*;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
-import com.tac.guns.network.PacketHandler;
-import com.tac.guns.network.message.MessageAnimationRun;
-import de.javagl.jgltf.model.animation.AnimationManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.io.IOException;
 
@@ -54,11 +51,11 @@ public class M60AnimationController extends MachineGunAnimationController {
 
     @Override
     public AnimationMeta getAnimationFromLabel(AnimationLabel label) {
-        ClientPlayerEntity player = Minecraft.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
         switch (label){
             case RELOAD_EMPTY: {
                 if(player != null){
-                    ItemStack stack = player.getHeldItemMainhand();
+                    ItemStack stack = player.getMainHandItem();
                     if(Gun.getScope(stack) == null) return RELOAD_EMPTY;
                     else return RELOAD_EMPTY_SCOPE;
                 }
@@ -66,7 +63,7 @@ public class M60AnimationController extends MachineGunAnimationController {
             }
             case RELOAD_NORMAL: {
                 if(player != null){
-                    ItemStack stack = player.getHeldItemMainhand();
+                    ItemStack stack = player.getMainHandItem();
                     if(Gun.getScope(stack) == null) return RELOAD_NORM;
                     else return RELOAD_NORM_SCOPE;
                 }

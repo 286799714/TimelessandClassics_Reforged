@@ -26,12 +26,12 @@
  */
 package de.javagl.jgltf.model.impl;
 
+import de.javagl.jgltf.model.MaterialModel;
+import de.javagl.jgltf.model.gl.TechniqueModel;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import de.javagl.jgltf.model.MaterialModel;
-import de.javagl.jgltf.model.gl.TechniqueModel;
 
 /**
  * Implementation of a {@link MaterialModel}

@@ -1,30 +1,15 @@
 package com.tac.guns.client;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import org.lwjgl.glfw.GLFW;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.InputConstants.Key;
+import com.mojang.blaze3d.platform.InputConstants.Type;
 import com.tac.guns.Config;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
-
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.client.util.InputMappings.Input;
-import net.minecraft.client.util.InputMappings.Type;
-import net.minecraft.item.Item;
+import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
@@ -32,6 +17,13 @@ import net.minecraftforge.client.event.InputEvent.RawMouseEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import org.lwjgl.glfw.GLFW;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Static handler for {@link KeyBind}s
@@ -52,14 +44,14 @@ public final class InputHandler
 			Type.MOUSE
 		),
 		AIM_HOLD = new KeyBind( "key.tac.aim_hold", GLFW.GLFW_MOUSE_BUTTON_RIGHT, Type.MOUSE ),
-		AIM_TOGGLE = new KeyBind( "key.tac.aim_toggle", InputMappings.INPUT_INVALID.getKeyCode() );
+		AIM_TOGGLE = new KeyBind( "key.tac.aim_toggle", InputConstants.UNKNOWN.getValue() );
 	
 	/**
 	 * Normal keys. These keys will update when {@link #CO} is not down.
 	 */
 	public static final KeyBind
 		RELOAD = new KeyBind( "key.tac.reload", GLFW.GLFW_KEY_R ),
-		UNLOAD = new KeyBind( "key.tac.unload", InputMappings.INPUT_INVALID.getKeyCode() ),
+		UNLOAD = new KeyBind( "key.tac.unload", InputConstants.UNKNOWN.getValue() ),
 		ATTACHMENTS = new KeyBind( "key.tac.attachments", GLFW.GLFW_KEY_Z ),
 		
 		FIRE_SELECT = new KeyBind( "key.tac.fireSelect", GLFW.GLFW_KEY_G ),
@@ -173,7 +165,6 @@ public final class InputHandler
 	 * Original TAC implementation seems to try to prevent gun from destroying block and bobbing on
 	 * use by canceling the {@link RawMouseEvent} event. Hence to receive the update, we need a
 	 * higher priority to receive event ahead. But I have to say this kind of implementation is a
-	 * bit of ugly. There are actually methods on {@link Item} that can be override to control the
 	 * behavior of item on mouse input.
 	 * 
 	 * TODO: maybe refactor this part
@@ -199,7 +190,7 @@ public final class InputHandler
 	private static KeyBind oriAimKey;
 	static void restoreKeyBinds()
 	{
-		oriAimKey = AIM_HOLD.keyCode() != InputMappings.INPUT_INVALID ? AIM_HOLD : AIM_TOGGLE;
+		oriAimKey = AIM_HOLD.keyCode() != InputConstants.UNKNOWN ? AIM_HOLD : AIM_TOGGLE;
 		KeyBind.REGISTRY.values().forEach( KeyBind::restoreKeyBind );
 	}
 	
@@ -210,7 +201,7 @@ public final class InputHandler
 			flag |= key.clearKeyBind();
 
 		// Make sure only one aim key is bounden
-		final Input none = InputMappings.INPUT_INVALID;
+		final Key none = InputConstants.UNKNOWN;
 		if( AIM_HOLD.keyCode() != none && AIM_TOGGLE.keyCode() != none )
 		{
 			oriAimKey.$keyCode( none );
@@ -218,7 +209,7 @@ public final class InputHandler
 		}
 		
 		// Do not forget to update key bind hash
-		KeyBinding.resetKeyBindingArrayAndHash();
+		KeyMapping.resetMapping();
 		
 		// If any key bind has changed, save it to the file
 		if( flag )
@@ -252,7 +243,7 @@ public final class InputHandler
 				try
 				{
 					KeyBind.REGISTRY.get( e.getKey() )
-						.$keyCode( InputMappings.getInputByName( e.getValue().getAsString() ) );
+						.$keyCode( InputConstants.getKey( e.getValue().getAsString() ) );
 				}
 				catch( NullPointerException ee ) {
 					GunMod.LOGGER.error( "Key bind " + e.getKey() + " do not exist" );

@@ -1,17 +1,16 @@
 package com.tac.guns.network.message;
 
-import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
-import com.tac.guns.GunMod;
+import com.mrcrayfish.framework.api.network.PlayMessage;
+import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.common.network.ServerPlayHandler;
 import com.tac.guns.init.ModSyncedDataKeys;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageArmorRepair implements IMessage
-{
+public class MessageArmorRepair extends PlayMessage<MessageArmorRepair> {
 	private boolean repairOrCancel;
 	private boolean repairApply;
 
@@ -27,33 +26,33 @@ public class MessageArmorRepair implements IMessage
 		this.repairOrCancel = repairOrCancel;
 		this.repairApply = repairApply;
 	}
-
-	public void encode(PacketBuffer buffer)
-	{
-		buffer.writeBoolean(this.repairOrCancel);
-		buffer.writeBoolean(this.repairApply);
+	@Override
+	public void encode(MessageArmorRepair messageArmorRepair, FriendlyByteBuf buffer) {
+		buffer.writeBoolean(messageArmorRepair.repairOrCancel);
+		buffer.writeBoolean(messageArmorRepair.repairApply);
 	}
 
-	public void decode(PacketBuffer buffer)
+	public MessageArmorRepair decode(FriendlyByteBuf buffer)
 	{
-		this.repairOrCancel = buffer.readBoolean();
-		this.repairApply = buffer.readBoolean();
+		boolean newrepairOrCancel = buffer.readBoolean();
+		boolean newrepairApply = buffer.readBoolean();
+		return new MessageArmorRepair(newrepairOrCancel, newrepairApply);
 	}
 
-	public void handle(Supplier<NetworkEvent.Context> supplier)
-	{
+	@Override
+	public void handle(MessageArmorRepair messageArmorRepair, Supplier<NetworkEvent.Context> supplier) {
 		supplier.get().enqueueWork(() ->
 		{
-			ServerPlayerEntity player = supplier.get().getSender();
+			ServerPlayer player = supplier.get().getSender();
 			if(player != null && !player.isSpectator())
 			{
 				if(this.repairApply)
 				{
 					ServerPlayHandler.handleArmorFixApplication(player);
-					SyncedPlayerData.instance().set(player, ModSyncedDataKeys.QREPAIRING, false);
+					SyncedEntityData.instance().set(player, ModSyncedDataKeys.QREPAIRING, false);
 				}
 				else
-					SyncedPlayerData.instance().set(player, ModSyncedDataKeys.QREPAIRING, this.repairOrCancel);
+					SyncedEntityData.instance().set(player, ModSyncedDataKeys.QREPAIRING, this.repairOrCancel);
 			}
 		});
 		supplier.get().setPacketHandled(true);

@@ -26,6 +26,10 @@
  */
 package de.javagl.jgltf.model.io.v1;
 
+import de.javagl.jgltf.impl.v1.GlTF;
+import de.javagl.jgltf.model.io.GltfAssetWriter;
+import de.javagl.jgltf.model.io.GltfWriter;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,10 +38,6 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
-
-import de.javagl.jgltf.impl.v1.GlTF;
-import de.javagl.jgltf.model.io.GltfAssetWriter;
-import de.javagl.jgltf.model.io.GltfWriter;
 
 /**
  * A class for writing a glTF 1.0 asset in binary format to an output stream.

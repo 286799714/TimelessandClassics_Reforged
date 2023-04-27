@@ -1,20 +1,16 @@
 package com.tac.guns.network.message;
 
-import com.tac.guns.client.network.ClientPlayHandler;
-import com.tac.guns.common.Gun;
-import com.tac.guns.common.NetworkGunManager;
+import com.mrcrayfish.framework.api.network.PlayMessage;
 import com.tac.guns.common.network.ServerPlayHandler;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
-import org.apache.commons.lang3.Validate;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageToClientRigInv implements IMessage
+public class MessageToClientRigInv extends PlayMessage<MessageToClientRigInv>
 {
-	public MessageToClientRigInv() {}
 
 	private ResourceLocation id;
 	public ResourceLocation getId()
@@ -22,29 +18,30 @@ public class MessageToClientRigInv implements IMessage
 		return this.id;
 	}
 
+	public MessageToClientRigInv(){}
+
 	public MessageToClientRigInv(ResourceLocation id)
 	{
 		this.id = id;
 	}
-
-	public void encode(PacketBuffer buffer)
-	{
-		buffer.writeResourceLocation(this.id);
+	@Override
+	public void encode(MessageToClientRigInv messageToClientRigInv, FriendlyByteBuf buffer) {
+		buffer.writeResourceLocation(messageToClientRigInv.id);
 	}
 
-	public void decode(PacketBuffer buffer)
+	public MessageToClientRigInv decode(FriendlyByteBuf buffer)
 	{
-		this.id = buffer.readResourceLocation();
+		return new MessageToClientRigInv(buffer.readResourceLocation());
 	}
 
-
-	public void handle(Supplier<NetworkEvent.Context> context) {
+	@Override
+	public void handle(MessageToClientRigInv messageToClientRigInv, Supplier<NetworkEvent.Context> context) {
 		context.get().enqueueWork(() ->
 		{
-			ServerPlayerEntity player = context.get().getSender();
+			ServerPlayer player = context.get().getSender();
 			if(player != null && !player.isSpectator())
 			{
-				ServerPlayHandler.handleRigAmmoCount(player, this.id);
+				ServerPlayHandler.handleRigAmmoCount(player, messageToClientRigInv.id);
 			}
 		});
 		context.get().setPacketHandled(true);

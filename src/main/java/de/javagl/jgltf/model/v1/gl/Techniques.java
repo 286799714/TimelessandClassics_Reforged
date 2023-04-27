@@ -26,17 +26,12 @@
  */
 package de.javagl.jgltf.model.v1.gl;
 
+import de.javagl.jgltf.impl.v1.*;
+import de.javagl.jgltf.model.GltfConstants;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import de.javagl.jgltf.impl.v1.Material;
-import de.javagl.jgltf.impl.v1.Program;
-import de.javagl.jgltf.impl.v1.Technique;
-import de.javagl.jgltf.impl.v1.TechniqueParameters;
-import de.javagl.jgltf.impl.v1.TechniqueStates;
-import de.javagl.jgltf.impl.v1.TechniqueStatesFunctions;
-import de.javagl.jgltf.model.GltfConstants;
 
 /**
  * Utility methods related to {@link Technique}s

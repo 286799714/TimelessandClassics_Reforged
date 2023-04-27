@@ -1,26 +1,22 @@
 package com.tac.guns.network.message;
 
+import com.mrcrayfish.framework.api.network.PlayMessage;
 import com.tac.guns.client.network.ClientPlayHandler;
 import com.tac.guns.common.Gun;
-import com.tac.guns.common.network.ServerPlayHandler;
-import com.tac.guns.inventory.gear.InventoryListener;
-import com.tac.guns.inventory.gear.armor.ArmorRigInventoryCapability;
-import com.tac.guns.util.WearableHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class MessageRigInvToClient implements IMessage
+public class MessageRigInvToClient extends PlayMessage<MessageRigInvToClient>
 {
 	public MessageRigInvToClient() {}
+
+	public MessageRigInvToClient(int count) {
+		this.count = count;
+	}
 
 	private int count;
 	public int getCount()
@@ -39,14 +35,24 @@ public class MessageRigInvToClient implements IMessage
 		this.count = Gun.ammoCountInRig(rig, id);
 	}
 
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(this.count);
 	}
 
-	public void decode(PacketBuffer buffer)
+	@Override
+	public void encode(MessageRigInvToClient messageRigInvToClient, FriendlyByteBuf friendlyByteBuf) {
+		friendlyByteBuf.writeInt(messageRigInvToClient.count);
+	}
+
+	public MessageRigInvToClient decode(FriendlyByteBuf buffer)
 	{
-		this.count = buffer.readInt();
+		return new MessageRigInvToClient(buffer.readInt());
+	}
+
+	@Override
+	public void handle(MessageRigInvToClient messageRigInvToClient, Supplier<NetworkEvent.Context> supplier) {
+
 	}
 
 

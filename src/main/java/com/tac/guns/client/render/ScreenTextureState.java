@@ -1,7 +1,7 @@
 package com.tac.guns.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.TextureUtil;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.net.optifine.shaders.TACOptifineShadersHelper;
 import com.tac.guns.Config;
@@ -9,57 +9,35 @@ import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.render.gun.model.scope.scopeUtil.ScopeGlobal;
 import com.tac.guns.common.Gun;
-import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.item.GunItem;
-import net.minecraft.client.MainWindow;
+import com.tac.guns.util.OptifineHelper;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.RenderState;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.brain.task.FarmTask;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-
-import com.tac.guns.util.OptifineHelper;
-
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.optifine.shaders.FlipTextures;
-import net.optifine.shaders.Program;
-import net.optifine.shaders.Shaders;
+//import net.optifine.shaders.Shaders;
 import org.apache.logging.log4j.Level;
-import org.lwjgl.opengl.*;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL43;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.IntSupplier;
-import java.util.function.Supplier;
 
-import static net.minecraft.client.settings.PointOfView.FIRST_PERSON;
 import static org.lwjgl.opengl.GL11.*;
 
-
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
-public class ScreenTextureState extends RenderState.TexturingState
+public class ScreenTextureState extends RenderStateShard.TexturingStateShard
 {
     private static ScreenTextureState instance = null;
 
@@ -88,7 +66,7 @@ public class ScreenTextureState extends RenderState.TexturingState
             RenderSystem.disableBlend();
         });
         if(Config.CLIENT.quality.worldRerenderPiPAlpha.get()) {
-            ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(this.scopeRenderGlobal);
+            ((ReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener(this.scopeRenderGlobal);
             scopeRenderGlobal = new ScopeGlobal(mc);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, this::onRenderHUD);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::renderTick);
@@ -108,27 +86,15 @@ public class ScreenTextureState extends RenderState.TexturingState
             mc.worldRenderer.setWorldAndLoadRenderers((ClientWorld) event.getWorld());
         }
     }*/
-    public int getTextureId()
+    private int getTextureId()
     {
         if(this.textureId == 0)
         {
             this.textureId = TextureUtil.generateTextureId();
             // Texture params only need to be set once, not once per frame
             RenderSystem.bindTexture(this.textureId);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 9728);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 9728);
-
-            //glTexParameteri(3553 , GL_TEXTURE_MIN_FILTER, 9728);
-            //glTexParameteri(3553 , GL_TEXTURE_MAG_FILTER, 9728);
-
-
-            // Can I make optifine Shaders compatible?
-            /*int wrap = true ? 33071 : 10497;
-            glTexParameteri(3553, 10242, wrap);
-            glTexParameteri(3553, 10243, wrap);
-            glTexParameteri(3553, 10240, 9728);
-            glTexParameteri(3553, 10241, 9728);
-*/
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         }
         return this.textureId;
     }
@@ -138,7 +104,7 @@ public class ScreenTextureState extends RenderState.TexturingState
         this.textureId = TextureUtil.generateTextureId();
         RenderSystem.bindTexture(this.textureId);
         //GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, mc.getMainWindow().getWidth(), mc.getMainWindow().getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, mc.getWindow().getScreenWidth(), mc.getWindow().getScreenHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
@@ -169,10 +135,10 @@ public class ScreenTextureState extends RenderState.TexturingState
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void renderTick(TickEvent.RenderTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            if (mc.player != null && mc.currentScreen == null) {
+            if (mc.player != null && mc.screen == null) {
                 //If player has gun, update scope
-                if (mc.player.getHeldItemMainhand().getItem() instanceof GunItem) {
-                    if(this.textureId==-1||(lastWidth!=mc.getMainWindow().getWidth()||lastHeight!=mc.getMainWindow().getHeight())) {
+                if (mc.player.getMainHandItem().getItem() instanceof GunItem) {
+                    if(this.textureId==-1||(lastWidth!=mc.getWindow().getScreenWidth()||lastHeight!=mc.getWindow().getScreenHeight())) {
                         GL11.glPushMatrix();
 
                         /*GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);if(OVERLAY_TEX!=-1) {
@@ -218,11 +184,11 @@ public class ScreenTextureState extends RenderState.TexturingState
                         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
                         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);*/
 
-                        lastWidth=mc.getMainWindow().getWidth();
-                        lastHeight=mc.getMainWindow().getHeight();
+                        lastWidth=mc.getWindow().getScreenWidth();
+                        lastHeight=mc.getWindow().getScreenHeight();
                         GL11.glPopMatrix();
                     }
-                    if(Gun.getScope(mc.player.getHeldItemMainhand()) != null)
+                    if(Gun.getScope(mc.player.getMainHandItem()) != null)
                         renderWorld(mc, event.renderTickTime);
 
                 }
@@ -238,14 +204,15 @@ public class ScreenTextureState extends RenderState.TexturingState
     public void onPreRenderHand1() {
         if(needRenderHand1) {
             needRenderHand1=false;
-            Shaders.setHandsRendered(false, true);
+            //Shaders.setHandsRendered(false, true);
         }
     }
     public static boolean isRenderHand0=false;
     public static boolean needRenderHand1=false;
     public boolean isRenderGun=false;
+    @SuppressWarnings("removal")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onRenderWorldLast(RenderWorldLastEvent event) {
+    public void onRenderWorldLast(RenderLevelLastEvent event) {
         //genMirror();
         isRenderHand0=false;
         isRenderGun=false;
@@ -262,54 +229,53 @@ public class ScreenTextureState extends RenderState.TexturingState
         GL43.glDeleteTextures(ScreenTextureState.instance().textureId);
         GL43.glDeleteBuffers(ScreenTextureState.instance().textureId);
         RenderSystem.bindTexture(ScreenTextureState.instance().regen());
-        GlStateManager.color4f(1f, 1f, 1f,1f);
 
-        WorldRenderer renderBackup = mc.worldRenderer;
+        LevelRenderer renderBackup = mc.levelRenderer;
         //Save the current settings to be reset later
         long endTime = 0;
-        boolean hide = mc.gameSettings.hideGUI;
-        int limit = mc.gameSettings.framerateLimit;
-        RayTraceResult mouseOver = mc.objectMouseOver;
-        boolean bobbingBackup = mc.gameSettings.viewBobbing;
-        double fovBackup = mc.gameSettings.fov;
+        boolean hide = mc.options.hideGui;
+        int limit = mc.options.framerateLimit;
+        HitResult mouseOver = mc.hitResult;
+        boolean bobbingBackup = mc.options.bobView;
+        double fovBackup = mc.options.fov;
 
-        TACOptifineShadersHelper.setGameRenderer(mc, this.scopeRenderGlobal);
+        //TACOptifineShadersHelper.setGameRenderer(mc, this.scopeRenderGlobal);
 
         //Change game settings for the Scope
-        mc.gameSettings.hideGUI = true;
-        mc.gameSettings.fov = zoom;
-        mc.gameSettings.viewBobbing = true;
+        mc.options.hideGui = true;
+        mc.options.fov = zoom;
+        mc.options.bobView = true;
 
         /*RenderSystem*/
-        endTime = Util.nanoTime();
+        endTime = Util.getNanos();
 
-        //GL30.glBindFramebuffer(mc.getFramebuffer().func_242996_f(), this.textureId);
-        //GL30.glBindTexture(mc.getFramebuffer().func_242996_f(), this.textureId);
-        int tex = mc.getFramebuffer().func_242996_f();
-        TACOptifineShadersHelper.setFramebufferTexture(mc.getFramebuffer(), this.textureId);// = MIRROR_TEX;
+        //GL30.glBindFramebuffer(mc.getFramebuffer().getColorTextureId(), this.textureId);
+        //GL30.glBindTexture(mc.getFramebuffer().getColorTextureId(), this.textureId);
+        int tex = mc.getMainRenderTarget().getColorTextureId();
+        //TACOptifineShadersHelper.setFramebufferTexture(mc.getMainRenderTarget(), this.textureId);// = MIRROR_TEX;
         //GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, this.textureId, 0);
-        if(mc.worldRenderer != null && mc.gameRenderer != null) {
-            mc.gameRenderer.updateCameraAndRender(partialTick, endTime, true);
+        if(mc.levelRenderer != null && mc.gameRenderer != null) {
+            mc.gameRenderer.render(partialTick, endTime, true);
             //mc.gameRenderer.renderWorld(partialTick, endTime, new MatrixStack());//gameRenderer.renderWorld(partialTick, endTime + (1000000000 / 30), matrixStackWrl);
         }
         else
             GunMod.LOGGER.log(Level.FATAL, "Warning gameRender doesn't exist");
 
         //GL20.glUseProgram(0);
-        TACOptifineShadersHelper.setFramebufferTexture(mc.getFramebuffer(), tex);
+        //TACOptifineShadersHelper.setFramebufferTexture(mc.getMainRenderTarget(), tex);
         //GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, tex, 0);
-        //GL30.glCopyTexSubImage2D(Minecraft.getInstance().getFramebuffer().func_242996_f(), GL11.GL_TEXTURE_2D, 0, 0, 0, 0, MIRROR_TEX, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, lastWidth, lastHeight, 1);
+        //GL30.glCopyTexSubImage2D(Minecraft.getInstance().getFramebuffer().getColorTextureId(), GL11.GL_TEXTURE_2D, 0, 0, 0, 0, MIRROR_TEX, GL11.GL_TEXTURE_2D, 0, 0, 0, 0, lastWidth, lastHeight, 1);
 
         //Compat with system, frame clearing properly
 
 
-        mc.objectMouseOver = mouseOver;
-        mc.gameSettings.framerateLimit = limit;
-        mc.gameSettings.hideGUI = hide;
-        mc.gameSettings.viewBobbing = bobbingBackup;
-        mc.gameSettings.fov = fovBackup;
+        mc.hitResult = mouseOver;
+        mc.options.framerateLimit = limit;
+        mc.options.hideGui = hide;
+        mc.options.bobView = bobbingBackup;
+        mc.options.fov = fovBackup;
 
-        TACOptifineShadersHelper.setWorldRenderer(mc, renderBackup);
+        //TACOptifineShadersHelper.setWorldRenderer(mc, renderBackup);
 
         GL11.glPopMatrix();
     }
@@ -319,7 +285,7 @@ public class ScreenTextureState extends RenderState.TexturingState
         if(event.getType()!= RenderGameOverlayEvent.ElementType.ALL) {
             return;
         }
-        ItemStack stack=Minecraft.getInstance().player.getHeldItemMainhand();
+        ItemStack stack=Minecraft.getInstance().player.getMainHandItem();
         if (stack != null && stack.getItem() instanceof GunItem && Gun.getScope(stack) != null && Gun.getScope(stack).getAdditionalZoom().getDrCropZoom() > 0) {
             //RenderSystem.pushMatrix();
             //TODO: Figure out why this is never called, the copy doesn't even work when I force it, do I care getting this working?
@@ -331,36 +297,40 @@ public class ScreenTextureState extends RenderState.TexturingState
                     /*if(this.textureId == 0)
                         this.getTextureId();
                     RenderSystem.bindTexture(this.textureId);*/
-                    GL43.glCopyImageSubData(Shaders.activeProgram.getDrawBuffersCustom().get(0) /*TACOptifineShadersHelper.getFlipTextures().getA(0)*/, 3553, 0,0,0, 0, this.textureId, 3553,0,0,0,0, mc.getMainWindow().getWidth(),
-                            mc.getMainWindow().getHeight(),1);
+                /*
+                    GL43.glCopyImageSubData(Shaders.activeProgram.getDrawBuffersCustom().get(0) TACOptifineShadersHelper.getFlipTextures().getA(0), 3553, 0,0,0, 0, this.textureId, 3553,0,0,0,0, mc.getWindow().getScreenWidth(),
+                            mc.getWindow().getScreenHeight(),1);
+
+                 */
                     GunMod.LOGGER.log(Level.INFO, "GL43 grab with optifine has functioned");
                 } else {
                     //RenderSystem.bindTexture(this.textureId);
-                    GL43.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,0,0,mc.getMainWindow().getWidth(), mc.getMainWindow().getHeight(),0);
+                    GL43.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,0,0,mc.getWindow().getScreenWidth(), mc.getWindow().getScreenHeight(),0);
                 }
             //RenderSystem.popMatrix();
        }
     }
 
     @SubscribeEvent
-    public void onRenderWorldLastLegacy(RenderWorldLastEvent event)
+    @SuppressWarnings("removal")
+    public void onRenderWorldLastLegacy(RenderLevelLastEvent event)
     {
-        MainWindow mainWindow = Minecraft.getInstance().getMainWindow();
-        if(mainWindow.getWidth() <= 0 || mainWindow.getHeight() <= 0)
+        Window mainWindow = Minecraft.getInstance().getWindow();
+        if(mainWindow.getScreenWidth() <= 0 || mainWindow.getScreenHeight() <= 0)
             return;
 
         RenderSystem.bindTexture(this.getTextureId());
-        if(mainWindow.getWidth() != this.lastWindowWidth || mainWindow.getHeight() != this.lastWindowHeight)
+        if(mainWindow.getScreenWidth() != this.lastWindowWidth || mainWindow.getScreenHeight() != this.lastWindowHeight)
         {
             // When window resizes the texture needs to be re-initialized and copied, so both are done in the same call
-            this.lastWindowWidth = mainWindow.getWidth();
-            this.lastWindowHeight = mainWindow.getHeight();
-            GL43.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, mainWindow.getFramebufferWidth(), mainWindow.getFramebufferHeight(), 0);
+            this.lastWindowWidth = mainWindow.getScreenWidth();
+            this.lastWindowHeight = mainWindow.getScreenHeight();
+            GL43.glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, mainWindow.getWidth(), mainWindow.getHeight(), 0);
         }
         else
         {
             // Copy sub-image is faster than copy because the texture does not need to be initialized
-            GL43.glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, mainWindow.getFramebufferWidth(), mainWindow.getFramebufferHeight());
+            GL43.glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, mainWindow.getWidth(), mainWindow.getHeight());
         }
     }
 }

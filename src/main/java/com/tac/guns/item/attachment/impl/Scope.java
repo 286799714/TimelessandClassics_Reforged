@@ -1,9 +1,6 @@
 package com.tac.guns.item.attachment.impl;
 
-import com.tac.guns.Config;
 import com.tac.guns.client.handler.AimingHandler;
-import com.tac.guns.client.handler.command.data.ScopeData;
-import com.tac.guns.common.Gun;
 import com.tac.guns.interfaces.IGunModifier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

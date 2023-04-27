@@ -1,20 +1,20 @@
 package com.tac.guns.inventory.gear.armor;
 
 import com.tac.guns.inventory.gear.InventoryListener;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ArmorRigInventoryCapability implements ICapabilitySerializable<ListNBT> {
+public class ArmorRigInventoryCapability implements ICapabilitySerializable<ListTag> {
 
-    @CapabilityInject(IAmmoItemHandler.class)
     public static Capability<IAmmoItemHandler> capability = InventoryListener.RIG_HANDLER_CAPABILITY;
 
     private IAmmoItemHandler itemHandler = new RigSlotsHandler(27);
@@ -33,13 +33,35 @@ public class ArmorRigInventoryCapability implements ICapabilitySerializable<List
     }
 
     @Override
-    public ListNBT serializeNBT() {
-        return (ListNBT) capability.getStorage().writeNBT(capability, itemHandler, null);
+    public ListTag serializeNBT() {
+        ListTag nbtTagList = new ListTag();
+        int size = itemHandler.getSlots();
+        for (int i = 0; i < size; i++) {
+            ItemStack stack = itemHandler.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                CompoundTag itemTag = new CompoundTag();
+                itemTag.putInt("Slot", i);
+                stack.save(itemTag);
+                nbtTagList.add(itemTag);
+            }
+        }
+        return nbtTagList;
     }
 
     @Override
-    public void deserializeNBT(ListNBT nbt) {
-        capability.getStorage().readNBT(capability, itemHandler, null, nbt);
+    public void deserializeNBT(ListTag nbt) {
+        if (!(itemHandler instanceof IItemHandlerModifiable))
+            throw new RuntimeException("IItemHandler instance does not implement IItemHandlerModifiable");
+        IItemHandlerModifiable itemHandlerModifiable = (IItemHandlerModifiable) itemHandler;
+        ListTag tagList = nbt;
+        for (int i = 0; i < tagList.size(); i++) {
+            CompoundTag itemTags = tagList.getCompound(i);
+            int j = itemTags.getInt("Slot");
+
+            if (j >= 0 && j < itemHandler.getSlots()) {
+                itemHandlerModifiable.setStackInSlot(j, ItemStack.of(itemTags));
+            }
+        }
     }
 
 }

@@ -5,29 +5,29 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mrcrayfish.framework.api.data.login.ILoginData;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Validator;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
-import net.minecraft.client.resources.ReloadListener;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
+import com.tac.guns.network.message.MessageUpdateRigs;
+import net.minecraft.Util;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.Validate;
-import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -38,7 +38,7 @@ import java.util.*;
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
-public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
+public class NetworkRigManager extends SimplePreparableReloadListener<Map<ArmorRigItem, Rig>>
 {
 
     private static final Gson GSON_INSTANCE = Util.make(() -> {
@@ -53,7 +53,7 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
 
     public HashSet<UUID> Ids = new HashSet<>();
     @Override
-    protected Map<ArmorRigItem, Rig> prepare(IResourceManager resourceManager, IProfiler profiler)
+    protected Map<ArmorRigItem, Rig> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
     {
         Map<ArmorRigItem, Rig> map = Maps.newHashMap();
         ForgeRegistries.ITEMS.getValues().stream().filter(item -> item instanceof ArmorRigItem).forEach(item ->
@@ -62,10 +62,10 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
             if(id != null)
             {
                 ResourceLocation resourceLocation = new ResourceLocation(String.format("%s:rigs/%s.json", id.getNamespace(), id.getPath()));
-                try(IResource resource = resourceManager.getResource(resourceLocation); InputStream is = resource.getInputStream();
+                try(Resource resource = resourceManager.getResource(resourceLocation); InputStream is = resource.getInputStream();
                     Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)))
                 {
-                    Rig rig = JSONUtils.fromJson(GSON_INSTANCE, reader, Rig.class);
+                    Rig rig = GsonHelper.fromJson(GSON_INSTANCE, reader, Rig.class);
                     if(rig != null && Validator.isValidObject(rig))
                     {
                         map.put((ArmorRigItem) item, rig);
@@ -95,7 +95,7 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
     }
 
     @Override
-    protected void apply(Map<ArmorRigItem, Rig> objects, IResourceManager resourceManager, IProfiler profiler)
+    protected void apply(Map<ArmorRigItem, Rig> objects, ResourceManager resourceManager, ProfilerFiller profiler)
     {
         ImmutableMap.Builder<ResourceLocation, Rig> builder = ImmutableMap.builder();
         objects.forEach((item, rig) -> {
@@ -111,12 +111,12 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
      *
      * @param buffer a packet buffer get
      */
-    public void writeRegisteredRigs(PacketBuffer buffer)
+    public void writeRegisteredRigs(FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(this.registeredRigs.size());
         this.registeredRigs.forEach((id, rig) -> {
             buffer.writeResourceLocation(id);
-            buffer.writeCompoundTag(rig.serializeNBT());
+            buffer.writeNbt(rig.serializeNBT());
         });
     }
 
@@ -126,7 +126,7 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
      * @param buffer a packet buffer get
      * @return a map of registered rigs from the server
      */
-    public static ImmutableMap<ResourceLocation, Rig> readRegisteredRigs(PacketBuffer buffer)
+    public static ImmutableMap<ResourceLocation, Rig> readRegisteredRigs(FriendlyByteBuf buffer)
     {
         int size = buffer.readVarInt();
         if(size > 0)
@@ -135,7 +135,7 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
             for(int i = 0; i < size; i++)
             {
                 ResourceLocation id = buffer.readResourceLocation();
-                Rig rig = Rig.create(buffer.readCompoundTag());
+                Rig rig = Rig.create(buffer.readNbt());
                 builder.put(id, rig);
             }
             return builder.build();
@@ -143,17 +143,21 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
         return ImmutableMap.of();
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public static boolean updateRegisteredRigs(MessageUpdateRigs msg)
+    {
+        return updateRegisteredRigs(msg.getRegisteredRigs());
+    }
+
     /**
      * Updates registered rigs from data provided by the server
      *
-     * @param message an update rigs message
      * @return true if all registered rigs were able to update their corresponding gun item
      */
     @OnlyIn(Dist.CLIENT)
-    public static boolean updateRegisteredRigs(IRigProvider message)
+    public static boolean updateRegisteredRigs(Map<ResourceLocation, Rig> registeredrigs)
     {
         clientRegisteredrigs.clear();
-        Map<ResourceLocation, Rig> registeredrigs = message.getRegisteredRigs();
         if(registeredrigs != null)
         {
             for(Map.Entry<ResourceLocation, Rig> entry : registeredrigs.entrySet())
@@ -192,7 +196,7 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
     }
 
     @SubscribeEvent
-    public static void onServerStopped(FMLServerStoppedEvent event)
+    public static void onServerStopped(ServerStoppedEvent event)
     {
         NetworkRigManager.instance = null;
     }
@@ -243,4 +247,23 @@ public class NetworkRigManager extends ReloadListener<Map<ArmorRigItem, Rig>>
             return this.rig;
         }
     }
+
+    public static class LoginData implements ILoginData
+    {
+        @Override
+        public void writeData(FriendlyByteBuf buffer)
+        {
+            Validate.notNull(NetworkRigManager.get());
+            NetworkRigManager.get().writeRegisteredRigs(buffer);
+        }
+
+        @Override
+        public Optional<String> readData(FriendlyByteBuf buffer)
+        {
+            Map<ResourceLocation, Rig> registeredGuns = NetworkRigManager.readRegisteredRigs(buffer);
+            NetworkRigManager.updateRegisteredRigs(registeredGuns);
+            return Optional.empty();
+        }
+    }
+
 }

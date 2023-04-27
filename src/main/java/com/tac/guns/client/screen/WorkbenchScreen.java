@@ -1,10 +1,12 @@
 package com.tac.guns.client.screen;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Vector3f;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
@@ -16,29 +18,30 @@ import com.tac.guns.init.ModItems;
 import com.tac.guns.item.*;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageCraft;
 import com.tac.guns.tileentity.WorkbenchTileEntity;
 import com.tac.guns.util.InventoryUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.*;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -50,7 +53,7 @@ import java.util.stream.Collectors;
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
+public class WorkbenchScreen extends AbstractContainerScreen<WorkbenchContainer>
 {
     private static final ResourceLocation GUI_BASE = new ResourceLocation("tac:textures/gui/workbench.png");
     private static boolean showRemaining = false;
@@ -59,7 +62,7 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
     private List<Tab> tabs = new ArrayList<>();
     private List<MaterialItem> materials;
     private List<MaterialItem> filteredMaterials;
-    private PlayerInventory playerInventory;
+    private Inventory playerInventory;
     private WorkbenchTileEntity workbench;
     private Button btnCraft;
     private CheckBox checkBoxMaterials;
@@ -67,18 +70,18 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
 
     float posDelta = 0.1f;//works for gun models, + means higher
 
-    public WorkbenchScreen(WorkbenchContainer container, PlayerInventory playerInventory, ITextComponent title)
+    public WorkbenchScreen(WorkbenchContainer container, Inventory playerInventory, Component title)
     {
         super(container, playerInventory, title);
         this.playerInventory = playerInventory;
         this.workbench = container.getWorkbench();
-        this.xSize = 256;
-        this.ySize = 184;
+        this.imageWidth = 256;
+        this.imageHeight = 184;
         this.materials = new ArrayList<>();
-        this.createTabs(WorkbenchRecipes.getAll(playerInventory.player.world));
+        this.createTabs(WorkbenchRecipes.getAll(playerInventory.player.level));
         if(!this.tabs.isEmpty())
         {
-            this.ySize += 28;
+            this.imageHeight += 28;
         }
     }
 
@@ -162,9 +165,9 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
         super.init();
         if(!this.tabs.isEmpty())
         {
-            this.guiTop += 28;
+            this.topPos += 28;
         }
-        this.addButton(new Button(this.guiLeft + 9, this.guiTop + 18, 15, 20, new StringTextComponent("<"), button ->
+        this.addRenderableWidget(new Button(this.leftPos + 9, this.topPos + 18, 15, 20, new TextComponent("<"), button ->
         {
             int index = this.currentTab.getCurrentIndex();
             if(index - 1 < 0)
@@ -176,7 +179,7 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
                 this.loadItem(index - 1);
             }
         }));
-        this.addButton(new Button(this.guiLeft + 153, this.guiTop + 18, 15, 20, new StringTextComponent(">"), button ->
+        this.addRenderableWidget(new Button(this.leftPos + 153, this.topPos + 18, 15, 20, new TextComponent(">"), button ->
         {
             int index = this.currentTab.getCurrentIndex();
             if(index + 1 >= this.currentTab.getRecipes().size())
@@ -188,23 +191,22 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
                 this.loadItem(index + 1);
             }
         }));
-        this.btnCraft = this.addButton(new Button(this.guiLeft + 195, this.guiTop + 16, 74, 20, new TranslationTextComponent("gui.tac.workbench.assemble"), button ->
+        this.btnCraft = this.addRenderableWidget(new Button(this.leftPos + 195, this.topPos + 16, 74, 20, new TranslatableComponent("gui.cgm.workbench.assemble"), button ->
         {
             int index = this.currentTab.getCurrentIndex();
             WorkbenchRecipe recipe = this.currentTab.getRecipes().get(index);
             ResourceLocation registryName = recipe.getId();
-            PacketHandler.getPlayChannel().sendToServer(new MessageCraft(registryName, this.workbench.getPos()));
+            PacketHandler.getPlayChannel().sendToServer(new MessageCraft(registryName, this.workbench.getBlockPos()));
         }));
         this.btnCraft.active = false;
-        this.checkBoxMaterials = this.addButton(new CheckBox(this.guiLeft + 172, this.guiTop + 51, new TranslationTextComponent("gui.tac.workbench.show_remaining")));
+        this.checkBoxMaterials = this.addRenderableWidget(new CheckBox(this.leftPos + 172, this.topPos + 51, new TranslatableComponent("gui.cgm.workbench.show_remaining")));
         this.checkBoxMaterials.setToggled(WorkbenchScreen.showRemaining);
         this.loadItem(this.currentTab.getCurrentIndex());
     }
 
     @Override
-    public void tick()
-    {
-        super.tick();
+    protected void containerTick() {
+        super.containerTick();
 
         for(MaterialItem material : this.materials)
         {
@@ -233,13 +235,13 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
             if(item.getItem() instanceof IColored && ((IColored) item.getItem()).canColor(item))
             {
                 IColored colored = (IColored) item.getItem();
-                if(!this.workbench.getStackInSlot(0).isEmpty())
+                if(!this.workbench.getItem(0).isEmpty())
                 {
-                    ItemStack dyeStack = this.workbench.getStackInSlot(0);
+                    ItemStack dyeStack = this.workbench.getItem(0);
                     if(dyeStack.getItem() instanceof DyeItem)
                     {
                         DyeColor color = ((DyeItem) dyeStack.getItem()).getDyeColor();
-                        float[] components = color.getColorComponentValues();
+                        float[] components = color.getTextureDiffuseColors();
                         int red = (int) (components[0] * 255F);
                         int green = (int) (components[1] * 255F);
                         int blue = (int) (components[2] * 255F);
@@ -266,11 +268,11 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
 
         for(int i = 0; i < this.tabs.size(); i++)
         {
-            if(RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, this.guiLeft + 28 * i, this.guiTop - 28, 28, 28))
+            if(RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, this.leftPos + 28 * i, this.topPos - 28, 28, 28))
             {
                 this.currentTab = this.tabs.get(i);
                 this.loadItem(this.currentTab.getCurrentIndex());
-                this.minecraft.getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 return true;
             }
         }
@@ -301,20 +303,20 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
 
-        int startX = this.guiLeft;
-        int startY = this.guiTop;
+        int startX = this.leftPos;
+        int startY = this.topPos;
 
         for(int i = 0; i < this.tabs.size(); i++)
         {
             if(RenderUtil.isMouseWithin(mouseX, mouseY, startX + 28 * i, startY - 28, 28, 28))
             {
-                this.renderTooltip(matrixStack, new TranslationTextComponent(this.tabs.get(i).getTabKey()), mouseX, mouseY);
+                this.renderTooltip(matrixStack, new TranslatableComponent(this.tabs.get(i).getTabKey()), mouseX, mouseY);
                 return;
             }
         }
@@ -343,20 +345,20 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY)
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY)
     {
         int offset = this.tabs.isEmpty() ? 0 : 28;
-        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY - 28 + offset, 4210752);
+        this.font.draw(matrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY - 28 + offset, 4210752);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY)
     {
         /* Fixes partial ticks to use percentage from 0 to 1 */
-        partialTicks = Minecraft.getInstance().getRenderPartialTicks();
+        partialTicks = Minecraft.getInstance().getFrameTime();
 
-        int startX = this.guiLeft;
-        int startY = this.guiTop;
+        int startX = this.leftPos;
+        int startY = this.topPos;
 
         RenderSystem.enableBlend();
 
@@ -366,14 +368,16 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
             Tab tab = this.tabs.get(i);
             if(tab != this.currentTab)
             {
-                this.minecraft.getTextureManager().bindTexture(GUI_BASE);
+                
+            RenderSystem.setShaderTexture(0, GUI_BASE);
                 this.blit(matrixStack, startX + 28 * i, startY - 28, 80, 184, 28, 32);
-                Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(tab.getIcon(), startX + 28 * i + 6, startY - 28 + 8);
-                Minecraft.getInstance().getItemRenderer().renderItemOverlayIntoGUI(this.font, tab.getIcon(), startX + 28 * i + 6, startY - 28 + 8, null);
+                Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(tab.getIcon(), startX + 28 * i + 6, startY - 28 + 8);
+                Minecraft.getInstance().getItemRenderer().renderGuiItemDecorations(this.font, tab.getIcon(), startX + 28 * i + 6, startY - 28 + 8, null);
             }
         }
 
-        this.minecraft.getTextureManager().bindTexture(GUI_BASE);
+        
+            RenderSystem.setShaderTexture(0, GUI_BASE);
         this.blit(matrixStack, startX, startY, 0, 0, 173, 184);
         blit(matrixStack, startX + 173, startY, 78, 184, 173, 0, 1, 184, 256, 256);
         this.blit(matrixStack, startX + 251, startY, 174, 0, 24, 184);
@@ -384,15 +388,16 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
         {
             int i = this.tabs.indexOf(this.currentTab);
             int u = i == 0 ? 80 : 108;
-            this.minecraft.getTextureManager().bindTexture(GUI_BASE);
+            RenderSystem.setShaderTexture(0, GUI_BASE);
             this.blit(matrixStack, startX + 28 * i, startY - 28, u, 214, 28, 32);
-            Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.currentTab.getIcon(), startX + 28 * i + 6, startY - 28 + 8);
-            Minecraft.getInstance().getItemRenderer().renderItemOverlayIntoGUI(this.font, this.currentTab.getIcon(), startX + 28 * i + 6, startY - 28 + 8, null);
+            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.currentTab.getIcon(), startX + 28 * i + 6, startY - 28 + 8);
+            Minecraft.getInstance().getItemRenderer().renderGuiItemDecorations(this.font, this.currentTab.getIcon(), startX + 28 * i + 6, startY - 28 + 8, null);
         }
 
-        this.minecraft.getTextureManager().bindTexture(GUI_BASE);
 
-        if(this.workbench.getStackInSlot(0).isEmpty())
+        RenderSystem.setShaderTexture(0, GUI_BASE);
+
+        if(this.workbench.getItem(0).isEmpty())
         {
             this.blit(matrixStack, startX + 174, startY + 18, 165, 199, 16, 16);
         }
@@ -400,11 +405,11 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
         ItemStack currentItem = this.displayStack;
         if(currentItem == null)
             return;
-        StringBuilder builder = new StringBuilder(currentItem.getDisplayName().getString());
+        StringBuilder builder = new StringBuilder(currentItem.getHoverName().getString());
         if(currentItem.getCount() > 1)
         {
-            builder.append(TextFormatting.GOLD);
-            builder.append(TextFormatting.BOLD);
+            builder.append(ChatFormatting.GOLD);
+            builder.append(ChatFormatting.BOLD);
             builder.append(" x ");
             builder.append(currentItem.getCount());
         }
@@ -413,53 +418,43 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         RenderUtil.scissor(startX + 8, startY + 17, 160, 70);
 
-        IRenderTypeBuffer.Impl buffer = this.minecraft.getRenderTypeBuffers().getBufferSource();
-        RenderSystem.pushMatrix();
+
+        PoseStack modelViewStack = RenderSystem.getModelViewStack();
+        modelViewStack.pushPose();
         {
-            RenderSystem.translatef(startX + 88, startY + 60, 100);
-            RenderSystem.scalef(50F, -50F, 50F);
-            RenderSystem.rotatef(5F, 1, 0, 0);
-            RenderSystem.rotatef(Minecraft.getInstance().player.ticksExisted + partialTicks, 0, 1, 0);
-
-            RenderSystem.enableRescaleNormal();
-            RenderSystem.enableAlphaTest();
-            RenderSystem.defaultAlphaFunc();
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-            buffer = this.minecraft.getRenderTypeBuffers().getBufferSource();
-
+            modelViewStack.translate(startX + 88, startY + 60, 100);
+            modelViewStack.scale(50F, -50F, 50F);
+            modelViewStack.mulPose(Vector3f.XP.rotationDegrees(5F));
+            modelViewStack.mulPose(Vector3f.YP.rotationDegrees(Minecraft.getInstance().player.tickCount + partialTicks));
+            RenderSystem.applyModelViewMatrix();
+            MultiBufferSource.BufferSource buffer = this.minecraft.renderBuffers().bufferSource();
             if(ModelOverrides.hasModel(currentItem) && currentItem.getItem() instanceof ScopeItem || currentItem.getItem() instanceof OldScopeItem || currentItem.getItem() instanceof PistolScopeItem) {
                 matrixStack.scale(2,2,2);
-                GunRenderingHandler.get().renderScope(this.minecraft.player, currentItem, ItemCameraTransforms.TransformType.HEAD, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
+                GunRenderingHandler.get().renderScope(this.minecraft.player, currentItem, ItemTransforms.TransformType.HEAD, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
                 matrixStack.scale(0.5f,0.5f,0.5f);
             }else if(currentItem.getItem() instanceof GunItem){
                 matrixStack.translate(0,posDelta,0);
-                GunRenderingHandler.get().renderWeapon(this.minecraft.player, currentItem, ItemCameraTransforms.TransformType.FIXED, matrixStack, buffer, 15728880, 0F);
+                GunRenderingHandler.get().renderWeapon(this.minecraft.player, currentItem, ItemTransforms.TransformType.FIXED, matrixStack, buffer, 15728880, 0F);
                 //TransformType.GROUND with 2x size will block out the text above it.
-            }else Minecraft.getInstance().getItemRenderer().renderItem(currentItem, ItemCameraTransforms.TransformType.FIXED, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(currentItem));
-
-            buffer.finish();
-
-            RenderSystem.disableAlphaTest();
-            RenderSystem.disableRescaleNormal();
+            }else Minecraft.getInstance().getItemRenderer().render(currentItem, ItemTransforms.TransformType.FIXED, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(currentItem));
+            buffer.endBatch();
         }
-        RenderSystem.popMatrix();
+        modelViewStack.popPose();
+        RenderSystem.applyModelViewMatrix();
 
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         this.filteredMaterials = this.getMaterials();
         for(int i = 0; i < this.filteredMaterials.size(); i++)
         {
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.minecraft.getTextureManager().bindTexture(GUI_BASE);
+            
+            RenderSystem.setShaderTexture(0, GUI_BASE);
 
             MaterialItem materialItem = this.filteredMaterials.get(i);
             ItemStack stack = materialItem.stack;
             if(!stack.isEmpty())
             {
-                RenderHelper.disableStandardItemLighting();
+                Lighting.setupForFlatItems();
                 if(materialItem.isEnabled())
                 {
                     this.blit(matrixStack, startX + 172, startY + i * 19 + 63, 0, 184, 80, 19);
@@ -469,15 +464,14 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
                     this.blit(matrixStack, startX + 172, startY + i * 19 + 63, 0, 222, 80, 19);
                 }
 
-                RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                String name = stack.getDisplayName().getString();
-                if(this.font.getStringWidth(name) > 55)
+                String name = stack.getHoverName().getString();
+                if(this.font.width(name) > 55)
                 {
-                    name = this.font.func_238412_a_(name, 50).trim() + "...";
+                    name = this.font.plainSubstrByWidth(name, 50).trim() + "...";
                 }
-                this.font.drawString(matrixStack, name, startX + 172 + 22, startY + i * 19 + 6 + 63, Color.WHITE.getRGB());
+                this.font.draw(matrixStack, name, startX + 172 + 22, startY + i * 19 + 6 + 63, Color.WHITE.getRGB());
 
-                Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(stack, startX + 172 + 2, startY + i * 19 + 1 + 63);
+                Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(stack, startX + 172 + 2, startY + i * 19 + 1 + 63);
 
                 if(this.checkBoxMaterials.isToggled())
                 {
@@ -487,7 +481,7 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
                 }
 
                 //GunRenderingHandler.get().renderWeapon(minecraft.player, stack, ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, )
-                Minecraft.getInstance().getItemRenderer().renderItemOverlayIntoGUI(this.font, stack, startX + 172 + 2, startY + i * 19 + 1 + 63, null);
+                Minecraft.getInstance().getItemRenderer().renderGuiItemDecorations(this.font, stack, startX + 172 + 2, startY + i * 19 + 1 + 63, null);
                 //GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getHeldItemMainhand(), ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
             }
         }
@@ -532,7 +526,7 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
         private MaterialItem(Ingredient ingredient, int count)
         {
             this.ingredient = ingredient;
-            this.matchingstacks = ingredient.getMatchingStacks();
+            this.matchingstacks = ingredient.getItems();
             this.stack = this.matchingstacks[0];
             this.count = count;
         }

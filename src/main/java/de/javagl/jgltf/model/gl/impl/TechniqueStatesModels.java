@@ -26,14 +26,14 @@
  */
 package de.javagl.jgltf.model.gl.impl;
 
-import java.util.Arrays;
-import java.util.List;
-
 import de.javagl.jgltf.impl.v1.TechniqueStatesFunctions;
 import de.javagl.jgltf.model.GltfConstants;
 import de.javagl.jgltf.model.gl.TechniqueStatesFunctionsModel;
 import de.javagl.jgltf.model.gl.TechniqueStatesModel;
 import de.javagl.jgltf.model.gl.impl.v1.DefaultTechniqueStatesFunctionsModelV1;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Methods to create {@link TechniqueStatesModel} instances

@@ -26,6 +26,19 @@
  */
 package de.javagl.jgltf.model.v2;
 
+import de.javagl.jgltf.impl.v2.*;
+import de.javagl.jgltf.model.GltfConstants;
+import de.javagl.jgltf.model.MaterialModel;
+import de.javagl.jgltf.model.NodeModel;
+import de.javagl.jgltf.model.Optionals;
+import de.javagl.jgltf.model.gl.*;
+import de.javagl.jgltf.model.gl.ShaderModel.ShaderType;
+import de.javagl.jgltf.model.gl.impl.*;
+import de.javagl.jgltf.model.impl.DefaultMaterialModel;
+import de.javagl.jgltf.model.io.Buffers;
+import de.javagl.jgltf.model.io.IO;
+import de.javagl.jgltf.model.v2.gl.Materials;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -33,31 +46,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import de.javagl.jgltf.impl.v2.Material;
-import de.javagl.jgltf.impl.v2.MaterialNormalTextureInfo;
-import de.javagl.jgltf.impl.v2.MaterialOcclusionTextureInfo;
-import de.javagl.jgltf.impl.v2.MaterialPbrMetallicRoughness;
-import de.javagl.jgltf.impl.v2.TextureInfo;
-import de.javagl.jgltf.model.GltfConstants;
-import de.javagl.jgltf.model.MaterialModel;
-import de.javagl.jgltf.model.NodeModel;
-import de.javagl.jgltf.model.Optionals;
-import de.javagl.jgltf.model.gl.ProgramModel;
-import de.javagl.jgltf.model.gl.ShaderModel;
-import de.javagl.jgltf.model.gl.ShaderModel.ShaderType;
-import de.javagl.jgltf.model.gl.TechniqueModel;
-import de.javagl.jgltf.model.gl.TechniqueParametersModel;
-import de.javagl.jgltf.model.gl.TechniqueStatesModel;
-import de.javagl.jgltf.model.gl.impl.DefaultProgramModel;
-import de.javagl.jgltf.model.gl.impl.DefaultShaderModel;
-import de.javagl.jgltf.model.gl.impl.DefaultTechniqueModel;
-import de.javagl.jgltf.model.gl.impl.DefaultTechniqueParametersModel;
-import de.javagl.jgltf.model.gl.impl.TechniqueStatesModels;
-import de.javagl.jgltf.model.impl.DefaultMaterialModel;
-import de.javagl.jgltf.model.io.Buffers;
-import de.javagl.jgltf.model.io.IO;
-import de.javagl.jgltf.model.v2.gl.Materials;
 
 /**
  * A class for creating the {@link MaterialModel} instances that are required

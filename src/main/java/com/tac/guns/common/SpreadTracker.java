@@ -2,8 +2,8 @@ package com.tac.guns.common;
 
 import com.tac.guns.Reference;
 import com.tac.guns.item.GunItem;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,11 +21,11 @@ import java.util.WeakHashMap;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class SpreadTracker
 {
-    private static final Map<PlayerEntity, SpreadTracker> TRACKER_MAP = new WeakHashMap<>();
+    private static final Map<Player, SpreadTracker> TRACKER_MAP = new WeakHashMap<>();
 
     private final Map<GunItem, Pair<MutableLong, MutableInt>> SPREAD_TRACKER_MAP = new HashMap<>();
 
-    public void update(PlayerEntity player, GunItem item)
+    public void update(Player player, GunItem item)
     {
         Pair<MutableLong, MutableInt> entry = SPREAD_TRACKER_MAP.computeIfAbsent(item, gun -> Pair.of(new MutableLong(-1), new MutableInt()));
         MutableLong lastFire = entry.getLeft();
@@ -68,7 +68,7 @@ public class SpreadTracker
         return 0f;
     }
 
-    public static SpreadTracker get(PlayerEntity player)
+    public static SpreadTracker get(Player player)
     {
         return TRACKER_MAP.computeIfAbsent(player, player1 -> new SpreadTracker());
     }

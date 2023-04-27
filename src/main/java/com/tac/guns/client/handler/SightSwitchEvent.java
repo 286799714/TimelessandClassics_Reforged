@@ -2,7 +2,6 @@ package com.tac.guns.client.handler;
 
 
 import com.tac.guns.Reference;
-
 import net.minecraftforge.fml.common.Mod;
 
 

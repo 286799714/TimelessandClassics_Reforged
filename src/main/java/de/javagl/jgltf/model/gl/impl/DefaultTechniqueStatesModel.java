@@ -26,12 +26,12 @@
  */
 package de.javagl.jgltf.model.gl.impl;
 
+import de.javagl.jgltf.model.gl.TechniqueStatesFunctionsModel;
+import de.javagl.jgltf.model.gl.TechniqueStatesModel;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import de.javagl.jgltf.model.gl.TechniqueStatesFunctionsModel;
-import de.javagl.jgltf.model.gl.TechniqueStatesModel;
 
 /**
  * Implementation of a {@link TechniqueStatesModel}

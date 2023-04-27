@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(Minecraft.class)
 public interface MinecraftStaticMixin {
-    @Accessor("debugFPS")
+    @Accessor("fps")
     int getCurrentFPS();
 }

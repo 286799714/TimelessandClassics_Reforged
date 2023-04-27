@@ -1,11 +1,15 @@
 package com.tac.guns.network.message;
 
 import com.google.common.collect.ImmutableMap;
+import com.mrcrayfish.framework.api.network.PlayMessage;
 import com.tac.guns.client.network.ClientPlayHandler;
-import com.tac.guns.common.*;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
+import com.tac.guns.common.CustomRig;
+import com.tac.guns.common.CustomRigLoader;
+import com.tac.guns.common.NetworkRigManager;
+import com.tac.guns.common.Rig;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.network.NetworkEvent;
 import org.apache.commons.lang3.Validate;
 
 import java.util.function.Supplier;
@@ -13,16 +17,20 @@ import java.util.function.Supplier;
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class MessageUpdateRigs implements IMessage, NetworkRigManager.IRigProvider
+public class MessageUpdateRigs extends PlayMessage<MessageUpdateRigs> implements NetworkRigManager.IRigProvider
 {
     private ImmutableMap<ResourceLocation, Rig> registeredRigs;
     private ImmutableMap<ResourceLocation, CustomRig> customRigs;
 
     public MessageUpdateRigs() {}
 
+    public MessageUpdateRigs(ImmutableMap<ResourceLocation, Rig> registeredRigs, ImmutableMap<ResourceLocation, CustomRig> customRigs) {
+        this.registeredRigs = registeredRigs;
+        this.customRigs = customRigs;
+    }
+
     @Override
-    public void encode(PacketBuffer buffer)
-    {
+    public void encode(MessageUpdateRigs messageUpdateRigs, FriendlyByteBuf buffer) {
         Validate.notNull(NetworkRigManager.get());
         Validate.notNull(CustomRigLoader.get());
         NetworkRigManager.get().writeRegisteredRigs(buffer);
@@ -30,19 +38,18 @@ public class MessageUpdateRigs implements IMessage, NetworkRigManager.IRigProvid
     }
 
     @Override
-    public void decode(PacketBuffer buffer)
+    public MessageUpdateRigs decode(FriendlyByteBuf buffer)
     {
-        this.registeredRigs = NetworkRigManager.readRegisteredRigs(buffer);
-        this.customRigs = CustomRigLoader.readCustomRigs(buffer);
+        ImmutableMap<ResourceLocation, Rig> registeredRigs = NetworkRigManager.readRegisteredRigs(buffer);
+        ImmutableMap<ResourceLocation, CustomRig> customrig = CustomRigLoader.readCustomRigs(buffer);
+        return new MessageUpdateRigs(registeredRigs, customrig);
     }
 
     @Override
-    public void handle(Supplier<NetworkEvent.Context> supplier)
-    {
+    public void handle(MessageUpdateRigs messageUpdateRigs, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> ClientPlayHandler.handleUpdateRigs(this));
         supplier.get().setPacketHandled(true);
     }
-
     @Override
     public ImmutableMap<ResourceLocation, Rig> getRegisteredRigs()
     {

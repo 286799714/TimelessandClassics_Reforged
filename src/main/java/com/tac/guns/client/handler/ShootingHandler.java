@@ -1,32 +1,30 @@
 package com.tac.guns.client.handler;
 
-import com.tac.guns.client.render.animation.module.GunAnimationController;
-import com.tac.guns.mixin.client.MinecraftStaticMixin;
-import net.minecraftforge.eventbus.api.EventPriority;
-import org.lwjgl.glfw.GLFW;
-
 import com.tac.guns.Config;
 import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.mixin.client.MinecraftStaticMixin;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageEmptyMag;
 import com.tac.guns.network.message.MessageShoot;
 import com.tac.guns.network.message.MessageShooting;
 import com.tac.guns.network.message.MessageUpdateMoveInacc;
-
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 
 import static net.minecraftforge.event.TickEvent.Type.RENDER;
 
@@ -83,13 +81,13 @@ public class  ShootingHandler
         Minecraft mc = Minecraft.getInstance();
         if(mc == null || mc.player == null)
             return false;
-        if(mc.loadingGui != null)
+        if(mc.getOverlay() != null)
             return false;
-        if(mc.currentScreen != null)
+        if(mc.screen != null)
             return false;
-        if(!mc.mouseHelper.isMouseGrabbed())
+        if(!mc.mouseHandler.isMouseGrabbed())
             return false;
-        return mc.isGameFocused();
+        return mc.isWindowActive();
     }
 
     @SubscribeEvent
@@ -102,11 +100,11 @@ public class  ShootingHandler
             return;
 
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
+        Player player = mc.player;
         if(player == null)
             return;
 
-        ItemStack heldItem = player.getHeldItemMainhand();
+        ItemStack heldItem = player.getMainHandItem();
         if(heldItem.getItem() instanceof GunItem)
         {
             int button = event.getButton();
@@ -126,7 +124,7 @@ public class  ShootingHandler
                     fire(player, heldItem);
 
                 if(!(heldItem.getTag().getInt("AmmoCount") > 0)) {
-                    player.sendStatusMessage(new TranslationTextComponent("info.tac.out_of_ammo").mergeStyle(TextFormatting.UNDERLINE).mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.RED), true);
+                    player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
                     PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
                 }
             }
@@ -216,9 +214,9 @@ public class  ShootingHandler
 
         // Upper is to handle rendering, bellow is handling animation calls and burst tracking
 
-        if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getHeldItemMainhand().getItem() instanceof GunItem)
+        if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getMainHandItem().getItem() instanceof GunItem)
             return;
-        GunAnimationController controller = GunAnimationController.fromItem(Minecraft.getInstance().player.getHeldItemMainhand().getItem());
+        GunAnimationController controller = GunAnimationController.fromItem(Minecraft.getInstance().player.getMainHandItem().getItem());
         if(controller == null)
             return;
         else if (controller.isAnimationRunning() && (shootMsGap < 0F && this.burstTracker != 0))
@@ -241,18 +239,18 @@ public class  ShootingHandler
             return;
 
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
+        Player player = mc.player;
         if( player != null )
         {
         	// CHECK HERE: Reduce by 1F in each tick until it is less than 0F
         	shootTickGapLeft -= shootTickGapLeft > 0F ? 1F : 0F;
         	
-            ItemStack heldItem = player.getHeldItemMainhand();
+            ItemStack heldItem = player.getMainHandItem();
             if(heldItem.getItem() instanceof GunItem && (Gun.hasAmmo(heldItem) || player.isCreative()))
             {
-                final float dist = Math.abs( player.moveForward ) / 2.5F
-                	+ Math.abs( player.moveStrafing ) / 1.25F
-                    + ( player.getMotion().y > 0D ? 0.5F : 0F );
+                final float dist = Math.abs( player.zza ) / 2.5F
+                	+ Math.abs( player.xxa ) / 1.25F
+                    + ( player.getDeltaMovement().y > 0D ? 0.5F : 0F );
                 PacketHandler.getPlayChannel().sendToServer( new MessageUpdateMoveInacc( dist ) );
                 
                 // Update #shooting state if it has changed
@@ -286,7 +284,7 @@ public class  ShootingHandler
         if (!isInGame())
             return;
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
+        Player player = mc.player;
         if (player != null)
             if(this.burstCooldown > 0)
                 this.burstCooldown -= 1;
@@ -300,9 +298,9 @@ public class  ShootingHandler
         if(!isInGame())
             return;
         Minecraft mc = Minecraft.getInstance();
-        PlayerEntity player = mc.player;
+        Player player = mc.player;
         if(player != null)
-        {   ItemStack heldItem = player.getHeldItemMainhand();
+        {   ItemStack heldItem = player.getMainHandItem();
             if(heldItem.getItem() instanceof TimelessGunItem)
             {
                 if(heldItem.getTag() == null) {
@@ -351,7 +349,7 @@ public class  ShootingHandler
         }
     }
 
-    public void fire(PlayerEntity player, ItemStack heldItem)
+    public void fire(Player player, ItemStack heldItem)
     {
         if(!(heldItem.getItem() instanceof GunItem))
             return;
@@ -385,7 +383,7 @@ public class  ShootingHandler
             shootMsGap = calcShootTickGap((int) rpm);
             RecoilHandler.get().lastRandPitch = RecoilHandler.get().lastRandPitch;
             RecoilHandler.get().lastRandYaw = RecoilHandler.get().lastRandYaw;
-            PacketHandler.getPlayChannel().sendToServer(new MessageShoot(player.getYaw(1), player.getPitch(1), RecoilHandler.get().lastRandPitch, RecoilHandler.get().lastRandYaw));
+            PacketHandler.getPlayChannel().sendToServer(new MessageShoot(player.getViewYRot(1), player.getViewXRot(1), RecoilHandler.get().lastRandPitch, RecoilHandler.get().lastRandYaw));
 
             if(Config.CLIENT.controls.burstPress.get()) this.burstTracker--;
             else this.burstTracker++;

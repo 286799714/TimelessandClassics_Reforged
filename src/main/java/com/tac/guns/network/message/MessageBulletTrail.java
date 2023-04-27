@@ -1,23 +1,25 @@
 package com.tac.guns.network.message;
 
+import com.mrcrayfish.framework.api.network.PlayMessage;
 import com.tac.guns.client.network.ClientPlayHandler;
 import com.tac.guns.common.Gun;
 import com.tac.guns.entity.ProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class MessageBulletTrail implements IMessage
+public class MessageBulletTrail extends PlayMessage<MessageBulletTrail>
 {
     private int[] entityIds;
-    private Vector3d[] positions;
-    private Vector3d[] motions;
+    private Vec3[] positions;
+    private Vec3[] motions;
     private float[] shooterYaws;
     private float[] shooterPitches;
     private ItemStack item;
@@ -32,19 +34,19 @@ public class MessageBulletTrail implements IMessage
 
     public MessageBulletTrail(ProjectileEntity[] spawnedProjectiles, Gun.Projectile projectileProps, int shooterId, float size)
     {
-        this.positions = new Vector3d[spawnedProjectiles.length];
-        this.motions = new Vector3d[spawnedProjectiles.length];
+        this.positions = new Vec3[spawnedProjectiles.length];
+        this.motions = new Vec3[spawnedProjectiles.length];
         this.shooterYaws = new float[spawnedProjectiles.length];
         this.shooterPitches = new float[spawnedProjectiles.length];
         this.entityIds = new int[spawnedProjectiles.length];
         for(int i = 0; i < spawnedProjectiles.length; i++)
         {
             ProjectileEntity projectile = spawnedProjectiles[i];
-            this.positions[i] = projectile.getPositionVec();
-            this.motions[i] = projectile.getMotion();
-            this.shooterYaws[i] = projectile.getShooter().getYaw(1);
-            this.shooterPitches[i] = projectile.getShooter().getPitch(1);
-            this.entityIds[i] = projectile.getEntityId();
+            this.positions[i] = projectile.position();
+            this.motions[i] = projectile.getDeltaMovement();
+            this.shooterYaws[i] = projectile.getShooter().getViewYRot(1);
+            this.shooterPitches[i] = projectile.getShooter().getViewXRot(1);
+            this.entityIds[i] = projectile.getId();
         }
         this.item = spawnedProjectiles[0].getItem();
         this.trailColor = projectileProps.getTrailColor();
@@ -55,68 +57,84 @@ public class MessageBulletTrail implements IMessage
         this.size = size;
     }
 
-    @Override
-    public void encode(PacketBuffer buffer)
+    public MessageBulletTrail(Vec3[] position, Vec3[] motions, float[] shooteryaws, float[]shooterPitches, int[] entityIds, ItemStack item, int color, double trailLengthMultiplier,
+                              int life, double gravity, int shooterId, float size)
     {
-        buffer.writeInt(this.entityIds.length);
-        for(int i = 0; i < this.entityIds.length; i++)
-        {
-            buffer.writeInt(this.entityIds[i]);
+        this.positions = position;
+        this.motions = motions;
+        this.shooterYaws = shooteryaws;
+        this.shooterPitches = shooterPitches;
+        this.entityIds = entityIds;
+        this.item = item;
+        this.trailColor = color;
+        this.trailLengthMultiplier = trailLengthMultiplier;
+        this.life = life;
+        this.gravity = gravity; //It's possible that projectiles have different gravity
+        this.shooterId = shooterId;
+        this.size = size;
+    }
 
-            Vector3d position = this.positions[i];
+    @Override
+    public void encode(MessageBulletTrail messageBulletTrail, FriendlyByteBuf buffer) {
+        buffer.writeInt(messageBulletTrail.entityIds.length);
+        for(int i = 0; i < messageBulletTrail.entityIds.length; i++)
+        {
+            buffer.writeInt(messageBulletTrail.entityIds[i]);
+
+            Vec3 position = messageBulletTrail.positions[i];
             buffer.writeDouble(position.x);
             buffer.writeDouble(position.y);
             buffer.writeDouble(position.z);
 
-            Vector3d motion = this.motions[i];
+            Vec3 motion = messageBulletTrail.motions[i];
             buffer.writeDouble(motion.x);
             buffer.writeDouble(motion.y);
             buffer.writeDouble(motion.z);
 
-            buffer.writeFloat(this.shooterYaws[i]);
-            buffer.writeFloat(this.shooterPitches[i]);
+            buffer.writeFloat(messageBulletTrail.shooterYaws[i]);
+            buffer.writeFloat(messageBulletTrail.shooterPitches[i]);
         }
-        buffer.writeItemStack(this.item);
-        buffer.writeVarInt(this.trailColor);
-        buffer.writeDouble(this.trailLengthMultiplier);
-        buffer.writeInt(this.life);
-        buffer.writeDouble(this.gravity);
-        buffer.writeInt(this.shooterId);
-        buffer.writeFloat(this.size);
+        buffer.writeItem(messageBulletTrail.item);
+        buffer.writeVarInt(messageBulletTrail.trailColor);
+        buffer.writeDouble(messageBulletTrail.trailLengthMultiplier);
+        buffer.writeInt(messageBulletTrail.life);
+        buffer.writeDouble(messageBulletTrail.gravity);
+        buffer.writeInt(messageBulletTrail.shooterId);
+        buffer.writeFloat(messageBulletTrail.size);
     }
 
     @Override
-    public void decode(PacketBuffer buffer)
-    {
+    public MessageBulletTrail decode(FriendlyByteBuf buffer) {
         int size = buffer.readInt();
-        this.entityIds = new int[size];
-        this.positions = new Vector3d[size];
-        this.motions = new Vector3d[size];
-        this.shooterYaws = new float[size];
-        this.shooterPitches = new float[size];
+        int[] entityIds = new int[size];
+        Vec3[] positions = new Vec3[size];
+        Vec3[] motions = new Vec3[size];
+        float[] shooterYaws = new float[size];
+        float[] shooterPitches = new float[size];
         for(int i = 0; i < size; i++)
         {
-            this.entityIds[i] = buffer.readInt();
-            this.positions[i] = new Vector3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
-            this.motions[i] = new Vector3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
-            this.shooterYaws[i] = buffer.readFloat();
-            this.shooterPitches[i] = buffer.readFloat();
+            entityIds[i] = buffer.readInt();
+            positions[i] = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+            motions[i] = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+            shooterYaws[i] = buffer.readFloat();
+            shooterPitches[i] = buffer.readFloat();
         }
-        this.item = buffer.readItemStack();
-        this.trailColor = buffer.readVarInt();
-        this.trailLengthMultiplier = buffer.readDouble();
-        this.life = buffer.readInt();
-        this.gravity = buffer.readDouble();
-        this.shooterId = buffer.readInt();
-        this.size = buffer.readFloat();
+        ItemStack item = buffer.readItem();
+        int trailColor = buffer.readVarInt();
+        double trailLengthMultiplier = buffer.readDouble();
+        int life = buffer.readInt();
+        double gravity = buffer.readDouble();
+        int shooterId = buffer.readInt();
+        float scale = buffer.readFloat();
+        return new MessageBulletTrail(positions,motions, shooterYaws, shooterPitches, entityIds, item, trailColor, trailLengthMultiplier, life, gravity, shooterId, scale);
     }
 
     @Override
-    public void handle(Supplier<NetworkEvent.Context> supplier)
-    {
-        supplier.get().enqueueWork(() -> ClientPlayHandler.handleMessageBulletTrail(this));
+    public void handle(MessageBulletTrail messageBulletTrail, Supplier<NetworkEvent.Context> supplier) {
+        supplier.get().enqueueWork(() -> ClientPlayHandler.handleMessageBulletTrail(messageBulletTrail));
         supplier.get().setPacketHandled(true);
     }
+
 
     public int getCount()
     {
@@ -128,12 +146,12 @@ public class MessageBulletTrail implements IMessage
         return this.entityIds;
     }
 
-    public Vector3d[] getPositions()
+    public Vec3[] getPositions()
     {
         return this.positions;
     }
 
-    public Vector3d[] getMotions()
+    public Vec3[] getMotions()
     {
         return this.motions;
     }

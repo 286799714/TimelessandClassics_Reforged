@@ -26,14 +26,14 @@
  */
 package de.javagl.jgltf.model.impl;
 
+import de.javagl.jgltf.model.AccessorModel;
+import de.javagl.jgltf.model.AnimationModel;
+import de.javagl.jgltf.model.NodeModel;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import de.javagl.jgltf.model.AccessorModel;
-import de.javagl.jgltf.model.AnimationModel;
-import de.javagl.jgltf.model.NodeModel;
 
 /**
  * Implementation of an {@link AnimationModel}

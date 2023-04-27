@@ -1,11 +1,11 @@
 package com.tac.guns.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
@@ -16,8 +16,8 @@ import java.lang.ref.WeakReference;
 public class BulletTrail
 {
     private int entityId;
-    private Vector3d position;
-    private Vector3d motion;
+    private Vec3 position;
+    private Vec3 motion;
     private float yaw;
     private float pitch;
     private boolean dead;
@@ -41,7 +41,7 @@ public class BulletTrail
 
     private float size;
 
-    public BulletTrail(int entityId, Vector3d position, Vector3d motion, float shooterYaw, float shooterPitch, ItemStack item, int trailColor, double trailMultiplier, int maxAge, double gravity, int shooterId, float size)
+    public BulletTrail(int entityId, Vec3 position, Vec3 motion, float shooterYaw, float shooterPitch, ItemStack item, int trailColor, double trailMultiplier, int maxAge, double gravity, int shooterId, float size)
     {
         this.entityId = entityId;
         this.position = position;
@@ -60,9 +60,9 @@ public class BulletTrail
 
     private void updateYawPitch()
     {
-        float horizontalLength = MathHelper.sqrt(this.motion.x * this.motion.x + this.motion.z * this.motion.z);
-        this.yaw = (float) Math.toDegrees(MathHelper.atan2(this.motion.x, this.motion.z));
-        this.pitch = (float) Math.toDegrees(MathHelper.atan2(this.motion.y, (double) horizontalLength));
+        float horizontalLength = Mth.sqrt((float) (this.motion.x * this.motion.x + this.motion.z * this.motion.z));
+        this.yaw = (float) Math.toDegrees(Mth.atan2(this.motion.x, this.motion.z));
+        this.pitch = (float) Math.toDegrees(Mth.atan2(this.motion.y, (double) horizontalLength));
     }
 
     public void tick()
@@ -77,8 +77,8 @@ public class BulletTrail
             this.updateYawPitch();
         }
 
-        Entity entity = Minecraft.getInstance().getRenderViewEntity();
-        double distance = entity != null ? Math.sqrt(entity.getDistanceSq(this.position)) : Double.MAX_VALUE;
+        Entity entity = Minecraft.getInstance().getCameraEntity();
+        double distance = entity != null ? Math.sqrt(entity.distanceToSqr(this.position)) : Double.MAX_VALUE;
         if(this.age >= this.maxAge || distance > 1024)
         {
             this.dead = true;
@@ -90,12 +90,12 @@ public class BulletTrail
         return this.entityId;
     }
 
-    public Vector3d getPosition()
+    public Vec3 getPosition()
     {
         return this.position;
     }
 
-    public Vector3d getMotion()
+    public Vec3 getMotion()
     {
         return this.motion;
     }
@@ -156,10 +156,10 @@ public class BulletTrail
     {
         if(this.shooter == null)
         {
-            World world = Minecraft.getInstance().world;
+            Level world = Minecraft.getInstance().level;
             if(world != null)
             {
-                Entity entity = world.getEntityByID(this.shooterId);
+                Entity entity = world.getEntity(this.shooterId);
                 if(entity != null)
                 {
                     this.shooter = new WeakReference<>(entity);
@@ -180,7 +180,7 @@ public class BulletTrail
 
     public boolean isTrailVisible()
     {
-        Entity entity = Minecraft.getInstance().getRenderViewEntity();
+        Entity entity = Minecraft.getInstance().getCameraEntity();
         return entity != null/* && entity.getEntityId() != this.shooterId*/;
     }
 

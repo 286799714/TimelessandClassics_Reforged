@@ -1,26 +1,12 @@
 package com.tac.guns.crafting;
 
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 public class RecipeType
 {
-    public static final IRecipeType<WorkbenchRecipe> WORKBENCH = register("tac:workbench");
+    public static final net.minecraft.world.item.crafting.RecipeType<WorkbenchRecipe> WORKBENCH = net.minecraft.world.item.crafting.RecipeType.register("cgm:workbench");
 
-    static <T extends IRecipe<?>> IRecipeType<T> register(final String key)
-    {
-        return Registry.register(Registry.RECIPE_TYPE, new ResourceLocation(key), new IRecipeType<T>()
-        {
-            @Override
-            public String toString()
-            {
-                return key;
-            }
-        });
-    }
+    // Does nothing but trigger loading of static fields
+    public static void init() {}
 }

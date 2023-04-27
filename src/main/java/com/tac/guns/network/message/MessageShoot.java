@@ -1,16 +1,17 @@
 package com.tac.guns.network.message;
 
+import com.mrcrayfish.framework.api.network.PlayMessage;
 import com.tac.guns.common.network.ServerPlayHandler;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class MessageShoot implements IMessage
+public class MessageShoot extends PlayMessage<MessageShoot>
 {
     private float rotationYaw;
     private float rotationPitch;
@@ -29,32 +30,29 @@ public class MessageShoot implements IMessage
     }
 
     @Override
-    public void encode(PacketBuffer buffer)
+    public void encode(MessageShoot messageShoot, FriendlyByteBuf buffer)
     {
-        buffer.writeFloat(this.rotationYaw);
-        buffer.writeFloat(this.rotationPitch);
-        buffer.writeFloat(this.randP);
-        buffer.writeFloat(this.randY);
-        }
+        buffer.writeFloat(messageShoot.rotationYaw);
+        buffer.writeFloat(messageShoot.rotationPitch);
+        buffer.writeFloat(messageShoot.randP);
+        buffer.writeFloat(messageShoot.randY);
+    }
 
     @Override
-    public void decode(PacketBuffer buffer)
+    public MessageShoot decode(FriendlyByteBuf buffer)
     {
-        this.rotationYaw = buffer.readFloat();
-        this.rotationPitch = buffer.readFloat();
-        this.randP = buffer.readFloat();
-        this.randY = buffer.readFloat();
-        }
+        return new MessageShoot(buffer.readFloat(), buffer.readFloat(),buffer.readFloat(), buffer.readFloat());
+    }
 
     @Override
-    public void handle(Supplier<NetworkEvent.Context> supplier)
+    public void handle(MessageShoot messageShoot, Supplier<NetworkEvent.Context> supplier)
     {
         supplier.get().enqueueWork(() ->
         {
-            ServerPlayerEntity player = supplier.get().getSender();
+            ServerPlayer player = supplier.get().getSender();
             if(player != null)
             {
-                ServerPlayHandler.handleShoot(this, player, randP, randY);
+                ServerPlayHandler.handleShoot(messageShoot, player, messageShoot.randP, messageShoot.randY);
             }
         });
         supplier.get().setPacketHandled(true);
@@ -68,15 +66,5 @@ public class MessageShoot implements IMessage
     public float getRotationPitch()
     {
         return this.rotationPitch;
-    }
-
-    public float getRandP()
-    {
-        return this.randP;
-    }
-
-    public float getRandY()
-    {
-        return this.randY;
     }
 }

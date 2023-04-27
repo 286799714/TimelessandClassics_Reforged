@@ -26,13 +26,9 @@
  */
 package de.javagl.jgltf.model.v2;
 
-import java.util.logging.Logger;
+import de.javagl.jgltf.model.*;
 
-import de.javagl.jgltf.model.AccessorByteData;
-import de.javagl.jgltf.model.AccessorData;
-import de.javagl.jgltf.model.AccessorFloatData;
-import de.javagl.jgltf.model.AccessorIntData;
-import de.javagl.jgltf.model.AccessorShortData;
+import java.util.logging.Logger;
 
 /**
  * Utility methods related to sparse accessors.<br>

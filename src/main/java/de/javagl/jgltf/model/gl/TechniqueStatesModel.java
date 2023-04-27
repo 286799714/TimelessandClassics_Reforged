@@ -26,10 +26,10 @@
  */
 package de.javagl.jgltf.model.gl;
 
+import de.javagl.jgltf.model.GltfConstants;
+
 import java.util.Arrays;
 import java.util.List;
-
-import de.javagl.jgltf.model.GltfConstants;
 
 /**
  * Interface for technique states.  

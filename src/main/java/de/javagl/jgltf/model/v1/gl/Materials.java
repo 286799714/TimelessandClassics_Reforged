@@ -26,10 +26,10 @@
  */
 package de.javagl.jgltf.model.v1.gl;
 
-import java.util.Arrays;
-
 import de.javagl.jgltf.impl.v1.Material;
 import de.javagl.jgltf.impl.v1.Technique;
+
+import java.util.Arrays;
 
 /**
  * Utility methods for {@link Material}s

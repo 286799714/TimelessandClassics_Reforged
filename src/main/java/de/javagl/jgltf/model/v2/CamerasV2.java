@@ -26,13 +26,13 @@
  */
 package de.javagl.jgltf.model.v2;
 
-import java.util.logging.Logger;
-
 import de.javagl.jgltf.impl.v2.Camera;
 import de.javagl.jgltf.impl.v2.CameraOrthographic;
 import de.javagl.jgltf.impl.v2.CameraPerspective;
 import de.javagl.jgltf.model.MathUtils;
 import de.javagl.jgltf.model.Utils;
+
+import java.util.logging.Logger;
 
 /**
  * Utility methods related to cameras in glTF 2.0

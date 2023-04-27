@@ -26,18 +26,12 @@
  */
 package de.javagl.jgltf.model.impl;
 
+import de.javagl.jgltf.model.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import de.javagl.jgltf.model.AccessorDatas;
-import de.javagl.jgltf.model.AccessorFloatData;
-import de.javagl.jgltf.model.AccessorModel;
-import de.javagl.jgltf.model.MathUtils;
-import de.javagl.jgltf.model.NodeModel;
-import de.javagl.jgltf.model.SkinModel;
-import de.javagl.jgltf.model.Utils;
 
 /**
  * Implementation of a {@link SkinModel}

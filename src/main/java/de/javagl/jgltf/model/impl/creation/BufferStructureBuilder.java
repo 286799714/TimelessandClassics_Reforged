@@ -26,6 +26,12 @@
  */
 package de.javagl.jgltf.model.impl.creation;
 
+import de.javagl.jgltf.model.*;
+import de.javagl.jgltf.model.impl.DefaultAccessorModel;
+import de.javagl.jgltf.model.impl.DefaultBufferModel;
+import de.javagl.jgltf.model.impl.DefaultBufferViewModel;
+import de.javagl.jgltf.model.io.Buffers;
+
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -34,17 +40,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import de.javagl.jgltf.model.AccessorModel;
-import de.javagl.jgltf.model.Accessors;
-import de.javagl.jgltf.model.BufferModel;
-import de.javagl.jgltf.model.BufferViewModel;
-import de.javagl.jgltf.model.ElementType;
-import de.javagl.jgltf.model.GltfConstants;
-import de.javagl.jgltf.model.impl.DefaultAccessorModel;
-import de.javagl.jgltf.model.impl.DefaultBufferModel;
-import de.javagl.jgltf.model.impl.DefaultBufferViewModel;
-import de.javagl.jgltf.model.io.Buffers;
 
 /**
  * A class for creating {@link BufferStructure} instances.

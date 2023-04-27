@@ -26,16 +26,15 @@
  */
 package de.javagl.jgltf.model.io.v2;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.javagl.jgltf.impl.v2.BufferView;
 import de.javagl.jgltf.impl.v2.GlTF;
 import de.javagl.jgltf.impl.v2.Image;
 import de.javagl.jgltf.model.GltfException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Utility methods related to {@link GlTF}s

@@ -26,13 +26,13 @@
  */
 package de.javagl.jgltf.model.v2;
 
-import java.util.Objects;
-
 import de.javagl.jgltf.impl.v2.Material;
 import de.javagl.jgltf.impl.v2.MaterialPbrMetallicRoughness;
 import de.javagl.jgltf.impl.v2.TextureInfo;
 import de.javagl.jgltf.model.Optionals;
 import de.javagl.jgltf.model.v2.gl.Materials;
+
+import java.util.Objects;
 
 /**
  * A simple (package-private!) class describing the structure of a material.

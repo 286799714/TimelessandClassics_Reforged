@@ -26,11 +26,11 @@
  */
 package de.javagl.jgltf.model.gl.impl;
 
-import java.nio.ByteBuffer;
-
 import de.javagl.jgltf.model.gl.ShaderModel;
 import de.javagl.jgltf.model.impl.AbstractNamedModelElement;
 import de.javagl.jgltf.model.io.Buffers;
+
+import java.nio.ByteBuffer;
 
 /**
  * Implementation of a {@link ShaderModel}

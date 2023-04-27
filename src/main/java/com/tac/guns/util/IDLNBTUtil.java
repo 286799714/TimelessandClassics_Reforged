@@ -1,13 +1,13 @@
 package com.tac.guns.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
@@ -15,36 +15,36 @@ public class IDLNBTUtil {
     //  As for item stack NBT, a total string length of 65000 is ok,
     //but 66000 will crash. Please do not spam it.
     //  Also, {} does not equals null, ignoring this causes unable to stack
-    public static CompoundNBT getNBT(ItemStack stack)
+    public static CompoundTag getNBT(ItemStack stack)
     {
-        CompoundNBT nbt = stack.getTag();
+        CompoundTag nbt = stack.getTag();
         if (nbt == null)
         {
-            nbt = new CompoundNBT();
+            nbt = new CompoundTag();
             stack.setTag(nbt);
         }
         return nbt;
     }
 
-    public static CompoundNBT getNBTReadOnly(ItemStack stack)
+    public static CompoundTag getNBTReadOnly(ItemStack stack)
     {
-        CompoundNBT nbt = stack.getTag();
+        CompoundTag nbt = stack.getTag();
         if (nbt == null)
         {
-            nbt = new CompoundNBT();
+            nbt = new CompoundTag();
         }
         return nbt;
     }
 
-    public static CompoundNBT getNBT(Entity entity) {
-        CompoundNBT nbt = entity.getPersistentData();
+    public static CompoundTag getNBT(Entity entity) {
+        CompoundTag nbt = entity.getPersistentData();
         return nbt;
     }
 
 
-    public static CompoundNBT getNBT(CompoundNBT tag) {
+    public static CompoundTag getNBT(CompoundTag tag) {
         if(tag == null) {
-            return new CompoundNBT();
+            return new CompoundTag();
         }
 
         return tag;
@@ -61,7 +61,7 @@ public class IDLNBTUtil {
     //Boolean
     public static boolean setBoolean(ItemStack stack, String key, boolean value)
     {
-        CompoundNBT nbt = getNBT(stack);
+        CompoundTag nbt = getNBT(stack);
         nbt.putBoolean(key, value);
         return true;
     }
@@ -70,7 +70,7 @@ public class IDLNBTUtil {
     {
         if (stackHasKey(stack, key))
         {
-            CompoundNBT nbt = getNBTReadOnly(stack);
+            CompoundTag nbt = getNBTReadOnly(stack);
             return nbt.getBoolean(key);
         }
         else
@@ -83,7 +83,7 @@ public class IDLNBTUtil {
     {
         if (stackHasKey(stack, key))
         {
-            CompoundNBT nbt = getNBTReadOnly(stack);
+            CompoundTag nbt = getNBTReadOnly(stack);
             return nbt.getBoolean(key);
         }
         else
@@ -96,7 +96,7 @@ public class IDLNBTUtil {
     {
         if (stackHasKey(stack, key))
         {
-            CompoundNBT nbt = getNBTReadOnly(stack);
+            CompoundTag nbt = getNBTReadOnly(stack);
             return nbt.getBoolean(key);
         }
         else
@@ -108,7 +108,7 @@ public class IDLNBTUtil {
     //Double
     public static boolean setDouble(ItemStack stack, String key, double value)
     {
-        CompoundNBT nbt = getNBT(stack);
+        CompoundTag nbt = getNBT(stack);
         nbt.putDouble(key, value);
         return true;
     }
@@ -117,7 +117,7 @@ public class IDLNBTUtil {
     {
         if (stackHasKey(stack, key))
         {
-            CompoundNBT nbt = getNBTReadOnly(stack);
+            CompoundTag nbt = getNBTReadOnly(stack);
             return nbt.getDouble(key);
         }
         else
@@ -129,19 +129,19 @@ public class IDLNBTUtil {
     //Integer
     public static boolean setLong(ItemStack stack, String key, long value)
     {
-        CompoundNBT nbt = getNBT(stack);
+        CompoundTag nbt = getNBT(stack);
         nbt.putLong(key, value);
         return true;
     }
     public static boolean setInt(ItemStack stack, String key, int value)
     {
-        CompoundNBT nbt = getNBT(stack);
+        CompoundTag nbt = getNBT(stack);
         nbt.putInt(key, value);
         return true;
     }
     public static boolean setIntOptimized(ItemStack stack, String key, int value)
     {
-        CompoundNBT nbt = getNBT(stack);
+        CompoundTag nbt = getNBT(stack);
         if (nbt.getInt(key) != value)
         {
             nbt.putInt(key, value);
@@ -150,18 +150,18 @@ public class IDLNBTUtil {
     }
     public static boolean setInt(Entity entity, String key, int value)
     {
-        CompoundNBT nbt = getNBT(entity);
+        CompoundTag nbt = getNBT(entity);
         nbt.putInt(key, value);
         return true;
     }
     public static boolean setIntAuto(Entity entity, String key, int value)
     {
-        if (entity instanceof PlayerEntity)
+        if (entity instanceof Player)
         {
-            setPlayerIdeallandTagSafe((PlayerEntity) entity, key, value);
+            setPlayerIdeallandTagSafe((Player) entity, key, value);
             return true;
         }
-        CompoundNBT nbt = getNBT(entity);
+        CompoundTag nbt = getNBT(entity);
         nbt.putInt(key, value);
         return true;
     }
@@ -177,7 +177,7 @@ public class IDLNBTUtil {
     {
         if (entityHasKey(entity, key))
         {
-            CompoundNBT nbt = getNBT(entity);
+            CompoundTag nbt = getNBT(entity);
             return nbt.getInt(key);
         }
         else
@@ -188,14 +188,14 @@ public class IDLNBTUtil {
 
     public static int getIntAuto(Entity entity, String key, int defaultVal)
     {
-        if (entity instanceof PlayerEntity)
+        if (entity instanceof Player)
         {
-            return getPlayerIdeallandIntSafe((PlayerEntity) entity, key);
+            return getPlayerIdeallandIntSafe((Player) entity, key);
         }
 
         if (entityHasKey(entity, key))
         {
-            CompoundNBT nbt = getNBT(entity);
+            CompoundTag nbt = getNBT(entity);
             return nbt.getInt(key);
         }
         else
@@ -208,7 +208,7 @@ public class IDLNBTUtil {
     {
         if (stackHasKey(stack, key))
         {
-            CompoundNBT nbt = getNBTReadOnly(stack);
+            CompoundTag nbt = getNBTReadOnly(stack);
             return nbt.getInt(key);
         }
         else
@@ -221,7 +221,7 @@ public class IDLNBTUtil {
     {
         if (stackHasKey(stack, key))
         {
-            CompoundNBT nbt = getNBTReadOnly(stack);
+            CompoundTag nbt = getNBTReadOnly(stack);
             return nbt.getLong(key);
         }
         else
@@ -240,7 +240,7 @@ public class IDLNBTUtil {
     {
         if (stackHasKey(stack, key))
         {
-            CompoundNBT nbt = getNBTReadOnly(stack);
+            CompoundTag nbt = getNBTReadOnly(stack);
             return nbt.getString(key);
         }
         else
@@ -251,7 +251,7 @@ public class IDLNBTUtil {
 
     public static boolean setString(ItemStack stack, String key, String value)
     {
-        CompoundNBT nbt = getNBT(stack);
+        CompoundTag nbt = getNBT(stack);
         nbt.putString(key, value);
 
         return true;
@@ -270,7 +270,7 @@ public class IDLNBTUtil {
     {
         if (entityHasKey(entity, key))
         {
-            CompoundNBT nbt = getNBT(entity);
+            CompoundTag nbt = getNBT(entity);
             return nbt.getBoolean(key);
         }
         else
@@ -281,14 +281,14 @@ public class IDLNBTUtil {
 
     public static boolean setBoolean(Entity stack, String key, boolean value)
     {
-        CompoundNBT nbt = getNBT(stack);
+        CompoundTag nbt = getNBT(stack);
         nbt.putBoolean(key, value);
         return true;
     }
 
     public static boolean setString(Entity stack, String key, String value)
     {
-        CompoundNBT nbt = getNBT(stack);
+        CompoundTag nbt = getNBT(stack);
         nbt.putString(key, value);
         return true;
     }
@@ -297,7 +297,7 @@ public class IDLNBTUtil {
     {
         if (stackHasKey(stack, key))
         {
-            CompoundNBT nbt = getNBTReadOnly(stack);
+            CompoundTag nbt = getNBTReadOnly(stack);
             return nbt.getIntArray(key);
         }
         else
@@ -310,7 +310,7 @@ public class IDLNBTUtil {
     {
         if (entityHasKey(entity, key))
         {
-            CompoundNBT nbt = getNBT(entity);
+            CompoundTag nbt = getNBT(entity);
             return nbt.getIntArray(key);
         }
         else
@@ -321,7 +321,7 @@ public class IDLNBTUtil {
 
     public static void setIntArray(ItemStack stack, String key, int[] array)
     {
-        CompoundNBT nbt = getNBT(stack);
+        CompoundTag nbt = getNBT(stack);
         nbt.putIntArray(key, array);
     }
 
@@ -330,151 +330,151 @@ public class IDLNBTUtil {
     //This is why we put all our data under a special tag.
     public static final String MOD_SECTION_NAME = "tac_nbt";
 
-    public static CompoundNBT getTagSafe(CompoundNBT tag, String key) {
+    public static CompoundTag getTagSafe(CompoundTag tag, String key) {
         if(tag == null) {
-            return new CompoundNBT();
+            return new CompoundTag();
         }
 
         return tag.getCompound(key);
     }
 
-    public static CompoundNBT getPlyrIdlTagSafe(PlayerEntity player) {
+    public static CompoundTag getPlyrIdlTagSafe(Player player) {
         if(player == null) {
-            return new CompoundNBT();
+            return new CompoundTag();
         }
 
-        CompoundNBT playerData = player.getPersistentData();
-        CompoundNBT data = getTagSafe(playerData, PlayerEntity.PERSISTED_NBT_TAG);
+        CompoundTag playerData = player.getPersistentData();
+        CompoundTag data = getTagSafe(playerData, Player.PERSISTED_NBT_TAG);
 
         return getTagSafe(data, MOD_SECTION_NAME);
     }
 
-    public static CompoundNBT getPlayerIdeallandTagGroupSafe(PlayerEntity player, String key) {
+    public static CompoundTag getPlayerIdeallandTagGroupSafe(Player player, String key) {
         return getPlyrIdlTagSafe(player).getCompound(key);
     }
 
-    public static int[] getPlayerIdeallandIntArraySafe(PlayerEntity player, String key) {
+    public static int[] getPlayerIdeallandIntArraySafe(Player player, String key) {
         return getPlyrIdlTagSafe(player).getIntArray(key);
     }
 
-    public static int getPlayerIdeallandIntSafe(PlayerEntity player, String key) {
+    public static int getPlayerIdeallandIntSafe(Player player, String key) {
         return getPlyrIdlTagSafe(player).getInt(key);
     }
-    public static float getPlayerIdeallandFloatSafe(PlayerEntity player, String key) {
+    public static float getPlayerIdeallandFloatSafe(Player player, String key) {
         return getPlyrIdlTagSafe(player).getFloat(key);
     }
-    public static double getPlayerIdeallandDoubleSafe(PlayerEntity player, String key) {
+    public static double getPlayerIdeallandDoubleSafe(Player player, String key) {
         return getPlyrIdlTagSafe(player).getDouble(key);
     }
-    public static boolean getPlayerIdeallandBoolSafe(PlayerEntity player, String key) {
+    public static boolean getPlayerIdeallandBoolSafe(Player player, String key) {
         return getPlyrIdlTagSafe(player).getBoolean(key);
     }
-    public static String getPlayerIdeallandStrSafe(PlayerEntity player, String key) {
+    public static String getPlayerIdeallandStrSafe(Player player, String key) {
         return getPlyrIdlTagSafe(player).getString(key);
     }
-    public static BlockPos getPlayerIdeallandBlockPosSafe(PlayerEntity player, String key) {
+    public static BlockPos getPlayerIdeallandBlockPosSafe(Player player, String key) {
         if (player == null)
         {
             return BlockPos.ZERO;
         }
 
-        INBT inbt = getPlyrIdlTagSafe(player).get(key);
-        if (inbt instanceof CompoundNBT)
+        Tag inbt = getPlyrIdlTagSafe(player).get(key);
+        if (inbt instanceof CompoundTag)
         {
-            return NBTUtil.readBlockPos((CompoundNBT) inbt);
+            return NbtUtils.readBlockPos((CompoundTag) inbt);
         }
         return BlockPos.ZERO;
     }
 
-    public static void setPlayerIdeallandTagSafe(PlayerEntity player, String key, int value) {
+    public static void setPlayerIdeallandTagSafe(Player player, String key, int value) {
         if (player == null)
         {
             return;
         }
 
-        CompoundNBT playerData = player.getPersistentData();
-        CompoundNBT data = getTagSafe(playerData, PlayerEntity.PERSISTED_NBT_TAG);
-        CompoundNBT idl_data = getPlyrIdlTagSafe(player);
+        CompoundTag playerData = player.getPersistentData();
+        CompoundTag data = getTagSafe(playerData, Player.PERSISTED_NBT_TAG);
+        CompoundTag idl_data = getPlyrIdlTagSafe(player);
 
         idl_data.putInt(key, value);
 
         data.put(MOD_SECTION_NAME, idl_data);
-        playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+        playerData.put(Player.PERSISTED_NBT_TAG, data);
     }
 
-    public static void setPlayerIdeallandTagSafe(PlayerEntity player, String key, int[] value) {
+    public static void setPlayerIdeallandTagSafe(Player player, String key, int[] value) {
         if (player == null)
         {
             return;
         }
 
-        CompoundNBT playerData = player.getPersistentData();
-        CompoundNBT data = getTagSafe(playerData, PlayerEntity.PERSISTED_NBT_TAG);
-        CompoundNBT idl_data = getPlyrIdlTagSafe(player);
+        CompoundTag playerData = player.getPersistentData();
+        CompoundTag data = getTagSafe(playerData, Player.PERSISTED_NBT_TAG);
+        CompoundTag idl_data = getPlyrIdlTagSafe(player);
 
         idl_data.putIntArray(key, value);
 
         data.put(MOD_SECTION_NAME, idl_data);
-        playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+        playerData.put(Player.PERSISTED_NBT_TAG, data);
     }
 
-    public static void setPlayerIdeallandTagSafe(PlayerEntity player, String key, double value) {
+    public static void setPlayerIdeallandTagSafe(Player player, String key, double value) {
         if (player == null)
         {
             return;
         }
 
-        CompoundNBT playerData = player.getPersistentData();
-        CompoundNBT data = getTagSafe(playerData, PlayerEntity.PERSISTED_NBT_TAG);
-        CompoundNBT idl_data = getPlyrIdlTagSafe(player);
+        CompoundTag playerData = player.getPersistentData();
+        CompoundTag data = getTagSafe(playerData, Player.PERSISTED_NBT_TAG);
+        CompoundTag idl_data = getPlyrIdlTagSafe(player);
 
         idl_data.putDouble(key, value);
 
         data.put(MOD_SECTION_NAME, idl_data);
-        playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+        playerData.put(Player.PERSISTED_NBT_TAG, data);
     }
 
-    public static void setPlayerIdeallandTagSafe(PlayerEntity player, String key, boolean value) {
+    public static void setPlayerIdeallandTagSafe(Player player, String key, boolean value) {
         if (player == null)
         {
             return;
         }
 
-        CompoundNBT playerData = player.getPersistentData();
-        CompoundNBT data = getTagSafe(playerData, PlayerEntity.PERSISTED_NBT_TAG);
-        CompoundNBT idl_data = getPlyrIdlTagSafe(player);
+        CompoundTag playerData = player.getPersistentData();
+        CompoundTag data = getTagSafe(playerData, Player.PERSISTED_NBT_TAG);
+        CompoundTag idl_data = getPlyrIdlTagSafe(player);
 
         idl_data.putBoolean(key, value);
 
         data.put(MOD_SECTION_NAME, idl_data);
-        playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+        playerData.put(Player.PERSISTED_NBT_TAG, data);
     }
 
-    public static void setPlayerIdeallandTagSafe(PlayerEntity player, String key, String value) {
+    public static void setPlayerIdeallandTagSafe(Player player, String key, String value) {
         if (player == null)
         {
             return;
         }
 
-        CompoundNBT playerData = player.getPersistentData();
-        CompoundNBT data = getTagSafe(playerData, PlayerEntity.PERSISTED_NBT_TAG);
-        CompoundNBT idl_data = getPlyrIdlTagSafe(player);
+        CompoundTag playerData = player.getPersistentData();
+        CompoundTag data = getTagSafe(playerData, Player.PERSISTED_NBT_TAG);
+        CompoundTag idl_data = getPlyrIdlTagSafe(player);
 
         idl_data.putString(key, value);
 
         data.put(MOD_SECTION_NAME, idl_data);
-        playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+        playerData.put(Player.PERSISTED_NBT_TAG, data);
     }
 
-    public static void setPlayerIdeallandTagSafe(PlayerEntity player, String key, BlockPos value) {
-        CompoundNBT playerData = player.getPersistentData();
-        CompoundNBT data = getTagSafe(playerData, PlayerEntity.PERSISTED_NBT_TAG);
-        CompoundNBT idl_data = getPlyrIdlTagSafe(player);
+    public static void setPlayerIdeallandTagSafe(Player player, String key, BlockPos value) {
+        CompoundTag playerData = player.getPersistentData();
+        CompoundTag data = getTagSafe(playerData, Player.PERSISTED_NBT_TAG);
+        CompoundTag idl_data = getPlyrIdlTagSafe(player);
 
-        idl_data.put(key, NBTUtil.writeBlockPos(value));
+        idl_data.put(key, NbtUtils.writeBlockPos(value));
 
         data.put(MOD_SECTION_NAME, idl_data);
-        playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+        playerData.put(Player.PERSISTED_NBT_TAG, data);
     }
 
     //--------------------------------------------

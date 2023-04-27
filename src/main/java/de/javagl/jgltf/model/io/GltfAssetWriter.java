@@ -26,6 +26,11 @@
  */
 package de.javagl.jgltf.model.io;
 
+import de.javagl.jgltf.model.io.v1.GltfAssetV1;
+import de.javagl.jgltf.model.io.v1.GltfAssetWriterV1;
+import de.javagl.jgltf.model.io.v2.GltfAssetV2;
+import de.javagl.jgltf.model.io.v2.GltfAssetWriterV2;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,11 +39,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.Map.Entry;
-
-import de.javagl.jgltf.model.io.v1.GltfAssetV1;
-import de.javagl.jgltf.model.io.v1.GltfAssetWriterV1;
-import de.javagl.jgltf.model.io.v2.GltfAssetV2;
-import de.javagl.jgltf.model.io.v2.GltfAssetWriterV2;
 
 /**
  * A class for writing a {@link GltfAsset}

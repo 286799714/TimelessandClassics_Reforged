@@ -1,19 +1,19 @@
 package com.tac.guns.util;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 public class InventoryUtil
 {
-    public static int getItemStackAmount(PlayerEntity player, ItemStack find)
+    public static int getItemStackAmount(Player player, ItemStack find)
     {
         int count = 0;
-        for(ItemStack stack : player.inventory.mainInventory)
+        for(ItemStack stack : player.getInventory().items)
         {
             if(!stack.isEmpty() && areItemStacksEqualIgnoreCount(stack, find))
             {
@@ -23,12 +23,12 @@ public class InventoryUtil
         return count;
     }
 
-    public static boolean hasIngredient(PlayerEntity player, Pair<Ingredient, Integer> pair)
+    public static boolean hasIngredient(Player player, Pair<Ingredient, Integer> pair)
     {
         int count = 0;
-        for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+        for(int i = 0; i < player.getInventory().getContainerSize(); i++)
         {
-            ItemStack stack = player.inventory.getStackInSlot(i);
+            ItemStack stack = player.getInventory().getItem(i);
             if(pair.getFirst().test(stack))
             {
                 count += stack.getCount();
@@ -37,24 +37,24 @@ public class InventoryUtil
         return pair.getSecond() <= count;
     }
 
-    public static boolean removeItemStackFromIngredient(PlayerEntity player, Pair<Ingredient, Integer> pair)
+    public static boolean removeItemStackFromIngredient(Player player, Pair<Ingredient, Integer> pair)
     {
         int amount = pair.getSecond();
-        for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+        for(int i = 0; i < player.getInventory().getContainerSize(); i++)
         {
-            ItemStack stack = player.inventory.getStackInSlot(i);
+            ItemStack stack = player.getInventory().getItem(i);
             if(pair.getFirst().test(stack))
             {
                 if(amount - stack.getCount() < 0)
                 {
                     stack.shrink(amount);
-                    player.inventory.setInventorySlotContents(i, stack);
+                    player.getInventory().setItem(i, stack);
                     return true;
                 }
                 else
                 {
                     amount -= stack.getCount();
-                    player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+                    player.getInventory().setItem(i, ItemStack.EMPTY);
                     if(amount == 0)
                     {
                         return true;
@@ -71,7 +71,7 @@ public class InventoryUtil
         {
             return false;
         }
-        else if(source.getDamage() != target.getDamage())
+        else if(source.getDamageValue() != target.getDamageValue())
         {
             return false;
         }

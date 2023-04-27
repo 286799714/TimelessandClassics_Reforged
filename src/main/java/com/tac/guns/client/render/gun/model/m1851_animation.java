@@ -1,18 +1,16 @@
 package com.tac.guns.client.render.gun.model;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.tac.guns.Config;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.tac.guns.client.SpecialModels;
 import com.tac.guns.client.render.gun.IOverrideModel;
-import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.CooldownTracker;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemCooldowns;
+import net.minecraft.world.item.ItemStack;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -26,7 +24,7 @@ public class m1851_animation implements IOverrideModel {
 
     //The render method, similar to what is in DartEntity. We can render the item
     @Override
-    public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
+    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         //The render method, similar to what is in DartEntity. We can render the item
         
         RenderUtil.renderModel(SpecialModels.M1851.getModel(), stack, matrices, renderBuffer, light, overlay);
@@ -35,18 +33,18 @@ public class m1851_animation implements IOverrideModel {
 //        if(entity.equals(Minecraft.getInstance().player)) {
 
         //Always push
-        matrices.push();
+        matrices.pushPose();
 
         //We're getting the cooldown tracker for the item - items like the sword, ender pearl, and chorus fruit all have this too.
-        CooldownTracker tracker = Minecraft.getInstance().player.getCooldownTracker();
-        float cooldown = tracker.getCooldown(stack.getItem(), Minecraft.getInstance().getRenderPartialTicks());
+        ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
+        float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
         cooldown = (float) easeInOutBack(cooldown);
 
         //Here we're moving the model into position
         matrices.translate(0, -5.0 * 0.0625, 0);
 
         //We rotate the chamber part of the model according to the cooldown variable above, which is manipulated by the method provided below.
-        matrices.rotate(Vector3f.ZN.rotationDegrees(20F * cooldown));
+        matrices.mulPose(Vector3f.ZN.rotationDegrees(20F * cooldown));
         //Then move it
         matrices.translate(0, 5.0 * 0.0625, 0.0);
 
@@ -69,7 +67,7 @@ public class m1851_animation implements IOverrideModel {
         */
 
         //Always pop
-        matrices.pop();
+        matrices.popPose();
     }
     private double easeInOutBack(double x) {
         double c1 = 1.70158;

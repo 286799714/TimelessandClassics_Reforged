@@ -26,12 +26,12 @@
  */
 package de.javagl.jgltf.model.impl;
 
+import de.javagl.jgltf.model.NodeModel;
+import de.javagl.jgltf.model.SceneModel;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import de.javagl.jgltf.model.NodeModel;
-import de.javagl.jgltf.model.SceneModel;
 
 /**
  * Implementation of a {@link SceneModel} 

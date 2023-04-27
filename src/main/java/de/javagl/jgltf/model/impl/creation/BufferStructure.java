@@ -26,18 +26,11 @@
  */
 package de.javagl.jgltf.model.impl.creation;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import de.javagl.jgltf.model.AccessorModel;
 import de.javagl.jgltf.model.BufferModel;
 import de.javagl.jgltf.model.BufferViewModel;
+
+import java.util.*;
 
 /**
  * A class representing the structure of a set of {@link AccessorModel} 

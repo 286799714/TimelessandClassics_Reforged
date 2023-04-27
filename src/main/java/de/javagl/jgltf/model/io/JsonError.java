@@ -26,14 +26,10 @@
  */
 package de.javagl.jgltf.model.io;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.core.JsonStreamContext;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A class containing information about an error that happened 

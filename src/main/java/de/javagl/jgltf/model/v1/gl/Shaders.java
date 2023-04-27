@@ -26,11 +26,11 @@
  */
 package de.javagl.jgltf.model.v1.gl;
 
-import java.util.Base64;
-
 import de.javagl.jgltf.impl.v1.Material;
 import de.javagl.jgltf.impl.v1.Shader;
 import de.javagl.jgltf.model.GltfConstants;
+
+import java.util.Base64;
 
 /**
  * Utility methods for {@link Shader}s.
