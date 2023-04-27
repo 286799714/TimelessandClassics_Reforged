@@ -23,10 +23,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.CooldownTracker;
 import com.tac.guns.util.GunModifierHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
-import net.optifine.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
 
 /*

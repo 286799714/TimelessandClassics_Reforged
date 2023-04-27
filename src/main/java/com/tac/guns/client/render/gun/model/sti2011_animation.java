@@ -54,12 +54,6 @@ public class sti2011_animation implements IOverrideModel {
 
                 matrices.push();
                 {
-                    ObjectRenderEditor.RENDER_Element element = new ObjectRenderEditor.RENDER_Element(0, 0, 0, 0);
-                    if (ObjectRenderEditor.get().currElement == 1 && ObjectRenderEditor.get().GetFromElements(1) != null) {
-                        element = ObjectRenderEditor.get().GetFromElements(1);
-                        matrices.translate(0, 0, element.getzMod());
-                    }
-
                     matrices.translate(0, 0, -0.225+0.125);
                     RenderUtil.renderModel(SpecialModels.STI2011_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
                 }
