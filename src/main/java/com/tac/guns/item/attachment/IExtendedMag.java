@@ -9,14 +9,12 @@ import com.tac.guns.item.attachment.impl.ExtendedMag;
  * <p>
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public interface IExtendedMag extends IAttachment<ExtendedMag>
-{
+public interface IExtendedMag extends IAttachment<ExtendedMag> {
     /**
      * @return The type of this attachment
      */
     @Override
-    default Type getType()
-    {
+    default Type getType() {
         return Type.EXTENDED_MAG;
     }
 }

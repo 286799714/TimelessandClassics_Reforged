@@ -3,12 +3,7 @@
     "auto": true,
     "rate": 600,
     "burstRate": 18,
-    "rateSelector": [
-      0,
-      1,
-      2,
-      3
-    ],
+    "rateSelector": [2, 3, 1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 1.65,
     "recoilKick": 1.05,
@@ -19,29 +14,33 @@
     "recoilDuration": 0.205,
     "weightKilo": 3.9,
 
-    "spread": 1.425,
-    "firstShotSpread": 0.175,
-    "hipFireInaccuracy": 3.3,
-    "projToMinAccuracy": 3,
-    "msToAccuracyReset": 280,
-    "movementInaccuracy": 0.185
+    "spread": 1.85,
+    "firstShotSpread": 0.125,
+    "hipFireInaccuracy": 5.5,
+    "projToMinAccuracy": 5,
+    "msToAccuracyReset": 420,
+    "movementInaccuracy": 0.6
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 20,
     "additionalReloadEmptyMagTimer": 15,
-    "maxAdditionalAmmoPerOC": [10, 15, 25],
+    "maxAdditionalAmmoPerOC": [10, 20, 40],
     "preReloadPauseTicks": 14
   },
   "projectile": {
     "item": "tac:58x42",
     "visible": false,
-    "damage": 7.0,
-    "size": 0.175,
-    "speed": 36.5,
+    "damage": 7.15,
+    "armorIgnore": 1.0,
+    "critical": 0.05,
+    "criticalDamage": 0.75,
+    "headDamage": 1.0,
+    "size": 0.075,
+    "speed": 19.5,
     "life": 12,
-    "trailLengthMultiplier": 3.75
+    "trailLengthMultiplier": 3
   },
   "sounds": {
     "fire": "tac:item.qbz95_fire",
@@ -49,15 +48,16 @@
     "reloadEmpty": "tac:animation.type_95_reload_empty",
     "draw": "tac:animation.type_95_draw",
     "inspect": "tac:animation.type_95_inspect",
+    "inspectEmpty": "tac:animation.type_95_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.qbz95_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 8.35,
-      "zOffset": -19.55,
+      "zOffset": -17,
       "size": 1.10,
-      "trailAdjust": 1.255
+      "trailAdjust": 1.225
     },
     "weaponType": 0
   },
@@ -65,7 +65,7 @@
     "zoom":{
       "fovModifier": 0.8,
       "yOffset": 13.1,
-      "zOffset": -3.65
+      "zOffset": -2.5
     },"attachments": {
       "barrel": {
         "yOffset": -100829.84,

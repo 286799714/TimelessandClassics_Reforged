@@ -252,8 +252,8 @@ public class AimingHandler
             return false;
         }
 
-        if(!this.localTracker.isAiming() && this.isLookingAtInteractableBlock())
-            return false;
+//        if(!this.localTracker.isAiming() && this.isLookingAtInteractableBlock())
+//            return false;
 
         if(SyncedEntityData.instance().get(mc.player, ModSyncedDataKeys.RELOADING))
             return false;

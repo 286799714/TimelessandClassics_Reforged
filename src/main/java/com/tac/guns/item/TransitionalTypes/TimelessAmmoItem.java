@@ -12,6 +12,6 @@ public class TimelessAmmoItem extends AmmoItem {
 	}
 	
 	public TimelessAmmoItem(Process<Item.Properties> properties) {
-		super(properties.process(new Item.Properties().stacksTo(64).tab(GunMod.AMMO)));
+		super(properties.process(new Item.Properties().stacksTo(60).tab(GunMod.AMMO)));
 	}
 }

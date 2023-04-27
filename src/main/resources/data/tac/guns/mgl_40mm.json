@@ -1,10 +1,7 @@
 {
   "general": {
-    "rate": 10,
-    "rateSelector": [
-      0,
-      1
-    ],
+    "rate": 100,
+    "rateSelector": [1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 1.65,
     "recoilKick": 1.45,

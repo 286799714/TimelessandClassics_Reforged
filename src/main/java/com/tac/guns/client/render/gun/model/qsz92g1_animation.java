@@ -33,7 +33,7 @@ public class qsz92g1_animation implements IOverrideModel
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
         GunItem gunItem = ((GunItem) stack.getItem());
-        if(Gun.hasAmmo(stack))
+        /*if(Gun.hasAmmo(stack))
         {
             // Math provided by Bomb787 on GitHub and Curseforge!!!
             if(GunEnchantmentHelper.getRate(stack, gunItem.getGun()) <= 1 && cooldownOg != 0)
@@ -51,7 +51,7 @@ public class qsz92g1_animation implements IOverrideModel
             {
                 matrices.translate(0, 0, 0.185f * (-4.5 * Math.pow(0.5-0.5, 2) + 1.0));
             }
-        }
+        }*/
         matrices.translate(0, 0, 0.025F);
         RenderUtil.renderModel(SpecialModels.QSZ92G1_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
 

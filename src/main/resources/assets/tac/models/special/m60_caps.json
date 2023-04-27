@@ -2,8 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"5": "tac:items/m60_others",
-		"particle": "tac:items/m60_bullets"
+		"5": "tac:items/m60_others_1"
 	},
 	"elements": [
 		{
@@ -813,139 +812,146 @@
 	},
 	"groups": [
 		{
-			"name": "m60",
+			"name": "m60_caps",
 			"origin": [8, 8, 8],
 			"color": 0,
 			"children": [
 				{
-					"name": "Gun Caps",
-					"origin": [0, 0, 0],
-					"color": 4,
+					"name": "m60",
+					"origin": [8, 8, 8],
+					"color": 0,
 					"children": [
-						0,
-						1,
-						2,
-						3,
-						4,
-						5,
-						6,
-						7,
-						8,
-						9,
-						10,
-						11,
-						12,
-						13,
-						14,
-						15,
-						16,
-						17,
-						18,
-						19,
-						20,
-						21,
-						22,
-						23,
-						24,
-						25,
-						26,
-						27,
-						28,
-						29,
-						30,
-						31,
-						32,
 						{
-							"name": "cheek rest",
-							"origin": [7.10156, 7.26563, 23.05469],
-							"color": 8,
-							"children": [33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
-						},
-						{
-							"name": "cap_rail",
-							"origin": [8.125, -0.4375, 0.5],
+							"name": "Gun Caps",
+							"origin": [0, 0, 0],
 							"color": 4,
 							"children": [
-								44,
+								0,
+								1,
+								2,
+								3,
+								4,
+								5,
+								6,
+								7,
+								8,
+								9,
+								10,
+								11,
+								12,
+								13,
+								14,
+								15,
+								16,
+								17,
+								18,
+								19,
+								20,
+								21,
+								22,
+								23,
+								24,
+								25,
+								26,
+								27,
+								28,
+								29,
+								30,
+								31,
+								32,
 								{
-									"name": "group",
-									"origin": [8.125, 15.125, 20.125],
-									"color": 0,
+									"name": "cheek rest",
+									"origin": [7.10156, 7.26563, 23.05469],
+									"color": 8,
+									"children": [33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
+								},
+								{
+									"name": "cap_rail",
+									"origin": [8.125, -0.4375, 0.5],
+									"color": 4,
 									"children": [
+										44,
 										{
 											"name": "group",
 											"origin": [8.125, 15.125, 20.125],
 											"color": 0,
-											"children": [45, 46, 47]
+											"children": [
+												{
+													"name": "group",
+													"origin": [8.125, 15.125, 20.125],
+													"color": 0,
+													"children": [45, 46, 47]
+												},
+												{
+													"name": "group",
+													"origin": [8.125, 15.125, 20.125],
+													"color": 0,
+													"children": [48, 49, 50]
+												}
+											]
 										},
 										{
 											"name": "group",
 											"origin": [8.125, 15.125, 20.125],
 											"color": 0,
-											"children": [48, 49, 50]
-										}
-									]
-								},
-								{
-									"name": "group",
-									"origin": [8.125, 15.125, 20.125],
-									"color": 0,
-									"children": [
-										{
-											"name": "group",
-											"origin": [8.125, 15.125, 20.125],
-											"color": 0,
-											"children": [51, 52, 53]
+											"children": [
+												{
+													"name": "group",
+													"origin": [8.125, 15.125, 20.125],
+													"color": 0,
+													"children": [51, 52, 53]
+												},
+												{
+													"name": "group",
+													"origin": [8.125, 15.125, 20.125],
+													"color": 0,
+													"children": [54, 55, 56]
+												}
+											]
 										},
 										{
 											"name": "group",
 											"origin": [8.125, 15.125, 20.125],
 											"color": 0,
-											"children": [54, 55, 56]
-										}
-									]
-								},
-								{
-									"name": "group",
-									"origin": [8.125, 15.125, 20.125],
-									"color": 0,
-									"children": [
-										{
-											"name": "group",
-											"origin": [8.125, 15.125, 20.125],
-											"color": 0,
-											"children": [57, 58, 59]
+											"children": [
+												{
+													"name": "group",
+													"origin": [8.125, 15.125, 20.125],
+													"color": 0,
+													"children": [57, 58, 59]
+												},
+												{
+													"name": "group",
+													"origin": [8.125, 15.125, 20.125],
+													"color": 0,
+													"children": [60, 61, 62]
+												}
+											]
 										},
 										{
 											"name": "group",
 											"origin": [8.125, 15.125, 20.125],
 											"color": 0,
-											"children": [60, 61, 62]
-										}
-									]
-								},
-								{
-									"name": "group",
-									"origin": [8.125, 15.125, 20.125],
-									"color": 0,
-									"children": [
-										{
-											"name": "group",
-											"origin": [8.125, 15.125, 20.125],
-											"color": 0,
-											"children": [63, 64, 65]
+											"children": [
+												{
+													"name": "group",
+													"origin": [8.125, 15.125, 20.125],
+													"color": 0,
+													"children": [63, 64, 65]
+												},
+												{
+													"name": "group",
+													"origin": [8.125, 15.125, 20.125],
+													"color": 0,
+													"children": [66, 67, 68]
+												}
+											]
 										},
-										{
-											"name": "group",
-											"origin": [8.125, 15.125, 20.125],
-											"color": 0,
-											"children": [66, 67, 68]
-										}
+										69,
+										70,
+										71
 									]
-								},
-								69,
-								70,
-								71
+								}
 							]
 						}
 					]

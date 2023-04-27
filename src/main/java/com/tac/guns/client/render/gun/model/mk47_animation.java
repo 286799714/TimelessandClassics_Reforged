@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.SpecialModels;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.MK47AnimationController;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.util.RenderUtil;
@@ -85,11 +86,11 @@ public class mk47_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.MK47_PULL.getModel(), stack, matrices, renderBuffer, light, overlay);
 
             Gun gun = ((GunItem) stack.getItem()).getGun();
-        float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-        if(transformType.firstPerson()) {
-            matrices.translate(0, 0, 0.225f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1));
-            matrices.translate(0, 0, 0.025f);
-        }
+            float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
+            if(transformType.firstPerson()) {
+                matrices.translate(0, 0, 0.225f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1));
+                matrices.translate(0, 0, 0.025f);
+            }
             RenderUtil.renderModel(SpecialModels.MK47_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();

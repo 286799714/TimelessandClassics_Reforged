@@ -101,6 +101,7 @@ public class RecipeGen extends RecipeProvider
                 .unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
+        //Gun
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.AI_AWP.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 150)
                 .addIngredient(Tags.Items.INGOTS_GOLD, 50)
@@ -221,9 +222,11 @@ public class RecipeGen extends RecipeProvider
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.MP7.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 66)
                 .build(consumer);
+
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.QBZ_95.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 62)
                 .build(consumer);
+
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.M16A4.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 68)
                 .build(consumer);
@@ -258,10 +261,10 @@ public class RecipeGen extends RecipeProvider
                 .build(consumer);
 
         //Ammo
-        /*WorkbenchRecipeBuilder.workbenchRecipe(ModItems.RPG7_MISSILE.get())
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.RPG7_MISSILE.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 32)
                 .addIngredient(Tags.Items.GUNPOWDER, 8)
-                .build(consumer);*/
+                .build(consumer);
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.BULLET_10g.get(), 20)
                 .addIngredient(Tags.Items.INGOTS_IRON, 1)
@@ -345,9 +348,10 @@ public class RecipeGen extends RecipeProvider
                 .addIngredient(Tags.Items.INGOTS_IRON, 6)
                 .addIngredient(Tags.Items.GUNPOWDER, 3)
                 .build(consumer);
+
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.LIGHT_GRENADE.get(), 2)
-                .addIngredient(Tags.Items.INGOTS_IRON, 6)
-                .addIngredient(Tags.Items.GUNPOWDER, 3)
+                .addIngredient(Tags.Items.INGOTS_IRON, 4)
+                .addIngredient(Tags.Items.GUNPOWDER, 2)
                 .build(consumer);
 
         //Scope
@@ -478,7 +482,7 @@ public class RecipeGen extends RecipeProvider
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.WEIGHTED_STOCK.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 36)
-                .addIngredient(Tags.Items.LEATHER, 12)
+                .addIngredient(Tags.Items.LEATHER, 16)
                 .build(consumer);
 
         //Barrel

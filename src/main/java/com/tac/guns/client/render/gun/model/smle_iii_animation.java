@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import com.tac.guns.util.GunModifierHelper;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a

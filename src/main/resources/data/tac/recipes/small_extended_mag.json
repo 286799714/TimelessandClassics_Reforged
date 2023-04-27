@@ -1,0 +1,14 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/rare"
+      },
+      "count": 4
+    }
+  ],
+  "result": {
+    "item": "tac:small_extended_mag"
+  }
+}

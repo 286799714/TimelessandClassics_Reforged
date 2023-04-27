@@ -10,12 +10,10 @@ public abstract class BoltActionAnimationController extends GunAnimationControll
         if (item instanceof GunItem) {
             GunItem gunItem = (GunItem) item;
             Gun.Sounds sounds = gunItem.getGun().getSounds();
-            switch (label) {
-                case PULL_BOLT:
-                    return new AnimationSoundMeta(sounds.getPullBolt());
-                default:
-                    return super.getSoundFromLabel(item, label);
+            if (label == AnimationLabel.PULL_BOLT) {
+                return new AnimationSoundMeta(sounds.getPullBolt());
             }
+            return super.getSoundFromLabel(item, label);
         }
         return null;
     }

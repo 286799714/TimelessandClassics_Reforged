@@ -2,8 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"5": "tac:items/m60_others",
-		"particle": "tac:items/m60_bullets"
+		"5": "tac:items/m60_others_1"
 	},
 	"elements": [
 		{
@@ -172,15 +171,22 @@
 	},
 	"groups": [
 		{
-			"name": "m60",
+			"name": "m60_handle",
 			"origin": [8, 8, 8],
 			"color": 0,
 			"children": [
 				{
-					"name": "pull handle",
-					"origin": [9, 5.5, 13.8125],
+					"name": "m60",
+					"origin": [8, 8, 8],
 					"color": 0,
-					"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+					"children": [
+						{
+							"name": "pull handle",
+							"origin": [9, 5.5, 13.8125],
+							"color": 0,
+							"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+						}
+					]
 				}
 			]
 		}

@@ -1,0 +1,25 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/ultimate"
+      }
+    },
+    {
+      "item": {
+        "tag": "forge:materials/legendary"
+      },
+      "count": 6
+    },
+    {
+      "item": {
+        "tag": "forge:materials/epic"
+      },
+      "count": 22
+    }
+  ],
+  "result": {
+    "item": "tac:m82a2"
+  }
+}

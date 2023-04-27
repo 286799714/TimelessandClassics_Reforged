@@ -92,10 +92,4 @@ public class ai_awp_animation implements IOverrideModel {
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
-    //Same method from GrenadeLauncherModel, to make a smooth rotation of the chamber.
-    private double easeInOutBack(double x) {
-        double c1 = 1.70158;
-        double c2 = c1 * 1.525;
-        return (x < 0.5 ? (Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 : (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2);
-    }
 }

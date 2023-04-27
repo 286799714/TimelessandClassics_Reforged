@@ -52,18 +52,6 @@ public class rpk_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.RPK_BUTT_HEAVY.getModel(), stack, matrices, renderBuffer, light, overlay);
                 matrices.popPose();
             }
-            /*if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem()))
-            {
-                matrices.translate(0, 0, -0.210f);
-
-                RenderUtil.renderModel(SpecialModels.AK47_SILENCER.getModel(), stack, matrices, renderBuffer, light, overlay);
-
-                matrices.translate(0, 0, 0.210f);
-            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderModel(SpecialModels.AK47_COMPENSATOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderModel(SpecialModels.AK47_BRAKE.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }*/
 
             RenderUtil.renderModel(SpecialModels.RPK.getModel(), stack, matrices, renderBuffer, light, overlay);
         }

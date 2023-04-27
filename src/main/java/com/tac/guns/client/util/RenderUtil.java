@@ -40,6 +40,7 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
+import com.tac.guns.util.GunModifierHelper;
 
 public class RenderUtil
 {

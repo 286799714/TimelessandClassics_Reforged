@@ -25,4 +25,3 @@ public class ExtendedMag extends Attachment
     {
         return new ExtendedMag(modifier);
     }
-}

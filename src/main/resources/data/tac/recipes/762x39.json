@@ -3,18 +3,19 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
+        "tag": "forge:materials/uncommon"
       },
-      "count": 2
+      "count": 4
     },
     {
       "item": {
         "tag": "forge:gunpowder"
-      }
+      },
+      "count": 2
     }
   ],
   "result": {
     "item": "tac:762x39",
-    "count": 20
+    "count": 45
   }
 }

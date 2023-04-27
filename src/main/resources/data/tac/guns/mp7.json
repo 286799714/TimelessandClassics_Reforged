@@ -1,8 +1,8 @@
 {
   "general": {
     "auto": true,
-    "rate": 1000,
-    "rateSelector": [0,1,2],
+    "rate": 1200,
+    "rateSelector": [2, 1],
     "gripType": "tac:two_handed_vector",
     "recoilAngle": 1.325,
     "horizontalRecoilAngle": 1.425,
@@ -13,44 +13,51 @@
     "recoilDuration": 0.205,
     "weightKilo": 2.1,
 
-    "spread": 2.375,
-    "firstShotSpread": 0.825,
-    "hipFireInaccuracy": 1.5,
-    "projToMinAccuracy": 4,
-    "msToAccuracyReset": 220,
-    "movementInaccuracy": 0.115
+    "spread": 2.525,
+    "firstShotSpread": 0.145,
+    "hipFireInaccuracy": 3.3,
+    "projToMinAccuracy": 6,
+    "msToAccuracyReset": 420,
+    "movementInaccuracy": 0.195
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 40,
     "reloadMagTimer": 29,
     "additionalReloadEmptyMagTimer": 13,
-    "maxAdditionalAmmoPerOC": [10, 15, 20],
+    "maxAdditionalAmmoPerOC": [3, 6, 10],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "damage": 5,
-    "speed": 30.5,
-    "life": 7,
+    "damage": 5.5,
+    "armorIgnore": 0.7,
+    "critical": 0.0,
+    "criticalDamage": 0.625,
+    "headDamage": 0.625,
+    "speed": 12.5,
+    "size": 0.05,
+    "life": 13,
+    "trailLengthMultiplier": 2.75,
     "ricochet": true
   },
   "sounds": {
     "fire": "tac:item.mp7_fire",
-    "reloadNormal": "tac:animation.mp7_reload_normal",
+    "reloadNormal": "tac:animation.mp7_reload_norm",
     "reloadEmpty": "tac:animation.mp7_reload_empty",
     "draw": "tac:animation.mp7_draw",
     "inspect": "tac:animation.mp7_inspect",
+    "inspectEmpty": "tac:animation.mp7_inspect_empty",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.mp5_fires"
+    "silencedFire": "tac:item.mp7_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 8.55,
       "zOffset": -14.55,
-      "size": 0.32,
-      "trailAdjust": 0.9475
+      "size": 0.5,
+      "trailAdjust": 0.9625
     },
     "hipfireScale": 0.70,
     "hipfireMoveScale": 0.55,
@@ -59,11 +66,11 @@
   },
   "modules": {
     "zoom":
-      {
-        "fovModifier": 0.9,
-        "yOffset": 11.8875,
-        "zOffset": -0.85
-      },
+    {
+      "fovModifier": 0.8,
+      "yOffset": 11.8875,
+      "zOffset": 1.25
+    },
     "attachments": {
       "barrel": {
         "yOffset": -100829.84,

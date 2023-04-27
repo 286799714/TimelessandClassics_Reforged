@@ -1,54 +1,53 @@
 {
   "general": {
     "rate": 500,
-    "rateSelector": [
-      1
-    ],
+    "rateSelector": [1],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 11.95,
-    "horizontalRecoilAngle": 5.075,
-    "recoilKick": 1.465,
-    "recoilAdsReduction": 0.225,
-    "cameraRecoilModifier": 1.815,
+    "recoilAngle": 20,
+    "horizontalRecoilAngle": 12,
+    "recoilKick": 3.25,
+    "recoilAdsReduction": 0.15,
+    "cameraRecoilModifier": 2.75,
     "weaponRecoilOffset": 0.915,
-    "recoilDuration": 0.105,
-    "projectileAmount": 11,
+    "recoilDuration": 0.35,
+    "projectileAmount": 14,
     "weightKilo": 2.1,
 
-    "spread": 12.5,
-    "firstShotSpread": 12.5,
+    "spread": 8.5,
+    "firstShotSpread": 8.5,
     "hipFireInaccuracy": 1,
     "projToMinAccuracy": 1,
     "msToAccuracyReset": 430,
-    "movementInaccuracy": 0.25
+    "movementInaccuracy": 0.025
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 2,
     "reloadMagTimer": 28,
     "additionalReloadEmptyMagTimer": 0,
-    "maxAdditionalAmmoPerOC": [
-      0,
-      0,
-      0
-    ],
     "openBolt": true
   },
   "projectile": {
     "item": "tac:10_gauge_round",
     "visible": false,
-    "damage": 24,
-    "size": 1.0,
-    "speed": 30.5,
-    "life": 2,
+    "damage": 36,
+    "armorIgnore": 0.5,
+    "critical": 0.0,
+    "criticalDamage": 0.75,
+    "headDamage": 0.55,
+    "size": 0.025,
+    "speed": 13.5,
+    "life": 4,
+    "trailLengthMultiplier": 3,
     "ricochet": false
   },
   "sounds": {
-    "fire": "tac:item.db_fire",
+    "fire": "tac:item.dbs_fire",
     "reloadNormal": "tac:animation.db_shortgun_reload_norm",
     "reloadEmpty": "tac:animation.db_shortgun_reload_empty",
     "draw": "tac:animation.db_shortgun_draw",
     "inspect": "tac:animation.db_shortgun_inspect",
+    "inspectEmpty": "tac:animation.db_shortgun_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.fire_m16s"
   },
@@ -63,9 +62,9 @@
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.9,
+      "fovModifier": 0.8,
       "yOffset": 12.88,
-      "zOffset": -7.5
+      "zOffset": -2.5
     },
     "attachments": {
     }

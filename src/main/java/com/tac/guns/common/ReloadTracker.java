@@ -30,6 +30,7 @@ import net.minecraftforge.network.PacketDistributor;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.WeakHashMap;
+import com.tac.guns.util.GunModifierHelper;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

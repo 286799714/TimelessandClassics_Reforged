@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#I#",
+    "iXi",
+    "#I#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:redstone_block"
+    },
+    "I": {
+      "tag": "forge:materials/legendary"
+    },
+    "X": {
+      "item": "minecraft:nether_star"
+    },
+    "i": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "item": "tac:ultimate_material"
+  }
+}

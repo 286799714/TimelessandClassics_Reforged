@@ -2,11 +2,7 @@
   "general": {
     "auto": true,
     "rate": 800,
-    "rateSelector": [
-      0,
-      1,
-      2
-    ],
+    "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 1.875,
     "horizontalRecoilAngle": 2.025,
@@ -17,48 +13,50 @@
     "recoilDuration": 0.185,
     "weightKilo": 2.65,
 
-    "spread": 1.375,
-    "firstShotSpread": 0.0925,
-    "hipFireInaccuracy": 4.05,
+    "spread": 1.85,
+    "firstShotSpread": 0.115,
+    "hipFireInaccuracy": 5.7,
     "projToMinAccuracy": 6,
-    "msToAccuracyReset": 140,
-    "movementInaccuracy": 0.225
+    "msToAccuracyReset": 300,
+    "movementInaccuracy": 0.425
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 36,
     "additionalReloadEmptyMagTimer": 12,
-    "maxAdditionalAmmoPerOC": [
-      10,
-      20,
-      30
-    ],
+    "maxAdditionalAmmoPerOC": [10, 20, 30],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
     "damage": 6.5,
-    "size": 0.1,
+    "armorIgnore": 1.0,
+    "critical": 0.05,
+    "criticalDamage": 0.75,
+    "headDamage": 1.0,
+    "size": 0.075,
     "speed": 22.5,
-    "life": 14
+    "trailLengthMultiplier": 2.75,
+    "life": 11
   },
   "sounds": {
-    "fire": "tac:item.ar15_fire",
-    "reloadNormal": "tac:animation.m4_norm_reload",
-    "reloadEmpty": "tac:animation.m4_empty_reload",
+    "fire": "tac:item.mk18_fire",
+    "reloadNormal": "tac:animation.m4_reload_norm",
+    "reloadEmpty": "tac:animation.m4_reload_empty",
     "draw": "tac:animation.m4_draw",
     "inspect": "tac:animation.m4_inspect",
+    "inspectEmpty": "tac:animation.m4_inspect_empty",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.ar15_fire_s"
+    "silencedFire": "tac:item.mk18_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 9.35,
-      "zOffset": -17.55,
+      "zOffset": -14,
       "size": 1.15,
-      "trailAdjust": 1.12
+      "trailAdjust": 1.25
     },
     "hipfireScale": 2.0,
     "weaponType": 0

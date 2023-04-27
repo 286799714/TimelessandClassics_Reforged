@@ -2,14 +2,18 @@ package com.tac.guns.client.render.gun.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.SpecialModels;
+import com.tac.guns.client.render.animation.M4AnimationController;
 import com.tac.guns.client.render.animation.M870AnimationController;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
+import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import com.tac.guns.util.GunModifierHelper;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -47,6 +51,15 @@ public class m870_classic_animation implements IOverrideModel {
         }
         matrices.popPose();
 
+        matrices.pushPose();
+        {
+            controller.applySpecialModelTransform(SpecialModels.M870_CLASSIC_BODY.getModel(), M870AnimationController.INDEX_BODY, transformType, matrices);
+
+            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
+                RenderUtil.renderModel(SpecialModels.M870_CLASSIC_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+            }
+        }
+        matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 }

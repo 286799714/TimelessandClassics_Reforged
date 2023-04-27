@@ -15,6 +15,7 @@ import com.tac.guns.network.message.MessageShooting;
 import com.tac.guns.network.message.MessageUpdateMoveInacc;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +26,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
+import com.tac.guns.util.GunModifierHelper;
 
 import static net.minecraftforge.event.TickEvent.Type.RENDER;
 
@@ -108,12 +110,18 @@ public class  ShootingHandler
         if(heldItem.getItem() instanceof GunItem)
         {
             int button = event.getButton();
-            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT && AimingHandler.get().isLookingAtInteractableBlock()))
+            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
             {
                 event.setCanceled(true);
             }
             if( InputHandler.PULL_TRIGGER.down )
             {
+                if (magError(player, heldItem)) {
+                    player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
+                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+                    return;
+                }
+
                 if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0)
                 {
                     this.burstTracker = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstCount();
@@ -210,8 +218,6 @@ public class  ShootingHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void renderTick(TickEvent.RenderTickEvent evt)
     {
-
-
         // Upper is to handle rendering, bellow is handling animation calls and burst tracking
 
         if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getMainHandItem().getItem() instanceof GunItem)
@@ -263,7 +269,7 @@ public class  ShootingHandler
                 if(shooting ^ this.shooting )
                 {
                 	this.shooting = shooting;
-                	PacketHandler.getPlayChannel().sendToServer( new MessageShooting( shooting ) );
+                    PacketHandler.getPlayChannel().sendToServer( new MessageShooting( shooting ) );
                 }
             }
             else if(this.shooting)
@@ -351,6 +357,8 @@ public class  ShootingHandler
 
     public void fire(Player player, ItemStack heldItem)
     {
+        if (magError(player, heldItem)) return;
+
         if(!(heldItem.getItem() instanceof GunItem))
             return;
 
@@ -389,5 +397,21 @@ public class  ShootingHandler
             else this.burstTracker++;
             MinecraftForge.EVENT_BUS.post(new GunFireEvent.Post(player, heldItem));
         }
+    }
+
+    private boolean magError(Player player, ItemStack heldItem) {
+        int[] extraAmmo = ((TimelessGunItem)heldItem.getItem()).getGun().getReloads().getMaxAdditionalAmmoPerOC();
+        int magMode = GunModifierHelper.getAmmoCapacity(heldItem);
+        if(magMode < 0) {
+            if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("AmmoCount")-1 > ((TimelessGunItem)heldItem.getItem()).getGun().getReloads().getMaxAmmo()) {
+                return true;
+            }
+        }
+        else {
+            if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("AmmoCount")-1 > ((TimelessGunItem)heldItem.getItem()).getGun().getReloads().getMaxAmmo()+extraAmmo[magMode]) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -16,7 +16,7 @@ public class PuncturingEnchantment extends GunEnchantment
     @Override
     public int getMaxLevel()
     {
-        return 5;
+        return 6;
     }
 
     @Override

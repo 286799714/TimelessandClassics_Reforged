@@ -3,15 +3,21 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
+        "tag": "forge:materials/rare"
       },
-      "count": 36
+      "count": 4
+    },
+    {
+      "item": {
+        "tag": "forge:materials/uncommon"
+      },
+      "count": 16
     },
     {
       "item": {
         "tag": "forge:glass_panes/colorless"
       },
-      "count": 20
+      "count": 24
     }
   ],
   "result": {

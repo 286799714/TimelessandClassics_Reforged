@@ -3,13 +3,16 @@ package com.tac.guns.client.render.gun.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.SpecialModels;
 import com.tac.guns.client.handler.ShootingHandler;
+import com.tac.guns.client.render.animation.M24AnimationController;
 import com.tac.guns.client.render.animation.MAC10AnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
+import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
+import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -73,7 +76,6 @@ public class micro_uzi_animation implements IOverrideModel {
                     matrices.translate(0,0, -0.25 + Math.pow(cooldownOg - 0.5, 2));
                 }
             }
-            matrices.translate(0.00, 0.0, 0.030);
             RenderUtil.renderModel(SpecialModels.MICRO_UZI_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();

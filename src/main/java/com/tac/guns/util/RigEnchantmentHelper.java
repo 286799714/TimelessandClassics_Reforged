@@ -33,17 +33,7 @@ public class RigEnchantmentHelper
         }
         return modifiedRig.getRepair().getDurability();
     }
-    public static int getRate(ItemStack weapon, Gun modifiedGun)
-    {
-        int rate = modifiedGun.getGeneral().getRate();
-        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
-        if(level > 0)
-        {
-            float newRate = rate * (0.25F * level);
-            rate -= Mth.clamp(newRate, 0, rate);
-        }
-        return rate;
-    }
+
 
     public static double getAimDownSightSpeed(ItemStack weapon)
     {

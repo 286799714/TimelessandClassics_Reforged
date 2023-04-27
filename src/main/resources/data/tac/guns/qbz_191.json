@@ -1,71 +1,101 @@
 {
   "general": {
     "auto": true,
-    "rate": 2,
-    "rateSelector": [
-      0,
-      1,
-      2
-    ],
+    "rate": 750,
+    "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 2.05,
-    "recoilKick": 0.625,
-    "horizontalRecoilAngle": 0.85,
-    "recoilAdsReduction": 0.25,
-    "alwaysSpread": true,
-    "weaponRecoilOffset": 0.375,
-    "cameraRecoilModifier": 0.9,
-    "recoilDuration": 0.205,
-    "spread": 1.5,
-    "weightKilo": 3.6
+    "recoilAngle": 1.75,
+    "horizontalRecoilAngle": 0.75,
+    "recoilKick": 1.5,
+    "recoilAdsReduction": 0.205,
+    "weaponRecoilOffset": 0.805,
+    "cameraRecoilModifier": 1.25,
+    "recoilDuration": 0.35,
+    "weightKilo": 3.6,
+
+    "spread": 1.575,
+    "firstShotSpread": 0.115,
+    "hipFireInaccuracy": 5.35,
+    "projToMinAccuracy": 6,
+    "msToAccuracyReset": 300,
+    "movementInaccuracy": 0.5
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
-    "reloadMagTimer": 46,
-    "additionalReloadEmptyMagTimer": 17,
-    "maxAdditionalAmmoPerOC": [10, 15, 20],
-    "preReloadPauseTicks":7
+    "reloadMagTimer": 35,
+    "additionalReloadEmptyMagTimer": 7,
+    "maxAdditionalAmmoPerOC": [10, 20, 30],
+    "preReloadPauseTicks": 8
   },
   "projectile": {
     "item": "tac:58x42",
     "visible": false,
-    "damage": 7.15,
-    "size": 0.175,
-    "speed": 42,
-    "life": 8
+    "damage": 7,
+    "armorIgnore": 1.0,
+    "critical": 0.05,
+    "criticalDamage": 0.75,
+    "headDamage": 1.0,
+    "size": 0.1,
+    "speed": 20.5,
+    "life": 12,
+    "trailLengthMultiplier": 2.75
   },
   "sounds": {
-    "fire": "tac:item.mtar_fire",
-    "reload": "tac:item.pistol.reload",
+    "fire": "tac:item.qbz191_fire",
+    "reloadNormal": "tac:animation.qbz_191_reload_norm",
+    "reloadEmpty": "tac:animation.qbz_191_reload_empty",
+    "draw": "tac:animation.qbz_191_draw",
+    "inspect": "tac:animation.qbz_191_inspect",
+    "inspectEmpty": "tac:animation.qbz_191_inspect_empty",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.mtar_fire_s"
+    "silencedFire": "tac:item.qbz191_fire_s"
   },
   "display": {
     "flash": {
-      "yOffset": 8.75,
-      "zOffset": -17.15,
-      "size": 0.835
-    },
-    "weaponType": 0
+      "yOffset": 9,
+      "zOffset": -15.25,
+      "size": 0.95,
+      "trailAdjust": 1
+    }
   },
   "modules": {
-    "zoom":{
+    "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 11.75,
-      "zOffset": -6.25
-    },"attachments": {
+      "yOffset": 11.8,
+      "zOffset": -4.5
+    },
+    "attachments": {
       "barrel": {
         "yOffset": -100829.84,
-        "zOffset": -21.55,
+        "zOffset": -11.55,
         "scale": 1.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       },
       "scope": {
-        "yOffset": 9.91,
-        "zOffset": 7.3,
+        "yOffset": 9.89,
+        "zOffset": 7,
         "scale": 1.00
       },
+      "pistolScope": {
+        "yOffset": 9.95,
+        "zOffset": 7,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      },
       "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
         "scale": 0.00
       }
     }

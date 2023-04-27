@@ -2,47 +2,43 @@
   "general": {
     "auto": true,
     "rate": 600,
-    "rateSelector": [
-      0,
-      1,
-      2
-    ],
+    "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 6.335,
-    "horizontalRecoilAngle": 4.15,
-    "recoilKick": 2.5,
-    "recoilAdsReduction": 0.16,
-    "weaponRecoilOffset": 0.865,
-    "cameraRecoilModifier": 1.825,
-    "recoilDuration": 0.2175,
+    "recoilAngle": 2.5,
+    "horizontalRecoilAngle": 1.75,
+    "recoilKick": 2.125,
+    "recoilAdsReduction": 0.2,
+    "weaponRecoilOffset": 0.85,
+    "cameraRecoilModifier": 1.525,
+    "recoilDuration": 0.375,
     "weightKilo": 6.75,
 
-    "spread": 0.625,
-    "firstShotSpread": 0.105,
-    "hipFireInaccuracy": 5.75,
+    "spread": 1.95,
+    "firstShotSpread": 0.115,
+    "hipFireInaccuracy": 7.4,
     "projToMinAccuracy": 2,
-    "msToAccuracyReset": 430,
-    "movementInaccuracy": 0.575
+    "msToAccuracyReset": 550,
+    "movementInaccuracy": 0.8
   },
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 14,
-    "size": 0.2,
-    "speed": 26.5,
-    "life": 12,
-    "trailLengthMultiplier": 4.05
+    "damage": 9,
+    "armorIgnore": 1.0,
+    "critical": 0.05,
+    "criticalDamage": 0.75,
+    "headDamage": 1.0,
+    "size": 0.125,
+    "speed": 16.5,
+    "life": 15,
+    "trailLengthMultiplier": 2.5
   },
   "reloads": {
     "magFed": true,
-    "maxAmmo": 10,
+    "maxAmmo": 20,
     "reloadMagTimer": 28,
     "additionalReloadEmptyMagTimer": 18,
-    "maxAdditionalAmmoPerOC": [
-      5,
-      8,
-      10
-    ],
+    "maxAdditionalAmmoPerOC": [3, 6, 10],
     "preReloadPauseTicks": 8
   },
   "sounds": {
@@ -51,15 +47,16 @@
     "reloadEmpty": "tac:animation.fn_fal_reload_empty",
     "draw": "tac:animation.fn_fal_draw",
     "inspect": "tac:animation.fn_fal_inspect",
+    "inspectEmpty": "tac:animation.fn_fal_inspect_empty",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.fire_ak47s"
+    "silencedFire": "tac:item.fnfal_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 8.725,
-      "zOffset": -16.75,
+      "zOffset": -18.75,
       "size": 0.8,
-      "trailAdjust": 1.075
+      "trailAdjust": 1.25
     },
     "hipfireScale": 3.05,
     "hipfireMoveScale": 1.0,
@@ -69,15 +66,15 @@
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.7,
+      "fovModifier": 0.8,
       "yOffset": 11.125,
       "zOffset": -6.125
     },
     "attachments": {
-      "stock": {
-        "yOffset": 7.75,
-        "zOffset": -22.05,
-        "scale": 0.00
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       },
       "extendedMag": {
         "yOffset": 1000.89,
@@ -114,4 +111,3 @@
     }
   }
 }
-

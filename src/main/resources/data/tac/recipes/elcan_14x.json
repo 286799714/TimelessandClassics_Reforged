@@ -3,7 +3,7 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
+        "tag": "forge:materials/uncommon"
       },
       "count": 30
     },
@@ -11,12 +11,7 @@
       "item": {
         "tag": "forge:glass_panes/colorless"
       },
-      "count": 26
-    },
-    {
-      "item": {
-        "tag": "forge:storage_blocks/redstone"
-      }
+      "count": 20
     }
   ],
   "result": {

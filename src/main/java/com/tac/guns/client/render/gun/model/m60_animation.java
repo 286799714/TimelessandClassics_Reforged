@@ -6,6 +6,7 @@ import com.tac.guns.client.render.animation.M60AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
+import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -31,11 +32,6 @@ public class m60_animation implements IOverrideModel {
         matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M60.getModel(), M60AnimationController.INDEX_BODY, transformType, matrices);
-            if (Gun.getScope(stack) == null) {
-                RenderUtil.renderModel(SpecialModels.M60_UNFOLDED_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
-            } else {
-                RenderUtil.renderModel(SpecialModels.M60_FOLDED_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
             RenderUtil.renderModel(SpecialModels.M60.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
@@ -61,6 +57,11 @@ public class m60_animation implements IOverrideModel {
         matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M60.getModel(), M60AnimationController.INDEX_CAPS, transformType, matrices);
+            if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(SpecialModels.M60_UNFOLDED_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
+            } else {
+                RenderUtil.renderModel(SpecialModels.M60_FOLDED_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
+            }
             RenderUtil.renderModel(SpecialModels.M60_CAPS.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();

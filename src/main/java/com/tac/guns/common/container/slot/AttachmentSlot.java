@@ -49,11 +49,8 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean isActive()
     {
-        /*if(!(this.weapon.getItem() instanceof GunItem) || !(this.weapon.getItem() instanceof ScopeItem) && !(this.weapon.getItem() instanceof SideRailItem))
-        {
-            return false;
-        }*/
-        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || ReloadHandler.get().isReloading()) {
+
+        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo())/* || ReloadHandler.get().isReloading()*/) {
             return false;
         }
         if(this.player.getMainHandItem().getItem() instanceof ScopeItem || this.player.getMainHandItem().getItem() instanceof SideRailItem || this.player.getMainHandItem().getItem() instanceof IrDeviceItem)
@@ -75,15 +72,18 @@ public class AttachmentSlot extends Slot
             }
             return false;
         }
+        /*GunItem item = (GunItem) this.weapon.getItem();
+        Gun modifiedGun = item.getModifiedGun(this.weapon);
+        return modifiedGun.canAttachType(this.type);*/
     }
 
     @Override
     public boolean mayPlace(ItemStack stack)
     {
-        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || ReloadHandler.get().isReloading()) {
+        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo())/* || ReloadHandler.get().isReloading()*/) {
             return false;
         }
-        if((this.player.getMainHandItem().getItem() instanceof ScopeItem || this.player.getMainHandItem().getItem() instanceof SideRailItem || this.player.getMainHandItem().getItem() instanceof IrDeviceItem) && stack.getItem() instanceof DyeItem /*instanceof DyeItem && !(this.weapon.getItem() instanceof
+        if((this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && stack.getItem() instanceof DyeItem /*instanceof DyeItem && !(this.weapon.getItem() instanceof
         GunItem)*/)
             return true;
         else

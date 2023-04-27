@@ -20,9 +20,11 @@ public class MAC10AnimationController extends GunAnimationController {
     public static int INDEX_RIGHT_HAND = 3;
     public static int INDEX_MAGAZINE = 0;
     public static int INDEX_BOLT = 1;
+
     public static final AnimationMeta RELOAD_NORM = new AnimationMeta(new ResourceLocation("tac","animations/micro_uzi_reload_norm.gltf"));
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/micro_uzi_reload_empty.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/micro_uzi_inspect.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/micro_uzi_inspect_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/micro_uzi_draw.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/micro_uzi_static.gltf"));
     private static final MAC10AnimationController instance = new MAC10AnimationController();
@@ -31,6 +33,7 @@ public class MAC10AnimationController extends GunAnimationController {
         try {
             Animations.load(RELOAD_NORM);
             Animations.load(INSPECT);
+            Animations.load(INSPECT_EMPTY);
             Animations.load(DRAW);
             Animations.load(RELOAD_EMPTY);
             Animations.load(STATIC);
@@ -49,6 +52,7 @@ public class MAC10AnimationController extends GunAnimationController {
     public AnimationMeta getAnimationFromLabel(AnimationLabel label) {
         switch (label){
             case INSPECT: return INSPECT;
+            case INSPECT_EMPTY: return INSPECT_EMPTY;
             case RELOAD_NORMAL: return RELOAD_NORM;
             case DRAW: return DRAW;
             case STATIC: return STATIC;

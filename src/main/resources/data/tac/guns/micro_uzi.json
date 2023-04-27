@@ -2,9 +2,7 @@
   "general": {
     "auto": true,
     "rate": 1200,
-    "rateSelector": [
-      2
-    ],
+    "rateSelector": [2],
     "gripType": "tac:one_handed_m1911",
     "recoilAngle": 2.75,
     "horizontalRecoilAngle": 1.35,
@@ -15,28 +13,34 @@
     "cameraRecoilModifier": 1.325,
     "weightKilo": 2.5,
 
-    "spread": 3.375,
-    "firstShotSpread": 0.425,
-    "hipFireInaccuracy": 1.05,
-    "projToMinAccuracy": 7,
-    "msToAccuracyReset": 350,
-    "movementInaccuracy": 0.125
+    "spread": 2.575,
+    "firstShotSpread": 0.225,
+    "hipFireInaccuracy": 3.25,
+    "projToMinAccuracy": 6,
+    "msToAccuracyReset": 540,
+    "movementInaccuracy": 0.285
   },
   "reloads": {
     "magFed": true,
-    "maxAmmo": 32,
+    "maxAmmo": 20,
     "reloadMagTimer": 26,
     "additionalReloadEmptyMagTimer": 11,
-    "maxAdditionalAmmoPerOC": [0, 0, 0],
+    "maxAdditionalAmmoPerOC": [3, 7, 12],
     "preReloadPauseTicks": 0,
     "openBolt": true
   },
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "damage": 4.0,
-    "speed": 16.5,
-    "life": 8
+    "size": 0.1,
+    "damage": 3.5,
+    "armorIgnore": 0.7,
+    "critical": 0.0,
+    "criticalDamage": 0.625,
+    "headDamage": 0.625,
+    "speed": 10,
+    "trailLengthMultiplier": 3,
+    "life": 11
   },
   "sounds": {
     "fire": "tac:item.mac10_fire",
@@ -44,8 +48,9 @@
     "reloadEmpty": "tac:animation.mac10_reload_empty",
     "draw": "tac:animation.mac10_draw",
     "inspect": "tac:animation.mac10_inspect",
+    "inspectEmpty": "tac:animation.mac10_inspect_empty",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.fire_glocks"
+    "silencedFire": "tac:item.mac10_fire_s"
   },
   "display": {
     "flash": {
@@ -60,10 +65,16 @@
   },
   "modules": {
     "zoom":{
-      "fovModifier": 0.9,
+      "fovModifier": 0.8,
       "yOffset": 15.660,
       "zOffset": -9.0
     },
-    "attachments": { }
+    "attachments": {
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      }
+    }
   }
 }

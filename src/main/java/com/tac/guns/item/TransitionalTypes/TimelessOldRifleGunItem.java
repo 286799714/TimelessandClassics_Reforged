@@ -15,6 +15,8 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
+
 
 public class TimelessOldRifleGunItem extends TimelessGunItem {
     public TimelessOldRifleGunItem(Process<Properties> properties, IGunModifier... modifiers)

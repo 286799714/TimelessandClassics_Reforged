@@ -5,6 +5,7 @@ import com.tac.guns.client.SpecialModels;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.Glock17AnimationController;
+import com.tac.guns.client.render.animation.Glock18AnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
@@ -53,7 +54,7 @@ public class glock_17_animation implements IOverrideModel {
             //Gun.getAttachment(IAttachment.Type.BARREL, GunItem.getItemById(Item.getIdFromItem(stack.getItem())).getDefaultInstance())
         }
 
-        if(GunModifierHelper.getAmmoCapacity(stack) > -1)
+        if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
         {
             RenderUtil.renderModel(SpecialModels.GLOCK_17_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
@@ -98,7 +99,7 @@ public class glock_17_animation implements IOverrideModel {
     }*/
 
     @Override
-    public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(float partialTicks, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
 
         //matrices.translate(0.01, 0.1, -0.1);
         //matrices.rotate(Vector3f.YP.rotationDegrees(-0.5F));
@@ -160,7 +161,7 @@ public class glock_17_animation implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.GLOCK_17_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
-        matrices.popPose();
+        matrices.pop();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
      

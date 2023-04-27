@@ -2,6 +2,7 @@ package com.tac.guns.client.render.gun.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.SpecialModels;
+import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.CZ75AutoAnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
@@ -68,18 +69,17 @@ public class cz75_auto_animation implements IOverrideModel
 
         if(transformType.firstPerson()) {
             Gun gun = ((GunItem) stack.getItem()).getGun();
-            float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
+            float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ?
+                    1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
             AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
             boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
-            if(transformType.firstPerson()) {
-                if (Gun.hasAmmo(stack) || shouldOffset) {
-                    matrices.translate(0, 0, 0.2075f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
-                } else if (!Gun.hasAmmo(stack)) {
-                    {
-                        matrices.translate(0, 0, 0.2075f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
-                    }
-                }
+            if (Gun.hasAmmo(stack) || shouldOffset) {
+                matrices.translate(0, 0, 0.2075f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
+                GunRenderingHandler.get().opticMovement = 0.2075f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0);
+            } else if (!Gun.hasAmmo(stack)) {
+                matrices.translate(0, 0, 0.2075f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
+                GunRenderingHandler.get().opticMovement = 0.2075f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0);
             }
             matrices.translate(0.00, 0.0, 0.025F);
         }

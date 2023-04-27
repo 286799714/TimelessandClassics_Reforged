@@ -48,4 +48,3 @@ public class ExtendedMagItem extends Item implements IExtendedMag, IColored
     {
         return enchantment == Enchantments.BINDING_CURSE || super.canApplyAtEnchantingTable(stack, enchantment);
     }
-}

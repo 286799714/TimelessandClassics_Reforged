@@ -1,9 +1,7 @@
 {
   "general": {
     "rate": 600,
-    "rateSelector": [
-      1
-    ],
+    "rateSelector": [1],
     "gripType": "tac:one_handed_m1911",
     "recoilAngle": 5.35,
     "horizontalRecoilAngle": 2.75,
@@ -15,53 +13,55 @@
     "weightKilo": 1.7,
 
     "spread": 2.15,
-    "firstShotSpread": 0.16,
-    "hipFireInaccuracy": 2.65,
+    "firstShotSpread": 0.175,
+    "hipFireInaccuracy": 2.05,
     "projToMinAccuracy": 4,
     "msToAccuracyReset": 250,
-    "movementInaccuracy": 0.225
+    "movementInaccuracy": 0.15
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 23,
     "reloadMagTimer": 25,
     "additionalReloadEmptyMagTimer": 7,
-    "maxAdditionalAmmoPerOC": [
-      3,
-      7,
-      10
-    ],
+    "maxAdditionalAmmoPerOC": [3, 6, 10],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
     "damage": 5.5,
-    "size": 0.15,
-    "speed": 20.0,
-    "life": 8
+    "armorIgnore": 0.6,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 0.75,
+    "size": 0.075,
+    "speed": 10,
+    "trailLengthMultiplier": 2.75,
+    "life": 12
   },
   "sounds": {
-    "fire": "tac:item.fire_glock",
-    "reloadNormal": "tac:animation.glock17_reload_normal",
+    "fire": "tac:item.ttig34_fire",
+    "reloadNormal": "tac:animation.glock17_reload_norm",
     "reloadEmpty": "tac:animation.glock17_reload_empty",
     "draw": "tac:animation.glock17_draw",
     "inspect": "tac:animation.glock17_inspect",
+    "inspectEmpty": "tac:animation.glock17_inspect_empty",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.fire_glocks"
+    "silencedFire": "tac:item.ttig34_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 10.35,
       "zOffset": -12.09,
       "size": 0.8,
-      "trailAdjust": 0.7825
+      "trailAdjust": 0.8
     },
     "weaponType": 2
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.9,
+      "fovModifier": 0.8,
       "yOffset": 12.355,
       "zOffset": -4.4
     },
@@ -74,7 +74,7 @@
       "pistolScope": {
         "yOffset": 10.25,
         "zOffset": 4.715,
-        "scale": 1.80,
+        "scale": 2,
         "doRenderMount": false,
         "doOnSlideMovement": true
       },

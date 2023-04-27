@@ -1,11 +1,8 @@
 {
   "general": {
     "boltAction": false,
-    "rate": 35,
-    "rateSelector": [
-      0,
-      1
-    ],
+    "rate": 200,
+    "rateSelector": [1],
     "gripType": "tac:two_handed_mosin",
     "recoilAngle": 7.85,
     "recoilKick": 2.325,
@@ -16,33 +13,34 @@
     "cameraRecoilModifier": 1.325,
     "weightKilo": 6.0,
 
-    "spread": 1.0,
+    "spread": 0.002,
     "firstShotSpread": 0.002,
-    "hipFireInaccuracy": 11.45,
+    "hipFireInaccuracy": 17.5,
     "projToMinAccuracy": 2,
-    "msToAccuracyReset": 100,
-    "movementInaccuracy": 3.0
+    "msToAccuracyReset": 0,
+    "movementInaccuracy": 0.5
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 5,
     "reloadMagTimer": 41,
     "additionalReloadEmptyMagTimer": 24,
-    "maxAdditionalAmmoPerOC": [
-      3,
-      5,
-      7
-    ],
+    "maxAdditionalAmmoPerOC": [2, 3, 5],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:lapua338",
     "visible": false,
     "gravity": true,
-    "damage": 32,
-    "size": 0.0,
-    "speed": 44.5,
-    "life": 32
+    "damage": 40.5,
+    "armorIgnore": 1.5,
+    "critical": 0.1,
+    "criticalDamage": 1.0,
+    "headDamage": 1.0,
+    "size": 0.175,
+    "speed": 42,
+    "trailLengthMultiplier": 3.75,
+    "life": 14
   },
   "sounds": {
     "fire": "tac:item.aiawp_fire",
@@ -50,28 +48,30 @@
     "reloadEmpty": "tac:animation.awp_reload_empty",
     "draw": "tac:animation.awp_draw",
     "inspect": "tac:animation.awp_inspect",
+    "inspectEmpty": "tac:animation.awp_inspect_empty",
     "pullBolt": "tac:animation.awp_bolt",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.aiawp_fire_s"
   },
   "display": {
     "flash": {
-      "yOffset": 8.1,
-      "zOffset": -22.80,
-      "size": 1.05
+      "yOffset": 7,
+      "zOffset": -21.5,
+      "size": 1.05,
+      "trailAdjust": 1.5
     },
     "weaponType": 5,
     "showDynamicHipfire": false
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.7,
+      "fovModifier": 0.67,
       "yOffset": 8.515,
       "zOffset": -5.7
     },
     "attachments": {
       "scope": {
-        "yOffset": 7.6,
+        "yOffset": 7.545,
         "zOffset": 6.425,
         "scale": 1.0
       },

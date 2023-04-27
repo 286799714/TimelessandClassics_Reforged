@@ -1,0 +1,26 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/epic"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "tag": "forge:materials/rare"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "tag": "forge:materials/uncommon"
+      },
+      "count": 5
+    }
+  ],
+  "result": {
+    "item": "tac:udp_9"
+  }
+}

@@ -2,14 +2,18 @@ package com.tac.guns.client.render.gun.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.SpecialModels;
+import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.ShootingHandler;
+import com.tac.guns.client.render.animation.RPKAnimationController;
 import com.tac.guns.client.render.animation.SKSTacticalAnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
+import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
+import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
@@ -100,8 +104,8 @@ public class sks_tactical_animation implements IOverrideModel {
                 } else if (!Gun.hasAmmo(stack)) {
                     matrices.translate(0, 0, 0.245f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
                 }
+                matrices.translate(0, 0, 0.025F);
             }
-            matrices.translate(0, 0, 0.0225f);
             RenderUtil.renderModel(SpecialModels.SKS_TACTICAL_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();

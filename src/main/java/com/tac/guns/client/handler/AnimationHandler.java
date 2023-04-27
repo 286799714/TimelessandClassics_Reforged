@@ -63,12 +63,23 @@ public enum AnimationHandler {
         SPR15AnimationController.getInstance();
         Deagle50AnimationController.getInstance();
         Type95LAnimationController.getInstance();
+        Type191AnimationController.getInstance();
         MAC10AnimationController.getInstance();
         Vector45AnimationController.getInstance();
         SKSTacticalAnimationController.getInstance();
         M24AnimationController.getInstance();
+        M82A2AnimationController.getInstance();
         //TODO: RPK redo due to static animation issue
         RPKAnimationController.getInstance();
+        M249AnimationController.getInstance();
+        M1A1AnimationController.getInstance();
+        Glock18AnimationController.getInstance();
+        SIGMCXAnimationController.getInstance();
+        M92FSAnimationController.getInstance();
+        MP9AnimationController.getInstance();
+        MK23AnimationController.getInstance();
+        RPG7AnimationController.getInstance();
+        UDP9AnimationController.getInstance();
     }
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {
@@ -111,14 +122,16 @@ public enum AnimationHandler {
         if (controller.isAnimationRunning()) {
             AnimationMeta meta = controller.getPreviousAnimation();
             if(meta == null) return;
-            if (meta.equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT)))
+            if (meta.equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT)) || meta.equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY)))
                 controller.stopAnimation();
             else {
                 AnimationRunner runner = Animations.getAnimationRunner(meta.getResourceLocation());
                 if(runner == null) return;
                 float current = runner.getAnimationManager().getCurrentTimeS();
                 float max = runner.getAnimationManager().getMaxEndTimeS();
-                if(max - current <= 0.25f) return;
+                if(!(meta.equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.PUMP)) ||
+                        meta.equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.PULL_BOLT))))
+                    if(max - current <= 0.25f) return;
                 event.setCanceled(true);
             }
         }
@@ -158,7 +171,11 @@ public enum AnimationHandler {
     		if( controller != null && !controller.isAnimationRunning() )
     		{
     			controller.stopAnimation();
-    			controller.runAnimation( GunAnimationController.AnimationLabel.INSPECT );
+                if (Gun.hasAmmo(stack)) {
+                    controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT);
+                } else {
+                    controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT_EMPTY);
+                }
     		}
     	};
     	InputHandler.INSPECT.addPressCallback( callback );

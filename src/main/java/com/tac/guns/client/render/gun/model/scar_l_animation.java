@@ -130,8 +130,8 @@ public class scar_l_animation implements IOverrideModel {
                         matrices.translate(0, 0, 0.225f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
                     }
                 }
+                matrices.translate(0, 0, 0.025F);
             }
-            matrices.translate(0, 0, 0.025f);
             RenderUtil.renderModel(SpecialModels.SCAR_L_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();

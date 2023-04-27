@@ -6,6 +6,7 @@ import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.M1014AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.gun.IOverrideModel;
+import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -58,6 +59,9 @@ public class m1014_animation implements IOverrideModel {
                         matrices.translate(0, 0, 0.2725f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
                     }
                 }
+                if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT_EMPTY)) {
+                    matrices.translate(0, 0, -0.2725f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
+                }
             }
             matrices.translate(0, 0, 0.025f);
             RenderUtil.renderModel(SpecialModels.M1014_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay); // BOLT
@@ -67,17 +71,11 @@ public class m1014_animation implements IOverrideModel {
         matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M1014.getModel(), M1014AnimationController.INDEX_BULLET, transformType, matrices);
-            if(Gun.hasAmmo(stack) || controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_LOOP))
+            if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT) || controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_LOOP))
                 RenderUtil.renderModel(SpecialModels.M1014_BULLET.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
-    }
-    //Same method from GrenadeLauncherModel, to make a smooth rotation of the chamber.
-    private double easeInOutBack(double x) {
-        double c1 = 1.70158;
-        double c2 = c1 * 1.525;
-        return (x < 0.5 ? (Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 : (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2);
     }
 }

@@ -27,6 +27,7 @@ public class M60AnimationController extends MachineGunAnimationController {
     public static final AnimationMeta RELOAD_EMPTY_SCOPE = new AnimationMeta(new ResourceLocation("tac","animations/m60_reload_empty_scope.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/m60_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/m60_inspect.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m60_inspect_empty.gltf"));
     private static final M60AnimationController instance = new M60AnimationController();
 
     private M60AnimationController(){
@@ -37,6 +38,7 @@ public class M60AnimationController extends MachineGunAnimationController {
             Animations.load(RELOAD_EMPTY_SCOPE);
             Animations.load(DRAW);
             Animations.load(INSPECT);
+            Animations.load(INSPECT_EMPTY);
             Animations.load(STATIC);
         } catch (IOException e) {
             GunMod.LOGGER.fatal(e.getStackTrace());
@@ -71,6 +73,7 @@ public class M60AnimationController extends MachineGunAnimationController {
             }
             case DRAW: return DRAW;
             case INSPECT: return INSPECT;
+            case INSPECT_EMPTY: return INSPECT_EMPTY;
             case STATIC: return STATIC;
             default: return null;
         }

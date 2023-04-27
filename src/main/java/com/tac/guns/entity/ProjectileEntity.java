@@ -545,7 +545,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             {
                 this.onHitEntity(entity, result.getLocation(), startVec, endVec, entityRayTraceResult.isHeadshot());
 
-                int collateralLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.COLLATERAL.get(), weapon);
+                int collateralLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.COLLATERAL.get(), weapon);
                 if(collateralLevel == 0)
                 {
                     this.remove(RemovalReason.DISCARDED);
@@ -567,6 +567,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if(headshot)
         {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
+            damage *= this.projectile.getGunHeadDamage();
             damage *= GunModifierHelper.getAdditionalHeadshotDamage(this.weapon) == 0F ? 1F : GunModifierHelper.getAdditionalHeadshotDamage(this.weapon);
         }
 
@@ -607,16 +608,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     {
         if(Config.COMMON.gameplay.bulletsIgnoreStandardArmor.get()) {
             float damageToMcArmor = 0;
-            if (Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() > 0) {
-                damageToMcArmor = (float) (damage * Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get());
+            if (Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore() <= 1.0) {
+                damageToMcArmor = (float) (damage * (1 - Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore()));
                 entity.hurt(source, damageToMcArmor); // Apply vanilla armor aware damage
             }
 
             entity.invulnerableTime = 0;
             source.bypassArmor();
             source.bypassMagic();
-            if(Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() <= 1.0)
-                entity.hurt(source, (damage-damageToMcArmor)); // Apply pure damage
+            if(Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore() > 0.0)
+                entity.hurt(source, (damage - damageToMcArmor)); // Apply pure damage
         }
         else
             entity.hurt(source, damage);
@@ -792,10 +793,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     private float getCriticalDamage(ItemStack weapon, Random rand, float damage)
     {
-        float chance = GunModifierHelper.getCriticalChance(weapon);
-        if(rand.nextFloat() < chance)
+        float chance = GunModifierHelper.getCriticalChance(weapon) + this.projectile.getGunCritical();
+        if (rand.nextFloat() < chance)
         {
-            return (float) (damage * Config.COMMON.gameplay.criticalDamageMultiplier.get());
+            return (float) (damage * Config.COMMON.gameplay.criticalDamageMultiplier.get() * this.projectile.getGunCriticalDamage());
         }
         return damage;
     }

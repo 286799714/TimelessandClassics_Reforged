@@ -1,10 +1,7 @@
 {
   "general": {
     "rate": 400,
-    "rateSelector": [
-      0,
-      1
-    ],
+    "rateSelector": [1],
     "gripType": "tac:one_handed_m1911",
     "recoilAngle": 7.75,
     "horizontalRecoilAngle": 6.35,
@@ -15,32 +12,33 @@
     "recoilDuration": 0.11,
     "weightKilo": 1.2,
 
-    "spread": 1.05,
-    "firstShotSpread": 0.15,
-    "hipFireInaccuracy": 3.6,
-    "projToMinAccuracy": 3,
-    "msToAccuracyReset": 530,
-    "movementInaccuracy": 0.25
+    "spread": 1.95,
+    "firstShotSpread": 0.145,
+    "hipFireInaccuracy": 2.55,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 280,
+    "movementInaccuracy": 0.185
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 16,
     "reloadMagTimer": 22,
     "additionalReloadEmptyMagTimer": 10,
-    "maxAdditionalAmmoPerOC": [
-      6,
-      10,
-      16
-    ],
+    "maxAdditionalAmmoPerOC": [3, 6, 10],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "damage": 6.5,
-    "size": 0.2,
-    "speed": 22.0,
-    "life": 5
+    "damage": 5.95,
+    "armorIgnore": 0.6,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 0.75,
+    "size": 0.05,
+    "speed": 9.5,
+    "trailLengthMultiplier": 2.75,
+    "life": 12
   },
   "sounds": {
     "fire": "tac:item.cz75_fire",
@@ -48,21 +46,22 @@
     "reloadEmpty": "tac:animation.cz75_reload_empty",
     "draw": "tac:animation.cz75_draw",
     "inspect": "tac:animation.cz75_inspect",
+    "inspectEmpty": "tac:animation.cz75_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.cz75_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 9.475,
-      "zOffset": -12.09,
-      "size": 0.65,
-      "trailAdjust": 0.7825
+      "zOffset": -8,
+      "size": 0.75,
+      "trailAdjust": 0.575
     },
     "weaponType": 2
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.9,
+      "fovModifier": 0.8,
       "yOffset": 11.4,
       "zOffset": -5.85
     },

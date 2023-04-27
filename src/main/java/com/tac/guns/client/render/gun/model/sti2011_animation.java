@@ -12,6 +12,7 @@ import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
+import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
@@ -41,40 +42,16 @@ public class sti2011_animation implements IOverrideModel {
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.STI2011_BASIC_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 matrices.pushPose();
-                matrices.translate(0, 0, -0.35);
-                matrices.scale(1, 1, 9);
-                matrices.translate(0, 0, 0.35);
                 RenderUtil.renderLaserModuleModel(SpecialModels.STI2011_BASIC_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
                 matrices.popPose();
             }
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
-
-                matrices.pushPose();
-                {
-                    ObjectRenderEditor.RENDER_Element element = new ObjectRenderEditor.RENDER_Element(0, 0, 0, 0);
-                    if (ObjectRenderEditor.get().currElement == 1 && ObjectRenderEditor.get().GetFromElements(1) != null) {
-                        element = ObjectRenderEditor.get().GetFromElements(1);
-                        matrices.translate(0, 0, element.getzMod());
-                    }
-
-                    matrices.translate(0, 0, -0.225+0.125);
-                    RenderUtil.renderModel(SpecialModels.STI2011_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-                }
-                matrices.popPose();
+                matrices.translate(0, 0, -0.1825);
+                RenderUtil.renderModel(SpecialModels.STI2011_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
+                matrices.translate(0, 0, 0.1825);
             }
 
             RenderUtil.renderModel(SpecialModels.STI2011_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
-        }
-        matrices.popPose();
-
-        matrices.pushPose();
-        {
-            controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(),STI2011AnimationController.INDEX_MAG,transformType,matrices);
-            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
-                RenderUtil.renderModel(SpecialModels.STI2011_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-            } else {
-                RenderUtil.renderModel(SpecialModels.STI2011_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
         }
         matrices.popPose();
 
@@ -85,6 +62,8 @@ public class sti2011_animation implements IOverrideModel {
                 Gun gun = ((GunItem) stack.getItem()).getGun();
                 float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 :
                         ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
+
+
 
                 AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
                 boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
@@ -100,12 +79,66 @@ public class sti2011_animation implements IOverrideModel {
                         matrices.translate(0, 0, 0.235f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
                     }
                 }
+                matrices.translate(0, 0, 0.025F);
             }
-            matrices.translate(0.00, 0.0, 0.035);
-            matrices.translate(0.00, 0.0, -0.008);
             RenderUtil.renderModel(SpecialModels.STI2011_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
+
+        matrices.pushPose();
+        {
+            controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_HAMMER, transformType, matrices);
+            RenderUtil.renderModel(SpecialModels.STI2011_HAMMER.getModel(), stack, matrices, renderBuffer, light, overlay);
+        }
+        matrices.popPose();
+
+        matrices.pushPose();
+        {
+            controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_MAG, transformType, matrices);
+            if(GunModifierHelper.getAmmoCapacity(stack) > -1)
+            {
+                RenderUtil.renderModel(SpecialModels.STI2011_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+            }
+            else
+            {
+                RenderUtil.renderModel(SpecialModels.STI2011_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+            }
+        }
+        matrices.popPose();
+
+        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation())) {
+            matrices.pushPose();
+            {
+                controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
+                matrices.translate(0, -0.1, 2.2);
+                if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
+                    RenderUtil.renderModel(SpecialModels.STI2011_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+                } else {
+                    RenderUtil.renderModel(SpecialModels.STI2011_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+                }
+                matrices.translate(0, 0.1, -2.2);
+            }
+            matrices.popPose();
+        }
+
+        matrices.pushPose();
+        {
+            controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_BULLET1, transformType, matrices);
+            RenderUtil.renderModel(SpecialModels.STI2011_BULLET1.getModel(), stack, matrices, renderBuffer, light, overlay);
+        }
+        matrices.popPose();
+
+        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) ) {
+            matrices.pushPose();
+            {
+                controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_BULLET2, transformType, matrices);
+                matrices.translate(0, -0.1, 2.2);
+                RenderUtil.renderModel(SpecialModels.STI2011_BULLET2.getModel(), stack, matrices, renderBuffer, light, overlay);
+                matrices.translate(0, 0.1, -2.2);
+            }
+            matrices.popPose();
+        }
+
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 }
