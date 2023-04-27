@@ -1,56 +1,63 @@
 {
   "general": {
     "auto": true,
-    "rate": 2,
-    "rateSelector": [
-      0,
-      2
-    ],
+    "rate": 600,
+    "rateSelector": [2],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 1.375,
+    "recoilAngle": 1.5,
     "horizontalRecoilAngle": 1.355,
-    "recoilKick": 0.920,
-    "recoilAdsReduction": 0.30,
-    "weaponRecoilOffset": 0.325,
-    "cameraRecoilModifier": 1.105,
+    "recoilKick": 1.25,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.5,
+    "cameraRecoilModifier": 1.25,
     "recoilDuration": 0.275,
-    "alwaysSpread": true,
-    "spread": 5.15,
-    "weightKilo": 4.2
+    "weightKilo": 4.2,
+
+    "spread": 2.75,
+    "firstShotSpread": 0.165,
+    "hipFireInaccuracy": 2.95,
+    "projToMinAccuracy": 6,
+    "msToAccuracyReset": 380,
+    "movementInaccuracy": 0.235
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 33,
     "additionalReloadEmptyMagTimer": 10,
-    "maxAdditionalAmmoPerOC": [
-      10,
-      15,
-      20
-    ],
+    "maxAdditionalAmmoPerOC": [5, 12, 20],
     "preReloadPauseTicks": 9,
     "openBolt": true
   },
   "projectile": {
     "item": "tac:round45",
     "visible": false,
-    "damage": 4.0,
-    "size": 0.1,
-    "speed": 14.5,
-    "life": 6,
+    "damage": 8.0,
+    "armorIgnore": 0.7,
+    "critical": 0.0,
+    "criticalDamage": 0.625,
+    "headDamage": 0.625,
+    "size": 0.05,
+    "speed": 15.5,
+    "life": 11,
+    "trailLengthMultiplier": 2.0,
     "ricochet": true
   },
   "sounds": {
-    "fire": "tac:item.m1928",
-    "reload": "tac:item.pistol.reload",
-    "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.fire_m16s"
+    "fire": "tac:item.m1a1_smg_fire",
+    "reloadNormal": "tac:animation.m1a1_smg_reload_norm",
+    "reloadEmpty": "tac:animation.m1a1_smg_reload_empty",
+    "draw": "tac:animation.m1a1_smg_draw",
+    "inspect": "tac:animation.m1a1_smg_inspect",
+    "inspectEmpty": "tac:animation.m1a1_smg_inspect_empty",
+    "cock": "tac:item.pistol.cock"
   },
   "display": {
     "flash": {
       "yOffset": 9.35,
       "zOffset": -18.55,
-      "size": 0.48
+      "size": 0.625,
+      "trailAdjust": 1.125
     },
     "hipfireScale": 0.70,
     "hipfireMoveScale": 0.55,
@@ -59,10 +66,16 @@
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.9,
-      "yOffset": 10.655,
-      "zOffset": -4.75
+      "fovModifier": 0.8,
+      "yOffset": 10.75,
+      "zOffset": -2.75
     },
-    "attachments": {}
+    "attachments": {
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      }
+    }
   }
 }

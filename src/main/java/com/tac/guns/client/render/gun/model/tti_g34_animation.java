@@ -23,6 +23,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
+import com.tac.guns.util.GunModifierHelper;
 
 /**
  * Author: Timeless Development, and associates.
@@ -31,25 +32,7 @@ public class tti_g34_animation implements IOverrideModel {
 
     @Override
     public void render(float partialTicks, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
-
-        //matrices.translate(0.01, 0.1, -0.1);
-        //matrices.rotate(Vector3f.YP.rotationDegrees(-0.5F));
-
-        /*
-            // So this area will be tested for the item specific name, allowing the use of custom attachments
-        if(Gun.getAttachment(IAttachment.Type.BARREL,stack).getItem().getName() != "")
-        {
-            RenderUtil.renderModel(SpecialModels.GLOCK_17_SUPPRESSOR_OVERIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
-        }
-
-
-        PROTIP VS CODE, CTRL K CTRL F, REFORMATS THE GLTF FILE INNERS
-        */
-
-        
-
         TtiG34AnimationController controller = TtiG34AnimationController.getInstance();
-        GunItem gunItem = ((GunItem) stack.getItem());
 
         matrices.push();
         {
@@ -64,7 +47,7 @@ public class tti_g34_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.TTI_G34.getModel(),TtiG34AnimationController.INDEX_MAG,transformType,matrices);
-            if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0) {
+            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                 RenderUtil.renderModel(SpecialModels.TTI_G34_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
                 RenderUtil.renderModel(SpecialModels.TTI_G34_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
@@ -78,7 +61,7 @@ public class tti_g34_animation implements IOverrideModel {
             {
 
                 controller.applySpecialModelTransform(SpecialModels.TTI_G34.getModel(), TtiG34AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
-                if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0) {
+                if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                     RenderUtil.renderModel(SpecialModels.TTI_G34_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
                 } else {
                     RenderUtil.renderModel(SpecialModels.TTI_G34_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
@@ -104,7 +87,6 @@ public class tti_g34_animation implements IOverrideModel {
                 matrices.translate(0, 0, 0.185f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
                 GunRenderingHandler.get().opticMovement = 0.185f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0);
             }
-        } else {
             matrices.translate(0, 0, 0.025F);
         }
         RenderUtil.renderModel(SpecialModels.TTI_G34_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);

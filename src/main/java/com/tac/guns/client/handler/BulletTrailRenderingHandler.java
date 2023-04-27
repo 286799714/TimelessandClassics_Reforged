@@ -148,6 +148,7 @@ public class BulletTrailRenderingHandler
             else if (mc.player.getLookVec().y > 0.385)
                 matrixStack.translate(0, -0.115f * mc.player.getLookVec().y, 0);
         }
+
         if(ShootingHandler.get().isShooting() && Minecraft.getInstance().player.isEntityEqual(entity) && bulletTrail.getAge() < 1)
         {
             matrixStack.translate(bulletX - (view.getX()), bulletY - view.getY() - 0.145f, (bulletZ - view.getZ()));

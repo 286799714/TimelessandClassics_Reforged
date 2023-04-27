@@ -2,10 +2,7 @@
   "general": {
     "auto": false,
     "rate": 400,
-    "rateSelector": [
-      0,
-      1
-    ],
+    "rateSelector": [1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 5.15,
     "recoilKick": 1.625,
@@ -16,12 +13,12 @@
     "recoilAdsReduction": 0.305,
     "weightKilo": 4.2,
 
-    "spread": 0.625,
-    "firstShotSpread": 0.085,
-    "hipFireInaccuracy": 4.2,
+    "spread": 1.15,
+    "firstShotSpread": 0.115,
+    "hipFireInaccuracy": 10.15,
     "projToMinAccuracy": 2,
-    "msToAccuracyReset": 430,
-    "movementInaccuracy": 0.35
+    "msToAccuracyReset": 550,
+    "movementInaccuracy": 0.5
   },
   "reloads": {
     "magFed": true,
@@ -30,19 +27,20 @@
     "reloadMagTimer": 30,
     "additionalReloadEmptyMagTimer": 15,
     "openBolt": false,
-    "maxAdditionalAmmoPerOC": [
-      3,
-      5,
-      10
-    ]
+    "maxAdditionalAmmoPerOC": [3, 6, 10]
   },
   "projectile": {
     "item": "tac:762x39",
     "visible": false,
-    "damage": 16,
+    "damage": 10.7,
+    "armorIgnore": 1.2,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 1.25,
     "size": 0.15,
-    "speed": 18.5,
-    "life": 20,
+    "speed": 27.5,
+    "life": 12,
+    "trailLengthMultiplier": 3.25,
     "ricochet": true
   },
   "sounds": {
@@ -51,8 +49,9 @@
     "reloadEmpty": "tac:animation.sks_tactical_reload_empty",
     "draw": "tac:animation.sks_tactical_draw",
     "inspect": "tac:animation.sks_tactical_inspect",
+    "inspectEmpty": "tac:animation.sks_tactical_inspect_empty",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.dmr_fire_s"
+    "silencedFire": "tac:item.skstti_fire_s"
   },
   "display": {
     "flash": {
@@ -69,9 +68,9 @@
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.7,
+      "fovModifier": 0.67,
       "yOffset": 8.155,
-      "zOffset": -4.75
+      "zOffset": -3.75
     },
     "attachments":
     {
@@ -79,6 +78,11 @@
         "yOffset": 7.75,
         "zOffset": 6.82,
         "scale": 1.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       },
       "pistolScope": {
         "yOffset": 7.75,

@@ -3212,7 +3212,7 @@
 			"scale": [0.55, 0.55, 0.55]
 		},
 		"firstperson_righthand": {
-			"translation": [-6, 4.75, -1.25]
+			"translation": [-6, 5, -1.25]
 		},
 		"firstperson_lefthand": {
 			"translation": [-3, 3.75, -5.25]
@@ -3236,24 +3236,18 @@
 			"name": "sten_mk_ii_oss",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"shade": false,
 			"children": [
 				{
 					"name": "TriggerGroup",
 					"origin": [8, 8, 8],
 					"color": 4,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"shade": false,
 					"children": [
 						{
 							"name": "Housing",
 							"origin": [8, 8, 8],
 							"color": 4,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [0, 1, 2, 3, 4]
 						},
@@ -3261,8 +3255,6 @@
 							"name": "Casing",
 							"origin": [-2.752, -4.69325, -1.83714],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 						},
@@ -3270,8 +3262,6 @@
 							"name": "Guard",
 							"origin": [8, 8, 8],
 							"color": 4,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [23, 24, 25, 26, 27, 28]
 						},
@@ -3279,8 +3269,6 @@
 							"name": "Trigger",
 							"origin": [8, 3.8635, 14.13352],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [29, 30, 31]
 						}
@@ -3290,16 +3278,12 @@
 					"name": "MagazineWell",
 					"origin": [8, 8, 8],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"shade": false,
 					"children": [
 						{
 							"name": "group",
 							"origin": [6.44054, 8.86916, 4.7398],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [32, 33]
 						},
@@ -3307,16 +3291,12 @@
 							"name": "Locker",
 							"origin": [6.62867, 9.54988, -0.11329],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [
 								{
 									"name": "Magazine",
 									"origin": [6.11093, 8.03098, 3.9519],
 									"color": 0,
-									"nbt": "{}",
-									"armAnimationEnabled": false,
 									"shade": false,
 									"children": [34, 35, 36, 37, 38, 39, 40, 41, 42]
 								},
@@ -3324,8 +3304,6 @@
 									"name": "Rotation",
 									"origin": [5.32962, 10.33012, -0.45687],
 									"color": 0,
-									"nbt": "{}",
-									"armAnimationEnabled": false,
 									"shade": false,
 									"children": [43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53]
 								}
@@ -3335,8 +3313,6 @@
 							"name": "Extention",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [54, 55, 56, 57, 58, 59, 60, 61, 62]
 						},
@@ -3364,16 +3340,12 @@
 					"name": "Reciver",
 					"origin": [8, 8, 8],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"shade": false,
 					"children": [
 						{
 							"name": "Casing",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [
 								81,
@@ -3404,16 +3376,12 @@
 									"name": "End",
 									"origin": [8, 8, 8],
 									"color": 0,
-									"nbt": "{}",
-									"armAnimationEnabled": false,
 									"shade": false,
 									"children": [
 										{
 											"name": "octagon",
 											"origin": [8, 8, 8],
 											"color": 0,
-											"nbt": "{}",
-											"armAnimationEnabled": false,
 											"shade": false,
 											"children": [105, 106, 107, 108, 109, 110, 111, 112]
 										},
@@ -3421,8 +3389,6 @@
 											"name": "octagon",
 											"origin": [8, 8, 8],
 											"color": 0,
-											"nbt": "{}",
-											"armAnimationEnabled": false,
 											"shade": false,
 											"children": [113, 114, 115, 116]
 										},
@@ -3430,8 +3396,6 @@
 											"name": "octagon",
 											"origin": [8, 8, 8],
 											"color": 0,
-											"nbt": "{}",
-											"armAnimationEnabled": false,
 											"shade": false,
 											"children": []
 										},
@@ -3439,8 +3403,6 @@
 											"name": "octagon",
 											"origin": [8, 8, 8],
 											"color": 0,
-											"nbt": "{}",
-											"armAnimationEnabled": false,
 											"shade": false,
 											"children": [117, 118, 119, 120, 121]
 										}
@@ -3452,16 +3414,12 @@
 							"name": "SpringCap",
 							"origin": [8, 8, 8],
 							"color": 1,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [
 								{
 									"name": "octagon",
 									"origin": [8, 8, 8],
 									"color": 1,
-									"nbt": "{}",
-									"armAnimationEnabled": false,
 									"shade": false,
 									"children": [122, 123, 124, 125]
 								},
@@ -3469,8 +3427,6 @@
 									"name": "octagon",
 									"origin": [8, 8, 8],
 									"color": 1,
-									"nbt": "{}",
-									"armAnimationEnabled": false,
 									"shade": false,
 									"children": [126, 127, 128, 129]
 								},
@@ -3478,8 +3434,6 @@
 									"name": "octagon",
 									"origin": [8, 8, 8],
 									"color": 1,
-									"nbt": "{}",
-									"armAnimationEnabled": false,
 									"shade": false,
 									"children": [130, 131, 132, 133, 134, 135, 136, 137, 138, 139]
 								}
@@ -3491,16 +3445,12 @@
 					"name": "Barrel",
 					"origin": [8, 8, 8],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"shade": false,
 					"children": [
 						{
 							"name": "Barrel",
 							"origin": [8, 8, 8],
 							"color": 3,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [140, 141, 142, 143, 144, 145, 146, 147]
 						},
@@ -3508,8 +3458,6 @@
 							"name": "Bulking",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [148, 149, 150, 151, 152, 153, 154, 155]
 						},
@@ -3517,8 +3465,6 @@
 							"name": "barrel_wrap",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [156, 157, 158, 159, 160, 161, 162, 163]
 						},
@@ -3526,8 +3472,6 @@
 							"name": "barrel_wrap",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [164, 165, 166, 167, 168, 169, 170, 171]
 						},
@@ -3535,8 +3479,6 @@
 							"name": "Screw",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [172, 173, 174, 175, 176, 177, 178]
 						},
@@ -3544,8 +3486,6 @@
 							"name": "BarrelPice",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [179, 180, 181, 182, 183, 184, 185, 186]
 						}
@@ -3555,8 +3495,6 @@
 					"name": "sight",
 					"origin": [8, 8, 8],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"shade": false,
 					"children": [
 						187,
@@ -3571,8 +3509,6 @@
 							"name": "front",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": [195, 196, 197, 198, 199, 200, 201]
 						}
 					]
@@ -3581,24 +3517,18 @@
 					"name": "front",
 					"origin": [8, 11, 2.0625],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [202, 203, 204, 205, 206, 207, 208, 209]
 				},
 				{
 					"name": "screws",
 					"origin": [8, 1.6875, 4.55955],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"shade": false,
 					"children": [
 						{
 							"name": "octagon",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [210, 211, 212, 213]
 						},
@@ -3607,8 +3537,6 @@
 							"name": "octagon",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [215]
 						}
@@ -3618,16 +3546,12 @@
 					"name": "butt",
 					"origin": [8, 8, 8],
 					"color": 6,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"shade": false,
 					"children": [
 						{
 							"name": "stock",
 							"origin": [8, 8, 15.96264],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [216, 217, 218, 219, 220, 221, 222, 223, 224]
 						}
@@ -3637,16 +3561,12 @@
 					"name": "stock2",
 					"origin": [8, 5.47138, 16.24839],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"shade": false,
 					"children": [
 						{
 							"name": "group",
 							"origin": [8, 2.62963, 27.29334],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"shade": false,
 							"children": [225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237]
 						}
@@ -3658,8 +3578,6 @@
 			"name": "wrap_stock",
 			"origin": [0, 0, 0],
 			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"children": [238, 239, 240, 241, 242, 243, 244, 245, 246, 247]
 		}
 	]

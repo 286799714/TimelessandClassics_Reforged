@@ -1,7 +1,10 @@
 package com.tac.guns.client.handler;
 
 import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.mixin.client.MinecraftStaticMixin;
+import com.tac.guns.network.message.*;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraftforge.eventbus.api.EventPriority;
 import org.lwjgl.glfw.GLFW;
 
@@ -12,10 +15,6 @@ import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
-import com.tac.guns.network.message.MessageEmptyMag;
-import com.tac.guns.network.message.MessageShoot;
-import com.tac.guns.network.message.MessageShooting;
-import com.tac.guns.network.message.MessageUpdateMoveInacc;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -107,15 +106,22 @@ public class  ShootingHandler
             return;
 
         ItemStack heldItem = player.getHeldItemMainhand();
+        IAttachment.Type type;
         if(heldItem.getItem() instanceof GunItem)
         {
             int button = event.getButton();
-            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT && AimingHandler.get().isLookingAtInteractableBlock()))
+            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
             {
                 event.setCanceled(true);
             }
             if( InputHandler.PULL_TRIGGER.down )
             {
+                if (magError(player, heldItem)) {
+                    player.sendStatusMessage(new TranslationTextComponent("info.tac.mag_error").mergeStyle(TextFormatting.UNDERLINE).mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.RED), true);
+                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+                    return;
+                }
+
                 if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0)
                 {
                     this.burstTracker = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstCount();
@@ -149,7 +155,6 @@ public class  ShootingHandler
         float shootTickGap = 60F / rpm * 20F;
         return shootTickGap;
     }
-
 
     private static float hitmarkerCooldownMultiplier()
     {
@@ -212,10 +217,7 @@ public class  ShootingHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void renderTick(TickEvent.RenderTickEvent evt)
     {
-
-
         // Upper is to handle rendering, bellow is handling animation calls and burst tracking
-
         if(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getHeldItemMainhand().getItem() instanceof GunItem)
             return;
         GunAnimationController controller = GunAnimationController.fromItem(Minecraft.getInstance().player.getHeldItemMainhand().getItem());
@@ -248,7 +250,7 @@ public class  ShootingHandler
         	shootTickGapLeft -= shootTickGapLeft > 0F ? 1F : 0F;
         	
             ItemStack heldItem = player.getHeldItemMainhand();
-            if(heldItem.getItem() instanceof GunItem && (Gun.hasAmmo(heldItem) || player.isCreative()))
+            if((heldItem.getItem() instanceof GunItem && (Gun.hasAmmo(heldItem) || player.isCreative())) && !magError(player, heldItem))
             {
                 final float dist = Math.abs( player.moveForward ) / 2.5F
                 	+ Math.abs( player.moveStrafing ) / 1.25F
@@ -265,7 +267,7 @@ public class  ShootingHandler
                 if(shooting ^ this.shooting )
                 {
                 	this.shooting = shooting;
-                	PacketHandler.getPlayChannel().sendToServer( new MessageShooting( shooting ) );
+                    PacketHandler.getPlayChannel().sendToServer( new MessageShooting( shooting ) );
                 }
             }
             else if(this.shooting)
@@ -353,6 +355,8 @@ public class  ShootingHandler
 
     public void fire(PlayerEntity player, ItemStack heldItem)
     {
+        if (magError(player, heldItem)) return;
+
         if(!(heldItem.getItem() instanceof GunItem))
             return;
 
@@ -391,5 +395,21 @@ public class  ShootingHandler
             else this.burstTracker++;
             MinecraftForge.EVENT_BUS.post(new GunFireEvent.Post(player, heldItem));
         }
+    }
+
+    private boolean magError(PlayerEntity player, ItemStack heldItem) {
+        int[] extraAmmo = ((TimelessGunItem)heldItem.getItem()).getGun().getReloads().getMaxAdditionalAmmoPerOC();
+        int magMode = GunModifierHelper.getAmmoCapacity(heldItem);
+        if(magMode < 0) {
+            if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("AmmoCount")-1 > ((TimelessGunItem)heldItem.getItem()).getGun().getReloads().getMaxAmmo()) {
+                return true;
+            }
+        }
+        else {
+            if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("AmmoCount")-1 > ((TimelessGunItem)heldItem.getItem()).getGun().getReloads().getMaxAmmo()+extraAmmo[magMode]) {
+                return true;
+            }
+        }
+        return false;
     }
 }

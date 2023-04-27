@@ -1,0 +1,14 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/uncommon"
+      },
+      "count": 48
+    }
+  ],
+  "result": {
+    "item": "tac:mp9"
+  }
+}

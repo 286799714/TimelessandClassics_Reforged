@@ -43,8 +43,6 @@ public class TacShootingEvent
         int[] gunItemFireModes = gunItem.getTag().getIntArray("supportedFireModes");
         Gun gun = ((GunItem) gunItem.getItem()).getModifiedGun(gunItem.getStack()); // Quick patch up, will create static method for handling null supported modes
 
-
-
         if(gunItem.getTag().get("CurrentFireMode") == null) // If user has not checked fire modes yet, default to first mode
         {
             if(ArrayUtils.isEmpty(gunItemFireModes) || gunItemFireModes == null)
@@ -75,8 +73,5 @@ public class TacShootingEvent
                 event.getPlayer().playSound(new SoundEvent(fireModeSound), 1.0F, 1.0F);
             }
         }
-
-
     }
-
 }

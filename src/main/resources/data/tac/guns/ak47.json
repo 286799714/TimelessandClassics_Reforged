@@ -2,11 +2,7 @@
   "general": {
     "auto": true,
     "rate": 600,
-    "rateSelector": [
-      0,
-      1,
-      2
-    ],
+    "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 3.275,
     "horizontalRecoilAngle": 2.35,
@@ -17,31 +13,32 @@
     "recoilDuration": 0.195,
     "weightKilo": 4.4,
 
-    "spread": 1.675,
-    "firstShotSpread": 0.13,
-    "hipFireInaccuracy": 6.25,
-    "projToMinAccuracy": 6,
-    "msToAccuracyReset": 130,
-    "movementInaccuracy": 0.55
+    "spread": 2.15,
+    "firstShotSpread": 0.145,
+    "hipFireInaccuracy": 5.05,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 500,
+    "movementInaccuracy": 0.75
   },
   "projectile": {
     "item": "tac:762x39",
     "visible": false,
-    "damage": 9,
-    "size": 0.2,
-    "speed": 19.5,
-    "life": 22
+    "damage": 8.25,
+    "armorIgnore": 1.0,
+    "critical": 0.05,
+    "criticalDamage": 0.75,
+    "headDamage": 1.0,
+    "size": 0.125,
+    "speed": 18.5,
+    "life": 12,
+    "trailLengthMultiplier": 2.75
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 36,
     "additionalReloadEmptyMagTimer": 20,
-    "maxAdditionalAmmoPerOC": [
-      15,
-      20,
-      45
-    ],
+    "maxAdditionalAmmoPerOC": [5, 12, 20],
     "preReloadPauseTicks": 0
   },
   "sounds": {
@@ -50,6 +47,7 @@
     "reloadEmpty": "tac:animation.ak47_reload_empty",
     "draw": "tac:animation.ak47_draw",
     "inspect": "tac:animation.ak47_inspect",
+    "inspectEmpty": "tac:animation.ak47_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.ak47_fire_s"
   },
@@ -57,7 +55,7 @@
     "flash": {
       "yOffset": 9.0,
       "zOffset": -20.75,
-      "trailAdjust": 1.315,
+      "trailAdjust": 1.325,
       "size": 0.8
     }
   },
@@ -65,13 +63,18 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 11.075,
-      "zOffset": -2.1
+      "zOffset": -0.5
     },
     "attachments": {
       "barrel": {
         "yOffset": -100829.84,
         "zOffset": -11.55,
         "scale": 1.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       },
       "stock": {
         "yOffset": 7.75,
@@ -93,4 +96,3 @@
     }
   }
 }
-

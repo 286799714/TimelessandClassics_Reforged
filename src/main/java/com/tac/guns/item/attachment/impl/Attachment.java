@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.tac.guns.util.GunModifierHelper;
 
 /**
  * The base attachment object
@@ -100,7 +101,7 @@ public abstract class Attachment
             }
             if (outputRadius > inputRadius) {
                 addPerkN(negativePerks, "perk.tac.sound_radius.negative", new TranslationTextComponent("-")
-                                .append(new TranslationTextComponent("perk.tac.sound_radiusv2",Math.round(outputRadius)).mergeStyle(TextFormatting.RED)));
+                        .append(new TranslationTextComponent("perk.tac.sound_radiusv2",Math.round(outputRadius)).mergeStyle(TextFormatting.RED)));
             } else if (outputRadius < inputRadius) {
                 addPerkP(positivePerks, "perk.tac.sound_radius.positive", new TranslationTextComponent("+")
                         .append(new TranslationTextComponent("perk.tac.sound_radiusv2",Math.round(outputRadius)).mergeStyle(TextFormatting.GREEN)));
@@ -183,9 +184,9 @@ public abstract class Attachment
                 outputHipFireSpread = modifier.modifyHipFireSpread(outputHipFireSpread);
             }
             if (outputHipFireSpread > inputHipFireSpread) {
-                addPerkN(negativePerks, "perk.tac.projectile_spread_hip.negativev2", String.valueOf(Math.round((10.0F - outputFirstSpread) * 10f)) + "%");
+                addPerkN(negativePerks, "perk.tac.projectile_spread_hip.negativev2", String.valueOf(Math.round((10.0F - outputHipFireSpread) * 10f)) + "%");
             } else if (outputHipFireSpread < inputHipFireSpread) {
-                addPerkP(positivePerks, "perk.tac.projectile_spread_hip.positivev2", String.valueOf(Math.round((10.0F - outputFirstSpread) * 10f)) + "%");
+                addPerkP(positivePerks, "perk.tac.projectile_spread_hip.positivev2", String.valueOf(Math.round((10.0F - outputHipFireSpread) * 10f)) + "%");
             }
 
             /* Test for modified projectile life */
@@ -262,14 +263,15 @@ public abstract class Attachment
         //TextFormatting format,   components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(format)));
         components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(TextFormatting.AQUA)));
     }
+
     private static void addPerkP(List<ITextComponent> components, String id, Object... params)
     {
         //TextFormatting format,   components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(format)));
-        components.add( new TranslationTextComponent(id, params).mergeStyle(TextFormatting.GREEN));
+        components.add(new TranslationTextComponent(id, params).mergeStyle(TextFormatting.GREEN));
     }
     private static void addPerkN(List<ITextComponent> components, String id, Object... params)
     {
         //TextFormatting format,   components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(format)));
-        components.add( new TranslationTextComponent(id, params).mergeStyle(TextFormatting.RED));
+        components.add(new TranslationTextComponent(id, params).mergeStyle(TextFormatting.RED));
     }
 }

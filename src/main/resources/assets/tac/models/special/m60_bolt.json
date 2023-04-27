@@ -2,8 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"5": "tac:items/m60_others",
-		"particle": "tac:items/m60_bullets"
+		"5": "tac:items/m60_others_1"
 	},
 	"elements": [
 		{
@@ -91,13 +90,20 @@
 		{
 			"name": "m60_bolt",
 			"origin": [8, 8, 8],
-			"color": 2,
+			"color": 0,
 			"children": [
 				{
-					"name": "Ejection port",
+					"name": "m60_bolt",
 					"origin": [8, 8, 8],
 					"color": 2,
-					"children": [0, 1, 2, 3]
+					"children": [
+						{
+							"name": "Ejection port",
+							"origin": [8, 8, 8],
+							"color": 2,
+							"children": [0, 1, 2, 3]
+						}
+					]
 				}
 			]
 		}

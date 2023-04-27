@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
 import java.util.Collections;
+import com.tac.guns.util.GunModifierHelper;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

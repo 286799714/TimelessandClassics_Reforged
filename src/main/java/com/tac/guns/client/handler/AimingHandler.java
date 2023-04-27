@@ -254,8 +254,8 @@ public class AimingHandler
             return false;
         }
 
-        if(!this.localTracker.isAiming() && this.isLookingAtInteractableBlock())
-            return false;
+//        if(!this.localTracker.isAiming() && this.isLookingAtInteractableBlock())
+//            return false;
 
         if(SyncedPlayerData.instance().get(mc.player, ModSyncedDataKeys.RELOADING))
             return false;
@@ -300,8 +300,8 @@ public class AimingHandler
                 BlockState state = mc.world.getBlockState(result.getPos());
                 Block block = state.getBlock();
                 // Forge should add a tag for intractable blocks so modders can know which blocks can be interacted with :)
-                /*if(block == ModBlocks.UPGRADE_BENCH.get())
-                    return false;*/
+//                if(block == ModBlocks.UPGRADE_BENCH.get())
+//                    return false;
                 return block instanceof ContainerBlock || block.hasTileEntity(state) || block == Blocks.CRAFTING_TABLE || block == ModBlocks.WORKBENCH.get() || /* ||*/ BlockTags.DOORS.contains(block) || BlockTags.TRAPDOORS.contains(block) || Tags.Blocks.CHESTS.contains(block) || Tags.Blocks.FENCE_GATES.contains(block);
             }
             // FOR TEST PURPOSES ONLY

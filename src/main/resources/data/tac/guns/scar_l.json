@@ -2,54 +2,52 @@
   "general": {
     "auto": true,
     "rate": 600,
-    "rateSelector": [
-      0,
-      1,
-      2
-    ],
+    "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 1.975,
-    "horizontalRecoilAngle": 1.55,
+    "horizontalRecoilAngle": 1.25,
     "recoilKick": 1.6,
     "recoilAdsReduction": 0.24,
     "weaponRecoilOffset": 0.755,
     "cameraRecoilModifier": 1.275,
-    "recoilDuration": 0.29,
+    "recoilDuration": 0.35,
     "weightKilo": 5.60,
 
-    "spread": 1.35,
+    "spread": 1.8,
     "firstShotSpread": 0.105,
-    "hipFireInaccuracy": 5.75,
-    "projToMinAccuracy": 3,
-    "msToAccuracyReset": 200,
+    "hipFireInaccuracy": 6.05,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 300,
     "movementInaccuracy": 0.65
   },
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 8.5,
-    "size": 0.15,
-    "speed": 30,
-    "life": 9
+    "damage": 8.15,
+    "armorIgnore": 1.0,
+    "critical": 0.05,
+    "criticalDamage": 0.75,
+    "headDamage": 1.0,
+    "size": 0.1,
+    "speed": 20.5,
+    "trailLengthMultiplier": 2.875,
+    "life": 12
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 32,
     "additionalReloadEmptyMagTimer": 13,
-    "maxAdditionalAmmoPerOC": [
-      10,
-      20,
-      30
-    ],
+    "maxAdditionalAmmoPerOC": [10, 20, 30],
     "preReloadPauseTicks": 0
   },
   "sounds": {
     "fire": "tac:item.scarl_fire",
-    "reloadNormal": "tac:animation.scar_h_norm_reload",
-    "reloadEmpty": "tac:animation.scar_l_empty_reload",
-    "draw": "tac:animation.scar_h_draw",
-    "inspect": "tac:animation.scar_h_inspect",
+    "reloadNormal": "tac:animation.scar_l_reload_norm",
+    "reloadEmpty": "tac:animation.scar_l_reload_empty",
+    "draw": "tac:animation.scar_l_draw",
+    "inspect": "tac:animation.scar_l_inspect",
+    "inspectEmpty": "tac:animation.scar_l_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.scarl_fire_s"
   },
@@ -57,8 +55,8 @@
     "flash": {
       "yOffset": 9.445,
       "zOffset": -16.77,
-      "size": 0.675,
-      "trailAdjust": 1.09
+      "size": 0.75,
+      "trailAdjust": 1.125
     },
     "hipfireScale": 2.5
   },
@@ -81,12 +79,22 @@
         "doRenderMount": true,
         "doOnSlideMovement": false
       },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
       "underBarrel": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00
       },
       "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

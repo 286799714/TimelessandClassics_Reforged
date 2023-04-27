@@ -1,51 +1,63 @@
 {
   "general": {
     "auto": true,
-    "rate": 2,
-    "rateSelector": [
-      0,
-      2
-    ],
+    "rate": 600,
+    "rateSelector": [2],
     "gripType": "tac:two_handed_m60",
-    "recoilAngle": 1.475,
-    "recoilKick": 0.85,
-    "horizontalRecoilAngle": 0.3625,
-    "recoilAdsReduction": 0.2885,
-    "cameraRecoilModifier": 0.85,
-    "weaponRecoilOffset": 0.98,
-    "recoilDuration": 0.205,
-    "alwaysSpread": true,
-    "spread": 2.5,
-    "weightKilo": 8.25
+    "recoilAngle": 1.35,
+    "recoilKick": 1.5,
+    "horizontalRecoilAngle": 1.0,
+    "recoilAdsReduction": 0.275,
+    "cameraRecoilModifier": 1.25,
+    "weaponRecoilOffset": 0.75,
+    "recoilDuration": 0.35,
+    "weightKilo": 8.25,
+
+    "spread": 0.495,
+    "firstShotSpread": 0.095,
+    "hipFireInaccuracy": 6.45,
+    "projToMinAccuracy": 17,
+    "msToAccuracyReset": 750,
+    "movementInaccuracy": 0.45
   },
   "reloads": {
     "magFed": true,
-    "maxAmmo": 200,
-    "reloadMagTimer": 110,
-    "additionalReloadEmptyMagTimer": -12,
-    "maxAdditionalAmmoPerOC": [0, 0, 0],
+    "maxAmmo": 80,
+    "reloadMagTimer": 100,
+    "additionalReloadEmptyMagTimer": 24,
+    "maxAdditionalAmmoPerOC": [40, 70, 120],
     "preReloadPauseTicks": 18,
     "openBolt": true
   },
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 6,
-    "size": 0.2,
-    "speed": 38.5,
-    "life": 6
+    "damage": 7.0,
+    "armorIgnore": 1.1,
+    "critical": 0.0,
+    "criticalDamage": 0.875,
+    "headDamage": 1.0,
+    "size": 0.075,
+    "speed": 27.5,
+    "trailLengthMultiplier": 2.25,
+    "life": 14
   },
   "sounds": {
-    "fire": "tac:item.fire_m60",
-    "reload": "tac:item.pistol.reload",
+    "fire": "tac:item.m249_fire",
+    "reloadNormal": "tac:animation.m249_reload_norm",
+    "reloadEmpty": "tac:animation.m249_reload_empty",
+    "draw": "tac:animation.m249_draw",
+    "inspect": "tac:animation.m249_inspect",
+    "inspectEmpty": "tac:animation.m249_inspect_empty",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.pistol.silenced_fire"
+    "silencedFire": "tac:item.m249_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 8.645,
       "zOffset": -23.42,
-      "size": 0.94
+      "size": 0.94,
+      "trailAdjust": 1.5
     },
     "weaponType": 1
   },
@@ -56,14 +68,19 @@
       "zOffset": -5.3
     },"attachments": {
       "scope": {
-        "yOffset": 10.115,
-        "zOffset": 6.3,
+        "yOffset": 10.125,
+        "zOffset": 6.5,
         "scale": 1.00
       },
       "underBarrel": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       }
     }
   }

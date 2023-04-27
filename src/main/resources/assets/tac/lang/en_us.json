@@ -1,5 +1,20 @@
 {
     "block.tac.workbench": "Workbench",
+    "item.tac.module_item": "Module Item",
+    "item.tac.basic_laser": "Basic Laser Device",
+    "item.tac.ir_laser": "IR Laser Device",
+    "item.tac.small_extended_mag": "Small Extended Mag",
+    "item.tac.medium_extended_mag": "§9Medium Extended Mag",
+    "item.tac.large_extended_mag": "§5Large Extended Mag",
+    "item.tac.uncommon_material": "§aUncommon Material",
+    "item.tac.rare_material": "§9Rare Material",
+    "item.tac.epic_material": "§5Epic Material",
+    "item.tac.legendary_material": "§6Legendary Material",
+    "item.tac.indigestion_tablet": "Indigestion Tablet",
+    "item.tac.legendary_certificate": "§6Legendary Certificate",
+    "item.tac.ultimate_certificate": "§cUltimate Certificate",
+    "item.tac.ultimate_material": "§cUltimate Material",
+    "item.tac.module_unit_item": "§bModule Unit",
     "item.tac.m1911": "M1911A1",
     "item.tac.m1894": "M1894",
     "item.tac.m1851": "M1851",
@@ -68,6 +83,7 @@
     "item.tac.m1_garand": "M1 Garand",
     "item.tac.sig_mcx_spear": "SIG MCX SPEAR",
     "item.tac.mp9": "B&T Mp9",
+    "item.tac.udp_9": "UDP 9",
     "item.tac.sks": "SKS",
     "item.tac.sks_tactical": "SKS Tactical",
     "item.tac.m1014": "Benelli M1014",
@@ -153,6 +169,7 @@
     "subtitle.tac.remington_700s": "Remington Action Fire Silenced",
     "subtitle.tac.m870": "M870 Fire",
     "subtitle.tac.mp9s": "Pew Pew!",
+    "subtitle.tac.udp_9_fire_s": "Pew Pew!",
     "subtitle.tac.p226s": "P226 Fire Silenced",
     "subtitle.tac.saiga": "Saiga Fire",
     "subtitle.tac.sig552": "SIG 552 Fire",
@@ -385,7 +402,6 @@
     "enchantment.tac.trigger_finger": "l_Trigger Finger",
     "enchantment.tac.lightweight": "Ergonomic",
     "enchantment.tac.collateral": "l_Collateral",
-    "enchantment.tac.over_capacity": "Extended Capacity",
     "enchantment.tac.reclaimed": "l_Reclaimed",
     "enchantment.tac.accelerator": "Over Pressured",
     "enchantment.tac.puncturing": "Tumbling",
@@ -398,7 +414,6 @@
     "enchantment.tac.trigger_finger.desc": "Increases the speed you can fire weapons",
     "enchantment.tac.lightweight.desc": "Reduces the weight of a weapon and increases ADS speed",
     "enchantment.tac.collateral.desc": "Makes fired bullets travel through multiple entities",
-    "enchantment.tac.over_capacity.desc": "Increases the ammunition count for the weapon",
     "enchantment.tac.reclaimed.desc": "Creates a chance that a bullet won't be consumed upon firing a weapon",
     "enchantment.tac.accelerator.desc": "Higher damaging projectiles, due to traveling at a higher speed",
     "enchantment.tac.puncturing.desc": "Chance that a bullet will tumble, dealing critical damage at the cost of penetration",
@@ -406,7 +421,7 @@
     "enchantment.tac.rifling.desc": "Minor Accuracy improvement per level",
     "enchantment.tac.buffered.desc": "Mild reduction to recoil",
 
-    "perk.tac.vol": "% 枪声",
+    "perk.tac.vol": "% Gun Vol",
 
     "tac.options.gui_settings": "TAC GUI",
 
@@ -430,6 +445,7 @@
 
     "info.tac.current_level": "Current level",
     "info.tac.out_of_ammo": "RELOAD!",
+    "info.tac.mag_error": "UNLOAD!",
 
     "tac.options.screenFormat": "TAC GUI SETTINGS",
 

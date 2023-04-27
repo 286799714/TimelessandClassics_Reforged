@@ -49,14 +49,14 @@ public class MiniDotSightModel implements IOverrideModel
         if(!parent.isEmpty()) {
             matrixStack.translate(0, 0, 0.0095F);
             GunItem gunItem = ((GunItem) parent.getItem());
-            if (gunItem.getGun().getModules().getAttachments().getPistolScope().getDoOnSlideMovement() && transformType.isFirstPerson()) {
+            boolean hasScope = gunItem.getGun().getModules().getAttachments().getPistolScope() != null;
+            if (hasScope && gunItem.getGun().getModules().getAttachments().getPistolScope().getDoOnSlideMovement() && transformType.isFirstPerson()) {
                 matrixStack.translate(0, 0, 0.0095F);
                 matrixStack.translate(0, 0, GunRenderingHandler.get().opticMovement * 0.525);
             }
 
-
             matrixStack.translate(0, 0.055, 0);
-            if (gunItem.getGun().getModules().getAttachments().getPistolScope().getDoRenderMount()) {
+            if (hasScope && gunItem.getGun().getModules().getAttachments().getPistolScope().getDoRenderMount()) {
                 RenderUtil.renderModel(MINI_DOT_BASE.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
             }
         }

@@ -3,24 +3,18 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
-      },
-      "count": 5
+        "tag": "forge:materials/legendary"
+      }
     },
     {
       "item": {
         "tag": "forge:gunpowder"
       },
-      "count": 10
-    },
-    {
-      "item": {
-        "tag": "forge:gems/diamond"
-      }
+      "count": 20
     }
   ],
   "result": {
     "item": "tac:50bmg",
-    "count": 5
+    "count": 24
   }
 }

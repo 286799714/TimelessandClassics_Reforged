@@ -14,15 +14,17 @@ import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class HK416A5AnimationController extends GunAnimationController{
-    public static int INDEX_BODY = 6;
-    public static int INDEX_LEFT_HAND = 0;
-    public static int INDEX_RIGHT_HAND = 2;
-    public static int INDEX_MAGAZINE = 4;
-    public static int INDEX_EXTRA_MAGAZINE = 5;
+    public static int INDEX_BODY = 7;
+    public static int INDEX_LEFT_HAND = 1;
+    public static int INDEX_RIGHT_HAND = 3;
+    public static int INDEX_MAGAZINE = 5;
+    public static int INDEX_EXTRA_MAGAZINE = 6;
+
     public static final AnimationMeta RELOAD_NORM = new AnimationMeta(new ResourceLocation("tac","animations/hk416_a5_reload_norm.gltf"));
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/hk416_a5_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/hk416_a5_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/hk416_a5_inspect.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/hk416_a5_inspect_empty.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/hk416_a5_static.gltf"));
     private static final HK416A5AnimationController instance = new HK416A5AnimationController();
 
@@ -32,6 +34,7 @@ public class HK416A5AnimationController extends GunAnimationController{
             Animations.load(RELOAD_EMPTY);
             Animations.load(DRAW);
             Animations.load(INSPECT);
+            Animations.load(INSPECT_EMPTY);
             Animations.load(STATIC);
         } catch (IOException e) {
             GunMod.LOGGER.fatal(e.getStackTrace());
@@ -51,6 +54,7 @@ public class HK416A5AnimationController extends GunAnimationController{
             case RELOAD_NORMAL: return RELOAD_NORM;
             case DRAW: return DRAW;
             case INSPECT: return INSPECT;
+            case INSPECT_EMPTY: return INSPECT_EMPTY;
             case STATIC: return STATIC;
             default: return null;
         }

@@ -27,6 +27,7 @@ import com.tac.guns.item.*;
 import com.tac.guns.item.TransitionalTypes.ITimelessAnimated;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.item.attachment.IBarrel;
 import com.tac.guns.item.attachment.impl.Barrel;
 import com.tac.guns.item.attachment.impl.Scope;
@@ -82,15 +83,15 @@ import java.util.*;
 
 public class GunRenderingHandler {
     private static GunRenderingHandler instance;
-    private final SecondOrderDynamics recoilDynamics = new SecondOrderDynamics(0.4f,0.7f, 3f, 0);
+    private final SecondOrderDynamics recoilDynamics = new SecondOrderDynamics(0.5f,0.6f, 2.65f, 0);
     private final SecondOrderDynamics swayYawDynamics = new SecondOrderDynamics(0.4f,0.5f, 3.25f, 0);
-    private final SecondOrderDynamics swayPitchDynamics = new SecondOrderDynamics(0.3f,0.4f, 3f, 0);
+    private final SecondOrderDynamics swayPitchDynamics = new SecondOrderDynamics(0.3f,0.4f, 3.5f, 0);
     private final SecondOrderDynamics aimingDynamics = new SecondOrderDynamics(0.45f,0.8f, 1.2f, 0);
     // Standard Sprint Dynamics
     private final SecondOrderDynamics sprintDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
     private final SecondOrderDynamics bobbingDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 1);
     private final SecondOrderDynamics speedUpDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
-    private final SecondOrderDynamics delaySwayDynamics = new SecondOrderDynamics(0.75f,1f, 1.4f, 0);
+    private final SecondOrderDynamics delaySwayDynamics = new SecondOrderDynamics(0.75f,0.9f, 1.4f, 0);
     private final SecondOrderDynamics sprintDynamicsZ = new SecondOrderDynamics(0.22f,0.8f, 0.5f, 0);
     private final SecondOrderDynamics jumpingDynamics =  new SecondOrderDynamics(0.28f,1f, 0.65f, 0);
     // High Speed Sprint Dynamics
@@ -654,9 +655,7 @@ public class GunRenderingHandler {
                 float f4 = MathHelper.lerp(partialTicks, player.prevRenderArmYaw, player.renderArmYaw);
                 float degree = delaySwayDynamics.update(0, (player.getYaw(partialTicks) - f4) * delayedSwayMultiplier);
                 if(Math.abs(degree) > maxRotationDegree) degree = degree / Math.abs(degree) * maxRotationDegree;
-
                 degree *= percentage;
-
                 if((Config.CLIENT.display.weaponDelayedSwayYNOptical.get() && Gun.getScope(player.getHeldItemMainhand()) != null) || YDIR.equals(Vector3f.YN)) {
                     stack.translate(this.translateX, this.translateY, this.translateZ);
                     stack.rotate(YDIR.rotationDegrees(degree));
@@ -908,8 +907,8 @@ public class GunRenderingHandler {
         //matrixStack.translate(noiseX.getValue()* (1 - AimingHandler.get().getNormalisedRepairProgress()), (noiseY.getValue() + additionNoiseY.getValue()) * (1 - AimingHandler.get().getNormalisedRepairProgress()), 0);
         if(AimingHandler.get().getNormalisedAdsProgress() == 1) {
             matrixStack.translate(aimed_noiseX.getValue() * (reverser*2), (aimed_noiseY.getValue() + additionNoiseY.getValue()) * reverser, 0);
-            matrixStack.rotate(Vector3f.YP.rotationDegrees(aimed_noiseRotationY.getValue()*reverser));
-            matrixStack.rotate(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue()*0.85*reverser)));
+            matrixStack.rotate(Vector3f.YP.rotationDegrees(aimed_noiseRotationY.getValue() * reverser));
+            matrixStack.rotate(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue() * 0.85 * reverser)));
         }
         else {
             matrixStack.translate(noiseX.getValue() * (reverser*2), (noiseY.getValue() + additionNoiseY.getValue()) * reverser, 0);

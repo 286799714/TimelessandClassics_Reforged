@@ -2,8 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [128, 128],
 	"textures": {
-		"6": "tac:items/sti2011/sti2011_new",
-		"particle": "tac:items/sti2011/9mm"
+		"6": "tac:items/sti2011/sti2011_new"
 	},
 	"elements": [
 		{
@@ -197,112 +196,31 @@
 	},
 	"groups": [
 		{
-			"name": "m+b",
-			"origin": [8, 8, 8],
+			"name": "magazine",
+			"origin": [7.25, 3.84375, 12.5],
 			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"children": [
 				{
-					"name": "magazine",
-					"origin": [7.25, 3.84375, 12.5],
+					"name": "group",
+					"origin": [7.25, 0.09375, 13.5],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": [
-						{
-							"name": "group",
-							"origin": [7.25, 0.09375, 13.5],
-							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
-							"children": []
-						},
-						0,
-						1,
-						2,
-						3,
-						4,
-						5,
-						6,
-						7,
-						8,
-						9,
-						10,
-						11,
-						12,
-						13
-					]
-				}
-			]
-		},
-		{
-			"name": "extra_extdmag",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
-			"children": [
-				{
-					"name": "magazine_extd",
-					"origin": [7.25, 3.84375, 12.5],
-					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": [
-						{
-							"name": "group",
-							"origin": [7.25, 0.09375, 13.5],
-							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
-							"children": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "slide+",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
-			"children": [
-				{
-					"name": "slide 2",
-					"origin": [0, 0, 0],
-					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": [
-						{
-							"name": "group",
-							"origin": [7.95202, 7.75264, 6.89015],
-							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
-							"children": []
-						}
-					]
-				},
-				{
-					"name": "pattern",
-					"origin": [8, 8, 8],
-					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": []
-				}
+				},
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13
 			]
-		},
-		{
-			"name": "9mm",
-			"origin": [0, 0, 0],
-			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
-			"children": []
 		}
 	]
 }

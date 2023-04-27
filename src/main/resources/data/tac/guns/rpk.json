@@ -2,7 +2,7 @@
   "general": {
     "auto": true,
     "rate": 600,
-    "rateSelector": [0,2],
+    "rateSelector": [2],
     "gripType":  "tac:two_handed_ak47",
     "recoilAngle": 3.125,
     "horizontalRecoilAngle": 1.65,
@@ -13,43 +13,49 @@
     "recoilDuration": 0.205,
     "weightKilo": 6.5,
 
-    "spread": 1.175,
-    "firstShotSpread": 0.215,
-    "hipFireInaccuracy": 4.25,
-    "projToMinAccuracy": 9,
-    "msToAccuracyReset": 280,
-    "movementInaccuracy": 0.25
+    "spread": 0.545,
+    "firstShotSpread": 0.125,
+    "hipFireInaccuracy": 6.45,
+    "projToMinAccuracy": 6,
+    "msToAccuracyReset": 720,
+    "movementInaccuracy": 0.55
   },
   "projectile": {
     "item":  "tac:762x39",
     "visible": false,
-    "damage": 10,
-    "size": 0.2,
-    "speed": 26.5,
-    "life": 12
+    "damage": 7.75,
+    "armorIgnore": 1.1,
+    "critical": 0.0,
+    "criticalDamage": 0.875,
+    "headDamage": 1.0,
+    "size": 0.1,
+    "speed": 23.5,
+    "trailLengthMultiplier": 2.75,
+    "life": 13
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 40,
     "reloadMagTimer": 48,
     "additionalReloadEmptyMagTimer": 18,
-    "maxAdditionalAmmoPerOC": [15, 25, 35],
+    "maxAdditionalAmmoPerOC": [10, 22, 35],
     "preReloadPauseTicks": 0
   },
   "sounds": {
-    "fire":  "tac:item.fire_ak47",
+    "fire":  "tac:item.rpk_fire",
     "reloadNormal": "tac:animation.rpk_reload_norm",
     "reloadEmpty": "tac:animation.rpk_reload_empty",
     "draw": "tac:animation.rpk_draw",
     "inspect": "tac:animation.rpk_inspect",
+    "inspectEmpty": "tac:animation.rpk_inspect_empty",
     "cock":  "tac:item.pistol.cock",
-    "silencedFire":  "tac:item.fire_ak47s"
+    "silencedFire":  "tac:item.rpk_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 11.3,
-      "zOffset": -24.75,
-      "trailAdjust": 1.584,
+      "zOffset": -23.75,
+      "trailAdjust": 1.65,
       "size": 0.8
     },
     "hipfireScale": 0.775,
@@ -70,6 +76,11 @@
         "zOffset": -22.05,
         "scale": 0.00
       },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
       "scope": {
         "yOffset": 13.57,
         "zOffset": 7.9,
@@ -85,4 +96,3 @@
     }
   }
 }
-

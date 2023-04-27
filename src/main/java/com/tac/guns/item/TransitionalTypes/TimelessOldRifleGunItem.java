@@ -24,6 +24,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
+import com.tac.guns.util.GunModifierHelper;
 
 
 public class TimelessOldRifleGunItem extends TimelessGunItem {

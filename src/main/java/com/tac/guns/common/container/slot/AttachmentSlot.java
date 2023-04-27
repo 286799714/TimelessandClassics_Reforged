@@ -1,12 +1,14 @@
 package com.tac.guns.common.container.slot;
 
+import com.tac.guns.client.handler.ReloadHandler;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.container.AttachmentContainer;
 import com.tac.guns.init.ModSounds;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.ScopeItem;
+import com.tac.guns.item.SideRailItem;
+import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
@@ -46,11 +48,14 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean isEnabled()
     {
-        if(!(this.weapon.getItem() instanceof GunItem) && !(this.weapon.getItem() instanceof ScopeItem))
+        /*if(!(this.weapon.getItem() instanceof GunItem) || !(this.weapon.getItem() instanceof ScopeItem) && !(this.weapon.getItem() instanceof SideRailItem))
         {
             return false;
+        }*/
+        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo())/* || ReloadHandler.get().isReloading()*/) {
+            return false;
         }
-        if(this.weapon.getItem() instanceof ScopeItem)
+        if(this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem)
         {
             return true;
         }
@@ -69,22 +74,17 @@ public class AttachmentSlot extends Slot
             }
             return false;
         }
-        /*GunItem item = (GunItem) this.weapon.getItem();
-        Gun modifiedGun = item.getModifiedGun(this.weapon);
-        return modifiedGun.canAttachType(this.type);*/
     }
 
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-        if(!(this.weapon.getItem() instanceof GunItem) && !(this.weapon.getItem() instanceof ScopeItem) || stack.getItem() instanceof GunItem)
-        {
+        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo())/* || ReloadHandler.get().isReloading()*/) {
             return false;
         }
-        if(this.weapon.getItem() instanceof ScopeItem)
-        {
+        if((this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && stack.getItem() instanceof DyeItem /*instanceof DyeItem && !(this.weapon.getItem() instanceof
+        GunItem)*/)
             return true;
-        }
         else
         {
             GunItem item = (GunItem) this.weapon.getItem();

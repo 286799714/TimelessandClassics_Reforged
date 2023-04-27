@@ -36,12 +36,12 @@ public class RigEnchantmentHelper
     public static int getRate(ItemStack weapon, Gun modifiedGun)
     {
         int rate = modifiedGun.getGeneral().getRate();
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
-        if(level > 0)
-        {
-            float newRate = rate * (0.25F * level);
-            rate -= MathHelper.clamp(newRate, 0, rate);
-        }
+//        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
+//        if(level > 0)
+//        {
+//            float newRate = rate * (0.25F * level);
+//            rate -= MathHelper.clamp(newRate, 0, rate);
+//        }
         return rate;
     }
 
@@ -71,21 +71,6 @@ public class RigEnchantmentHelper
             return 0.4f * level;
         }
         return 0f;
-    }
-
-    public static int getAmmoCapacity(ItemStack weapon, Gun modifiedGun)
-    {
-        int capacity = modifiedGun.getReloads().isOpenBolt() ? modifiedGun.getReloads().getMaxAmmo() : modifiedGun.getReloads().getMaxAmmo()+1;
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), weapon);
-        if(level > 0 && level < modifiedGun.getReloads().getMaxAdditionalAmmoPerOC().length+1)
-        {
-            capacity += modifiedGun.getReloads().getMaxAdditionalAmmoPerOC()[level-1];
-        }
-        else if(level > 0)
-        {
-            capacity += (capacity / 2) * level-3;
-        }
-        return capacity;
     }
 
     public static double getProjectileSpeedModifier(ItemStack weapon)

@@ -1,0 +1,20 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/rare"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "tag": "forge:materials/uncommon"
+      },
+      "count": 12
+    }
+  ],
+  "result": {
+    "item": "tac:glock_18"
+  }
+}

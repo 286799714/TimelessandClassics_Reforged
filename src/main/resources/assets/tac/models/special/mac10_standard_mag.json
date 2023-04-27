@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [128, 128],
 	"textures": {
-		"3": "tac:items/mac10/mac10_new",
-		"particle": "tac:items/mac10/9mm"
+		"3": "tac:items/mac10_new",
+		"particle": "tac:items/mac10_9mm"
 	},
 	"elements": [
 		{
@@ -164,121 +164,17 @@
 	},
 	"groups": [
 		{
-			"name": "stock",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
-			"children": [
-				{
-					"name": "stock",
-					"origin": [7.99998, 10.30714, 19.41086],
-					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": []
-				},
-				{
-					"name": "base",
-					"origin": [8.34203, 10.83556, 8.16609],
-					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": []
-				}
-			]
-		},
-		{
-			"name": "bolt",
-			"origin": [8.34203, 10.83556, 8.16609],
-			"color": 1,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
-			"children": [
-				{
-					"name": "bolt",
-					"origin": [8.41347, 9.35549, 6.48337],
-					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": []
-				},
-				{
-					"name": "pull",
-					"origin": [8, 25.08676, -2.00667],
-					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": []
-				}
-			]
-		},
-		{
-			"name": "stock_extd",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
-			"children": [
-				{
-					"name": "stock",
-					"origin": [7.99998, 10.30714, 19.41086],
-					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": []
-				},
-				{
-					"name": "base",
-					"origin": [8.34203, 10.83556, 8.16609],
-					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": []
-				}
-			]
-		},
-		{
 			"name": "m+b",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"children": [
 				{
 					"name": "magazine",
 					"origin": [8.34203, 10.83556, 2.16609],
 					"color": 6,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 				}
 			]
-		},
-		{
-			"name": "extdm+b",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
-			"children": [
-				{
-					"name": "magazine_extend",
-					"origin": [8.34203, 10.83556, 2.16609],
-					"color": 6,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
-					"children": []
-				}
-			]
-		},
-		{
-			"name": "9mm",
-			"origin": [0, 0, 0],
-			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
-			"children": []
 		}
 	]
 }
