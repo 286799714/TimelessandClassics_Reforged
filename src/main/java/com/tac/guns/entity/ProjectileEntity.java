@@ -406,18 +406,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             RayTraceResult raytraceresult = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
             BlockRayTraceResult resultB = (BlockRayTraceResult) raytraceresult;
             BlockState blockState = world.getBlockState(resultB.getPos());
-            if(blockState.getMaterial() == Material.WOOL)
+
+            Predicate<BlockState> IGNORE_BLOCK = input -> input != null && input.getBlock().equals(blockState.getBlock());
+            RayTraceResult result2 = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_BLOCK);
+            if(result2.getType() != RayTraceResult.Type.MISS)
             {
-                Predicate<BlockState> IGNORE_BLOCK = input -> input != null && input.getBlock().equals(blockState.getBlock());
-                RayTraceResult result2 = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_BLOCK);
-                if(result2.getType() != RayTraceResult.Type.MISS)
-                {
-                    endVec = result2.getHitVec();
-                }
-                if(raytraceresult.getType() == RayTraceResult.Type.BLOCK)
-                {
-                    return null;
-                }
+                endVec = result2.getHitVec();
+            }
+            if(raytraceresult.getType() == RayTraceResult.Type.BLOCK)
+            {
+                return null;
             }
             else if(raytraceresult.getType() == RayTraceResult.Type.BLOCK)
             {
@@ -480,6 +478,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             BlockState state = this.world.getBlockState(pos);
             Block block = state.getBlock();
 
+
+
             if(block.getRegistryName().getPath().contains("_button"))
                 return;
 
@@ -509,12 +509,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     this.world.setBlockState(offsetPos, fireState, 11);
                 }
             }
-            // Build pen checks and results per passing through materials
-            if(state.getMaterial() == Material.WOOL || state.getMaterial() == Material.WOOD)
             {
-                return;
-            }
-            else {
                 this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
 
                 //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
