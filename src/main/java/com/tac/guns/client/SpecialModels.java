@@ -676,7 +676,7 @@ public enum SpecialModels
     //Everything from this point on is all LOD renders
 
     M1911_LOD("lods/m1911_lod"),
-    //TODO: Answer this || Tests to create new auto registry per gunAnimationFile, registries per file still need to be here anyway? f me
+    // Tests to create new auto registry per gunAnimationFile, registries per file still need to be here anyway? f me
     MK14_BODY1 ("mk14"),
     BOLT1("mk14_bolt"),
     STANDARD_MAG1 ("mk14_standard_mag"),
