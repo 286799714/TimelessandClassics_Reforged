@@ -72,7 +72,7 @@ public class fn_fal_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.FN_FAL_MOUNT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 
-            if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY)
+            if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY || Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY)
             {
                 RenderUtil.renderModel(SpecialModels.FN_FAL_STANDARD_HANDGUARD.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
