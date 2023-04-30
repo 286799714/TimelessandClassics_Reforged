@@ -24,7 +24,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 version = "0.3.6-1.16.5"
 group = "com.tac"
-archivesBaseName = "tac-r"
+archivesBaseName = "tac-pra"
 
 
 //name = "tac-a-0.3.0.44-1.16.5"
