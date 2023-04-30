@@ -11,7 +11,7 @@
     "weaponRecoilOffset": 0.805,
     "cameraRecoilModifier": 1.25,
     "recoilDuration": 0.35,
-    "weightKilo": 3.6,
+    "weightKilo": 4.4,
 
     "spread": 1.575,
     "firstShotSpread": 0.115,
@@ -26,7 +26,7 @@
     "reloadMagTimer": 35,
     "additionalReloadEmptyMagTimer": 7,
     "maxAdditionalAmmoPerOC": [10, 20, 30],
-    "preReloadPauseTicks": 8
+    "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:58x42",
