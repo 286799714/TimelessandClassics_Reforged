@@ -3,7 +3,7 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/rare_material"
+        "tag": "forge:materials/rare"
       },
       "count": 12
     },
