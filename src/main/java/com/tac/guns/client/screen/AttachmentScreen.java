@@ -34,8 +34,10 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
 {
     private static final ResourceLocation GUN_GUI_TEXTURES = new ResourceLocation("tac:textures/gui/attachments.png");
     private static final ResourceLocation SCOPE_GUI_TEXTURES = new ResourceLocation("tac:textures/gui/scope_attachments.png");
+
     private final PlayerInventory playerInventory;
     private final IInventory weaponInventory;
+
     private boolean showHelp = true;
     private int windowZoom = 14;
     private int windowX, windowY;
@@ -91,17 +93,17 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
             RenderUtil.scissor(left + 26, top + 17, 123, 70);
         RenderSystem.pushMatrix();
         {
-            RenderSystem.translatef(96.0F, 50.0F, 100.0F);
-            RenderSystem.translated((double)(this.windowX + (this.mouseGrabbed && this.mouseGrabbedButton == 0 ? mouseX - this.mouseClickedX : 0)), 0, 0);
-            RenderSystem.translated(0, (double)(this.windowY + (this.mouseGrabbed && this.mouseGrabbedButton == 0 ? mouseY - this.mouseClickedY : 0)), 0);
-            RenderSystem.rotatef(-30.0F, 1.0F, 0.0F, 0.0F);
-            RenderSystem.rotatef(this.windowRotationY - (float)(this.mouseGrabbed && this.mouseGrabbedButton == 1 ? mouseY - this.mouseClickedY : 0), 1, 0, 0);
-            RenderSystem.rotatef(this.windowRotationX + (float)(this.mouseGrabbed && this.mouseGrabbedButton == 1 ? mouseX - this.mouseClickedX : 0), 0, 1, 0);
-            RenderSystem.rotatef(150.0F, 0.0F, 1.0F, 0.0F);
-            RenderSystem.scalef((float)this.windowZoom / 10.0F, (float)this.windowZoom / 10.0F, (float)this.windowZoom / 10.0F);
-            RenderSystem.scalef(90.0F, -90.0F, 90.0F);
-            RenderSystem.rotatef(5.0F, 1.0F, 0.0F, 0.0F);
-            RenderSystem.rotatef(90.0F, 0.0F, 1.0F, 0.0F);
+            RenderSystem.translatef(96, 50, 100);
+            RenderSystem.translated(this.windowX + (this.mouseGrabbed && this.mouseGrabbedButton == 0 ? mouseX - this.mouseClickedX : 0), 0, 0);
+            RenderSystem.translated(0, this.windowY + (this.mouseGrabbed && this.mouseGrabbedButton == 0 ? mouseY - this.mouseClickedY : 0), 0);
+            RenderSystem.rotatef(-30F, 1, 0, 0);
+            RenderSystem.rotatef(this.windowRotationY - (this.mouseGrabbed && this.mouseGrabbedButton == 1 ? mouseY - this.mouseClickedY : 0), 1, 0, 0);
+            RenderSystem.rotatef(this.windowRotationX + (this.mouseGrabbed && this.mouseGrabbedButton == 1 ? mouseX - this.mouseClickedX : 0), 0, 1, 0);
+            RenderSystem.rotatef(150F, 0, 1, 0);
+            RenderSystem.scalef(this.windowZoom / 10F, this.windowZoom / 10F, this.windowZoom / 10F);
+            RenderSystem.scalef(90F, -90F, 90F);
+            RenderSystem.rotatef(5F, 1, 0, 0);
+            RenderSystem.rotatef(90F, 0, 1, 0);
 
             RenderSystem.enableRescaleNormal();
             RenderSystem.enableAlphaTest();
