@@ -112,6 +112,8 @@ public class TimelessGunItem extends GunItem {
         tooltip.add((new TranslationTextComponent("info.tac.attachment_help", (new KeybindTextComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH))).mergeStyle(TextFormatting.YELLOW));
         if(gun.getGun().canAttachType(IAttachment.Type.PISTOL_SCOPE))
             tooltip.add((new TranslationTextComponent("info.tac.pistolScope", new TranslationTextComponent("MiniScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
+        if(gun.getGun().canAttachType(IAttachment.Type.IR_DEVICE))
+            tooltip.add((new TranslationTextComponent("info.tac.irLaserEquip", new TranslationTextComponent("IrLaser").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.AQUA)));
     }
 
     public IGunModifier[] getModifiers() {
