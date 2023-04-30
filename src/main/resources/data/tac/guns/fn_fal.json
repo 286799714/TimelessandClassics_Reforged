@@ -58,7 +58,7 @@
       "size": 0.8,
       "trailAdjust": 1.25
     },
-    "hipfireScale": 3.05,
+    "hipfireScale": 1.05,
     "hipfireMoveScale": 1.0,
     "hipfireRecoilScale": 0.95,
     "showDynamicHipfire": true,
