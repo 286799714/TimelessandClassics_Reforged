@@ -37,6 +37,8 @@ public class sti2011_animation implements IOverrideModel {
     //The render method, similar to what is in DartEntity. We can render the item
     @Override
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
+
+
         STI2011AnimationController controller = STI2011AnimationController.getInstance();
         matrices.push();
         {
@@ -51,13 +53,9 @@ public class sti2011_animation implements IOverrideModel {
                 matrices.pop();
             }
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
-
-                matrices.push();
-                {
-                    matrices.translate(0, 0, -0.225+0.125);
-                    RenderUtil.renderModel(SpecialModels.STI2011_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-                }
-                matrices.pop();
+                matrices.translate(0, 0, -0.1825);
+                RenderUtil.renderModel(SpecialModels.STI2011_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
+                matrices.translate(0, 0, 0.1825);
             }
 
             RenderUtil.renderModel(SpecialModels.STI2011_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
