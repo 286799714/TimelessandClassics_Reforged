@@ -808,6 +808,12 @@
          { "name": "tac:item/cock" }
       ]
    },
+   "item.noammo": {
+      "subtitle": "subtitle.tac.noammo",
+      "sounds": [
+         { "name": "tac:item/noammo" }
+      ]
+   },
 
 
 

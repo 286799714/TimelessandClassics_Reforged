@@ -477,7 +477,7 @@ public class ServerPlayHandler
         {
             GunItem gunItem = (GunItem) heldItem.getItem();
             Gun gun = gunItem.getModifiedGun(heldItem.getStack());
-            ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
+            ResourceLocation fireModeSound = gun.getSounds().getNoammo();
             if(fireModeSound != null && player.isAlive())
             {
                 MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1.2F, 0.75F, player.getEntityId(), false, false);

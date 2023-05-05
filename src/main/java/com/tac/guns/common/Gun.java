@@ -3,6 +3,7 @@ package com.tac.guns.common;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.tac.guns.Config;
+import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Ignored;
 import com.tac.guns.annotation.Optional;
@@ -1008,6 +1009,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Optional
         @Nullable
         @TGExclude
+        private ResourceLocation noammo;
+        @Optional
+        @Nullable
+        @TGExclude
         private ResourceLocation silencedFire;
 
         @Override
@@ -1074,6 +1079,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 tag.putString("ReloadEndEmpty", this.reloadEndEmpty.toString());
             }
+            tag.putString("Noammo", "tac:item.noammo");
             return tag;
         }
 
@@ -1091,6 +1097,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             if(tag.contains("Cock", Constants.NBT.TAG_STRING))
             {
                 this.cock = this.createSound(tag, "Cock");
+            }
+            if(tag.contains("Noammo", Constants.NBT.TAG_STRING))
+            {
+                this.noammo = this.createSound(tag, "Noammo");
             }
             if(tag.contains("SilencedFire", Constants.NBT.TAG_STRING))
             {
@@ -1138,6 +1148,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             sounds.fire = this.fire;
             sounds.reload = this.reload;
             sounds.cock = this.cock;
+            sounds.noammo = this.noammo;
             sounds.silencedFire = this.silencedFire;
             sounds.reloadEmpty = this.reloadEmpty;
             sounds.draw = this.draw;
@@ -1157,6 +1168,12 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         private ResourceLocation createSound(CompoundNBT tag, String key)
         {
             String sound = tag.getString(key);
+            return sound.isEmpty() ? null : new ResourceLocation(sound);
+        }
+
+        @Nullable
+        private ResourceLocation createSound(String sound)
+        {
             return sound.isEmpty() ? null : new ResourceLocation(sound);
         }
 
@@ -1185,6 +1202,15 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         public ResourceLocation getCock()
         {
             return this.cock;
+        }
+
+        /**
+         * @return The registry id of the sound event when no ammo
+         */
+        @Nullable
+        public ResourceLocation getNoammo()
+        {
+            return this.noammo;
         }
 
         /**
