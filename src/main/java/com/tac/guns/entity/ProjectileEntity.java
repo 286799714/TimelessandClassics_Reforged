@@ -95,7 +95,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.general = modifiedGun.getGeneral();
         this.projectile = modifiedGun.getProjectile();
         this.entitySize = new EntitySize(this.projectile.getSize(), this.projectile.getSize(), false);
-        this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.0285) : 0.0; // -0.0285 Default upcoming new -0.0125
+        this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.0225) : 0.0; // -0.0285 Default upcoming new -0.0125
         this.life = GunModifierHelper.getModifiedProjectileLife(weapon, this.projectile.getLife());
         this.randomRecoilP = randP;
         this.randomRecoilY = randY;
@@ -232,16 +232,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             //TODO: Make RayTraceBlocks return the meta class, use end vec as a new start vec if a tracked block was the hit vec, pretty much re-running the raytrace
 
             RayTraceResult result = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
-            if(result.getType() == RayTraceResult.Type.BLOCK)
-            {
-                BlockRayTraceResult hit = (BlockRayTraceResult)result;
-                BlockState state = this.world.getBlockState(hit.getPos());
-                Vector3d hitVec = result.getHitVec();
-                this.onHitBlock(state, hit.getPos(), hit.getFace(),hitVec.getX(),hitVec.getY(), hitVec.getZ());
-                this.onExpired();
-                this.remove();
-                return;
-            }
             List<EntityResult> hitEntities = null;
             int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.COLLATERAL.get(), this.weapon);
             if(level == 0)
@@ -256,8 +246,17 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             {
                 hitEntities = this.findEntitiesOnPath(startVec, endVec);
             }
-
-            if(hitEntities != null && hitEntities.size() > 0)
+/*if(result.getType() == RayTraceResult.Type.BLOCK)
+                {
+                    BlockRayTraceResult hit = (BlockRayTraceResult)result;
+                    BlockState state = this.world.getBlockState(hit.getPos());
+                    Vector3d hitVec = result.getHitVec();
+                    this.onHitBlock(state, hit.getPos(), hit.getFace(),hitVec.getX(),hitVec.getY(), hitVec.getZ());
+                    this.onExpired();
+                    this.remove();
+                    return;
+                }*/
+            if(hitEntities != null && hitEntities.size() > 0 && result.getType() != RayTraceResult.Type.BLOCK)
             {
                 for(EntityResult entityResult : hitEntities)
                 {
@@ -293,7 +292,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             this.setMotion(this.getMotion().add(0, this.modifiedGravity, 0));
         }
 
-        if(this.ticksExisted >= this.life)
+        if(this.ticksExisted > this.life)
         {
             if(this.isAlive())
             {
@@ -388,10 +387,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             {
                 return null;
             }
-            else if(raytraceresult.getType() == RayTraceResult.Type.BLOCK)
-            {
-                return null;
-            }
             hitPos = grownHitPos;
         }
 
@@ -436,14 +431,13 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         //MinecraftForge.EVENT_BUS.post(new GunProjectileHitEvent(result, this));
 
-        if(result instanceof BlockRayTraceResult)
+        if(result.getType() == RayTraceResult.Type.BLOCK || result instanceof BlockRayTraceResult)
         {
             BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) result;
-            if(blockRayTraceResult.getType() == RayTraceResult.Type.MISS)
+            if(result.getType() == RayTraceResult.Type.MISS)
             {
                 return;
             }
-
             Vector3d hitVec = result.getHitVec();
             BlockPos pos = blockRayTraceResult.getPos();
             BlockState state = this.world.getBlockState(pos);
@@ -473,10 +467,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
             this.onExpired();
             this.remove();
+            this.life=0;
             return;
 
         }
-
         if(result instanceof ExtendedEntityRayTraceResult)
         {
             ExtendedEntityRayTraceResult entityRayTraceResult = (ExtendedEntityRayTraceResult) result;
