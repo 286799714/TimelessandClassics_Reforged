@@ -53,9 +53,9 @@ public class sti2011_animation implements IOverrideModel {
                 matrices.pop();
             }
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
-                matrices.translate(0, 0, -0.1825);
+                matrices.translate(0, 0, -0.105);
                 RenderUtil.renderModel(SpecialModels.STI2011_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-                matrices.translate(0, 0, 0.1825);
+                matrices.translate(0, 0, 0.105);
             }
 
             RenderUtil.renderModel(SpecialModels.STI2011_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
