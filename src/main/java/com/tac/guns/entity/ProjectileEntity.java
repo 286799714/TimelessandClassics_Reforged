@@ -60,7 +60,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 
-// Extended Entity at first, now ProjectileItemEntity
+//TODO: Blast this whole damned file and redo.
 public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnData
 {
     private static final Predicate<Entity> PROJECTILE_TARGETS = input -> input != null && input.canBeCollidedWith() && !input.isSpectator();
@@ -202,13 +202,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.item = item;
     }
 
-/*
-    @Override
-    protected Item getDefaultItem() {
-        return null;
-    }
-*/
-
     public ItemStack getItem()
     {
         return this.item;
@@ -239,29 +232,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             //TODO: Make RayTraceBlocks return the meta class, use end vec as a new start vec if a tracked block was the hit vec, pretty much re-running the raytrace
 
             RayTraceResult result = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
-            BlockRayTraceResult resultB = (BlockRayTraceResult) result;
-            BlockState blockState = world.getBlockState(resultB.getPos());
-            if(blockState.getMaterial() == Material.WOOL)
+            if(result.getType() == RayTraceResult.Type.BLOCK)
             {
-                Predicate<BlockState> IGNORE_BLOCK = input -> input != null && input.getBlock().equals(blockState.getBlock());
-                RayTraceResult result2 = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_BLOCK);
-                if(result2.getType() != RayTraceResult.Type.MISS)
-                {
-                    endVec = result2.getHitVec();
-                }
+                BlockRayTraceResult hit = (BlockRayTraceResult)result;
+                BlockState state = this.world.getBlockState(hit.getPos());
+                Vector3d hitVec = result.getHitVec();
+                this.onHitBlock(state, hit.getPos(), hit.getFace(),hitVec.getX(),hitVec.getY(), hitVec.getZ());
+                this.onExpired();
+                this.remove();
+                return;
             }
-
-            /*RayTraceResult result = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
-
-            BlockRayTraceResult resultB = (BlockRayTraceResult) result;
-            if(result.getType() != RayTraceResult.Type.MISS)
-            {
-                endVec = result.getHitVec();
-            }
-            BlockState blockState = world.getBlockState(resultB.getPos());*/
-            // if(ignorePredicate.test(blockState)) return null;
-
-
             List<EntityResult> hitEntities = null;
             int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.COLLATERAL.get(), this.weapon);
             if(level == 0)
@@ -404,15 +384,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if(hitPos == null && grownHitPos != null)
         {
             RayTraceResult raytraceresult = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
-            BlockRayTraceResult resultB = (BlockRayTraceResult) raytraceresult;
-            BlockState blockState = world.getBlockState(resultB.getPos());
-
-            Predicate<BlockState> IGNORE_BLOCK = input -> input != null && input.getBlock().equals(blockState.getBlock());
-            RayTraceResult result2 = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_BLOCK);
-            if(result2.getType() != RayTraceResult.Type.MISS)
-            {
-                endVec = result2.getHitVec();
-            }
             if(raytraceresult.getType() == RayTraceResult.Type.BLOCK)
             {
                 return null;
@@ -478,8 +449,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             BlockState state = this.world.getBlockState(pos);
             Block block = state.getBlock();
 
-
-
             if(block.getRegistryName().getPath().contains("_button"))
                 return;
 
@@ -487,17 +456,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             {
                 this.world.destroyBlock(blockRayTraceResult.getPos(), false);
             }
-
-            /*if(modifiedGun.getProjectile().isRicochet() &&
-            ((
-                            state.getMaterial() == Material.ROCK ||
-                            state.getMaterial() == Material.PACKED_ICE ||
-                            state.getMaterial() == Material.IRON ||
-                            state.getMaterial() == Material.ANVIL
-            )))
-            {
-                this.onHitBlock(blockRayTraceResult);
-            }*/
 
             int fireStarterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
             if(fireStarterLevel > 0 && Config.COMMON.gameplay.enableGunGriefing.get())
@@ -509,13 +467,14 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     this.world.setBlockState(offsetPos, fireState, 11);
                 }
             }
-            {
-                this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
 
-                //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
-                this.remove();
-                return;
-            }
+            this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
+
+            //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
+            this.onExpired();
+            this.remove();
+            return;
+
         }
 
         if(result instanceof ExtendedEntityRayTraceResult)
@@ -682,12 +641,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.world.getChunkAt(pos)), new MessageProjectileHitBlock(x, y, z, pos, face));
     }
 
-    protected void teleportToHitPoint(RayTraceResult rayTraceResult)
-    {
-        Vector3d hitResult = rayTraceResult.getHitVec();
-        this.setPosition(hitResult.x, hitResult.y, hitResult.z);
-    }
-
     @Override
     public void readAdditional(CompoundNBT compound)
     {
@@ -822,23 +775,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-
-    private static class BlockRayTraceMeta
-    {
-        public BlockRayTraceResult blockRayTraceResult;
-        public int wallBangCount = 0;
-        // Wallbang block hit, update count
-        public BlockRayTraceMeta(BlockRayTraceResult blockRayTraceResult, int wallBangCount)
-        {
-            this.wallBangCount = wallBangCount;
-            this.blockRayTraceResult = blockRayTraceResult;
-        }
-        // No wallbang blocks met
-        public BlockRayTraceMeta(BlockRayTraceResult blockRayTraceResult)
-        {
-            this.blockRayTraceResult = blockRayTraceResult;
-        }
-    }
 
     /**
      * A custom implementation of

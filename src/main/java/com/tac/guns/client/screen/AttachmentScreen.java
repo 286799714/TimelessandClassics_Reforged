@@ -193,47 +193,6 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
                     //this.blit(matrixStack, left + 10, top + 32 + i * 18, 176, 16 + i * 16, 16, 16);
                 }*/
             }
-        /*else if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof TimelessOldRifleGunItem))
-        {
-            int iSkipper = 0;
-            for(int i = 1; i < IAttachment.Type.values().length-6; i++)
-            {
-                if(!this.container.getSlot(iSkipper).isEnabled())
-                {
-                    this.blit(matrixStack, left + 5, top + 17 + iSkipper * 18, 176, 0, 16, 16);
-                }
-                else if (i > 3)
-                {
-                    this.blit(matrixStack, left + 155, top + 17 + (i-4) * 18, 176, 16 + i * 16, 16, 16);
-                }
-                else if(this.weaponInventory.getStackInSlot(iSkipper).isEmpty())
-                {
-                    this.blit(matrixStack, left + 5, top + 17 + iSkipper * 18, 176, 16 + iSkipper * 16, 16, 16);
-                }
-                iSkipper++;
-            }
-        }
-        else if((this.minecraft.player.getHeldItemMainhand().getItem() instanceof TimelessPistolGunItem))
-        {
-            int iSkipper = 0;
-            for(int i = 1; i < IAttachment.Type.values().length-6; i++)
-            {
-                if(!this.container.getSlot(iSkipper).isEnabled())
-                {
-                    this.blit(matrixStack, left + 5, top + 17 + iSkipper * 18, 176, 0, 16, 16);
-                }
-                else if (i > 3)
-                {
-                    this.blit(matrixStack, left + 155, top + 17 + i * 18, 176, 16 + (i-4) * 16, 16, 16);
-                }
-                else if(this.weaponInventory.getStackInSlot(iSkipper).isEmpty())
-                {
-                    this.blit(matrixStack, left + 5, top + 17 + iSkipper * 18, 176, 16 + iSkipper * 16, 16, 16);
-                }
-                iSkipper++;
-                // Redo to display new pistolScope & pistolBarrel icons
-            }
-        }*/
         else
             for(int i = 0; i < IAttachment.Type.values().length-7; i++)
             {
@@ -253,23 +212,6 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
                     this.blit(matrixStack, left + 5, top + 17 + i * 18, 176, 16 + i * 16, 16, 16);
                 }
             }
-
-
-
-
-        /* Draws the icons for each attachment slot. If not applicable
-         * for the weapon, it will draw a cross instead. */
-        /*for(int i = 0; i < IAttachment.Type.values().length-1; i++)
-        {
-            if(!this.container.getSlot(i).isEnabled())
-            {
-                this.blit(matrixStack, left + 11, top + 17 + i * 18, 176, 0, 16, 16);
-            }
-            else if(this.weaponInventory.getStackInSlot(i).isEmpty())
-            {
-                this.blit(matrixStack, left + 11, top + 17 + i * 18, 176, 16 + i * 16, 16, 16);
-            }
-        }*/
     }
 
     @Override
