@@ -221,7 +221,7 @@ public class ServerPlayHandler
                         if(!tag.getBoolean("IgnoreAmmo"))
                         {
                             int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RECLAIMED.get(), heldItem);
-                            if(level == 0 || player.world.rand.nextInt(4 - MathHelper.clamp(level, 1, 2)) != 0)
+                            if(level == 0 || player.world.rand.nextInt(9 - MathHelper.clamp(level * 3, 3, 6)) != 0)
                             {
                                 tag.putInt("AmmoCount", Math.max(0, tag.getInt("AmmoCount") - 1));
                             }
@@ -458,7 +458,6 @@ public class ServerPlayHandler
                     MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
                     PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), messageSound);
                 }
-
             }
         }
         catch (Exception e)
