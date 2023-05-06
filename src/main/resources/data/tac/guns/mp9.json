@@ -26,7 +26,7 @@
     "reloadMagTimer": 32,
     "additionalReloadEmptyMagTimer": 10,
     "maxAdditionalAmmoPerOC": [5, 10, 20],
-    "preReloadPauseTicks": 8
+    "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:9mm_round",
@@ -82,6 +82,11 @@
         "scale": 1.0,
         "doRenderMount": true,
         "doOnSlideMovement": false
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       },
       "extendedMag": {
         "yOffset": 1000.89,

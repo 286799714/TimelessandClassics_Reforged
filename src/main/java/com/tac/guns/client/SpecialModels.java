@@ -438,6 +438,8 @@ public enum SpecialModels
 
     MP9_STANDARD_MAG("mp9_standard_mag"),
     MP9_EXTENDED_MAG("mp9_extended_mag"),
+    MP9_B_LASER("mp9_b_laser"),
+    MP9_B_LASER_DEVICE("mp9_b_laser_device"),
     SKS("sks"),
     SKS_BOLT("sks_bolt"),
     SKS_STANDARD_MAG("sks_standard_mag"),
