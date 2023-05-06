@@ -74,7 +74,7 @@ public class AttachmentContainer extends Container
         }
         else if (stack.getItem() instanceof TimelessGunItem)
         {
-            for (int i = 0; i < IAttachment.Type.values().length-6; i++)
+            for (int i = 0; i < IAttachment.Type.values().length-7; i++)
             {
                 //if(i==0) {
                 if(Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack) != ItemStack.EMPTY)
@@ -137,7 +137,7 @@ public class AttachmentContainer extends Container
         }
         else if (this.weapon.getItem() instanceof TimelessGunItem)
         {
-            for (int i = 0; i < attachments.length-6; i++)
+            for (int i = 0; i < attachments.length-7; i++)
             {
                 if(Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack) != ItemStack.EMPTY && i == 0)
                     attachments[i] = Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack);
@@ -146,7 +146,7 @@ public class AttachmentContainer extends Container
                 else
                     attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
             }
-            for (int i = 0; i < attachments.length-6; i++) {
+            for (int i = 0; i < attachments.length-7; i++) {
                 this.weaponInventory.setInventorySlotContents(i, attachments[i]);
             }
         }
