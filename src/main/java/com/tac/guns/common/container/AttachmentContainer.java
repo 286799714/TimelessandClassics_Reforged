@@ -74,7 +74,7 @@ public class AttachmentContainer extends Container
         }
         else if (stack.getItem() instanceof TimelessGunItem)
         {
-            for (int i = 0; i < IAttachment.Type.values().length-7; i++)
+            for (int i = 0; i < IAttachment.Type.values().length-6; i++)
             {
                 //if(i==0) {
                 if(Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack) != ItemStack.EMPTY)
@@ -137,7 +137,7 @@ public class AttachmentContainer extends Container
         }
         else if (this.weapon.getItem() instanceof TimelessGunItem)
         {
-            for (int i = 0; i < attachments.length-7; i++)
+            for (int i = 0; i < attachments.length-6; i++)
             {
                 if(Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack) != ItemStack.EMPTY && i == 0)
                     attachments[i] = Gun.getAttachment(IAttachment.Type.PISTOL_SCOPE, stack);
@@ -146,7 +146,7 @@ public class AttachmentContainer extends Container
                 else
                     attachments[i] = Gun.getAttachment(IAttachment.Type.values()[i], stack);
             }
-            for (int i = 0; i < attachments.length-7; i++) {
+            for (int i = 0; i < attachments.length-6; i++) {
                 this.weaponInventory.setInventorySlotContents(i, attachments[i]);
             }
         }
@@ -228,7 +228,7 @@ public class AttachmentContainer extends Container
         }
         else if(this.weapon.getItem() instanceof TimelessGunItem)// && !(this.weapon.getItem() instanceof TimelessOldRifleGunItem))
         {
-            for (int i = 0; i < IAttachment.Type.values().length-7; i++)
+            for (int i = 0; i < IAttachment.Type.values().length-6; i++)
             {
                 if(i==0 && ((TimelessGunItem)this.weapon.getItem()).getGun().canAttachType(IAttachment.Type.PISTOL_SCOPE))
                     this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, new IAttachment.Type[]{IAttachment.Type.values()[i], IAttachment.Type.PISTOL_SCOPE}, playerInventory.player, 0, 5, 17 + 0 * 18));
