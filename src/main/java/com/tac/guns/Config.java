@@ -381,8 +381,7 @@ public class Config
 
                 this.bulletsIgnoreStandardArmor = builder.comment("Bullets completely ignore Minecraft armor, forcing you to use our armor system.").define("bulletsIgnoreStandardArmor", true);
                 this.percentDamageIgnoresStandardArmor =
-                        builder.comment("The percent of the damage to be applied standard, AKA Minecraft armor reduces this portion of the damage, while the rest passes through freely, only active when either armor hits 0 or no TaC armor worn at " +
-                                "all, 0 = Minecraft armor effectiveness doesn't change, 1 = Minecraft armor never effects bullet damage.").defineInRange(
+                        builder.comment("The percent of the damage ignore the armor, 0 = Minecraft armor effectiveness doesn't change, 1 = Minecraft armor never effects bullet damage.").defineInRange(
                         "percentDamageIgnoresStandardArmor", 0.5, 0.0, 1.0);
                 this.renderTaCArmor = builder.comment("Enable rendering of TaC armor on the player, useful if other armors are taking priority, doesn't fit gameplay theme, or not performant enough.").define("renderTaCArmor",
                         true);
