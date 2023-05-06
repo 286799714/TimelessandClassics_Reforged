@@ -98,6 +98,11 @@
         "zOffset": -22.05,
         "scale": 0.00
       },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
       "underBarrel": {
         "yOffset": 7.799,
         "zOffset": -2.35,

@@ -630,6 +630,9 @@ public enum SpecialModels
     UDP_9_SUPPRESSOR("udp_9_suppressor"),
     UDP_9_TACTICAL_GRIP("udp_9_tactical_grip"),
     UDP_9_TACTICAL_STOCK("udp_9_tactical_stock"),
+    UDP_9_B_LASER_DEVICE("udp_9_b_laser_device"),
+    UDP_9_RAIL_COVER("udp_9_rail_cover"),
+    UDP_9_B_LASER("udp_9_b_laser"),
 
     MK18_MOD1_BODY("mk18_mod1"),
     MK18_MOD1_BOLT("mk18_mod1_bolt"),
