@@ -689,6 +689,9 @@ public enum SpecialModels
     SCAR_MK20_IR_LASER_DEVICE("scar_mk20_ir_laser_device"),
     GLOCK_17_B_LASER_DEVICE("glock_17_b_laser_device"),
     GLOCK_17_B_LASER("glock_17_b_laser"),
+
+    M92FS_B_LASER_DEVICE("m92fs_b_laser_device"),
+    M92FS_B_LASER("m92fs_b_laser"),
     //Everything from this point on is all scope additions
 
     MINI_DOT_BASE("optics/mini_dot_base"),
