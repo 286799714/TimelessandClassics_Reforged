@@ -207,7 +207,7 @@ public class ServerPlayHandler
 
                         // PATCH NOTE: Neko required to remove the random pitch effect in sound
                         final float pitch = 0.9F + world.rand.nextFloat() * 0.125F;
-                        
+
                         double radius = GunModifierHelper.getModifiedFireSoundRadius(heldItem, Config.SERVER.gunShotMaxDistance.get());
                         boolean muzzle = modifiedGun.getDisplay().getFlash() != null;
                         MessageGunSound messageSound = new MessageGunSound(fireSound, SoundCategory.PLAYERS, (float) posX, (float) posY, (float) posZ, volume, pitch, player.getEntityId(), muzzle, false);
@@ -476,7 +476,7 @@ public class ServerPlayHandler
         {
             GunItem gunItem = (GunItem) heldItem.getItem();
             Gun gun = gunItem.getModifiedGun(heldItem.getStack());
-            ResourceLocation fireModeSound = gun.getSounds().getNoammo();
+            ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
             if(fireModeSound != null && player.isAlive())
             {
                 MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1.2F, 0.75F, player.getEntityId(), false, false);
@@ -551,9 +551,9 @@ public class ServerPlayHandler
     {
         //RayTraceResult entityPos = lookingAtEntity(player,rangeL);GunMod.LOGGER.log(Level.FATAL, entityPos.getType().toString());
         ///if(entityPos instanceof EntityRayTraceResult)
-         //   return new BlockPos(entityPos.getHitVec());
+        //   return new BlockPos(entityPos.getHitVec());
         //else
-            return ((BlockRayTraceResult)player.pick((double)rangeL, 0.0F, false)).getPos();
+        return ((BlockRayTraceResult)player.pick((double)rangeL, 0.0F, false)).getPos();
 
     }
     protected static RayTraceResult lookingAtEntity(PlayerEntity player, int rangeL)
@@ -569,11 +569,9 @@ public class ServerPlayHandler
         if(heldItem.getItem() instanceof TimelessGunItem)
         {
             Gun gun = ((TimelessGunItem) heldItem.getItem()).getModifiedGun(heldItem.getStack());
-
             if(!ArrayUtils.isEmpty(gun.getModules().getZoom()))
             {
                 int currentZoom = heldItem.getTag().getInt("currentZoom");
-
                 if(currentZoom == (gun.getModules().getZoom().length-2))
                 {
                     heldItem.getTag().remove("currentZoom");
@@ -635,10 +633,10 @@ public class ServerPlayHandler
 
         Gun gun = ((TimelessGunItem) heldItem.getItem()).getGun();
         //if(MovementAdaptationsHandler.get().previousGun == null || gun.serializeNBT().getId() == MovementAdaptationsHandler.get().previousGun)
-            if ((MovementAdaptationsHandler.get().isReadyToUpdate()) || MovementAdaptationsHandler.get().getPreviousWeight() != gun.getGeneral().getWeightKilo())
-            {
-                // TODO: Show that the speed effect is now only half
-                float speed = calceldGunWeightSpeed(gun, heldItem);
+        if ((MovementAdaptationsHandler.get().isReadyToUpdate()) || MovementAdaptationsHandler.get().getPreviousWeight() != gun.getGeneral().getWeightKilo())
+        {
+            // TODO: Show that the speed effect is now only half
+            float speed = calceldGunWeightSpeed(gun, heldItem);
 
                 /*0.1f
                         /
@@ -646,20 +644,20 @@ public class ServerPlayHandler
                         * 0.0275f))
                 ; // * 0.01225f));// //(1+GunModifierHelper.getModifierOfWeaponWeight(heldItem)) + GunModifierHelper.getAdditionalWeaponWeight(heldItem)) / 3.775F));*/
 
-                if(player.isSprinting() && speed > 0.094f )
-                    speed = Math.max(Math.min(speed, 0.12F), 0.075F);
-                else if(player.isSprinting())
-                    speed = Math.max(Math.min(speed, 0.12F), 0.075F)*0.955f;
-                else
-                    speed = Math.max(Math.min(speed, 0.1F), 0.075F);
-                changeGunSpeedMod(player, "GunSpeedMod", -((double)((0.1 - speed)*10)));//*1000
-
-                MovementAdaptationsHandler.get().setReadyToReset(true);
-                MovementAdaptationsHandler.get().setReadyToUpdate(false);
-                MovementAdaptationsHandler.get().setSpeed(speed);
-            }
+            if(player.isSprinting() && speed > 0.094f )
+                speed = Math.max(Math.min(speed, 0.12F), 0.075F);
+            else if(player.isSprinting())
+                speed = Math.max(Math.min(speed, 0.12F), 0.075F)*0.955f;
             else
-                MovementAdaptationsHandler.get().setSpeed((float)player.getAttribute(MOVEMENT_SPEED).getValue());
+                speed = Math.max(Math.min(speed, 0.1F), 0.075F);
+            changeGunSpeedMod(player, "GunSpeedMod", -((double)((0.1 - speed)*10)));//*1000
+
+            MovementAdaptationsHandler.get().setReadyToReset(true);
+            MovementAdaptationsHandler.get().setReadyToUpdate(false);
+            MovementAdaptationsHandler.get().setSpeed(speed);
+        }
+        else
+            MovementAdaptationsHandler.get().setSpeed((float)player.getAttribute(MOVEMENT_SPEED).getValue());
         player.sendPlayerAbilities();
 
         MovementAdaptationsHandler.get().setPreviousWeight(gun.getGeneral().getWeightKilo());
@@ -671,7 +669,7 @@ public class ServerPlayHandler
     public static float calceldGunWeightSpeed(Gun gun, ItemStack gunStack)
     {
         return 0.1f / (1+(((gun.getGeneral().getWeightKilo()*(1+GunModifierHelper.getModifierOfWeaponWeight(gunStack)) + GunModifierHelper.getAdditionalWeaponWeight(gunStack) - GunEnchantmentHelper.getWeightModifier(gunStack))/2)
-                        * 0.0275f));
+                * 0.0275f));
     }
 
     public static void handleGunID(ServerPlayerEntity player, boolean regenerate)
