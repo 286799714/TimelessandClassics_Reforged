@@ -74,7 +74,7 @@ public class scar_mk20_animation implements IOverrideModel {
             }
         }
         matrices.pop();
-        
+
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.SCAR_MK20_BODY.getModel(), SCAR_MK20AnimationController.INDEX_MAGAZINE, transformType, matrices);
