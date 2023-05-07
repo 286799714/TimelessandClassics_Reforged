@@ -438,6 +438,8 @@ public enum SpecialModels
 
     MP9_STANDARD_MAG("mp9_standard_mag"),
     MP9_EXTENDED_MAG("mp9_extended_mag"),
+    MP9_B_LASER("mp9_b_laser"),
+    MP9_B_LASER_DEVICE("mp9_b_laser_device"),
     SKS("sks"),
     SKS_BOLT("sks_bolt"),
     SKS_STANDARD_MAG("sks_standard_mag"),
@@ -628,6 +630,9 @@ public enum SpecialModels
     UDP_9_SUPPRESSOR("udp_9_suppressor"),
     UDP_9_TACTICAL_GRIP("udp_9_tactical_grip"),
     UDP_9_TACTICAL_STOCK("udp_9_tactical_stock"),
+    UDP_9_B_LASER_DEVICE("udp_9_b_laser_device"),
+    UDP_9_RAIL_COVER("udp_9_rail_cover"),
+    UDP_9_B_LASER("udp_9_b_laser"),
 
     MK18_MOD1_BODY("mk18_mod1"),
     MK18_MOD1_BOLT("mk18_mod1_bolt"),

@@ -36,6 +36,13 @@ public class udp_9_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.UDP_9.getModel(),UDP9AnimationController.INDEX_BODY,transformType,matrices);
+            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.UDP_9_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.UDP_9_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+            }
+            else {
+                RenderUtil.renderModel(SpecialModels.UDP_9_RAIL_COVER.getModel(), stack, matrices, renderBuffer, light, overlay);
+            }
             if (Gun.getScope(stack) != null) {
                 RenderUtil.renderModel(SpecialModels.UDP_9_SIGHT_FOLDED.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
