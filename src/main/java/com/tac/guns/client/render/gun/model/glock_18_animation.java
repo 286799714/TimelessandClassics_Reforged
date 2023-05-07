@@ -41,14 +41,14 @@ public class glock_18_animation implements IOverrideModel
     @Override
     public void render(float partialTicks, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
     {
-
-
         Glock18AnimationController controller = Glock18AnimationController.getInstance();
-        GunItem gunItem = ((GunItem) stack.getItem());
-
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.GLOCK_18.getModel(),Glock18AnimationController.INDEX_BODY,transformType,matrices);
+            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.GLOCK_17_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.GLOCK_17_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+            }
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.GLOCK_18_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
             }

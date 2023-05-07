@@ -78,6 +78,11 @@
         "doRenderMount": false,
         "doOnSlideMovement": true
       },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
       "extendedMag": {
         "yOffset": 1000.89,
         "zOffset": 5.35,
