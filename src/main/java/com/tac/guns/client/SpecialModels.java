@@ -670,6 +670,23 @@ public enum SpecialModels
     FN_FAL_BASIC_LASER("fn_fal_b_laser"),
     STI2011_BASIC_LASER_DEVICE("sti2011_b_laser_device"),
     STI2011_BASIC_LASER("sti2011_b_laser"),
+
+    SCAR_MK20_BODY("scar_mk20"),
+    SCAR_MK20_BOLT("scar_mk20_bolt"),
+    SCAR_MK20_COMPENSATOR("scar_mk20_c_muzzle"),
+    SCAR_MK20_DEFAULT_BARREL("scar_mk20_d_muzzle"),
+    SCAR_MK20_EXTENDED_MAG("scar_mk20_extended_mag"),
+    SCAR_MK20_SUPPRESSOR("scar_mk20_s_muzzle"),
+    SCAR_MK20_STANDARD_MAG("scar_mk20_standard_mag"),
+    SCAR_MK20_FS("scar_mk20_sight_folded"),
+    SCAR_MK20_FSU("scar_mk20_sight"),
+    SCAR_MK20_BRAKE("scar_mk20_b_muzzle"),
+    SCAR_MK20_TAC_GRIP("scar_mk20_t_grip"),
+    SCAR_MK20_LIGHT_GRIP("scar_mk20_l_grip"),
+    SCAR_MK20_B_LASER("scar_mk20_b_laser_device"),
+    SCAR_MK20_B_LASER_BEAM("scar_mk20_b_laser"),
+    SCAR_MK20_IR_LASER("scar_mk20_ir_laser"),
+    SCAR_MK20_IR_LASER_DEVICE("scar_mk20_ir_laser_device"),
     //Everything from this point on is all scope additions
 
     MINI_DOT_BASE("optics/mini_dot_base"),
