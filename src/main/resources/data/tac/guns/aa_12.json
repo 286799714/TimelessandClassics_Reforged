@@ -51,7 +51,6 @@
     "reloadEmpty": "tac:animation.aa12_reload_empty",
     "draw": "tac:animation.aa12_draw",
     "inspect": "tac:animation.aa12_inspect",
-    "inspectEmpty": "tac:animation.aa12_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.aa12_fire_s"
   },

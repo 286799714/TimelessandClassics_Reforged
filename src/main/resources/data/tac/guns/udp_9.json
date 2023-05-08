@@ -48,7 +48,6 @@
     "reloadEmpty": "tac:animation.udp_9_reload_empty",
     "draw": "tac:animation.udp_9_draw",
     "inspect": "tac:animation.udp_9_inspect",
-    "inspectEmpty": "tac:animation.udp_9_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.udp_9_fire_s"
   },

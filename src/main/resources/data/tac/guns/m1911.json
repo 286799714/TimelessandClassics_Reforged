@@ -46,7 +46,6 @@
     "reloadEmpty": "tac:animation.m1911_reload_empty",
     "draw": "tac:animation.m1911_draw",
     "inspect": "tac:animation.m1911_inspect",
-    "inspectEmpty": "tac:animation.m1911_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.m1911_fire_s"
   },

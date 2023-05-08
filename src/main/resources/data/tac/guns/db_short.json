@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.db_shortgun_reload_empty",
     "draw": "tac:animation.db_shortgun_draw",
     "inspect": "tac:animation.db_shortgun_inspect",
-    "inspectEmpty": "tac:animation.db_shortgun_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.fire_m16s"
   },

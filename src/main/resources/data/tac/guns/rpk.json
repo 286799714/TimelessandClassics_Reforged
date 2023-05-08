@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.rpk_reload_empty",
     "draw": "tac:animation.rpk_draw",
     "inspect": "tac:animation.rpk_inspect",
-    "inspectEmpty": "tac:animation.rpk_inspect_empty",
     "cock":  "tac:item.pistol.cock",
     "silencedFire":  "tac:item.rpk_fire_s"
   },

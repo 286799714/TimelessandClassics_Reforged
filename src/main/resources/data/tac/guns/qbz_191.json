@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.qbz_191_reload_empty",
     "draw": "tac:animation.qbz_191_draw",
     "inspect": "tac:animation.qbz_191_inspect",
-    "inspectEmpty": "tac:animation.qbz_191_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.qbz191_fire_s"
   },

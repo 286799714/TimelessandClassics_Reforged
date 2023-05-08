@@ -46,7 +46,6 @@
     "reloadEmpty": "tac:animation.m92fs_reload_empty",
     "draw": "tac:animation.m92fs_draw",
     "inspect": "tac:animation.m92fs_inspect",
-    "inspectEmpty": "tac:animation.m92fs_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.m92fs_fire_s"
   },

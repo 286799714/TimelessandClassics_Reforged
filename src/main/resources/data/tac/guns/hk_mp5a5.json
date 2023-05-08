@@ -49,7 +49,6 @@
     "reloadEmpty": "tac:animation.hk_mp5a5_reload_empty",
     "draw": "tac:animation.hk_mp5a5_draw",
     "inspect": "tac:animation.hk_mp5a5_inspect",
-    "inspectEmpty": "tac:animation.hk_mp5a5_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.mp5a5_fire_s"
   },

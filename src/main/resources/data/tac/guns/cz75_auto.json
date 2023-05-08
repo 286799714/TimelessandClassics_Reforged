@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.cz75_auto_reload_empty",
     "draw": "tac:animation.cz75_auto_draw",
     "inspect": "tac:animation.cz75_auto_inspect",
-    "inspectEmpty": "tac:animation.cz75_auto_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.cz75auto_fire_s"
   },

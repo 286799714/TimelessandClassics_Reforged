@@ -50,7 +50,6 @@
     "reloadEmpty": "tac:animation.vector45_reload_empty",
     "draw": "tac:animation.vector45_draw",
     "inspect": "tac:animation.vector45_inspect",
-    "inspectEmpty": "tac:animation.vector45_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.vector_fire_s"
   },

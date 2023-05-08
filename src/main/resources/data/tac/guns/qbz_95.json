@@ -48,7 +48,6 @@
     "reloadEmpty": "tac:animation.type_95_reload_empty",
     "draw": "tac:animation.type_95_draw",
     "inspect": "tac:animation.type_95_inspect",
-    "inspectEmpty": "tac:animation.type_95_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.qbz95_fire_s"
   },

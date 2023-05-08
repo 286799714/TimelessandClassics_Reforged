@@ -23,7 +23,7 @@ public class SIGMCXAnimationController extends GunAnimationController {
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/sig_mcx_spear_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/sig_mcx_spear_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/sig_mcx_spear_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/sig_mcx_spear_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/sig_mcx_spear_inspect.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/sig_mcx_spear_static.gltf"));
     private static final SIGMCXAnimationController instance = new SIGMCXAnimationController();
 

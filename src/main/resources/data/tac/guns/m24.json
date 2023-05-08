@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.m24_reload_empty",
     "draw": "tac:animation.m24_draw",
     "inspect": "tac:animation.m24_inspect",
-    "inspectEmpty": "tac:animation.m24_inspect_empty",
     "pullBolt": "tac:animation.m24_bolt",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.assault_rifle.silenced_fire"

@@ -49,7 +49,6 @@
     "reloadEmpty": "tac:animation.m1a1_smg_reload_empty",
     "draw": "tac:animation.m1a1_smg_draw",
     "inspect": "tac:animation.m1a1_smg_inspect",
-    "inspectEmpty": "tac:animation.m1a1_smg_inspect_empty",
     "cock": "tac:item.pistol.cock"
   },
   "display": {

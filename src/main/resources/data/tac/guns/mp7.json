@@ -48,7 +48,6 @@
     "reloadEmpty": "tac:animation.mp7_reload_empty",
     "draw": "tac:animation.mp7_draw",
     "inspect": "tac:animation.mp7_inspect",
-    "inspectEmpty": "tac:animation.mp7_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.mp7_fire_s"
   },

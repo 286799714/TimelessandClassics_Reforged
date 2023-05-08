@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.dp28_reload_empty",
     "draw": "tac:animation.dp28_draw",
     "inspect": "tac:animation.dp28_inspect",
-    "inspectEmpty": "tac:animation.dp28_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.dp28_fire_s"
   },

@@ -49,7 +49,6 @@
     "reloadEmpty": "tac:animation.sks_tactical_reload_empty",
     "draw": "tac:animation.sks_tactical_draw",
     "inspect": "tac:animation.sks_tactical_inspect",
-    "inspectEmpty": "tac:animation.sks_tactical_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.skstti_fire_s"
   },

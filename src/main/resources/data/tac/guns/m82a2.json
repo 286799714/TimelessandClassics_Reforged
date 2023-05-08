@@ -48,7 +48,6 @@
     "reloadEmpty": "tac:animation.m82a2_reload_empty",
     "draw": "tac:animation.m82a2_draw",
     "inspect": "tac:animation.m82a2_inspect",
-    "inspectEmpty": "tac:animation.m82a2_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.m82a2_fire_s"
   },

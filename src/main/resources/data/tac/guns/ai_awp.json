@@ -48,7 +48,6 @@
     "reloadEmpty": "tac:animation.awp_reload_empty",
     "draw": "tac:animation.awp_draw",
     "inspect": "tac:animation.awp_inspect",
-    "inspectEmpty": "tac:animation.awp_inspect_empty",
     "pullBolt": "tac:animation.awp_bolt",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.aiawp_fire_s"

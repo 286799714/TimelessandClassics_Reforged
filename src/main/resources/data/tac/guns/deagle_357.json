@@ -46,7 +46,6 @@
     "reloadEmpty": "tac:animation.deagle_reload_empty",
     "draw": "tac:animation.deagle_draw",
     "inspect": "tac:animation.deagle_inspect",
-    "inspectEmpty": "tac:animation.deagle_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.deagle_fire_s"
   },

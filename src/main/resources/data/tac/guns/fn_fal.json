@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.fn_fal_reload_empty",
     "draw": "tac:animation.fn_fal_draw",
     "inspect": "tac:animation.fn_fal_inspect",
-    "inspectEmpty": "tac:animation.fn_fal_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.fnfal_fire_s"
   },

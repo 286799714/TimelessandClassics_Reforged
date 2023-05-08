@@ -48,7 +48,6 @@
     "reloadEmpty": "tac:animation.mac10_reload_empty",
     "draw": "tac:animation.mac10_draw",
     "inspect": "tac:animation.mac10_inspect",
-    "inspectEmpty": "tac:animation.mac10_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.mac10_fire_s"
   },

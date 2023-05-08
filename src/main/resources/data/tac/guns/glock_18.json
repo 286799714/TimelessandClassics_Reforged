@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.glock_18_reload_empty",
     "draw": "tac:animation.glock_18_draw",
     "inspect": "tac:animation.glock_18_inspect",
-    "inspectEmpty": "tac:animation.glock_18_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.glock18_fire_s"
   },

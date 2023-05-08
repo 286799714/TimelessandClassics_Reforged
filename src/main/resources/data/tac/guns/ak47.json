@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.ak47_reload_empty",
     "draw": "tac:animation.ak47_draw",
     "inspect": "tac:animation.ak47_inspect",
-    "inspectEmpty": "tac:animation.ak47_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.ak47_fire_s"
   },

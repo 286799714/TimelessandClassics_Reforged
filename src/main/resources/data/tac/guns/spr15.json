@@ -50,7 +50,6 @@
     "reloadEmpty": "tac:animation.spr15_reload_empty",
     "draw": "tac:animation.spr15_draw",
     "inspect": "tac:animation.spr15_inspect",
-    "inspectEmpty": "tac:animation.spr15_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.spr15_fire_s"
   },

@@ -20,7 +20,7 @@ public class M24AnimationController extends BoltActionAnimationController {
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m24_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/m24_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/m24_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m24_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m24_inspect.gltf"));
     public static final AnimationMeta BOLT = new AnimationMeta(new ResourceLocation("tac","animations/m24_bolt.gltf"));
     private static final M24AnimationController instance = new M24AnimationController();
 

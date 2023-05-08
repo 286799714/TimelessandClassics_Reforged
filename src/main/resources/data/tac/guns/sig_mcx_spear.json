@@ -47,7 +47,6 @@
     "reloadEmpty": "tac:animation.sig_mcx_spear_reload_empty",
     "draw": "tac:animation.sig_mcx_spear_draw",
     "inspect": "tac:animation.sig_mcx_spear_inspect",
-    "inspectEmpty": "tac:animation.sig_mcx_spear_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.sigmcx_fire_s"
   },
