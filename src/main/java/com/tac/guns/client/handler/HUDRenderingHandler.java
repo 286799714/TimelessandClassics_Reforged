@@ -301,30 +301,8 @@ public class HUDRenderingHandler extends AbstractGui {
             stack.pop();
         }
 
-        /*if(ArmorInteractionHandler.get().isRepairing())//Replace with reload bar checker
-        {
-            // FireMode rendering
-            RenderSystem.enableAlphaTest();
-            buffer = Tessellator.getInstance().getBuffer();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            stack.push();
-            {
-                stack.translate(anchorPointX - (ReloadBarSize*4.35) / 4F, anchorPointY + 20f + (ReloadBarSize*1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
-                stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
-                // stack.translate(0, 0, );
-                stack.scale(2.1F*(1-ArmorInteractionHandler.get().getRepairProgress(event.getPartialTicks(), player)),0.25F,0); // *21F
-                Minecraft.getInstance().getTextureManager().bindTexture(RELOAD_ICONS[0]); // Future options to render bar types
-
-                Matrix4f matrix = stack.getLast().getMatrix();
-                buffer.pos(matrix, 0, ReloadBarSize, 0).tex(0, 1).color(1.0F, 0.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, ReloadBarSize, ReloadBarSize, 0).tex(1, 1).color(1.0F, 0.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, ReloadBarSize, 0, 0).tex(1, 0).color(1.0F, 0.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 0.0F, 1.0F, 0.99F).endVertex();
-            }
-            buffer.finishDrawing();
-            WorldVertexBufferUploader.draw(buffer);
-            stack.pop();
-        }*/
+        // TODO: Add armor health UI
+        // Wearable.currentDurabilityPercentage()
 
 
 
