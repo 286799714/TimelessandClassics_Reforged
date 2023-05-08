@@ -692,6 +692,13 @@ public enum SpecialModels
 
     M92FS_B_LASER_DEVICE("m92fs_b_laser_device"),
     M92FS_B_LASER("m92fs_b_laser"),
+    MK23_B_LASER_DEVICE("mk23_b_laser_device"),
+    MK23_B_LASER("mk23_b_laser"),
+
+    MK47_IR_DEVICE("mk47_ir_device"),
+    MK47_IR_LASER("mk47_ir_laser"),
+    MK47_B_LASER_DEVICE("mk47_b_laser_device"),
+    MK47_B_LASER("mk47_b_laser"),
     //Everything from this point on is all scope additions
 
     MINI_DOT_BASE("optics/mini_dot_base"),
