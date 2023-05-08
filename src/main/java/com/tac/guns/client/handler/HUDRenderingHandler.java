@@ -9,8 +9,10 @@ import com.tac.guns.common.Gun;
 import com.tac.guns.common.ReloadTracker;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageToClientRigInv;
+import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
@@ -72,6 +74,11 @@ public class HUDRenderingHandler extends AbstractGui {
                     new ResourceLocation(Reference.MOD_ID, "textures/screen_effect/noise2.png")
                     /*new ResourceLocation(Reference.MOD_ID, "textures/screen_effect/noise4.png"),
                     new ResourceLocation(Reference.MOD_ID, "textures/screen_effect/noise5.png")*/
+            };
+    private static final ResourceLocation[] ARMOR_ICONS = new ResourceLocation[]
+            {
+                    new ResourceLocation(Reference.MOD_ID, "textures/gui/armor_backdrop.png"),
+                    new ResourceLocation(Reference.MOD_ID, "textures/gui/armor_filler.png")
             };
 
     public static HUDRenderingHandler get() {
@@ -301,8 +308,32 @@ public class HUDRenderingHandler extends AbstractGui {
             stack.pop();
         }
 
+
         // TODO: Add armor health UI
         // Wearable.currentDurabilityPercentage()
+        ItemStack armorRig = WearableHelper.PlayerWornRig(player);
+        if(armorRig != null && armorRig.getItem() instanceof ArmorRigItem)
+        {
+            RenderSystem.enableAlphaTest();
+            //buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+            stack.push();
+            {
+                //stack.scale(0.1f,0.1f,0.1f);
+
+                Minecraft.getInstance().getTextureManager().bindTexture(ARMOR_ICONS[1]);
+                //RenderSystem.color3f(1.0f, 1.0f, 1.0f); // Set color here (Red in this case)
+                int cropHeight = (int) (16 * WearableHelper.currentDurabilityPercentage(armorRig));
+                blit(stack, 0, 0, 0, 0, 16, 16, 16, 16);
+
+                Minecraft.getInstance().getTextureManager().bindTexture(ARMOR_ICONS[0]);
+                blit(stack, 0, 0, 0, 0, 16, 16-cropHeight, 16, 16);
+
+                //RenderSystem.color3f(1.0f, 1.0f, 1.0f);
+            }
+            //buffer.finishDrawing();
+            //WorldVertexBufferUploader.draw(buffer);
+            stack.pop();
+        }
 
 
 
