@@ -44,7 +44,6 @@
     "reloadEmpty": "tac:animation.scar_h_reload_empty",
     "draw": "tac:animation.scar_h_draw",
     "inspect": "tac:animation.scar_h_inspect",
-    "inspectEmpty": "tac:animation.scar_h_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.scarh_fire_s"
   },
