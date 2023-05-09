@@ -290,11 +290,10 @@ public class HUDRenderingHandler extends AbstractGui {
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             stack.push();
             {
-                stack.translate(anchorPointX - (ReloadBarSize*4.35) / 4F, anchorPointY + (ReloadBarSize*1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
+                stack.translate(anchorPointX - (ReloadBarSize*4.35) / 4F, anchorPointY + (ReloadBarSize*1.625F) / 5F * 3F, 0);
                 stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
-                // stack.translate(0, 0, );
-                stack.scale(2.1F*(1-ArmorInteractionHandler.get().getRepairProgress(event.getPartialTicks(), player)),0.25F,0); // *21F
-                Minecraft.getInstance().getTextureManager().bindTexture(RELOAD_ICONS[0]); // Future options to render bar types
+                stack.scale(2.1F*(1-ArmorInteractionHandler.get().getRepairProgress(event.getPartialTicks(), player)),0.25F,0);
+                Minecraft.getInstance().getTextureManager().bindTexture(RELOAD_ICONS[0]);
 
                 Matrix4f matrix = stack.getLast().getMatrix();
                 buffer.pos(matrix, 0, ReloadBarSize, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
@@ -320,7 +319,7 @@ public class HUDRenderingHandler extends AbstractGui {
                 Minecraft.getInstance().getTextureManager().bindTexture(ARMOR_ICONS[1]);
                 float durabilityPercentage = WearableHelper.currentDurabilityPercentage(armorRig);
 
-                RenderSystem.color3f(0.0f, 1.5f*durabilityPercentage, 0.0f);
+                RenderSystem.color3f(0.0f, 1.85f*durabilityPercentage, 0.0f);
                 blit(stack, 0, 0, 0, 0, 16, 16, 16, 16);
                 int cropHeight = (int) (16 * durabilityPercentage);
 
@@ -338,11 +337,9 @@ public class HUDRenderingHandler extends AbstractGui {
             return;
         TimelessGunItem gunItem = (TimelessGunItem) heldItem.getItem();
         Gun gun = gunItem.getGun();
-
         if(!Config.CLIENT.weaponGUI.weaponGui.get()) {
             return;
         }
-
         if(Config.CLIENT.weaponGUI.weaponFireMode.showWeaponFireMode.get()) {
             // FireMode rendering
             RenderSystem.enableAlphaTest();
