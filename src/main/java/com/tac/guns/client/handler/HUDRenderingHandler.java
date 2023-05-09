@@ -320,7 +320,7 @@ public class HUDRenderingHandler extends AbstractGui {
                 Minecraft.getInstance().getTextureManager().bindTexture(ARMOR_ICONS[1]);
                 float durabilityPercentage = WearableHelper.currentDurabilityPercentage(armorRig);
 
-                RenderSystem.color3f(0.0f, 0.85f*durabilityPercentage, 0.0f);
+                RenderSystem.color3f(0.0f, 1.5f*durabilityPercentage, 0.0f);
                 blit(stack, 0, 0, 0, 0, 16, 16, 16, 16);
                 int cropHeight = (int) (16 * durabilityPercentage);
 
