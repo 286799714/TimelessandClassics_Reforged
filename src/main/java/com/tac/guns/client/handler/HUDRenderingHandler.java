@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.tac.guns.Config;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
+import com.tac.guns.client.handler.command.GuiEditor;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.ReloadTracker;
 import com.tac.guns.item.GunItem;
@@ -216,6 +217,7 @@ public class HUDRenderingHandler extends AbstractGui {
         float counterSize = 1.8F * configScaleWeaponCounter;
         float fireModeSize = 32.0F * configScaleWeaponFireMode;
         float ReloadBarSize = 32.0F * configScaleWeaponReloadBar;
+        float armorHeathSize = 16.0F;// * //configScaleWeaponFireMode;
 
         float hitMarkerSize = 128.0F;
 
@@ -232,9 +234,6 @@ public class HUDRenderingHandler extends AbstractGui {
             stack.push();
             {
                 stack.translate(width / 2F, height / 2F, 0);
-                //float size = 0.1f;
-                //stack.translate(anchorPointX - (size+data.getxMod()*10+(109.15*10)) / 4F, anchorPointY + (size*1.625F+data.getyMod()*10+(-25.1*10)) / 5F * 3F, 0);
-                //stack.scale(size,size,size);
 
                 ResourceLocation hitMarker;
                 if(AimingHandler.get().isAiming())
@@ -308,34 +307,32 @@ public class HUDRenderingHandler extends AbstractGui {
             stack.pop();
         }
 
-
-        // TODO: Add armor health UI
-        // Wearable.currentDurabilityPercentage()
         ItemStack armorRig = WearableHelper.PlayerWornRig(player);
         if(armorRig != null && armorRig.getItem() instanceof ArmorRigItem)
         {
             RenderSystem.enableAlphaTest();
-            //buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             stack.push();
             {
-                //stack.scale(0.1f,0.1f,0.1f);
+                stack.translate(anchorPointX - (armorHeathSize*2) / 4F, anchorPointY - (armorHeathSize*2) / 5F * 3F, 0);
+                stack.translate(-102f, 6f, 0);
 
+                RenderSystem.color3f(1.0f, 1.0f, 1.0f);
                 Minecraft.getInstance().getTextureManager().bindTexture(ARMOR_ICONS[1]);
-                //RenderSystem.color3f(1.0f, 1.0f, 1.0f); // Set color here (Red in this case)
-                int cropHeight = (int) (16 * WearableHelper.currentDurabilityPercentage(armorRig));
-                blit(stack, 0, 0, 0, 0, 16, 16, 16, 16);
+                float durabilityPercentage = WearableHelper.currentDurabilityPercentage(armorRig);
 
+                RenderSystem.color3f(0.0f, 0.85f*durabilityPercentage, 0.0f);
+                blit(stack, 0, 0, 0, 0, 16, 16, 16, 16);
+                int cropHeight = (int) (16 * durabilityPercentage);
+
+                RenderSystem.color3f(1.0f, 1.0f, 1.0f);
+
+                RenderSystem.color3f(1.0f/durabilityPercentage, 0, 0.0f);
                 Minecraft.getInstance().getTextureManager().bindTexture(ARMOR_ICONS[0]);
                 blit(stack, 0, 0, 0, 0, 16, 16-cropHeight, 16, 16);
-
-                //RenderSystem.color3f(1.0f, 1.0f, 1.0f);
             }
-            //buffer.finishDrawing();
-            //WorldVertexBufferUploader.draw(buffer);
+            RenderSystem.color3f(1.0f, 1.0f, 1.0f);
             stack.pop();
         }
-
-
 
         if(!(Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND).getItem() instanceof TimelessGunItem))
             return;
