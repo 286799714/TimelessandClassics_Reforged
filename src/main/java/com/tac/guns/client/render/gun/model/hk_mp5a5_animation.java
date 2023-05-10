@@ -68,10 +68,10 @@ public class hk_mp5a5_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.HK_MP5A5_TACTICAL_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 
-        /*if(Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.STANDARD_FLASHLIGHT.orElse(ItemStack.EMPTY.getItem()))
-        {
-            RenderUtil.renderModel(SpecialModels.AR_15_CQB_STANDARD_FLASHLIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
-        }*/
+            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.HK_MP5A5_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.HK_MP5A5_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+            }
 
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.HK_MP5A5_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);

@@ -263,6 +263,11 @@ public enum SpecialModels
     HK_MP5A5_EXTENDED_HANDGUARD("hk_mp5a5_extended_handguard"),
     HK_MP5A5_DEFAULT_STOCK("hk_mp5a5_default_stock"),
     HK_MP5A5_OPTICS_RAIL("hk_mp5a5_rail"),
+
+    HK_MP5A5_B_LASER_DEVICE("hk_mp5a5_b_laser_device"),
+    HK_MP5A5_B_LASER("hk_mp5a5_b_laser"),
+
+
     STEN_MK_II_BODY("sten_mk_ii"),
     STEN_MK_II_BOLT("sten_mk_ii_bolt"),
     STEN_MK_II_BOLT_SPRING("sten_mk_ii_bolt_spring"),
@@ -317,6 +322,12 @@ public enum SpecialModels
     HK416_A5_FOLDED("hk416_a5_folded_sights"),
     HK416_A5_UNFOLDED("hk416_a5_unfolded_sights"),
     HK416_A5_DEFAULT_MUZZLE("hk416_a5_default_muzzle"),
+
+    HK416_A5_B_LASER_DEVICE("hk416_a5_b_laser_device"),
+    HK416_A5_B_LASER("hk416_a5_b_laser"),
+    HK416_A5_IR_LASER_DEVICE("hk416_a5_ir_laser_device"),
+    HK416_A5_IR_LASER("hk416_a5_ir_laser"),
+
     GLOCK_17_SUPPRESSOR("glock_17_suppressor"),
     GLOCK_17_BULLET("glock_17_bullet"),
     STI2011_SUPPRESSOR("sti2011_suppressor"),
