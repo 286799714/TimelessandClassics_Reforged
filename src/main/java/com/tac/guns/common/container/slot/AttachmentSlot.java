@@ -30,6 +30,7 @@ public class AttachmentSlot extends Slot
     private IAttachment.Type type;
     private PlayerEntity player;
     private IAttachment.Type[] types;
+    private int index;
 
     public AttachmentSlot(AttachmentContainer container, IInventory weaponInventory, ItemStack weapon, IAttachment.Type type, PlayerEntity player, int index, int x, int y)
     {
@@ -38,6 +39,7 @@ public class AttachmentSlot extends Slot
         this.weapon = weapon;
         this.type = type;
         this.player = player;
+        this.index = index;
     }
 
     public AttachmentSlot(AttachmentContainer container, IInventory weaponInventory, ItemStack weapon, IAttachment.Type[] types, PlayerEntity player, int index, int x, int y)
@@ -47,11 +49,13 @@ public class AttachmentSlot extends Slot
         this.weapon = weapon;
         this.types = types;
         this.player = player;
+        this.index = index;
     }
 
     @Override
     public boolean isEnabled()
     {
+        this.weapon.inventoryTick(player.world, player, index, true);
         if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
             return false;
         }
@@ -121,9 +125,9 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean canTakeStack(PlayerEntity player)
     {
-        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
+        if(this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo() || SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
             return false;
-        }
-        return true;
+        } else
+            return true;
     }
 }

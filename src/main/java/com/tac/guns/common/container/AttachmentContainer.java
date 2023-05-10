@@ -286,7 +286,6 @@ public class AttachmentContainer extends Container
     {
         return true;
     }
-
     @Override
     public void onCraftMatrixChanged(IInventory inventoryIn) // something with this...
     {

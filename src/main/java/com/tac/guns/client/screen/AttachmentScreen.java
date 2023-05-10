@@ -3,13 +3,16 @@ package com.tac.guns.client.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.container.AttachmentContainer;
+import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.IrDeviceItem;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.SideRailItem;
+import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessOldRifleGunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessPistolGunItem;
 import com.tac.guns.item.attachment.IAttachment;
@@ -58,6 +61,8 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer>
     public void tick()
     {
         super.tick();
+        if(SyncedPlayerData.instance().get(Minecraft.getInstance().player, ModSyncedDataKeys.RELOADING))
+            Minecraft.getInstance().displayGuiScreen(null);
         if(this.minecraft != null && this.minecraft.player != null)
         {
             if(!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
