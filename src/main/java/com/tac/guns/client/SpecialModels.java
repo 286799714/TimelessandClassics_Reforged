@@ -104,6 +104,13 @@ public enum SpecialModels
     VECTOR45_SILENCER("vector45_silencer"),
     VECTOR45_STANDARD_MAG("vector45_standard_mag"),
     VECTOR45_TACTICAL_STOCK("vector45_tactical_stock"),
+
+    VECTOR45_B_LASER_DEVICE("vector45_b_laser_device"),
+    VECTOR45_IR_LASER_DEVICE("vector45_ir_laser_device"),
+
+    VECTOR45_B_LASER("vector45_b_laser"),
+    VECTOR45_IR_LASER("vector45_ir_laser"),
+
     MICRO_UZI_BODY("mac10"),
     MICRO_UZI_BULLET("mac10_bullet"),
     MICRO_UZI_BOLT("mac10_bolt"),
@@ -438,6 +445,13 @@ public enum SpecialModels
     SIG_MCX_SPEAR_MAG("sig_mcx_spear_mag"),
     SIG_MCX_SPEAR_LIGHT_GRIP("sig_mcx_spear_light_grip"),
     SIG_MCX_SPEAR_TACTICAL_GRIP("sig_mcx_spear_tactical_grip"),
+
+    SIG_MCX_SPEAR_B_LASER_DEVICE("sig_mcx_spear_b_laser_device"),
+    SIG_MCX_SPEAR_IR_LASER_DEVICE("sig_mcx_spear_ir_laser_device"),
+
+    SIG_MCX_SPEAR_B_LASER("sig_mcx_spear_b_laser"),
+    SIG_MCX_SPEAR_IR_LASER("sig_mcx_spear_ir_laser"),
+
     MP9("mp9"),
     MP9_BOLT("mp9_bolt"),
     MP9_BULLET("mp9_bullet"),

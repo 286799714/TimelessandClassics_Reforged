@@ -63,9 +63,9 @@
   },
   "modules": {
     "zoom":{
-      "fovModifier": 0.8,
+      "fovModifier": 0.9,
       "yOffset": 14.80,
-      "zOffset": 3.75
+      "zOffset": 1.9
     },
     "attachments": {
       "barrel": {
@@ -75,12 +75,12 @@
       },
       "scope": {
         "yOffset": 13.35,
-        "zOffset": -1.175,
+        "zOffset": 1.775,
         "scale": 1.00
       },
       "pistolScope": {
         "yOffset": 13.35,
-        "zOffset": -2.175,
+        "zOffset": -1.225,
         "scale": 1.0,
         "doRenderMount": true,
         "doOnSlideMovement": false
@@ -99,6 +99,16 @@
         "yOffset": 1000.89,
         "zOffset": 5.35,
         "scale": 0.0
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       }
     }
   }
