@@ -125,9 +125,6 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean canTakeStack(PlayerEntity player)
     {
-        if(this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo() || SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
-            return false;
-        } else
-            return true;
+        return true;
     }
 }

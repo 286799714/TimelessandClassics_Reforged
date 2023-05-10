@@ -406,6 +406,16 @@ public enum SpecialModels
     AR15_HELLMOUTH_EXTENDED_MAG("ar_15_hellmouth_extended_mag"),
     AR15_HELLMOUTH_DD_MAG("ar_15_hellmouth_dd_mag"),
     M4_EXTENDED_HANDGUARD_V2("m4a1_extended_handguard_v2"),
+    M4_EXTENDED_HANDGUARD_V2_L_COVER("m4a1_extended_handguard_v2_left_cover"),
+    M4_EXTENDED_HANDGUARD_V2_L_RAIL("m4a1_extended_handguard_v2_left_rail"),
+    M4_EXTENDED_HANDGUARD_V2_T_COVER("m4a1_extended_handguard_v2_top_cover"),
+    M4_EXTENDED_HANDGUARD_V2_T_RAIL("m4a1_extended_handguard_v2_top_rail"),
+
+    M4_B_LASER_DEVICE("m4a1_b_laser_device"),
+    M4_IR_LASER_DEVICE("m4a1_ir_laser_device"),
+
+    M4_B_LASER("m4a1_b_laser"),
+    M4_IR_LASER("m4a1_ir_laser"),
     VECTOR45_BRAKE("vector45_brake"),
     VECTOR45_COMP("vector45_compensator"),
     VECTOR45_LGRIP("vector45_light_grip"),

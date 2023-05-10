@@ -51,16 +51,38 @@ public class m4_animation implements IOverrideModel {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.M4_H_STOCK.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-            if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY)
+
+            // If niether trips, render the cover for the side or top, since only one is accessible at once currently, TODO: Have a more streamlined system to handle multi-accesible attachments
+            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.get()) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.M4_EXTENDED_HANDGUARD_V2_L_RAIL.getModel(), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.M4_EXTENDED_HANDGUARD_V2_T_COVER.getModel(), stack, matrices, renderBuffer, light, overlay);
+
+                RenderUtil.renderLaserModuleModel(SpecialModels.M4_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.M4_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+            }
+            else if (Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack) != ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.get()) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.M4_EXTENDED_HANDGUARD_V2_T_RAIL.getModel(), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.M4_EXTENDED_HANDGUARD_V2_L_COVER.getModel(), stack, matrices, renderBuffer, light, overlay);
+
+                RenderUtil.renderLaserModuleModel(SpecialModels.M4_IR_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay);
+                if(transformType.isFirstPerson()) {
+                    RenderUtil.renderLaserModuleModel(SpecialModels.M4_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                }
+            }
+
+            if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack) == ItemStack.EMPTY)
             {
                 RenderUtil.renderModel(SpecialModels.M4_DEFAULT_HANDGUARD.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             else
             {
-                // Use when more rail implementations are ready.
-                //RenderUtil.renderModel(SpecialModels.M4_EXTENDED_HANDGUARD.getModel(), stack, matrices, renderBuffer, light, overlay);
+                if(Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack) == ItemStack.EMPTY) {
+                    RenderUtil.renderLaserModuleModel(SpecialModels.M4_EXTENDED_HANDGUARD_V2_L_COVER.getModel(), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderLaserModuleModel(SpecialModels.M4_EXTENDED_HANDGUARD_V2_T_COVER.getModel(), stack, matrices, renderBuffer, light, overlay);
+                }
                 RenderUtil.renderModel(SpecialModels.M4_EXTENDED_HANDGUARD_V2.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
+
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.M4_L_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
 
