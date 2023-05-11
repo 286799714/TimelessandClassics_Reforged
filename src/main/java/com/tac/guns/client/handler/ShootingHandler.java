@@ -203,7 +203,7 @@ public class  ShootingHandler
             return;
 
         //TODO: Gurantee this solution is good, run a performance profile soon and reduce renderTick listeners
-        if(HUDRenderingHandler.get().hitMarkerTracker > 0F)
+        if(Config.CLIENT.display.showHitMarkers.get() && HUDRenderingHandler.get().hitMarkerTracker > 0F)
             HUDRenderingHandler.get().hitMarkerTracker -= evt.renderTickTime*hitmarkerCooldownMultiplier();
         else
             HUDRenderingHandler.get().hitMarkerTracker = 0;

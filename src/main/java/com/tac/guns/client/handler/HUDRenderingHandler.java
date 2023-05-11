@@ -234,23 +234,23 @@ public class HUDRenderingHandler extends AbstractGui {
         int centerX = event.getWindow().getScaledWidth()/2;
         int centerY = event.getWindow().getScaledHeight()/2;
 
-
-        // TODO: turn hitMarkerTracker into a float/frame time variable
-        if(this.hitMarkerTracker > 0 && !AimingHandler.get().isAiming() || (this.hitMarkerTracker > 0 && AimingHandler.get().isAiming() && Gun.getScope(heldItem) == null))//Hit Markers
-        {
-            RenderSystem.enableAlphaTest();
-            stack.push();
+        if(Config.CLIENT.display.showHitMarkers.get()) {
+            if (this.hitMarkerTracker > 0 && !AimingHandler.get().isAiming() || (this.hitMarkerTracker > 0 && AimingHandler.get().isAiming() && Gun.getScope(heldItem) == null))//Hit Markers
             {
+                RenderSystem.enableAlphaTest();
+                stack.push();
+                {
+                    RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+                    Minecraft.getInstance().getTextureManager().bindTexture(fleshHitMarker); // Future options to render bar types
+
+                    float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.20f);
+                    RenderSystem.color4f(1.0f, 1.0f, 1.0f, opac);
+
+                    blit(stack, centerX - 8, centerY - 8, 0, 0, 16, 16, 16, 16); //-264 + (int)(-9.0/4),-134,
+                }
                 RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-                Minecraft.getInstance().getTextureManager().bindTexture(fleshHitMarker); // Future options to render bar types
-
-                float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.20f);
-                RenderSystem.color4f(1.0f, 1.0f, 1.0f, opac);
-
-                blit(stack,centerX-8,centerY-8,  0, 0, 16, 16, 16, 16); //-264 + (int)(-9.0/4),-134,
+                stack.pop();
             }
-            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-            stack.pop();
         }
 
         // All code for rendering night vision, still only a test
