@@ -5,17 +5,17 @@
       "item": {
         "tag": "forge:materials/uncommon"
       },
-      "count": 4
+      "count": 3
     },
     {
       "item": {
         "tag": "forge:gunpowder"
       },
-      "count": 2
+      "count": 4
     }
   ],
   "result": {
     "item": "tac:bullet68",
-    "count": 48
+    "count": 45
   }
 }

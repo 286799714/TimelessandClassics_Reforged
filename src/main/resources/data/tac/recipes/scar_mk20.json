@@ -4,23 +4,23 @@
     {
       "item": {
         "tag": "forge:materials/legendary"
-      }
-    },
-    {
-      "item": {
-        "tag": "forge:materials/rare"
       },
       "count": 2
     },
     {
       "item": {
-        "tag": "forge:gunpowder"
+        "tag": "forge:materials/epic"
       },
-      "count": 20
+      "count": 10
+    },
+    {
+      "item": {
+        "tag": "forge:materials/rare"
+      },
+      "count": 8
     }
   ],
   "result": {
-    "item": "tac:50bmg",
-    "count": 24
+    "item": "tac:scar_mk20"
   }
 }

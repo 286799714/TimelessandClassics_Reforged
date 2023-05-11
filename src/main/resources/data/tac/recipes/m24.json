@@ -5,13 +5,13 @@
       "item": {
         "tag": "forge:materials/epic"
       },
-      "count": 5
+      "count": 1
     },
     {
       "item": {
         "tag": "forge:materials/rare"
       },
-      "count": 3
+      "count": 10
     }
   ],
   "result": {

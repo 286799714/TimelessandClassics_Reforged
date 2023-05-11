@@ -3,19 +3,19 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/uncommon"
+        "tag": "forge:materials/rare"
       },
-      "count": 3
+      "count": 1
     },
     {
       "item": {
         "tag": "forge:gunpowder"
       },
-      "count": 5
+      "count": 10
     }
   ],
   "result": {
     "item": "tac:lapua338",
-    "count": 10
+    "count": 24
   }
 }

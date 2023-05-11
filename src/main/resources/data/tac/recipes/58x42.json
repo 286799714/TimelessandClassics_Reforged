@@ -5,7 +5,7 @@
       "item": {
         "tag": "forge:materials/uncommon"
       },
-      "count": 4
+      "count": 3
     },
     {
       "item": {
@@ -16,6 +16,6 @@
   ],
   "result": {
     "item": "tac:58x42",
-    "count": 42
+    "count": 50
   }
 }
