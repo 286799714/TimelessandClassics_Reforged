@@ -240,12 +240,15 @@ public class HUDRenderingHandler extends AbstractGui {
                 RenderSystem.enableAlphaTest();
                 stack.push();
                 {
+
                     RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
                     Minecraft.getInstance().getTextureManager().bindTexture(fleshHitMarker); // Future options to render bar types
 
                     float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.20f);
-                    RenderSystem.color4f(1.0f, 1.0f, 1.0f, opac);
-
+                    if(HUDRenderingHandler.get().hitMarkerHeadshot)
+                        RenderSystem.color4f(1.0f, 0.075f, 0.075f, opac); // Only render red
+                    else
+                        RenderSystem.color4f(1.0f, 1.0f, 1.0f, opac);
                     blit(stack, centerX - 8, centerY - 8, 0, 0, 16, 16, 16, 16); //-264 + (int)(-9.0/4),-134,
                 }
                 RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
