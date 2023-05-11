@@ -69,6 +69,11 @@ public class HUDRenderingHandler extends AbstractGui {
             {
                     new ResourceLocation(Reference.MOD_ID, "textures/gui/reloadbar.png")
             };
+
+    private static final ResourceLocation[] HIPFIRE_ICONS = new ResourceLocation[]
+            {
+                    new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker.png")
+            };
     private static final ResourceLocation[] NOISE_S = new ResourceLocation[]
             {
                     new ResourceLocation(Reference.MOD_ID, "textures/screen_effect/noise1.png"),
@@ -190,8 +195,8 @@ public class HUDRenderingHandler extends AbstractGui {
         }
     }
 
-    private static ResourceLocation fleshHitMarker = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_128x.png");
-    private static ResourceLocation fleshHitMarkerADS = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_ads_128x.png");
+    private static ResourceLocation fleshHitMarker = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_no_opac.png");
+    private static ResourceLocation fleshHitMarkerADS = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_no_opac.png");
     public boolean hitMarkerHeadshot = false;
     public static final float hitMarkerRatio = 14f;
     public float hitMarkerTracker = 0;
@@ -226,36 +231,27 @@ public class HUDRenderingHandler extends AbstractGui {
         int width = event.getWindow().getWidth();
         int height = event.getWindow().getHeight();
 
+        int centerX = event.getWindow().getScaledWidth()/2;
+        int centerY = event.getWindow().getScaledHeight()/2;
+
+
         // TODO: turn hitMarkerTracker into a float/frame time variable
-        if(this.hitMarkerTracker > 0 && ((AimingHandler.get().isAiming() && Gun.getScope(heldItem) == null) || !AimingHandler.get().isAiming()))//Hit Markers
+        if(this.hitMarkerTracker > 0 && !AimingHandler.get().isAiming() || (this.hitMarkerTracker > 0 && AimingHandler.get().isAiming() && Gun.getScope(heldItem) == null))//Hit Markers
         {
             RenderSystem.enableAlphaTest();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             stack.push();
             {
-                stack.translate(width / 2F, height / 2F, 0);
+                RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+                Minecraft.getInstance().getTextureManager().bindTexture(fleshHitMarker); // Future options to render bar types
 
-                ResourceLocation hitMarker;
-                if(AimingHandler.get().isAiming())
-                    hitMarker = fleshHitMarkerADS;
-                else
-                    hitMarker = fleshHitMarker;
+                float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.20f);
+                RenderSystem.color4f(1.0f, 1.0f, 1.0f, opac);
 
-                Minecraft.getInstance().getTextureManager().bindTexture(hitMarker); // Future options to render bar types
-
-                float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.25f);
-
-                Matrix4f matrix = stack.getLast().getMatrix();
-                buffer.pos(matrix, 0, hitMarkerSize, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.pos(matrix, hitMarkerSize, hitMarkerSize, 0).tex(1, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.pos(matrix, hitMarkerSize, 0, 0).tex(1, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
+                blit(stack,centerX-8,centerY-8,  0, 0, 16, 16, 16, 16); //-264 + (int)(-9.0/4),-134,
             }
-            buffer.finishDrawing();
-            WorldVertexBufferUploader.draw(buffer);
+            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
             stack.pop();
         }
-        //this.hitMarkerTracker--;
 
         // All code for rendering night vision, still only a test
         if(false) {
@@ -282,11 +278,8 @@ public class HUDRenderingHandler extends AbstractGui {
             }
         }
 
-        if(ArmorInteractionHandler.get().isRepairing())//Replace with reload bar checker
-        {
-            // FireMode rendering
+        if(ArmorInteractionHandler.get().isRepairing()) {
             RenderSystem.enableAlphaTest();
-
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             stack.push();
             {
