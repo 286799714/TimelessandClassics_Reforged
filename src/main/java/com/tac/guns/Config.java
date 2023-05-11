@@ -46,6 +46,13 @@ public class Config
         public final ForgeConfigSpec.ConfigValue<String> headshotSound;
         public final ForgeConfigSpec.BooleanValue playSoundWhenCritical;
         public final ForgeConfigSpec.ConfigValue<String> criticalSound;
+
+
+        public final ForgeConfigSpec.BooleanValue playSoundWhenPlayer;
+        public final ForgeConfigSpec.ConfigValue<String> playerSound;
+        public final ForgeConfigSpec.BooleanValue playSoundWhenMob;
+        public final ForgeConfigSpec.ConfigValue<String> mobSound;
+
         public final ForgeConfigSpec.DoubleValue weaponsVolume;
 
         public Sounds(ForgeConfigSpec.Builder builder)
@@ -58,6 +65,12 @@ public class Config
                 this.headshotSound = builder.comment("The sound to play when a headshot occurs").define("headshotSound", "minecraft:entity.player.attack.crit");
                 this.playSoundWhenCritical = builder.comment("If true, a sound will play when you successfully hit a critical on a entity with a gun").define("playSoundWhenCritical", true);
                 this.criticalSound = builder.comment("The sound to play when a critical occurs").define("criticalSound", "minecraft:entity.player.attack.crit");
+
+                this.playSoundWhenPlayer = builder.comment("If true, a sound will play when you successfully hit a player with a gun").define("playSoundWhenPlayer", true);
+                this.playerSound = builder.comment("The sound to play when hitting a player").define("playerSound", "minecraft:entity.player.hurt");
+                this.playSoundWhenMob = builder.comment("If true, a sound will play when you successfully hit an entity with a gun").define("playSoundWhenMob", true);
+                this.mobSound = builder.comment("The sound to play when an entity is shot").define("mobSound", "minecraft:entity.player.attack.weak");
+
             }
             builder.pop();
         }
