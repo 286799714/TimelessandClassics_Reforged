@@ -1,8 +1,8 @@
 {
     "block.tac.workbench": "枪械工作台",
     "item.tac.module_item": "模组数据块",
-    "item.tac.basic_laser": "Basic Laser Device",
-    "item.tac.ir_laser": "IR Laser Device",
+    "item.tac.basic_laser": "轻型镭射",
+    "item.tac.ir_laser": "战术镭射",
     "item.tac.small_extended_mag": "轻型扩容弹匣",
     "item.tac.medium_extended_mag": "§9中型扩容弹匣",
     "item.tac.large_extended_mag": "§5重型扩容弹匣",
@@ -98,6 +98,7 @@
     "item.tac.m16a4": "M16A4 突击步枪",
     "item.tac.scar_h": "SCAR H 突击步枪",
     "item.tac.scar_l": "SCAR L 突击步枪",
+    "item.tac.scar_mk20": "SCAR MK20 狙击枪",
     "item.tac.mk47": "MK47 突击步枪",
     "item.tac.tti_g34": "黑钢战术 TTI G34 手枪",
     "item.tac.mk18_mod1": "MK18 MOD1 突击步枪",
