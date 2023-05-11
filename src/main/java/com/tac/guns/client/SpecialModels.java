@@ -641,6 +641,10 @@ public enum SpecialModels
     SPR_15_DEFAULT_GRIP("spr15_default_grip"),
     SPR_15_LIGHT_GRIP("spr15_light_grip"),
     SPR_15_TAC_GRIP("spr15_tac_grip"),
+
+    SPR_15_B_LASER_DEVICE("spr15_b_laser_device"),
+    SPR_15_B_LASER("spr15_b_laser"),
+
     TTI_G34("tti_g34"),
     TTI_G34_SLIDE("tti_g34_slide"),
     TTI_G34_STANDARD_MAG("tti_g34_standard_mag"),

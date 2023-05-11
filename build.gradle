@@ -115,6 +115,8 @@ dependencies {
 
     implementation fg.deobf('curse.maven:curios-309927:3661903')
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+
+    implementation fg.deobf('curse.maven:dynamicsounds-238891:3502320')
 }
 repositories {
     maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
