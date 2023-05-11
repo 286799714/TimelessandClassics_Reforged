@@ -491,6 +491,12 @@ public enum SpecialModels
     SKS_TACTICAL_SCOPE_RAIL("sks_tactical_srail"),
     SKS_TACTICAL_TACTICAL_GRIP("sks_tactical_tactical_grip"),
     SKS_TACTICAL_TACTICAL_STOCK("sks_tactical_tactical_stock"),
+
+    SKS_TACTICAL_B_LASER_DEVICE("sks_tactical_b_laser_device"),
+    SKS_TACTICAL_B_LASER("sks_tactical_b_laser"),
+    SKS_TACTICAL_IR_LASER_DEVICE("sks_tactical_ir_laser_device"),
+    SKS_TACTICAL_IR_LASER("sks_tactical_ir_laser"),
+
     M1014("m1014"),
     M1014_BULLET("m1014_bullet"),
     M1014_BOLT("m1014_bolt"),
@@ -738,6 +744,21 @@ public enum SpecialModels
     MK47_IR_LASER("mk47_ir_laser"),
     MK47_B_LASER_DEVICE("mk47_b_laser_device"),
     MK47_B_LASER("mk47_b_laser"),
+
+    MK14_BODY1 ("mk14"),
+    BOLT1("mk14_bolt"),
+    STANDARD_MAG1 ("mk14_standard_mag"),
+    EXTENDED_MAG1("mk14_extended_mag"),
+    T_GRIP1("mk14_tac_grip"),
+    L_GRIP1 ("mk14_light_grip"),
+    SCOPE_MOUNT1 ("mk14_mount"),
+    BOLT_HANDLE1 ("mk14_bolt_handle"),
+
+    MK14_B_LASER_DEVICE("mk14_b_laser_device"),
+    MK14_B_LASER("mk14_b_laser"),
+    MK14_IR_LASER_DEVICE("mk14_ir_laser_device"),
+    MK14_IR_LASER("mk14_ir_laser"),
+
     //Everything from this point on is all scope additions
 
     MINI_DOT_BASE("optics/mini_dot_base"),
@@ -748,16 +769,7 @@ public enum SpecialModels
     Sx8_BODY("optics/8x_scope"),
     //Everything from this point on is all LOD renders
 
-    M1911_LOD("lods/m1911_lod"),
-    //TODO: Answer this || Tests to create new auto registry per gunAnimationFile, registries per file still need to be here anyway? f me
-    MK14_BODY1 ("mk14"),
-    BOLT1("mk14_bolt"),
-    STANDARD_MAG1 ("mk14_standard_mag"),
-    EXTENDED_MAG1("mk14_extended_mag"),
-    T_GRIP1("mk14_tac_grip"),
-    L_GRIP1 ("mk14_light_grip"),
-    SCOPE_MOUNT1 ("mk14_mount"),
-    BOLT_HANDLE1 ("mk14_bolt_handle");
+    M1911_LOD("lods/m1911_lod");
 
     /**
      * The location of an item model in the [MOD_ID]/models/special/[NAME] folder
