@@ -178,6 +178,10 @@ public enum SpecialModels
     AA_12_STANDARD_MAG("aa_12_standard_mag"),
     AA_12_MUZZLE("aa_12_muzzle"),
     AA_12_FRONT_RAIL("aa_12_front_rail"),
+
+    AA_12_B_LASER_DEVICE("aa_12_b_laser_device"),
+    AA_12_B_LASER("aa_12_b_laser"),
+
     X95R("x95r"),
     X95R_BOLT("x95r_bolt"),
     X95R_SIGHT("x95r_sight"),
@@ -565,6 +569,11 @@ public enum SpecialModels
     M16A4_BRAKE("m16a4_b_muzzle"),
     M16A4_TAC_GRIP("m16a4_tac_grip"),
     M16A4_LIGHT_GRIP("m16a4_light_grip"),
+
+    M16A4_B_LASER_DEVICE("m16a4_b_laser_device"),
+    M16A4_B_LASER("m16a4_b_laser"),
+    M16A4_IR_LASER_DEVICE("m16a4_ir_laser_device"),
+    M16A4_IR_LASER("m16a4_ir_laser"),
 
 
     SCAR_H_BODY("scar_h"),

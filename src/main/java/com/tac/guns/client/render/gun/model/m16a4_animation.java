@@ -47,16 +47,26 @@ public class m16a4_animation implements IOverrideModel {
             {
                 RenderUtil.renderModel(SpecialModels.M16A4_CARRY.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-            if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY)
+            if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack) == ItemStack.EMPTY)
             {
                 RenderUtil.renderModel(SpecialModels.M16A4_DEFAULT_HANDGUARD.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             else
             {
-                // Use when more rail implementations are ready.
-                //RenderUtil.renderModel(SpecialModels.M4_EXTENDED_HANDGUARD.getModel(), stack, matrices, renderBuffer, light, overlay);
                 RenderUtil.renderModel(SpecialModels.M16A4_EXTENDED_HANDGUARD.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
+
+            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.M16A4_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.M16A4_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+            }
+            else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.M16A4_IR_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay);
+                if(transformType.isFirstPerson()) {
+                    RenderUtil.renderLaserModuleModel(SpecialModels.M16A4_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                }
+            }
+
             if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem()))
             {
                 // M16a4 light grip missing, updated with m4 grip place holder, same model based on showcase images

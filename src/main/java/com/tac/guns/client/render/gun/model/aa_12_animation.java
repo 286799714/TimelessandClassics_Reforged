@@ -61,13 +61,22 @@ public class aa_12_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.AA_12_MUZZLE.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderModel(SpecialModels.AA_12_FRONT_RAIL.getModel(), stack, matrices, renderBuffer, light, overlay);
                 RenderUtil.renderModel(SpecialModels.AA_12_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-            if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderModel(SpecialModels.AA_12_FRONT_RAIL.getModel(), stack, matrices, renderBuffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.AA_12_LIGHT_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
+
+            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.AA_12_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.AA_12_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+            }
+
+            if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) != ItemStack.EMPTY || Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) != ItemStack.EMPTY || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack) != ItemStack.EMPTY)
+            {
+                RenderUtil.renderModel(SpecialModels.AA_12_FRONT_RAIL.getModel(), stack, matrices, renderBuffer, light, overlay);
+            }
+
             RenderUtil.renderModel(SpecialModels.AA_12_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();
