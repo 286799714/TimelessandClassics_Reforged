@@ -1,0 +1,96 @@
+{
+  "general": {
+    "auto": true,
+    "rate": 600,
+    "rateSelector": [2],
+    "gripType": "tac:one_handed_m1911",
+    "recoilAngle": 2.75,
+    "horizontalRecoilAngle": 1.35,
+    "recoilKick": 1.2125,
+    "recoilAdsReduction": 0.305,
+    "weaponRecoilOffset": 0.525,
+    "recoilDuration": 0.1025,
+    "cameraRecoilModifier": 1.25,
+    "weightKilo": 3.5,
+
+    "spread": 2.575,
+    "firstShotSpread": 0.225,
+    "hipFireInaccuracy": 3.25,
+    "projToMinAccuracy": 6,
+    "msToAccuracyReset": 540,
+    "movementInaccuracy": 0.285
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 20,
+    "reloadMagTimer": 26,
+    "additionalReloadEmptyMagTimer": 11,
+    "maxAdditionalAmmoPerOC": [12, 20, 30],
+    "preReloadPauseTicks": 0,
+    "openBolt": true
+  },
+  "projectile": {
+    "item": "tac:9mm_round",
+    "visible": false,
+    "size": 0.1,
+    "damage": 6.5,
+    "armorIgnore": 0.7,
+    "critical": 0.0,
+    "criticalDamage": 0.625,
+    "headDamage": 0.625,
+    "speed": 13,
+    "trailLengthMultiplier": 3,
+    "life": 11
+  },
+  "sounds": {
+    "fire": "tac:item.uzi_fire",
+    "reloadNormal": "tac:animation.uzi_reload_norm",
+    "reloadEmpty": "tac:animation.uzi_reload_empty",
+    "draw": "tac:animation.uzi_draw",
+    "inspect": "tac:animation.uzi_inspect",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "tac:item.uzi_fire_s"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 8.25,
+      "zOffset": -18.15,
+      "size": 0.845
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1.0,
+    "weaponType": 4
+  },
+  "modules": {
+    "zoom":{
+      "fovModifier": 0.8,
+      "yOffset": 10.660,
+      "zOffset": -2.0
+    },
+    "attachments": {
+      "pistolBarrel": {
+        "yOffset": -100829.84,
+        "zOffset": -11.55,
+        "scale": 0.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
+      "scope": {
+        "yOffset": 9.825,
+        "zOffset": 6.475,
+        "scale": 1.00
+      },
+      "pistolScope": {
+        "yOffset": 9.825,
+        "zOffset": 3.925,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      }
+    }
+  }
+}

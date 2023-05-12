@@ -688,6 +688,16 @@ public enum SpecialModels
     UDP_9_RAIL_COVER("udp_9_rail_cover"),
     UDP_9_B_LASER("udp_9_b_laser"),
 
+    UZI("uzi"),
+    UZI_BOLT("uzi_bolt"),
+    UZI_BULLET("uzi_bullet"),
+    UZI_EXTENDED_MAG("uzi_extended_mag"),
+    UZI_EXTENDED_STOCK("uzi_extended_stock"),
+    UZI_FOLDED_STOCK("uzi_folded_stock"),
+    UZI_HANDLE("uzi_handle"),
+    UZI_STANDARD_MAG("uzi_standard_mag"),
+    UZI_SUPPRESSOR("uzi_suppressor"),
+
     MK18_MOD1_BODY("mk18_mod1"),
     MK18_MOD1_BOLT("mk18_mod1_bolt"),
     MK18_MOD1_COMPENSATOR("mk18_mod1_c_muzzle"),
