@@ -59,11 +59,11 @@ public class AttachmentSlot extends Slot
         if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
             return false;
         }
-        if(this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem || this.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem)
+        if((this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem || this.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
         {
             return true;
         }
-        else
+        else if (this.weapon.getItem() instanceof GunItem)
         {
             GunItem item = (GunItem) this.weapon.getItem();
             Gun modifiedGun = item.getModifiedGun(this.weapon);
@@ -78,6 +78,7 @@ public class AttachmentSlot extends Slot
             }
             return false;
         }
+        return false;
     }
 
     @Override
