@@ -97,10 +97,12 @@ public class TimelessGunItem extends GunItem {
         if(isShift) {
             GunItem gun = (GunItem) stack.getItem();
             if (tagCompound != null) {
-                double armorPen = (1-(1 - Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * gun.getGun().getProjectile().getGunArmorIgnore()))*100;
+                double armorPen = gun.getGun().getProjectile().getGunArmorIgnore() >= 0 ?
+                        Math.min((Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * gun.getGun().getProjectile().getGunArmorIgnore() * 100), 100F) : 0F;
                 tooltip.add((new TranslationTextComponent("info.tac.armorPen", new TranslationTextComponent(String.format("%.1f", armorPen) + "%").mergeStyle(TextFormatting.RED)).mergeStyle(TextFormatting.DARK_AQUA)));
 
-                int headDamgeModifier = (int)(Config.COMMON.gameplay.headShotDamageMultiplier.get() * gun.getGun().getProjectile().getGunHeadDamage())*100;
+                int headDamgeModifier = Config.COMMON.gameplay.headShotDamageMultiplier.get() * gun.getGun().getProjectile().getGunHeadDamage() >= 0 ?
+                        (int)(Config.COMMON.gameplay.headShotDamageMultiplier.get() * gun.getGun().getProjectile().getGunHeadDamage() * 100) : 0;
                 tooltip.add((new TranslationTextComponent("info.tac.headDamageModifier", new TranslationTextComponent(String.format("%d", headDamgeModifier) + "%").mergeStyle(TextFormatting.RED)).mergeStyle(TextFormatting.DARK_AQUA)));
 
                 float speed = ServerPlayHandler.calceldGunWeightSpeed(gun.getGun(), stack);
