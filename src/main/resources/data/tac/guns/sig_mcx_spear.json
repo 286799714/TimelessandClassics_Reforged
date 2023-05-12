@@ -56,6 +56,9 @@
       "zOffset": -17.55,
       "size": 0.90
     },
+    "hipfireScale": 2,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1,
     "weaponType": 0
   },
   "modules": {

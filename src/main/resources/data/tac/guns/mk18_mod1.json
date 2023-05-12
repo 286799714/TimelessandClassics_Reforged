@@ -1,7 +1,7 @@
 {
   "general": {
     "auto": true,
-    "rate": 800,
+    "rate": 850,
     "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 1.875,
@@ -18,7 +18,7 @@
     "hipFireInaccuracy": 5.7,
     "projToMinAccuracy": 6,
     "msToAccuracyReset": 300,
-    "movementInaccuracy": 0.425
+    "movementInaccuracy": 0.325
   },
   "reloads": {
     "magFed": true,
@@ -57,7 +57,9 @@
       "size": 1.15,
       "trailAdjust": 1.25
     },
-    "hipfireScale": 2.0,
+    "hipfireScale": 1.375,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1.00,
     "weaponType": 0
   },
   "modules": {

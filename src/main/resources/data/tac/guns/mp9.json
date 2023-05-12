@@ -1,7 +1,7 @@
 {
   "general": {
     "auto": true,
-    "rate": 780,
+    "rate": 750,
     "rateSelector": [2, 1],
     "gripType": "tac:two_handed_vector",
     "recoilAngle": 1.75,
@@ -58,8 +58,8 @@
       "size": 0.5,
       "trailAdjust": 0.5
     },
-    "hipfireScale": 0.60,
-    "hipfireMoveScale": 0.675,
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.375,
     "hipfireRecoilScale": 1.31,
     "weaponType": 4
   },

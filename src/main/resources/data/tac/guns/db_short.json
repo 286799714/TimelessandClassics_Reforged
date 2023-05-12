@@ -57,6 +57,10 @@
       "zOffset": -21.55,
       "trailAdjust": 1.4125
     },
+    "hipfireScale": 2,
+    "hipfireMoveScale": 0.05,
+    "hipfireRecoilScale": 1.0,
+    "showDynamicHipfire":true,
     "weaponType": 3
   },
   "modules": {

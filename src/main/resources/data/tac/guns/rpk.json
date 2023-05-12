@@ -23,7 +23,7 @@
   "projectile": {
     "item":  "tac:762x39",
     "visible": false,
-    "damage": 7.75,
+    "damage": 8.5,
     "armorIgnore": 1.1,
     "critical": 0.0,
     "criticalDamage": 0.875,
@@ -57,9 +57,9 @@
       "trailAdjust": 1.65,
       "size": 0.8
     },
-    "hipfireScale": 0.775,
-    "hipfireMoveScale": 0.41,
-    "hipfireRecoilScale": 0.75,
+    "hipfireScale": 3.5,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1,
     "showDynamicHipfire": true,
     "weaponType": 0
   },

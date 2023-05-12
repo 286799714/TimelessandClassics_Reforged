@@ -32,7 +32,7 @@
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 7.15,
+    "damage": 7.25,
     "armorIgnore": 1.0,
     "critical": 0.00,
     "criticalDamage": 0.75,
@@ -59,9 +59,9 @@
       "size": 0.90,
       "trailAdjust": 1.625
     },
-    "hipfireScale": 2.0,
-    "hipfireMoveScale": 1.0,
-    "hipfireRecoilScale": 0.95,
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1,
     "showDynamicHipfire": true,
     "weaponType": 0
   },

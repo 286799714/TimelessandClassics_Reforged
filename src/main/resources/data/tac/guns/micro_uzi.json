@@ -4,13 +4,13 @@
     "rate": 1200,
     "rateSelector": [2],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 2.75,
+    "recoilAngle": 2,
     "horizontalRecoilAngle": 1.35,
     "recoilKick": 1.2125,
     "recoilAdsReduction": 0.305,
     "weaponRecoilOffset": 0.525,
     "recoilDuration": 0.1025,
-    "cameraRecoilModifier": 1.325,
+    "cameraRecoilModifier": 1.5,
     "weightKilo": 2.5,
 
     "spread": 2.575,
@@ -38,7 +38,7 @@
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
-    "speed": 10,
+    "speed": 12,
     "trailLengthMultiplier": 3,
     "life": 11
   },
@@ -57,8 +57,8 @@
       "zOffset": -18.15,
       "size": 0.845
     },
-    "hipfireScale": 0.325,
-    "hipfireMoveScale": 0.525,
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.25,
     "hipfireRecoilScale": 1.0,
     "weaponType": 4
   },
@@ -66,7 +66,7 @@
     "zoom":{
       "fovModifier": 0.8,
       "yOffset": 15.660,
-      "zOffset": -9.0
+      "zOffset": -7.0
     },
     "attachments": {
       "extendedMag": {

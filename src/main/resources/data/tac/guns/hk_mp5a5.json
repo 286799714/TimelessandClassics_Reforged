@@ -60,8 +60,9 @@
       "trailAdjust": 0.75
     },
     "hipfireScale": 0.5,
-    "hipfireMoveScale": 1.0,
+    "hipfireMoveScale": 0.5,
     "hipfireRecoilScale": 1.0,
+    "showDynamicHipfire":true,
     "weaponType": 4
   },
   "modules": {

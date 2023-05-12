@@ -61,8 +61,8 @@
       "zOffset": -24.05,
       "trailAdjust": 1.555
     },
-    "hipfireScale": 0.325,
-    "hipfireMoveScale": 0.225,
+    "hipfireScale": 1.5,
+    "hipfireMoveScale": 0.15,
     "hipfireRecoilScale": 0.45,
     "weaponType": 3
   },
@@ -70,7 +70,7 @@
     "zoom":{
       "fovModifier": 0.8,
       "yOffset": 11.12,
-      "zOffset": -4.5
+      "zOffset": -2.5
     },
     "attachments": {
       "scope": {

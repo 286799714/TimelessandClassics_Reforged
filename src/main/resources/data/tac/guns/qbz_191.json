@@ -31,7 +31,7 @@
   "projectile": {
     "item": "tac:58x42",
     "visible": false,
-    "damage": 7,
+    "damage": 7.25,
     "armorIgnore": 1.0,
     "critical": 0.00,
     "criticalDamage": 0.75,
@@ -56,7 +56,10 @@
       "zOffset": -15.25,
       "size": 0.95,
       "trailAdjust": 1
-    }
+    },
+    "hipfireScale": 1.125,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1.31
   },
   "modules": {
     "zoom": {

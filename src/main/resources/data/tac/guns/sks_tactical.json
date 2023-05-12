@@ -59,9 +59,9 @@
       "zOffset": -24.15,
       "trailAdjust": 1.555
     },
-    "hipfireScale": 0.95,
-    "hipfireMoveScale": 0.55,
-    "hipfireRecoilScale": 0.525,
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1,
     "weaponType": 0,
     "showDynamicHipfire": true
   },

@@ -32,7 +32,7 @@
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 10.5,
+    "damage": 11.5,
     "armorIgnore": 1.1,
     "critical": 0.0,
     "criticalDamage": 0.875,
@@ -58,6 +58,9 @@
       "size": 1.1,
       "trailAdjust": 1.5
     },
+    "hipfireScale": 3.25,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1.00,
     "weaponType": 1
   },
   "modules": {

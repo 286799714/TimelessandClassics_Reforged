@@ -15,10 +15,10 @@
 
     "spread": 1.8,
     "firstShotSpread": 0.105,
-    "hipFireInaccuracy": 6.05,
+    "hipFireInaccuracy": 4.05,
     "projToMinAccuracy": 4,
     "msToAccuracyReset": 300,
-    "movementInaccuracy": 0.65
+    "movementInaccuracy": 0.45
   },
   "projectile": {
     "item": "tac:nato_556_bullet",
@@ -57,7 +57,11 @@
       "size": 0.75,
       "trailAdjust": 1.125
     },
-    "hipfireScale": 2.5
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.35,
+    "hipfireRecoilScale": 1,
+    "showDynamicHipfire": true
+    
   },
   "modules": {
     "zoom": {

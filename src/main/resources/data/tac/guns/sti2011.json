@@ -14,7 +14,7 @@
 
     "spread": 1.25,
     "firstShotSpread": 0.1,
-    "hipFireInaccuracy": 1.45,
+    "hipFireInaccuracy": 1.75,
     "projToMinAccuracy": 4,
     "msToAccuracyReset": 240,
     "movementInaccuracy": 0.1
@@ -57,7 +57,11 @@
       "size": 1.1,
       "trailAdjust": 0.875
     },
-    "weaponType": 2
+    "hipfireScale": 1.5,
+    "hipfireMoveScale": 0.35,
+    "hipfireRecoilScale": 1,
+    "weaponType": 0,
+    "showDynamicHipfire": true
   },
   "modules": {
     "zoom":

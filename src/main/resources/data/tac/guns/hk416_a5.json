@@ -31,7 +31,7 @@
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 6.5,
+    "damage": 6.75,
     "armorIgnore": 1.0,
     "critical": 0.00,
     "criticalDamage": 0.75,
@@ -57,7 +57,10 @@
       "zOffset": -14,
       "size": 1.10,
       "trailAdjust": 0.9375
-    }
+    },
+    "hipfireScale": 1.5,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1.00
   },
   "modules": {
     "zoom": {

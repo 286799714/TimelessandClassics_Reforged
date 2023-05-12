@@ -56,9 +56,11 @@
       "size": 1.1,
       "trailAdjust": 0.5
     },
-    "hipfireScale": 2.5,
-    "hipfireMoveScale": 1.0,
-    "hipfireRecoilScale": 4.00
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1.0,
+    "showDynamicHipfire":true
+
   },
   "modules": {
     "zoom": {

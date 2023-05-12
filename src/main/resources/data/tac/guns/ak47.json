@@ -56,7 +56,11 @@
       "zOffset": -20.75,
       "trailAdjust": 1.325,
       "size": 0.8
-    }
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.5,
+    "hipfireRecoilScale": 1.0,
+    "showDynamicHipfire":true
   },
   "modules": {
     "zoom": {
