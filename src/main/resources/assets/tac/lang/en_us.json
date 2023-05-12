@@ -271,8 +271,10 @@
     "info.tac.firemode_semi": "<SEMI>, press %s to change fire mode",
     "info.tac.firemode_auto": "<AUTO>, press %s to change fire mode",
 
+    "info.tac.armorPen": "%s Damage ignores Minecraft armor",
+
     "info.tac.attachment_help": "Press %s in-game for Attachments",
-    "info.tac.more_info_gunitem": "Hold [ %s ] for more info",
+    "info.tac.more_info_gunitem": "Hold [%s] for more info",
     "info.tac.tac_armor_repair1": "Hold your ",
     "info.tac.tac_armor_repair2": " in-game to repair Armor",
     "info.tac.current_armor_amount": "Current Armor Durability: ",

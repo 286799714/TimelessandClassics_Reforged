@@ -78,27 +78,28 @@ public class TimelessGunItem extends GunItem {
         additionalDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, additionalDamage);
         tooltip.add((new TranslationTextComponent("info.tac.damage", TextFormatting.GOLD + ItemStack.DECIMALFORMAT.format(additionalDamage) + additionalDamageText)).mergeStyle(TextFormatting.DARK_GRAY));
 
+        if (tagCompound != null) {
+            if (tagCompound.getBoolean("IgnoreAmmo")) {
+                tooltip.add((new TranslationTextComponent("info.tac.ignore_ammo")).mergeStyle(TextFormatting.AQUA));
+            } else {
+                int ammoCount = tagCompound.getInt("AmmoCount");
+                tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + ammoCount + "/" + GunModifierHelper.getAmmoCapacity(stack, modifiedGun))).mergeStyle(TextFormatting.DARK_GRAY));
+            }
+        }
+
         boolean isShift = InputHandler.MORE_INFO_HOLD.down;
         if(!isShift) {
-
-            String text = "SHIFT";
-            if(!InputHandler.MORE_INFO_HOLD.keyCode().equals(GLFW.GLFW_KEY_LEFT_SHIFT))
-                text = (new KeybindTextComponent("key.tac.moreInfoHold")).getString().toUpperCase(Locale.ENGLISH);
-
-            tooltip.add((new TranslationTextComponent("info.tac.more_info_gunitem", )).mergeStyle(TextFormatting.YELLOW));
+            //String text = "SHIFT";
+            //if(!InputHandler.MORE_INFO_HOLD.keyCode().equals(GLFW.GLFW_KEY_LEFT_SHIFT))
+            String text = (new KeybindTextComponent("key.tac.moreInfoHold")).getString().toUpperCase(Locale.ENGLISH);
+            tooltip.add((new TranslationTextComponent("info.tac.more_info_gunitem", text)).mergeStyle(TextFormatting.YELLOW));
         }
         if(isShift) {
-            if (tagCompound != null) {
-                if (tagCompound.getBoolean("IgnoreAmmo")) {
-                    tooltip.add((new TranslationTextComponent("info.tac.ignore_ammo")).mergeStyle(TextFormatting.AQUA));
-                } else {
-                    int ammoCount = tagCompound.getInt("AmmoCount");
-                    tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + ammoCount + "/" + GunModifierHelper.getAmmoCapacity(stack, modifiedGun))).mergeStyle(TextFormatting.DARK_GRAY));
-                }
-            }
-
             GunItem gun = (GunItem) stack.getItem();
             if (tagCompound != null) {
+                double armorPen = (1-(1 - Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * gun.getGun().getProjectile().getGunArmorIgnore()))*100;
+                tooltip.add((new TranslationTextComponent("info.tac.armorPen", new TranslationTextComponent(String.format("%.1f", armorPen) + "%").mergeStyle(TextFormatting.RED)).mergeStyle(TextFormatting.DARK_AQUA)));
+
                 float speed = ServerPlayHandler.calceldGunWeightSpeed(gun.getGun(), stack);
                 speed = Math.max(Math.min(speed, 0.1F), 0.075F);
                 if (speed > 0.094f)
