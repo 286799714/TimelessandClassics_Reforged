@@ -2,6 +2,7 @@ package com.tac.guns.item.TransitionalTypes;
 
 
 import com.tac.guns.GunMod;
+import com.tac.guns.client.InputHandler;
 import com.tac.guns.common.Gun;
 import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.item.GunItem;
@@ -35,14 +36,13 @@ public class TimelessPistolGunItem extends TimelessGunItem {
     }
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        Gun modifiedGun = this.getModifiedGun(stack);
         CompoundNBT tagCompound = stack.getTag();
         super.addInformation(stack, worldIn, tooltip, flag);
-        if(tagCompound != null)
-        {
-            //tooltip.add((new TranslationTextComponent("info.tac.oldRifle", new TranslationTextComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).mergeStyle(TextFormatting.GREEN)));
-            //tooltip.add((new TranslationTextComponent("info.tac.pistolScope", new TranslationTextComponent("MiniScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
-            tooltip.add((new TranslationTextComponent("info.tac.pistolBarrel", new TranslationTextComponent("PistolBarrel").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
+        boolean isShift = InputHandler.MORE_INFO_HOLD.down;
+        if(isShift) {
+            if (tagCompound != null) {
+                tooltip.add((new TranslationTextComponent("info.tac.pistolBarrel", new TranslationTextComponent("PistolBarrel").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
+            }
         }
     }
     public TimelessPistolGunItem() {

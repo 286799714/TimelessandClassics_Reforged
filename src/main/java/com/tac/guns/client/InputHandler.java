@@ -49,7 +49,8 @@ public final class InputHandler
 	public static final KeyBind
 		PULL_TRIGGER = new KeyBind( "key.tac.pull_trigger", GLFW.GLFW_MOUSE_BUTTON_LEFT, Type.MOUSE ),
 		AIM_HOLD = new KeyBind( "key.tac.aim_hold", GLFW.GLFW_MOUSE_BUTTON_RIGHT, Type.MOUSE ),
-		AIM_TOGGLE = new KeyBind( "key.tac.aim_toggle", InputMappings.INPUT_INVALID.getKeyCode() );
+		AIM_TOGGLE = new KeyBind( "key.tac.aim_toggle", InputMappings.INPUT_INVALID.getKeyCode()),
+			ARMOR_REPAIRING = new KeyBind( "key.tac.armor_repairing", GLFW.GLFW_MOUSE_BUTTON_RIGHT, Type.MOUSE);
 	
 	/**
 	 * Normal keys. These keys will update when {@link #CO} is not down.
@@ -63,7 +64,7 @@ public final class InputHandler
 		INSPECT = new KeyBind( "key.tac.inspect", GLFW.GLFW_KEY_H ),
 		SIGHT_SWITCH = new KeyBind( "key.tac.sight_switch", GLFW.GLFW_KEY_V ),
 		ACTIVATE_SIDE_RAIL = new KeyBind( "key.tac.activateSideRail", GLFW.GLFW_KEY_B ),
-		ARMOR_REPAIRING = new KeyBind( "key.tac.armor_repairing", GLFW.GLFW_KEY_K);
+		MORE_INFO_HOLD = new KeyBind( "key.tac.moreInfoHold", GLFW.GLFW_KEY_LEFT_SHIFT );
 	
 	/**
 	 * Co-keys. These keys will update when {@link #CO} is down.
@@ -124,7 +125,8 @@ public final class InputHandler
 
 			AIM_HOLD,
 			AIM_TOGGLE,
-			CO
+			CO,
+				ARMOR_REPAIRING
 		);
 		
 		regisAll(
@@ -137,7 +139,7 @@ public final class InputHandler
 			INSPECT,
 			SIGHT_SWITCH,
 			ACTIVATE_SIDE_RAIL,
-			ARMOR_REPAIRING
+				MORE_INFO_HOLD
 		);
 		
 		regisAll(

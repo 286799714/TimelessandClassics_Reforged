@@ -272,6 +272,7 @@
     "info.tac.firemode_auto": "<AUTO>, press %s to change fire mode",
 
     "info.tac.attachment_help": "Press %s in-game for Attachments",
+    "info.tac.more_info_gunitem": "Hold [ %s ] for more info",
     "info.tac.tac_armor_repair1": "Hold your ",
     "info.tac.tac_armor_repair2": " in-game to repair Armor",
     "info.tac.current_armor_amount": "Current Armor Durability: ",
@@ -338,6 +339,7 @@
     "key.tac.reload": "Reload",
     "key.tac.unload": "Unload",
     "key.tac.attachments": "Modify Attachments",
+    "key.tac.moreInfoHold": "Show more Gun info",
 	
     "key.tac.fireSelect": "Fire Mode",
     "key.tac.inspect": "Inspect Weapon",
