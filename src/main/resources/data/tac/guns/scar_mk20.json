@@ -1,20 +1,20 @@
 {
   "general": {
-    "rate": 200,
+    "rate": 150,
     "rateSelector": [1],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 4.0,
+    "recoilAngle": 3.75,
     "horizontalRecoilAngle": 1.95,
-    "recoilKick": 2.2,
-    "recoilAdsReduction": 0.295,
-    "weaponRecoilOffset": 0.825,
+    "recoilKick": 1.75,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.745,
     "cameraRecoilModifier": 1.225,
-    "recoilDuration": 0.24,
+    "recoilDuration": 0.27,
     "weightKilo": 7.60,
 
-    "spread": 1.15,
+    "spread": 0.75,
     "firstShotSpread": 0.005,
-    "hipFireInaccuracy": 9.5,
+    "hipFireInaccuracy": 8.5,
     "projToMinAccuracy": 5,
     "msToAccuracyReset": 660,
     "movementInaccuracy": 0.25
@@ -26,11 +26,11 @@
     "armorIgnore": 1.5,
     "critical": 0.0,
     "criticalDamage": 1.0,
-    "headDamage": 1.0,
+    "headDamage": 1.5,
     "size": 0.15,
-    "speed": 28.5,
-    "life": 18,
-    "trailLengthMultiplier": 3.0
+    "speed": 32.5,
+    "life": 16,
+    "trailLengthMultiplier": 3.5
   },
   "reloads": {
     "magFed": true,
@@ -54,7 +54,7 @@
       "yOffset": 9.445,
       "zOffset": -23.45,
       "size": 0.7,
-      "trailAdjust": 1.2875
+      "trailAdjust": 1.5
     },
     "hipfireScale": 1.55,
     "hipfireMoveScale": 0.71,
@@ -64,7 +64,7 @@
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.7,
+      "fovModifier": 0.67,
       "yOffset": 12.845,
       "zOffset": -5.805
     },
