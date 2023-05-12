@@ -22,7 +22,9 @@ apply plugin: 'org.spongepowered.mixin'
 //apply plugin: 'eclipse'
 //apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
-version = "0.3.5-1.16.5"
+version = "0.3.6.1-1.16.5"
+group = "com.tac"
+archivesBaseName = "tac-pra"
 
 
 //name = "tac-a-0.3.0.44-1.16.5"
@@ -113,14 +115,16 @@ dependencies {
 
     implementation fg.deobf('curse.maven:curios-309927:3661903')
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+
+    implementation fg.deobf('curse.maven:dynamicsounds-238891:3502320')
 }
-/*repositories {
+repositories {
     maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven {
         url = "https://www.cursemaven.com"
     }
-}*/
-repositories {
+}
+/*repositories {
     maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven {
         url "https://cursemaven.com"
@@ -128,7 +132,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-}
+}*/
 jar {
     manifest {
         attributes([

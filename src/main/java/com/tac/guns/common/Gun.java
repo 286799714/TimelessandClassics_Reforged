@@ -3,6 +3,7 @@ package com.tac.guns.common;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.tac.guns.Config;
+import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Ignored;
 import com.tac.guns.annotation.Optional;
@@ -27,6 +28,7 @@ import org.apache.logging.log4j.core.config.plugins.validation.constraints.Requi
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import com.tac.guns.util.GunModifierHelper;
 
 
 public final class Gun implements INBTSerializable<CompoundNBT>
@@ -642,6 +644,14 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         private boolean visible = true;
         @Optional
         private float damage;
+        @Optional
+        private float armorIgnore = 1f;
+        @Optional
+        private float critical = 0f;
+        @Optional
+        private float criticalDamage = 1f;
+        @Optional
+        private float headDamage = 1f;
         @Ignored
         private float size = 0.1f;
         @Optional
@@ -667,7 +677,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Optional
         private int bulletClass = 1;
         @Optional
-        private float bluntDamagePercentage = 0.20f;
+        private float bluntDamagePercentage = 0.5f;
         @Override
         public CompoundNBT serializeNBT()
         {
@@ -675,6 +685,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             tag.putString("Item", this.item.toString());
             tag.putBoolean("Visible", this.visible);
             tag.putFloat("Damage", this.damage);
+            tag.putFloat("ArmorIgnore", this.armorIgnore);
+            tag.putFloat("Critical", this.critical);
+            tag.putFloat("CriticalDamage", this.criticalDamage);
+            tag.putFloat("HeadDamage", this.headDamage);
             tag.putFloat("Size", this.size);
             tag.putDouble("Speed", this.speed);
             tag.putInt("Life", this.life);
@@ -703,6 +717,22 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             if(tag.contains("Damage", Constants.NBT.TAG_ANY_NUMERIC))
             {
                 this.damage = tag.getFloat("Damage");
+            }
+            if(tag.contains("ArmorIgnore", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.armorIgnore = tag.getFloat("ArmorIgnore");
+            }
+            if(tag.contains("Critical", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.critical = tag.getFloat("Critical");
+            }
+            if(tag.contains("CriticalDamage", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.criticalDamage = tag.getFloat("CriticalDamage");
+            }
+            if(tag.contains("HeadDamage", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.headDamage = tag.getFloat("HeadDamage");
             }
             if(tag.contains("Size", Constants.NBT.TAG_ANY_NUMERIC))
             {
@@ -756,6 +786,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             projectile.item = this.item;
             projectile.visible = this.visible;
             projectile.damage = this.damage;
+            projectile.armorIgnore = this.armorIgnore;
+            projectile.critical = this.critical;
+            projectile.criticalDamage = this.criticalDamage;
+            projectile.headDamage = this.headDamage;
             projectile.size = this.size;
             projectile.speed = this.speed;
             projectile.life = this.life;
@@ -787,11 +821,43 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         }
 
         /**
-         * @return The damage caused by this projectile
+         * @return The Damage caused by this projectile
          */
         public float getDamage()
         {
             return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.damage + GunEditor.get().getDamageMod()) : this.damage;
+        }
+
+        /**
+         * @return The ArmorIgnore caused by this projectile
+         */
+        public float getGunArmorIgnore()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.armorIgnore + GunEditor.get().getArmorIgnoreMod()) : this.armorIgnore;
+        }
+
+        /**
+         * @return The Critical caused by this projectile
+         */
+        public float getGunCritical()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.critical + GunEditor.get().getCriticalMod()) : this.critical;
+        }
+
+        /**
+         * @return The CriticalDamage caused by this projectile
+         */
+        public float getGunCriticalDamage()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.criticalDamage + GunEditor.get().getCriticalDamageMod()) : this.criticalDamage;
+        }
+
+        /**
+         * @return The HeadDamage caused by this projectile
+         */
+        public float getGunHeadDamage()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.headDamage + GunEditor.get().getHeadDamageMod()) : this.headDamage;
         }
 
         /**
@@ -935,7 +1001,15 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Optional
         @Nullable
         @TGExclude
+        private ResourceLocation inspectEmpty;
+        @Optional
+        @Nullable
+        @TGExclude
         private ResourceLocation cock;
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation noammo;
         @Optional
         @Nullable
         @TGExclude
@@ -969,6 +1043,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 tag.putString("Draw", this.draw.toString());
             }
+            if(inspectEmpty != null)
+            {
+                tag.putString("InspectEmpty", this.inspectEmpty.toString());
+            }
             if(inspect != null)
             {
                 tag.putString("Inspect", this.inspect.toString());
@@ -1001,6 +1079,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 tag.putString("ReloadEndEmpty", this.reloadEndEmpty.toString());
             }
+            tag.putString("Noammo", "tac:item.noammo");
             return tag;
         }
 
@@ -1019,6 +1098,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 this.cock = this.createSound(tag, "Cock");
             }
+            if(tag.contains("Noammo", Constants.NBT.TAG_STRING))
+            {
+                this.noammo = this.createSound(tag, "Noammo");
+            }
             if(tag.contains("SilencedFire", Constants.NBT.TAG_STRING))
             {
                 this.silencedFire = this.createSound(tag, "SilencedFire");
@@ -1029,6 +1112,9 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             }
             if(tag.contains("Draw", Constants.NBT.TAG_STRING)){
                 this.draw = this.createSound(tag, "Draw");
+            }
+            if(tag.contains("InspectEmpty", Constants.NBT.TAG_STRING)){
+                this.inspectEmpty = this.createSound(tag, "InspectEmpty");
             }
             if(tag.contains("Inspect", Constants.NBT.TAG_STRING)){
                 this.inspect = this.createSound(tag, "Inspect");
@@ -1062,9 +1148,11 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             sounds.fire = this.fire;
             sounds.reload = this.reload;
             sounds.cock = this.cock;
+            sounds.noammo = this.noammo;
             sounds.silencedFire = this.silencedFire;
             sounds.reloadEmpty = this.reloadEmpty;
             sounds.draw = this.draw;
+            sounds.inspectEmpty = this.inspectEmpty;
             sounds.inspect = this.inspect;
             sounds.reloadNormal = this.reloadNormal;
             sounds.pump = this.pump;
@@ -1080,6 +1168,12 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         private ResourceLocation createSound(CompoundNBT tag, String key)
         {
             String sound = tag.getString(key);
+            return sound.isEmpty() ? null : new ResourceLocation(sound);
+        }
+
+        @Nullable
+        private ResourceLocation createSound(String sound)
+        {
             return sound.isEmpty() ? null : new ResourceLocation(sound);
         }
 
@@ -1111,6 +1205,15 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         }
 
         /**
+         * @return The registry id of the sound event when no ammo
+         */
+        @Nullable
+        public ResourceLocation getNoammo()
+        {
+            return this.noammo;
+        }
+
+        /**
          * @return The registry id of the sound event when silenced firing this weapon
          */
         @Nullable
@@ -1131,6 +1234,8 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Nullable
         public ResourceLocation getDraw() { return this.draw; }
 
+        @Nullable
+        public ResourceLocation getInspectEmpty() { return this.inspectEmpty != null ? this.inspectEmpty : this.inspect; }
         /**
          * @return The registry id of the sound event when inspecting.
          */
@@ -1218,7 +1323,6 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         {
             private double size = 0.5;
             private double smokeSize = 2.0;
-
             private double trailAdjust = 1.15;
 
             @Override
@@ -1467,6 +1571,12 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             private ScaledPositioned sideRail;
             @Optional
             @Nullable
+            private ScaledPositioned irDevice;
+            @Optional
+            @Nullable
+            private ScaledPositioned extendedMag;
+            @Optional
+            @Nullable
             private ScaledPositioned oldScope;
             @Optional
             @Nullable
@@ -1502,6 +1612,17 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             public ScaledPositioned getSideRail()
             {
                 return this.sideRail;
+            }
+
+            @Nullable
+            public ScaledPositioned getIrDevice()
+            {
+                return this.irDevice;
+            }
+            @Nullable
+            public ScaledPositioned getExtendedMag()
+            {
+                return this.extendedMag;
             }
             @Nullable
             public ScaledPositioned getOldScope()
@@ -1548,6 +1669,14 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 {
                     tag.put("SideRail", this.sideRail.serializeNBT());
                 }
+                if(this.irDevice != null)
+                {
+                    tag.put("IrDevice", this.irDevice.serializeNBT());
+                }
+                if(this.extendedMag != null)
+                {
+                    tag.put("ExtendedMag", this.extendedMag.serializeNBT());
+                }
                 if(this.pistolScope != null)
                 {
                     tag.put("PistolScope", this.pistolScope.serializeNBT());
@@ -1586,6 +1715,14 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 {
                     this.sideRail = this.createScaledPositioned(tag, "SideRail");
                 }
+                if(tag.contains("IrDevice", Constants.NBT.TAG_COMPOUND))
+                {
+                    this.irDevice = this.createScaledPositioned(tag, "IrDevice");
+                }
+                if(tag.contains("ExtendedMag", Constants.NBT.TAG_COMPOUND))
+                {
+                    this.extendedMag = this.createScaledPositioned(tag, "ExtendedMag");
+                }
                 if(tag.contains("PistolScope", Constants.NBT.TAG_COMPOUND))
                 {
                     this.pistolScope = this.createPistolScope(tag, "PistolScope");
@@ -1622,6 +1759,14 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 if(this.sideRail != null)
                 {
                     attachments.sideRail = this.sideRail.copy();
+                }
+                if(this.irDevice != null)
+                {
+                    attachments.irDevice = this.irDevice.copy();
+                }
+                if(this.extendedMag != null)
+                {
+                    attachments.extendedMag = this.extendedMag.copy();
                 }
                 if(this.pistolScope != null)
                 {
@@ -1982,6 +2127,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                     return this.modules.attachments.underBarrel != null;
                 case SIDE_RAIL:
                     return this.modules.attachments.sideRail != null;
+                case IR_DEVICE:
+                    return this.modules.attachments.irDevice != null;
+                case EXTENDED_MAG:
+                    return this.modules.attachments.extendedMag != null;
                 case OLD_SCOPE:
                     return this.modules.attachments.oldScope != null;
                 case PISTOL_SCOPE:
@@ -2010,6 +2159,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                     return this.modules.attachments.underBarrel;
                 case SIDE_RAIL:
                     return this.modules.attachments.sideRail;
+                case IR_DEVICE:
+                    return this.modules.attachments.irDevice;
+                case EXTENDED_MAG:
+                    return this.modules.attachments.extendedMag;
                 case OLD_SCOPE:
                     return this.modules.attachments.oldScope;
                 case PISTOL_SCOPE:

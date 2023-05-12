@@ -3,24 +3,25 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
-      }
-    },
-    {
-      "item": {
-        "tag": "forge:nuggets/iron"
+        "tag": "forge:materials/uncommon"
       },
-      "count": 12
+      "count": 3
     },
     {
       "item": {
         "tag": "forge:gunpowder"
       },
-      "count": 2
+      "count": 6
+    },
+    {
+      "item": {
+        "tag": "forge:nuggets/iron"
+      },
+      "count": 18
     }
   ],
   "result": {
     "item": "tac:10_gauge_round",
-    "count": 20
+    "count": 18
   }
 }

@@ -1,0 +1,25 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/epic"
+      }
+    },
+    {
+      "item": {
+        "tag": "forge:materials/rare"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "tag": "forge:materials/uncommon"
+      },
+      "count": 7
+    }
+  ],
+  "result": {
+    "item": "tac:mk23"
+  }
+}

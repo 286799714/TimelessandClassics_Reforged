@@ -2,7 +2,7 @@
   "general": {
     "auto": true,
     "rate": 600,
-    "rateSelector": [0,1,2],
+    "rateSelector": [2, 1],
     "gripType":  "tac:two_handed_ak47",
     "recoilAngle": 3.025,
     "horizontalRecoilAngle": 2.525,
@@ -14,26 +14,31 @@
     "weightKilo": 5.1,
 
     "spread": 2.25,
-    "firstShotSpread": 0.135,
-    "hipFireInaccuracy": 5.2,
-    "projToMinAccuracy": 4,
-    "msToAccuracyReset": 220,
-    "movementInaccuracy": 0.875
+    "firstShotSpread": 0.185,
+    "hipFireInaccuracy": 6.75,
+    "projToMinAccuracy": 5,
+    "msToAccuracyReset": 460,
+    "movementInaccuracy": 0.7
   },
   "projectile": {
     "item":  "tac:762x39",
     "visible": false,
-    "damage": 9,
-    "size": 0.2,
-    "speed": 25.5,
-    "life": 10
+    "damage": 8,
+    "armorIgnore": 1.0,
+    "critical": 0.00,
+    "criticalDamage": 0.75,
+    "headDamage": 1.0,
+    "size": 0.15,
+    "speed": 17.5,
+    "trailLengthMultiplier": 2.5,
+    "life": 13
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 41,
     "additionalReloadEmptyMagTimer": 12,
-    "maxAdditionalAmmoPerOC": [15, 20, 45],
+    "maxAdditionalAmmoPerOC": [5, 12, 20],
     "preReloadPauseTicks": 0
   },
   "sounds": {
@@ -60,11 +65,11 @@
   },
   "modules": {
     "zoom":
-      {
+    {
       "fovModifier": 0.8,
       "yOffset": 11.015,
-      "zOffset": -4.225
-      },
+      "zOffset": -1.5
+    },
     "attachments": {
       "scope": {
         "yOffset": 10.51,
@@ -77,6 +82,11 @@
         "scale": 1.0,
         "doRenderMount": true,
         "doOnSlideMovement": false
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       }
     }
   }

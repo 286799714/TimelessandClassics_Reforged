@@ -60,7 +60,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 
-// Extended Entity at first, now ProjectileItemEntity
+//TODO: Blast this whole damned file and redo.
 public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnData
 {
     private static final Predicate<Entity> PROJECTILE_TARGETS = input -> input != null && input.canBeCollidedWith() && !input.isSpectator();
@@ -95,7 +95,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.general = modifiedGun.getGeneral();
         this.projectile = modifiedGun.getProjectile();
         this.entitySize = new EntitySize(this.projectile.getSize(), this.projectile.getSize(), false);
-        this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.0285) : 0.0;
+        this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.0285) : 0.0; // -0.0285 Default upcoming new -0.0125
         this.life = GunModifierHelper.getModifiedProjectileLife(weapon, this.projectile.getLife());
         this.randomRecoilP = randP;
         this.randomRecoilY = randY;
@@ -503,7 +503,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 this.onHitEntity(entity, result.getHitVec(), startVec, endVec, entityRayTraceResult.isHeadshot());
 
                 int collateralLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.COLLATERAL.get(), weapon);
-                if(collateralLevel == 0)
+                if (collateralLevel == 0)
                 {
                     this.remove();
                 }
@@ -523,7 +523,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         if(headshot)
         {
-            damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
+            if (this.projectile.getGunHeadDamage() >= 0)
+                damage *= (Config.COMMON.gameplay.headShotDamageMultiplier.get() * this.projectile.getGunHeadDamage());
             damage *= GunModifierHelper.getAdditionalHeadshotDamage(this.weapon) == 0F ? 1F : GunModifierHelper.getAdditionalHeadshotDamage(this.weapon);
         }
 
@@ -564,16 +565,23 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     {
         if(Config.COMMON.gameplay.bulletsIgnoreStandardArmor.get()) {
             float damageToMcArmor = 0;
-            if (Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() > 0) {
-                damageToMcArmor = (float) (damage * Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get());
-                entity.attackEntityFrom(source, damageToMcArmor); // Apply vanilla armor aware damage
+            if (Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore() >= 1.0) {
+                damageToMcArmor = 0;
             }
+
+            if (Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore() <= 1.0) {
+                damageToMcArmor = (float) (damage * (1 - Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore()));
+            }
+
+            if (Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore() <= 0.0) {
+                damageToMcArmor = damage;
+            }
+            entity.attackEntityFrom(source, damageToMcArmor); // Apply vanilla armor aware damage
 
             entity.hurtResistantTime = 0;
             source.setDamageBypassesArmor();
             source.setDamageIsAbsolute();
-            if(Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() <= 1.0)
-                entity.attackEntityFrom(source, (damage-damageToMcArmor)); // Apply pure damage
+            entity.attackEntityFrom(source, (damage - damageToMcArmor)); // Apply pure damage
         }
         else
             entity.attackEntityFrom(source, damage);
@@ -582,7 +590,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     protected void updateWeaponLevels(float damage)
     {
         ItemStack gunStack = this.shooter.getHeldItemMainhand();
-        if(!(gunStack.getItem() instanceof GunItem))
+        if(!(gunStack.getItem() instanceof GunItem) || gunStack.getTag() == null)
             return;
         if(gunStack.getTag().get("levelDmg") != null)
         {
@@ -749,10 +757,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     private float getCriticalDamage(ItemStack weapon, Random rand, float damage)
     {
-        float chance = GunModifierHelper.getCriticalChance(weapon);
-        if(rand.nextFloat() < chance)
+        float chance = GunModifierHelper.getCriticalChance(weapon) + this.projectile.getGunCritical();
+        if (rand.nextFloat() < chance && this.projectile.getGunCriticalDamage() >= 0)
         {
-            return (float) (damage * Config.COMMON.gameplay.criticalDamageMultiplier.get());
+            return (float) (damage * Config.COMMON.gameplay.criticalDamageMultiplier.get() * this.projectile.getGunCriticalDamage());
         }
         return damage;
     }

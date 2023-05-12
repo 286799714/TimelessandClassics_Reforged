@@ -1,0 +1,112 @@
+{
+  "general": {
+    "auto": true,
+    "rate": 1200,
+    "rateSelector": [2, 1],
+    "gripType": "tac:two_handed_vector",
+    "recoilAngle": 1.45,
+    "horizontalRecoilAngle": 1.25,
+    "recoilKick": 2,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.875,
+    "cameraRecoilModifier": 1.125,
+    "recoilDuration": 0.15,
+    "weightKilo": 2.3,
+
+    "spread": 2.5,
+    "firstShotSpread": 0.165,
+    "hipFireInaccuracy": 2.95,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 360,
+    "movementInaccuracy": 0.2
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 22,
+    "reloadMagTimer": 26,
+    "additionalReloadEmptyMagTimer": 8,
+    "maxAdditionalAmmoPerOC": [4, 7, 11],
+    "preReloadPauseTicks": 8
+  },
+  "projectile": {
+    "item": "tac:9mm_round",
+    "visible": false,
+    "damage": 5,
+    "armorIgnore": 0.7,
+    "critical": 0.0,
+    "criticalDamage": 0.625,
+    "headDamage": 0.625,
+    "size": 0.05,
+    "speed": 15.0,
+    "life": 12,
+    "trailLengthMultiplier": 2,
+    "ricochet": true
+  },
+  "sounds": {
+    "fire": "tac:item.udp_9_fire",
+    "reloadNormal": "tac:animation.udp_9_reload_norm",
+    "reloadEmpty": "tac:animation.udp_9_reload_empty",
+    "draw": "tac:animation.udp_9_draw",
+    "inspect": "tac:animation.udp_9_inspect",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "tac:item.udp_9_fire_s"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 8.875,
+      "zOffset": -11.75,
+      "size": 0.75,
+      "trailAdjust": 0.75
+    },
+    "hipfireScale": 0.60,
+    "hipfireMoveScale": 0.675,
+    "hipfireRecoilScale": 1.31,
+    "weaponType": 4
+  },
+  "modules": {
+    "zoom": {
+      "fovModifier": 0.8,
+      "yOffset": 11.665,
+      "zOffset": 1.5
+    },
+    "attachments": {
+      "barrel": {
+        "yOffset": -100829.84,
+        "zOffset": -11.55,
+        "scale": 1.00
+      },
+      "scope": {
+        "yOffset": 10.025,
+        "zOffset": 1.175,
+        "scale": 1.00
+      },
+      "pistolScope": {
+        "yOffset": 10.05,
+        "zOffset": 1.5,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
+      "stock": {
+        "yOffset": 7.75,
+        "zOffset": -22.05,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      }
+    }
+  }
+}

@@ -28,10 +28,11 @@ public interface IAttachment<T extends Attachment>
         STOCK("stock", "Stock"),            // 3
         UNDER_BARREL("under_barrel", "Under_Barrel"),            // 4
         SIDE_RAIL("side_rail", "Side_Rail"),            // 5
-
-        OLD_SCOPE("oldScope", "OldScope"),            // 6
-        PISTOL_SCOPE("pistolScope", "PistolScope"),            // 7
-        PISTOL_BARREL("pistolBarrel", "PistolBarrel"),            // 8
+        EXTENDED_MAG("extended_mag", "Extended_Mag"), // 6
+        IR_DEVICE("ir_device", "Ir_Device"), //7
+        OLD_SCOPE("oldScope", "OldScope"),            // 8
+        PISTOL_SCOPE("pistolScope", "PistolScope"),            // 9
+        PISTOL_BARREL("pistolBarrel", "PistolBarrel"),            // 10
 
         SCOPE_RETICLE_COLOR("reticle_color", "Reticle_Color"), // Scope Attachment Type             // 9
         SCOPE_BODY_COLOR("body_color", "Body_Color"),          // Scope Attachment Type            // 10

@@ -12,26 +12,17 @@ import java.io.IOException;
 @OnlyIn(Dist.CLIENT)
 public class CZ75AutoAnimationController extends PistalAnimationController {
     public static int INDEX_BODY = 6;
-
     public static int INDEX_SLIDE = 4;
-
     public static int INDEX_MAG = 5;
-
     public static int INDEX_LEFT_HAND = 0;
-
     public static int INDEX_RIGHT_HAND = 2;
 
     public static final AnimationMeta RELOAD_NORM = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_reload_norm.gltf"));
-
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_draw.gltf"));
-
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_reload_empty.gltf"));
-
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_inspect.gltf"));
-
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_inspect.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_static.gltf"));
-
-
     private static final CZ75AutoAnimationController instance = new CZ75AutoAnimationController();
 
     @Override
@@ -42,6 +33,7 @@ public class CZ75AutoAnimationController extends PistalAnimationController {
             case DRAW: return DRAW;
             case STATIC: return STATIC;
             case INSPECT: return INSPECT;
+            case INSPECT_EMPTY: return INSPECT_EMPTY;
             default: return null;
         }
     }
@@ -58,6 +50,7 @@ public class CZ75AutoAnimationController extends PistalAnimationController {
             Animations.load(DRAW);
             Animations.load(STATIC);
             Animations.load(INSPECT);
+            Animations.load(INSPECT_EMPTY);
         } catch (IOException e) {
             GunMod.LOGGER.fatal(e.getStackTrace());
         }

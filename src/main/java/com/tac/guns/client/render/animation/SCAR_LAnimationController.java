@@ -21,12 +21,12 @@ public class SCAR_LAnimationController extends GunAnimationController{
     public static int INDEX_MAGAZINE2 = 3;
     public static int INDEX_BOLT = 10;
     //public static int INDEX_CHARGE_HANDLE = 1;
-    //public static int INDEX_CHARGE_HANDLE = 1;
 
     public static final AnimationMeta RELOAD_NORM = new AnimationMeta(new ResourceLocation("tac","animations/scar_l_reload_norm.gltf"));
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/scar_l_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/scar_l_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/scar_l_inspect.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/scar_l_inspect.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/scar_l_static.gltf"));
     private static final SCAR_LAnimationController instance = new SCAR_LAnimationController();
 
@@ -36,6 +36,7 @@ public class SCAR_LAnimationController extends GunAnimationController{
             Animations.load(RELOAD_EMPTY);
             Animations.load(DRAW);
             Animations.load(INSPECT);
+            Animations.load(INSPECT_EMPTY);
             Animations.load(STATIC);
         } catch (IOException e) {
             GunMod.LOGGER.fatal(e.getStackTrace());
@@ -55,6 +56,7 @@ public class SCAR_LAnimationController extends GunAnimationController{
             case RELOAD_NORMAL: return RELOAD_NORM;
             case DRAW: return DRAW;
             case INSPECT: return INSPECT;
+            case INSPECT_EMPTY: return INSPECT_EMPTY;
             case STATIC: return STATIC;
             default: return null;
         }

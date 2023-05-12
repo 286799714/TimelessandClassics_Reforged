@@ -1,5 +1,20 @@
 {
     "block.tac.workbench": "枪械工作台",
+    "item.tac.module_item": "模组数据块",
+    "item.tac.basic_laser": "轻型镭射",
+    "item.tac.ir_laser": "战术镭射",
+    "item.tac.small_extended_mag": "轻型扩容弹匣",
+    "item.tac.medium_extended_mag": "§9中型扩容弹匣",
+    "item.tac.large_extended_mag": "§5重型扩容弹匣",
+    "item.tac.uncommon_material": "§a优秀材料",
+    "item.tac.rare_material": "§9稀有材料",
+    "item.tac.epic_material": "§5史诗材料",
+    "item.tac.legendary_material": "§6传说材料",
+    "item.tac.indigestion_tablet": "健胃消食片",
+    "item.tac.legendary_certificate": "§6高级枪械凭证",
+    "item.tac.ultimate_certificate": "§c传说枪械凭证",
+    "item.tac.ultimate_material": "§c终极材料",
+    "item.tac.module_unit_item": "§b枪械模组数据块",
     "item.tac.m1911": "M1911 手枪",
     "item.tac.m1894": "M1894 步枪",
     "item.tac.m1851": "M1851单动式 左轮手枪",
@@ -59,15 +74,16 @@
     "item.tac.type81_x": "81-1 突击步枪",
     "item.tac.pkp_penchenberg": "PKP 佩切涅格机枪",
     "item.tac.mp7": "MP7 冲锋枪",
-    "item.tac.m82a2": "M82A3 .50口径狙击步枪",
+    "item.tac.m82a2": "M82A3 .50口径反器材步枪",
     "item.tac.ai_awp": "AWM 狙击步枪",
     "item.tac.rpg7": "RPG-7 火箭筒",
     "item.tac.rpk": "RPK 轻机枪",
-    "item.tac.fn_fal": "FN FAL 突击步枪",
+    "item.tac.fn_fal": "FN FAL 战斗步枪",
     "item.tac.de_lisle": "德莱赛 卡宾枪",
     "item.tac.m1_garand": "M1 加兰德 步枪",
     "item.tac.sig_mcx_spear": "SIG MCX SPEAR 突击步枪",
     "item.tac.mp9": "Mp9 冲锋枪",
+    "item.tac.udp_9": "UDP 9 冲锋枪",
     "item.tac.sks": "SKS 步枪",
     "item.tac.sks_tactical": "SKS 战术步枪",
     "item.tac.m1014": "M1014 战术霰弹枪",
@@ -80,8 +96,9 @@
     "item.tac.sten_mk_ii_oss": "OSS STEN MK.III 冲锋枪",
     "item.tac.espadon": "ESPADON .50口径步枪",
     "item.tac.m16a4": "M16A4 突击步枪",
-    "item.tac.scar_h": "SCAR H 突击步枪",
+    "item.tac.scar_h": "SCAR H 战斗步枪",
     "item.tac.scar_l": "SCAR L 突击步枪",
+    "item.tac.scar_mk20": "SCAR MK20 狙击枪",
     "item.tac.mk47": "MK47 突击步枪",
     "item.tac.tti_g34": "黑钢战术 TTI G34 手枪",
     "item.tac.mk18_mod1": "MK18 MOD1 突击步枪",
@@ -153,6 +170,7 @@
     "subtitle.tac.remington_700s": "步枪 消音射击",
     "subtitle.tac.m870": "霰弹枪开火",
     "subtitle.tac.mp9s": "Pew Pew!",
+    "subtitle.tac.udp_9_fire_s": "Pew Pew!",
     "subtitle.tac.p226s": "手枪 消音射击",
     "subtitle.tac.saiga": "霰弹枪 射击",
     "subtitle.tac.sig552": "突击步枪 射击",
@@ -245,6 +263,12 @@
     "info.tac.firemode_semi": "<半自动射击>, 按下 %s 以更改开火模式",
     "info.tac.firemode_auto": "<全自动射击>, 按下 %s 以更改开火模式",
 
+    "info.tac.armorPen": "%s 伤害穿透Minecraft护甲",
+    "info.tac.headDamageModifier": "%s 爆头倍率",
+
+    "info.tac.more_info_gunitem": "按住 [%s] 以显示更多信息",
+    "key.tac.moreInfoHold": "显示更多枪械信息",
+
     "key.categories.tac": "永恒枪械工坊",
 
 	"key.tac.pull_trigger": "武器开火",
@@ -318,7 +342,6 @@
     "enchantment.tac.trigger_finger": "l_快速扳机",
     "enchantment.tac.lightweight": "人体工学优化",
     "enchantment.tac.collateral": "l_子弹过穿",
-    "enchantment.tac.over_capacity": "扩容弹匣",
     "enchantment.tac.reclaimed": "l_节约风气",
     "enchantment.tac.accelerator": "膛压过载",
     "enchantment.tac.puncturing": "正中要害",
@@ -329,7 +352,6 @@
     "enchantment.tac.trigger_finger.desc": "增加射速",
     "enchantment.tac.lightweight.desc": "减少开镜瞄准所需时间",
     "enchantment.tac.collateral.desc": "子弹能穿透多个实体",
-    "enchantment.tac.over_capacity.desc": "增加武器弹药容量",
     "enchantment.tac.reclaimed.desc": "开火有概率不消耗子弹",
     "enchantment.tac.accelerator.desc": "射出的子弹速度更快以造成更高伤害",
     "enchantment.tac.puncturing.desc": "子弹有概率暴击造成更高伤害",
@@ -412,6 +434,7 @@
 
     "info.tac.current_level": "好感度等级",
     "info.tac.out_of_ammo": "装填弹药!",
+    "info.tac.mag_error": "卸载弹药!",
 
     "tac.options.screenFormat": "TAC GUI设置",
 
@@ -434,7 +457,9 @@
     "info.tac.current_armor_amount": "Current Armor Durability: ",
     "tac.options.weaponsVolume.format": "Gun fire Volume: %s",
     "tac.options.toggleAim": "Toggle ADS",
-    "tac.options.showFirstPersonBulletTrails": "Show FPS trails"
+    "tac.options.showFirstPersonBulletTrails": "Show FPS trails",
+    "enchantment.tac.over_capacity": "Extended Capacity",
+    "enchantment.tac.over_capacity.desc": "Increases the ammunition count for the weapon"
     
     
 }

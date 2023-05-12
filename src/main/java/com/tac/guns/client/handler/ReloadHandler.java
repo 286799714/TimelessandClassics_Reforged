@@ -30,6 +30,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import com.tac.guns.util.GunModifierHelper;
 
 
 /**
@@ -296,7 +297,7 @@ public class ReloadHandler {
                     CompoundNBT tag = stack.getTag();
                     if (tag != null && !tag.contains("IgnoreAmmo", Constants.NBT.TAG_BYTE)) {
                         Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
-                        if (tag.getInt("AmmoCount") >= GunEnchantmentHelper.getAmmoCapacity(stack, gun)) {
+                        if (tag.getInt("AmmoCount") >= GunModifierHelper.getAmmoCapacity(stack, gun)) {
                             return;
                         }
                         ItemStack rig = WearableHelper.PlayerWornRig(player);
@@ -437,8 +438,9 @@ public class ReloadHandler {
 
     @SubscribeEvent
     public void onGunFire(GunFireEvent.Pre event) {
-        if(Minecraft.getInstance().player == null) return;
-        ItemStack stack = Minecraft.getInstance().player.getHeldItemMainhand();
+        PlayerEntity player = event.getPlayer();
+        if(player == null) return;
+        ItemStack stack = player.getHeldItemMainhand();
         Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
         if(GunAnimationController.fromItem(stack.getItem()) instanceof PumpShotgunAnimationController && isReloading()) event.setCanceled(true);
         CompoundNBT tag = stack.getOrCreateTag();

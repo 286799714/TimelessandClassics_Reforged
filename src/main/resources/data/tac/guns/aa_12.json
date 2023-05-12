@@ -1,60 +1,58 @@
 {
   "general": {
     "auto": true,
-    "rate": 325,
-    "rateSelector": [
-      0,
-      2
-    ],
+    "rate": 300,
+    "rateSelector": [2],
     "gripType": "tac:two_handed_ak47",
     "maxAmmo": 9,
     "recoilAngle": 3.15,
     "horizontalRecoilAngle": 1.45,
-    "recoilKick": 3.155,
+    "recoilKick": 2.155,
     "recoilAdsReduction": 0.275,
     "weaponRecoilOffset": 0.725,
     "recoilDuration": 0.185,
-    "cameraRecoilModifier": 0.325,
+    "cameraRecoilModifier": 0.825,
     "projectileAmount": 12,
     "weightKilo": 5.0,
 
-    "spread": 7.25,
-    "firstShotSpread": 5.45,
-    "hipFireInaccuracy": 1.6,
-    "projToMinAccuracy": 2,
-    "msToAccuracyReset": 625,
-    "movementInaccuracy": 0.0
+    "spread": 5.85,
+    "firstShotSpread": 3.85,
+    "hipFireInaccuracy": 0.95,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 925,
+    "movementInaccuracy": 0.05
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 8,
     "reloadMagTimer": 38,
     "additionalReloadEmptyMagTimer": 16,
-    "maxAdditionalAmmoPerOC": [
-      3,
-      7,
-      11
-    ],
+    "maxAdditionalAmmoPerOC": [3, 7, 12],
     "preReloadPauseTicks": 0,
     "openBolt": true
   },
   "projectile": {
     "item": "tac:10_gauge_round",
     "visible": false,
-    "damage": 21,
+    "damage": 30,
+    "armorIgnore": 0.5,
+    "critical": 0.0,
+    "criticalDamage": 0.75,
+    "headDamage": 0.55,
     "size": 0.05,
-    "speed": 18.5,
-    "life": 3,
+    "speed": 16.5,
+    "life": 5,
+    "trailLengthMultiplier": 2.5,
     "ricochet": false
   },
   "sounds": {
-    "fire": "tac:item.aa12",
+    "fire": "tac:item.aa12_fire",
     "reloadNormal": "tac:animation.aa12_reload_norm",
     "reloadEmpty": "tac:animation.aa12_reload_empty",
     "draw": "tac:animation.aa12_draw",
     "inspect": "tac:animation.aa12_inspect",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.aa12_s"
+    "silencedFire": "tac:item.aa12_fire_s"
   },
   "display": {
     "flash": {
@@ -67,7 +65,7 @@
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.9,
+      "fovModifier": 0.8,
       "yOffset": 15.23,
       "zOffset": -3.2
     },
@@ -76,6 +74,11 @@
         "yOffset": -100829.84,
         "zOffset": -11.55,
         "scale": 1.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       },
       "underBarrel": {
         "yOffset": 7.799,
@@ -93,6 +96,11 @@
         "scale": 1.0,
         "doRenderMount": true,
         "doOnSlideMovement": false
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       }
     }
   }

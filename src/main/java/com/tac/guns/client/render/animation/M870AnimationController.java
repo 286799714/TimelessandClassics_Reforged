@@ -11,33 +11,21 @@ import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class M870AnimationController extends PumpShotgunAnimationController {
-
     public static final int INDEX_PUMP = 0;
-
     public static final int INDEX_BULLET = 1;
-
     public static final int INDEX_BODY = 2;
-
     public static final int INDEX_RIGHT_HAND = 3;
-
     public static final int INDEX_LEFT_HAND = 6;
 
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/m870_static.gltf"));
-
     public static final AnimationMeta PUMP = new AnimationMeta(new ResourceLocation("tac","animations/m870_pump.gltf"));
-
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/m870_draw.gltf"));
-
     public static final AnimationMeta INTRO = new AnimationMeta(new ResourceLocation("tac","animations/m870_reload_intro.gltf"));
-
     public static final AnimationMeta LOOP = new AnimationMeta(new ResourceLocation("tac","animations/m870_reload_loop.gltf"));
-
-    public static final AnimationMeta NORMAL_END = new AnimationMeta(new ResourceLocation("tac","animations/m870_reload_normal_end.gltf"));
-
+    public static final AnimationMeta NORMAL_END = new AnimationMeta(new ResourceLocation("tac","animations/m870_reload_norm_end.gltf"));
     public static final AnimationMeta EMPTY_END = new AnimationMeta(new ResourceLocation("tac","animations/m870_reload_empty_end.gltf"));
-
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/m870_inspect.gltf"));
-
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m870_inspect.gltf"));
     private static final M870AnimationController instance = new M870AnimationController();
 
     public static M870AnimationController getInstance(){return instance;}
@@ -51,6 +39,7 @@ public class M870AnimationController extends PumpShotgunAnimationController {
             Animations.load(NORMAL_END);
             Animations.load(EMPTY_END);
             Animations.load(INSPECT);
+            Animations.load(INSPECT_EMPTY);
         } catch (IOException e) {
             GunMod.LOGGER.fatal(e.getStackTrace());
         }
@@ -69,6 +58,7 @@ public class M870AnimationController extends PumpShotgunAnimationController {
             case RELOAD_NORMAL_END: return NORMAL_END;
             case RELOAD_EMPTY_END: return EMPTY_END;
             case INSPECT: return INSPECT;
+            case INSPECT_EMPTY: return INSPECT_EMPTY;
             default: return null;
         }
     }

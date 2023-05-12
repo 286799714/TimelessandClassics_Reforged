@@ -17,6 +17,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import com.tac.guns.util.GunModifierHelper;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

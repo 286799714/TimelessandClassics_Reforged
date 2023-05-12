@@ -1,14 +1,11 @@
 {
   "general": {
-    "rate": 300,
-    "rateSelector": [
-      0,
-      1
-    ],
+    "rate": 400,
+    "rateSelector": [1],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 11.75,
-    "horizontalRecoilAngle": 5.325,
-    "recoilKick": 1.725,
+    "recoilAngle": 9.25,
+    "horizontalRecoilAngle": 4.325,
+    "recoilKick": 1.425,
     "recoilAdsReduction": 0.165,
     "weaponRecoilOffset": 0.725,
     "cameraRecoilModifier": 5.35,
@@ -16,38 +13,40 @@
     "weightKilo": 1.7,
 
     "spread": 1.25,
-    "firstShotSpread": 0.13,
-    "hipFireInaccuracy": 3.45,
-    "projToMinAccuracy": 3,
-    "msToAccuracyReset": 310,
-    "movementInaccuracy": 0.45
+    "firstShotSpread": 0.1,
+    "hipFireInaccuracy": 1.45,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 240,
+    "movementInaccuracy": 0.1
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 13,
-    "reloadMagTimer": 30,
-    "additionalReloadEmptyMagTimer": 13,
-    "maxAdditionalAmmoPerOC": [
-      3,
-      5,
-      8
-    ],
+    "reloadMagTimer": 28,
+    "additionalReloadEmptyMagTimer": 12,
+    "maxAdditionalAmmoPerOC": [3, 5, 8],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:round45",
     "visible": false,
-    "damage": 8.0,
-    "size": 0.2,
-    "speed": 20.0,
-    "life": 5
+    "damage": 9.5,
+    "armorIgnore": 0.6,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 0.75,
+    "size": 0.1,
+    "speed": 12.5,
+    "trailLengthMultiplier": 2.75,
+    "life": 13
   },
   "sounds": {
     "fire": "tac:item.ttisti2011_fire",
-    "reloadNormal": "tac:animation.sti2011_norm_reload",
-    "reloadEmpty": "tac:animation.sti2011_empty_reload",
+    "reloadNormal": "tac:animation.sti2011_reload_norm",
+    "reloadEmpty": "tac:animation.sti2011_reload_empty",
     "draw": "tac:animation.sti2011_draw",
     "inspect": "tac:animation.sti2011_inspect",
+    "inspectEmpty": "tac:animation.sti2011_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.ttisti2011_fire_s"
   },
@@ -56,24 +55,39 @@
       "yOffset": 9.825,
       "zOffset": -13.32,
       "size": 1.1,
-      "trailAdjust": 0.895
+      "trailAdjust": 0.875
     },
     "weaponType": 2
   },
   "modules": {
     "zoom":
-      {
-        "fovModifier": 0.9,
-        "yOffset": 11.685,
-        "zOffset": -4.125
-      },
+    {
+      "fovModifier": 0.9,
+      "yOffset": 11.685,
+      "zOffset": -4.125
+    },
     "attachments": {
+      "pistolBarrel": {
+        "yOffset": -100829.84,
+        "zOffset": -11.55,
+        "scale": 0.00
+      },
       "pistolScope": {
-        "yOffset": 10.085,
-        "zOffset": 3.635,
-        "scale": 1.80,
+        "yOffset": 10,
+        "zOffset": 3.25,
+        "scale": 2,
         "doRenderMount": true,
         "doOnSlideMovement": true
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       }
     }
   }

@@ -1,12 +1,8 @@
 {
   "general": {
     "auto": true,
-    "rate": 700,
-    "rateSelector": [
-      0,
-      1,
-      2
-    ],
+    "rate": 725,
+    "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 3.325,
     "horizontalRecoilAngle": 2.75,
@@ -20,34 +16,35 @@
     "spread": 1.775,
     "firstShotSpread": 0.115,
     "hipFireInaccuracy": 6.25,
-    "projToMinAccuracy": 4,
-    "msToAccuracyReset": 220,
-    "movementInaccuracy": 0.35
+    "projToMinAccuracy": 5,
+    "msToAccuracyReset": 360,
+    "movementInaccuracy": 0.55
   },
   "projectile": {
     "item": "tac:762x39",
     "visible": false,
-    "damage": 7.75,
-    "size": 0.2,
-    "speed": 17.0,
-    "life": 21
+    "damage": 8,
+    "armorIgnore": 1.0,
+    "critical": 0.00,
+    "criticalDamage": 0.75,
+    "headDamage": 1.0,
+    "size": 0.1,
+    "speed": 20,
+    "trailLengthMultiplier": 2.75,
+    "life": 13
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 34,
     "additionalReloadEmptyMagTimer": 14,
-    "maxAdditionalAmmoPerOC": [
-      10,
-      15,
-      20
-    ],
+    "maxAdditionalAmmoPerOC": [5, 12, 20],
     "preReloadPauseTicks": 0
   },
   "sounds": {
     "fire": "tac:item.mk47_fire",
-    "reloadNormal": "tac:animation.mk47_norm_reload",
-    "reloadEmpty": "tac:animation.mk47_empty_reload",
+    "reloadNormal": "tac:animation.mk47_reload_norm",
+    "reloadEmpty": "tac:animation.mk47_reload_empty",
     "draw": "tac:animation.mk47_draw",
     "inspect": "tac:animation.mk47_inspect",
     "cock": "tac:item.pistol.cock",
@@ -57,7 +54,7 @@
     "flash": {
       "yOffset": 9.55,
       "zOffset": -17.35,
-      "size": 0.9
+      "size": 1
     },
     "hipfireScale": 1.175,
     "hipfireMoveScale": 0.8,
@@ -77,9 +74,24 @@
         "zOffset": -11.55,
         "scale": 1.00
       },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
       "stock": {
         "yOffset": 7.75,
         "zOffset": -22.05,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
         "scale": 0.00
       },
       "scope": {
@@ -97,4 +109,3 @@
     }
   }
 }
-

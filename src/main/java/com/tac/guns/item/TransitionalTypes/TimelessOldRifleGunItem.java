@@ -2,6 +2,7 @@ package com.tac.guns.item.TransitionalTypes;
 
 
 import com.tac.guns.GunMod;
+import com.tac.guns.client.InputHandler;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.GunModifiers;
 import com.tac.guns.interfaces.IGunModifier;
@@ -24,6 +25,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
+import com.tac.guns.util.GunModifierHelper;
 
 
 public class TimelessOldRifleGunItem extends TimelessGunItem {
@@ -34,13 +36,14 @@ public class TimelessOldRifleGunItem extends TimelessGunItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        Gun modifiedGun = this.getModifiedGun(stack);
         CompoundNBT tagCompound = stack.getTag();
         super.addInformation(stack, worldIn, tooltip, flag);
-        if(tagCompound != null)
-        {
-            //tooltip.add((new TranslationTextComponent("info.tac.oldRifle", new TranslationTextComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).mergeStyle(TextFormatting.GREEN)));
-            tooltip.add((new TranslationTextComponent("info.tac.oldRifleScope", new TranslationTextComponent("OldScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
+        boolean isShift = InputHandler.MORE_INFO_HOLD.down;
+        if(isShift) {
+            if (tagCompound != null) {
+                //tooltip.add((new TranslationTextComponent("info.tac.oldRifle", new TranslationTextComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).mergeStyle(TextFormatting.GREEN)));
+                tooltip.add((new TranslationTextComponent("info.tac.oldRifleScope", new TranslationTextComponent("OldScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
+            }
         }
     }
 

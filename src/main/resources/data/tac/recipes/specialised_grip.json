@@ -3,9 +3,8 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
-      },
-      "count": 12
+        "tag": "forge:materials/epic"
+      }
     },
     {
       "item": {

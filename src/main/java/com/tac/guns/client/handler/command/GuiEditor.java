@@ -131,7 +131,7 @@ public class GuiEditor
         boolean isUp = event.getKeyCode() == GLFW.GLFW_KEY_UP;
         boolean isDown = event.getKeyCode() == GLFW.GLFW_KEY_DOWN;
 
-        boolean isShiftDown = event.getKeyCode() == GLFW.GLFW_KEY_LEFT_SHIFT; // Increase Step Size
+        boolean isShiftDown = InputHandler.SHIFTY.down; // Increase Step Size
         boolean isPeriodDown = InputHandler.SIZE_OPT.down;
 
         GUI_Element element = this.elements.size() == 0 || !this.elements.containsKey(this.currElement) ? new GUI_Element(0, 0, 0, 0) : this.elements.get(this.currElement);

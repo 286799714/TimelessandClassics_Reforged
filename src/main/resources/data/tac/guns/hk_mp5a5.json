@@ -1,14 +1,9 @@
 {
   "general": {
     "auto": true,
-    "rate": 800,
+    "rate": 750,
     "burstRate": 12,
-    "rateSelector": [
-      0,
-      1,
-      2,
-      3
-    ],
+    "rateSelector": [2, 3, 1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 1.625,
     "horizontalRecoilAngle": 1.425,
@@ -19,31 +14,33 @@
     "recoilDuration": 0.275,
     "weightKilo": 1.35,
 
-    "spread": 2.15,
-    "firstShotSpread": 0.225,
-    "hipFireInaccuracy": 1.35,
-    "projToMinAccuracy": 8,
-    "msToAccuracyReset": 150,
-    "movementInaccuracy": 0.35
+    "spread": 2.85,
+    "firstShotSpread": 0.165,
+    "hipFireInaccuracy": 3.05,
+    "projToMinAccuracy": 6,
+    "msToAccuracyReset": 380,
+    "movementInaccuracy": 0.235
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 35,
     "additionalReloadEmptyMagTimer": 16,
-    "maxAdditionalAmmoPerOC": [
-      10,
-      20,
-      45
-    ],
+    "maxAdditionalAmmoPerOC": [5, 12, 20],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "damage": 4.5,
-    "speed": 20,
-    "life": 18,
+    "damage": 6.5,
+    "armorIgnore": 0.7,
+    "critical": 0.0,
+    "criticalDamage": 0.625,
+    "headDamage": 0.625,
+    "speed": 14,
+    "size": 0.05,
+    "life": 11,
+    "trailLengthMultiplier": 2.5,
     "ricochet": true
   },
   "sounds": {
@@ -53,14 +50,14 @@
     "draw": "tac:animation.hk_mp5a5_draw",
     "inspect": "tac:animation.hk_mp5a5_inspect",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.mp5_fires"
+    "silencedFire": "tac:item.mp5a5_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 10.75,
       "zOffset": -10.525,
       "size": 0.52,
-      "trailAdjust": 0.70
+      "trailAdjust": 0.75
     },
     "hipfireScale": 2.5,
     "hipfireMoveScale": 1.0,
@@ -69,7 +66,7 @@
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.9,
+      "fovModifier": 0.8,
       "yOffset": 13.225,
       "zOffset": -2.65
     },
@@ -78,6 +75,11 @@
         "yOffset": -100829.84,
         "zOffset": -11.55,
         "scale": 1.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       },
       "scope": {
         "yOffset": 12.525,
@@ -97,6 +99,11 @@
         "scale": 0.00
       },
       "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "sideRail": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

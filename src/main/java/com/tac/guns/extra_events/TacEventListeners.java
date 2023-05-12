@@ -107,6 +107,7 @@ public class TacEventListeners {
         event.getPlayer().getEntityWorld().playSound(player, player.getPosition(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.experience_orb.pickup")), SoundCategory.PLAYERS,4.0F, 1.0F);
     }
 
+    // TODO: remaster method to play empty fire sound on most-all guns
     /* BTW this was by bomb787 as a Timeless Contributor */
     @SubscribeEvent
     public static void postShoot(GunFireEvent.Post event) {

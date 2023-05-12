@@ -1,54 +1,53 @@
 {
   "general": {
     "rate": 300,
-    "rateSelector": [
-      0,
-      1
-    ],
+    "rateSelector": [1],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 8.25,
-    "horizontalRecoilAngle": 3.25,
-    "recoilKick": 1.55,
+    "recoilAngle": 10.75,
+    "horizontalRecoilAngle": 5.325,
+    "recoilKick": 1.725,
     "recoilAdsReduction": 0.185,
     "weaponRecoilOffset": 0.545,
     "cameraRecoilModifier": 4.65,
     "recoilDuration": 0.28,
     "weightKilo": 1.2,
 
-    "spread": 1.25,
+    "spread": 2.35,
     "firstShotSpread": 0.205,
-    "hipFireInaccuracy": 4.15,
+    "hipFireInaccuracy": 2.8,
     "projToMinAccuracy": 2,
-    "msToAccuracyReset": 640,
-    "movementInaccuracy": 0.625
+    "msToAccuracyReset": 280,
+    "movementInaccuracy": 0.245
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 7,
     "reloadMagTimer": 24,
     "additionalReloadEmptyMagTimer": 11,
-    "maxAdditionalAmmoPerOC": [
-      5,
-      8,
-      13
-    ],
+    "maxAdditionalAmmoPerOC": [2, 4, 7],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:round45",
     "visible": false,
-    "damage": 9.0,
-    "speed": 15.0,
-    "life": 14
+    "damage": 9,
+    "armorIgnore": 0.6,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 0.75,
+    "size": 0.075,
+    "speed": 10.5,
+    "life": 12,
+    "trailLengthMultiplier": 3
   },
   "sounds": {
     "fire": "tac:item.m1911_fire",
-    "reloadNormal": "tac:animation.m1911_norm_reload",
-    "reloadEmpty": "tac:animation.m1911_empty_reload",
+    "reloadNormal": "tac:animation.m1911_reload_norm",
+    "reloadEmpty": "tac:animation.m1911_reload_empty",
     "draw": "tac:animation.m1911_draw",
     "inspect": "tac:animation.m1911_inspect",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.fire_m1911s"
+    "silencedFire": "tac:item.m1911_fire_s"
   },
   "display": {
     "flash": {
@@ -61,11 +60,17 @@
   },
   "modules": {
     "zoom":
-      {
-        "fovModifier": 0.9,
-        "yOffset": 12.5125,
-        "zOffset": -5.78
-      },
-    "attachments": {}
+    {
+      "fovModifier": 0.8,
+      "yOffset": 12.5125,
+      "zOffset": -5.78
+    },
+    "attachments": {
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      }
+    }
   }
 }

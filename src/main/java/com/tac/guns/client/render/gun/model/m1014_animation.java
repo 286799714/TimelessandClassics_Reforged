@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
+import com.tac.guns.util.GunModifierHelper;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -26,12 +27,6 @@ import net.minecraft.util.math.vector.Vector3f;
  * Author: ClumsyAlien, codebase and design based off Mr.Pineapple's original addon
  */
 public class m1014_animation implements IOverrideModel {
-
-    /*
-        I plan on making a very comprehensive description on my render / rendering methods, currently I am unable to give a good explanation on each part and will be supplying one later one in development!
-
-        If you are just starting out I don't recommend attempting to create an animated part of your weapon is as much as I can comfortably give at this point!
-    */
     @Override
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
     {
@@ -61,8 +56,10 @@ public class m1014_animation implements IOverrideModel {
                         matrices.translate(0, 0, 0.2725f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
                     }
                 }
+                if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT_EMPTY)) {
+                    matrices.translate(0, 0, -0.2725f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
+                }
             }
-            matrices.translate(0, 0, 0.025f);
             RenderUtil.renderModel(SpecialModels.M1014_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay); // BOLT
         }
         matrices.pop();
@@ -70,7 +67,7 @@ public class m1014_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.M1014.getModel(), M1014AnimationController.INDEX_BULLET, transformType, matrices);
-            if(Gun.hasAmmo(stack) || controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_LOOP))
+            if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT) || controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_LOOP))
                 RenderUtil.renderModel(SpecialModels.M1014_BULLET.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();

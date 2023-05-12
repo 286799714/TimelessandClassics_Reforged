@@ -20,6 +20,7 @@ public class M24AnimationController extends BoltActionAnimationController {
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m24_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/m24_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/m24_inspect.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m24_inspect.gltf"));
     public static final AnimationMeta BOLT = new AnimationMeta(new ResourceLocation("tac","animations/m24_bolt.gltf"));
     private static final M24AnimationController instance = new M24AnimationController();
 
@@ -29,6 +30,7 @@ public class M24AnimationController extends BoltActionAnimationController {
             Animations.load(RELOAD_EMPTY);
             Animations.load(DRAW);
             Animations.load(INSPECT);
+            Animations.load(INSPECT_EMPTY);
             Animations.load(STATIC);
             Animations.load(BOLT);
         } catch (IOException e) {
@@ -49,6 +51,7 @@ public class M24AnimationController extends BoltActionAnimationController {
             case RELOAD_NORMAL: return RELOAD_NORM;
             case DRAW: return DRAW;
             case INSPECT: return INSPECT;
+            case INSPECT_EMPTY: return INSPECT_EMPTY;
             case STATIC: return STATIC;
             case PULL_BOLT: return BOLT;
             default: return null;

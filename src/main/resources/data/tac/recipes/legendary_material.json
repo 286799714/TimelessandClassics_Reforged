@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#I#",
+    "iXi",
+    "#I#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:quartz"
+    },
+    "I": {
+      "item": "minecraft:diamond"
+    },
+    "X": {
+      "tag": "forge:materials/epic"
+    },
+    "i": {
+      "item": "minecraft:blaze_rod"
+    }
+  },
+  "result": {
+    "item": "tac:legendary_material"
+  }
+}

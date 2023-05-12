@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import com.tac.guns.util.GunModifierHelper;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -28,7 +29,7 @@ public class c96_animation implements IOverrideModel {
     public void render(float partialTicks, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
 
         GunItem gunItem = ((GunItem) stack.getItem());
-        if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
+        if(GunModifierHelper.getAmmoCapacity(stack) > -1)
         {
             RenderUtil.renderModel(SpecialModels.C96_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
         }

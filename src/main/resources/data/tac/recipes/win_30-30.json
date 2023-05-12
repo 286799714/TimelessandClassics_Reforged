@@ -3,7 +3,7 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
+        "tag": "forge:materials/uncommon"
       },
       "count": 3
     },
@@ -11,11 +11,11 @@
       "item": {
         "tag": "forge:gunpowder"
       },
-      "count": 4
+      "count": 8
     }
   ],
   "result": {
     "item": "tac:win_30-30",
-    "count": 20
+    "count": 24
   }
 }

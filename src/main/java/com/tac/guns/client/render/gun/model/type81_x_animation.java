@@ -21,6 +21,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
+import com.tac.guns.util.GunModifierHelper;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -39,7 +40,7 @@ public class type81_x_animation implements IOverrideModel {
         Type81AnimationController controller = Type81AnimationController.getInstance();
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-        
+
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.TYPE81_X.getModel(),Type81AnimationController.INDEX_BODY,transformType,matrices);
@@ -54,7 +55,7 @@ public class type81_x_animation implements IOverrideModel {
         {
             controller.applySpecialModelTransform(SpecialModels.TYPE81_X.getModel(),Type81AnimationController.INDEX_MAGAZINE,transformType,matrices);
 
-            if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
+            if(GunModifierHelper.getAmmoCapacity(stack) > -1)
             {
                 RenderUtil.renderModel(SpecialModels.TYPE81_X_EXT_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
@@ -75,41 +76,20 @@ public class type81_x_animation implements IOverrideModel {
                 boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
                 if (Gun.hasAmmo(stack) || shouldOffset) {
                     matrices.translate(0, 0, 0.280f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
+                    GunRenderingHandler.get().opticMovement = 0.280f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0);
                 } else if (!Gun.hasAmmo(stack)) {
                     {
                         matrices.translate(0, 0, 0.280f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
+                        GunRenderingHandler.get().opticMovement = 0.280f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0);
                     }
                 }
+                matrices.translate(0, 0, 0.025F);
             }
-            matrices.translate(0, 0, 0.025F);
             RenderUtil.renderModel(SpecialModels.TYPE81_X_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
-
-        /*
-        Gun gun = ((GunItem) stack.getItem()).getGun();
-            float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-
-            AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
-            boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
-            if (Gun.hasAmmo(stack) || shouldOffset) {
-                matrices.translate(0, 0, 0.185f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
-                GunRenderingHandler.get().opticMovement = 0.185f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0);
-            } else if (!Gun.hasAmmo(stack)) {
-                matrices.translate(0, 0, 0.185f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
-                GunRenderingHandler.get().opticMovement = 0.185f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0);
-            }
-        * */
-        //Always pop
         matrices.pop();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
-/*
-        matrices.push();
-        {
-            controller.applySpecialModelTransform(SpecialModels.AK47.getModel(), Ak47AnimationController.INDEX_MAGAZINE, transformType, matrices);
-            RenderUtil.renderModel(SpecialModels.AK47_MAGAZINE.getModel(), stack, matrices, renderBuffer, light, overlay);
-        }
-        matrices.pop();*/
     }
 
      

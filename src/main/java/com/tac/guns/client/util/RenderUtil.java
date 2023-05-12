@@ -3,8 +3,12 @@ package com.tac.guns.client.util;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.tac.guns.common.Gun;
+import com.tac.guns.item.IrDeviceItem;
 import com.tac.guns.item.ScopeItem;
+import com.tac.guns.item.SideRailItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.item.attachment.impl.SideRail;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BreakableBlock;
 import net.minecraft.block.StainedGlassPaneBlock;
@@ -67,7 +71,7 @@ public class RenderUtil
     public static void renderModel(ItemStack child, ItemStack parent, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
     {
         IBakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelMesher().getItemModel(child);
-        renderModel(model, ItemCameraTransforms.TransformType.NONE, null, child, parent, matrixStack, buffer, light, overlay);
+        renderModel(model, ItemCameraTransforms.TransformType.NONE, null, child, parent, matrixStack, buffer, light, overlay, false);
     }
 
     public static void renderModel(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, @Nullable LivingEntity entity)
@@ -92,12 +96,22 @@ public class RenderUtil
         renderModel(model, ItemCameraTransforms.TransformType.NONE, stack, matrixStack, buffer, light, overlay);
     }
 
-    public static void renderModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    public static void renderLaserModuleModel(IBakedModel model, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
     {
-        renderModel(model, transformType, null, stack, ItemStack.EMPTY, matrixStack, buffer, light, overlay);
+        renderLaserModuleModel(model, ItemCameraTransforms.TransformType.NONE, stack, matrixStack, buffer, light, overlay);
+    }
+    public static void renderLaserModuleModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    {
+        renderModel(model, transformType, null, stack, ItemStack.EMPTY, matrixStack, buffer, light, overlay, true);
     }
 
-    public static void renderModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, @Nullable Transform transform, ItemStack stack, ItemStack parent, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    public static void renderModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    {
+        renderModel(model, transformType, null, stack, ItemStack.EMPTY, matrixStack, buffer, light, overlay, false);
+    }
+
+    public static void renderModel(IBakedModel model, ItemCameraTransforms.TransformType transformType, @Nullable Transform transform, ItemStack stack, ItemStack parent, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay,
+                                   boolean renderWithPersonalColor)
     {
         if(!stack.isEmpty())
         {
@@ -163,8 +177,11 @@ public class RenderUtil
                     {
                         builder = ItemRenderer.getBuffer(buffer, renderType, true, stack.hasEffect() || parent.hasEffect());
                     }
-
-                    renderModel(model, stack, parent, transform, matrixStack, builder, light, overlay);
+                    if(renderWithPersonalColor) {
+                        renderModelPersonallyColored(model, stack, parent, transform, matrixStack, builder, light, overlay);
+                    }
+                    else
+                        renderModel(model, stack, parent, transform, matrixStack, builder, light, overlay);
                 }
             }
             else
@@ -174,6 +191,32 @@ public class RenderUtil
 
             matrixStack.pop();
         }
+    }
+
+    /**
+     * @param model
+     * @param stack
+     * @param parent
+     * @param transform
+     * @param matrixStack
+     * @param buffer
+     * @param light
+     * @param overlay
+     */
+    private static void renderModelPersonallyColored(IBakedModel model, ItemStack stack, ItemStack parent, @Nullable Transform transform, MatrixStack matrixStack, IVertexBuilder buffer, int light, int overlay)
+    {
+        if(transform != null)
+        {
+            transform.apply();
+        }
+        Random random = new Random();
+        for(Direction direction : Direction.values())
+        {
+            random.setSeed(42L);
+            renderPersonalizedQuads(matrixStack, buffer, model.getQuads(null, direction, random), stack, parent, light, overlay);
+        }
+        random.setSeed(42L);
+        renderPersonalizedQuads(matrixStack, buffer, model.getQuads(null, null, random), stack, parent, light, overlay);
     }
 
     /**
@@ -200,6 +243,60 @@ public class RenderUtil
         }
         random.setSeed(42L);
         renderQuads(matrixStack, buffer, model.getQuads(null, null, random), stack, parent, light, overlay);
+    }
+
+
+
+    // TODO: Rewrite the current scope color renderer with this new refined system specifically built for special built attachments with coloring abilities
+    /**
+     * @param matrixStack
+     * @param buffer
+     * @param quads
+     * @param stack
+     * @param parent
+     * @param light
+     * @param overlay
+     */
+    private static void renderPersonalizedQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, ItemStack stack, ItemStack parent, int light, int overlay)
+    {
+        MatrixStack.Entry entry = matrixStack.getLast();
+        for(BakedQuad quad : quads)
+        {
+            float alpha = 1f;
+            boolean keepColor = true;
+            int color = -1;
+            if(stack.getItem() instanceof SideRailItem || stack.getItem() instanceof IrDeviceItem)
+            {
+                if(quad.hasTintIndex() && quad.getTintIndex() == 1)
+                {
+                    color = getItemStackColor(stack, parent, IAttachment.Type.SCOPE_RETICLE_COLOR, quad.getTintIndex());
+                    keepColor = true;
+                }
+                else if(quad.hasTintIndex() && quad.getTintIndex() == 0)
+                {
+                    color = getItemStackColor(stack, parent, IAttachment.Type.SCOPE_BODY_COLOR, quad.getTintIndex());
+                    keepColor = true;
+                }
+            }
+            else {
+                if(quad.hasTintIndex())
+                {
+                    color = getItemStackColor(stack, parent, IAttachment.Type.SCOPE_BODY_COLOR, quad.getTintIndex());
+                    keepColor = true;
+                }
+                if(quad.hasTintIndex() || quad.getTintIndex() == 1)
+                {
+                    color = getItemStackColor(stack, parent, IAttachment.Type.SCOPE_GLASS_COLOR, quad.getTintIndex());
+                    alpha = 2f;
+                    keepColor = false;
+                }
+            }
+            float red = (float) (color >> 16 & 255) / 255.0F;
+            float green = (float) (color >> 8 & 255) / 255.0F;
+            float blue = (float) (color & 255) / 255.0F;
+
+            buffer.addVertexData(entry, quad, red, green, blue, alpha, light, overlay, keepColor);
+        }
     }
 
     /*

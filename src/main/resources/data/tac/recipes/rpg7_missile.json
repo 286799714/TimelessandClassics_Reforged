@@ -1,0 +1,21 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/rare"
+      },
+      "count": 6
+    },
+    {
+      "item": {
+        "tag": "forge:gunpowder"
+      },
+      "count": 16
+    }
+  ],
+  "result": {
+    "item": "tac:rpg7_missile",
+    "count": 2
+  }
+}

@@ -1,29 +1,18 @@
 package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.tac.guns.Config;
+import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.command.GuiEditor;
-import com.tac.guns.client.handler.command.ObjectRenderEditor;
-import com.tac.guns.client.network.ClientPlayHandler;
-import com.tac.guns.client.render.crosshair.TexturedCrosshair;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.ReloadTracker;
-import com.tac.guns.common.SpreadTracker;
-import com.tac.guns.inventory.gear.GearSlotsHandler;
-import com.tac.guns.inventory.gear.InventoryListener;
-import com.tac.guns.inventory.gear.armor.ArmorRigContainer;
-import com.tac.guns.inventory.gear.armor.ArmorRigContainerProvider;
-import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
-import com.tac.guns.network.message.MessageRigInvToClient;
 import com.tac.guns.network.message.MessageToClientRigInv;
-import com.tac.guns.network.message.MessageUpdateGunID;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -33,24 +22,17 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.network.NetworkDirection;
+import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -87,12 +69,22 @@ public class HUDRenderingHandler extends AbstractGui {
             {
                     new ResourceLocation(Reference.MOD_ID, "textures/gui/reloadbar.png")
             };
+
+    private static final ResourceLocation[] HIPFIRE_ICONS = new ResourceLocation[]
+            {
+                    new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker.png")
+            };
     private static final ResourceLocation[] NOISE_S = new ResourceLocation[]
             {
                     new ResourceLocation(Reference.MOD_ID, "textures/screen_effect/noise1.png"),
                     new ResourceLocation(Reference.MOD_ID, "textures/screen_effect/noise2.png")
                     /*new ResourceLocation(Reference.MOD_ID, "textures/screen_effect/noise4.png"),
                     new ResourceLocation(Reference.MOD_ID, "textures/screen_effect/noise5.png")*/
+            };
+    private static final ResourceLocation[] ARMOR_ICONS = new ResourceLocation[]
+            {
+                    new ResourceLocation(Reference.MOD_ID, "textures/gui/armor_backdrop.png"),
+                    new ResourceLocation(Reference.MOD_ID, "textures/gui/armor_filler.png")
             };
 
     public static HUDRenderingHandler get() {
@@ -203,8 +195,8 @@ public class HUDRenderingHandler extends AbstractGui {
         }
     }
 
-    private static ResourceLocation fleshHitMarker = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_128x.png");
-    private static ResourceLocation fleshHitMarkerADS = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_ads_128x.png");
+    private static ResourceLocation fleshHitMarker = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_no_opac.png");
+    private static ResourceLocation fleshHitMarkerADS = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_no_opac.png");
     public boolean hitMarkerHeadshot = false;
     public static final float hitMarkerRatio = 14f;
     public float hitMarkerTracker = 0;
@@ -230,6 +222,7 @@ public class HUDRenderingHandler extends AbstractGui {
         float counterSize = 1.8F * configScaleWeaponCounter;
         float fireModeSize = 32.0F * configScaleWeaponFireMode;
         float ReloadBarSize = 32.0F * configScaleWeaponReloadBar;
+        float armorHeathSize = 16.0F;// * //configScaleWeaponFireMode;
 
         float hitMarkerSize = 128.0F;
 
@@ -238,39 +231,30 @@ public class HUDRenderingHandler extends AbstractGui {
         int width = event.getWindow().getWidth();
         int height = event.getWindow().getHeight();
 
-        // TODO: turn hitMarkerTracker into a float/frame time variable
-        if(this.hitMarkerTracker > 0 && ((AimingHandler.get().isAiming() && Gun.getScope(heldItem) == null) || !AimingHandler.get().isAiming()))//Hit Markers
-        {
-            RenderSystem.enableAlphaTest();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            stack.push();
+        int centerX = event.getWindow().getScaledWidth()/2;
+        int centerY = event.getWindow().getScaledHeight()/2;
+
+        if(Config.CLIENT.display.showHitMarkers.get()) {
+            if (this.hitMarkerTracker > 0 && !AimingHandler.get().isAiming() || (this.hitMarkerTracker > 0 && AimingHandler.get().isAiming() && Gun.getScope(heldItem) == null))//Hit Markers
             {
-                stack.translate(width / 2F, height / 2F, 0);
-                //float size = 0.1f;
-                //stack.translate(anchorPointX - (size+data.getxMod()*10+(109.15*10)) / 4F, anchorPointY + (size*1.625F+data.getyMod()*10+(-25.1*10)) / 5F * 3F, 0);
-                //stack.scale(size,size,size);
+                RenderSystem.enableAlphaTest();
+                stack.push();
+                {
 
-                ResourceLocation hitMarker;
-                if(AimingHandler.get().isAiming())
-                    hitMarker = fleshHitMarkerADS;
-                else
-                    hitMarker = fleshHitMarker;
+                    RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+                    Minecraft.getInstance().getTextureManager().bindTexture(fleshHitMarker); // Future options to render bar types
 
-                Minecraft.getInstance().getTextureManager().bindTexture(hitMarker); // Future options to render bar types
-
-                float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.25f);
-
-                Matrix4f matrix = stack.getLast().getMatrix();
-                buffer.pos(matrix, 0, hitMarkerSize, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.pos(matrix, hitMarkerSize, hitMarkerSize, 0).tex(1, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.pos(matrix, hitMarkerSize, 0, 0).tex(1, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
+                    float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.20f);
+                    if(HUDRenderingHandler.get().hitMarkerHeadshot)
+                        RenderSystem.color4f(1.0f, 0.075f, 0.075f, opac); // Only render red
+                    else
+                        RenderSystem.color4f(1.0f, 1.0f, 1.0f, opac);
+                    blit(stack, centerX - 8, centerY - 8, 0, 0, 16, 16, 16, 16); //-264 + (int)(-9.0/4),-134,
+                }
+                RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+                stack.pop();
             }
-            buffer.finishDrawing();
-            WorldVertexBufferUploader.draw(buffer);
-            stack.pop();
         }
-        //this.hitMarkerTracker--;
 
         // All code for rendering night vision, still only a test
         if(false) {
@@ -297,19 +281,15 @@ public class HUDRenderingHandler extends AbstractGui {
             }
         }
 
-        if(ArmorInteractionHandler.get().isRepairing())//Replace with reload bar checker
-        {
-            // FireMode rendering
+        if(ArmorInteractionHandler.get().isRepairing()) {
             RenderSystem.enableAlphaTest();
-
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             stack.push();
             {
-                stack.translate(anchorPointX - (ReloadBarSize*4.35) / 4F, anchorPointY + (ReloadBarSize*1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
+                stack.translate(anchorPointX - (ReloadBarSize*4.35) / 4F, anchorPointY + (ReloadBarSize*1.625F) / 5F * 3F, 0);
                 stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
-                // stack.translate(0, 0, );
-                stack.scale(2.1F*(1-ArmorInteractionHandler.get().getRepairProgress(event.getPartialTicks(), player)),0.25F,0); // *21F
-                Minecraft.getInstance().getTextureManager().bindTexture(RELOAD_ICONS[0]); // Future options to render bar types
+                stack.scale(2.1F*(1-ArmorInteractionHandler.get().getRepairProgress(event.getPartialTicks(), player)),0.25F,0);
+                Minecraft.getInstance().getTextureManager().bindTexture(RELOAD_ICONS[0]);
 
                 Matrix4f matrix = stack.getLast().getMatrix();
                 buffer.pos(matrix, 0, ReloadBarSize, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
@@ -322,42 +302,40 @@ public class HUDRenderingHandler extends AbstractGui {
             stack.pop();
         }
 
-        /*if(ArmorInteractionHandler.get().isRepairing())//Replace with reload bar checker
+        ItemStack armorRig = WearableHelper.PlayerWornRig(player);
+        if(armorRig != null && armorRig.getItem() instanceof ArmorRigItem)
         {
-            // FireMode rendering
             RenderSystem.enableAlphaTest();
-            buffer = Tessellator.getInstance().getBuffer();
-            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             stack.push();
             {
-                stack.translate(anchorPointX - (ReloadBarSize*4.35) / 4F, anchorPointY + 20f + (ReloadBarSize*1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
-                stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
-                // stack.translate(0, 0, );
-                stack.scale(2.1F*(1-ArmorInteractionHandler.get().getRepairProgress(event.getPartialTicks(), player)),0.25F,0); // *21F
-                Minecraft.getInstance().getTextureManager().bindTexture(RELOAD_ICONS[0]); // Future options to render bar types
+                stack.translate(anchorPointX - (armorHeathSize*2) / 4F, anchorPointY - (armorHeathSize*2) / 5F * 3F, 0);
+                stack.translate(-102f, 6f, 0);
 
-                Matrix4f matrix = stack.getLast().getMatrix();
-                buffer.pos(matrix, 0, ReloadBarSize, 0).tex(0, 1).color(1.0F, 0.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, ReloadBarSize, ReloadBarSize, 0).tex(1, 1).color(1.0F, 0.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, ReloadBarSize, 0, 0).tex(1, 0).color(1.0F, 0.0F, 1.0F, 0.99F).endVertex();
-                buffer.pos(matrix, 0, 0, 0).tex(0, 0).color(1.0F, 0.0F, 1.0F, 0.99F).endVertex();
+                RenderSystem.color3f(1.0f, 1.0f, 1.0f);
+                Minecraft.getInstance().getTextureManager().bindTexture(ARMOR_ICONS[1]);
+                float durabilityPercentage = WearableHelper.currentDurabilityPercentage(armorRig);
+
+                RenderSystem.color3f(0.0f, 1.85f*durabilityPercentage, 0.0f);
+                blit(stack, 0, 0, 0, 0, 16, 16, 16, 16);
+                int cropHeight = (int) (16 * durabilityPercentage);
+
+                RenderSystem.color3f(1.0f, 1.0f, 1.0f);
+
+                RenderSystem.color3f(1.0f/durabilityPercentage, 0, 0.0f);
+                Minecraft.getInstance().getTextureManager().bindTexture(ARMOR_ICONS[0]);
+                blit(stack, 0, 0, 0, 0, 16, 16-cropHeight, 16, 16);
             }
-            buffer.finishDrawing();
-            WorldVertexBufferUploader.draw(buffer);
+            RenderSystem.color3f(1.0f, 1.0f, 1.0f);
             stack.pop();
-        }*/
-
-
+        }
 
         if(!(Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND).getItem() instanceof TimelessGunItem))
             return;
         TimelessGunItem gunItem = (TimelessGunItem) heldItem.getItem();
         Gun gun = gunItem.getGun();
-
         if(!Config.CLIENT.weaponGUI.weaponGui.get()) {
             return;
         }
-
         if(Config.CLIENT.weaponGUI.weaponFireMode.showWeaponFireMode.get()) {
             // FireMode rendering
             RenderSystem.enableAlphaTest();
@@ -374,17 +352,30 @@ public class HUDRenderingHandler extends AbstractGui {
                 stack.translate(20, 5, 0);
                 int fireMode;
 
-                if(player.getHeldItemMainhand().getTag() == null)
+                try {
+                    if (player.getHeldItemMainhand().getTag() == null) {
+                        if (!Config.COMMON.gameplay.safetyExistence.get())
+                            fireMode = gun.getGeneral().getRateSelector()[1];
+                        else
+                            fireMode = gun.getGeneral().getRateSelector()[0];
+                    } else if (player.getHeldItemMainhand().getTag().getInt("CurrentFireMode") == 0)
+                        if (!Config.COMMON.gameplay.safetyExistence.get())
+                            fireMode = gun.getGeneral().getRateSelector()[1];
+                        else
+                            fireMode = gun.getGeneral().getRateSelector()[0];
+                    else
+                        fireMode = Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode");
+                }
+                catch (ArrayIndexOutOfBoundsException e)
+                {
                     fireMode = gun.getGeneral().getRateSelector()[0];
-                else if(player.getHeldItemMainhand().getTag().getInt("CurrentFireMode") == 0)
-                    fireMode = gun.getGeneral().getRateSelector()[0];
-                else
-                    fireMode = Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode");
-                //int fireMode = gunItem.getSupportedFireModes()[gunItem.getCurrFireMode()];
-                if (!Config.COMMON.gameplay.safetyExistence.get() && fireMode == 0)
-                    Minecraft.getInstance().getTextureManager().bindTexture(FIREMODE_ICONS[0]); // Render true firemode
-                else
-                    Minecraft.getInstance().getTextureManager().bindTexture(FIREMODE_ICONS[fireMode]); // Render true firemode
+                }
+                catch(Exception e)
+                {
+                    fireMode = 0;
+                    GunMod.LOGGER.log(Level.ERROR, "TaC HUD_RENDERER has failed obtaining the fire mode");
+                }
+                Minecraft.getInstance().getTextureManager().bindTexture(FIREMODE_ICONS[fireMode]); // Render true firemode
 
                 Matrix4f matrix = stack.getLast().getMatrix();
                 buffer.pos(matrix, 0, fireModeSize/2, 0).tex(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();

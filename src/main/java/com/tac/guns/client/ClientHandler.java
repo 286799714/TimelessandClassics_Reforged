@@ -44,14 +44,13 @@ import com.tac.guns.client.screen.TaCSettingsScreen;
 import com.tac.guns.client.screen.UpgradeBenchScreen;
 import com.tac.guns.client.screen.WorkbenchScreen;
 import com.tac.guns.client.settings.GunOptions;
-import com.tac.guns.init.ModBlocks;
-import com.tac.guns.init.ModContainers;
-import com.tac.guns.init.ModEntities;
-import com.tac.guns.init.ModItems;
+import com.tac.guns.client.util.UpgradeBenchRenderUtil;
+import com.tac.guns.init.*;
 import com.tac.guns.item.IColored;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageAttachments;
 import com.tac.guns.network.message.MessageInspection;
+import com.tac.guns.util.IDLNBTUtil;
 import com.tac.guns.util.math.SecondOrderDynamics;
 
 import de.javagl.jgltf.model.animation.AnimationRunner;
@@ -82,6 +81,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.VersionChecker;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -168,7 +168,7 @@ public class ClientHandler
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.PROJECTILE.get(), ProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.GRENADE.get(), GrenadeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.THROWABLE_GRENADE.get(), ThrowableGrenadeRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.THROWABLE_STUN_GRENADE.get(), ThrowableGrenadeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.THROWABLE_STUN_GRENADE.get(), ThrowableGrenadeRenderer::new); // TODO: Bring back flashes
         //RenderingRegistry.registerEntityRenderingHandler(ModEntities.MISSILE.get(), MissileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.RPG7_MISSILE.get(), MissileRenderer::new);
     }
@@ -180,9 +180,9 @@ public class ClientHandler
             {
                 return -1;
             }
-            if(index == 0 && stack.hasTag() && stack.getTag().contains("Color", Constants.NBT.TAG_INT))
+            if(index == 0)
             {
-                return stack.getTag().getInt("Color");
+                return IDLNBTUtil.getInt(stack,"Color",-1);
             }
             return -1;
         };

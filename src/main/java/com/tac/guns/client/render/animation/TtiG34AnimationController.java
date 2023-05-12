@@ -11,29 +11,19 @@ import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class TtiG34AnimationController extends PistalAnimationController {
-
     public static int INDEX_BODY = 6;
-
     public static int INDEX_SLIDE = 12;
-
     public static int INDEX_MAG = 1;
-
     public static int INDEX_EXTRA_MAG = 3;
-
     public static int INDEX_LEFT_HAND = 20;
-
     public static int INDEX_RIGHT_HAND = 17;
 
-    public static final AnimationMeta RELOAD_NORM = new AnimationMeta(new ResourceLocation("tac","animations/glock_tac_2mag_norm_reload.gltf"));
-
+    public static final AnimationMeta RELOAD_NORM = new AnimationMeta(new ResourceLocation("tac","animations/glock_tac_reload_norm.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/glock_tac_draw.gltf"));
-
-    public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/glock_tac_empty_reload.gltf"));
-
+    public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/glock_tac_reload_empty.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/glock_tac_static.gltf"));
-
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/glock_tac_inspect.gltf"));
-
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/glock_tac_inspect.gltf"));
     private static final TtiG34AnimationController instance = new TtiG34AnimationController();
 
     @Override
@@ -44,6 +34,7 @@ public class TtiG34AnimationController extends PistalAnimationController {
             case DRAW: return DRAW;
             case STATIC: return STATIC;
             case INSPECT: return INSPECT;
+            case INSPECT_EMPTY: return INSPECT_EMPTY;
             default: return null;
         }
     }
@@ -55,6 +46,7 @@ public class TtiG34AnimationController extends PistalAnimationController {
             Animations.load(RELOAD_EMPTY);
             Animations.load(STATIC);
             Animations.load(INSPECT);
+            Animations.load(INSPECT_EMPTY);
         } catch (IOException e) {
             GunMod.LOGGER.fatal(e.getStackTrace());
         }

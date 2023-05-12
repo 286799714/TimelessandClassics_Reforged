@@ -49,14 +49,14 @@ public class MiniDotSightModel implements IOverrideModel
         if(!parent.isEmpty()) {
             matrixStack.translate(0, 0, 0.0095F);
             GunItem gunItem = ((GunItem) parent.getItem());
-            if (gunItem.getGun().getModules().getAttachments().getPistolScope().getDoOnSlideMovement() && transformType.isFirstPerson()) {
+            boolean hasScope = gunItem.getGun().getModules().getAttachments().getPistolScope() != null;
+            if (hasScope && gunItem.getGun().getModules().getAttachments().getPistolScope().getDoOnSlideMovement() && transformType.isFirstPerson()) {
                 matrixStack.translate(0, 0, 0.0095F);
                 matrixStack.translate(0, 0, GunRenderingHandler.get().opticMovement * 0.525);
             }
 
-
             matrixStack.translate(0, 0.055, 0);
-            if (gunItem.getGun().getModules().getAttachments().getPistolScope().getDoRenderMount()) {
+            if (hasScope && gunItem.getGun().getModules().getAttachments().getPistolScope().getDoRenderMount()) {
                 RenderUtil.renderModel(MINI_DOT_BASE.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
             }
         }
@@ -114,7 +114,7 @@ public class MiniDotSightModel implements IOverrideModel
                 builder.pos(matrix, (float) (size / scale), 0, 0).color(red, green, blue, alpha).tex(0.9375F, 0.0F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
                 builder.pos(matrix, (float) (size / scale), (float) (size / scale), 0).color(red, green, blue, alpha).tex(0.9375F, 0.9375F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
 
-                if(HUDRenderingHandler.get().hitMarkerTracker > 0)
+                if(Config.CLIENT.display.showHitMarkers.get() && HUDRenderingHandler.get().hitMarkerTracker > 0)
                 {
                     builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(HIT_MARKER));
 

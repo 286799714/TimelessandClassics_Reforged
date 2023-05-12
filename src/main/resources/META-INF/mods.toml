@@ -4,9 +4,9 @@ license="GPL3"
 
 [[mods]]
 modId="tac"
-version="0.3.5.1"
+version="0.3.6.1"
 displayName="Timeless and Classics Guns"
-updateJSONURL="https://ClumsyAlien.github.io/TaC_Patch_notes/update.json"
+updateJSONURL=""
 displayURL=""
 authors="Timeless Development Team"
 description='''

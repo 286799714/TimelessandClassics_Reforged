@@ -3,47 +3,44 @@
     "auto": true,
     "rate": 900,
     "burstRate": 15,
-    "rateSelector": [
-      0,
-      1,
-      3
-    ],
+    "rateSelector": [1, 3],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 1.825,
-    "horizontalRecoilAngle": 1.475,
+    "recoilAngle": 1.875,
+    "horizontalRecoilAngle": 1.25,
     "recoilKick": 1.375,
     "recoilAdsReduction": 0.21,
-    "weaponRecoilOffset": 0.91,
+    "weaponRecoilOffset": 0.9,
     "cameraRecoilModifier": 1.315,
     "recoilDuration": 0.185,
     "weightKilo": 4.8,
 
-    "spread": 0.925,
-    "firstShotSpread": 0.125,
-    "hipFireInaccuracy": 4.75,
-    "projToMinAccuracy": 5,
-    "msToAccuracyReset": 900,
-    "movementInaccuracy": 0.475
+    "spread": 1.875,
+    "firstShotSpread": 0.105,
+    "hipFireInaccuracy": 4.65,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 450,
+    "movementInaccuracy": 0.6
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 32,
     "additionalReloadEmptyMagTimer": 12,
-    "maxAdditionalAmmoPerOC": [
-      10,
-      20,
-      30
-    ],
+    "maxAdditionalAmmoPerOC": [10, 20, 30],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 7.5,
-    "size": 0.1,
-    "speed": 30.5,
-    "life": 19,
+    "damage": 7.15,
+    "armorIgnore": 1.0,
+    "critical": 0.00,
+    "criticalDamage": 0.75,
+    "headDamage": 1.0,
+    "size": 0.075,
+    "speed": 25,
+    "life": 11,
+    "trailLengthMultiplier": 3,
     "ricochet": true
   },
   "sounds": {
@@ -60,7 +57,7 @@
       "yOffset": 9.53,
       "zOffset": -23.99,
       "size": 0.90,
-      "trailAdjust": 1.5325
+      "trailAdjust": 1.625
     },
     "hipfireScale": 2.0,
     "hipfireMoveScale": 1.0,
@@ -72,13 +69,18 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 12.625,
-      "zOffset": -3.7
+      "zOffset": -3
     },
     "attachments": {
       "scope": {
         "yOffset": 10.515,
         "zOffset": 7.285,
         "scale": 1.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       },
       "barrel": {
         "yOffset": -100829.84,
@@ -91,6 +93,11 @@
         "scale": 0.00
       },
       "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

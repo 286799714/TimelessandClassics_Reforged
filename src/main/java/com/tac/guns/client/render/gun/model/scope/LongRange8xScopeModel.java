@@ -145,7 +145,7 @@ public class LongRange8xScopeModel implements IOverrideModel
                 builder.pos(matrix, (float) (reticleSize / scale), 0, 0).color(red, green, blue, alpha).tex(0.9375F, 0.0F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
                 builder.pos(matrix, (float) (reticleSize / scale), (float) (reticleSize / scale), 0).color(red, green, blue, alpha).tex(0.9375F, 0.9375F).overlay(overlay).lightmap(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
 
-                if(HUDRenderingHandler.get().hitMarkerTracker > 0)
+                if(Config.CLIENT.display.showHitMarkers.get() && HUDRenderingHandler.get().hitMarkerTracker > 0)
                 {
                     builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(HIT_MARKER));
 

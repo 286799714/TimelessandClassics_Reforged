@@ -22,19 +22,19 @@ public class GunEnchantmentHelper
         new HashMap<String, UpgradeBenchScreen.RequirementItem>()
     {{
         put("Over Pressured",
-                new UpgradeBenchScreen.RequirementItem(new int[]{2,3,3}, new int[]{5,7,10},
+                new UpgradeBenchScreen.RequirementItem(new int[]{2,3,3,5}, new int[]{5,7,10,15},
                         ModEnchantments.ACCELERATOR.get()));
-        put("Over Capacity",
+        /*put("Over Capacity",
                 new UpgradeBenchScreen.RequirementItem(new int[]{1,2,3}, new int[]{1,3,6},
-                        ModEnchantments.OVER_CAPACITY.get()));
+                        ModEnchantments.OVER_CAPACITY.get()));*/
         put("Advanced Rifling",
                 new UpgradeBenchScreen.RequirementItem(new int[]{1,2,3}, new int[]{4,6,8},
                         ModEnchantments.RIFLING.get()));
         put("Buffered",
-                new UpgradeBenchScreen.RequirementItem(new int[]{1,2,2,3,3}, new int[]{1,5,8,11,15},
+                new UpgradeBenchScreen.RequirementItem(new int[]{2,4}, new int[]{5,11},
                         ModEnchantments.BUFFERED.get()));
         put("Puncturing",
-                new UpgradeBenchScreen.RequirementItem(new int[]{1,2,3}, new int[]{5,7,10},
+                new UpgradeBenchScreen.RequirementItem(new int[]{1,2,3,4,5,6}, new int[]{4,6,8,11,14,17},
                         ModEnchantments.PUNCTURING.get()));
     }};
 
@@ -52,12 +52,12 @@ public class GunEnchantmentHelper
     public static int getRate(ItemStack weapon, Gun modifiedGun)
     {
         int rate = modifiedGun.getGeneral().getRate();
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
-        if(level > 0)
-        {
-            float newRate = rate * (0.25F * level);
-            rate -= MathHelper.clamp(newRate, 0, rate);
-        }
+//        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
+//        if(level > 0)
+//        {
+//            float newRate = rate * (0.25F * level);
+//            rate -= MathHelper.clamp(newRate, 0, rate);
+//        }
         return rate;
     }
 
@@ -89,7 +89,7 @@ public class GunEnchantmentHelper
         return 0f;
     }
 
-    public static int getAmmoCapacity(ItemStack weapon, Gun modifiedGun)
+    /*public static int getAmmoCapacity(ItemStack weapon, Gun modifiedGun)
     {
         int capacity = modifiedGun.getReloads().isOpenBolt() ? modifiedGun.getReloads().getMaxAmmo() : modifiedGun.getReloads().getMaxAmmo()+1;
         int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), weapon);
@@ -102,14 +102,14 @@ public class GunEnchantmentHelper
             capacity += (capacity / 2) * level-3;
         }
         return capacity;
-    }
+    }*/
 
     public static double getProjectileSpeedModifier(ItemStack weapon)
     {
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), weapon);
+        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RIFLING.get(), weapon);
         if(level > 0)
         {
-            return 1.0 + 0.075 * level;
+            return 1.0 + 0.0333 * level;
         }
         return 1.0;
     }
@@ -119,7 +119,7 @@ public class GunEnchantmentHelper
         int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), weapon);
         if(level > 0)
         {
-            return damage + damage * (0.0875F * level);
+            return damage + damage * (0.05F * level);
         }
         return damage;
     }
@@ -128,7 +128,7 @@ public class GunEnchantmentHelper
         int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BUFFERED.get(), weapon);
         if(level > 0)
         {
-            return (1-(0.03F * level));
+            return (1-(0.15F * level));
         }
         return 1;
     }

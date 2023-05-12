@@ -3,6 +3,7 @@ package com.tac.guns.client.render.gun.model;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.tac.guns.Config;
 import com.tac.guns.client.SpecialModels;
+import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.Ak47AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
@@ -21,6 +22,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
+import com.tac.guns.util.GunModifierHelper;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -35,11 +37,11 @@ public class ak47_animation implements IOverrideModel {
     @Override
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
     {
-        
+
         Ak47AnimationController controller = Ak47AnimationController.getInstance();
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-        
+
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.AK47.getModel(),Ak47AnimationController.INDEX_BODY,transformType,matrices);
@@ -93,6 +95,8 @@ public class ak47_animation implements IOverrideModel {
             if(transformType.isFirstPerson()) {
                 // Math provided by Bomb787 on GitHub and Curseforge!!!
                 matrices.translate(0, 0, 0.190f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1));
+                GunRenderingHandler.get().opticMovement = 0.190f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1);
+                matrices.translate(0, 0, 0.025F);
             }
             RenderUtil.renderModel(SpecialModels.AK47_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
@@ -102,7 +106,7 @@ public class ak47_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.AK47.getModel(), Ak47AnimationController.INDEX_MAGAZINE, transformType, matrices);
-            if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
+            if(GunModifierHelper.getAmmoCapacity(stack) > -1)
             {
                 RenderUtil.renderModel(SpecialModels.AK47_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
@@ -117,7 +121,7 @@ public class ak47_animation implements IOverrideModel {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.AK47.getModel(), Ak47AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
-                if(EnchantmentHelper.getEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), stack) > 0)
+                if(GunModifierHelper.getAmmoCapacity(stack) > -1)
                 {
                     RenderUtil.renderModel(SpecialModels.AK47_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
                 }
@@ -132,7 +136,7 @@ public class ak47_animation implements IOverrideModel {
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
 
-     
+
 
     //TODO comments
 }

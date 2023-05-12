@@ -16,7 +16,7 @@ public class BufferedEnchantment extends GunEnchantment
     @Override
     public int getMaxLevel()
     {
-        return 5;
+        return 2;
     }
 
     @Override

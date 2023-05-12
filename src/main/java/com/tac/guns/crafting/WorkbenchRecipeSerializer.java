@@ -59,7 +59,7 @@ public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.For
         int size = buffer.readVarInt();
         for(int i = 0; i < size; i++) {
             Ingredient ingredient = Ingredient.read(buffer);
-            int count = buffer.readByte();
+            int count = buffer.readInt();
             builder.add(new Pair<>(ingredient, count));
         }
         return new WorkbenchRecipe(recipeId, result, builder.build(), group);
@@ -74,7 +74,7 @@ public class WorkbenchRecipeSerializer extends net.minecraftforge.registries.For
         for(Pair<Ingredient, Integer> stack : recipe.getMaterials())
         {
             stack.getFirst().write(buffer);
-            buffer.writeByte(stack.getSecond());
+            buffer.writeInt(stack.getSecond());
         }
     }
 }

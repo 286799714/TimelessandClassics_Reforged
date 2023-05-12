@@ -1,47 +1,45 @@
 {
   "general": {
     "auto": true,
-    "rate": 1000,
-    "rateSelector": [
-      0,
-      2
-    ],
+    "rate": 1200,
+    "rateSelector": [2],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 2.825,
+    "recoilAngle": 3.825,
     "horizontalRecoilAngle": 2.35,
     "recoilKick": 2.25,
     "recoilAdsReduction": 0.1925,
-    "weaponRecoilOffset": 0.975,
+    "weaponRecoilOffset": 0.75,
     "cameraRecoilModifier": 1.875,
-    "recoilDuration": 0.125,
+    "recoilDuration": 0.25,
     "weightKilo": 2.2,
 
-    "spread": 1.825,
-    "firstShotSpread": 0.25,
-    "hipFireInaccuracy": 3.2,
-    "projToMinAccuracy": 3,
-    "msToAccuracyReset": 220,
-    "movementInaccuracy": 0.125
+    "spread": 2.35,
+    "firstShotSpread": 0.225,
+    "hipFireInaccuracy": 2.3,
+    "projToMinAccuracy": 4,
+    "msToAccuracyReset": 320,
+    "movementInaccuracy": 0.1
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 16,
     "reloadMagTimer": 21,
     "additionalReloadEmptyMagTimer": 14,
-    "maxAdditionalAmmoPerOC": [
-      8,
-      14,
-      20
-    ],
+    "maxAdditionalAmmoPerOC": [3, 6, 10],
     "preReloadPauseTicks": 7
   },
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "damage": 5,
-    "size": 0.2,
-    "speed": 17.0,
-    "life": 6
+    "damage": 4.6,
+    "armorIgnore": 0.6,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 0.75,
+    "size": 0.05,
+    "speed": 10.5,
+    "trailLengthMultiplier": 2.5,
+    "life": 13
   },
   "sounds": {
     "fire": "tac:item.cz75auto_fire",
@@ -54,16 +52,16 @@
   },
   "display": {
     "flash": {
-      "yOffset": 9.475,
-      "zOffset": -12.09,
-      "size": 0.45,
-      "trailAdjust": 0.7675
+      "yOffset": 9.625,
+      "zOffset": -10,
+      "size": 0.75,
+      "trailAdjust": 0.575
     },
     "weaponType": 2
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.9,
+      "fovModifier": 0.8,
       "yOffset": 11.4,
       "zOffset": -5.85
     },
@@ -72,6 +70,18 @@
         "yOffset": -100829.84,
         "zOffset": -11.8,
         "scale": 1.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
+      "pistolScope": {
+        "yOffset": 9.75,
+        "zOffset": 5.75,
+        "scale": 2.00,
+        "doRenderMount": true,
+        "doOnSlideMovement": true
       }
     }
   }

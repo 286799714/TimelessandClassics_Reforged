@@ -1,63 +1,69 @@
 {
   "general": {
     "auto": true,
-    "rate": 2,
-    "rateSelector": [
-      0,
-      1,
-      2
-    ],
+    "rate": 1200,
+    "rateSelector": [2, 1],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 3.825,
-    "horizontalRecoilAngle": 1.9125,
-    "recoilKick": 1.25,
-    "recoilAdsReduction": 0.25,
-    "weaponRecoilOffset": 0.975,
-    "cameraRecoilModifier": 1.55,
-    "recoilDuration": 0.18,
-    "alwaysSpread": true,
-    "spread": 6.15,
-    "weightKilo": 1.1
+    "recoilAngle": 4.5,
+    "horizontalRecoilAngle": 3.75,
+    "recoilKick": 1.5,
+    "recoilAdsReduction": 0.275,
+    "weaponRecoilOffset": 0.75,
+    "cameraRecoilModifier": 2.75,
+    "recoilDuration": 0.25,
+    "weightKilo": 1.1,
+
+    "spread": 2.5,
+    "firstShotSpread": 0.35,
+    "hipFireInaccuracy": 2.85,
+    "projToMinAccuracy": 5,
+    "msToAccuracyReset": 420,
+    "movementInaccuracy": 0.275
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 17,
-    "reloadMagTimer": 40,
-    "additionalReloadEmptyMagTimer": 6,
-    "maxAdditionalAmmoPerOC": [
-      6,
-      10,
-      14
-    ],
+    "reloadMagTimer": 24,
+    "additionalReloadEmptyMagTimer": 9,
+    "maxAdditionalAmmoPerOC": [5, 10, 16],
     "preReloadPauseTicks": 4
   },
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "damage": 4.25,
-    "size": 0.2,
-    "speed": 17.0,
-    "life": 4
+    "damage": 4,
+    "armorIgnore": 0.6,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 0.75,
+    "size": 0.005,
+    "speed": 11,
+    "trailLengthMultiplier": 2,
+    "life": 11
   },
   "sounds": {
-    "fire": "tac:item.fire_glock",
-    "reload": "tac:item.pistol.reload",
+    "fire": "tac:item.glock18_fire",
+    "reloadNormal": "tac:animation.glock_18_reload_norm",
+    "reloadEmpty": "tac:animation.glock_18_reload_empty",
+    "draw": "tac:animation.glock_18_draw",
+    "inspect": "tac:animation.glock_18_inspect",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.fire_glocks"
+    "silencedFire": "tac:item.glock18_fire_s"
   },
   "display": {
     "flash": {
       "yOffset": 10.35,
       "zOffset": -12.09,
-      "size": 0.7
+      "size": 1.5,
+      "trailAdjust": 0.75
     },
     "weaponType": 2
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.9,
-      "yOffset": 11.965,
-      "zOffset": -10.6
+      "fovModifier": 0.8,
+      "yOffset": 12.125,
+      "zOffset": -4.5
     },
     "attachments": {
       "pistolBarrel": {
@@ -65,10 +71,20 @@
         "zOffset": -11.55,
         "scale": 1.00
       },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
       "pistolScope": {
-        "yOffset": 10.25,
+        "yOffset": 10.275,
         "zOffset": 4.715,
-        "scale": 1.80,
+        "scale": 2,
         "doRenderMount": false,
         "doOnSlideMovement": true
       }

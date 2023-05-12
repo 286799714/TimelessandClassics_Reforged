@@ -1,0 +1,20 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/epic"
+      },
+      "count": 5
+    },
+    {
+      "item": {
+        "tag": "forge:leather"
+      },
+      "count": 12
+    }
+  ],
+  "result": {
+    "item": "tac:rpg7"
+  }
+}

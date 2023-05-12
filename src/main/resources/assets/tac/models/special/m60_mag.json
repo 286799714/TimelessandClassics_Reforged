@@ -2,8 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"5": "tac:items/m60_others",
-		"particle": "tac:items/m60_bullets"
+		"5": "tac:items/m60_others_1"
 	},
 	"elements": [
 		{
@@ -237,38 +236,45 @@
 	},
 	"groups": [
 		{
-			"name": "m60",
+			"name": "m60_mag",
 			"origin": [8, 8, 8],
 			"color": 0,
 			"children": [
 				{
-					"name": "Magazine",
-					"origin": [0, 0, 0],
-					"color": 9,
+					"name": "m60",
+					"origin": [8, 8, 8],
+					"color": 0,
 					"children": [
 						{
-							"name": "group",
-							"origin": [4.42188, 1.53125, 13.5625],
-							"color": 0,
+							"name": "Magazine",
+							"origin": [0, 0, 0],
+							"color": 9,
 							"children": [
 								{
 									"name": "group",
 									"origin": [4.42188, 1.53125, 13.5625],
 									"color": 0,
-									"children": [0, 1, 2, 3, 4]
+									"children": [
+										{
+											"name": "group",
+											"origin": [4.42188, 1.53125, 13.5625],
+											"color": 0,
+											"children": [0, 1, 2, 3, 4]
+										},
+										5,
+										6,
+										7,
+										8,
+										9
+									]
 								},
-								5,
-								6,
-								7,
-								8,
-								9
+								{
+									"name": "group",
+									"origin": [4.42188, 1.53125, 13.5625],
+									"color": 9,
+									"children": [10, 11, 12, 13, 14, 15]
+								}
 							]
-						},
-						{
-							"name": "group",
-							"origin": [4.42188, 1.53125, 13.5625],
-							"color": 9,
-							"children": [10, 11, 12, 13, 14, 15]
 						}
 					]
 				}

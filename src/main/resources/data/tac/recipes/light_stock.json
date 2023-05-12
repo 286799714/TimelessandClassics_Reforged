@@ -3,15 +3,15 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
+        "tag": "forge:materials/rare"
       },
-      "count": 12
+      "count": 2
     },
     {
       "item": {
         "tag": "forge:leather"
       },
-      "count": 6
+      "count": 3
     }
   ],
   "result": {

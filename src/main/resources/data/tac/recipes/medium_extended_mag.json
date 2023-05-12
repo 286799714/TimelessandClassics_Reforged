@@ -1,0 +1,14 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/epic"
+      },
+      "count": 4
+    }
+  ],
+  "result": {
+    "item": "tac:medium_extended_mag"
+  }
+}

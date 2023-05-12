@@ -29,10 +29,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -48,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import com.tac.guns.util.GunModifierHelper;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -293,9 +291,7 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
         {
             for(Pair<Ingredient, Integer> material : materials)
             {
-                ItemStack stack = material.getFirst().getMatchingStacks()[0];
-                stack.setCount(material.getSecond());
-                MaterialItem item = new MaterialItem(stack);
+                MaterialItem item = new MaterialItem(material.getFirst(), material.getSecond());
                 item.update();
                 this.materials.add(item);
             }
@@ -499,7 +495,7 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
 
     private List<MaterialItem> getMaterials()
     {
-        List<MaterialItem> materials = NonNullList.withSize(6, new MaterialItem(ItemStack.EMPTY));
+        List<MaterialItem> materials = NonNullList.withSize(6, new MaterialItem());
         List<MaterialItem> filteredMaterials = this.materials.stream().filter(materialItem -> this.checkBoxMaterials.isToggled() ? !materialItem.isEnabled() : !materialItem.stack.isEmpty()).collect(Collectors.toList());
         for(int i = 0; i < filteredMaterials.size() && i < materials.size(); i++)
         {
@@ -518,13 +514,27 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
         public static final MaterialItem EMPTY = new MaterialItem();
 
         private boolean enabled = false;
-        private ItemStack stack = ItemStack.EMPTY;
+        private final int count;
+        private int tickcount;
+        private int index;
+        private ItemStack stack;
+        private final Ingredient ingredient;
+        private final ItemStack[] matchingstacks;
 
-        private MaterialItem() {}
-
-        private MaterialItem(ItemStack stack)
+        private MaterialItem()
         {
-            this.stack = stack;
+            this.ingredient = null;
+            this.matchingstacks = new ItemStack[]{ItemStack.EMPTY};
+            this.stack = ItemStack.EMPTY;
+            this.count =0;
+        }
+
+        private MaterialItem(Ingredient ingredient, int count)
+        {
+            this.ingredient = ingredient;
+            this.matchingstacks = ingredient.getMatchingStacks();
+            this.stack = this.matchingstacks[0];
+            this.count = count;
         }
 
         public ItemStack getStack()
@@ -534,9 +544,18 @@ public class WorkbenchScreen extends ContainerScreen<WorkbenchContainer>
 
         public void update()
         {
-            if(!this.stack.isEmpty())
+            if(++this.tickcount%20==0){
+                this.tickcount=0;
+                this.index+=1;
+                if(this.index==this.matchingstacks.length){
+                    this.index=0;
+                }
+                this.stack = this.matchingstacks[this.index];
+            }
+            if(this.ingredient!=null)
             {
-                this.enabled = InventoryUtil.hasItemStack(Minecraft.getInstance().player, this.stack);
+                this.stack.setCount(this.count);
+                this.enabled = InventoryUtil.hasIngredient(Minecraft.getInstance().player, new Pair<>(this.ingredient, this.count));
             }
         }
 

@@ -1,23 +1,20 @@
 package com.tac.guns.item;
 
+import com.tac.guns.common.DiscardOffhand;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.enchantment.EnchantmentTypes;
-import com.tac.guns.init.ModItems;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.KeybindTextComponent;
@@ -26,6 +23,11 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
+import com.tac.guns.init.ModItems;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.UseAction;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -95,7 +97,7 @@ public class GunItem extends Item implements IColored
             else
             {
                 int ammoCount = tagCompound.getInt("AmmoCount");
-                tooltip.add(new TranslationTextComponent("info.tac.ammo", TextFormatting.WHITE.toString() + ammoCount + "/" + GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun)).mergeStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("info.tac.ammo", TextFormatting.WHITE.toString() + ammoCount + "/" + GunModifierHelper.getAmmoCapacity(stack, modifiedGun)).mergeStyle(TextFormatting.GRAY));
             }
         }
 
@@ -130,7 +132,7 @@ public class GunItem extends Item implements IColored
     {
         CompoundNBT tagCompound = stack.getOrCreateTag();
         Gun modifiedGun = this.getModifiedGun(stack);
-        return !tagCompound.getBoolean("IgnoreAmmo") && tagCompound.getInt("AmmoCount") != GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun);
+        return !tagCompound.getBoolean("IgnoreAmmo") && tagCompound.getInt("AmmoCount") != GunModifierHelper.getAmmoCapacity(stack, modifiedGun);
     }
 
     @Override
@@ -138,7 +140,7 @@ public class GunItem extends Item implements IColored
     {
         CompoundNBT tagCompound = stack.getOrCreateTag();
         Gun modifiedGun = this.getModifiedGun(stack);
-        return 1.0 - (tagCompound.getInt("AmmoCount") / (double) GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun));
+        return 1.0 - (tagCompound.getInt("AmmoCount") / (double) GunModifierHelper.getAmmoCapacity(stack, modifiedGun));
     }
 
     @Override
@@ -171,17 +173,21 @@ public class GunItem extends Item implements IColored
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (isSelected)
+        if (isSelected && !worldIn.isRemote)
         {
             if (entityIn instanceof PlayerEntity)
             {
                 PlayerEntity playerEntity = (PlayerEntity) entityIn;
-                if (!isSingleHanded(stack))
+                if (!isSingleHanded(stack) && !DiscardOffhand.isSafeTime(playerEntity))
                 {
                     ItemStack offHand = playerEntity.getHeldItemOffhand();
                     if (!(offHand.getItem() instanceof GunItem) && !offHand.isEmpty()) {
-                        playerEntity.dropItem(offHand, false);
+                        ItemEntity entity = playerEntity.dropItem(offHand, false);
                         playerEntity.setHeldItem(Hand.OFF_HAND, ItemStack.EMPTY);
+                        if (entity != null)
+                        {
+                            entity.setNoPickupDelay();
+                        }
                     }
                 }
             }
@@ -192,7 +198,7 @@ public class GunItem extends Item implements IColored
     {
         Item item = stack.getItem();
         return item == ModItems.M1911.get() || item == ModItems.MICRO_UZI.get()
-                || item == ModItems.STI2011.get() || item == ModItems.CZ75.get();
+                || item == ModItems.CZ75.get() || item == ModItems.MK23.get();
     }
 
     /*@Override

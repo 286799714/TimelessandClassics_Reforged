@@ -34,6 +34,7 @@ public abstract class GunAnimationController {
         PUMP,
         PULL_BOLT,
         INSPECT,
+        INSPECT_EMPTY,
         DRAW,
         STATIC,
     }
@@ -128,6 +129,7 @@ public abstract class GunAnimationController {
                 case RELOAD_NORMAL: return new AnimationSoundMeta(sounds.getReloadNormal());
                 case DRAW: return new AnimationSoundMeta(sounds.getDraw());
                 case INSPECT: return new AnimationSoundMeta(sounds.getInspect());
+                case INSPECT_EMPTY: return new AnimationSoundMeta(sounds.getInspectEmpty());
                 default: return null;
             }
         }

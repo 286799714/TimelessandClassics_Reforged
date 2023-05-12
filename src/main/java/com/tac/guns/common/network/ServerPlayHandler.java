@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
+import com.tac.guns.item.*;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import org.apache.commons.lang3.ArrayUtils;
@@ -44,12 +45,10 @@ import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.interfaces.IProjectileFactory;
-import com.tac.guns.item.GunItem;
-import com.tac.guns.item.IColored;
-import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageBulletTrail;
 import com.tac.guns.network.message.MessageGunSound;
@@ -208,7 +207,7 @@ public class ServerPlayHandler
 
                         // PATCH NOTE: Neko required to remove the random pitch effect in sound
                         final float pitch = 0.9F + world.rand.nextFloat() * 0.125F;
-                        
+
                         double radius = GunModifierHelper.getModifiedFireSoundRadius(heldItem, Config.SERVER.gunShotMaxDistance.get());
                         boolean muzzle = modifiedGun.getDisplay().getFlash() != null;
                         MessageGunSound messageSound = new MessageGunSound(fireSound, SoundCategory.PLAYERS, (float) posX, (float) posY, (float) posZ, volume, pitch, player.getEntityId(), muzzle, false);
@@ -222,7 +221,7 @@ public class ServerPlayHandler
                         if(!tag.getBoolean("IgnoreAmmo"))
                         {
                             int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RECLAIMED.get(), heldItem);
-                            if(level == 0 || player.world.rand.nextInt(4 - MathHelper.clamp(level, 1, 2)) != 0)
+                            if(level == 0 || player.world.rand.nextInt(9 - MathHelper.clamp(level * 3, 3, 6)) != 0)
                             {
                                 tag.putInt("AmmoCount", Math.max(0, tag.getInt("AmmoCount") - 1));
                             }
@@ -265,19 +264,15 @@ public class ServerPlayHandler
                 {
                     for(Pair<Ingredient, Integer> stack : materials)
                     {
-                        for(ItemStack itemstack: stack.getFirst().getMatchingStacks()) {
-                            if (!InventoryUtil.hasItemStack(player, itemstack)) {
-                                return;
-                            }
+                        if (!InventoryUtil.hasIngredient(player, stack)) {
+                            return;
                         }
                     }
 
                     for(Pair<Ingredient, Integer> stack : materials)
                     {
-                        for(ItemStack itemstack: stack.getFirst().getMatchingStacks()) {
-                            if(InventoryUtil.removeItemStack(player, itemstack)){
-                                break;
-                            }
+                        if(!InventoryUtil.removeItemStackFromIngredient(player, stack)){
+                            return;
                         }
                     }
 
@@ -389,7 +384,7 @@ public class ServerPlayHandler
     public static void handleAttachments(ServerPlayerEntity player)
     {
         ItemStack heldItem = player.getHeldItemMainhand();
-        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem)
+        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem || heldItem.getItem() instanceof SideRailItem || heldItem.getItem() instanceof IrDeviceItem)
         {
             NetworkHooks.openGui(player, new SimpleNamedContainerProvider((windowId, playerInventory, player1) -> new AttachmentContainer(windowId, playerInventory, heldItem), new TranslationTextComponent("container.tac.attachments")));
         }
@@ -425,53 +420,49 @@ public class ServerPlayHandler
     public static void handleFireMode(ServerPlayerEntity player)
     {
         ItemStack heldItem = player.getHeldItemMainhand();
-        if(heldItem.getItem() instanceof GunItem)
+        try {
+
+            //TODO Fix double click req
+            if (heldItem.getItem() instanceof GunItem) {
+                if (heldItem.getTag() == null) {
+                    heldItem.getOrCreateTag();
+                }
+                GunItem gunItem = (GunItem) heldItem.getItem();
+                Gun gun = gunItem.getModifiedGun(heldItem.getStack());
+                int[] gunItemFireModes = heldItem.getTag().getIntArray("supportedFireModes");
+                if (ArrayUtils.isEmpty(gunItemFireModes)) {
+                    gunItemFireModes = gun.getGeneral().getRateSelector();
+                    heldItem.getTag().putIntArray("supportedFireModes", gunItemFireModes);
+                } else if (!Arrays.equals(gunItemFireModes, gun.getGeneral().getRateSelector())) {
+                    heldItem.getTag().putIntArray("supportedFireModes", gun.getGeneral().getRateSelector());
+                }
+                int toCheck = ArrayUtils.indexOf(gunItemFireModes, heldItem.getTag().getInt("CurrentFireMode"));
+                if (toCheck >= (heldItem.getTag().getIntArray("supportedFireModes").length-1)) {
+                    heldItem.getTag().remove("CurrentFireMode");
+                    heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
+                } else {
+                    heldItem.getTag().remove("CurrentFireMode");
+                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[toCheck + 1]);
+                }
+
+                if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 2) {
+                    heldItem.getTag().remove("CurrentFireMode");
+                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
+                } else if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0) {
+                    heldItem.getTag().remove("CurrentFireMode");
+                    heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[0]);
+                }
+
+                ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
+                if (fireModeSound != null && player.isAlive()) {
+                    MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
+                    PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), messageSound);
+                }
+            }
+        }
+        catch (Exception e)
         {
-            if(heldItem.getTag() == null)
-            {
-                heldItem.getOrCreateTag();
-            }
-            GunItem gunItem = (GunItem) heldItem.getItem();
-            Gun gun = gunItem.getModifiedGun(heldItem.getStack());
-            int[] gunItemFireModes = heldItem.getTag().getIntArray("supportedFireModes");
-            if(ArrayUtils.isEmpty(gunItemFireModes))
-            {
-                gunItemFireModes = gun.getGeneral().getRateSelector();
-                heldItem.getTag().putIntArray("supportedFireModes", gunItemFireModes);
-            }
-            else if(!Arrays.equals(gunItemFireModes, gun.getGeneral().getRateSelector()))
-            {
-                heldItem.getTag().putIntArray("supportedFireModes", gun.getGeneral().getRateSelector());
-            }
-            int toCheck = ArrayUtils.indexOf(gunItemFireModes, heldItem.getTag().getInt("CurrentFireMode"));
-            if(toCheck >= (heldItem.getTag().getIntArray("supportedFireModes").length))
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
-            }
-            else
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[toCheck+1]);
-            }
-
-            if(!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1)
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
-            }
-            else if(!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0)
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[0]);
-            }
-
-            ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
-            if(fireModeSound != null && player.isAlive())
-            {
-                MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
-                PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() ->(ServerPlayerEntity) player), messageSound);
-            }
+            GunMod.LOGGER.log(Level.ERROR, "Fire Mode check did not function properly");//TODO: For now the issue seems to be minimal, this will be eventually reworked, while still having server capability
         }
     }
 
@@ -493,56 +484,6 @@ public class ServerPlayHandler
             }
         }
     }
-    //ARCHIVE, THIS MAY CHANGE IN THE FUTURE CAUSE WTF
-    /*public static void handleFireMode(ServerPlayerEntity player)
-    {
-        ItemStack heldItem = player.getHeldItemMainhand();
-        if(heldItem.getItem() instanceof TimelessGunItem)
-        {
-            TimelessGunItem gunItem = (TimelessGunItem) heldItem.getItem();
-            Gun gun = gunItem.getModifiedGun(heldItem.getStack());
-            int[] gunItemFireModes = heldItem.getTag().getIntArray("supportedFireModes");
-            if(ArrayUtils.isEmpty(gunItemFireModes))
-            {
-                gunItemFireModes = gun.getGeneral().getRateSelector();
-                heldItem.getTag().putIntArray("supportedFireModes", gunItemFireModes);
-            }
-            else if(!Arrays.equals(gunItemFireModes, gun.getGeneral().getRateSelector()))
-            {
-                heldItem.getTag().putIntArray("supportedFireModes", gun.getGeneral().getRateSelector());
-            }
-            //int currMode = gun.getGeneral().getRateSelector().length >  ? heldItem.getTag().getInt("CurrentFireMode") : gun.getGeneral().getRateSelector()[0];
-            int toCheck = ArrayUtils.indexOf(gunItemFireModes, heldItem.getTag().getInt("CurrentFireMode"));
-            if(toCheck >= (heldItem.getTag().getIntArray("supportedFireModes").length))
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
-            }
-            else
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[toCheck+1]);
-            }
-
-            if(!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1)
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
-            }
-            else if(!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0)
-            {
-                heldItem.getTag().remove("CurrentFireMode");
-                heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[0]);
-            }
-
-            ResourceLocation fireModeSound = gun.getSounds().getCock(); // Use cocking sound for now
-            if(fireModeSound != null && player.isAlive())
-            {
-                MessageGunSound messageSound = new MessageGunSound(fireModeSound, SoundCategory.PLAYERS, (float) player.getPosX(), (float) (player.getPosY() + 1.0), (float) player.getPosZ(), 1F, 1F, player.getEntityId(), false, false);
-                PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() ->(ServerPlayerEntity) player), messageSound);
-            }
-        }
-    }*/
 
     /**
      * @param player
@@ -610,9 +551,9 @@ public class ServerPlayHandler
     {
         //RayTraceResult entityPos = lookingAtEntity(player,rangeL);GunMod.LOGGER.log(Level.FATAL, entityPos.getType().toString());
         ///if(entityPos instanceof EntityRayTraceResult)
-         //   return new BlockPos(entityPos.getHitVec());
+        //   return new BlockPos(entityPos.getHitVec());
         //else
-            return ((BlockRayTraceResult)player.pick((double)rangeL, 0.0F, false)).getPos();
+        return ((BlockRayTraceResult)player.pick((double)rangeL, 0.0F, false)).getPos();
 
     }
     protected static RayTraceResult lookingAtEntity(PlayerEntity player, int rangeL)
@@ -628,11 +569,9 @@ public class ServerPlayHandler
         if(heldItem.getItem() instanceof TimelessGunItem)
         {
             Gun gun = ((TimelessGunItem) heldItem.getItem()).getModifiedGun(heldItem.getStack());
-
             if(!ArrayUtils.isEmpty(gun.getModules().getZoom()))
             {
                 int currentZoom = heldItem.getTag().getInt("currentZoom");
-
                 if(currentZoom == (gun.getModules().getZoom().length-2))
                 {
                     heldItem.getTag().remove("currentZoom");
@@ -694,10 +633,10 @@ public class ServerPlayHandler
 
         Gun gun = ((TimelessGunItem) heldItem.getItem()).getGun();
         //if(MovementAdaptationsHandler.get().previousGun == null || gun.serializeNBT().getId() == MovementAdaptationsHandler.get().previousGun)
-            if ((MovementAdaptationsHandler.get().isReadyToUpdate()) || MovementAdaptationsHandler.get().getPreviousWeight() != gun.getGeneral().getWeightKilo())
-            {
-                // TODO: Show that the speed effect is now only half
-                float speed = calceldGunWeightSpeed(gun, heldItem);
+        if ((MovementAdaptationsHandler.get().isReadyToUpdate()) || MovementAdaptationsHandler.get().getPreviousWeight() != gun.getGeneral().getWeightKilo())
+        {
+            // TODO: Show that the speed effect is now only half
+            float speed = calceldGunWeightSpeed(gun, heldItem);
 
                 /*0.1f
                         /
@@ -705,20 +644,20 @@ public class ServerPlayHandler
                         * 0.0275f))
                 ; // * 0.01225f));// //(1+GunModifierHelper.getModifierOfWeaponWeight(heldItem)) + GunModifierHelper.getAdditionalWeaponWeight(heldItem)) / 3.775F));*/
 
-                if(player.isSprinting() && speed > 0.094f )
-                    speed = Math.max(Math.min(speed, 0.12F), 0.075F);
-                else if(player.isSprinting())
-                    speed = Math.max(Math.min(speed, 0.12F), 0.075F)*0.955f;
-                else
-                    speed = Math.max(Math.min(speed, 0.1F), 0.075F);
-                changeGunSpeedMod(player, "GunSpeedMod", -((double)((0.1 - speed)*10)));//*1000
-
-                MovementAdaptationsHandler.get().setReadyToReset(true);
-                MovementAdaptationsHandler.get().setReadyToUpdate(false);
-                MovementAdaptationsHandler.get().setSpeed(speed);
-            }
+            if(player.isSprinting() && speed > 0.094f )
+                speed = Math.max(Math.min(speed, 0.12F), 0.075F);
+            else if(player.isSprinting())
+                speed = Math.max(Math.min(speed, 0.12F), 0.075F)*0.955f;
             else
-                MovementAdaptationsHandler.get().setSpeed((float)player.getAttribute(MOVEMENT_SPEED).getValue());
+                speed = Math.max(Math.min(speed, 0.1F), 0.075F);
+            changeGunSpeedMod(player, "GunSpeedMod", -((double)((0.1 - speed)*10)));//*1000
+
+            MovementAdaptationsHandler.get().setReadyToReset(true);
+            MovementAdaptationsHandler.get().setReadyToUpdate(false);
+            MovementAdaptationsHandler.get().setSpeed(speed);
+        }
+        else
+            MovementAdaptationsHandler.get().setSpeed((float)player.getAttribute(MOVEMENT_SPEED).getValue());
         player.sendPlayerAbilities();
 
         MovementAdaptationsHandler.get().setPreviousWeight(gun.getGeneral().getWeightKilo());
@@ -730,7 +669,7 @@ public class ServerPlayHandler
     public static float calceldGunWeightSpeed(Gun gun, ItemStack gunStack)
     {
         return 0.1f / (1+(((gun.getGeneral().getWeightKilo()*(1+GunModifierHelper.getModifierOfWeaponWeight(gunStack)) + GunModifierHelper.getAdditionalWeaponWeight(gunStack) - GunEnchantmentHelper.getWeightModifier(gunStack))/2)
-                        * 0.0275f));
+                * 0.0275f));
     }
 
     public static void handleGunID(ServerPlayerEntity player, boolean regenerate)

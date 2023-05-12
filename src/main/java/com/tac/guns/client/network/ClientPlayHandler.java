@@ -227,11 +227,19 @@ public class ClientPlayHandler
         }
         else if(player)
         {
-            return SoundEvents.ENTITY_PLAYER_HURT;
+            if(Config.CLIENT.sounds.playSoundWhenPlayer.get())
+            {
+                SoundEvent event = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(Config.CLIENT.sounds.playerSound.get()));
+                return event != null ? event : SoundEvents.ENTITY_PLAYER_HURT;
+            }
         }
         else
         {
-            return SoundEvents.ENTITY_PLAYER_ATTACK_WEAK; // Hitmarker
+            if(Config.CLIENT.sounds.playSoundWhenMob.get())
+            {
+                SoundEvent event = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(Config.CLIENT.sounds.mobSound.get()));
+                return event != null ? event : SoundEvents.ENTITY_PLAYER_ATTACK_WEAK;
+            }
         }
 
         return null;

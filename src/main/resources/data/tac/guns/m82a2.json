@@ -1,67 +1,83 @@
 {
   "general": {
-    "rate": 10,
-    "rateSelector": [
-      0,
-      1
-    ],
+    "auto": false,
+    "rate": 120,
+    "rateSelector": [1],
     "gripType": "tac:two_handed_mosin",
-    "recoilAngle": 2.725,
-    "horizontalRecoilAngle": 1.275,
-    "recoilKick": 2.375,
-    "recoilAdsReduction": 0.275,
-    "weaponRecoilOffset": 0.875,
-    "cameraRecoilModifier": 0.4125,
-    "alwaysSpread": true,
-    "spread": 1.675,
-    "weightKilo": 14.0
+    "recoilAngle": 8.75,
+    "horizontalRecoilAngle": 6.75,
+    "recoilKick": 1.5,
+    "recoilAdsReduction": 0.25,
+    "recoilDuration": 0.35,
+    "weaponRecoilOffset": 0.625,
+    "cameraRecoilModifier": 1.85,
+    "weightKilo": 15.0,
+
+    "spread": 2,
+    "firstShotSpread": 0.025,
+    "hipFireInaccuracy": 10,
+    "projToMinAccuracy": 5,
+    "msToAccuracyReset": 750,
+    "movementInaccuracy": 0.25
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 5,
-    "reloadMagTimer": 66,
-    "additionalReloadEmptyMagTimer": 20,
-    "maxAdditionalAmmoPerOC": [
-      2,
-      3,
-      5
-    ],
-    "preReloadPauseTicks": 13
+    "reloadMagTimer": 74,
+    "additionalReloadEmptyMagTimer": 22,
+    "maxAdditionalAmmoPerOC": [2, 3, 5],
+    "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:50bmg",
     "visible": false,
     "gravity": true,
-    "damage": 30,
-    "size": 0.2,
-    "speed": 72.0,
-    "life": 6
+    "damage": 75,
+    "armorIgnore": 2.0,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 2.0,
+    "size": 0.35,
+    "speed": 30.0,
+    "life": 20,
+    "trailLengthMultiplier": 3.75
   },
   "sounds": {
-    "fire": "tac:item.m82a3",
-    "reload": "tac:item.pistol.reload",
+    "fire": "tac:item.m82a2_fire",
+    "reloadNormal": "tac:animation.m82a2_reload_norm",
+    "reloadEmpty": "tac:animation.m82a2_reload_empty",
+    "draw": "tac:animation.m82a2_draw",
+    "inspect": "tac:animation.m82a2_inspect",
     "cock": "tac:item.pistol.cock",
-    "silencedFire": "tac:item.assault_rifle.silenced_fire"
+    "silencedFire": "tac:item.m82a2_fire_s"
   },
   "display": {
     "flash": {
-      "yOffset": 8.7,
-      "zOffset": -22.10,
-      "size": 1.8
+      "yOffset": 9.25,
+      "zOffset": -46.10,
+      "size": 3,
+      "trailAdjust": 3
+
     },
-    "weaponType": 5
+    "weaponType": 5,
+    "showDynamicHipfire": true
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.8,
-      "yOffset": 11.7625,
-      "zOffset": -7.5
+      "fovModifier": 0.67,
+      "yOffset": 14,
+      "zOffset": -2.5
     },
     "attachments": {
       "scope": {
-        "yOffset": 10.275,
-        "zOffset": 10.05,
+        "yOffset": 11.575,
+        "zOffset": 1.75,
         "scale": 1.0
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
       }
     }
   }
