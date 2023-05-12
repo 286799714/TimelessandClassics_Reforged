@@ -51,16 +51,23 @@ public class scar_mk20_animation implements IOverrideModel {
 
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
                 matrices.push();
-                matrices.translate(0, 0, -0.125f);
+                matrices.translate(0, 0, -0.285f);
                 RenderUtil.renderModel(SpecialModels.SCAR_MK20_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-                matrices.translate(0, 0, 0.125f);
+                matrices.translate(0, 0, 0.285f);
                 matrices.pop();
             } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem())) {
+                matrices.translate(0, 0, -0.11f);
                 RenderUtil.renderModel(SpecialModels.SCAR_MK20_COMPENSATOR.getModel(), stack, matrices, renderBuffer, light, overlay);
+                matrices.translate(0, 0, 0.11f);
             } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.orElse(ItemStack.EMPTY.getItem())) {
+                matrices.translate(0, 0, -0.11f);
                 RenderUtil.renderModel(SpecialModels.SCAR_MK20_BRAKE.getModel(), stack, matrices, renderBuffer, light, overlay);
-            } else
+                matrices.translate(0, 0, 0.11f);
+            } else {
+                matrices.translate(0, 0, -0.11f);
                 RenderUtil.renderModel(SpecialModels.SCAR_MK20_DEFAULT_BARREL.getModel(), stack, matrices, renderBuffer, light, overlay);
+                matrices.translate(0, 0, 0.11f);
+            }
 
             RenderUtil.renderModel(SpecialModels.SCAR_MK20_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
 

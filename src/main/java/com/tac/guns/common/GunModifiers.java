@@ -395,7 +395,7 @@ public class GunModifiers
         @Override
         public double modifyAimDownSightSpeed(double speed)
         {
-            return speed * 0.65F;
+            return speed * 0.8F;
         }
         @Override
         public float modifyWeaponWeight() { return 0.175F; }
