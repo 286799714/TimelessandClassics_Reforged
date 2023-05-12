@@ -263,6 +263,12 @@
     "info.tac.firemode_semi": "<半自动射击>, 按下 %s 以更改开火模式",
     "info.tac.firemode_auto": "<全自动射击>, 按下 %s 以更改开火模式",
 
+    "info.tac.armorPen": "%s 伤害穿透Minecraft护甲",
+    "info.tac.headDamageModifier": "%s 爆头倍率",
+
+    "info.tac.more_info_gunitem": "按住 [%s] 以显示更多信息",
+    "key.tac.moreInfoHold": "显示更多枪械信息",
+
     "key.categories.tac": "永恒枪械工坊",
 
 	"key.tac.pull_trigger": "武器开火",
