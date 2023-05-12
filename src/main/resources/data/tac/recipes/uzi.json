@@ -5,10 +5,10 @@
       "item": {
         "tag": "forge:materials/uncommon"
       },
-      "count": 18
+      "count": 36
     }
   ],
   "result": {
-    "item": "tac:glock_17"
+    "item": "tac:uzi"
   }
 }
