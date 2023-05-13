@@ -91,12 +91,10 @@ public class glock_18_animation implements IOverrideModel
                 GunRenderingHandler.get().opticMovement = 0.185f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0);
             }
             matrices.translate(0, 0, 0.025F);
-        }
+
         RenderUtil.renderModel(SpecialModels.GLOCK_18_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
         //Always pop
         matrices.popPose();
-    }
-     
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }

@@ -140,7 +140,42 @@ public class GunModifiers
         @Override
         public float additionalWeaponWeight() { return 1.2F; }
     };
+    public static final IGunModifier BASIC_LASER = new IGunModifier()
+    {
+        @Override
+        public double modifyAimDownSightSpeed(double speed)
+        {
+            return speed * 0.90F;
+        }
+        @Override
+        public float modifyWeaponWeight() { return 0.1F; }
+        @Override
+        public float modifyHipFireSpread(float spread)
+        {
+            return spread * 0.185F;
+        }
+    };
 
+    public static final IGunModifier IR_LASER = new IGunModifier()
+    {
+        @Override
+        public double modifyAimDownSightSpeed(double speed)
+        {
+            return speed * 0.825F;
+        }
+        @Override
+        public float modifyWeaponWeight() { return 0.195F; }
+        @Override
+        public float modifyHipFireSpread(float spread)
+        {
+            return spread * 0.15F;
+        }
+
+        @Override
+        public float modifyProjectileSpread(float spread) {
+            return spread*0.925f;
+        }
+    };
     public static final IGunModifier MINI_DOT_ADS = new IGunModifier()
     {
         @Override
@@ -161,7 +196,40 @@ public class GunModifiers
         @Override
         public float additionalWeaponWeight() { return 0.125F; }
     };
+    public static final IGunModifier RPG7_MOD = new IGunModifier()
+    {
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed*0.5;
+        }
+    };
+    public static final IGunModifier M82A2_MOD = new IGunModifier()
+    {
+        @Override
+        public double modifyFireSoundRadius(double radius)
+        {
+            return radius * 1.75;
+        }
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed*0.5;
+        }
+        @Override
+        public double additionalProjectileGravity() {
+            return -0.02;
+        }
+    };
+    public static final IGunModifier UDP_9_MOD = new IGunModifier()
+    {
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {return speed*1.125;}
 
+        @Override
+        public float modifyFireSoundVolume(float volume)
+        {
+            return volume * 0.90F;
+        }
+    };
     public static final IGunModifier HEAVY_STOCK_MODIFIER = new IGunModifier()
     {
         @Override
@@ -373,42 +441,6 @@ public class GunModifiers
         public int modifyFireRate(int rate) {
             return (int)(rate*1.15);
         }*/
-    };
-    public static final IGunModifier BASIC_LASER = new IGunModifier()
-    {
-        @Override
-        public double modifyAimDownSightSpeed(double speed)
-        {
-            return speed * 0.85F;
-        }
-        @Override
-        public float modifyWeaponWeight() { return 0.1F; }
-        @Override
-        public float modifyHipFireSpread(float spread)
-        {
-            return spread * 0.185F;
-        }
-    };
-
-    public static final IGunModifier IR_LASER = new IGunModifier()
-    {
-        @Override
-        public double modifyAimDownSightSpeed(double speed)
-        {
-            return speed * 0.75F;
-        }
-        @Override
-        public float modifyWeaponWeight() { return 0.175F; }
-        @Override
-        public float modifyHipFireSpread(float spread)
-        {
-            return spread * 0.15F;
-        }
-
-        @Override
-        public float modifyProjectileSpread(float spread) {
-            return spread*0.925f;
-        }
     };
     public static final IGunModifier SMALL_EXTENDED_MAG = new IGunModifier()
     {

@@ -41,7 +41,7 @@ public class LootTableGen extends LootTableProvider
         protected void addTables()
         {
             this.dropSelf(ModBlocks.WORKBENCH.get());
-            this.dropSelf(ModBlocks.UPGRADE_BENCH.get());
+            //this.dropSelf(ModBlocks.UPGRADE_BENCH.get());
         }
 
         @Override

@@ -39,6 +39,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import static com.tac.guns.util.KeyBindingReflections.GetKeyBindings;
+
 /**
  * Static handler for {@link KeyBind}s
  * 
@@ -110,7 +112,7 @@ public final class InputHandler
 		INCO_KEYS = new ArrayList<>(),
 		CO_KEYS = new ArrayList<>();
 	
-	private static final HashMultimap< Input, KeyBind >
+	private static final HashMultimap< Key, KeyBind >
 		GLOBAL_MAPPER = HashMultimap.create(),
 		INCO_MAPPER = HashMultimap.create(),
 		CO_MAPPER = HashMultimap.create();
@@ -183,7 +185,7 @@ public final class InputHandler
 	@SubscribeEvent( priority = EventPriority.HIGH )
 	public static void onMouseInput( InputEvent.RawMouseEvent evt )
 	{
-		final Input button = InputMappings.Type.MOUSE.getOrMakeInput( evt.getButton() );
+		final Key button =  InputConstants.Type.MOUSE.getOrCreate( evt.getButton() );
 		final boolean down = evt.getAction() == GLFW.GLFW_PRESS;
 		GLOBAL_MAPPER.get( button ).forEach( kb -> kb.update( down ) );
 		( CO.down ? CO_MAPPER : INCO_MAPPER ).get( button ).forEach( kb -> kb.update( down ) );
@@ -194,7 +196,7 @@ public final class InputHandler
 	@SubscribeEvent( priority = EventPriority.HIGH )
 	public static void onKeyInput( InputEvent.KeyInputEvent evt )
 	{
-		final Input key = InputMappings.Type.KEYSYM.getOrMakeInput( evt.getKey() );
+		final Key key = InputConstants.Type.KEYSYM.getOrCreate( evt.getKey() );
 		final boolean down = evt.getAction() != GLFW.GLFW_RELEASE;
 		GLOBAL_MAPPER.get( key ).forEach( kb -> kb.update( down ) );
 		( CO.down ? CO_MAPPER : INCO_MAPPER ).get( key ).forEach( kb -> kb.update( down ) );
@@ -217,10 +219,10 @@ public final class InputHandler
 		}
 
 		// Make sure only one aim key is bounden
-		final Input none = InputMappings.INPUT_INVALID;
+		final Key none = InputConstants.UNKNOWN;
 		if( AIM_HOLD.keyCode() != none && AIM_TOGGLE.keyCode() != none )
 		{
-			oriAimKey.setKeyCode( none );
+			oriAimKey.$keyCode( none );
 			flag = true;
 		}
 		
@@ -261,7 +263,7 @@ public final class InputHandler
 				try
 				{
 					KeyBind.REGISTRY.get( e.getKey() )
-						.$keyCode( InputMappings.getInputByName( e.getValue().getAsString() ) );
+						.$keyCode(GetKeyBindings().get(e.getValue().getAsString()).getKey() );
 				}
 				catch ( NullPointerException ee ) {
 					GunMod.LOGGER.error( "Key bind " + e.getKey() + " do not exist" );
@@ -285,12 +287,12 @@ public final class InputHandler
 
 	private static void updateMapper(
 		Collection< KeyBind > group,
-		Multimap< Input, KeyBind > mapper
+		Multimap< Key, KeyBind > mapper
 	) {
 		mapper.clear();
 		group.forEach( kb -> {
-			final Input code = kb.keyCode();
-			if ( code != InputMappings.INPUT_INVALID ) { mapper.put( code, kb ); }
+			final Key code = kb.keyCode();
+			if ( code != InputConstants.UNKNOWN ) { mapper.put( code, kb ); }
 		} );
 	}
 	

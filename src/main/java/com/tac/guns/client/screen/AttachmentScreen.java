@@ -306,7 +306,7 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
     {
         int startX = (this.width - this.imageWidth) / 2;
         int startY = (this.height - this.imageHeight) / 2;
-        if((this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem)) {
+        if((this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem)) {
             if (RenderUtil.isMouseWithin((int) mouseX, (int) mouseY, startX + 93, startY + 18, 65, 67)) {
                 if (!this.mouseGrabbed && (button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
                     this.mouseGrabbed = true;

@@ -75,7 +75,7 @@ public class RenderUtil
     public static void renderModel(ItemStack child, ItemStack parent, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay)
     {
         BakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(child);
-        renderModel(model, ItemTransforms.TransformType.NONE, null, child, parent, matrixStack, buffer, light, overlay);
+        renderModel(model, ItemTransforms.TransformType.NONE, null, child, parent, matrixStack, buffer, light, overlay, false);
     }
 
     public static void renderModel(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay, @Nullable LivingEntity entity)
@@ -111,10 +111,10 @@ public class RenderUtil
 
     public static void renderModel(BakedModel model, ItemTransforms.TransformType transformType, ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay)
     {
-        renderModel(model, transformType, null, stack, ItemStack.EMPTY, matrixStack, buffer, light, overlay);
+        renderModel(model, transformType, null, stack, ItemStack.EMPTY, matrixStack, buffer, light, overlay, false);
     }
 
-    public static void renderModel(BakedModel model, ItemTransforms.TransformType transformType, @Nullable Transform transform, ItemStack stack, ItemStack parent, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay)
+    public static void renderModel(BakedModel model, ItemTransforms.TransformType transformType, @Nullable Transform transform, ItemStack stack, ItemStack parent, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay, boolean renderWithPersonalColor)
     {
         if(!stack.isEmpty())
         {
@@ -195,33 +195,6 @@ public class RenderUtil
             matrixStack.popPose();
         }
     }
-
-    /**
-     * @param model
-     * @param stack
-     * @param parent
-     * @param transform
-     * @param matrixStack
-     * @param buffer
-     * @param light
-     * @param overlay
-     */
-    private static void renderModelPersonallyColored(IBakedModel model, ItemStack stack, ItemStack parent, @Nullable Transform transform, MatrixStack matrixStack, IVertexBuilder buffer, int light, int overlay)
-    {
-        if(transform != null)
-        {
-            transform.apply();
-        }
-        Random random = new Random();
-        for(Direction direction : Direction.values())
-        {
-            random.setSeed(42L);
-            renderPersonalizedQuads(matrixStack, buffer, model.getQuads(null, direction, random), stack, parent, light, overlay);
-        }
-        random.setSeed(42L);
-        renderPersonalizedQuads(matrixStack, buffer, model.getQuads(null, null, random), stack, parent, light, overlay);
-    }
-
     /**
      * @param model
      * @param stack

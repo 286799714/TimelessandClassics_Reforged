@@ -8,10 +8,8 @@ import com.tac.guns.interfaces.IGunModifier;
  * <p>
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class ExtendedMag extends Attachment
-{
-    private ExtendedMag(IGunModifier... modifier)
-    {
+public class ExtendedMag extends Attachment {
+    private ExtendedMag(IGunModifier... modifier) {
         super(modifier);
     }
 
@@ -21,7 +19,7 @@ public class ExtendedMag extends Attachment
      * @param modifier an array of gun modifiers
      * @return an under barrel get
      */
-    public static ExtendedMag create(IGunModifier... modifier)
-    {
+    public static ExtendedMag create(IGunModifier... modifier) {
         return new ExtendedMag(modifier);
     }
+}

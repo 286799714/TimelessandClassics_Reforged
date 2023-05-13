@@ -71,7 +71,6 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -917,8 +916,8 @@ public class GunRenderingHandler {
         //matrixStack.translate(noiseX.getValue()* (1 - AimingHandler.get().getNormalisedRepairProgress()), (noiseY.getValue() + additionNoiseY.getValue()) * (1 - AimingHandler.get().getNormalisedRepairProgress()), 0);
         if(AimingHandler.get().getNormalisedAdsProgress() == 1) {
             matrixStack.translate(aimed_noiseX.getValue() * (reverser*2), (aimed_noiseY.getValue() + additionNoiseY.getValue()) * reverser, 0);
-            matrixStack.rotate(Vector3f.YP.rotationDegrees(aimed_noiseRotationY.getValue()*reverser));
-            matrixStack.rotate(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue()*0.85*reverser)));
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees(aimed_noiseRotationY.getValue()*reverser));
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue()*0.85*reverser)));
         }
         else {
             matrixStack.translate(noiseX.getValue() * (-reverser), (noiseY.getValue() + additionNoiseY.getValue()) * reverser, 0);

@@ -135,7 +135,7 @@ public class ClientHandler
 
     private static void setupRenderLayers()
     {
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.UPGRADE_BENCH.get(), RenderType.cutout());
+        //ItemBlockRenderTypes.setRenderLayer(ModBlocks.UPGRADE_BENCH.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WORKBENCH.get(), RenderType.cutout());
     }
 

@@ -46,20 +46,6 @@ public class ShootTracker
     }
 
     /**
-     * Puts a cooldown for the specified gun item. This stores the time it was fired and the rate
-     * of the weapon to determine when it's allowed to fire again.
-     *
-     * @param item        a gun item
-     * @param modifiedGun the modified gun get of the specified gun
-     */
-    public void putCooldown(ItemStack weapon, GunItem item, Gun modifiedGun)
-    {
-        int rate = GunEnchantmentHelper.getRate(weapon, modifiedGun);
-        rate = GunModifierHelper.getModifiedRate(weapon, rate);
-        this.cooldownMap.put(item, Pair.of(Util.getMillis(), rate * 50));
-    }
-
-    /**
      * Checks if the specified item has an active cooldown. If a cooldown is active, it means that
      * the weapon can not be fired until it has finished. This method provides leeway as sometimes a
      * weapon is ready to fire but the cooldown is not completely finished, rather it's in the last

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -25,9 +26,13 @@ public class UpgradeBenchTileEntity extends SyncedTileEntity implements IStorage
 {
     private NonNullList<ItemStack> inventory = NonNullList.withSize(2, ItemStack.EMPTY);
 
-    public UpgradeBenchTileEntity(BlockPos pos, BlockState state) {
-        super(ModTileEntities.UPGRADE_BENCH.get(), pos, state);
+    public UpgradeBenchTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
+
+    /*public UpgradeBenchTileEntity(BlockPos pos, BlockState state) {
+        super(ModTileEntities.UPGRADE_BENCH.get(), pos, state);
+    }*/
 
     @Override
     public NonNullList<ItemStack> getInventory()
