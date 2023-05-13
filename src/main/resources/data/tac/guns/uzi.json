@@ -2,29 +2,29 @@
   "general": {
     "auto": true,
     "rate": 600,
-    "rateSelector": [2],
+    "rateSelector": [2, 1],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 2.75,
+    "recoilAngle": 2.25,
     "horizontalRecoilAngle": 1.35,
-    "recoilKick": 1.2125,
-    "recoilAdsReduction": 0.305,
-    "weaponRecoilOffset": 0.525,
-    "recoilDuration": 0.1025,
-    "cameraRecoilModifier": 1.25,
+    "recoilKick": 1.375,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.75,
+    "recoilDuration": 0.25,
+    "cameraRecoilModifier": 1.375,
     "weightKilo": 3.5,
 
-    "spread": 2.575,
+    "spread": 2.25,
     "firstShotSpread": 0.225,
-    "hipFireInaccuracy": 3.25,
-    "projToMinAccuracy": 6,
+    "hipFireInaccuracy": 2.875,
+    "projToMinAccuracy": 8,
     "msToAccuracyReset": 540,
-    "movementInaccuracy": 0.285
+    "movementInaccuracy": 0.25
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 20,
     "reloadMagTimer": 26,
-    "additionalReloadEmptyMagTimer": 11,
+    "additionalReloadEmptyMagTimer": 14,
     "maxAdditionalAmmoPerOC": [12, 20, 30],
     "preReloadPauseTicks": 0,
     "openBolt": true
@@ -32,15 +32,15 @@
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "size": 0.1,
+    "size": 0.125,
     "damage": 6.5,
     "armorIgnore": 0.7,
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
-    "speed": 13,
+    "speed": 14,
     "trailLengthMultiplier": 3,
-    "life": 11
+    "life": 10
   },
   "sounds": {
     "fire": "tac:item.uzi_fire",
@@ -65,8 +65,8 @@
   "modules": {
     "zoom":{
       "fovModifier": 0.8,
-      "yOffset": 10.660,
-      "zOffset": -2.0
+      "yOffset": 10.6,
+      "zOffset": -2.5
     },
     "attachments": {
       "pistolBarrel": {
@@ -78,11 +78,6 @@
         "yOffset": 1000.89,
         "zOffset": 5.35,
         "scale": 0.0
-      },
-      "scope": {
-        "yOffset": 9.825,
-        "zOffset": 6.475,
-        "scale": 1.00
       },
       "pistolScope": {
         "yOffset": 9.825,

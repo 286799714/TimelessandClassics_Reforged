@@ -928,6 +928,22 @@ public class GunModifiers
             return -0.0175;
         }
     };
+    public static final IGunModifier UZI_MOD = new IGunModifier()
+    {
+        @Override
+        public double modifyFireSoundRadius(double radius)
+        {
+            return radius * 0.9;
+        }
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed*1.225;
+        }
+        @Override
+        public double additionalProjectileGravity() {
+            return -0.0175;
+        }
+    };
     public static final IGunModifier AA_12_MOD = new IGunModifier()
     {
         @Override
@@ -980,6 +996,17 @@ public class GunModifiers
         @Override
         public double additionalProjectileGravity() {
             return 0.015;
+        }
+    };
+    public static final IGunModifier M1A1_MOD = new IGunModifier()
+    {
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed*1.15;
+        }
+        @Override
+        public double additionalProjectileGravity() {
+            return -0.015;
         }
     };
     public static final IGunModifier HK416_MOD = new IGunModifier()
