@@ -70,11 +70,11 @@ public class ModelOverrides
     {
         if(event.phase == TickEvent.Phase.START && event.side == LogicalSide.CLIENT) //  && event.type == TickEvent.Type.RENDER
         {
-            if(!ScreenTextureState.instance().isRenderGun)
+            /*if(!ScreenTextureState.instance().isRenderGun)
             {
                 ScreenTextureState.instance().isRenderGun = true;
                 return;
-            }
+            }*/
             tick(event.player);
         }
     }

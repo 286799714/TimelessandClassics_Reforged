@@ -3,6 +3,91 @@ package com.tac.guns.client.render;
 import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.tac.guns.Reference;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.common.Mod;
+
+import static org.lwjgl.opengl.GL11.*;
+@Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
+public class ScreenTextureState extends RenderStateShard.TexturingStateShard
+{
+    private static ScreenTextureState instance = null;
+
+    public static ScreenTextureState instance()
+    {
+        return instance == null ? instance = new ScreenTextureState() : instance;
+    }
+
+    private int textureId;
+    private int lastWindowWidth;
+    private int lastWindowHeight;
+
+    private ScreenTextureState()
+    {
+        super("screen_texture", () ->
+        {
+            RenderSystem.enableDepthTest();
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.enableTexture();
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.setShaderTexture(0, instance().getTextureId());
+        }, () ->
+        {
+            RenderSystem.disableDepthTest();
+            RenderSystem.disableBlend();
+        });
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onRenderWorldLast);
+    }
+
+    private int getTextureId()
+    {
+        if(this.textureId == 0)
+        {
+            this.textureId = TextureUtil.generateTextureId();
+            // Texture params only need to be set once, not once per frame
+            RenderSystem.bindTexture(this.textureId);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        }
+        return this.textureId;
+    }
+
+    private void onRenderWorldLast(RenderLevelLastEvent event)
+    {
+        Window mainWindow = Minecraft.getInstance().getWindow();
+
+        // OpenGL will spit out an error (GL_INVALID_VALUE) if the window is minimised (or draw calls stop)
+        // It seems just testing the width or height if it's zero is enough to prevent it
+        if(mainWindow.getScreenWidth() <= 0 || mainWindow.getScreenHeight() <= 0)
+            return;
+
+        RenderSystem.bindTexture(this.getTextureId());
+        if(mainWindow.getScreenWidth() != this.lastWindowWidth || mainWindow.getScreenHeight() != this.lastWindowHeight)
+        {
+            // When window resizes the texture needs to be re-initialized and copied, so both are done in the same call
+            this.lastWindowWidth = mainWindow.getScreenWidth();
+            this.lastWindowHeight = mainWindow.getScreenHeight();
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, mainWindow.getWidth(), mainWindow.getHeight(), 0);
+        }
+        else
+        {
+            // Copy sub-image is faster than copy because the texture does not need to be initialized
+            glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, mainWindow.getWidth(), mainWindow.getHeight());
+        }
+    }
+}
+/*
+package com.tac.guns.client.render;
+
+import com.mojang.blaze3d.platform.TextureUtil;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.net.optifine.shaders.TACOptifineShadersHelper;
 import com.tac.guns.Config;
 import com.tac.guns.GunMod;
@@ -65,7 +150,8 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
             RenderSystem.disableDepthTest();
             RenderSystem.disableBlend();
         });
-        if(Config.CLIENT.quality.worldRerenderPiPAlpha.get()) {
+        */
+/*if(Config.CLIENT.quality.worldRerenderPiPAlpha.get()) {
             ((ReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener(this.scopeRenderGlobal);
             scopeRenderGlobal = new ScopeGlobal(mc);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, this::onRenderHUD);
@@ -73,19 +159,22 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
             //MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onWorldLoad);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onRenderWorldLast);
         }
-        else
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderWorldLastLegacy);
+        else*//*
+
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, this::onRenderWorldLastLegacy);
     }
 
     private Field renderEndNanoTime;
 
 
-    /*@SubscribeEvent
+    */
+/*@SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
         if (event.getWorld().isRemote()) {
             mc.worldRenderer.setWorldAndLoadRenderers((ClientWorld) event.getWorld());
         }
-    }*/
+    }*//*
+
     private int getTextureId()
     {
         if(this.textureId == 0)
@@ -124,11 +213,13 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
     public int lastWidth;
     public int lastHeight;
 
-    /*@SubscribeEvent(priority = EventPriority.HIGHEST)
+    */
+/*@SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         //genMirror();
         isRenderHand0=false;
-    }*/
+    }*//*
+
 
 
     // Next im guessing i'll have to check this world render, it says the render is incomplete, maybe this code is supposed to complete it for the specific image output?
@@ -141,7 +232,8 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
                     if(this.textureId==-1||(lastWidth!=mc.getWindow().getScreenWidth()||lastHeight!=mc.getWindow().getScreenHeight())) {
                         GL11.glPushMatrix();
 
-                        /*GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);if(OVERLAY_TEX!=-1) {
+                        */
+/*GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);if(OVERLAY_TEX!=-1) {
                             GL11.glDeleteTextures(OVERLAY_TEX);
                         }
                         OVERLAY_TEX = GL11.glGenTextures();
@@ -182,7 +274,8 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
                         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, mc.getMainWindow().getWidth(), mc.getMainWindow().getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
                         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
                         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-                        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);*/
+                        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);*//*
+
 
                         lastWidth=mc.getWindow().getScreenWidth();
                         lastHeight=mc.getWindow().getScreenHeight();
@@ -218,9 +311,11 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
         isRenderGun=false;
     }
 
-    /*public static float getFov() {
+    */
+/*public static float getFov() {
         return (50.0f / ((ModelAttachment) itemAttachment.type.model).config.sight.fovZoom);
-    }*/
+    }*//*
+
     private static Minecraft mc = Minecraft.getInstance();
     public void renderWorld(Minecraft mc, float partialTick)
     {
@@ -246,7 +341,9 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
         mc.options.fov = zoom;
         mc.options.bobView = true;
 
-        /*RenderSystem*/
+        */
+/*RenderSystem*//*
+
         endTime = Util.getNanos();
 
         //GL30.glBindFramebuffer(mc.getFramebuffer().getColorTextureId(), this.textureId);
@@ -280,7 +377,7 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
         GL11.glPopMatrix();
     }
 
-    @SubscribeEvent//(priority = EventPriority.HIGHEST)
+    //@SubscribeEvent//(priority = EventPriority.HIGHEST)
     public void onRenderHUD(RenderGameOverlayEvent.Pre event) {
         if(event.getType()!= RenderGameOverlayEvent.ElementType.ALL) {
             return;
@@ -294,14 +391,18 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
             RenderSystem.bindTexture(ScreenTextureState.instance().getTextureId());
             if(OptifineHelper.isShadersEnabled()) {
                     //TODO: Optifine and OpenGL 2.1 Compatibility ?
-                    /*if(this.textureId == 0)
+                    */
+/*if(this.textureId == 0)
                         this.getTextureId();
-                    RenderSystem.bindTexture(this.textureId);*/
-                /*
+                    RenderSystem.bindTexture(this.textureId);*//*
+
+                */
+/*
                     GL43.glCopyImageSubData(Shaders.activeProgram.getDrawBuffersCustom().get(0) TACOptifineShadersHelper.getFlipTextures().getA(0), 3553, 0,0,0, 0, this.textureId, 3553,0,0,0,0, mc.getWindow().getScreenWidth(),
                             mc.getWindow().getScreenHeight(),1);
 
-                 */
+                 *//*
+
                     GunMod.LOGGER.log(Level.INFO, "GL43 grab with optifine has functioned");
                 } else {
                     //RenderSystem.bindTexture(this.textureId);
@@ -334,3 +435,4 @@ public class ScreenTextureState extends RenderStateShard.TexturingStateShard
         }
     }
 }
+*/
