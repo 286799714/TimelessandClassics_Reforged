@@ -1,0 +1,75 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "tac:items/hotbar_icons/scar_mk20"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        0.5,
+        -4.75
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        0.5,
+        -4.75
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "firstperson_righthand": {
+      "translation": [
+        -6,
+        2.5,
+        -6.25
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        -6,
+        2.5,
+        -6.25
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "translation": [
+        -10.25,
+        -0.5,
+        -1
+      ],
+      "scale": [
+        1.1,
+        1.1,
+        1.1
+      ]
+    }
+  }
+}

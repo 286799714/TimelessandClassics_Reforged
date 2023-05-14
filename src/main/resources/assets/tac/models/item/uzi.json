@@ -1,0 +1,58 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "tac:items/hotbar_icons/uzi"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        0.5,
+        -1.25
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "firstperson_righthand": {
+      "translation": [
+        -5.5,
+        3.5,
+        -4
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        -0.5,
+        0.25,
+        -6
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        5,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "translation": [
+        0.75,
+        -0.75,
+        -1.5
+      ]
+    }
+  }
+}

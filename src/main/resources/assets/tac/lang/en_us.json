@@ -74,7 +74,7 @@
     "item.tac.type81_x": "Type 81-1",
     "item.tac.pkp_penchenberg": "PKP Pencheneg",
     "item.tac.mp7": "MP7",
-    "item.tac.m82a2": "M82A1",
+    "item.tac.m82a2": "M82A3 .50",
     "item.tac.ai_awp": "AWM .338 Lapua",
     "item.tac.rpg7": "RPG-7",
     "item.tac.rpk": "RPK",
@@ -98,10 +98,12 @@
     "item.tac.m16a4": "M16A4",
     "item.tac.scar_h": "SCAR H",
     "item.tac.scar_l": "SCAR L",
+    "item.tac.scar_mk20": "SCAR MK20",
     "item.tac.mk47": "MK47 MUTANT",
     "item.tac.tti_g34": "TTI G34",
     "item.tac.mk18_mod1": "MK18 MOD1",
     "item.tac.spr15": "SPR 5.56",
+    "item.tac.uzi": "UZI",
 
     "item.tac.round45": ".45 ACP Bullet",
     "item.tac.magnumround": ".357 Magnum Bullet",
@@ -255,6 +257,7 @@
 
     "info.tac.oldRifleScope": "Scope slot only accepts %s",
     "info.tac.pistolScope": "Scope slot supports %s",
+    "info.tac.irLaserEquip": "SideRail slot supports %s",
     "info.tac.pistolBarrel": "Barrel slot only accepts %s",
 
     "info.tac.oldScope_type": "OldScope",
@@ -269,7 +272,13 @@
     "info.tac.firemode_semi": "<SEMI>, press %s to change fire mode",
     "info.tac.firemode_auto": "<AUTO>, press %s to change fire mode",
 
+    "info.tac.armorPen": "%s Damage ignores Minecraft armor",
+    "info.tac.headDamageModifier": "%s Extra headshot damage",
+
     "info.tac.attachment_help": "Press %s in-game for Attachments",
+
+    "info.tac.more_info_gunitem": "Hold [%s] for more info",
+
     "info.tac.tac_armor_repair1": "Hold your ",
     "info.tac.tac_armor_repair2": " in-game to repair Armor",
     "info.tac.current_armor_amount": "Current Armor Durability: ",
@@ -336,6 +345,7 @@
     "key.tac.reload": "Reload",
     "key.tac.unload": "Unload",
     "key.tac.attachments": "Modify Attachments",
+    "key.tac.moreInfoHold": "Show more Gun info",
 	
     "key.tac.fireSelect": "Fire Mode",
     "key.tac.inspect": "Inspect Weapon",
@@ -467,7 +477,5 @@
     "tac.button.attachments": "Modify Attachments",
     "tac.button.steadyAim": "Steady Aim",
 
-    "curios.identifier.armor_rig": "Timeless Armor",
-    "container.tac.upgradeBench": "Upgrade Bench",
-    "tac.empt": "Empty"
+    "curios.identifier.armor_rig": "Timeless Armor"
 }
