@@ -8,7 +8,7 @@ import java.util.Map;
 public class KeyBindingReflections
 {
 
-    //TODO: wtf why do I ahve to do this, can we not access registered keys in mc anymore?
+    /*//TODO: wtf why do I ahve to do this, can we not access registered keys in mc anymore?
     //Map<String, KeyMapping> keysInMC = null;
     public static Map<String, KeyMapping> GetKeyBindings()
     {
@@ -19,15 +19,17 @@ public class KeyBindingReflections
             if(clazz != null)
             {
                 field = clazz.getDeclaredField("ALL");
+                field.setAccessible(true);
             }
-            if(field != null)
+            Map<String, KeyMapping> iWant = (Map<String, KeyMapping>) field.get(null);
+            if(iWant != null)
             {
 
-                return (Map<String, KeyMapping>) field.get(null);
+                return iWant;
             }
         }
         catch(Exception ignored) {}
 
         return null;
-    }
+    }*/
 }

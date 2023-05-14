@@ -36,8 +36,6 @@ public class glock_18_animation implements IOverrideModel
     @Override
     public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay)
     {
-
-
         Glock18AnimationController controller = Glock18AnimationController.getInstance();
         GunItem gunItem = ((GunItem) stack.getItem());
 
@@ -50,7 +48,7 @@ public class glock_18_animation implements IOverrideModel
             RenderUtil.renderModel(SpecialModels.GLOCK_18.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
-
+        matrices.pushPose();
         if(GunModifierHelper.getAmmoCapacity(stack) > -1)
         {
             controller.applySpecialModelTransform(SpecialModels.GLOCK_18.getModel(),Glock18AnimationController.INDEX_MAG,transformType,matrices);

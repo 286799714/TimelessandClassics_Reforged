@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 /**
  * Helps to fix key conflict issue. Adapted solution from FMUM.
- * 
+ *
  * @see InputHandler
  * @author Giant_Salted_Fish
  */
@@ -37,22 +37,25 @@ public final class KeyBind
 	}
 
 	private static final Function< Integer, Boolean >
-		UPDATER_KEYBOARD = key -> GLFW.glfwGetKey( getHandle(), key ) == GLFW.GLFW_PRESS;
+			UPDATER_KEYBOARD = key -> GLFW.glfwGetKey( getHandle(), key ) == GLFW.GLFW_PRESS;
 
-	public boolean down = false;
-	private static final Function< Integer, Boolean > UPDATER_NONE = key -> false;
 	private static final Function< Integer, Boolean >
 			UPDATER_MOUSE = key -> GLFW.glfwGetMouseButton( getHandle(), key ) == GLFW.GLFW_PRESS;
+
+	private static final Function< Integer, Boolean > UPDATER_NONE = key -> false;
+
+	/**
+	 * Whether this key is continuously down or not
+	 */
+	public boolean down = false;
+
 	/**
 	 * Current bounden key
 	 */
 	private Key keyCode;
-	
-	private final LinkedList< Runnable > keyPressCallbacks = new LinkedList<>();
 
-	// TODO FIX COMMENTS FROM 0.3.6.1 input handler changes
 	/**
-	 * Invoked in {} to check whether the bounden key is down or not. This helps to
+	 * Invoked in {@link #update()} to check whether the bounden key is down or not. This helps to
 	 * avoid the if branch that checks whether the bounden key is from keyboard or the mouse.
 	 */
 	private Function< Integer, Boolean > updater;
@@ -62,12 +65,12 @@ public final class KeyBind
 	 *  to avoid key conflict in game.
 	 */
 	private KeyMapping keyBind;
-	
+
 	private final LinkedList< Runnable > pressCallbacks = new LinkedList<>();
-	
+
 	/**
 	 * Use {@link #KeyBind(String, String, int, Type...)} if you want to specify key category
-	 * 
+	 *
 	 * @param inputType Will be {@link Type#KEYSYM} if not present
 	 */
 	KeyBind( String name, int keyCode, Type... inputType ) {
@@ -77,7 +80,7 @@ public final class KeyBind
 	public int getKeyCode() {
 		return keyCode.getValue();
 	}
-	
+
 	/**
 	 * @see #KeyBind(String, int, Type...)
 	 */
@@ -94,41 +97,32 @@ public final class KeyBind
 				this.keyCode,
 				category
 		);
-		/*final boolean isValidKey = keyCode >= 0;
-		if ( isValidKey )
-		{
-			final Type type = inputType.length > 0 ? inputType[ 0 ] : Type.KEYSYM;
-			this.keyCode = type.getOrMakeInput( keyCode );
-		}
-		else this.keyCode = InputMappings.INPUT_INVALID;
 
-		final GunConflictContext conflictContext = GunConflictContext.IN_GAME_HOLDING_WEAPON;
-		this.keyBind = new KeyBinding( name, conflictContext, this.keyCode, category );*/
 		// Bind to none to avoid conflict
 		this.keyBind.setKey( InputConstants.UNKNOWN );
-		
+
 		REGISTRY.put( this.name(), this );
 	}
-	
+
 	public String name() { return this.keyBind.getName(); }
-	
+
 	public Key keyCode() { return this.keyCode; }
 
 	public void $keyCode( Key code )
 	{
 		this.keyCode = code;
 		if( code == InputConstants.UNKNOWN )
-			this. updater = UPDATER_NONE;
+			this.updater = UPDATER_NONE;
 		else switch( code.getType() )
 		{
-		case KEYSYM:
-			this.updater = UPDATER_KEYBOARD;
-			break;
-		case MOUSE:
-			this.updater = UPDATER_MOUSE;
-			break;
-		case SCANCODE:
-			// TODO: what this means?
+			case KEYSYM:
+				this.updater = UPDATER_KEYBOARD;
+				break;
+			case MOUSE:
+				this.updater = UPDATER_MOUSE;
+				break;
+			case SCANCODE:
+				// TODO: what this means?
 		}
 	}
 
@@ -136,35 +130,52 @@ public final class KeyBind
 	 * Add a callback that will be invoked on the press of this key. It will only be invoked once
 	 * until the key is released and pressed again.
 	 */
-	public void addPressCallback( Runnable callback ) { this.keyPressCallbacks.add( callback ); }
+	public void addPressCallback( Runnable callback ) { this.pressCallbacks.add( callback ); }
 
-	void update( boolean down )
+	void update()
 	{
-		if ( down ^ this.down )
+		if( !this.updater.apply( this.keyCode.getValue() ) )
+			this.down = false;
+		else if( !this.down )
 		{
-			this.down = down;
-			if ( down ) { this.pressCallbacks.forEach( Runnable::run ); }
+			// Previously not pressed, update #down and fire callbacks
+			this.down = true;
+			this.pressCallbacks.forEach( Runnable::run );
 		}
 	}
-	
-	void inactiveUpdate( boolean down )
-	{
-		// Only handle key release if is inactive
-		if( !down ) { this.down = down; }
-	}
-	
+
+	void reset() { this.down = false; }
+
 	void restoreKeyBind() { this.keyBind.setKey( this.keyCode ); }
-	
+
 	boolean clearKeyBind()
 	{
 		final Key code = this.keyBind.getKey();
 		if( code == this.keyCode ) return false;
-		
+
 		// Key bind has been changed, update it
 		this.$keyCode( code );
 		this.keyBind.setKey( InputConstants.UNKNOWN );
 		return true;
 	}
-	
+
 	void regis() { ClientRegistry.registerKeyBinding( this.keyBind ); }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
