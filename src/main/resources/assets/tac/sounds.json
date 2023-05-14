@@ -751,6 +751,18 @@
          { "name": "tac:item/mrad_fire" }
       ]
    },
+   "item.mk20_fire_s": {
+      "subtitle": "subtitle.tac.mk20_fire_s",
+      "sounds": [
+         { "name": "tac:item/mk20_fire_s" }
+      ]
+   },
+   "item.mk20_fire": {
+      "subtitle": "subtitle.tac.mk20_fire",
+      "sounds": [
+         { "name": "tac:item/mk20_fire" }
+      ]
+   },
 
 
 

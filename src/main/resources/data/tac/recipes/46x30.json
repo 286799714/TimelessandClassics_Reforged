@@ -3,19 +3,19 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/rare"
+        "tag": "forge:materials/uncommon"
       },
-      "count": 1
+      "count": 2
     },
     {
       "item": {
         "tag": "forge:gunpowder"
       },
-      "count": 12
+      "count": 2
     }
   ],
   "result": {
-    "item": "tac:bullet_308",
-    "count": 60
+    "item": "tac:46x30",
+    "count": 50
   }
 }
