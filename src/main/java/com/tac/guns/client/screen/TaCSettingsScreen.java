@@ -2,6 +2,7 @@ package com.tac.guns.client.screen;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.tac.guns.client.settings.GunOptions;
 import net.minecraft.client.Option;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.OptionsList;
@@ -28,8 +29,8 @@ public class TaCSettingsScreen extends OptionsSubScreen {
         this.optionsList = new OptionsList(this.minecraft, this.width, this.height, 32, this.height - 32, 25);
         if (InputConstants.isRawMouseInputSupported()) {
             this.optionsList.addSmall(Stream.concat(Arrays.stream(OPTIONS), Stream.of()).toArray(Option[]::new));
-            /*this.optionsList.addBig(GunOptions.DOUBLE_RENDER_EXIST*//*, GunOptions.REDDOT_SQUISH_EXIST*//*);
-            this.optionsList.addBig(GunOptions.SIZE_FIREMODE_POS);
+            //this.optionsList.addBig(GunOptions.DOUBLE_RENDER_EXIST*//*, GunOptions.REDDOT_SQUISH_EXIST*//*);
+            /*this.optionsList.addBig(GunOptions.SIZE_FIREMODE_POS);
             this.optionsList.addBig(GunOptions.FIREMODE_EXIST);
             this.optionsList.addBig(GunOptions.X_FIREMODE_POS);
             this.optionsList.addBig(GunOptions.Y_FIREMODE_POS);

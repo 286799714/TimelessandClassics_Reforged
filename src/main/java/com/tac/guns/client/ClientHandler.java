@@ -19,6 +19,7 @@ import com.tac.guns.client.render.entity.ThrowableGrenadeRenderer;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.render.gun.model.scope.*;
 import com.tac.guns.client.screen.*;
+import com.tac.guns.client.settings.GunOptions;
 import com.tac.guns.init.ModBlocks;
 import com.tac.guns.init.ModContainers;
 import com.tac.guns.init.ModEntities;
@@ -31,6 +32,7 @@ import com.tac.guns.util.IDLNBTUtil;
 import com.tac.guns.util.math.SecondOrderDynamics;
 import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Option;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
@@ -226,7 +228,7 @@ public class ClientHandler
             try
             {
                 OptionsList list = (OptionsList) mouseOptionsField.get(screen);
-                //list.addSmall(GunOptions.ADS_SENSITIVITY, GunOptions.CROSSHAIR);
+                list.addSmall(new Option[]{GunOptions.ADS_SENSITIVITY}/*, GunOptions.CROSSHAIR*/);
                 /*, GunOptions.BURST_MECH);*/
             }
             catch(IllegalAccessException e)

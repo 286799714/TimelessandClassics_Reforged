@@ -60,7 +60,7 @@ public class glock_18_animation implements IOverrideModel
         }
         matrices.popPose();
 
-        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) ) {
+        if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_NORMAL)) {
             matrices.pushPose();
             {
                 controller.applySpecialModelTransform(SpecialModels.GLOCK_18.getModel(), Glock18AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
@@ -76,6 +76,7 @@ public class glock_18_animation implements IOverrideModel
         //Always push
         matrices.pushPose();
 
+        controller.applySpecialModelTransform(SpecialModels.GLOCK_18.getModel(),Glock18AnimationController.INDEX_SLIDE,transformType,matrices);
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 

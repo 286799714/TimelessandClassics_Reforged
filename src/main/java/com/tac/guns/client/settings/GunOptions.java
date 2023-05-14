@@ -1,11 +1,21 @@
 package com.tac.guns.client.settings;
 
+import com.tac.guns.Config;
+import com.tac.guns.client.handler.CrosshairHandler;
+import net.minecraft.client.Option;
+import net.minecraft.client.ProgressOption;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+
+import java.text.DecimalFormat;
+
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 public class GunOptions
 {
-    /*
+
     private static final DecimalFormat FORMAT = new DecimalFormat("0.0#");
 
     public static final ProgressOption ADS_SENSITIVITY = new GunSliderPercentageOption("tac.options.adsSensitivity", 0.0, 1.0, 0.01F, gameSettings -> {
@@ -27,13 +37,14 @@ public class GunOptions
     // this.minecraft.displayGuiScreen
 */
 
-    /*
+
+    /*private static Object CrosshairHandler;
     public static final Option CROSSHAIR = new GunListOption<>("tac.options.crosshair", () -> {
         return CrosshairHandler.get().getRegisteredCrosshairs();
     }, () -> {
         return ResourceLocation.tryParse(Config.CLIENT.display.crosshair.get());
     }, (value) -> {
-        Config.CLIENT.display.crosshair.set(value.toString());
+        Config.CLIENT.display.crosshair.set(value toString());
         Config.saveClientConfig();
         CrosshairHandler.get().setCrosshair(value);
     }, (value) -> {
@@ -71,7 +82,14 @@ public class GunOptions
     }, (settings, value) -> {
         Config.CLIENT.display.showFirstPersonBulletTrails.set(value);
         Config.saveClientConfig();
-    });
+    });*/
+
+
+
+
+
+
+    /*
     public static final BooleanOption REDDOT_SQUISH_EXIST = new BooleanOption("tac.options.reddotSquish", (settings) -> {
         return Config.CLIENT.display.redDotSquishUpdate.get();
     }, (settings, value) -> {

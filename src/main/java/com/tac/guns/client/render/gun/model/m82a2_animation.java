@@ -34,28 +34,27 @@ public class m82a2_animation implements IOverrideModel {
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
-        if(Gun.getScope(stack) == null)
-        {
-            controller.applySpecialModelTransform(SpecialModels.M82A2_BODY.getModel(), M82A2AnimationController.INDEX_BODY, transformType, matrices);
-            if (Gun.getScope(stack) == null) {
-                RenderUtil.renderModel(SpecialModels.M82A2_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
-            } else {
-                RenderUtil.renderModel(SpecialModels.M82A2_SIGHT_FOLDED.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-
-            RenderUtil.renderModel(SpecialModels.M82A2_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
-
-            //matrices.push();
-            if(transformType.firstPerson()) {
-                matrices.translate(0, 0, 0.375f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
-                matrices.translate(0, 0, 0.025F);
-            }
-            matrices.translate(0, 0, -1.5);
-            RenderUtil.renderModel(SpecialModels.M82A2_BARREL.getModel(), stack, matrices, renderBuffer, light, overlay);
-            matrices.translate(0, 0, 1.5);
-            //matrices.pop();
+        matrices.pushPose();
+        controller.applySpecialModelTransform(SpecialModels.M82A2_BODY.getModel(), M82A2AnimationController.INDEX_BODY, transformType, matrices);
+        if (Gun.getScope(stack) == null) {
+            RenderUtil.renderModel(SpecialModels.M82A2_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
+        } else {
+            RenderUtil.renderModel(SpecialModels.M82A2_SIGHT_FOLDED.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
+
+        RenderUtil.renderModel(SpecialModels.M82A2_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
+
+        //matrices.push();
+        if(transformType.firstPerson()) {
+            matrices.translate(0, 0, 0.375f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
+            matrices.translate(0, 0, 0.025F);
+        }
+
+        matrices.translate(0, 0, -1.5);
+        RenderUtil.renderModel(SpecialModels.M82A2_BARREL.getModel(), stack, matrices, renderBuffer, light, overlay);
+        matrices.translate(0, 0, 1.5);
         matrices.popPose();
+
 
         matrices.pushPose();
         {

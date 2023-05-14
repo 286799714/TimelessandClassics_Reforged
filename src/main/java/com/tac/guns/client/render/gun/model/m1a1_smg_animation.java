@@ -31,10 +31,8 @@ import com.tac.guns.util.GunModifierHelper;
 public class m1a1_smg_animation implements IOverrideModel {
 
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay)
-    {
+    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         M1A1AnimationController controller = M1A1AnimationController.getInstance();
-
         matrices.pushPose();
         {
             controller.applySpecialModelTransform(SpecialModels.M1A1_SMG_BODY.getModel(), HkMp5a5AnimationController.INDEX_BODY, transformType, matrices);
@@ -44,42 +42,33 @@ public class m1a1_smg_animation implements IOverrideModel {
                 Gun gun = ((GunItem) stack.getItem()).getGun();
                 float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
+                matrices.translate(0, 0, -0.085f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
+            }
+            RenderUtil.renderModel(SpecialModels.M1A1_SMG_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
+            matrices.popPose();
 
-                //matrices.translate(0, 0, 0.22f * (-4.5 * Math.pow(cooldownOg-0.5, 2) + 1.0));
-                if (Gun.hasAmmo(stack)) {
-                    // Math provided by Bomb787 on GitHub and Curseforge!!!
-                    matrices.translate(0, 0, -0.22f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
-                } else if (!Gun.hasAmmo(stack)) {
-                    if (cooldownOg > 0.5) {
-                        // Math provided by Bomb787 on GitHub and Curseforge!!!
-                        matrices.translate(0, 0, -0.22f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
-                    } else {
-                        matrices.translate(0, 0, -0.22f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
-                    }
-                }
-                RenderUtil.renderModel(SpecialModels.M1A1_SMG_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(SpecialModels.M1A1_SMG_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
+        }
+        matrices.popPose();
 
-                matrices.pushPose();
-                {
-                    controller.applySpecialModelTransform(SpecialModels.M1A1_SMG_BODY.getModel(), HkMp5a5AnimationController.INDEX_MAGAZINE, transformType, matrices);
-                    if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
-                        RenderUtil.renderModel(SpecialModels.M1A1_SMG_DRUM_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-                    } else {
-                        RenderUtil.renderModel(SpecialModels.M1A1_SMG_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-                    }
-                }
-                matrices.popPose();
-
-                matrices.pushPose();
-                {
-                    controller.applySpecialModelTransform(SpecialModels.M1A1_SMG_BODY.getModel(), M1A1AnimationController.INDEX_MAGAZINE, transformType, matrices);
-                    RenderUtil.renderModel(SpecialModels.M1A1_SMG_BULLET.getModel(), stack, matrices, renderBuffer, light, overlay);
-                }
-                matrices.popPose();
-
-                PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
+        matrices.pushPose();
+        {
+            controller.applySpecialModelTransform(SpecialModels.M1A1_SMG_BODY.getModel(), HkMp5a5AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
+                RenderUtil.renderModel(SpecialModels.M1A1_SMG_DRUM_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+            } else {
+                RenderUtil.renderModel(SpecialModels.M1A1_SMG_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
+        matrices.popPose();
+
+        matrices.pushPose();
+        {
+            controller.applySpecialModelTransform(SpecialModels.M1A1_SMG_BODY.getModel(), M1A1AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            RenderUtil.renderModel(SpecialModels.M1A1_SMG_BULLET.getModel(), stack, matrices, renderBuffer, light, overlay);
+        }
+        matrices.popPose();
+
+        PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
     }
-    //TODO comments
 }
