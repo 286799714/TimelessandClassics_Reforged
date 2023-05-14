@@ -465,16 +465,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
             this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
 
-            int fireStarterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
-            if(fireStarterLevel > 0 && Config.COMMON.gameplay.enableGunGriefing.get())
-            {
-                BlockPos offsetPos = pos.offset(blockRayTraceResult.getFace());
-                if(AbstractFireBlock.canLightBlock(this.world, offsetPos, blockRayTraceResult.getFace()))
-                {
-                    BlockState fireState = AbstractFireBlock.getFireForPlacement(this.world, offsetPos);
-                    this.world.setBlockState(offsetPos, fireState, 11);
-                }
-            }
+//            int fireStarterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
+//            if(fireStarterLevel > 0 && Config.COMMON.gameplay.enableGunGriefing.get())
+//            {
+//                BlockPos offsetPos = pos.offset(blockRayTraceResult.getFace());
+//                if(AbstractFireBlock.canLightBlock(this.world, offsetPos, blockRayTraceResult.getFace()))
+//                {
+//                    BlockState fireState = AbstractFireBlock.getFireForPlacement(this.world, offsetPos);
+//                    this.world.setBlockState(offsetPos, fireState, 11);
+//                }
+//            }
             //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
             this.remove();
             return;
