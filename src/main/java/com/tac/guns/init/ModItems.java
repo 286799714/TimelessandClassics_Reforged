@@ -102,6 +102,7 @@ public class ModItems
     public static final RegistryObject<Item> UDP_9 = REGISTER.register("udp_9", () -> new TimelessGunItem(properties -> properties.group(GunMod.SMG), GunModifiers.UDP_9_MOD));
     public static final RegistryObject<Item> SCAR_MK20 = REGISTER.register("scar_mk20", () -> new TimelessGunItem(properties -> properties.group(GunMod.SNIPER), GunModifiers.SCAR_MK20_MOD));
     //public static final RegistryObject<Item> DEVGUN1 = REGISTER.register("devgun1", () -> new TimelessGunItem(properties -> properties.group(GunMod.GROUP), GunModifiers.UDP_9_MOD));
+    public static final RegistryObject<Item> TIMELESS_50 = REGISTER.register("timeless_50", () -> new TimelessGunItem(properties -> properties.group(GunMod.PISTOL), GunModifiers.STI2011_MOD));
 
 
     /* Ammunition */

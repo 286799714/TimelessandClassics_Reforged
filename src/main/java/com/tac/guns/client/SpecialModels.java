@@ -778,6 +778,18 @@ public enum SpecialModels
     MK14_IR_LASER_DEVICE("mk14_ir_laser_device"),
     MK14_IR_LASER("mk14_ir_laser"),
 
+    TIMELESS_50("timeless_50"),
+    TIMELESS_50_S_SLIDE("timeless_50_s_slide"),
+    TIMELESS_50_S_BARREL("timeless_50_s_barrel"),
+    TIMELESS_50_E_SLIDE("timeless_50_e_slide"),
+    TIMELESS_50_E_BARREL("timeless_50_e_barrel"),
+    TIMELESS_50_E_MAG("timeless_50_e_mag"),
+    TIMELESS_50_S_MAG("timeless_50_s_mag"),
+    TIMELESS_50_CLUMSYYY("timeless_50_clumsyyy"),
+    TIMELESS_50_NEKOOO("timeless_50_nekooo"),
+    TIMELESS_50_HAMMER("timeless_50_hammer"),
+
+
     //Everything from this point on is all scope additions
 
     MINI_DOT_BASE("optics/mini_dot_base"),
