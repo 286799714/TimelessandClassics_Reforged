@@ -117,7 +117,7 @@ public class ak47_animation implements IOverrideModel {
         }
         matrices.pop();
 
-        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation()) ){
+        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation())){
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.AK47.getModel(), Ak47AnimationController.INDEX_EXTRA_MAG, transformType, matrices);

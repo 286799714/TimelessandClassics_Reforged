@@ -795,6 +795,8 @@ public enum SpecialModels
     TIMELESS_50_CLUMSYYY("timeless_50_clumsyyy"),
     TIMELESS_50_NEKOOO("timeless_50_nekooo"),
     TIMELESS_50_HAMMER("timeless_50_hammer"),
+    TIMELESS_50_BULLET1("timeless_50_bullet1"),
+    TIMELESS_50_BULLET2("timeless_50_bullet2"),
 
 
     //Everything from this point on is all scope additions
