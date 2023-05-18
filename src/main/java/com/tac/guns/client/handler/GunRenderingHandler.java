@@ -1370,11 +1370,14 @@ public class GunRenderingHandler {
                 float displayXv = pos.getX() * 0.0625f;
                 float displayYv = pos.getY() * 0.0625f;
                 float displayZv = pos.getZ() * 0.0625f;
+                float scale = (float) modifiedGun.getDisplay().getShellCasing().getScale();
 
                 matrixStack.translate(displayXv, displayYv, displayZv);
                 matrixStack.rotate(Vector3f.XP.rotationDegrees(rot.getX()));
                 matrixStack.rotate(Vector3f.YP.rotationDegrees(rot.getY()));
                 matrixStack.rotate(Vector3f.ZP.rotationDegrees(rot.getZ()));
+                matrixStack.scale(scale,scale,scale);
+
                 IBakedModel caseModel;
                 if(modifiedGun.getDisplay().getShellCasing().getCasingModel() != null)
                     caseModel = Minecraft.getInstance().getModelManager().getModel(modifiedGun.getDisplay().getShellCasing().getCasingModel());
