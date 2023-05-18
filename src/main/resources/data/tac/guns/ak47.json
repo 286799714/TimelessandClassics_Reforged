@@ -57,6 +57,21 @@
       "trailAdjust": 1.325,
       "size": 0.8
     },
+    "shellCasing": {
+      "yOffset": -0.4,
+      "xOffset": 0,
+      "zOffset": -4.5,
+      "scale": 1.0,
+      "velocityX": 8,
+      "velocityY": 3.5,
+      "velocityZ": 0.0,
+      "rVelocityX": 0.0,
+      "rVelocityY": 3,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 0.0,
+      "aVelocityY": 320.0,
+      "aVelocityZ": 0.0
+    },
     "hipfireScale": 1.25,
     "hipfireMoveScale": 0.5,
     "hipfireRecoilScale": 1.0,

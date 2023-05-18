@@ -3,7 +3,6 @@ package com.tac.guns.common;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.tac.guns.Config;
-import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Ignored;
 import com.tac.guns.annotation.Optional;
@@ -28,7 +27,6 @@ import org.apache.logging.log4j.core.config.plugins.validation.constraints.Requi
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import com.tac.guns.util.GunModifierHelper;
 
 
 public final class Gun implements INBTSerializable<CompoundNBT>
@@ -1274,6 +1272,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         private Flash flash;
 
         @Optional
+        @Nullable
+        private ShellCasing shellCasing;
+
+        @Optional
         private int weaponType = 0;
 
         @Optional
@@ -1318,6 +1320,9 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         {
             return this.flash;
         }
+
+        @Nullable
+        public ShellCasing getShellCasing() {return  this.shellCasing; }
 
         public static class Flash extends Positioned
         {
@@ -1392,6 +1397,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 tag.put("Flash", this.flash.serializeNBT());
             }
+            if(this.shellCasing != null)
+            {
+                tag.put("ShellCasing", this.shellCasing.serializeNBT());
+            }
             tag.putFloat("HipFireScale", this.hipfireScale);
             tag.putFloat("HipFireMoveScale", this.hipfireMoveScale);
             tag.putFloat("HipFireRecoilScale", this.hipfireRecoilScale/2); // Compensate for camera changes
@@ -1415,6 +1424,18 @@ public final class Gun implements INBTSerializable<CompoundNBT>
                 else
                 {
                     this.flash = null;
+                }
+            }
+            if(tag.contains("ShellCasing", Constants.NBT.TAG_COMPOUND))
+            {
+                CompoundNBT casingTag = tag.getCompound("ShellCasing");
+                if(!casingTag.isEmpty())
+                {
+                    ShellCasing shellCasing = new ShellCasing();
+                    shellCasing.deserializeNBT(casingTag);
+                    this.shellCasing = shellCasing;
+                } else {
+                    this.shellCasing = null;
                 }
             }
             if(tag.contains("HipFireScale", Constants.NBT.TAG_ANY_NUMERIC))
@@ -1445,6 +1466,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             if(flash != null)
             {
                 display.flash = flash.copy();
+            }
+            if(shellCasing != null)
+            {
+                display.shellCasing = shellCasing.copy();
             }
             if(hipfireScale != 0)
             {
@@ -1933,6 +1958,155 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             positioned.yOffset = this.yOffset;
             positioned.zOffset = this.zOffset;
             return positioned;
+        }
+    }
+
+    public static class ShellCasing extends ScaledPositioned{
+        @Optional
+        protected float velocityX = 0f;
+
+        @Optional
+        protected float velocityY = 0f;
+
+        @Optional
+        protected float velocityZ = 0f;
+
+        @Optional
+        protected float rVelocityX = 0f;
+
+        @Optional
+        protected float rVelocityY = 0f;
+
+        @Optional
+        protected float rVelocityZ = 0f;
+
+        @Optional
+        protected float aVelocityX = 0f;
+
+        @Optional
+        protected float aVelocityY = 0f;
+
+        @Optional
+        protected float aVelocityZ = 0f;
+
+        public ShellCasing() {}
+
+        public ShellCasing(CompoundNBT tag)
+        {
+            this.deserializeNBT(tag);
+        }
+
+        @Override
+        public CompoundNBT serializeNBT()
+        {
+            CompoundNBT tag = super.serializeNBT();
+            tag.putFloat("VelocityX", velocityX);
+            tag.putFloat("VelocityY", velocityY);
+            tag.putFloat("VelocityZ", velocityZ);
+            tag.putFloat("RVelocityX", rVelocityX);
+            tag.putFloat("RVelocityY", rVelocityY);
+            tag.putFloat("RVelocityZ", rVelocityZ);
+            tag.putFloat("AVelocityX", aVelocityX);
+            tag.putFloat("AVelocityY", aVelocityY);
+            tag.putFloat("AVelocityZ", aVelocityZ);
+            return tag;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundNBT tag)
+        {
+            super.deserializeNBT(tag);
+            if(tag.contains("VelocityX", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.velocityX = tag.getFloat("VelocityX");
+            }
+            if(tag.contains("VelocityY", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.velocityY = tag.getFloat("VelocityY");
+            }
+            if(tag.contains("VelocityZ", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.velocityZ = tag.getFloat("VelocityZ");
+            }
+            if(tag.contains("RVelocityX", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.rVelocityX = tag.getFloat("RVelocityX");
+            }
+            if(tag.contains("RVelocityY", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.rVelocityY = tag.getFloat("RVelocityY");
+            }
+            if(tag.contains("RVelocityZ", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.rVelocityZ = tag.getFloat("RVelocityZ");
+            }
+            if(tag.contains("AVelocityX", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.aVelocityX = tag.getFloat("AVelocityX");
+            }
+            if(tag.contains("AVelocityY", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.aVelocityY = tag.getFloat("AVelocityY");
+            }
+            if(tag.contains("AVelocityZ", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.aVelocityZ = tag.getFloat("AVelocityZ");
+            }
+        }
+
+        @Override
+        public ShellCasing copy() {
+            ShellCasing ms = new ShellCasing();
+            ms.xOffset = this.xOffset;
+            ms.yOffset = this.yOffset;
+            ms.zOffset = this.zOffset;
+            ms.scale = this.scale;
+            ms.velocityX = this.velocityX;
+            ms.velocityY = this.velocityY;
+            ms.velocityZ = this.velocityZ;
+            ms.rVelocityX = this.rVelocityX;
+            ms.rVelocityY = this.rVelocityY;
+            ms.rVelocityZ = this.rVelocityZ;
+            ms.aVelocityX = this.aVelocityX;
+            ms.aVelocityY = this.aVelocityY;
+            ms.aVelocityZ = this.aVelocityZ;
+            return ms;
+        }
+
+        public float getVelocityX() {
+            return velocityX;
+        }
+
+        public float getVelocityY() {
+            return velocityY;
+        }
+
+        public float getVelocityZ() {
+            return velocityZ;
+        }
+
+        public float getRVelocityX() {
+            return rVelocityX;
+        }
+
+        public float getRVelocityY() {
+            return rVelocityY;
+        }
+
+        public float getRVelocityZ() {
+            return rVelocityZ;
+        }
+
+        public float getAVelocityX() {
+            return aVelocityX;
+        }
+
+        public float getAVelocityY() {
+            return aVelocityY;
+        }
+
+        public float getAVelocityZ() {
+            return aVelocityZ;
         }
     }
 
