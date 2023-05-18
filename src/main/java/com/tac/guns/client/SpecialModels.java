@@ -797,6 +797,7 @@ public enum SpecialModels
     TIMELESS_50_HAMMER("timeless_50_hammer"),
     TIMELESS_50_BULLET1("timeless_50_bullet1"),
     TIMELESS_50_BULLET2("timeless_50_bullet2"),
+    TIMELESS_50_SUPPRESSOR("timeless_50_suppressor"),
 
 
     //Everything from this point on is all scope additions
