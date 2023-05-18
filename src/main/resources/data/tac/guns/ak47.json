@@ -70,7 +70,8 @@
       "rVelocityZ": 0.0,
       "aVelocityX": 0.0,
       "aVelocityY": 320.0,
-      "aVelocityZ": 0.0
+      "aVelocityZ": 0.0,
+      "casingModel": "tac:special/shell_large"
     },
     "hipfireScale": 1.25,
     "hipfireMoveScale": 0.5,

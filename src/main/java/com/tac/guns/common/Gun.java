@@ -1989,6 +1989,11 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @Optional
         protected float aVelocityZ = 0f;
 
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation casingModel;
+
         public ShellCasing() {}
 
         public ShellCasing(CompoundNBT tag)
@@ -2009,6 +2014,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             tag.putFloat("AVelocityX", aVelocityX);
             tag.putFloat("AVelocityY", aVelocityY);
             tag.putFloat("AVelocityZ", aVelocityZ);
+            if(this.casingModel != null)
+            {
+                tag.putString("CasingModel", this.casingModel.toString());
+            }
             return tag;
         }
 
@@ -2052,6 +2061,16 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 this.aVelocityZ = tag.getFloat("AVelocityZ");
             }
+            if(tag.contains("CasingModel", Constants.NBT.TAG_STRING))
+            {
+                this.casingModel = this.createResource(tag, "CasingModel");
+            }
+        }
+        @Nullable
+        private ResourceLocation createResource(CompoundNBT tag, String key)
+        {
+            String resource = tag.getString(key);
+            return resource.isEmpty() ? null : new ResourceLocation(resource);
         }
 
         @Override
@@ -2107,6 +2126,9 @@ public final class Gun implements INBTSerializable<CompoundNBT>
 
         public float getAVelocityZ() {
             return aVelocityZ;
+        }
+        public ResourceLocation getCasingModel() {
+            return casingModel;
         }
     }
 

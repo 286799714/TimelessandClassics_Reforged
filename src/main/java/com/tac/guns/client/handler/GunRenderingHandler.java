@@ -1374,7 +1374,12 @@ public class GunRenderingHandler {
                 matrixStack.rotate(Vector3f.XP.rotationDegrees(rot.getX()));
                 matrixStack.rotate(Vector3f.YP.rotationDegrees(rot.getY()));
                 matrixStack.rotate(Vector3f.ZP.rotationDegrees(rot.getZ()));
-                RenderUtil.renderModel(SpecialModels.BULLET_SHELL.getModel(), weapon, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
+                IBakedModel caseModel;
+                if(modifiedGun.getDisplay().getShellCasing().getCasingModel() != null)
+                    caseModel = Minecraft.getInstance().getModelManager().getModel(modifiedGun.getDisplay().getShellCasing().getCasingModel());
+                else
+                    caseModel = SpecialModels.BULLET_SHELL.getModel();
+                RenderUtil.renderModel(caseModel, weapon, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
 
                 matrixStack.pop();
             }
