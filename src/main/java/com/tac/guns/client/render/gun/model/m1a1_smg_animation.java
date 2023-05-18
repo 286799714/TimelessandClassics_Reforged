@@ -66,12 +66,14 @@ public class m1a1_smg_animation implements IOverrideModel {
         }
         matrices.pop();
 
-        matrices.push();
-        {
-            controller.applySpecialModelTransform(SpecialModels.M1A1_SMG_BODY.getModel(), M1A1AnimationController.INDEX_MAGAZINE, transformType, matrices);
-            RenderUtil.renderModel(SpecialModels.M1A1_SMG_BULLET.getModel(), stack, matrices, renderBuffer, light, overlay);
+        if(!controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation())) {
+            matrices.push();
+            {
+                controller.applySpecialModelTransform(SpecialModels.M1A1_SMG_BODY.getModel(), M1A1AnimationController.INDEX_MAGAZINE, transformType, matrices);
+                RenderUtil.renderModel(SpecialModels.M1A1_SMG_BULLET.getModel(), stack, matrices, renderBuffer, light, overlay);
+            }
+            matrices.pop();
         }
-        matrices.pop();
 
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
     }
