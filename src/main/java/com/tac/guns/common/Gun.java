@@ -1994,6 +1994,9 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         @TGExclude
         private ResourceLocation casingModel;
 
+        @Optional
+        protected int tickLife = 40;
+
         public ShellCasing() {}
 
         public ShellCasing(CompoundNBT tag)
@@ -2018,6 +2021,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 tag.putString("CasingModel", this.casingModel.toString());
             }
+            tag.putInt("TickLife", tickLife);
             return tag;
         }
 
@@ -2065,6 +2069,10 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             {
                 this.casingModel = this.createResource(tag, "CasingModel");
             }
+            if(tag.contains("TickLife", Constants.NBT.TAG_ANY_NUMERIC))
+            {
+                this.tickLife = tag.getInt("TickLife");
+            }
         }
         @Nullable
         private ResourceLocation createResource(CompoundNBT tag, String key)
@@ -2089,6 +2097,8 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             ms.aVelocityX = this.aVelocityX;
             ms.aVelocityY = this.aVelocityY;
             ms.aVelocityZ = this.aVelocityZ;
+            ms.casingModel = this.casingModel;
+            ms.tickLife = this.tickLife;
             return ms;
         }
 
@@ -2129,6 +2139,9 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         }
         public ResourceLocation getCasingModel() {
             return casingModel;
+        }
+        public int getTickLife() {
+            return tickLife;
         }
     }
 

@@ -57,8 +57,24 @@
       "size": 1.1,
       "trailAdjust": 0.875
     },
-    "hipfireScale": 1.5,
-    "hipfireMoveScale": 0.35,
+    "shellCasing": {
+      "yOffset": 0.2,
+      "xOffset": 0,
+      "zOffset": -3.25,
+      "scale": 2.5,
+      "velocityX": 4.5,
+      "velocityY": 7.5,
+      "velocityZ": 1.85,
+      "rVelocityX": 0.0,
+      "rVelocityY": 4,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 0.0,
+      "aVelocityY": 320.0,
+      "aVelocityZ": 120.0,
+      "casingModel": "tac:special/shell_small"
+    },
+    "hipfireScale": 1.75,
+    "hipfireMoveScale": 0.55,
     "hipfireRecoilScale": 1,
     "weaponType": 0,
     "showDynamicHipfire": true

@@ -60,6 +60,7 @@ public enum AnimationHandler {
         MK18MOD1AnimationController.getInstance();
         M4AnimationController.getInstance();
         STI2011AnimationController.getInstance();
+        Timeless50AnimationController.getInstance();
         M1911AnimationController.getInstance();
         MK47AnimationController.getInstance();
         MK14AnimationController.getInstance();
@@ -80,7 +81,6 @@ public enum AnimationHandler {
         SKSTacticalAnimationController.getInstance();
         M24AnimationController.getInstance();
         M82A2AnimationController.getInstance();
-        //TODO: RPK redo due to static animation issue
         RPKAnimationController.getInstance();
         M249AnimationController.getInstance();
         M1A1AnimationController.getInstance();

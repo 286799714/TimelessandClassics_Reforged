@@ -324,7 +324,8 @@ public class GunRenderingHandler {
             shells.add(new ShellInAir(
                     new Vector3f((float) shellCasing.getXOffset(), (float) shellCasing.getYOffset(), (float) shellCasing.getZOffset()),
                     new Vector3f(shellCasing.getVelocityX() + shellCasing.getRVelocityX()*card, shellCasing.getVelocityY() + shellCasing.getRVelocityY()*card, shellCasing.getVelocityZ() + shellCasing.getRVelocityZ()*card),
-                    new Vector3f(vard*shellCasing.getAVelocityX(), vard*shellCasing.getAVelocityY(), vard*shellCasing.getAVelocityZ())
+                    new Vector3f(vard*shellCasing.getAVelocityX(), vard*shellCasing.getAVelocityY(), vard*shellCasing.getAVelocityZ()),
+                    modifiedGun.getDisplay().getShellCasing().getTickLife()
             ));
         }
     }
@@ -1560,7 +1561,7 @@ public class GunRenderingHandler {
     }
 
     public static class ShellInAir{
-        public int livingTick = 40;
+        public int livingTick;
         public Vector3f preDisplacement = new Vector3f(0f, 0f, 0f);
         public Vector3f displacement = new Vector3f(0f, 0f, 0f);
         public Vector3f preRotation = new Vector3f(0f, 0f, 0f);
@@ -1569,10 +1570,11 @@ public class GunRenderingHandler {
         public Vector3f velocity;
         public Vector3f angularVelocity;
 
-        public ShellInAir(@Nonnull Vector3f origin, @Nonnull Vector3f velocity, @Nonnull Vector3f angularVelocity){
+        public ShellInAir(@Nonnull Vector3f origin, @Nonnull Vector3f velocity, @Nonnull Vector3f angularVelocity, int life){
             this.origin = origin.copy();
             this.velocity = velocity.copy();
             this.angularVelocity = angularVelocity.copy();
+            livingTick = life;
         }
     }
 }
