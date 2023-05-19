@@ -56,6 +56,23 @@
       "zOffset": -17.55,
       "size": 0.90
     },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 2,
+      "xOffset": 0,
+      "zOffset": 1.5,
+      "scale": 1,
+      "velocityX": 9,
+      "velocityY": 1.5,
+      "velocityZ": 0.0,
+      "rVelocityX": 1.0,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -70.0,
+      "aVelocityZ": 10.0,
+      "casingModel": "tac:special/shell_large"
+    },
     "hipfireScale": 2,
     "hipfireMoveScale": 0.25,
     "hipfireRecoilScale": 1,

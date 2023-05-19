@@ -38,7 +38,7 @@
     "maxAmmo": 30,
     "reloadMagTimer": 41,
     "additionalReloadEmptyMagTimer": 12,
-    "maxAdditionalAmmoPerOC": [5, 7, 10],
+    "maxAdditionalAmmoPerOC": [5, 12, 20],
     "preReloadPauseTicks": 0
   },
   "sounds": {
@@ -57,6 +57,23 @@
       "size": 0.755,
       "trailAdjust": 1.555
     },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1.5,
+      "xOffset": 0,
+      "zOffset": -1,
+      "scale": 0.8,
+      "velocityX": 8,
+      "velocityY": 1.75,
+      "velocityZ": -2.0,
+      "rVelocityX": 0.5,
+      "rVelocityY": 1,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 45.0,
+      "aVelocityY": -60.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_large"
+    },
     "hipfireScale": 1.25,
     "hipfireMoveScale": 0.25,
     "hipfireRecoilScale": 2,
@@ -68,7 +85,7 @@
     {
       "fovModifier": 0.8,
       "yOffset": 11.015,
-      "zOffset": -1
+      "zOffset": -0.5
     },
     "attachments": {
       "scope": {

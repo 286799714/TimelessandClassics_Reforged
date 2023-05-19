@@ -3,7 +3,7 @@
     "rate": 300,
     "rateSelector": [1],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 12.5,
+    "recoilAngle": 10.5,
     "horizontalRecoilAngle": 1.75,
     "recoilKick": 1.625,
     "recoilAdsReduction": 0.275,
@@ -56,6 +56,27 @@
       "size": 1.25,
       "trailAdjust": 0.25
     },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 5,
+      "xOffset": -1,
+      "zOffset": 10,
+      "scale": 2,
+      "velocityX": 11,
+      "velocityY": 7,
+      "velocityZ": 2,
+      "rVelocityX": 2,
+      "rVelocityY": 4,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 45.0,
+      "aVelocityY": -90.0,
+      "aVelocityZ": 0.0,
+      "casingModel": "tac:special/shell_small"
+    },
+    "hipfireScale": 1,
+    "hipfireMoveScale": 0.5,
+    "hipfireRecoilScale": 1.0,
+    "showDynamicHipfire":true,
     "weaponType": 2
   },
   "modules": {
