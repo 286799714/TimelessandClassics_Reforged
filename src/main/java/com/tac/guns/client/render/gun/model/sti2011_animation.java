@@ -125,7 +125,7 @@ public class sti2011_animation implements IOverrideModel {
             matrices.pop();
         }
 
-        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
+        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && !controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_BULLET2, transformType, matrices);

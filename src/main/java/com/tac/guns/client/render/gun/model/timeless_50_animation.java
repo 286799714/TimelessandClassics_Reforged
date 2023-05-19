@@ -118,7 +118,7 @@ public class timeless_50_animation implements IOverrideModel {
         }
         matrices.pop();
 
-        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation())) {
+        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.TIMELESS_50.getModel(), Timeless50AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
