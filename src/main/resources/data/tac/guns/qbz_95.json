@@ -59,6 +59,7 @@
       "trailAdjust": 1.225
     },
     "shellCasing": {
+      "tickLife":10,
       "yOffset": 1,
       "xOffset": 0,
       "zOffset": 9.5,
