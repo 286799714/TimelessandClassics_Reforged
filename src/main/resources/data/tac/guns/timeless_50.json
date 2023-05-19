@@ -58,21 +58,21 @@
       "trailAdjust": 0.875
     },
     "shellCasing": {
-      "tickLife":10,
+      "tickLife": 14,
       "yOffset": 1.75,
       "xOffset": -0.5,
-      "zOffset": 2,
-      "scale": 2,
+      "zOffset": 1,
+      "scale": 1.5,
       "velocityX": 11,
       "velocityY": 5,
       "velocityZ": 4,
       "rVelocityX": 2,
       "rVelocityY": 3,
       "rVelocityZ": 0.0,
-      "aVelocityX": 30.0,
+      "aVelocityX": 70.0,
       "aVelocityY": -90.0,
       "aVelocityZ": 0.0,
-      "casingModel": "tac:special/shell_small"
+      "casingModel": "tac:special/shell_silver"
     },
     "hipfireScale": 1.75,
     "hipfireMoveScale": 0.55,
@@ -84,7 +84,7 @@
     "zoom":
     {
       "fovModifier": 0.8,
-      "yOffset": 11.685,
+      "yOffset": 11.875,
       "zOffset": -4.125
     },
     "attachments": {

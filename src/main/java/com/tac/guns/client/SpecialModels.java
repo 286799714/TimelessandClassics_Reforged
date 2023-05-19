@@ -22,6 +22,8 @@ public enum SpecialModels
     BULLET_SHELL_RIFLE("shell_large"),
     BULLET_SHELL_SHOTGUN("shell_shotgun"),
     BULLET_SHELL_PISTOL("shell_small"),
+    BULLET_SHELL_PISTOL_SILVER("shell_silver"),
+    BULLET_SHELL_RIFLE_SURPLUS("shell_steel"),
 
 
     FLAME("flame"),
