@@ -38,7 +38,7 @@
     "maxAmmo": 30,
     "reloadMagTimer": 36,
     "additionalReloadEmptyMagTimer": 20,
-    "maxAdditionalAmmoPerOC": [5, 12, 20],
+    "maxAdditionalAmmoPerOC": [5, 7, 10],
     "preReloadPauseTicks": 0
   },
   "sounds": {

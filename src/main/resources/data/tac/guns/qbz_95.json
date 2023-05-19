@@ -73,7 +73,7 @@
       "aVelocityX": 30.0,
       "aVelocityY": -60.0,
       "aVelocityZ": 15.0,
-      "casingModel": "tac:special/shell_large"
+      "casingModel": "tac:special/shell_steel"
     },
     "hipfireScale": 1.125,
     "hipfireMoveScale": 0.375,

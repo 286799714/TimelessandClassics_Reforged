@@ -38,7 +38,7 @@
     "maxAmmo": 30,
     "reloadMagTimer": 41,
     "additionalReloadEmptyMagTimer": 12,
-    "maxAdditionalAmmoPerOC": [5, 12, 20],
+    "maxAdditionalAmmoPerOC": [5, 7, 10],
     "preReloadPauseTicks": 0
   },
   "sounds": {
@@ -72,7 +72,7 @@
       "aVelocityX": 45.0,
       "aVelocityY": -60.0,
       "aVelocityZ": 15.0,
-      "casingModel": "tac:special/shell_large"
+      "casingModel": "tac:special/shell_steel"
     },
     "hipfireScale": 1.25,
     "hipfireMoveScale": 0.25,
