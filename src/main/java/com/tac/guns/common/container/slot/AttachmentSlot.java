@@ -58,7 +58,8 @@ public class AttachmentSlot extends Slot
     {
         this.weapon.inventoryTick(player.world, player, index, true);
         if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo())
-         || SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING) || EnchantmentHelper.hasBindingCurse(this.container.getWeaponInventory().getStackInSlot(this.index))) {
+         || SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING) || EnchantmentHelper.hasBindingCurse(this.container.getWeaponInventory().getStackInSlot(this.index))
+         || EnchantmentHelper.hasBindingCurse(this.container.getWeaponInventory().getItem(this.index))) {
             return false;
         }
         if((this.player.getHeldItemMainhand().getItem() instanceof ScopeItem || this.player.getHeldItemMainhand().getItem() instanceof SideRailItem || this.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
