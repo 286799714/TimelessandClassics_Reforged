@@ -801,11 +801,6 @@ public class GunModifiers
     public static final IGunModifier M16A4_MOD = new IGunModifier()
     {
         @Override
-        public float modifyFireSoundVolume(float volume)
-        {
-            return volume * 2.0F;
-        }
-        @Override
         public double modifyAimDownSightSpeed(double speed) {
             return speed*0.8;
         }

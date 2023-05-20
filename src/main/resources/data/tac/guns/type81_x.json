@@ -23,7 +23,7 @@
   "projectile": {
     "item":  "tac:762x39",
     "visible": false,
-    "damage": 8,
+    "damage": 8.5,
     "armorIgnore": 1.0,
     "critical": 0.00,
     "criticalDamage": 0.75,
@@ -62,7 +62,7 @@
       "yOffset": 1.5,
       "xOffset": 0,
       "zOffset": -1,
-      "scale": 0.8,
+      "scale": 1,
       "velocityX": 8,
       "velocityY": 1.75,
       "velocityZ": -2.0,

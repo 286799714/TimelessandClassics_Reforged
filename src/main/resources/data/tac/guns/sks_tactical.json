@@ -64,7 +64,7 @@
       "yOffset": -1,
       "xOffset": -0.5,
       "zOffset": 1,
-      "scale": 0.8,
+      "scale": 1,
       "velocityX": 8,
       "velocityY": 3,
       "velocityZ": 0.0,
@@ -74,7 +74,7 @@
       "aVelocityX": 30.0,
       "aVelocityY": -120.0,
       "aVelocityZ": 10.0,
-      "casingModel": "tac:special/shell_large"
+      "casingModel": "tac:special/shell_steel"
     },
     "hipfireScale": 1.25,
     "hipfireMoveScale": 0.375,
