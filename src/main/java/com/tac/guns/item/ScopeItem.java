@@ -42,7 +42,10 @@ public class ScopeItem extends Item implements IScope, IColored
     {
         return this.colored;
     }
-
+    @Override
+    public boolean isFoil(ItemStack gunItem) {
+        return false;
+    }
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
     {
