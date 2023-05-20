@@ -43,7 +43,7 @@ public class ScopeItem extends Item implements IScope, IColored
         return this.colored;
     }
     @Override
-    public boolean isFoil(ItemStack gunItem) {
+    public boolean hasEffect(ItemStack gunItem) {
         return false;
     }
     @Override
