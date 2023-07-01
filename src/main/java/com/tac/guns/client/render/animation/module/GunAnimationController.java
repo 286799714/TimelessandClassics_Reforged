@@ -37,6 +37,7 @@ public abstract class GunAnimationController {
         INSPECT_EMPTY,
         DRAW,
         STATIC,
+        BULLET_CHAIN
     }
     private AnimationMeta previousAnimation;
 
