@@ -730,11 +730,11 @@ public enum SpecialModels
     MK18_MOD1_BASIC_LASER_DEVICE("mk18_mod1_b_laser_device"),
     MK18_MOD1_BASIC_LASER("mk18_mod1_b_laser"),
 
-       MP7_IR_DEVICE("mp7_ir_device"),
-       MP7_IR_LASER("mp7_ir_laser"),
+    MP7_IR_DEVICE("mp7_ir_device"),
+    MP7_IR_LASER("mp7_ir_laser"),
 
-       MP7_BASIC_LASER_DEVICE("mp7_b_laser_device"),
-       MP7_BASIC_LASER("mp7_b_laser"),
+    MP7_BASIC_LASER_DEVICE("mp7_b_laser_device"),
+    MP7_BASIC_LASER("mp7_b_laser"),
 
     FN_FAL_IR_DEVICE("fn_fal_ir_device"),
     FN_FAL_IR_LASER("fn_fal_ir_laser"),
@@ -762,6 +762,20 @@ public enum SpecialModels
     SCAR_MK20_IR_LASER_DEVICE("scar_mk20_ir_laser_device"),
     GLOCK_17_B_LASER_DEVICE("glock_17_b_laser_device"),
     GLOCK_17_B_LASER("glock_17_b_laser"),
+
+    MRAD_BODY("mrad"),
+    MRAD_BOLT("mrad_bolt"),
+    MRAD_BOLT_EXTRA("mrad_bolt_extra"),
+    MRAD_BARREL("mrad_barrel"),
+    MRAD_BIPOD("mrad_bipod"),
+    MRAD_EXTENDED_MAG("mrad_extended_mag"),
+    MRAD_STANDARD_MAG("mrad_standard_mag"),
+    MRAD_SF("mrad_sightf"),
+    MRAD_S("mrad_sight"),
+    MRAD_TACTICAL_GRIP("mrad_tactical_grip"),
+    MRAD_LIGHT_GRIP("mrad_light_grip"),
+    MRAD_BULLET("mrad_bullet"),
+    MRAD_SHELL("mrad_shell"),
 
     M92FS_B_LASER_DEVICE("m92fs_b_laser_device"),
     M92FS_B_LASER("m92fs_b_laser"),

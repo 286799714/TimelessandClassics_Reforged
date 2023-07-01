@@ -1,0 +1,20 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/legendary"
+      },
+      "count": 5
+    },
+    {
+      "item": {
+        "tag": "forge:materials/epic"
+      },
+      "count": 20
+    }
+  ],
+  "result": {
+    "item": "tac:mrad"
+  }
+}

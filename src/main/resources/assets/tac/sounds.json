@@ -2211,12 +2211,6 @@
          { "name": "tac:animation/mrad_inspect"}
       ]
    },
-   "animation.mrad_inspect_empty": {
-      "subtitle": "animation.mrad_inspect_empty",
-      "sounds": [
-         { "name": "tac:animation/mrad_inspect_empty"}
-      ]
-   },
    "animation.mrad_draw": {
       "subtitle": "animation.mrad_draw",
       "sounds": [
