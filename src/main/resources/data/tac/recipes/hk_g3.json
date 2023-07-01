@@ -1,0 +1,26 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:materials/legendary"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "tag": "forge:materials/epic"
+      },
+      "count": 10
+    },
+    {
+      "item": {
+        "tag": "forge:materials/rare"
+      },
+      "count": 8
+    }
+  ],
+  "result": {
+    "item": "tac:hk_g3"
+  }
+}

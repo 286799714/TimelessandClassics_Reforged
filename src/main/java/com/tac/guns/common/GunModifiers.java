@@ -839,6 +839,23 @@ public class GunModifiers
             return speed*0.6;
         }
     };
+    public static final IGunModifier HK_G3_MOD = new IGunModifier()
+    {
+        @Override
+        public float modifyFireSoundVolume(float volume)
+        {
+            return volume * 2F;
+        }
+        @Override
+        public double modifyFireSoundRadius(double radius)
+        {
+            return radius * 1.2;
+        }
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed*0.7;
+        }
+    };
     public static final IGunModifier SCAR_L_MOD = new IGunModifier()
     {
         @Override
