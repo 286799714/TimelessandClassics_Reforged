@@ -819,7 +819,7 @@ public class GunModifiers
         }
         @Override
         public double modifyAimDownSightSpeed(double speed) {
-            return speed*0.675;
+            return speed*0.75;
         }
     };
     public static final IGunModifier SCAR_MK20_MOD = new IGunModifier()
@@ -836,7 +836,7 @@ public class GunModifiers
         }
         @Override
         public double modifyAimDownSightSpeed(double speed) {
-            return speed*0.6;
+            return speed*0.75;
         }
     };
     public static final IGunModifier HK_G3_MOD = new IGunModifier()
@@ -844,16 +844,16 @@ public class GunModifiers
         @Override
         public float modifyFireSoundVolume(float volume)
         {
-            return volume * 2F;
+            return volume * 1.25F;
         }
         @Override
         public double modifyFireSoundRadius(double radius)
         {
-            return radius * 1.2;
+            return radius * 1.05;
         }
         @Override
         public double modifyAimDownSightSpeed(double speed) {
-            return speed*0.7;
+            return speed*0.8;
         }
     };
     public static final IGunModifier SCAR_L_MOD = new IGunModifier()

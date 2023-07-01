@@ -1,16 +1,16 @@
 {
   "general": {
-    "auto": false,
+    "auto": true,
     "rate": 300,
-    "rateSelector": [1],
+    "rateSelector": [1,2],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 4.85,
+    "recoilAngle": 4.75,
     "horizontalRecoilAngle": 3.35,
     "recoilKick": 1.75,
     "recoilAdsReduction": 0.225,
     "weaponRecoilOffset": 0.785,
     "cameraRecoilModifier": 1.625,
-    "recoilDuration": 0.155,
+    "recoilDuration": 0.255,
     "weightKilo": 5.75,
 
     "spread": 0.925,
@@ -31,7 +31,7 @@
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 18.45,
+    "damage": 18,
     "armorIgnore": 1.2,
     "critical": 0.0,
     "criticalDamage": 1.0,
@@ -59,6 +59,7 @@
       "trailAdjust": 1.525
     },
     "shellCasing": {
+      "tickLife":10,
       "yOffset": -1.5,
       "xOffset": 0,
       "zOffset": 2.5,
