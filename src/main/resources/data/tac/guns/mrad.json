@@ -79,6 +79,16 @@
         "zOffset": 5.35,
         "scale": 0.0
       },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
       "pistolScope": {
         "yOffset": 11.615,
         "zOffset": 2.025,

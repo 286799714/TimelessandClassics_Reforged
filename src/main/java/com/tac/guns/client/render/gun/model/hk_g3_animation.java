@@ -33,14 +33,25 @@ public class hk_g3_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.HK_G3_RAIL.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 
-            if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderModel(SpecialModels.HK_G3_LIGHT_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
-                RenderUtil.renderModel(SpecialModels.HK_G3_TACTICAL_HG.getModel(), stack, matrices, renderBuffer, light, overlay);
-            } else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderModel(SpecialModels.HK_G3_TAC_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.HK_G3_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(SpecialModels.HK_G3_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem())) {
+                    RenderUtil.renderModel(SpecialModels.HK_G3_LIGHT_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
+                } else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {
+                    RenderUtil.renderModel(SpecialModels.HK_G3_TAC_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
+                }
                 RenderUtil.renderModel(SpecialModels.HK_G3_TACTICAL_HG.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
-                RenderUtil.renderModel(SpecialModels.HK_G3_DEFAULT_HG.getModel(), stack, matrices, renderBuffer, light, overlay);
+                if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem())) {
+                    RenderUtil.renderModel(SpecialModels.HK_G3_LIGHT_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderModel(SpecialModels.HK_G3_TACTICAL_HG.getModel(), stack, matrices, renderBuffer, light, overlay);
+                } else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {
+                    RenderUtil.renderModel(SpecialModels.HK_G3_TAC_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderModel(SpecialModels.HK_G3_TACTICAL_HG.getModel(), stack, matrices, renderBuffer, light, overlay);
+                } else {
+                    RenderUtil.renderModel(SpecialModels.HK_G3_DEFAULT_HG.getModel(), stack, matrices, renderBuffer, light, overlay);
+                }
             }
 
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
@@ -74,17 +85,6 @@ public class hk_g3_animation implements IOverrideModel {
             }
 
             RenderUtil.renderModel(SpecialModels.HK_G3_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
-
-            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_MK20_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
-                RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_MK20_B_LASER_BEAM.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
-            }
-            else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_MK20_IR_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay);
-                if(transformType.isFirstPerson()) {
-                    RenderUtil.renderLaserModuleModel(SpecialModels.SCAR_MK20_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
-                }
-            }
         }
         matrices.pop();
 

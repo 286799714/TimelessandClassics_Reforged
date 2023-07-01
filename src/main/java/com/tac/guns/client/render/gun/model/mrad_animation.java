@@ -47,6 +47,19 @@ public class mrad_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.MRAD_BIPOD.getModel(), stack, matrices, renderBuffer, light, overlay);
             matrices.translate(0, 0, 0.25);
             matrices.pop();
+
+            if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.MRAD_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                matrices.translate(0, 0, -0.3);
+                RenderUtil.renderLaserModuleModel(SpecialModels.MRAD_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                matrices.translate(0, 0, 0.3);
+            }
+            else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
+                RenderUtil.renderLaserModuleModel(SpecialModels.MRAD_IR_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay);
+                if(transformType.isFirstPerson()) {
+                    RenderUtil.renderLaserModuleModel(SpecialModels.MRAD_IR_LASER.getModel(), Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                }
+            }
             RenderUtil.renderModel(SpecialModels.MRAD_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();

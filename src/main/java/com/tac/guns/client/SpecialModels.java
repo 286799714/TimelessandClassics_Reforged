@@ -776,6 +776,10 @@ public enum SpecialModels
     MRAD_LIGHT_GRIP("mrad_light_grip"),
     MRAD_BULLET("mrad_bullet"),
     MRAD_SHELL("mrad_shell"),
+    MRAD_IR_DEVICE("mrad_ir_laser_device"),
+    MRAD_IR_LASER("mrad_ir_laser"),
+    MRAD_B_LASER_DEVICE("mrad_b_laser_device"),
+    MRAD_B_LASER("mrad_b_laser"),
 
     HK_G3_BODY("hk_g3"),
     HK_G3_BOLT("hk_g3_bolt"),
@@ -797,6 +801,8 @@ public enum SpecialModels
     HK_G3_LIGHT_GRIP("hk_g3_l_grip"),
     HK_G3_DEFAULT_HG("hk_g3_d_hg"),
     HK_G3_TACTICAL_HG("hk_g3_t_hg"),
+    HK_G3_B_LASER_DEVICE("hk_g3_b_laser_device"),
+    HK_G3_B_LASER("hk_g3_b_laser"),
 
     M92FS_B_LASER_DEVICE("m92fs_b_laser_device"),
     M92FS_B_LASER("m92fs_b_laser"),
