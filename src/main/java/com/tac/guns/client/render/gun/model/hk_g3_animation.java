@@ -110,23 +110,20 @@ public class hk_g3_animation implements IOverrideModel {
                 boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
                 if (Gun.hasAmmo(stack) || shouldOffset) {
                     // Math provided by Bomb787 on GitHub and Curseforge!!!
-                    matrices.translate(0, 0, 0.225f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
+                    matrices.translate(0, 0, 0.175f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
                 } else if (!Gun.hasAmmo(stack)) {
                     {
-                        matrices.translate(0, 0, 0.225f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
+                        matrices.translate(0, 0, 0.175f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
                     }
                 }
-                matrices.translate(0, 0, 0.025F);
             }
             RenderUtil.renderModel(SpecialModels.HK_G3_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();
 
         matrices.push();
-        {
-            controller.applySpecialModelTransform(SpecialModels.HK_G3_BODY.getModel(), HK_G3AnimationController.INDEX_PULL, transformType, matrices);
-            RenderUtil.renderModel(SpecialModels.HK_G3_PULL.getModel(), stack, matrices, renderBuffer, light, overlay);
-        }
+        controller.applySpecialModelTransform(SpecialModels.HK_G3_BODY.getModel(), HK_G3AnimationController.INDEX_PULL, transformType, matrices);
+        RenderUtil.renderModel(SpecialModels.HK_G3_PULL.getModel(), stack, matrices, renderBuffer, light, overlay);
         matrices.pop();
 
         matrices.push();

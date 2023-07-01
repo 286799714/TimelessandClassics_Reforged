@@ -15,7 +15,7 @@ public class HK_G3AnimationController extends GunAnimationController {
     public static int INDEX_LEFT_HAND = 10;
     public static int INDEX_RIGHT_HAND = 0;
     public static int INDEX_MAGAZINE = 7;
-    public static int INDEX_BOLT = 4;   //test: 5
+    public static int INDEX_BOLT = 5;   //test: 4
     public static int INDEX_HANDLE = 2;
     public static int INDEX_PULL = 3;
     public static int INDEX_BULLET = 6;
