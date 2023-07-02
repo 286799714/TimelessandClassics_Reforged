@@ -3,21 +3,27 @@
   "materials": [
     {
       "item": {
+        "tag": "forge:gems/diamond"
+      },
+      "count": 10
+    },
+    {
+      "item": {
         "tag": "forge:ingots/gold"
       },
-      "count": 20
+      "count": 50
     },
     {
       "item": {
         "tag": "forge:ingots/iron"
       },
-      "count": 150
+      "count": 250
     },
     {
       "item": {
-        "tag": "forge:gems/quartz"
+        "tag": "forge:rods/blaze"
       },
-      "count": 10
+      "count": 5
     }
   ],
   "result": {
