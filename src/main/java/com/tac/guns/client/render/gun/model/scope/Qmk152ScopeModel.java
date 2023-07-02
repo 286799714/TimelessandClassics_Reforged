@@ -128,13 +128,13 @@ public class Qmk152ScopeModel implements IOverrideModel
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true);
                 if (Config.CLIENT.display.scopeDoubleRender.get()) {
                     matrixStack.scale(12.5f,12.5f,12.5f);
+                    matrixStack.translate(-0.00352715, -0.0039055, 0.001);
                 } else {
                     matrixStack.scale(10f,10f,10f);
+                    matrixStack.translate(-0.00337715, -0.0039055, 0.001);
                 }
                 //matrixStack.translate(-0.00335715, -0.0039355, 0.0000);
-                matrixStack.translate(-0.00337715, -0.0039055, 0.001);
                 //matrixStack.translate(-0.00335715, -0.0035055, 0.0000);
-
 
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
                 // Walking bobbing

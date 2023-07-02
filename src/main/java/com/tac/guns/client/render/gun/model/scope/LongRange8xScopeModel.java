@@ -120,11 +120,14 @@ public class LongRange8xScopeModel implements IOverrideModel
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true);
                 if (Config.CLIENT.display.scopeDoubleRender.get()) {
                     matrixStack.scale(10f,10f,10f);
+                    matrixStack.translate(-0.00455715, -0.00439, 0.001);
+                    matrixStack.translate(0.00025875f, 0.0000525f, scopeData.getReticleZMod());
                 } else {
                     matrixStack.scale(8f,8f,8f);
+                    matrixStack.translate(-0.00455715, -0.00439, 0.001);
+                    matrixStack.translate(0.00042875f, 0.0000525f, scopeData.getReticleZMod());
                 }
-                matrixStack.translate(-0.00455715, -0.00439, 0.001);
-                matrixStack.translate(0.00042875f, 0.0000525f, scopeData.getReticleZMod());
+
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
                 // Walking bobbing
                 boolean aimed = false;

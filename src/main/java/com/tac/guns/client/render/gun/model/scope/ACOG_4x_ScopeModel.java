@@ -131,12 +131,13 @@ public class ACOG_4x_ScopeModel implements IOverrideModel
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true);
                 if (Config.CLIENT.display.scopeDoubleRender.get()) {
                     matrixStack.scale(7.5f,7.5f,7.5f);
+                    matrixStack.translate(0, 0, 0.001);
+                    matrixStack.translate(-0.00335715-0.00022-0.0008825 + scopeData.getReticleXMod(), -0.0035055-0.0006325 + scopeData.getReticleYMod(), 0.0007 + scopeData.getReticleZMod());
                 } else {
                     matrixStack.scale(6f,6f,6f);
+                    matrixStack.translate(0, 0, 0.001);
+                    matrixStack.translate(-0.00335715-0.0001-0.0008825 + scopeData.getReticleXMod(), -0.0035055-0.0006325 + scopeData.getReticleYMod(), 0.0007 + scopeData.getReticleZMod());
                 }
-                matrixStack.translate(0, 0, 0.001);
-                matrixStack.translate(-0.00335715-0.0001-0.0008825 + scopeData.getReticleXMod(), -0.0035055-0.0006325 + scopeData.getReticleYMod(), 0.0007 + scopeData.getReticleZMod());
-
 
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
                 // Walking bobbing
