@@ -3,15 +3,21 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/legendary"
+        "tag": "forge:ingots/gold"
       },
-      "count": 5
+      "count": 20
     },
     {
       "item": {
-        "tag": "forge:materials/epic"
+        "tag": "forge:ingots/iron"
       },
-      "count": 20
+      "count": 150
+    },
+    {
+      "item": {
+        "tag": "forge:gems/quartz"
+      },
+      "count": 10
     }
   ],
   "result": {
