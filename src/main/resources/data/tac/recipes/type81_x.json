@@ -12,6 +12,12 @@
         "tag": "forge:gems/lapis"
       },
       "count": 4
+    },
+    {
+      "item": {
+        "tag": "minecraft:logs"
+      },
+      "count": 9
     }
   ],
   "result": {

@@ -18,6 +18,12 @@
         "tag": "forge:gems/quartz"
       },
       "count": 4
+    },
+    {
+      "item": {
+        "tag": "minecraft:logs"
+      },
+      "count": 10
     }
   ],
   "result": {

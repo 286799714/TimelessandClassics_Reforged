@@ -11,12 +11,13 @@
       "item": {
         "tag": "forge:ingots/iron"
       },
-      "count": 28
+      "count": 24
     },
     {
       "item": {
-        "tag": "forge:gems/quartz"
-      }
+        "tag": "forge:gems/lapis"
+      },
+      "count": 4
     }
   ],
   "result": {
