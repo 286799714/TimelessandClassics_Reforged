@@ -97,13 +97,6 @@
         "yOffset": 1000.89,
         "zOffset": 5.35,
         "scale": 0.0
-      },
-      "pistolScope": {
-        "yOffset": 10,
-        "zOffset": 3.25,
-        "scale": 2,
-        "doRenderMount": true,
-        "doOnSlideMovement": true
       }
     }
   }
