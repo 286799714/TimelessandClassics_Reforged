@@ -1,6 +1,8 @@
 package com.tac.guns.common;
 
 import com.google.common.collect.Maps;
+import com.tac.guns.Reference;
+import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
@@ -8,77 +10,43 @@ import net.minecraft.Util;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
-/**
- * A simple class to track and control weapon cooldowns
- * <p>
- * Author: Forked from MrCrayfish, continued by Timeless devs
- */
+@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class ShootTracker
 {
-
-    // Clumsyalien: Um, why don't we spend a cycle and unlock this for MS level firerate?
-    /**
-     * A custom implementation of the cooldown tracker in order to provide the best experience for
-     * players. On servers, Minecraft's cooldown tracker is sent to the client but the latency creates
-     * an awkward experience as the cooldown applies to the item after the packet has traveled to the
-     * server then back to the client. To fix this and still apply security, we just handle the
-     * cooldown tracker quietly and not send cooldown packet back to client. The cooldown is still
-     * applied on the client in {@link GunItem#onItemRightClick} and {@link GunItem#onUsingTick}.
-     */
+    private boolean isShooting = false;
+    private boolean isTicked = false;
     private static final Map<Player, ShootTracker> SHOOT_TRACKER_MAP = new WeakHashMap<>();
 
-    private final Map<Item, Pair<Long, Integer>> cooldownMap = Maps.newHashMap();
-
-    /**
-     * Gets the cooldown tracker for the specified player UUID.
-     *
-     * @param player the player instance
-     * @return a cooldown tracker get
-     */
     public static ShootTracker getShootTracker(Player player)
     {
         return SHOOT_TRACKER_MAP.computeIfAbsent(player, player1 -> new ShootTracker());
     }
 
-    /**
-     * Checks if the specified item has an active cooldown. If a cooldown is active, it means that
-     * the weapon can not be fired until it has finished. This method provides leeway as sometimes a
-     * weapon is ready to fire but the cooldown is not completely finished, rather it's in the last
-     * 50 milliseconds or 1 game tick.
-     *
-     * @param item a gun item
-     * @return if the specified gun item has an active cooldown
-     */
-    public boolean hasCooldown(GunItem item)
-    {
-        Pair<Long, Integer> pair = this.cooldownMap.get(item);
-        if(pair != null)
-        {
-            /* Give a 50 millisecond leeway as most of the time the cooldown has finished, just not exactly to the millisecond */
-            return Util.getMillis() - pair.getLeft() < pair.getRight() - 50;
-        }
-        return false;
+    @SubscribeEvent
+    public static void onGunFire(GunFireEvent.Post event){
+        if(event.isClient()) return;
+        ShootTracker tracker = getShootTracker(event.getPlayer());
+        tracker.isShooting = true;
+        tracker.isTicked = false;
     }
 
-    /**
-     * Gets the remaining milliseconds before the weapon is allowed to shoot again. This doesn't
-     * take into account the leeway given in {@link #hasCooldown(GunItem)}.
-     *
-     * @param item a gun item
-     * @return the remaining time in milliseconds
-     */
-    public long getRemaining(GunItem item)
-    {
-        Pair<Long, Integer> pair = this.cooldownMap.get(item);
-        if(pair != null)
-        {
-            return pair.getRight() - (Util.getMillis() - pair.getLeft());
-        }
-        return 0;
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event){
+        SHOOT_TRACKER_MAP.values().forEach(tracker -> {
+            if(tracker.isTicked) tracker.isShooting = false;
+            else tracker.isTicked = true;
+        });
+    }
+
+    public boolean isShooting() {
+        return isShooting;
     }
 }

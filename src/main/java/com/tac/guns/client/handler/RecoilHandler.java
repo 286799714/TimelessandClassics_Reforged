@@ -2,21 +2,28 @@ package com.tac.guns.client.handler;
 
 import com.tac.guns.Config;
 import com.tac.guns.common.Gun;
+import com.tac.guns.common.ShootTracker;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -33,6 +40,8 @@ public class RecoilHandler
         }
         return instance;
     }
+
+    private Map<Player, RecoilTracker> trackerMap = new WeakHashMap<>();
 
     private Random random = new Random();
     private int recoilRand;
@@ -98,7 +107,12 @@ public class RecoilHandler
         horizontalProgressCameraRecoil = 0F;
 
         timer = recoilDuration;
+
+        RecoilTracker tracker = getRecoilTracker(event.getPlayer());
+        tracker.needRecoil = true;
+        tracker.tick = 1;
     }
+
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event)
     {
@@ -194,6 +208,20 @@ public class RecoilHandler
         this.gunHorizontalRecoilAngle = modifiedGun.getGeneral().getHorizontalRecoilAngle();
     }
 
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event){
+        trackerMap.values().forEach(tracker -> {
+            if(tracker.tick > 4) {
+                tracker.needRecoil = false;
+                tracker.tick = 0;
+            }
+            else if(tracker.tick > 0){
+                tracker.needRecoil = true;
+                tracker.tick++;
+            }
+        });
+    }
+
     public double getAdsRecoilReduction(Gun gun)
     {
         return 1.0 - gun.getGeneral().getRecoilAdsReduction() * AimingHandler.get().getNormalisedAdsProgress();
@@ -216,6 +244,11 @@ public class RecoilHandler
 
     public double getRecoilProgress() {return timer / (double)recoilDuration;}
 
+    public RecoilTracker getRecoilTracker(Player player)
+    {
+        return trackerMap.computeIfAbsent(player, player1 -> new RecoilTracker());
+    }
+
     private static Vec3 getVectorFromRotation(float pitch, float yaw)
     {
         float f = Mth.cos(-yaw * 0.017453292F - (float) Math.PI);
@@ -229,4 +262,16 @@ public class RecoilHandler
     public float lastRandPitch = 0f;
     public float lastRandYaw = 0f;
 
+    public static class RecoilTracker{
+        private boolean needRecoil = false;
+        private int tick = 0;
+
+        public boolean isNeedRecoil() {
+            return needRecoil;
+        }
+
+        public int getTick() {
+            return tick;
+        }
+    }
 }
