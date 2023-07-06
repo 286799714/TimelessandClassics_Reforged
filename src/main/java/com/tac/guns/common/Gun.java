@@ -1310,9 +1310,9 @@ public final class Gun implements INBTSerializable<CompoundNBT>
             return this.showDynamicHipfire;
         }
 
-        public int getWeaponType()
+        public WeaponType getWeaponType()
         {
-            return this.weaponType;
+            return WeaponType.values()[weaponType];
         }
 
         @Nullable
