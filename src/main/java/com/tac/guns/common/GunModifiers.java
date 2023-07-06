@@ -1150,6 +1150,19 @@ public class GunModifiers
         }
     };
 
+    public static final IGunModifier KAR98 = new IGunModifier()
+    {
+        @Override
+        public double modifyFireSoundRadius(double radius)
+        {
+            return radius * 1.3;
+        }
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed*0.9;
+        }
+    };
+
     public static final IGunModifier MRAD_MOD = new IGunModifier()
     {
         @Override

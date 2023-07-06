@@ -26,7 +26,6 @@
     "reloadAmount": 1,
     "preReloadPauseTicks": 0,
     "interReloadPauseTicks": 15,
-    "maxAdditionalAmmoPerOC": [2, 3, 5],
     "openBolt": true
   },
   "projectile": {
@@ -56,37 +55,23 @@
   },
   "display": {
     "flash": {
-      "yOffset": 6,
-      "zOffset": -24,
-      "size": 1.3,
-      "trailAdjust": 1.6
+      "yOffset": 7.65,
+      "zOffset": -24.80,
+      "size": 1.05
     },
-    "showDynamicHipfire": false,
     "weaponType": 5
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.67,
-      "yOffset": 7.50,
-      "zOffset": -4.0
+      "fovModifier": 0.7,
+      "yOffset": 8.315,
+      "zOffset": -5.7
     },
     "attachments": {
-      "scope": {
-        "yOffset": 6.65,
-        "zOffset": 6.0,
+      "oldScope": {
+        "yOffset": 7.655,
+        "zOffset": 5.08,
         "scale": 1.0
-      },
-      "extendedMag": {
-        "yOffset": 1000.89,
-        "zOffset": 5.35,
-        "scale": 0.0
-      },
-      "pistolScope": {
-        "yOffset": 6.65,
-        "zOffset": 4.85,
-        "scale": 1.0,
-        "doRenderMount": true,
-        "doOnSlideMovement": false
       }
     }
   }
