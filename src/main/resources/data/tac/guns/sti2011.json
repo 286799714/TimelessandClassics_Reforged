@@ -77,7 +77,7 @@
     "hipfireScale": 1.5,
     "hipfireMoveScale": 0.35,
     "hipfireRecoilScale": 1,
-    "weaponType": 0,
+    "weaponType": 2,
     "showDynamicHipfire": true
   },
   "modules": {
