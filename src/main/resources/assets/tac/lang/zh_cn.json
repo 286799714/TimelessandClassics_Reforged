@@ -92,7 +92,7 @@
     "item.tac.m79": "M79 榴弹枪",
     "item.tac.mgl_40mm": "MGL 战术榴弹枪",
     "item.tac.mk23": "HK MK23 手枪",
-    "item.tac.qbz_191": "QBZ-191 突击步枪",
+    "item.tac.qbz_191": "QBZ-192 突击步枪",
     "item.tac.c96": "C96 手枪",
     "item.tac.sten_mk_ii_oss": "OSS STEN MK.III 冲锋枪",
     "item.tac.espadon": "ESPADON .50口径步枪",
@@ -105,6 +105,8 @@
     "item.tac.mk18_mod1": "MK18 MOD1 突击步枪",
     "item.tac.spr15": "射手座 SPR-15 精确步枪",
     "item.tac.uzi": "UZI 冲锋枪",
+    "item.tac.mrad": "MRAD 狙击步枪",
+    "item.tac.hk_g3": "G3 战斗步枪",
 
     "item.tac.46x30": "4.6mm 穿甲弹",
     "item.tac.round45": ".45 ACP 手枪子弹",

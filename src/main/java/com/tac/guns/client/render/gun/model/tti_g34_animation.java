@@ -39,7 +39,9 @@ public class tti_g34_animation implements IOverrideModel {
             controller.applySpecialModelTransform(SpecialModels.TTI_G34.getModel(),TtiG34AnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.GLOCK_17_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                matrices.translate(0, 0, -0.25);
                 RenderUtil.renderLaserModuleModel(SpecialModels.GLOCK_17_B_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                matrices.translate(0, 0, 0.25);
             }
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.TTI_G34_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);

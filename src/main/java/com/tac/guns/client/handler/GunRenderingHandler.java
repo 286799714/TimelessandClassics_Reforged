@@ -43,15 +43,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.FirstPersonRenderer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -1456,8 +1457,7 @@ public class GunRenderingHandler {
 
         /*float smokeSize = (float) modifiedGun.getDisplay().getFlash().getSmokeSize();
         builder = buffer.getBuffer(GunRenderType.getMuzzleSmoke());
-        matrixStack.translate(size / 2,size / 2,0);
-        matrixStack.translate(-smokeSize / 2, -smokeSize / 2, 0);
+        matrixStack.translate(size / 2 - smokeSize / 2, size / 2 - smokeSize / 2, 0.01f);
         builder.pos(matrix, 0, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).tex(1.0F, 1.0F).lightmap(15728880).endVertex();
         builder.pos(matrix, smokeSize, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).tex(0, 1.0F).lightmap(15728880).endVertex();
         builder.pos(matrix, smokeSize, smokeSize, 0).color(1.0F, 1.0F, 1.0F, 1.0F).tex(0, 0).lightmap(15728880).endVertex();
@@ -1465,78 +1465,6 @@ public class GunRenderingHandler {
 */
         matrixStack.pop();
     }
-
-    /*private void renderReloadArm(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, Gun modifiedGun, ItemStack stack, HandSide hand) {
-        *//*if (stack.getItem() instanceof IAnimatable && stack.getItem() instanceof GunItem) {
-
-        }*//*
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.player.ticksExisted < ReloadHandler.get().getStartReloadTick() || ReloadHandler.get().getReloadTimer() != 5)
-            return;
-
-        Item item = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
-        if (item == null)
-            return;
-
-        matrixStack.push();
-
-        float interval = GunEnchantmentHelper.getReloadInterval(stack);
-        float reload = ((mc.player.ticksExisted - ReloadHandler.get().getStartReloadTick() + mc.getRenderPartialTicks()) % interval) / interval;
-        float percent = 1.0F - reload;
-        if (percent >= 0.5F) {
-            percent = 1.0F - percent;
-        }
-        percent *= 2F;
-        percent = percent < 0.5 ? 2 * percent * percent : -1 + (4 - 2 * percent) * percent;
-
-        int side = hand.opposite() == HandSide.RIGHT ? 1 : -1;
-        matrixStack.translate(-2.75 * side * 0.0625, -0.5625, -0.5625);
-        matrixStack.rotate(Vector3f.YP.rotationDegrees(180F));
-        matrixStack.translate(0, -0.35 * (1.0 - percent), 0);
-        matrixStack.translate(side * 0.0625, 0, 0);
-        matrixStack.rotate(Vector3f.XP.rotationDegrees(90F));
-        matrixStack.rotate(Vector3f.YP.rotationDegrees(35F * -side));
-        matrixStack.rotate(Vector3f.XP.rotationDegrees(-75F * percent));
-        matrixStack.scale(0.5F, 0.5F, 0.5F);
-
-        RenderUtil.renderFirstPersonArm(mc.player, hand.opposite(), matrixStack, buffer, light);
-
-        if (reload < 0.5F) {
-            matrixStack.push();
-            matrixStack.translate(-side * 5 * 0.0625, 15 * 0.0625, -1 * 0.0625);
-            matrixStack.rotate(Vector3f.XP.rotationDegrees(180F));
-            matrixStack.scale(0.75F, 0.75F, 0.75F);
-            ItemStack ammo = new ItemStack(item, modifiedGun.getReloads().getReloadAmount());
-            IBakedModel model = RenderUtil.getModel(ammo);
-            boolean isModel = model.isGui3d();
-            this.random.setSeed(Item.getIdFromItem(item));
-            int count = Math.min(modifiedGun.getReloads().getReloadAmount(), 5);
-            for (int i = 0; i < count; ++i) {
-                matrixStack.push();
-                if (i > 0) {
-                    if (isModel) {
-                        float x = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
-                        float y = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
-                        float z = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
-                        matrixStack.translate(x, y, z);
-                    } else {
-                        float x = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
-                        float y = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
-                        matrixStack.translate(x, y, 0);
-                    }
-                }
-
-                RenderUtil.renderModel(ammo, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, matrixStack, buffer, light, OverlayTexture.NO_OVERLAY, null);
-                matrixStack.pop();
-
-                if (!isModel) {
-                    matrixStack.translate(0.0, 0.0, 0.09375F);
-                }
-            }
-            matrixStack.pop();
-        }
-        matrixStack.pop();
-    }*/
 
     /**
      * A temporary hack to get the equip progress until Forge fixes the issue.

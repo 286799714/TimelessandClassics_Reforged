@@ -2,7 +2,7 @@
   "general": {
     "rate": 200,
     "rateSelector": [1],
-    "gripType": "tac:one_handed_m1911",
+    "gripType": "tac:bazooka",
     "recoilAngle": 3.25,
     "horizontalRecoilAngle": 3.25,
     "recoilKick": 1.5,

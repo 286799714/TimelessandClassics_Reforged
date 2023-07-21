@@ -4,12 +4,7 @@ import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Reference;
 import com.tac.guns.client.InputHandler;
 import com.tac.guns.client.render.animation.*;
-import com.tac.guns.client.render.animation.module.AnimationMeta;
-import com.tac.guns.client.render.animation.module.AnimationSoundManager;
-import com.tac.guns.client.render.animation.module.Animations;
-import com.tac.guns.client.render.animation.module.BoltActionAnimationController;
-import com.tac.guns.client.render.animation.module.GunAnimationController;
-import com.tac.guns.client.render.animation.module.PumpShotgunAnimationController;
+import com.tac.guns.client.render.animation.module.*;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
@@ -92,6 +87,8 @@ public enum AnimationHandler {
         RPG7AnimationController.getInstance();
         UDP9AnimationController.getInstance();
         UZIAnimationController.getInstance();
+        MRADAnimationController.getInstance();
+        HK_G3AnimationController.getInstance();
     }
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {
@@ -170,7 +167,19 @@ public enum AnimationHandler {
             controller.runAnimation(GunAnimationController.AnimationLabel.PULL_BOLT);
         }
     }
-    
+
+    @SubscribeEvent
+    public void onMachineGunFire(GunFireEvent.Post event){
+        if (!event.isClient()) return;
+        if(Minecraft.getInstance().player == null) return;
+        if(!event.getPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID())) return;
+        GunAnimationController controller = GunAnimationController.fromItem(event.getStack().getItem());
+        if (controller instanceof MachineGunAnimationController) {
+            if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.BULLET_CHAIN) != null)
+                controller.runAnimation(GunAnimationController.AnimationLabel.BULLET_CHAIN);
+        }
+    }
+
     static
     {
     	final Runnable callback = () -> {

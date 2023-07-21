@@ -3,7 +3,7 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/uncommon"
+        "tag": "forge:ingots/iron"
       },
       "count": 6
     },

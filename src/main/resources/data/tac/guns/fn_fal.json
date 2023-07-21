@@ -24,7 +24,7 @@
     "item": "tac:bullet_308",
     "visible": false,
     "damage": 12,
-    "armorIgnore": 1.0,
+    "armorIgnore": 1.2,
     "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
