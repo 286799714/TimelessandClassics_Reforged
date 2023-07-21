@@ -92,7 +92,7 @@
     "item.tac.m79": "M79",
     "item.tac.mgl_40mm": "MGL",
     "item.tac.mk23": "HK MK23",
-    "item.tac.qbz_191": "QBZ-191",
+    "item.tac.qbz_191": "QBZ-192",
     "item.tac.c96": "C96",
     "item.tac.sten_mk_ii_oss": "OSS STEN MK.III",
     "item.tac.espadon": "ESPADON .50",
@@ -105,6 +105,8 @@
     "item.tac.mk18_mod1": "MK18 MOD1",
     "item.tac.spr15": "SPR 5.56",
     "item.tac.uzi": "UZI",
+    "item.tac.mrad": "Barrett MRAD",
+    "item.tac.hk_g3": "G3 Battle Rifle",
 
     "item.tac.46x30": "4.6mm AP Bullet",
     "item.tac.round45": ".45 ACP Bullet",

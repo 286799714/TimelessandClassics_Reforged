@@ -1,0 +1,129 @@
+{
+  "general": {
+    "rate": 600,
+    "auto": true,
+    "rateSelector": [1, 2],
+    "gripType": "tac:two_handed_ak47",
+    "recoilAngle": 4.55,
+    "horizontalRecoilAngle": 1.95,
+    "recoilKick": 2.0,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.725,
+    "cameraRecoilModifier": 1.15,
+    "recoilDuration": 0.35,
+    "weightKilo": 3.8,
+
+    "spread": 2,
+    "firstShotSpread": 0.05,
+    "hipFireInaccuracy": 5,
+    "projToMinAccuracy": 5,
+    "msToAccuracyReset": 660,
+    "movementInaccuracy": 0.25
+  },
+  "projectile": {
+    "item": "tac:bullet_308",
+    "visible": false,
+    "damage": 11,
+    "armorIgnore": 1.2,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 1.0,
+    "size": 0.15,
+    "speed": 20,
+    "life": 16,
+    "trailLengthMultiplier": 3
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 20,
+    "reloadMagTimer": 33,
+    "additionalReloadEmptyMagTimer": 16,
+    "maxAdditionalAmmoPerOC": [10, 20, 30],
+    "preReloadPauseTicks": 0
+  },
+  "sounds": {
+    "fire": "tac:item.hk_g3_fire",
+    "reloadNormal": "tac:animation.hk_g3_reload_norm",
+    "reloadEmpty": "tac:animation.hk_g3_reload_empty",
+    "draw": "tac:animation.hk_g3_draw",
+    "inspect": "tac:animation.hk_g3_inspect",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "tac:item.hk_g3_fire_s"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 10.25,
+      "zOffset": -24,
+      "size": 0.8,
+      "trailAdjust": 1.5
+    },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 0.5,
+      "xOffset": 0,
+      "zOffset": -2.5,
+      "scale": 1,
+      "velocityX": 9,
+      "velocityY": 2,
+      "velocityZ": 0.0,
+      "rVelocityX": 1.0,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -90.0,
+      "aVelocityZ": 10.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 1.5,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1,
+    "showDynamicHipfire": true,
+    "weaponType": 0
+  },
+  "modules": {
+    "zoom": {
+      "fovModifier": 0.67,
+      "yOffset": 12.55,
+      "zOffset": -1.75
+    },
+    "attachments": {
+      "scope": {
+        "yOffset": 11.575,
+        "zOffset": 3.715,
+        "scale": 1.0
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
+      "pistolScope": {
+        "yOffset": 11.575,
+        "zOffset": 5.35,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "stock": {
+        "yOffset": 7.75,
+        "zOffset": -22.05,
+        "scale": 0.00
+      },
+      "barrel": {
+        "yOffset": -100829.84,
+        "zOffset": -24.80,
+        "scale": 1.00
+      }
+    }
+  }
+}

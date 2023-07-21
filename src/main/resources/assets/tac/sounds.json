@@ -763,6 +763,18 @@
          { "name": "tac:item/mk20_fire" }
       ]
    },
+   "item.hk_g3_fire_s": {
+      "subtitle": "subtitle.tac.hk_g3_fire_s",
+      "sounds": [
+         { "name": "tac:item/hk_g3_fire_s" }
+      ]
+   },
+   "item.hk_g3_fire": {
+      "subtitle": "subtitle.tac.hk_g3_fire",
+      "sounds": [
+         { "name": "tac:item/hk_g3_fire" }
+      ]
+   },
 
 
 
@@ -2211,12 +2223,6 @@
          { "name": "tac:animation/mrad_inspect"}
       ]
    },
-   "animation.mrad_inspect_empty": {
-      "subtitle": "animation.mrad_inspect_empty",
-      "sounds": [
-         { "name": "tac:animation/mrad_inspect_empty"}
-      ]
-   },
    "animation.mrad_draw": {
       "subtitle": "animation.mrad_draw",
       "sounds": [
@@ -2227,6 +2233,31 @@
       "subtitle": "animation.mrad_bolt",
       "sounds": [
          { "name": "tac:animation/mrad_bolt"}
+      ]
+   },
+
+   "animation.hk_g3_reload_empty": {
+      "subtitle": "animation.hk_g3_reload_empty",
+      "sounds": [
+         { "name": "tac:animation/hk_g3_reload_empty"}
+      ]
+   },
+   "animation.hk_g3_reload_norm": {
+      "subtitle": "animation.hk_g3_reload_norm",
+      "sounds": [
+         { "name": "tac:animation/hk_g3_reload_norm"}
+      ]
+   },
+   "animation.hk_g3_inspect": {
+      "subtitle": "animation.hk_g3_inspect",
+      "sounds": [
+         { "name": "tac:animation/hk_g3_inspect"}
+      ]
+   },
+   "animation.hk_g3_draw": {
+      "subtitle": "animation.hk_g3_draw",
+      "sounds": [
+         { "name": "tac:animation/hk_g3_draw"}
       ]
    }
 }

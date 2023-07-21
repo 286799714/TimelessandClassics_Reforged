@@ -1,0 +1,71 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1_2": "tac:items/test_laser_mini/beam",
+		"particle": "tac:items/test_laser_peq15/extra_base"
+	},
+	"elements": [
+		{
+			"from": [6.65181, 10.17319, -15.75],
+			"to": [6.77681, 10.29819, -6.75],
+			"rotation": {"angle": 45, "axis": "z", "origin": [6.875, 9.4375, -8.5]},
+			"faces": {
+				"north": {"uv": [2, 2, 2.25, 2.25], "rotation": 270, "texture": "#1_2", "tintindex": 1},
+				"east": {"uv": [0.25, 12.5, 0, 2], "rotation": 90, "texture": "#1_2", "tintindex": 1},
+				"south": {"uv": [2, 3, 2.25, 3.25], "rotation": 90, "texture": "#1_2", "tintindex": 1},
+				"west": {"uv": [1.25, 2, 1, 12.5], "rotation": 90, "texture": "#1_2", "tintindex": 1},
+				"up": {"uv": [0, 1, 10.5, 1.25], "rotation": 90, "texture": "#1_2", "tintindex": 1},
+				"down": {"uv": [0, 0, 10.5, 0.25], "rotation": 90, "texture": "#1_2", "tintindex": 1}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"thirdperson_lefthand": {
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 1.25, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 1.25, 0]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"gui": {
+			"rotation": [30, -145, 0],
+			"translation": [1.5, 0, 0],
+			"scale": [3, 3, 3]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [0.75, 1, -1],
+			"scale": [1.1, 1.1, 1.1]
+		}
+	},
+	"groups": [
+		{
+			"name": "mini_laser_s",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "laser_dye",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "beam_dye",
+					"origin": [8, 7.36616, -4],
+					"color": 0,
+					"children": [0]
+				}
+			]
+		}
+	]
+}

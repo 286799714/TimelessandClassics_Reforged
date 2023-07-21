@@ -139,10 +139,15 @@ public class elcan_14x_ScopeModel implements IOverrideModel
                 float blue = ((reticleGlowColor >> 0) & 0xFF) / 255F;
                 float alpha = (float) AimingHandler.get().getNormalisedAdsProgress();
 
-                matrixStack.scale(7.5f,7.5f,7.5f);
-                matrixStack.translate(0,0, 0.001);
-                matrixStack.translate((-0.00335715-0.0033) + scopeData.getReticleXMod(), (-0.0035055-0.0046) + scopeData.getReticleYMod(), 0.0003 + scopeData.getReticleZMod());
-
+                if (Config.CLIENT.display.scopeDoubleRender.get()) {
+                    matrixStack.scale(7.5f,7.5f,7.5f);
+                    matrixStack.translate(0,0, 0.001);
+                    matrixStack.translate((-0.00335715-0.0033) + scopeData.getReticleXMod(), (-0.0035055-0.0046) + scopeData.getReticleYMod(), 0.0003 + scopeData.getReticleZMod());
+                } else {
+                    matrixStack.scale(6f,6f,6f);
+                    matrixStack.translate(0,0, 0.001);
+                    matrixStack.translate((-0.00335715-0.00315) + scopeData.getReticleXMod(), (-0.0035055-0.0046) + scopeData.getReticleYMod(), 0.0003 + scopeData.getReticleZMod());
+                }
 
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
                 // Walking bobbing

@@ -3,21 +3,21 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/rare"
+        "tag": "forge:ingots/iron"
+      },
+      "count": 62
+    },
+    {
+      "item": {
+        "tag": "forge:gems/lapis"
       },
       "count": 10
     },
     {
       "item": {
-        "tag": "forge:materials/uncommon"
+        "tag": "minecraft:logs"
       },
-      "count": 2
-    },
-    {
-      "item": {
-        "tag": "forge:leather"
-      },
-      "count": 12
+      "count": 10
     }
   ],
   "result": {

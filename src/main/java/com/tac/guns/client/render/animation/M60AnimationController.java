@@ -31,6 +31,7 @@ public class M60AnimationController extends MachineGunAnimationController {
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/m60_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/m60_inspect.gltf"));
     public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m60_inspect.gltf"));
+    public static final AnimationMeta BULLET_CHAIN = new AnimationMeta(new ResourceLocation("tac", "animations/m60_bullet_chain.gltf"));
     private static final M60AnimationController instance = new M60AnimationController();
 
     private M60AnimationController(){
@@ -43,6 +44,7 @@ public class M60AnimationController extends MachineGunAnimationController {
             Animations.load(INSPECT);
             Animations.load(INSPECT_EMPTY);
             Animations.load(STATIC);
+            Animations.load(BULLET_CHAIN);
         } catch (IOException e) {
             GunMod.LOGGER.fatal(e.getStackTrace());
         }
@@ -78,6 +80,7 @@ public class M60AnimationController extends MachineGunAnimationController {
             case INSPECT: return INSPECT;
             case INSPECT_EMPTY: return INSPECT_EMPTY;
             case STATIC: return STATIC;
+            case BULLET_CHAIN: return BULLET_CHAIN;
             default: return null;
         }
     }
@@ -87,6 +90,7 @@ public class M60AnimationController extends MachineGunAnimationController {
         try {
             Animations.specifyInitialModel(RELOAD_NORM_SCOPE, STATIC);
             Animations.specifyInitialModel(RELOAD_EMPTY_SCOPE, STATIC);
+            Animations.specifyInitialModel(BULLET_CHAIN, STATIC);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

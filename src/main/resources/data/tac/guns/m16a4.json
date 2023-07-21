@@ -1,9 +1,9 @@
 {
   "general": {
     "auto": true,
-    "rate": 900,
+    "rate": 720,
     "burstRate": 15,
-    "rateSelector": [1, 3],
+    "rateSelector": [3, 2, 1],
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 1.875,
     "horizontalRecoilAngle": 1.25,
@@ -38,7 +38,7 @@
     "criticalDamage": 0.75,
     "headDamage": 1.0,
     "size": 0.075,
-    "speed": 25,
+    "speed": 28,
     "life": 11,
     "trailLengthMultiplier": 3,
     "ricochet": true
@@ -86,7 +86,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 12.625,
-      "zOffset": -3
+      "zOffset": -2.875
     },
     "attachments": {
       "scope": {

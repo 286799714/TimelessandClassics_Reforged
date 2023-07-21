@@ -46,7 +46,7 @@ public class LongRange8xScopeModel implements IOverrideModel
             double transition = 1.0D - Math.pow(1.0D - AimingHandler.get().getNormalisedAdsProgress(), 2.0D);
             double zScale = 0.05D + 0.95D * (1.0D - transition);
             matrixStack.translate(0,0,transition*0.18);
-            matrixStack.scale(1.0F, 1.0F, (float)zScale);
+            matrixStack.scale(1.0F, 1.0F, (float) zScale);
         }
         matrixStack.translate(0, -0.15, -0.38);
         matrixStack.translate(0, 0, 0.0015);
@@ -118,9 +118,16 @@ public class LongRange8xScopeModel implements IOverrideModel
 
                 alpha = (float) (1F * AimingHandler.get().getNormalisedAdsProgress());
                 GunRenderingHandler.get().applyBobbingTransforms(matrixStack,true);
-                matrixStack.scale(10.0f,10.0f,10.0f);
-                matrixStack.translate(-0.00455715, -0.00439, 0.001);
-                matrixStack.translate(0.00025875f, 0.0000525f, scopeData.getReticleZMod());
+                if (Config.CLIENT.display.scopeDoubleRender.get()) {
+                    matrixStack.scale(10f,10f,10f);
+                    matrixStack.translate(-0.00455715, -0.00439, 0.001);
+                    matrixStack.translate(0.00025875f, 0.0000525f, scopeData.getReticleZMod());
+                } else {
+                    matrixStack.scale(8f,8f,8f);
+                    matrixStack.translate(-0.00455715, -0.00439, 0.001);
+                    matrixStack.translate(0.00042875f, 0.0000525f, scopeData.getReticleZMod());
+                }
+
                 builder = renderTypeBuffer.getBuffer(RenderType.getEntityTranslucent(RED_DOT_RETICLE));
                 // Walking bobbing
                 boolean aimed = false;

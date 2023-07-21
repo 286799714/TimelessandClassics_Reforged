@@ -3,20 +3,32 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/ultimate"
+        "tag": "forge:ingots/netherite"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "tag": "forge:gems/diamond"
+      },
+      "count": 16
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/gold"
+      },
+      "count": 60
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 300
+    },
+    {
+      "item": {
+        "tag": "forge:nether_stars"
       }
-    },
-    {
-      "item": {
-        "tag": "forge:materials/legendary"
-      },
-      "count": 6
-    },
-    {
-      "item": {
-        "tag": "forge:materials/epic"
-      },
-      "count": 22
     }
   ],
   "result": {
