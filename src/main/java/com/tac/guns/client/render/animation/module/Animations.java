@@ -19,15 +19,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class Animations {
@@ -222,5 +220,35 @@ public class Animations {
             }
         }
         applyExtraTransform(matrixStack);
+    }
+
+    public static Vector3f getAlphaYPRAngle(){
+        Matrix4f matrix4f = new Matrix4f();
+        matrix4f.setIdentity();
+        Matrix4f animationTransition = new Matrix4f(Animations.peekNodeModel().computeGlobalTransform(null));
+        Matrix4f initialTransition = new Matrix4f(Animations.peekInitialModel().computeGlobalTransform(null));
+        animationTransition.transpose();
+        initialTransition.transpose();
+        initialTransition.invert();
+        matrix4f.mul(animationTransition);
+        matrix4f.mul(initialTransition);
+        float[][] matrix = new float[3][3];
+        int i = 0;
+        for(String str : matrix4f.toString().split("\n")){
+            if(str.contains("Matrix4f"))continue;
+            if(i >= 3) break;
+            int j = 0;
+            for(String s : str.split(" ")){
+                if(j >= 3) break;
+                matrix[i][j] = Float.parseFloat(s);
+                j ++;
+            }
+            i++;
+        }
+        Vector3f vector3f = new Vector3f();
+        vector3f.setX((float) Math.atan2(matrix[2][1], matrix[2][2]));
+        vector3f.setY((float) Math.atan2(-matrix[2][0], Math.sqrt(matrix[2][1] * matrix[2][1] + matrix[2][2] * matrix[2][2])));
+        vector3f.setZ((float) Math.atan2(matrix[1][0], matrix[0][0]));
+        return vector3f;
     }
 }
