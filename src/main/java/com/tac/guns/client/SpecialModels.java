@@ -313,10 +313,7 @@ public enum SpecialModels
     VZ61_EXTENDED_MAG("vz61_extended_mag"),
     QSZ92G1("qsz92g1"),
     QSZ92G1_SLIDE("qsz92g1_slide"),
-    KAR98("kar98"),
-    KAR98_BOLT("kar98_bolt_rotate"),
-    KAR98_BOLT_EXTRA("kar98_bolt_fixed"),
-    KAR98_BULLET("kar98_bullet"),
+
     HK416_A5_BODY("hk416_a5"),
     HK416_A5_BULLET("hk416_a5_bullet"),
     HK416_A5_BRAKE("hk416_a5_brake"),
@@ -557,6 +554,17 @@ public enum SpecialModels
     C96_STANDARD_MAG("c96_standard_mag"),
     STEN_MK_II_OSS("sten_mk_ii_oss"),
 
+    KAR98_BODY("kar98_body"),
+    KAR98_BOLT_FIXED("kar98_bolt_fixed"),
+    KAR98_BOLT_ROTATE("kar98_bolt_rotate"),
+    KAR98_BULLET2("kar98_bullet2"),
+    KAR98_BULLET3("kar98_bullet3"),
+    KAR98_BULLETS("kar98_bullets"),
+    KAR98_CLIP("kar98_clip"),
+    KAR98_FRONT("kar98_front"),
+    KAR98_MOUNT("kar98_mount"),
+    KAR98_SHELL("kar98_shell"),
+
     ESPADON("espadon"),
     ESPADON_SIGHT("espadon_sight"),
     ESPADON_RAIL("espadon_rail"),
@@ -629,7 +637,6 @@ public enum SpecialModels
     MK47_LIGHT_STOCK("mk47_light_stock"),
     MK47_HEAVY_STOCK("mk47_heavy_stock"),
     MK47_PULL("mk47_pull"),
-    KAR98_MOUNT("kar98_mount"),
 
    AR_15_BODY("ar_15_body"),
    AR_15_BOLT("ar_15h_bolt"),

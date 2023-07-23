@@ -2259,5 +2259,48 @@
       "sounds": [
          { "name": "tac:animation/hk_g3_draw"}
       ]
+   },
+
+   "animation.kar98_reload_empty": {
+      "subtitle": "animation.kar98_reload_empty",
+      "sounds": [
+         { "name": "tac:animation/kar98_reload_empty"}
+      ]
+   },
+   "animation.kar98_reload_intro": {
+      "subtitle": "animation.kar98_reload_intro",
+      "sounds": [
+         { "name": "tac:animation/kar98_reload_intro"}
+      ]
+   },
+   "animation.kar98_reload_loop": {
+      "subtitle": "animation.kar98_reload_loop",
+      "sounds": [
+         { "name": "tac:animation/kar98_reload_loop"}
+      ]
+   },
+   "animation.kar98_reload_end": {
+      "subtitle": "animation.kar98_reload_end",
+      "sounds": [
+         { "name": "tac:animation/kar98_reload_end"}
+      ]
+   },
+   "animation.kar98_inspect": {
+      "subtitle": "animation.kar98_inspect",
+      "sounds": [
+         { "name": "tac:animation/kar98_inspect"}
+      ]
+   },
+   "animation.kar98_draw": {
+      "subtitle": "animation.kar98_draw",
+      "sounds": [
+         { "name": "tac:animation/kar98_draw"}
+      ]
+   },
+   "animation.kar98_bolt": {
+      "subtitle": "animation.kar98_bolt",
+      "sounds": [
+         { "name": "tac:animation/kar98_bolt"}
+      ]
    }
 }
