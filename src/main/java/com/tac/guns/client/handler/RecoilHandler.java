@@ -21,7 +21,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.Map;
 import java.util.Random;
+import java.util.WeakHashMap;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -38,6 +40,7 @@ public class RecoilHandler
         }
         return instance;
     }
+    private final Map<PlayerEntity, RecoilTracker> trackerMap = new WeakHashMap<>();
 
     private Random random = new Random();
     private int recoilRand;
@@ -103,6 +106,10 @@ public class RecoilHandler
         horizontalProgressCameraRecoil = 0F;
 
         timer = recoilDuration;
+
+        RecoilTracker tracker = getRecoilTracker(event.getPlayer());
+        tracker.needRecoil = true;
+        tracker.tick = 1;
     }
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event)
@@ -164,6 +171,20 @@ public class RecoilHandler
         }
     }
 
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event){
+        trackerMap.values().forEach(tracker -> {
+            if(tracker.tick > 8) {
+                tracker.needRecoil = false;
+                tracker.tick = 0;
+            }
+            else if(tracker.tick > 0){
+                tracker.needRecoil = true;
+                tracker.tick++;
+            }
+        });
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRenderOverlay(RenderHandEvent event)
     {
@@ -222,6 +243,11 @@ public class RecoilHandler
 
     public double getRecoilProgress() {return timer / (double)recoilDuration;}
 
+    public RecoilTracker getRecoilTracker(PlayerEntity player)
+    {
+        return trackerMap.computeIfAbsent(player, player1 -> new RecoilTracker());
+    }
+
     private static Vector3d getVectorFromRotation(float pitch, float yaw)
     {
         float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
@@ -235,4 +261,16 @@ public class RecoilHandler
     public float lastRandPitch = 0f;
     public float lastRandYaw = 0f;
 
+    public static class RecoilTracker{
+        private boolean needRecoil = false;
+        private int tick = 0;
+
+        public boolean isNeedRecoil() {
+            return needRecoil;
+        }
+
+        public int getTick() {
+            return tick;
+        }
+    }
 }

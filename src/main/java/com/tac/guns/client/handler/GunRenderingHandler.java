@@ -13,6 +13,7 @@ import com.tac.guns.client.GunRenderType;
 import com.tac.guns.client.SpecialModels;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.client.render.IHeldAnimation;
+import com.tac.guns.client.render.animation.module.CameraAnimated;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PistalAnimationController;
 import com.tac.guns.client.render.gun.IOverrideModel;
@@ -200,6 +201,16 @@ public class GunRenderingHandler {
                     * 0.9f);
             event.setPitch(event.getPitch() - Math.abs(alpha));
             event.setRoll(event.getRoll() + alpha * 0.5f);
+        }
+
+        float multiplier = 20.0f;
+        GunAnimationController controller = GunAnimationController.fromItem(mc.player.getHeldItemMainhand().getItem());
+        if(controller instanceof CameraAnimated){
+            int index = ((CameraAnimated) controller).getCameraNodeIndex();
+            Vector3f vector3f = controller.getYPRAngle(index);
+            event.setYaw(event.getYaw() + vector3f.getX() * multiplier);
+            event.setPitch(event.getPitch() + vector3f.getY() * multiplier);
+            event.setRoll(event.getRoll() + vector3f.getZ() * multiplier);
         }
     }
 

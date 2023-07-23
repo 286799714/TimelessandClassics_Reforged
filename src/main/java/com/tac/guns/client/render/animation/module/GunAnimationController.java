@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -156,6 +157,14 @@ public abstract class GunAnimationController {
         if( isFirstPerson ) Animations.pushNode(previousAnimation, index);
         Animations.applyAnimationTransform(itemStack, ItemCameraTransforms.TransformType.NONE, entity, matrixStack);
         if( isFirstPerson ) Animations.popNode();
+    }
+
+    public Vector3f getYPRAngle(int index){
+        if(previousAnimation == null) return new Vector3f(0,0,0);
+        Animations.pushNode(previousAnimation, index);
+        Vector3f result = Animations.getAlphaYPRAngle();
+        Animations.popNode();
+        return result;
     }
 
     public void applyRightHandTransform(MatrixStack matrixStack)

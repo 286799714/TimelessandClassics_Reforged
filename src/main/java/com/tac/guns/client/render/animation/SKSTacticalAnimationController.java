@@ -1,21 +1,19 @@
 package com.tac.guns.client.render.animation;
 
 import com.tac.guns.GunMod;
-import com.tac.guns.client.render.animation.module.AnimationMeta;
-import com.tac.guns.client.render.animation.module.AnimationSoundMeta;
-import com.tac.guns.client.render.animation.module.Animations;
-import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.render.animation.module.*;
 import com.tac.guns.init.ModItems;
 import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 
-public class SKSTacticalAnimationController extends GunAnimationController {
+public class SKSTacticalAnimationController extends GunAnimationController implements CameraAnimated {
     public static int INDEX_BODY = 4;
     public static int INDEX_LEFT_HAND = 6;
     public static int INDEX_RIGHT_HAND = 0;
     public static int INDEX_MAGAZINE = 3;
     public static int INDEX_BOLT = 2;
+    public static int CAMERA_INDEX = 9;
 
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/sks_tactical_static.gltf"));
     public static final AnimationMeta RELOAD_NORM = new AnimationMeta(new ResourceLocation("tac","animations/sks_tactical_reload_norm.gltf"));
@@ -75,5 +73,10 @@ public class SKSTacticalAnimationController extends GunAnimationController {
     @Override
     protected int getLeftHandNodeIndex() {
         return INDEX_LEFT_HAND;
+    }
+
+    @Override
+    public int getCameraNodeIndex() {
+        return CAMERA_INDEX;
     }
 }

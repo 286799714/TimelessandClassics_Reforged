@@ -58,7 +58,7 @@
     "hipfireMoveScale": 0,
     "hipfireRecoilScale": 0,
     "showDynamicHipfire": true,
-    "weaponType": 5
+    "weaponType": 6
   },
   "modules": {
     "zoom":{
