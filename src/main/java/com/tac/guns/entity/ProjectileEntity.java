@@ -4,6 +4,7 @@ package com.tac.guns.entity;
 
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Config;
+import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.Gun.Projectile;
@@ -177,6 +178,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 {
                     gunSpread *= Math.max(1 , (2F * ( 1 + SyncedPlayerData.instance().get((PlayerEntity) shooter, ModSyncedDataKeys.MOVING))) * modifiedGun.getGeneral().getMovementInaccuracy());
                 }
+            } else {
+                gunSpread = (float) (GunModifierHelper.getModifiedHipFireSpread(weapon, gunSpread) * AimingHandler.get().aimState());
             }
             if(((PlayerEntity) shooter).isCrouching() && modifiedGun.getGeneral().getProjectileAmount() == 1)
             {
