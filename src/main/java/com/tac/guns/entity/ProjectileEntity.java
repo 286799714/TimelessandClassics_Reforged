@@ -171,7 +171,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             if(!SyncedPlayerData.instance().get((PlayerEntity) shooter, ModSyncedDataKeys.AIMING))
             {
                 if(gunSpread < 0.5)
-                    gunSpread+=0.5f;
+                    gunSpread += 0.5f;
                 gunSpread *= modifiedGun.getGeneral().getHipFireInaccuracy();
                 gunSpread = GunModifierHelper.getModifiedHipFireSpread(weapon, gunSpread);
                 if(SyncedPlayerData.instance().get((PlayerEntity) shooter, ModSyncedDataKeys.MOVING) != 0)
@@ -179,7 +179,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     gunSpread *= Math.max(1 , (2F * ( 1 + SyncedPlayerData.instance().get((PlayerEntity) shooter, ModSyncedDataKeys.MOVING))) * modifiedGun.getGeneral().getMovementInaccuracy());
                 }
             } else {
-                gunSpread = (float) (GunModifierHelper.getModifiedHipFireSpread(weapon, gunSpread) * AimingHandler.get().aimState());
+                if(gunSpread < 0.5)
+                    gunSpread += 0.5f;
+                gunSpread *= (modifiedGun.getGeneral().getHipFireInaccuracy() * AimingHandler.get().aimState());
+                gunSpread = GunModifierHelper.getModifiedHipFireSpread(weapon, gunSpread);
             }
             if(((PlayerEntity) shooter).isCrouching() && modifiedGun.getGeneral().getProjectileAmount() == 1)
             {
