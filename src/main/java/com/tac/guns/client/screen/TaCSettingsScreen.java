@@ -38,6 +38,8 @@ public class TaCSettingsScreen extends SettingsScreen {
             this.optionsList.addOption(GunOptions.HIDE_LEFT_HAND);
             this.optionsList.addOption(GunOptions.ALLOW_SHOOTER_BREAK);
             this.optionsList.addOption(GunOptions.ALLOW_EXPLOSION_BREAK);
+            this.optionsList.addOption(GunOptions.EXPLOSION_FIRE);
+
             this.optionsList.addOption(GunOptions.SHOW_FPS_TRAILS_EXIST);
 
             this.optionsList.addOption(GunOptions.Fire_Volume);

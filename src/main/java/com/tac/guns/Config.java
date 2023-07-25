@@ -379,6 +379,8 @@ public class Config
 
         public final ForgeConfigSpec.BooleanValue forceCameraShakeOnFire;
 
+        public final ForgeConfigSpec.BooleanValue explosionCauseFire;
+        public final ForgeConfigSpec.BooleanValue fireStarterCauseFire;
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
@@ -413,7 +415,8 @@ public class Config
 
                 this.forceCameraShakeOnFire = builder.comment("Force camera shake on for all players, since control over the weapon is reduced with this off, having a client only options could lead to balance issues.").define("forceCameraShakeOnFire",
                         false);
-
+                this.explosionCauseFire = builder.comment("If enable, explosion will cause fire").define("explosionCauseFire", false);
+                this.fireStarterCauseFire = builder.comment("If enable, Fire Starter will cause fire").define("fireStarterCauseFire", false);
             }
             builder.pop();
         }

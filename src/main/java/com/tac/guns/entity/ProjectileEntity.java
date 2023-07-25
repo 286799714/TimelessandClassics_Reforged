@@ -465,16 +465,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
             this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
 
-//            int fireStarterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
-//            if(fireStarterLevel > 0 && Config.COMMON.gameplay.enableGunGriefing.get())
-//            {
-//                BlockPos offsetPos = pos.offset(blockRayTraceResult.getFace());
-//                if(AbstractFireBlock.canLightBlock(this.world, offsetPos, blockRayTraceResult.getFace()))
-//                {
-//                    BlockState fireState = AbstractFireBlock.getFireForPlacement(this.world, offsetPos);
-//                    this.world.setBlockState(offsetPos, fireState, 11);
-//                }
-//            }
+            int fireStarterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
+            if(fireStarterLevel > 0 && Config.COMMON.gameplay.fireStarterCauseFire.get())
+            {
+                BlockPos offsetPos = pos.offset(blockRayTraceResult.getFace());
+                if(AbstractFireBlock.canLightBlock(this.world, offsetPos, blockRayTraceResult.getFace()))
+                {
+                    BlockState fireState = AbstractFireBlock.getFireForPlacement(this.world, offsetPos);
+                    this.world.setBlockState(offsetPos, fireState, 11);
+                }
+            }
             //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
             this.remove();
             return;
@@ -944,7 +944,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             return;
 
         Explosion.Mode mode = Config.COMMON.gameplay.enableExplosionBreak.get() ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
-        Explosion explosion = new ProjectileExplosion(world, entity, null, null, entity.getPosX(), entity.getPosY(), entity.getPosZ(), radius, false, mode);
+        Explosion explosion = new ProjectileExplosion(world, entity, null, null, entity.getPosX(), entity.getPosY(), entity.getPosZ(), radius, mode);
 
         if(net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;
