@@ -329,7 +329,7 @@ public class AimingHandler
         {
             this.previousAim = this.currentAim;
             double vAmplifier = 0.1;
-            if(SyncedPlayerData.instance().get(player, ModSyncedDataKeys.AIMING) || (player.isUser() && AimingHandler.this.isAiming()))
+            if(SyncedPlayerData.instance().get(player, ModSyncedDataKeys.AIMING) || (player.isUser() && (AimingHandler.this.isAiming())))
             {
                 if(this.amplifier < 1.3)
                 {
@@ -367,6 +367,11 @@ public class AimingHandler
             }
         }
 
+        public float aimState() {
+            float t = (float) (1F - currentAim / 4);
+            return t >= 0 || t <= 1 ? t : 0;
+        }
+
         public boolean isAiming()
         {
             return this.currentAim != 0 || this.previousAim != 0;
@@ -376,18 +381,12 @@ public class AimingHandler
         {
             return (this.previousAim + (this.currentAim - this.previousAim) * (this.previousAim == 0 || this.previousAim == MAX_AIM_PROGRESS ? 0 : partialTicks)) / (float) MAX_AIM_PROGRESS;
         }
-
-        public double aimState() {
-            if (this.currentAim / MAX_AIM_PROGRESS > 1f) return 0f;
-            return this.currentAim < 0 ? 1f : (1f - this.currentAim / MAX_AIM_PROGRESS);
-        }
     }
 
-    public double aimState() {
+    public float aimState() {
         return this.localTracker.aimState();
     }
 
     public void cancelAim() {
-        if (this.toggledAim) this.aiming = false;
     }
 }

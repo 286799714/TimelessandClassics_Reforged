@@ -180,7 +180,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 }
             } else {
                 if(gunSpread < 0.5)
-                    gunSpread += 0.5f;
+                    gunSpread += 0.5f * AimingHandler.get().aimState();
                 gunSpread *= (modifiedGun.getGeneral().getHipFireInaccuracy() * AimingHandler.get().aimState());
                 gunSpread = GunModifierHelper.getModifiedHipFireSpread(weapon, gunSpread);
             }

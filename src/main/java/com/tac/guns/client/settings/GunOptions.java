@@ -85,26 +85,6 @@ public class GunOptions
         Config.CLIENT.display.hideLeftHand.set(value);
         Config.saveClientConfig();
     });
-    //----------------------TEST------------------------
-    public static final BooleanOption ALLOW_SHOOTER_BREAK = new BooleanOption("tac.options.shooterBreak", (settings) -> {
-        return Config.COMMON.gameplay.enableGunGriefing.get();
-    }, (settings, value) -> {
-        Config.COMMON.gameplay.enableGunGriefing.set(value);
-        Config.saveClientConfig();
-    });
-    public static final BooleanOption ALLOW_EXPLOSION_BREAK = new BooleanOption("tac.options.explosionBreak", (settings) -> {
-        return Config.COMMON.gameplay.enableExplosionBreak.get();
-    }, (settings, value) -> {
-        Config.COMMON.gameplay.enableExplosionBreak.set(value);
-        Config.saveClientConfig();
-    });
-    public static final BooleanOption EXPLOSION_FIRE = new BooleanOption("tac.options.explosionFire", (settings) -> {
-        return Config.COMMON.gameplay.explosionCauseFire.get();
-    }, (settings, value) -> {
-        Config.COMMON.gameplay.explosionCauseFire.set(value);
-        Config.saveClientConfig();
-    });
-    //--------------------------------------------------------------------
     public static final BooleanOption SHOW_FPS_TRAILS_EXIST = new BooleanOption("tac.options.showFirstPersonBulletTrails", (settings) -> {
         return Config.CLIENT.display.showFirstPersonBulletTrails.get();
     }, (settings, value) -> {
