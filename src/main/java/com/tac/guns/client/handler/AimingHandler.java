@@ -377,4 +377,8 @@ public class AimingHandler
             return (this.previousAim + (this.currentAim - this.previousAim) * (this.previousAim == 0 || this.previousAim == MAX_AIM_PROGRESS ? 0 : partialTicks)) / (float) MAX_AIM_PROGRESS;
         }
     }
+
+    public void cancelAim() {
+        if (this.toggledAim) this.aiming = false;
+    }
 }

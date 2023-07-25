@@ -102,8 +102,9 @@ public enum AnimationHandler {
         }
         GunAnimationController controller = GunAnimationController.fromItem(itemStack.getItem());
         if (controller == null) return;
-        if(!reloading)
-            return;
+        if(!reloading) return;
+
+        AimingHandler.get().cancelAim();
         AnimationMeta reloadEmptyMeta = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
         AnimationMeta reloadNormalMeta = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL);
         if (Gun.hasAmmo(itemStack)) {
@@ -193,8 +194,10 @@ public enum AnimationHandler {
     		{
     			controller.stopAnimation();
                 if (Gun.hasAmmo(stack)) {
+                    AimingHandler.get().cancelAim();
                     controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT);
                 } else {
+                    AimingHandler.get().cancelAim();
                     controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT_EMPTY);
                 }
     		}
@@ -216,6 +219,7 @@ public enum AnimationHandler {
                 if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.DRAW) ||
                         controller.isAnimationRunning(GunAnimationController.AnimationLabel.PUMP))
                     event.setCanceled(true);
+                if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.DRAW)) AimingHandler.get().cancelAim();
             }
         }
     }
@@ -235,6 +239,7 @@ public enum AnimationHandler {
     public boolean isReloadingIntro(Item item){
         GunAnimationController controller = GunAnimationController.fromItem(item);
         if(controller == null) return false;
+        AimingHandler.get().cancelAim();
         return controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_INTRO);
     }
 
@@ -242,12 +247,14 @@ public enum AnimationHandler {
         GunAnimationController controller = GunAnimationController.fromItem(item);
         if(controller == null) return;
         controller.stopAnimation();
+        AimingHandler.get().cancelAim();
         controller.runAnimation(GunAnimationController.AnimationLabel.RELOAD_LOOP);
     }
 
     public void onReloadEnd(Item item){
         GunAnimationController controller = GunAnimationController.fromItem(item);
         if(controller == null) return;
+        AimingHandler.get().cancelAim();
         if(controller instanceof PumpShotgunAnimationController ) {
             if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL_END) != null) {
                 if(SyncedPlayerData.instance().get(Minecraft.getInstance().player, ModSyncedDataKeys.STOP_ANIMA))
@@ -266,6 +273,7 @@ public enum AnimationHandler {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event){
         if(Minecraft.getInstance().player == null) return;
+        AimingHandler.get().cancelAim();
         ItemStack stack = Minecraft.getInstance().player.getHeldItemMainhand();
         GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
         if (controller instanceof PumpShotgunAnimationController) {
