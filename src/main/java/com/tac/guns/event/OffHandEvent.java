@@ -1,5 +1,6 @@
 package com.tac.guns.event;
 
+import com.tac.guns.Config;
 import com.tac.guns.item.GunItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +23,7 @@ public class OffHandEvent {
 
     @SubscribeEvent
     public static void renderOffHandEvent(RenderHandEvent event) {
-        if (event.getHand() == Hand.OFF_HAND) {
+        if (event.getHand() == Hand.OFF_HAND && Config.CLIENT.display.hideLeftHand.get()) {
             Minecraft mc = Minecraft.getInstance();
             PlayerEntity player = mc.player;
             ItemStack mainHand = player.getHeldItemMainhand();
@@ -41,7 +42,7 @@ public class OffHandEvent {
 
     @SubscribeEvent
     public static void useOffHandEvent(InputEvent.ClickInputEvent event) {
-        if (event.getHand() == Hand.OFF_HAND) {
+        if (event.getHand() == Hand.OFF_HAND && Config.CLIENT.display.hideLeftHand.get()) {
             Minecraft mc = Minecraft.getInstance();
             PlayerEntity player = mc.player;
             ItemStack mainHand = player.getHeldItemMainhand();

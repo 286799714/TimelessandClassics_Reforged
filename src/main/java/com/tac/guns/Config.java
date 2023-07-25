@@ -102,6 +102,8 @@ public class Config
 
 
         public final ForgeConfigSpec.BooleanValue showHitMarkers;
+
+        public final ForgeConfigSpec.BooleanValue hideLeftHand;
         public Display(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Configuration for display related options").push("display");
@@ -132,7 +134,9 @@ public class Config
                 this.showBulletTrails = builder.comment("Choose to see any bullet trails, trails by you or any other player / bot will not appear. Helps with Shader compatability.").define("showBulletTrails", true);
                 this.bulletTrailOpacity = builder.comment("Adjusts the opacity, AKA how see through the bullet trails are seen as, higher values can be seen better indoors or at daytime.").defineInRange("bulletTrailOpacity", 0.5, 0.1, 1.0);
 
-                this.showHitMarkers = builder.comment("true if you want hitmarkers to appear, both in hipfire and optics when hitting an entity.").define("showHitMarkers", true);
+                this.showHitMarkers = builder.comment("True if you want hitmarkers to appear, both in hipfire and optics when hitting an entity.").define("showHitMarkers", true);
+
+                this.hideLeftHand = builder.comment("True if you don't want pack up the item on your left hand, this option will keep the item but unable to use it and stop render it.").define("hideLeftHand",true);
             }
             builder.pop();
         }
@@ -351,6 +355,7 @@ public class Config
     public static class Gameplay
     {
         public final ForgeConfigSpec.BooleanValue enableGunGriefing;
+        public final ForgeConfigSpec.BooleanValue enableExplosionBreak;
         public final ForgeConfigSpec.DoubleValue growBoundingBoxAmountV2;
         public final ForgeConfigSpec.BooleanValue enableHeadShots;
         public final ForgeConfigSpec.DoubleValue headShotDamageMultiplier;
@@ -379,7 +384,8 @@ public class Config
         {
             builder.comment("Properties relating to gameplay").push("gameplay");
             {
-                this.enableGunGriefing = builder.comment("If enable, allows guns to shoot out glass and remove blocks on explosions").define("enableGunGriefing", true);
+                this.enableGunGriefing = builder.comment("If enable, allows guns to shoot out glass").define("enableGunGriefing", true);
+                this.enableExplosionBreak = builder.comment("If enable, allows guns to remove blocks on explosions").define("enableExplosionBreak", false);
                 this.growBoundingBoxAmountV2 = builder.comment("The extra amount to expand an entity's bounding box when checking for projectile collision. Setting this value higher will make it easier to hit entities").defineInRange(
                         "growBoundingBoxAmountV2", 0.0, 0.0, 1.0);
                 this.enableHeadShots = builder.comment("Enables the check for head shots for players. Projectiles that hit the head of a player will have increased damage.").define("enableHeadShots", true);
