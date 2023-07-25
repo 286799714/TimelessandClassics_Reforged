@@ -113,8 +113,10 @@ public class AimingHandler
                 this.aimingMap.remove(player);
             }
         }
-        if (this.aiming)
+        if (this.aiming){
             player.setSprinting(false);
+            Minecraft.getInstance().gameSettings.keyBindSprint.setPressed(false);
+        }
     }
 
     @Nullable
