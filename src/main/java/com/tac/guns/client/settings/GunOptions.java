@@ -80,9 +80,9 @@ public class GunOptions
         Config.saveClientConfig();
     });
     public static final BooleanOption HIDE_LEFT_HAND = new BooleanOption("tac.options.hideLeftHand", (settings) -> {
-        return Config.COMMON.gameplay.hideLeftHand.get();
+        return Config.CLIENT.display.hideLeftHand.get();
     }, (settings, value) -> {
-        Config.COMMON.gameplay.hideLeftHand.set(value);
+        Config.CLIENT.display.hideLeftHand.set(value);
         Config.saveClientConfig();
     });
     public static final BooleanOption SHOW_FPS_TRAILS_EXIST = new BooleanOption("tac.options.showFirstPersonBulletTrails", (settings) -> {

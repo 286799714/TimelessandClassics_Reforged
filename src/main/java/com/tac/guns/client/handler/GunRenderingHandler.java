@@ -633,7 +633,6 @@ public class GunRenderingHandler {
         Objects.requireNonNull(entity);
         int blockLight = entity.isBurning() ? 15 : entity.world.getLightFor(LightType.BLOCK, new BlockPos(entity.getEyePosition(event.getPartialTicks())));
         blockLight += (this.entityIdForMuzzleFlash.contains(entity.getEntityId()) ? 3 : 0); // 3
-        blockLight = Math.min(blockLight, 15);
         int packedLight = LightTexture.packLight(blockLight, entity.world.getLightFor(LightType.SKY, new BlockPos(entity.getEyePosition(event.getPartialTicks()))));
 
         /* Renders the reload arm. Will only render if actually reloading. This is applied before

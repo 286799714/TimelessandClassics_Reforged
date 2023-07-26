@@ -40,12 +40,6 @@ public class ModSyncedDataKeys
             .resetOnDeath()
             .build();
 
-    public static final SyncedDataKey<Float> AIMING_STATE = SyncedDataKey.builder(Serializers.FLOAT)
-            .id(new ResourceLocation(Reference.MOD_ID, "aiming_state"))
-            .defaultValueSupplier(() -> 0f)
-            .resetOnDeath()
-            .build();
-
     public static final SyncedDataKey<Boolean> QREPAIRING = SyncedDataKey.builder(Serializers.BOOLEAN)
             .id(new ResourceLocation(Reference.MOD_ID, "qrepairing"))
             .defaultValueSupplier(() -> false)
@@ -58,7 +52,6 @@ public class ModSyncedDataKeys
         SyncedPlayerData.instance().registerKey(SHOOTING);
         SyncedPlayerData.instance().registerKey(RELOADING);
         SyncedPlayerData.instance().registerKey(MOVING);
-        SyncedPlayerData.instance().registerKey(AIMING_STATE);
         SyncedPlayerData.instance().registerKey(STOP_ANIMA);
         SyncedPlayerData.instance().registerKey(QREPAIRING);
     }

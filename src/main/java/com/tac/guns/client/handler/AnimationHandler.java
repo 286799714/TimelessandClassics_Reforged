@@ -206,6 +206,7 @@ public enum AnimationHandler {
         AnimationSoundManager.INSTANCE.onPlayerDeath(event.getPlayer());
     }
 
+    private boolean flag;
     @SubscribeEvent
     public void onClientPlayerReload(GunReloadEvent.Pre event) {
         if (event.isClient()) {
@@ -283,6 +284,7 @@ public enum AnimationHandler {
         final ItemStack itemStack = player.inventory.getCurrentItem();
         if (itemStack.getItem() instanceof GunItem) {
             if (controller.isAnimationRunning()) {
+                if (!controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.DRAW))) flag = true;
                 if (!(controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.PULL_BOLT)) ||
                         controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.PUMP)) ||
                         controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY_END)) ||
@@ -290,10 +292,17 @@ public enum AnimationHandler {
                         controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_LOOP)) ||
                         controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.STATIC)) ||
                         controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.DRAW)))) {
-                    if (AimingHandler.get().isAiming())
+                    if (AimingHandler.get().isAiming() || AimingHandler.get().isToggledAim())
                         AimingHandler.get().cancelAim();
-                } else if (AimingHandler.get().getCanceling())
-                    AimingHandler.get().setCanceling();
+                } else if (controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.DRAW)))
+                    if (AimingHandler.get().isAiming() || AimingHandler.get().isToggledAim())
+                        if (flag) {
+                            AimingHandler.get().cancelAim();
+                            flag = false;
+                        } else {
+                            if (AimingHandler.get().getCanceling())
+                                AimingHandler.get().setCanceling();
+                        }
             } else if (AimingHandler.get().getCanceling())
                 AimingHandler.get().setCanceling();
         }
