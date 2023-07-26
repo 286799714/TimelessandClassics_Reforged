@@ -79,6 +79,12 @@ public class GunOptions
         Config.CLIENT.display.scopeDoubleRender.set(value);
         Config.saveClientConfig();
     });
+    public static final BooleanOption HIDE_LEFT_HAND = new BooleanOption("tac.options.hideLeftHand", (settings) -> {
+        return Config.CLIENT.display.hideLeftHand.get();
+    }, (settings, value) -> {
+        Config.CLIENT.display.hideLeftHand.set(value);
+        Config.saveClientConfig();
+    });
     public static final BooleanOption SHOW_FPS_TRAILS_EXIST = new BooleanOption("tac.options.showFirstPersonBulletTrails", (settings) -> {
         return Config.CLIENT.display.showFirstPersonBulletTrails.get();
     }, (settings, value) -> {
