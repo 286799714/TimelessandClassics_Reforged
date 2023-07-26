@@ -435,7 +435,11 @@
     "tac.options.reloadBarExist": "显示装弹进度条",
     "tac.options.ammoCounterExist": "显示武器计数器",
     "tac.options.iconExist": "显示武器图标",
-    "tac.options.doubleRender": "启用瞄具双重渲染（若使用光影请关闭该选项）" ,
+    "tac.options.doubleRender": "启用瞄具双重渲染（若使用光影请关闭该选项）",
+    "tac.options.hideLeftHand": "在主手持枪时隐藏副手而非收起副手的物品",
+    "tac.options.shooterBreak": "允许子弹击碎玻璃",
+    "tac.options.explosionBreak": "允许爆炸摧毁方块",
+    "tac.options.explosionFire": "允许爆炸起火",
 
     "info.tac.current_level": "好感度等级",
     "info.tac.out_of_ammo": "装填弹药!",
