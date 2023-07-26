@@ -4,7 +4,6 @@ package com.tac.guns.entity;
 
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Config;
-import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.Gun.Projectile;
@@ -174,18 +173,13 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             if(!SyncedPlayerData.instance().get((PlayerEntity) shooter, ModSyncedDataKeys.AIMING))
             {
                 if(gunSpread < 0.5)
-                    gunSpread += 0.5f;
+                    gunSpread+=0.5f;
                 gunSpread *= modifiedGun.getGeneral().getHipFireInaccuracy();
                 gunSpread = GunModifierHelper.getModifiedHipFireSpread(weapon, gunSpread);
                 if(SyncedPlayerData.instance().get((PlayerEntity) shooter, ModSyncedDataKeys.MOVING) != 0)
                 {
                     gunSpread *= Math.max(1 , (2F * ( 1 + SyncedPlayerData.instance().get((PlayerEntity) shooter, ModSyncedDataKeys.MOVING))) * modifiedGun.getGeneral().getMovementInaccuracy());
                 }
-            } else {
-                if(gunSpread < 0.5)
-                    gunSpread += 0.5f * AimingHandler.get().aimState();
-                gunSpread = Math.max(gunSpread, gunSpread * (modifiedGun.getGeneral().getHipFireInaccuracy() * AimingHandler.get().aimState()));
-                gunSpread = GunModifierHelper.getModifiedHipFireSpread(weapon, gunSpread);
             }
             if(((PlayerEntity) shooter).isCrouching() && modifiedGun.getGeneral().getProjectileAmount() == 1)
             {
@@ -483,16 +477,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
             this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
 
-            int fireStarterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
-            if(fireStarterLevel > 0 && Config.COMMON.gameplay.fireStarterCauseFire.get())
-            {
-                BlockPos offsetPos = pos.offset(blockRayTraceResult.getFace());
-                if(AbstractFireBlock.canLightBlock(this.world, offsetPos, blockRayTraceResult.getFace()))
-                {
-                    BlockState fireState = AbstractFireBlock.getFireForPlacement(this.world, offsetPos);
-                    this.world.setBlockState(offsetPos, fireState, 11);
-                }
-            }
+//            int fireStarterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
+//            if(fireStarterLevel > 0 && Config.COMMON.gameplay.enableGunGriefing.get())
+//            {
+//                BlockPos offsetPos = pos.offset(blockRayTraceResult.getFace());
+//                if(AbstractFireBlock.canLightBlock(this.world, offsetPos, blockRayTraceResult.getFace()))
+//                {
+//                    BlockState fireState = AbstractFireBlock.getFireForPlacement(this.world, offsetPos);
+//                    this.world.setBlockState(offsetPos, fireState, 11);
+//                }
+//            }
             //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
             this.remove();
             return;
@@ -953,16 +947,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
      *
      * @param entity The entity to explode
      * @param radius The amount of radius the entity should deal
-     //* @param forceNone If true, forces the explosion mode to be NONE instead of config value
+     * @param forceNone If true, forces the explosion mode to be NONE instead of config value
      */
-    public static void createExplosion(Entity entity, float radius)
+    public static void createExplosion(Entity entity, float radius, boolean forceNone)
     {
         World world = entity.world;
         if(world.isRemote())
             return;
 
-        Explosion.Mode mode = Config.COMMON.gameplay.enableExplosionBreak.get() ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
-        Explosion explosion = new ProjectileExplosion(world, entity, null, null, entity.getPosX(), entity.getPosY(), entity.getPosZ(), radius, mode);
+        Explosion.Mode mode = Config.COMMON.gameplay.enableGunGriefing.get() && !forceNone ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
+        Explosion explosion = new ProjectileExplosion(world, entity, null, null, entity.getPosX(), entity.getPosY(), entity.getPosZ(), radius, false, mode);
 
         if(net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;
