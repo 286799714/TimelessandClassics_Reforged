@@ -290,6 +290,7 @@ public class AimingHandler {
         private double currentAim;
         private double previousAim;
         private double amplifier = 0.8;
+        private float prevDist = 0.0f;
 
         private void handleAiming(PlayerEntity player, ItemStack heldItem) {
             this.previousAim = this.currentAim;
@@ -323,7 +324,11 @@ public class AimingHandler {
             }
             float t = (float) (1F - currentAim / 4);
             float dist = (t >= 0 || t <= 1 ? t : 0);
-            PacketHandler.getPlayChannel().sendToServer(new MessageAimingState(dist));
+            if(prevDist != dist) {
+                SyncedPlayerData.instance().set(player, ModSyncedDataKeys.AIMING_STATE, dist);
+                PacketHandler.getPlayChannel().sendToServer(new MessageAimingState(dist));
+            }
+            prevDist = dist;
         }
 
         public boolean isAiming() {
