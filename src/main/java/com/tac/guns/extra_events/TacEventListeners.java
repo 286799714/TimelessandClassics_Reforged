@@ -19,6 +19,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -139,7 +141,15 @@ public class TacEventListeners {
         // TODO: Continue for dropping armor on a bot's death
     }*/
 
-
-
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase == TickEvent.Phase.START) {
+            Vector3d p0 = ProjectileEntity.cachePlayerPosition.getOrDefault(event.player, event.player.getPositionVec());
+            Vector3d p1 = event.player.getPositionVec();
+            ProjectileEntity.cachePlayerPosition.put(event.player, p1);
+            Vector3d v = p1.subtract(p0).mul(5,5,5);
+            ProjectileEntity.cachePlayerVelocity.put(event.player, v);
+        }
+    }
 
 }
