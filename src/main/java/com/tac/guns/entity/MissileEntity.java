@@ -51,19 +51,19 @@ public class MissileEntity extends ProjectileEntity
     @Override
     protected void onHitEntity(Entity entity, Vector3d hitVec, Vector3d startVec, Vector3d endVec, boolean headshot)
     {
-        createExplosion(this, this.power*Config.COMMON.missiles.explosionRadius.get().floatValue(), true);
+        createExplosion(this, this.power*Config.COMMON.missiles.explosionRadius.get().floatValue());
     }
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z)
     {
-        createExplosion(this, this.power*Config.COMMON.missiles.explosionRadius.get().floatValue(), true);
+        createExplosion(this, this.power*Config.COMMON.missiles.explosionRadius.get().floatValue());
         this.life = 0;
     }
 
     @Override
     public void onExpired()
     {
-        createExplosion(this, this.power*Config.COMMON.missiles.explosionRadius.get().floatValue(), true);
+        createExplosion(this, this.power*Config.COMMON.missiles.explosionRadius.get().floatValue());
     }
 }

@@ -1,6 +1,7 @@
 package com.tac.guns.world;
 
 import com.google.common.collect.Sets;
+import com.tac.guns.Config;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.Entity;
@@ -37,9 +38,9 @@ public class ProjectileExplosion extends Explosion
     private final Entity exploder;
     private final ExplosionContext context;
 
-    public ProjectileExplosion(World world, Entity exploder, @Nullable DamageSource source, @Nullable ExplosionContext context, double x, double y, double z, float size, boolean causesFire, Mode mode)
+    public ProjectileExplosion(World world, Entity exploder, @Nullable DamageSource source, @Nullable ExplosionContext context, double x, double y, double z, float size, Mode mode)
     {
-        super(world, exploder, source, context, x, y, z, size, causesFire, mode);
+        super(world, exploder, source, context, x, y, z, size, Config.COMMON.gameplay.explosionCauseFire.get(), mode);
         this.world = world;
         this.x = x;
         this.y = y;

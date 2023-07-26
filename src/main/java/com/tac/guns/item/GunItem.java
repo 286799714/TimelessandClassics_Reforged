@@ -1,5 +1,6 @@
 package com.tac.guns.item;
 
+import com.tac.guns.Config;
 import com.tac.guns.common.DiscardOffhand;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
@@ -173,9 +174,7 @@ public class GunItem extends Item implements IColored
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        /*
-        建议加个配置选项在这，让玩家选择打开还是不打开这个弹副手物品的功能
-        if (isSelected && !worldIn.isRemote)
+        if (isSelected && !worldIn.isRemote && !Config.CLIENT.display.hideLeftHand.get())
         {
             if (entityIn instanceof PlayerEntity)
             {
@@ -194,7 +193,6 @@ public class GunItem extends Item implements IColored
                 }
             }
         }
-        */
     }
 
     public static boolean isSingleHanded(ItemStack stack)

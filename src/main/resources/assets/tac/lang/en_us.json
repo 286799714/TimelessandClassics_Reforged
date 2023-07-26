@@ -462,7 +462,11 @@
     "tac.options.reloadBarExist": "Show Reloading Bar",
     "tac.options.ammoCounterExist": "Show Ammo Counter",
     "tac.options.iconExist": "Show Weapon Icon",
-    "tac.options.doubleRender": "Enable DR for Scopes" ,
+    "tac.options.doubleRender": "Enable DR for Scopes",
+    "tac.options.hideLeftHand": "Hide the item while the main hand is holding the gun instead of packing them up",
+    "tac.options.shooterBreak": "Allow bullets to break glass",
+    "tac.options.explosionBreak": "Allow explosion to destroy blocks",
+    "tac.options.explosionFire": "Allow explosion fire",
 
     "info.tac.current_level": "Current level",
     "info.tac.out_of_ammo": "RELOAD!",
