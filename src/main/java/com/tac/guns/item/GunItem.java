@@ -4,11 +4,9 @@ import com.tac.guns.Config;
 import com.tac.guns.common.DiscardOffhand;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
-import com.tac.guns.enchantment.EnchantmentTypes;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,8 +24,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 import com.tac.guns.init.ModItems;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 
 import javax.annotation.Nullable;
@@ -174,7 +170,7 @@ public class GunItem extends Item implements IColored
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (isSelected && !worldIn.isRemote && !Config.CLIENT.display.hideLeftHand.get())
+        if (isSelected && !worldIn.isRemote && !Config.COMMON.gameplay.hideLeftHand.get())
         {
             if (entityIn instanceof PlayerEntity)
             {

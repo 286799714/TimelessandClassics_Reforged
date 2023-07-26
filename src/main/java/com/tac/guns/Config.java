@@ -100,10 +100,8 @@ public class Config
         public final ForgeConfigSpec.BooleanValue showBulletTrails;
         public final ForgeConfigSpec.DoubleValue bulletTrailOpacity;
 
-
         public final ForgeConfigSpec.BooleanValue showHitMarkers;
 
-        public final ForgeConfigSpec.BooleanValue hideLeftHand;
         public Display(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Configuration for display related options").push("display");
@@ -135,8 +133,6 @@ public class Config
                 this.bulletTrailOpacity = builder.comment("Adjusts the opacity, AKA how see through the bullet trails are seen as, higher values can be seen better indoors or at daytime.").defineInRange("bulletTrailOpacity", 0.5, 0.1, 1.0);
 
                 this.showHitMarkers = builder.comment("True if you want hitmarkers to appear, both in hipfire and optics when hitting an entity.").define("showHitMarkers", true);
-
-                this.hideLeftHand = builder.comment("True if you don't want pack up the item on your left hand, this option will keep the item but unable to use it and stop render it.").define("hideLeftHand",true);
             }
             builder.pop();
         }
@@ -279,7 +275,6 @@ public class Config
     {
         public final ForgeConfigSpec.DoubleValue aimDownSightSensitivity;
 
-        public final ForgeConfigSpec.IntValue toggleAimDelay;
         public final ForgeConfigSpec.BooleanValue burstPress;
         public Controls(ForgeConfigSpec.Builder builder)
         {
@@ -287,7 +282,6 @@ public class Config
             {
                 this.aimDownSightSensitivity = builder.comment("A value to multiple the mouse sensitivity by when aiming down weapon sights. Go to (Options > Controls > Mouse Settings > ADS Sensitivity) in game to change this!").defineInRange("aimDownSightSensitivity", 0.75, 0.0, 2.0);
 
-                this.toggleAimDelay = builder.comment("The delay in ticks before being able to activate your toggleAim again, recommended to leave alone or increase past default!").defineInRange("toggleAimDelay", 1, 1, 60);
                 this.burstPress = builder.comment("Press to use a burst fire a gun, or hold to continue a burst, un-clicking cancels your burst").define("burstPress", true);
             }
             builder.pop();
@@ -381,6 +375,7 @@ public class Config
 
         public final ForgeConfigSpec.BooleanValue explosionCauseFire;
         public final ForgeConfigSpec.BooleanValue fireStarterCauseFire;
+        public final ForgeConfigSpec.BooleanValue hideLeftHand;
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
@@ -417,6 +412,7 @@ public class Config
                         false);
                 this.explosionCauseFire = builder.comment("If enable, explosion will cause fire").define("explosionCauseFire", false);
                 this.fireStarterCauseFire = builder.comment("If enable, Fire Starter will cause fire").define("fireStarterCauseFire", false);
+                this.hideLeftHand = builder.comment("True if you don't want pack up the item on your left hand, this option will keep the item but unable to use it and stop render it.").define("hideLeftHand",true);
             }
             builder.pop();
         }
