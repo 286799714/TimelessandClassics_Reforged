@@ -2,6 +2,7 @@ package com.tac.guns.client.handler;
 
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -30,6 +31,7 @@ import net.minecraft.client.settings.PointOfView;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.CooldownTracker;
@@ -43,6 +45,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -337,9 +340,16 @@ public class AimingHandler {
             }
         }
 
-        public float aimState() {
-            float t = (float) (1F - currentAim / 4);
-            return t >= 0 || t <= 1 ? t : 0;
+        public void aimState(Supplier<NetworkEvent.Context> supplier) {
+            supplier.get().enqueueWork(() ->
+            {
+                ServerPlayerEntity player = supplier.get().getSender();
+                if (player != null) {
+                    float t = (float) (1F - currentAim / 4);
+                    SyncedPlayerData.instance().set(player, ModSyncedDataKeys.AIMING_STATE, t >= 0 || t <= 1 ? t : 0);
+                }
+            });
+            supplier.get().setPacketHandled(true);
         }
 
         public boolean isAiming() {
@@ -349,10 +359,6 @@ public class AimingHandler {
         public double getNormalProgress(float partialTicks) {
             return (this.previousAim + (this.currentAim - this.previousAim) * (this.previousAim == 0 || this.previousAim == MAX_AIM_PROGRESS ? 0 : partialTicks)) / (float) MAX_AIM_PROGRESS;
         }
-    }
-
-    public float aimState() {
-        return this.localTracker.aimState();
     }
 
     public void cancelAim() {

@@ -40,6 +40,12 @@ public class ModSyncedDataKeys
             .resetOnDeath()
             .build();
 
+    public static final SyncedDataKey<Float> AIMING_STATE = SyncedDataKey.builder(Serializers.FLOAT)
+            .id(new ResourceLocation(Reference.MOD_ID, "aiming_state"))
+            .defaultValueSupplier(() -> 0f)
+            .resetOnDeath()
+            .build();
+
     public static final SyncedDataKey<Boolean> QREPAIRING = SyncedDataKey.builder(Serializers.BOOLEAN)
             .id(new ResourceLocation(Reference.MOD_ID, "qrepairing"))
             .defaultValueSupplier(() -> false)
