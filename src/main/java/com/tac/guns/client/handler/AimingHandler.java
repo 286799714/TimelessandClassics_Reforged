@@ -19,6 +19,7 @@ import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.impl.Scope;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageAim;
+import com.tac.guns.network.message.MessageAimingState;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 
@@ -29,15 +30,12 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.client.util.InputMappings;
-import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -45,7 +43,6 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -66,7 +63,6 @@ public class AimingHandler {
     private double normalisedAdsProgress;
     private boolean aiming = false;
     private boolean toggledAim = false;
-    private int toggledAimAwaiter = 0;
 
     public int getCurrentScopeZoomIndex() {
         return this.currentScopeZoomIndex;
@@ -83,24 +79,15 @@ public class AimingHandler {
     private AimingHandler() {
         InputHandler.SIGHT_SWITCH.addPressCallback(() -> {
             final Minecraft mc = Minecraft.getInstance();
-            if (
-                    mc.player != null
-                            && (
-                            mc.player.getHeldItemMainhand().getItem() instanceof GunItem
-                                    || Gun.getScope(mc.player.getHeldItemMainhand()) != null
-                    )
-            ) this.currentScopeZoomIndex++;
+            if (mc.player != null && (mc.player.getHeldItemMainhand().getItem() instanceof GunItem ||
+                    Gun.getScope(mc.player.getHeldItemMainhand()) != null))
+                this.currentScopeZoomIndex++;
         });
 
         InputHandler.AIM_TOGGLE.addPressCallback(() -> {
             final Minecraft mc = Minecraft.getInstance();
-            if (
-                    mc.player != null
-                            && mc.player.getHeldItemMainhand().getItem() instanceof GunItem
-                            && this.toggledAimAwaiter <= 0
-            ) {
+            if (mc.player != null && mc.player.getHeldItemMainhand().getItem() instanceof GunItem) {
                 this.forceToggleAim();
-                this.toggledAimAwaiter = Config.CLIENT.controls.toggleAimDelay.get();
             }
         });
     }
@@ -119,7 +106,7 @@ public class AimingHandler {
                 this.aimingMap.remove(player);
             }
         }
-        if (this.aiming){
+        if (this.aiming || this.toggledAim) {
             player.setSprinting(false);
             Minecraft.getInstance().gameSettings.keyBindSprint.setPressed(false);
         }
@@ -154,21 +141,16 @@ public class AimingHandler {
         if (player == null)
             return;
 
-        if (!canceling) {
-            if (this.toggledAimAwaiter > 0)
-                this.toggledAimAwaiter--;
-
-            if (this.isAiming()) {
-                if (!this.aiming) {
-                    SyncedPlayerData.instance().set(player, ModSyncedDataKeys.AIMING, true);
-                    PacketHandler.getPlayChannel().sendToServer(new MessageAim(true));
-                    this.aiming = true;
-                }
-            } else if (this.aiming) {
-                SyncedPlayerData.instance().set(player, ModSyncedDataKeys.AIMING, false);
-                PacketHandler.getPlayChannel().sendToServer(new MessageAim(false));
-                this.aiming = false;
+        if (this.isAiming()) {
+            if (!canceling) {
+                SyncedPlayerData.instance().set(player, ModSyncedDataKeys.AIMING, true);
+                PacketHandler.getPlayChannel().sendToServer(new MessageAim(true));
+                this.aiming = true;
             }
+        } else {
+            SyncedPlayerData.instance().set(player, ModSyncedDataKeys.AIMING, false);
+            PacketHandler.getPlayChannel().sendToServer(new MessageAim(false));
+            this.aiming = false;
         }
 
         this.localTracker.handleAiming(player, player.getHeldItem(Hand.MAIN_HAND));
@@ -271,11 +253,10 @@ public class AimingHandler {
     }
 
     public void forceToggleAim() {
-        if (!canceling) {
-            if (this.toggledAim)
-                this.toggledAim = false;
-            else
-                this.toggledAim = true;
+        if (this.toggledAim) {
+            this.toggledAim = false;
+        } else if (!canceling) {
+            this.toggledAim = true;
         }
     }
 
@@ -340,18 +321,9 @@ public class AimingHandler {
                     }
                 } else amplifier = 0.8;
             }
-        }
-
-        public void aimState(Supplier<NetworkEvent.Context> supplier) {
-            supplier.get().enqueueWork(() ->
-            {
-                ServerPlayerEntity player = supplier.get().getSender();
-                if (player != null) {
-                    float t = (float) (1F - currentAim / 4);
-                    SyncedPlayerData.instance().set(player, ModSyncedDataKeys.AIMING_STATE, t >= 0 || t <= 1 ? t : 0);
-                }
-            });
-            supplier.get().setPacketHandled(true);
+            float t = (float) (1F - currentAim / 4);
+            float dist = (t >= 0 || t <= 1 ? t : 0);
+            PacketHandler.getPlayChannel().sendToServer(new MessageAimingState(dist));
         }
 
         public boolean isAiming() {
@@ -369,22 +341,14 @@ public class AimingHandler {
         cancel(player);
     }
 
-    public void drawAim() {
-        PlayerEntity player = Minecraft.getInstance().player;
-        cancel(player);
-    }
-
     private void cancel(PlayerEntity player) {
-        if (this.aiming) {
+        if (this.aiming || this.toggledAim) {
             SyncedPlayerData.instance().set(player, ModSyncedDataKeys.AIMING, false);
             PacketHandler.getPlayChannel().sendToServer(new MessageAim(false));
             this.aiming = false;
-        }
-        if (this.toggledAim) {
-            SyncedPlayerData.instance().set(player, ModSyncedDataKeys.AIMING, false);
-            PacketHandler.getPlayChannel().sendToServer(new MessageAim(false));
             this.toggledAim = false;
         }
+
         this.localTracker.handleAiming(player, player.getHeldItem(Hand.MAIN_HAND));
     }
 
