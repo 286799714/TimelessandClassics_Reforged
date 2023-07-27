@@ -245,13 +245,13 @@ public enum AnimationHandler {
     }
 
     public void onReloadEnd(Item item) {
+        /*
         GunAnimationController controller = GunAnimationController.fromItem(item);
         if (controller == null) return;
         if (controller instanceof PumpShotgunAnimationController) {
             if (controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL_END) != null) {
                 if (SyncedPlayerData.instance().get(Minecraft.getInstance().player, ModSyncedDataKeys.STOP_ANIMA))
                     controller.stopAnimation();
-                //controller.runAnimation(GunAnimationController.AnimationLabel.RELOAD_NORMAL_END);
             }
         } else {
             if (SyncedPlayerData.instance().get(Minecraft.getInstance().player, ModSyncedDataKeys.STOP_ANIMA)) {
@@ -260,6 +260,7 @@ public enum AnimationHandler {
                 controller.stopAnimation();
             }
         }
+        */
     }
 
     @SubscribeEvent
