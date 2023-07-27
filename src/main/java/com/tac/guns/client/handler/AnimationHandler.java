@@ -282,18 +282,8 @@ public enum AnimationHandler {
         final PlayerEntity player = Minecraft.getInstance().player;
         final ItemStack itemStack = player.inventory.getCurrentItem();
         if (itemStack.getItem() instanceof GunItem) {
-            if (controller.isAnimationRunning()) {
-                if (!(controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.PULL_BOLT)) ||
-                        controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.PUMP)) ||
-                        controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY_END)) ||
-                        controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL_END)) ||
-                        controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_LOOP)) ||
-                        controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.STATIC)) ||
-                        controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.DRAW)))) {
-                    if (AimingHandler.get().isAiming())
-                        AimingHandler.get().cancelAim();
-                } else if (AimingHandler.get().getCanceling())
-                    AimingHandler.get().setCanceling();
+            if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT)) {
+                if(AimingHandler.get().isAiming()) controller.stopAnimation();
             } else if (AimingHandler.get().getCanceling())
                 AimingHandler.get().setCanceling();
         }
