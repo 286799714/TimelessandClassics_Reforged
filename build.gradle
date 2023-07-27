@@ -28,8 +28,8 @@ archivesBaseName = "tac-a"
 
 
 //name = "tac-a-0.3.0.44-1.16.5"
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+//sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 //sourceSets.main.resources { srcDir 'src/generated/resources' }
 

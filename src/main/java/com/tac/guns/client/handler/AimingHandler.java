@@ -92,6 +92,7 @@ public class AimingHandler {
         });
     }
 
+    private boolean originalSprint = false;
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.START)
@@ -107,7 +108,13 @@ public class AimingHandler {
             }
         }
         if (isAiming()) {
-            player.setSprinting(false);
+            if (player.isSprinting()){
+                originalSprint = true;
+                player.setSprinting(false);
+            }
+        }else if (originalSprint){
+            originalSprint=false;
+            player.setSprinting(true);
         }
     }
 
