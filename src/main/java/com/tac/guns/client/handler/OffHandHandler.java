@@ -1,7 +1,7 @@
-package com.tac.guns.event;
+package com.tac.guns.client.handler;
 
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
-import com.tac.guns.Config;
+import com.tac.guns.Reference;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
 import net.minecraft.client.Minecraft;
@@ -20,12 +20,12 @@ import static com.tac.guns.item.GunItem.isSingleHanded;
  * @author Arcomit
  * @updateDate 2023/7/25
  */
-@Mod.EventBusSubscriber(modid = "tac",value = Dist.CLIENT)
-public class OffHandEvent {
+@Mod.EventBusSubscriber(modid = Reference.MOD_ID,value = Dist.CLIENT)
+public class OffHandHandler {
 
     @SubscribeEvent
     public static void renderOffHandEvent(RenderHandEvent event) {
-        if (event.getHand() == Hand.OFF_HAND && Config.COMMON.gameplay.hideLeftHand.get()) {
+        if (event.getHand() == Hand.OFF_HAND) {
             Minecraft mc = Minecraft.getInstance();
             PlayerEntity player = mc.player;
             ItemStack mainHand = player.getHeldItemMainhand();
@@ -44,7 +44,7 @@ public class OffHandEvent {
 
     @SubscribeEvent
     public static void useOffHandEvent(InputEvent.ClickInputEvent event) {
-        if (event.getHand() == Hand.OFF_HAND && Config.COMMON.gameplay.hideLeftHand.get()) {
+        if (event.getHand() == Hand.OFF_HAND) {
             Minecraft mc = Minecraft.getInstance();
             PlayerEntity player = mc.player;
             ItemStack mainHand = player.getHeldItemMainhand();

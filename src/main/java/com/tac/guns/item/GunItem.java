@@ -1,6 +1,8 @@
 package com.tac.guns.item;
 
 import com.tac.guns.Config;
+import com.tac.guns.client.handler.AimingHandler;
+import com.tac.guns.client.handler.ReloadHandler;
 import com.tac.guns.common.DiscardOffhand;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
@@ -170,25 +172,40 @@ public class GunItem extends Item implements IColored
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (isSelected && !worldIn.isRemote && !Config.COMMON.gameplay.hideLeftHand.get())
-        {
-            if (entityIn instanceof PlayerEntity)
+        if (isSelected){
+            if (stack.getOrCreateTag().get("tac.isSelected") == null){
+                stack.getOrCreateTag().putBoolean("tac.isSelected",true);
+            }
+            if (!worldIn.isRemote && !Config.COMMON.gameplay.hideLeftHand.get())
             {
-                PlayerEntity playerEntity = (PlayerEntity) entityIn;
-                if (!isSingleHanded(stack) && !DiscardOffhand.isSafeTime(playerEntity))
+                if (entityIn instanceof PlayerEntity)
                 {
-                    ItemStack offHand = playerEntity.getHeldItemOffhand();
-                    if (!(offHand.getItem() instanceof GunItem) && !offHand.isEmpty()) {
-                        ItemEntity entity = playerEntity.dropItem(offHand, false);
-                        playerEntity.setHeldItem(Hand.OFF_HAND, ItemStack.EMPTY);
-                        if (entity != null)
-                        {
-                            entity.setNoPickupDelay();
+                    PlayerEntity playerEntity = (PlayerEntity) entityIn;
+                    playerEntity.inventory.currentItem=itemSlot;
+                    if (!isSingleHanded(stack) && !DiscardOffhand.isSafeTime(playerEntity))
+                    {
+                        ItemStack offHand = playerEntity.getHeldItemOffhand();
+                        if (!(offHand.getItem() instanceof GunItem) && !offHand.isEmpty()) {
+                            ItemEntity entity = playerEntity.dropItem(offHand, false);
+                            playerEntity.setHeldItem(Hand.OFF_HAND, ItemStack.EMPTY);
+                            if (entity != null)
+                            {
+                                entity.setNoPickupDelay();
+                            }
                         }
                     }
                 }
             }
+        }else if (stack.getOrCreateTag().get("tac.isSelected") != null){
+            if (worldIn.isRemote){
+                if (AimingHandler.get().isAiming()){
+                    AimingHandler.get().cancelAim();
+                }
+                ReloadHandler.get().setReloading(false);
+            }
+            stack.getOrCreateTag().remove("tac.isSelected");
         }
+
     }
 
     public static boolean isSingleHanded(ItemStack stack)
