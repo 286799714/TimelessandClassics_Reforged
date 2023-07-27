@@ -28,18 +28,24 @@ public class KeyBindingMixin{
 
     @Overwrite
     public static void onTick(InputMappings.Input key) {
-        HashSet<KeyBinding> pressedTacKeyBindings = new HashSet<>();
-        for (KeyBinding tac : TacKeyBingding.TAC_KEYBINDS) {
+        HashSet<TacKeyBingding> pressedTacKeyBindings = new HashSet<>();
+        boolean isTriggerOtherKey = true;
+
+        for (TacKeyBingding tac : TacKeyBingding.TAC_KEYBINDS) {
             if (tac.getKey().equals(key)) {
                 ++((KeyBindingMixin)((Object)tac)).pressTime;
                 pressedTacKeyBindings.add(tac);
+                isTriggerOtherKey = tac.isTriggerOtherKey;
             }
         }//Let the Tac key be triggered first.
-        for (KeyBinding keybinding : HASH.lookupAll(key)) {
-            if (keybinding != null && !pressedTacKeyBindings.contains(keybinding)) {
-                ++((KeyBindingMixin)((Object)keybinding)).pressTime;
-            }
-        }//The same key other than Tac.
+
+        if (isTriggerOtherKey){
+            for (KeyBinding keybinding : HASH.lookupAll(key)) {
+                if (keybinding != null && !pressedTacKeyBindings.contains(keybinding)) {
+                    ++((KeyBindingMixin)((Object)keybinding)).pressTime;
+                }
+            }//The same key other than Tac.
+        }
     }
 
 }
