@@ -107,14 +107,16 @@ public class AimingHandler {
                 this.aimingMap.remove(player);
             }
         }
-        if (isAiming()) {
-            if (player.isSprinting()){
-                originalSprint = true;
-                player.setSprinting(false);
+        if (player == Minecraft.getInstance().player){
+            if (isAiming()) {
+                if (player.isSprinting()){
+                    originalSprint = true;
+                    player.setSprinting(false);
+                }
+            }else if (originalSprint){
+                originalSprint=false;
+                player.setSprinting(true);
             }
-        }else if (originalSprint){
-            originalSprint=false;
-            player.setSprinting(true);
         }
     }
 
