@@ -367,7 +367,6 @@ public class  ShootingHandler
             return;
 
         player.setSprinting(false);
-        Minecraft.getInstance().gameSettings.keyBindSprint.setPressed(false);
         if(GunRenderingHandler.get().sprintTransition != 0) {
             this.shooting = false;
             return;

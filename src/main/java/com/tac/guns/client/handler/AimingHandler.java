@@ -106,9 +106,8 @@ public class AimingHandler {
                 this.aimingMap.remove(player);
             }
         }
-        if (this.aiming || this.toggledAim) {
+        if (isAiming()) {
             player.setSprinting(false);
-            Minecraft.getInstance().gameSettings.keyBindSprint.setPressed(false);
         }
     }
 
