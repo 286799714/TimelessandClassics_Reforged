@@ -19,9 +19,9 @@ public class SprintingHandler {
         if (event.getSprinting()){
             if ((AimingHandler.get().isAiming()) || ShootingHandler.get().isShooting()){
                 event.setSprinting(false);
-                //阻止玩家进入疾跑状态（是阻止,而非在setSprinting(true)后再setSprinting(false)）
-                //单击疾跑键进入疾跑只会触发一次setSprinting(true),所以能用setSprinting(false)取消,但是长按疾跑键时会一直触发setSprinting(true)
-                //setSprinting()方法如果为True时就会给玩家加速度,长按疾跑键时在setSprinting(true)后setSprinting(false)的时间差会导致无法减速。
+                //Prevent the player from entering a Sprinting state (is prevent, not set Sprinting(false) after set Sprinting(true))
+                //Clicking Sprinting to enter the sprint will only trigger set Sprinting(true) once, so we can cancel it with set Sprinting(false), but long pressing the sprint key will always trigger set Sprinting(true).
+                //The set Sprinting() method will give the player acceleration if it is True, and the time difference between set Sprinting(true) and set Sprinting(false) will prevent the player from slowing down.
             }
         }
     }

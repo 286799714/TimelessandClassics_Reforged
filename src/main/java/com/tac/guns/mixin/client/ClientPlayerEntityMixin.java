@@ -18,7 +18,7 @@ public class ClientPlayerEntityMixin {
     @ModifyVariable(at = @At("HEAD"),method = "setSprinting")
     public boolean setSprinting(boolean sprinting){
         ClientSetSprintingEvent event = new ClientSetSprintingEvent(sprinting);
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);//当玩家疾跑状态发生改变时发送事件
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);//Send an event when the player's sprint state changes
         return event.getSprinting();
     }
 }

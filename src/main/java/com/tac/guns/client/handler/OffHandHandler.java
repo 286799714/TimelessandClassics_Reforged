@@ -31,10 +31,10 @@ public class OffHandHandler {
             ItemStack mainHand = player.getHeldItemMainhand();
             ItemStack offHand = event.getItemStack();
             if (mainHand.getItem() instanceof GunItem) {
-                if (!isSingleHanded(mainHand) || SyncedPlayerData.instance().get((PlayerEntity) player, ModSyncedDataKeys.RELOADING))//判断主手是否持有枪械且是否为双手武器
+                if (!isSingleHanded(mainHand) || SyncedPlayerData.instance().get((PlayerEntity) player, ModSyncedDataKeys.RELOADING))
                 {
                     if (!(offHand.getItem() instanceof GunItem) && !offHand.isEmpty()) {
-                        event.setCanceled(true);//关闭渲染
+                        event.setCanceled(true);//Turn off rendering.
                     }
                 }
             }
@@ -50,11 +50,11 @@ public class OffHandHandler {
             ItemStack mainHand = player.getHeldItemMainhand();
             ItemStack offHand = player.getHeldItemOffhand();
             if (mainHand.getItem() instanceof GunItem) {
-                if (!isSingleHanded(mainHand) || SyncedPlayerData.instance().get((PlayerEntity) player, ModSyncedDataKeys.RELOADING))//判断主手是否持有枪械且是否为双手武器
+                if (!isSingleHanded(mainHand) || SyncedPlayerData.instance().get((PlayerEntity) player, ModSyncedDataKeys.RELOADING))
                 {
                     if (!(offHand.getItem() instanceof GunItem) && !offHand.isEmpty()) {
-                        event.setSwingHand(false);//关闭手臂摆动
-                        event.setCanceled(true);//禁用副手
+                        event.setSwingHand(false);//Close arm swing
+                        event.setCanceled(true);//Disable deputies
                     }
                 }
             }

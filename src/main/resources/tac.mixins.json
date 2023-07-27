@@ -18,7 +18,8 @@
     "client.MouseHelperMixin",
     "client.WorldRendererMixin",
     "client.ShadersFramebufferMixin",
-    "client.ClientPlayerEntityMixin"
+    "client.ClientPlayerEntityMixin",
+    "client.KeyBindingMixin"
   ],
   "injectors": {
     "defaultRequire": 1
