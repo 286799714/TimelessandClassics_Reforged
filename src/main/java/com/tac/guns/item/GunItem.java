@@ -170,7 +170,7 @@ public class GunItem extends Item implements IColored
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (isSelected && !worldIn.isRemote && !Config.COMMON.gameplay.hideLeftHand.get())
+        if (isSelected && !worldIn.isRemote && !Config.COMMON.gameplay.bannedDrop.get())
         {
             if (entityIn instanceof PlayerEntity)
             {

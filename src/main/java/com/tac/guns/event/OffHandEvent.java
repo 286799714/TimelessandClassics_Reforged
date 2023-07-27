@@ -25,7 +25,7 @@ public class OffHandEvent {
 
     @SubscribeEvent
     public static void renderOffHandEvent(RenderHandEvent event) {
-        if (event.getHand() == Hand.OFF_HAND && Config.COMMON.gameplay.hideLeftHand.get()) {
+        if (event.getHand() == Hand.OFF_HAND) {
             Minecraft mc = Minecraft.getInstance();
             PlayerEntity player = mc.player;
             ItemStack mainHand = player.getHeldItemMainhand();
@@ -44,7 +44,7 @@ public class OffHandEvent {
 
     @SubscribeEvent
     public static void useOffHandEvent(InputEvent.ClickInputEvent event) {
-        if (event.getHand() == Hand.OFF_HAND && Config.COMMON.gameplay.hideLeftHand.get()) {
+        if (event.getHand() == Hand.OFF_HAND) {
             Minecraft mc = Minecraft.getInstance();
             PlayerEntity player = mc.player;
             ItemStack mainHand = player.getHeldItemMainhand();
