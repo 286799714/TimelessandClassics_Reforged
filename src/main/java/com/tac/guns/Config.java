@@ -375,7 +375,7 @@ public class Config
 
         public final ForgeConfigSpec.BooleanValue explosionCauseFire;
         public final ForgeConfigSpec.BooleanValue fireStarterCauseFire;
-        public final ForgeConfigSpec.BooleanValue hideLeftHand;
+        public final ForgeConfigSpec.BooleanValue bannedDrop;
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
@@ -412,7 +412,7 @@ public class Config
                         false);
                 this.explosionCauseFire = builder.comment("If enable, explosion will cause fire").define("explosionCauseFire", false);
                 this.fireStarterCauseFire = builder.comment("If enable, Fire Starter will cause fire").define("fireStarterCauseFire", false);
-                this.hideLeftHand = builder.comment("True if you don't want pack up the item on your left hand, this option will keep the item but unable to use it and stop render it.").define("hideLeftHand",true);
+                this.bannedDrop = builder.comment("True if you don't want pack up the item on your left hand, this option will keep the item but unable to use it and stop render it.").define("bannedDrop",true);
             }
             builder.pop();
         }

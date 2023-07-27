@@ -1,16 +1,12 @@
 package com.tac.guns.client.handler;
 
-import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Config;
 import com.tac.guns.common.Gun;
-import com.tac.guns.common.SpreadTracker;
 import com.tac.guns.event.GunFireEvent;
-import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -137,7 +133,9 @@ public class RecoilHandler
 
         float progressForward = mc.player.getHeldItemMainhand().getItem() instanceof GunItem ? ((GunItem) mc.player.getHeldItemMainhand().getItem()).getGun().getGeneral().getRecoilDuration() *
                 GunModifierHelper.getRecoilSmootheningTime(mc.player.getHeldItemMainhand()) : 0.25F;
-        if(startProgress < progressForward) // && startProgress > 0.125F
+        float delay = 0.10F;
+        float slow = 1.75F;
+        if(startProgress < progressForward - delay) // && startProgress > 0.125F
         {
             mc.player.rotationPitch -= ((endProgress - startProgress) / progressForward) * this.cameraRecoil / cameraRecoilModifer;
             if(recoilRand == 1)
@@ -147,11 +145,11 @@ public class RecoilHandler
         }
         else if(startProgress > progressForward)
         {
-            mc.player.rotationPitch += ((endProgress - startProgress) / (1-progressForward) ) * this.cameraRecoil / (cameraRecoilModifer*1.025); // 0.75F
+            mc.player.rotationPitch += ((endProgress - startProgress) / (1 - progressForward) ) * this.cameraRecoil / (cameraRecoilModifer * slow); // 0.75F
             if(recoilRand == 1)
-                mc.player.rotationYaw -= ((endProgress - startProgress) / (1-progressForward)) * -this.horizontalCameraRecoil / (cameraRecoilModifer*1.025);
+                mc.player.rotationYaw -= ((endProgress - startProgress) / (1 - progressForward)) * -this.horizontalCameraRecoil / (cameraRecoilModifer * slow);
             else
-                mc.player.rotationYaw -= ((endProgress - startProgress) / (1-progressForward)) * this.horizontalCameraRecoil / (cameraRecoilModifer*1.025);
+                mc.player.rotationYaw -= ((endProgress - startProgress) / (1 - progressForward)) * this.horizontalCameraRecoil / (cameraRecoilModifer * slow);
         }
 
         this.progressCameraRecoil += recoilAmount;
@@ -213,7 +211,7 @@ public class RecoilHandler
             this.gunRecoilNormal = 1 - (--amount);
         }
         else {
-            float amount = ( (cooldown) / modifiedGun.getGeneral().getWeaponRecoilOffset() );
+            float amount = ((cooldown) / modifiedGun.getGeneral().getWeaponRecoilOffset());
             this.gunRecoilNormal = amount < 0.5 ? 2 * amount * amount : -1 + (4 - 2 * amount) * amount;
         }
 
