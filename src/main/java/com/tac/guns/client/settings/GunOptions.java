@@ -79,10 +79,10 @@ public class GunOptions
         Config.CLIENT.display.scopeDoubleRender.set(value);
         Config.saveClientConfig();
     });
-    public static final BooleanOption HIDE_LEFT_HAND = new BooleanOption("tac.options.hideLeftHand", (settings) -> {
-        return Config.COMMON.gameplay.hideLeftHand.get();
+    public static final BooleanOption BANNED_DROP = new BooleanOption("tac.options.bannedDrop", (settings) -> {
+        return Config.COMMON.gameplay.bannedDrop.get();
     }, (settings, value) -> {
-        Config.COMMON.gameplay.hideLeftHand.set(value);
+        Config.COMMON.gameplay.bannedDrop.set(value);
         Config.saveClientConfig();
     });
     public static final BooleanOption SHOW_FPS_TRAILS_EXIST = new BooleanOption("tac.options.showFirstPersonBulletTrails", (settings) -> {
