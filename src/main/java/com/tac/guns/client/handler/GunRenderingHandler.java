@@ -86,7 +86,7 @@ public class GunRenderingHandler {
     private final SecondOrderDynamics recoilDynamics = new SecondOrderDynamics(0.5f, 0.6f, 2.65f, 0);
     private final SecondOrderDynamics swayYawDynamics = new SecondOrderDynamics(0.4f, 0.5f, 3.25f, 0);
     private final SecondOrderDynamics swayPitchDynamics = new SecondOrderDynamics(0.3f, 0.4f, 3.5f, 0);
-    private final SecondOrderDynamics aimingDynamics = new SecondOrderDynamics(0.45f, 0.8f, 1.2f, 0);
+    private final SecondOrderDynamics aimingDynamics = new SecondOrderDynamics(0.45f, 0.9f, 1.2f, 0);
     // Standard Sprint Dynamics
     private final SecondOrderDynamics sprintDynamics = new SecondOrderDynamics(0.22f, 0.7f, 0.6f, 0);
     private final SecondOrderDynamics bobbingDynamics = new SecondOrderDynamics(0.22f, 0.7f, 0.6f, 1);
@@ -599,22 +599,24 @@ public class GunRenderingHandler {
 
                 double transition = (float) AimingHandler.get().getNormalisedAdsProgress();
 
-                float result = aimingDynamics.update(0.05f, (float) transition);
+                float function = (float) (3f * Math.pow(transition - 0.33f, 2) - 0.33f);
+                if (function > 1)
+                    function = 1f;
+                if (transition == 0)
+                    function = 0;
 
-//                float function = (float) (1.85f * Math.pow(result - 0.23f, 2) - 0.1f);
-//                if (function > 1)
-//                    function = 1f;
-//                if (function < 0 && transition == 0)
-//                    function = 0;
+                float result = aimingDynamics.update(0.05f, (float) function);
+                float resultZ = aimingDynamics.update(0.05f, (float) transition);
+
                 /* Reverses the original first person translations */
                 //matrixStack.translate(-0.56 * side * transition, 0.52 * transition, 0);
-                matrixStack.translate(xOffset * side * result - 0.56 * side * result,
-                        yOffset * result + 0.52 * result + 0.033 - Math.abs(0.5 - result) * 0.066 + this.fix,
-                        zOffset * result);
+                matrixStack.translate(xOffset * side * resultZ - 0.56 * side * resultZ,
+                        yOffset * result + 0.52 * result - 0.07 + Math.abs(0.5 - result) * 0.14 + this.fix,
+                        zOffset * result - 0.3 + Math.abs(0.5 - result) * 0.6);
                 matrixStack.rotate(Vector3f.ZP.rotationDegrees((float) (5 * (1 - transition))));
                 /* Reverses the first person translations of the item in order to position it in the center of the screen */
                 //matrixStack.translate(xOffset * side * transition, yOffset * transition, zOffset * transition);
-                matrixStack.translate(0, (0.015 - this.fix) * transition, 0);
+                matrixStack.translate(0, (0.015 - this.fix) * result, 0);
 
                 if (Config.COMMON.gameplay.realisticAimedBreathing.get()) {
                     /* Apply scope jitter*/
