@@ -198,7 +198,7 @@ public class GunItem extends Item implements IColored
             }
         }else if (stack.getOrCreateTag().get("tac.isSelected") != null){
             if (worldIn.isRemote){
-                if (AimingHandler.get().isAiming()){
+                if (AimingHandler.get().isAiming() || AimingHandler.get().isToggledAim()){
                     AimingHandler.get().cancelAim();
                 }
                 ReloadHandler.get().setReloading(false);
