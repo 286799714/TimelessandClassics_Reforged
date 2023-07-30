@@ -17,7 +17,9 @@
     "client.InventoryScreenMixin",
     "client.MouseHelperMixin",
     "client.WorldRendererMixin",
-    "client.ShadersFramebufferMixin"
+    "client.ShadersFramebufferMixin",
+    "client.ClientPlayerEntityMixin",
+    "client.KeyBindingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

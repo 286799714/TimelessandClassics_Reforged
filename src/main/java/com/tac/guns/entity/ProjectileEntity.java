@@ -333,7 +333,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         AxisAlignedBB boundingBox = entity.getBoundingBox();
         if (Config.COMMON.gameplay.improvedHitboxes.get() && entity instanceof ServerPlayerEntity && this.shooter != null) {
             int ping = (int) Math.floor((((ServerPlayerEntity) this.shooter).ping / 1000.0) * 20.0 + 0.5);
-            boundingBox = BoundingBoxManager.getBoundingBox((PlayerEntity) entity, ping);
+            //boundingBox = BoundingBoxManager.getBoundingBox((PlayerEntity) entity, ping);
         }
         if (entity instanceof PlayerEntity) {
             Vector3d v = cachePlayerVelocity.get(entity);
@@ -400,7 +400,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 return;
 
             if (Config.COMMON.gameplay.enableGunGriefing.get() && (block instanceof BreakableBlock || block instanceof PaneBlock) && state.getMaterial() == Material.GLASS) {
-                this.world.destroyBlock(blockRayTraceResult.getPos(), false);
+                this.world.destroyBlock(blockRayTraceResult.getPos(), false,this.shooter);
             }
 
             /*if(modifiedGun.getProjectile().isRicochet() &&

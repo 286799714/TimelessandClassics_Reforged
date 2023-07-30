@@ -268,6 +268,10 @@ public class  ShootingHandler
                 {
                 	this.shooting = shooting;
                     PacketHandler.getPlayChannel().sendToServer( new MessageShooting( shooting ) );
+                    if (!shooting && originalSprint){
+                        originalSprint=false;
+                        player.setSprinting(true);
+                    }
                 }
             }
             else if(this.shooting)
@@ -352,7 +356,7 @@ public class  ShootingHandler
             }
         }
     }
-
+    private boolean originalSprint = false;
     public void fire(PlayerEntity player, ItemStack heldItem)
     {
         if (magError(player, heldItem)) return;
@@ -366,11 +370,13 @@ public class  ShootingHandler
         if(player.isSpectator())
             return;
 
-        player.setSprinting(false);
-        Minecraft.getInstance().gameSettings.keyBindSprint.setPressed(false);
         if(GunRenderingHandler.get().sprintTransition != 0) {
             this.shooting = false;
             return;
+        }
+        if (player.isSprinting()){
+            originalSprint = true;
+            player.setSprinting(false);
         }
 
         // CHECK HERE: Restrict the fire rate

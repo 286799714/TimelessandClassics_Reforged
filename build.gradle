@@ -22,14 +22,14 @@ apply plugin: 'org.spongepowered.mixin'
 //apply plugin: 'eclipse'
 //apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
-version = "0.3.7.2-1.16.5"
+version = "0.3.8.1-1.16.5"
 group = "com.tac"
 archivesBaseName = "tac-a"
 
 
 //name = "tac-a-0.3.0.44-1.16.5"
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+//sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 //sourceSets.main.resources { srcDir 'src/generated/resources' }
 
@@ -161,7 +161,7 @@ publishing {
     }
     repositories {
         maven {
-            url "file://C:/dev/maven/mcmodsrepo"
+            url "./build/maven"
         }
     }
 }

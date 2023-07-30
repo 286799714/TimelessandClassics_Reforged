@@ -92,6 +92,7 @@ public class AimingHandler {
         });
     }
 
+    private boolean originalSprint = false;
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.START)
@@ -106,9 +107,16 @@ public class AimingHandler {
                 this.aimingMap.remove(player);
             }
         }
-        if (this.aiming || this.toggledAim) {
-            player.setSprinting(false);
-            Minecraft.getInstance().gameSettings.keyBindSprint.setPressed(false);
+        if (player == Minecraft.getInstance().player){
+            if (isAiming()) {
+                if (player.isSprinting()){
+                    originalSprint = true;
+                    player.setSprinting(false);
+                }
+            }else if (originalSprint){
+                originalSprint=false;
+                player.setSprinting(true);
+            }
         }
     }
 

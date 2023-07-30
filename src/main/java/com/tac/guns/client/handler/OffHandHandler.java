@@ -1,7 +1,7 @@
-package com.tac.guns.event;
+package com.tac.guns.client.handler;
 
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
-import com.tac.guns.Config;
+import com.tac.guns.Reference;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
 import net.minecraft.client.Minecraft;
@@ -20,8 +20,8 @@ import static com.tac.guns.item.GunItem.isSingleHanded;
  * @author Arcomit
  * @updateDate 2023/7/25
  */
-@Mod.EventBusSubscriber(modid = "tac",value = Dist.CLIENT)
-public class OffHandEvent {
+@Mod.EventBusSubscriber(modid = Reference.MOD_ID,value = Dist.CLIENT)
+public class OffHandHandler {
 
     @SubscribeEvent
     public static void renderOffHandEvent(RenderHandEvent event) {
@@ -31,10 +31,10 @@ public class OffHandEvent {
             ItemStack mainHand = player.getHeldItemMainhand();
             ItemStack offHand = event.getItemStack();
             if (mainHand.getItem() instanceof GunItem) {
-                if (!isSingleHanded(mainHand) || SyncedPlayerData.instance().get((PlayerEntity) player, ModSyncedDataKeys.RELOADING))//判断主手是否持有枪械且是否为双手武器
+                if (!isSingleHanded(mainHand) || SyncedPlayerData.instance().get((PlayerEntity) player, ModSyncedDataKeys.RELOADING))
                 {
                     if (!(offHand.getItem() instanceof GunItem) && !offHand.isEmpty()) {
-                        event.setCanceled(true);//关闭渲染
+                        event.setCanceled(true);//Turn off rendering.
                     }
                 }
             }
@@ -50,11 +50,11 @@ public class OffHandEvent {
             ItemStack mainHand = player.getHeldItemMainhand();
             ItemStack offHand = player.getHeldItemOffhand();
             if (mainHand.getItem() instanceof GunItem) {
-                if (!isSingleHanded(mainHand) || SyncedPlayerData.instance().get((PlayerEntity) player, ModSyncedDataKeys.RELOADING))//判断主手是否持有枪械且是否为双手武器
+                if (!isSingleHanded(mainHand) || SyncedPlayerData.instance().get((PlayerEntity) player, ModSyncedDataKeys.RELOADING))
                 {
                     if (!(offHand.getItem() instanceof GunItem) && !offHand.isEmpty()) {
-                        event.setSwingHand(false);//关闭手臂摆动
-                        event.setCanceled(true);//禁用副手
+                        event.setSwingHand(false);//Close arm swing
+                        event.setCanceled(true);//Disable deputies
                     }
                 }
             }
