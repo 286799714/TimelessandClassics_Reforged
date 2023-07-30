@@ -1517,7 +1517,7 @@ public final class Gun implements INBTSerializable<CompoundNBT>
         public static class Zoom extends Positioned
         {
             @Optional
-            private float fovModifier;
+            private float fovModifier = 0.8F;
 
             @Optional
             private double stabilityOffset = 0.225;
