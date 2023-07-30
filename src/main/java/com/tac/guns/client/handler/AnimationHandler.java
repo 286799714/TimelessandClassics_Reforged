@@ -283,8 +283,12 @@ public enum AnimationHandler {
         final PlayerEntity player = Minecraft.getInstance().player;
         final ItemStack itemStack = player.inventory.getCurrentItem();
         if (itemStack.getItem() instanceof GunItem) {
-            if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT)) {
-                if(AimingHandler.get().isAiming()) controller.stopAnimation();
+            if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT))
+                if (AimingHandler.get().isAiming())
+                    controller.stopAnimation();
+
+            if (SyncedPlayerData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
+                AimingHandler.get().cancelAim();
             } else if (AimingHandler.get().getCanceling())
                 AimingHandler.get().setCanceling();
         }
