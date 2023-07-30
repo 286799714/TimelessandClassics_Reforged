@@ -27,6 +27,7 @@ import com.tac.guns.client.handler.command.GuiEditor;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.client.handler.command.ObjectRenderEditor;
 import com.tac.guns.client.handler.command.ScopeEditor;
+import com.tac.guns.client.keybind.KeyHandler;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.armor.VestLayer.VestLayerRender;
 import com.tac.guns.client.render.armor.models.MediumArmor;
@@ -127,6 +128,7 @@ public class ClientHandler
         //ClientRegistry.bindTileEntityRenderer(ModTileEntities.UPGRADE_BENCH.get(), UpgradeBenchRenderUtil::new);
 
         // Load key binds
+        KeyHandler.init();
         InputHandler.initKeys();
         keyBindsFile = new File(mc.gameDir, "config/tac-key-binds.json");
         if (!keyBindsFile.exists()) {
