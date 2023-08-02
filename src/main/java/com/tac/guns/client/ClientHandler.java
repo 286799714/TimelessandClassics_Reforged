@@ -44,7 +44,6 @@ import com.tac.guns.client.screen.TaCSettingsScreen;
 import com.tac.guns.client.screen.UpgradeBenchScreen;
 import com.tac.guns.client.screen.WorkbenchScreen;
 import com.tac.guns.client.settings.GunOptions;
-import com.tac.guns.client.util.UpgradeBenchRenderUtil;
 import com.tac.guns.init.*;
 import com.tac.guns.item.IColored;
 import com.tac.guns.network.PacketHandler;
@@ -55,7 +54,6 @@ import com.tac.guns.util.math.SecondOrderDynamics;
 
 import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.screen.ControlsScreen;
 import net.minecraft.client.gui.screen.MouseSettingsScreen;
@@ -69,19 +67,10 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.VersionChecker;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -126,17 +115,22 @@ public class ClientHandler
 
         //ClientRegistry.bindTileEntityRenderer(ModTileEntities.UPGRADE_BENCH.get(), UpgradeBenchRenderUtil::new);
 
-        // Load key binds
-        InputHandler.initKeys();
-        keyBindsFile = new File(mc.gameDir, "config/tac-key-binds.json");
-        if (!keyBindsFile.exists()) {
+        // Load key binds.
+        InputHandler.initInputSystem();
+        keyBindsFile = new File( mc.gameDir, "config/tac-key-binds.json" );
+        if ( keyBindsFile.exists() ) {
+            InputHandler.loadKeyBindsFrom( keyBindsFile );
+        }
+        else
+        {
             try {
                 keyBindsFile.createNewFile();
-            } catch (IOException e) {
-                GunMod.LOGGER.error("Fail to create key bindings file");
             }
-            InputHandler.saveTo(keyBindsFile);
-        } else InputHandler.readFrom(keyBindsFile);
+            catch ( IOException e ) {
+                GunMod.LOGGER.error( "Fail to create key bindings file" );
+            }
+            InputHandler.saveKeyBindsTo( keyBindsFile );
+        }
 
         setupRenderLayers();
         registerEntityRenders();
@@ -277,40 +271,39 @@ public class ClientHandler
     }
     
     private static Screen prevScreen = null;
-
     @SubscribeEvent
     public static void onGUIChange( GuiOpenEvent evt )
     {
     	final Screen gui = evt.getGui();
     	
     	// Show key binds if control GUI is activated
-    	if( gui instanceof ControlsScreen )
-    		InputHandler.restoreKeyBinds();
-    	else if( prevScreen instanceof ControlsScreen )
-    		InputHandler.clearKeyBinds( keyBindsFile );
+    	if( gui instanceof ControlsScreen ) {
+            InputHandler.restoreVanillaKeyBinds();
+        }
+    	else if( prevScreen instanceof ControlsScreen ) {
+            InputHandler.clearVanillaKeyBinds( keyBindsFile );
+        }
     	
     	prevScreen = gui;
     }
     
     static {
-        InputHandler.ATTACHMENTS.addPressCallback(() -> {
+        Keys.ATTACHMENTS.addPressCallback(() -> {
             final Minecraft mc = Minecraft.getInstance();
             if (mc.player != null && mc.currentScreen == null)
                 PacketHandler.getPlayChannel().sendToServer(new MessageAttachments());
         });
 
-        final Runnable callback = () -> {
+        Keys.INSPECT.addPressCallback(() -> {
             final Minecraft mc = Minecraft.getInstance();
             if (
-                    mc.player != null
-                            && mc.currentScreen == null
-                            && GunAnimationController.fromItem(
-                            Minecraft.getInstance().player.inventory.getCurrentItem().getItem()
-                    ) == null
+                mc.player != null
+                    && mc.currentScreen == null
+                    && GunAnimationController.fromItem(
+                    Minecraft.getInstance().player.inventory.getCurrentItem().getItem()
+                ) == null
             ) PacketHandler.getPlayChannel().sendToServer(new MessageInspection());
-        };
-        InputHandler.INSPECT.addPressCallback(callback);
-        InputHandler.CO_INSPECT.addPressCallback(callback);
+        });
     }
 
     /* Uncomment for debugging headshot hit boxes */

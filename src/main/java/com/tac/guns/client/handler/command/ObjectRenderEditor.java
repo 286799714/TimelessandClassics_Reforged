@@ -1,25 +1,23 @@
 package com.tac.guns.client.handler.command;
 
-import static com.tac.guns.GunMod.LOGGER;
+import com.google.gson.GsonBuilder;
+import com.tac.guns.Config;
+import com.tac.guns.client.Keys;
+import com.tac.guns.common.Gun;
+import com.tac.guns.common.tooling.CommandsHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.apache.logging.log4j.Level;
+import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.apache.logging.log4j.Level;
-import org.lwjgl.glfw.GLFW;
-
-import com.google.gson.GsonBuilder;
-import com.tac.guns.Config;
-import com.tac.guns.client.InputHandler;
-import com.tac.guns.common.Gun;
-import com.tac.guns.common.tooling.CommandsHandler;
-
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import static com.tac.guns.GunMod.LOGGER;
 
 public class ObjectRenderEditor
 {
@@ -132,10 +130,10 @@ public class ObjectRenderEditor
         boolean isUp = event.getKey() == GLFW.GLFW_KEY_UP;
         boolean isDown = event.getKey() == GLFW.GLFW_KEY_DOWN;
 
-        boolean isControlDown = InputHandler.CONTROLLY.down || InputHandler.CONTROLLYR.down; // Increase Module Size
+        boolean isControlDown = Keys.CONTROLLY.isDown() || Keys.CONTROLLYR.isDown(); // Increase Module Size
         boolean isShiftDown = event.getKey() == GLFW.GLFW_KEY_LEFT_SHIFT; // Increase Step Size
-        boolean isAltDown = InputHandler.ALTY.down || InputHandler.ALTYR.down; // Swap X -> Z modify
-        boolean isPeriodDown = InputHandler.SIZE_OPT.down;
+        boolean isAltDown = Keys.ALTY.isDown() || Keys.ALTYR.isDown(); // Swap X -> Z modify
+        boolean isPeriodDown = Keys.SIZE_OPT.isDown();
 
         RENDER_Element element = this.elements.size() == 0 || !this.elements.containsKey(this.currElement) ? new RENDER_Element(0, 0,0, 0) : this.elements.get(this.currElement);
         float xMod = element.xMod;
