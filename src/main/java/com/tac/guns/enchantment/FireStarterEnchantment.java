@@ -6,25 +6,38 @@ import net.minecraft.item.ItemStack;
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class FireStarterEnchantment extends GunEnchantment
-{
-    public FireStarterEnchantment()
-    {
+public class FireStarterEnchantment extends GunEnchantment {
+    public FireStarterEnchantment() {
         super(Rarity.VERY_RARE, EnchantmentTypes.GUN, new EquipmentSlotType[]{EquipmentSlotType.MAINHAND}, Type.PROJECTILE);
     }
 
     @Override
-    public int getMinEnchantability(int level)
-    {
+    public int getMinEnchantability(int level) {
         return 15;
     }
+
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public boolean isAllowedOnBooks() {
         return false;
     }
+
     @Override
-    public int getMaxEnchantability(int level)
-    {
+    public boolean canVillagerTrade() {
+        return false;
+    }
+
+    @Override
+    public boolean canGenerateInLoot() {
+        return false;
+    }
+
+    @Override
+    public int getMaxEnchantability(int level) {
         return super.getMinEnchantability(level) + 30;
     }
 }

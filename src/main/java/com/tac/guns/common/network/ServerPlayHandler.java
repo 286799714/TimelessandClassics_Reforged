@@ -734,23 +734,23 @@ public class ServerPlayHandler
                     NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
                     player.closeScreen();
                 }
-                else if (heldItem.getItem() == ModItems.MODULE.get() && ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).getCount() < 3)
-                {
-                    if( ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).getItem() != ModItems.MODULE.get() ) {
-                        ((UpgradeBenchTileEntity) tileEntity).setInventorySlotContents(1,
-                                heldItem.copy());
-                        ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).setCount(1);
-                    }
-                    else {
-                        ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).setCount(((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).getCount() + 1);
-                    }
-                    player.getHeldItem(Hand.MAIN_HAND).setCount(player.getHeldItem(Hand.MAIN_HAND).getCount()-1);
-                    /// I hate this last part, this is used in order to reset the TileRenderer,
-                    // without this the item stack is added, but the visual is only reset on
-                    // entering GUI, gotta Check what Yor said about this portion.
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
-                    player.closeScreen();
-                }
+//                else if (heldItem.getItem() == ModItems.MODULE.get() && ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).getCount() < 3)
+//                {
+//                    if( ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).getItem() != ModItems.MODULE.get() ) {
+//                        ((UpgradeBenchTileEntity) tileEntity).setInventorySlotContents(1,
+//                                heldItem.copy());
+//                        ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).setCount(1);
+//                    }
+//                    else {
+//                        ((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).setCount(((UpgradeBenchTileEntity) tileEntity).getStackInSlot(1).getCount() + 1);
+//                    }
+//                    player.getHeldItem(Hand.MAIN_HAND).setCount(player.getHeldItem(Hand.MAIN_HAND).getCount()-1);
+//                    /// I hate this last part, this is used in order to reset the TileRenderer,
+//                    // without this the item stack is added, but the visual is only reset on
+//                    // entering GUI, gotta Check what Yor said about this portion.
+//                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+//                    player.closeScreen();
+//                }
                 else
                 {
                     player.inventory.addItemStackToInventory(((UpgradeBenchTileEntity) tileEntity).getStackInSlot(0));

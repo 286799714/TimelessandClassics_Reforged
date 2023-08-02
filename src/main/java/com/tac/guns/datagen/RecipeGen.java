@@ -101,16 +101,16 @@ public class RecipeGen extends RecipeProvider
                 .addCriterion("has_iron", hasItem(Tags.Items.STORAGE_BLOCKS_IRON))
                 .build(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(ModItems.MODULE.get(), 3)
-                .patternLine("#I#")
-                .patternLine("D#D")
-                .patternLine("GDG")
-                .key('#', Tags.Items.GLASS)
-                .key('I', Tags.Items.STORAGE_BLOCKS_IRON)
-                .key('D', Tags.Items.GEMS_DIAMOND)
-                .key('G', Tags.Items.INGOTS_GOLD)
-                .addCriterion("has_diamond", hasItem(Tags.Items.GEMS_DIAMOND))
-                .build(consumer);
+//        ShapedRecipeBuilder.shapedRecipe(ModItems.MODULE.get(), 3)
+//                .patternLine("#I#")
+//                .patternLine("D#D")
+//                .patternLine("GDG")
+//                .key('#', Tags.Items.GLASS)
+//                .key('I', Tags.Items.STORAGE_BLOCKS_IRON)
+//                .key('D', Tags.Items.GEMS_DIAMOND)
+//                .key('G', Tags.Items.INGOTS_GOLD)
+//                .addCriterion("has_diamond", hasItem(Tags.Items.GEMS_DIAMOND))
+//                .build(consumer);
 
         //Gun
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.AI_AWP.get())
