@@ -1,21 +1,20 @@
 package com.tac.guns.client.handler;
 
-import com.tac.guns.client.render.animation.module.GunAnimationController;
-import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.mixin.client.MinecraftStaticMixin;
-import com.tac.guns.network.message.*;
-import com.tac.guns.util.GunModifierHelper;
-import net.minecraftforge.eventbus.api.EventPriority;
-import org.lwjgl.glfw.GLFW;
-
 import com.tac.guns.Config;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.item.attachment.IAttachment;
+import com.tac.guns.mixin.client.MinecraftStaticMixin;
 import com.tac.guns.network.PacketHandler;
-
+import com.tac.guns.network.message.MessageEmptyMag;
+import com.tac.guns.network.message.MessageShoot;
+import com.tac.guns.network.message.MessageShooting;
+import com.tac.guns.network.message.MessageUpdateMoveInacc;
+import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -25,7 +24,9 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 
 import static net.minecraftforge.event.TickEvent.Type.RENDER;
 
@@ -114,7 +115,7 @@ public class  ShootingHandler
             {
                 event.setCanceled(true);
             }
-            if( InputHandler.PULL_TRIGGER.down )
+            if( Keys.PULL_TRIGGER.isDown() )
             {
                 if (magError(player, heldItem)) {
                     player.sendStatusMessage(new TranslationTextComponent("info.tac.mag_error").mergeStyle(TextFormatting.UNDERLINE).mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.RED), true);
@@ -258,7 +259,7 @@ public class  ShootingHandler
                 PacketHandler.getPlayChannel().sendToServer( new MessageUpdateMoveInacc( dist ) );
                 
                 // Update #shooting state if it has changed
-                final boolean shooting = InputHandler.PULL_TRIGGER.down && GunRenderingHandler.get().sprintTransition == 0;
+                final boolean shooting = Keys.PULL_TRIGGER.isDown() && GunRenderingHandler.get().sprintTransition == 0;
                 // TODO: check if this is needed
 //              if(GunMod.controllableLoaded)
 //              {
@@ -322,7 +323,7 @@ public class  ShootingHandler
                         fire(player, heldItem);
                     return;
                 }
-                else if( InputHandler.PULL_TRIGGER.down )
+                else if( Keys.PULL_TRIGGER.isDown() )
                 {
                     Gun gun = ((TimelessGunItem) heldItem.getItem()).getModifiedGun(heldItem);
                     if (gun.getGeneral().isAuto() && heldItem.getTag().getInt("CurrentFireMode") == 2) {
@@ -344,7 +345,7 @@ public class  ShootingHandler
                         return;
                     }
                 }
-                else if(this.clickUp /*|| InputHandler.PULL_TRIGGER.down*/ )
+                else if(this.clickUp /*|| Keys.PULL_TRIGGER.isDown()*/ )
                 {
                     if(heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstTracker > 0) {
                         this.burstCooldown = gunItem.getGun().getGeneral().getBurstRate();

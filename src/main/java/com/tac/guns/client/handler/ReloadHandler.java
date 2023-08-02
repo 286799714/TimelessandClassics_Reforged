@@ -1,8 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
-
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PumpShotgunAnimationController;
 import com.tac.guns.common.Gun;
@@ -15,22 +14,18 @@ import com.tac.guns.network.message.MessageReload;
 import com.tac.guns.network.message.MessageToClientRigInv;
 import com.tac.guns.network.message.MessageUnload;
 import com.tac.guns.network.message.MessageUpdateGunID;
-import com.tac.guns.util.GunEnchantmentHelper;
-
+import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.datafix.fixes.SwapHandsFix;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import com.tac.guns.util.GunModifierHelper;
 
 
 /**
@@ -212,7 +207,7 @@ public class ReloadHandler {
 
     private ReloadHandler()
     {
-    	InputHandler.RELOAD.addPressCallback( () -> {
+    	Keys.RELOAD.addPressCallback( () -> {
     		final ClientPlayerEntity player = Minecraft.getInstance().player;
 			if( player == null ) return;
 			
@@ -234,17 +229,15 @@ public class ReloadHandler {
 			}
 		} );
     	
-    	final Runnable callback = () -> {
-    		if( !this.isReloading() )
-			{
-				final SimpleChannel channel = PacketHandler.getPlayChannel();
-				channel.sendToServer( new MessageUpdateGunID() );
-				this.setReloading( false );
-				channel.sendToServer( new MessageUnload() );
-			}
-    	};
-    	InputHandler.UNLOAD.addPressCallback( callback );
-    	InputHandler.CO_UNLOAD.addPressCallback( callback );
+    	Keys.UNLOAD.addPressCallback( () -> {
+            if( !this.isReloading() )
+            {
+                final SimpleChannel channel = PacketHandler.getPlayChannel();
+                channel.sendToServer( new MessageUpdateGunID() );
+                this.setReloading( false );
+                channel.sendToServer( new MessageUnload() );
+            }
+        } );
     }
 
     @SubscribeEvent
