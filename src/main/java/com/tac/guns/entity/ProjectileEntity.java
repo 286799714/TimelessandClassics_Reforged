@@ -1,8 +1,5 @@
 package com.tac.guns.entity;
 
-//import com.sun.tools.jdi.Packet;
-
-import com.google.common.cache.RemovalCause;
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Config;
 import com.tac.guns.common.BoundingBoxManager;
@@ -27,7 +24,6 @@ import com.tac.guns.util.math.ExtendedEntityRayTraceResult;
 import com.tac.guns.world.ProjectileExplosion;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,6 +35,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SExplosionPacket;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
@@ -55,8 +52,6 @@ import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.core.util.ReflectionUtil;
-import org.codehaus.plexus.util.ReflectionUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -409,7 +404,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 return;
 
             if (Config.COMMON.gameplay.enableGunGriefing.get() && (block instanceof BreakableBlock || block instanceof PaneBlock) && state.getMaterial() == Material.GLASS) {
-                this.world.destroyBlock(blockRayTraceResult.getPos(), false,this.shooter);
+                this.world.destroyBlock(blockRayTraceResult.getPos(), false, this.shooter);
             }
 
             /*if(modifiedGun.getProjectile().isRicochet() &&
@@ -424,7 +419,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             }*/
 
             this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
-            ((ServerWorld) this.world).spawnParticle(ParticleTypes.ASH, hitVec.x - 1.0 + this.rand.nextDouble() * 2.0, hitVec.y, hitVec.z - 1.0 + this.rand.nextDouble() * 2.0, 4, 0, 0, 0, 0);
 
             if (block instanceof BellBlock) {
                 BellBlock bell = (BellBlock) block;
@@ -591,6 +585,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.world.getChunkAt(pos)), new MessageProjectileHitBlock(x, y, z, pos, face));
+        if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon) > 0)
+            ((ServerWorld) this.world).spawnParticle(ParticleTypes.LAVA, x, y, z, 1, 0, 0, 0, 0);
     }
 
     protected void teleportToHitPoint(RayTraceResult rayTraceResult) {
