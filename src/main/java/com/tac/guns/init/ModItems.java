@@ -216,8 +216,7 @@ public class ModItems
 
     public static final RegistryObject<Item> LIGHT_ARMOR_REPAIR_PLATE = REGISTER.register("light_armor_plate", () -> new ArmorPlateItem(new Item.Properties().maxStackSize(12).group(GunMod.GROUP)));
 
-    public static final RegistryObject<Item> MODULE = REGISTER.register("module_item",
-            () -> new Item(new Item.Properties().maxStackSize(64).group(GunMod.GROUP)));
+    //public static final RegistryObject<Item> MODULE = REGISTER.register("module_item",() -> new Item(new Item.Properties().maxStackSize(64).group(GunMod.GROUP)));
 
     public static final RegistryObject<Item> UNCOMMON_MATERIAL = REGISTER.register("uncommon_material", () -> new Item(new Item.Properties().maxStackSize(64).group(GunMod.GROUP)));
     public static final RegistryObject<Item> RARE_MATERIAL = REGISTER.register("rare_material", () -> new Item(new Item.Properties().maxStackSize(48).group(GunMod.GROUP)));

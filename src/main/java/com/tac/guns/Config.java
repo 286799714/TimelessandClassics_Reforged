@@ -391,7 +391,7 @@ public class Config
                 this.ignoreLeaves = builder.comment("If true, projectiles will ignore leaves when checking for collision").define("ignoreLeaves", true);
                 this.enableKnockback = builder.comment("If true, projectiles will cause knockback when an entity is hit. By default this is set to true to match the behaviour of Minecraft.").define("enableKnockback", true);
                 this.knockbackStrength = builder.comment("Sets the strength of knockback when shot by a bullet projectile. Knockback must be enabled for this to take effect. If value is equal to zero, knockback will use default minecraft value").defineInRange("knockbackStrength", 0.15, 0.0, 1.0);
-                this.improvedHitboxes = builder.comment("If true, improves the accuracy of weapons by considering the ping of the player. This has no affect on singleplayer. This will add a little overhead if enabled.").define("improvedHitboxes", false);
+                this.improvedHitboxes = builder.comment("If true, improves the accuracy of weapons by considering the ping of the player. This has no affect on singleplayer. This will add a little overhead if enabled.").define("improvedHitboxes", true);
 
                 this.safetyExistence = builder.comment("Enables the safe mode on weapons, false completely nullifies the existence of the safety").define("safetyExistence", false);
 
@@ -410,8 +410,8 @@ public class Config
 
                 this.forceCameraShakeOnFire = builder.comment("Force camera shake on for all players, since control over the weapon is reduced with this off, having a client only options could lead to balance issues.").define("forceCameraShakeOnFire",
                         false);
-                this.explosionCauseFire = builder.comment("If enable, explosion will cause fire").define("explosionCauseFire", false);
-                this.fireStarterCauseFire = builder.comment("If enable, Fire Starter will cause fire").define("fireStarterCauseFire", false);
+                this.explosionCauseFire = builder.comment("If enable, explosion will cause fire (ignite the block)").define("explosionCauseFire", false);
+                this.fireStarterCauseFire = builder.comment("If enable, Fire Starter will cause fire (ignite the block)").define("fireStarterCauseFire", false);
                 this.bannedDrop = builder.comment("True if you don't want pack up the item on your left hand, this option will keep the item but unable to use it and stop render it.").define("bannedDrop",true);
             }
             builder.pop();
@@ -430,9 +430,9 @@ public class Config
             builder.comment("Development").push("development");
             {
                 this.permanentCrosshair = builder.comment("If enabled any crosshair will continue to render on aim.").define("permanentCrosshair", false);
-                this.enableTDev = builder.comment("If enabled, /tdev will both be registered (Upon restart), and function! Used as well to speed up tag checks").define("enableTDev", false);
-                this.TDevPath = builder.comment("Directory to build all TaC sub-directories, these will contain export data from /tdev functions").define("tDevPath", "");
-                this.bulletSelfHarm = builder.comment("Wether the shooters bullets can harm the shooter, great for testing armor and onhit effects with the development gun").define("bulletSelfHarm", false);
+                this.enableTDev = builder.comment("If enabled, /t dev will both be registered (Upon restart), and function! Used as well to speed up tag checks").define("enableTDev", false);
+                this.TDevPath = builder.comment("Directory to build all TaC sub-directories, these will contain export data from /t dev functions").define("tDevPath", "");
+                this.bulletSelfHarm = builder.comment("Whether the shooters bullets can harm the shooter, great for testing armor and on hit effects with the development gun").define("bulletSelfHarm", true);
             }
             builder.pop();
         }
@@ -635,16 +635,11 @@ public class Config
      */
     public static class ProjectileSpread
     {
-        public final ForgeConfigSpec.IntValue spreadThreshold;
-        public final ForgeConfigSpec.IntValue maxCount;
         public final ForgeConfigSpec.BooleanValue movementInaccuracy;
         public ProjectileSpread(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to projectile spread").push("projectile_spread");
             {
-                this.spreadThreshold = builder.comment("The amount of time in milliseconds before logic to apply spread is skipped. The value indicates a reasonable amount of time before a weapon is considered stable again.").defineInRange("spreadThreshold", 300, 0, 1000);
-                this.maxCount = builder.comment("The amount of times a player has to shoot within" +
-                        " the spread threshold before the maximum amount of spread is applied. Setting the value higher means it will take longer for the spread to be applied.").defineInRange("maxCount", 3, 1, Integer.MAX_VALUE);
                 this.movementInaccuracy = builder.comment("Weapon grows more inaccurate depending if the player is in motion (Forward, Strafing, Jumping)").define("movementInaccuracy", true);
             }
             builder.pop();
