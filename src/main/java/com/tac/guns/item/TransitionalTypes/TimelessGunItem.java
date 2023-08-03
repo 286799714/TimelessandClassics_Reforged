@@ -3,7 +3,7 @@ package com.tac.guns.item.TransitionalTypes;
 
 import com.tac.guns.Config;
 import com.tac.guns.GunMod;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.network.ServerPlayHandler;
 import com.tac.guns.interfaces.IGunModifier;
@@ -27,8 +27,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import com.tac.guns.util.GunModifierHelper;
-import org.lwjgl.glfw.GLFW;
 
 
 public class TimelessGunItem extends GunItem {
@@ -87,7 +85,7 @@ public class TimelessGunItem extends GunItem {
             }
         }
 
-        boolean isShift = InputHandler.MORE_INFO_HOLD.down;
+        boolean isShift = Keys.MORE_INFO_HOLD.isDown();
         if(!isShift) {
             //String text = "SHIFT";
             //if(!InputHandler.MORE_INFO_HOLD.keyCode().equals(GLFW.GLFW_KEY_LEFT_SHIFT))

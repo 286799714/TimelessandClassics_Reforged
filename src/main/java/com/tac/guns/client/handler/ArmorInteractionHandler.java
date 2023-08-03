@@ -1,25 +1,18 @@
 package com.tac.guns.client.handler;
 
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.Rig;
 import com.tac.guns.init.ModSyncedDataKeys;
-import com.tac.guns.item.ArmorPlateItem;
-import com.tac.guns.item.IArmorPlate;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageArmorRepair;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
@@ -46,7 +39,7 @@ public class ArmorInteractionHandler
     private int prevRepairTime = 0;
 	private ArmorInteractionHandler()
 	{
-		InputHandler.ARMOR_REPAIRING.addPressCallback( () -> {
+		Keys.ARMOR_REPAIRING.addPressCallback( () -> {
 			final Minecraft mc = Minecraft.getInstance();
 			if(mc.player != null && WearableHelper.PlayerWornRig(mc.player) != null && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player))) {
                 this.repairing = true;
@@ -118,7 +111,7 @@ public class ArmorInteractionHandler
             return;
 
         this.prevRepairTime = this.repairTime;
-        if(InputHandler.ARMOR_REPAIRING.down && this.repairTime > 0)
+        if(Keys.ARMOR_REPAIRING.isDown() && this.repairTime > 0)
             this.repairTime--;
         else if (this.repairTime == 0)
         {
@@ -127,7 +120,7 @@ public class ArmorInteractionHandler
             return;
         }
 
-        if(InputHandler.AIM_HOLD.down)
+        if(Keys.AIM_HOLD.isDown())
         {
             if(!this.repairing)
             {
@@ -136,7 +129,7 @@ public class ArmorInteractionHandler
                 this.repairing = true;
             }
         }
-        else if(this.repairing && !InputHandler.AIM_HOLD.down)
+        else if( this.repairing )
         {
             SyncedPlayerData.instance().set(player, ModSyncedDataKeys.QREPAIRING, false);
             PacketHandler.getPlayChannel().sendToServer(new MessageArmorRepair(false, false));

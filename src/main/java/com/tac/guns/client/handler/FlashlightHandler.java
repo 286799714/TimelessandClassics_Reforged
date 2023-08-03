@@ -4,15 +4,14 @@ import static com.tac.guns.GunMod.LOGGER;
 
 import java.util.UUID;
 
+import com.tac.guns.client.Keys;
 import org.apache.logging.log4j.Level;
 
-import com.tac.guns.client.InputHandler;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageLightChange;
 
@@ -42,7 +41,7 @@ public class FlashlightHandler
     
     private FlashlightHandler()
     {
-    	InputHandler.ACTIVATE_SIDE_RAIL.addPressCallback( () -> {
+    	Keys.ACTIVATE_SIDE_RAIL.addPressCallback( () -> {
     		final Minecraft mc = Minecraft.getInstance();
     		final PlayerEntity player = mc.player;
     		if(

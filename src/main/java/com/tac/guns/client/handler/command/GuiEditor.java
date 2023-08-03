@@ -7,12 +7,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.tac.guns.client.Keys;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.gson.GsonBuilder;
 import com.tac.guns.Config;
-import com.tac.guns.client.InputHandler;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.tooling.CommandsHandler;
 
@@ -131,10 +131,10 @@ public class GuiEditor
         boolean isUp = event.getKeyCode() == GLFW.GLFW_KEY_UP;
         boolean isDown = event.getKeyCode() == GLFW.GLFW_KEY_DOWN;
 
-        boolean isShiftDown = InputHandler.SHIFTY.down; // Increase Step Size
-        boolean isPeriodDown = InputHandler.SIZE_OPT.down;
+        boolean isShiftDown = Keys.SHIFTY.isDown(); // Increase Step Size
+        boolean isPeriodDown = Keys.SIZE_OPT.isDown();
 
-        GUI_Element element = this.elements.size() == 0 || !this.elements.containsKey(this.currElement) ? new GUI_Element(0, 0, 0, 0) : this.elements.get(this.currElement);
+        GUI_Element element = this.elements.isEmpty() || !this.elements.containsKey(this.currElement) ? new GUI_Element(0, 0, 0, 0) : this.elements.get(this.currElement);
         double xMod = element.xMod;
         double yMod = element.yMod;
         double sizeXMod = element.sizeXMod;

@@ -2,7 +2,7 @@ package com.tac.guns.client.handler;
 
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Reference;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.animation.*;
 import com.tac.guns.client.render.animation.module.*;
 import com.tac.guns.common.Gun;
@@ -181,13 +181,13 @@ public enum AnimationHandler {
     }
 
     static {
-        final Runnable callback = () -> {
+        Keys.INSPECT.addPressCallback( () -> {
             final PlayerEntity player = Minecraft.getInstance().player;
             if (player == null) return;
-
+            
             final ItemStack stack = player.inventory.getCurrentItem();
             final GunAnimationController controller
-                    = GunAnimationController.fromItem(stack.getItem());
+                = GunAnimationController.fromItem(stack.getItem());
             if (controller != null && !controller.isAnimationRunning()) {
                 controller.stopAnimation();
                 if (Gun.hasAmmo(stack)) {
@@ -196,9 +196,7 @@ public enum AnimationHandler {
                     controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT_EMPTY);
                 }
             }
-        };
-        InputHandler.INSPECT.addPressCallback(callback);
-        InputHandler.CO_INSPECT.addPressCallback(callback);
+        } );
     }
 
     @SubscribeEvent
