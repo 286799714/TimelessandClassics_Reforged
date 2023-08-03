@@ -40,6 +40,7 @@ public class mk14_animation implements IOverrideModel {
     private final SpecialModel T_GRIP = new SpecialModel("mk14_tac_grip");
     private final SpecialModel L_GRIP = new SpecialModel("mk14_light_grip");
     private final SpecialModel SCOPE_MOUNT = new SpecialModel("mk14_mount");
+    private final SpecialModel MK14_SIGHT_LIGHT = new SpecialModel("mk14_sight_light");
 
     @Override
     public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
@@ -77,6 +78,7 @@ public class mk14_animation implements IOverrideModel {
                 RenderUtil.renderModel(T_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 
+            RenderUtil.renderModel(MK14_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             RenderUtil.renderModel(MK14_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         } matrices.pop();

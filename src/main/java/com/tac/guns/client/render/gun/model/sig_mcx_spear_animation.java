@@ -44,6 +44,7 @@ public class sig_mcx_spear_animation implements IOverrideModel {
         {
             controller.applySpecialModelTransform(SpecialModels.SIG_MCX_SPEAR.getModel(),SIGMCXAnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(SpecialModels.SIG_MCX_SPEAR_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.SIG_MCX_SPEAR_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {

@@ -63,6 +63,7 @@ public class qbz_95_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.QBZ_95_DEFAULT_MUZZLE.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 
+            RenderUtil.renderModel(SpecialModels.QBZ_95_BODY_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             RenderUtil.renderModel(SpecialModels.QBZ_95_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();

@@ -41,6 +41,7 @@ public class m24_animation implements IOverrideModel {
         {
             controller.applySpecialModelTransform(SpecialModels.M24_BODY.getModel(), M24AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(SpecialModels.M24_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.M24_IRON_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             RenderUtil.renderModel(SpecialModels.M24_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);

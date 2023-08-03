@@ -91,6 +91,7 @@ public class hk_mp5a5_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.HK_MP5A5_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
             matrices.pop();
 
+            RenderUtil.renderModel(SpecialModels.HK_MP5A5_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             RenderUtil.renderModel(SpecialModels.HK_MP5A5_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();

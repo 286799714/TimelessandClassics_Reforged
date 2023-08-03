@@ -1,0 +1,339 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [256, 256],
+	"textures": {
+		"2": "tac:items/aa_12/aa12_new",
+		"particle": "tac:items/aa_12/aa12_gauge"
+	},
+	"elements": [
+		{
+			"from": [7.95313, 14.89063, -6.10937],
+			"to": [8.04688, 15.20313, -6.01562],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8.00001, 15.04688, -6.06249]},
+			"faces": {
+				"north": {"uv": [8.125, 4.375, 8.14063, 4.39063], "texture": "#2", "cullface": "north"},
+				"east": {"uv": [4.5, 8.125, 4.51563, 8.14063], "texture": "#2", "cullface": "north"},
+				"south": {"uv": [8.125, 4.5, 8.14063, 4.51563], "texture": "#2", "cullface": "north"},
+				"west": {"uv": [4.625, 8.125, 4.64063, 8.14063], "texture": "#2", "cullface": "north"},
+				"up": {"uv": [8.14063, 4.64063, 8.125, 4.625], "texture": "#2", "cullface": "north"},
+				"down": {"uv": [8.14063, 4.75, 8.125, 4.76563], "texture": "#2", "cullface": "north"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, -0.25, -3.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"thirdperson_lefthand": {
+			"translation": [-0.5, -0.25, -3.5],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 0, 5],
+			"translation": [-6, 0, -5.25]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 0, 5],
+			"translation": [-6, 0, -5.25]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"gui": {
+			"rotation": [30, -145, 0],
+			"translation": [0.75, -2.25, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [-3, -2.25, -2],
+			"scale": [1.1, 1.1, 1.1]
+		}
+	},
+	"groups": [
+		0,
+		{
+			"name": "handstops",
+			"origin": [-1.3125, 7.25596, 5.85706],
+			"color": 8,
+			"children": []
+		},
+		{
+			"name": "suppressor move+2",
+			"origin": [18.3125, 8, 8],
+			"color": 8,
+			"children": [
+				{
+					"name": "octagon",
+					"origin": [28.4375, 8, 8],
+					"color": 8,
+					"children": [
+						{
+							"name": "group",
+							"origin": [21.4375, 10.75, -13],
+							"color": 8,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [21.4375, 10.75, -13],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "integratedSuppressor",
+					"origin": [18.3125, 13.5, -1.5],
+					"color": 8,
+					"children": [
+						{
+							"name": "group",
+							"origin": [18.31729, 15.58096, -9.80273],
+							"color": 8,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "compensator",
+			"origin": [8.0625, 8, 8],
+			"color": 3,
+			"children": [
+				{
+					"name": "octagon",
+					"origin": [8.0625, 8, 8],
+					"color": 3,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8.0625, 8, 8],
+					"color": 3,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8.0625, 8, 8],
+					"color": 3,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8.0625, 8, 8],
+					"color": 3,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8.0625, 8, 8],
+					"color": 3,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "brake",
+			"origin": [8, 8, 8],
+			"color": 5,
+			"children": [
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 5,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 5,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 5,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 5,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 5,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "front_rail",
+			"origin": [0, -0.125, 0],
+			"color": 0,
+			"children": [
+				{
+					"name": "group",
+					"origin": [12.875, 10.53125, 3.23438],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 5,
+					"children": []
+				},
+				{
+					"name": "group",
+					"origin": [11.79071, 10.78121, -3.26563],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "group",
+					"origin": [14.20929, 10.78121, -3.26563],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "grip2",
+			"origin": [8.36601, 6.79862, 2.65625],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "m+b",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "mag",
+					"origin": [40.24997, 6, 14.89063],
+					"color": 9,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "extdm+b",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "drum_mag",
+					"origin": [-15.6875, 8, 8],
+					"color": 2,
+					"children": [
+						{
+							"name": "hexadecagon",
+							"origin": [-15.6875, 8, 8],
+							"color": 2,
+							"children": []
+						},
+						{
+							"name": "hexadecagon",
+							"origin": [-15.6875, 8, 8],
+							"color": 2,
+							"children": []
+						},
+						{
+							"name": "hexadecagon",
+							"origin": [-15.6875, 8, 8],
+							"color": 2,
+							"children": []
+						},
+						{
+							"name": "hexadecagon",
+							"origin": [-15.6875, 8, 8],
+							"color": 2,
+							"children": []
+						},
+						{
+							"name": "hexadecagon",
+							"origin": [-15.6875, 8, 8],
+							"color": 2,
+							"children": []
+						},
+						{
+							"name": "hexadecagon",
+							"origin": [-15.6875, 8, 8],
+							"color": 2,
+							"children": []
+						},
+						{
+							"name": "hexadecagon",
+							"origin": [-15.6875, 8, 8],
+							"color": 2,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "12G",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "rear sight",
+			"origin": [8, 8, 8],
+			"color": 9,
+			"children": [
+				{
+					"name": "group",
+					"origin": [7.125, 0.625, -0.3125],
+					"color": 9,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "bolt(open bolt)",
+			"origin": [8, 8, 8],
+			"color": 4,
+			"children": [
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "group",
+					"origin": [7.98805, 11.48266, 12.85012],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		}
+	]
+}

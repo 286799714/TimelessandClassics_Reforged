@@ -78,6 +78,7 @@ public class aa_12_animation implements IOverrideModel {
             }
 
             RenderUtil.renderModel(SpecialModels.AA_12_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(SpecialModels.AA_12_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
         }
         matrices.pop();
 

@@ -59,8 +59,10 @@ public class mk18_mod1_animation implements IOverrideModel {
                 matrices.pop();
             }
             if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(SpecialModels.MK18_MOD1_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.MK18_MOD1_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
+                RenderUtil.renderModel(SpecialModels.MK18_MOD1_SIGHT_FOLDED_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.MK18_MOD1_SIGHT_FOLDED.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.orElse(ItemStack.EMPTY.getItem())) {

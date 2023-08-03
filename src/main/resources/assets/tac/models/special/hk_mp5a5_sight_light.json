@@ -1,0 +1,692 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"4": "tac:items/mp5/hk_mp5a5_others",
+		"particle": "tac:items/mp5/hk_mp5a5_tac_hg"
+	},
+	"elements": [
+		{
+			"from": [7.96875, 13, -0.34375],
+			"to": [8.03125, 13.1875, -0.28125],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 13.09375, -0.3125]},
+			"faces": {
+				"north": {"uv": [6.875, 8, 6.90625, 8.03125], "texture": "#4", "cullface": "north"},
+				"east": {"uv": [8, 7, 8.03125, 7.03125], "texture": "#4", "cullface": "north"},
+				"south": {"uv": [8, 7.125, 8.03125, 7.15625], "texture": "#4", "cullface": "north"},
+				"west": {"uv": [7.25, 8, 7.28125, 8.03125], "texture": "#4", "cullface": "north"},
+				"up": {"uv": [8.03125, 7.28125, 8, 7.25], "texture": "#4", "cullface": "north"},
+				"down": {"uv": [8.03125, 7.375, 8, 7.40625], "texture": "#4", "cullface": "north"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 0, -2.75],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 0, -2.75],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 0, 5],
+			"translation": [-6, 2.5, -3]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 0, 5],
+			"translation": [-6, 2.5, -3]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"gui": {
+			"rotation": [30, -145, 0],
+			"translation": [1, -2, 0],
+			"scale": [0.7, 0.7, 0.7]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [-1.75, -2, -2],
+			"scale": [1.1, 1.1, 1.1]
+		}
+	},
+	"groups": [
+		0,
+		{
+			"name": "hk_mp5a5_default_stock",
+			"origin": [8, 8, 8],
+			"color": 5,
+			"children": [
+				{
+					"name": "base",
+					"origin": [0, 0, 0],
+					"color": 5,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [7.875, 8, 8],
+							"color": 5,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [7.875, 8, 8],
+							"color": 5,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [0, 0, 0],
+							"color": 5,
+							"children": [
+								{
+									"name": "group",
+									"origin": [0, 0, -0.1875],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [0, 0, -0.1875],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [0.3125, 9.42292, 16.40473],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "group",
+							"origin": [8, 10.75, 17.75],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [8, 10.75, 18.46875],
+									"color": 0,
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_standard_handguard",
+			"origin": [8, 8, 8],
+			"color": 4,
+			"children": [
+				{
+					"name": "handguard",
+					"origin": [0, 0, 0],
+					"color": 4,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [7.90625, 8, 8],
+							"color": 4,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_standard_mag",
+			"origin": [-7.1875, 8, 8],
+			"color": 9,
+			"children": [
+				{
+					"name": "m+b",
+					"origin": [-7.1875, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "mag",
+							"origin": [1, 2.17624, 6.52612],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_bolt",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "bolt",
+					"origin": [10.19324, 16.29128, 41.5],
+					"color": 6,
+					"children": [
+						{
+							"name": "bolt",
+							"origin": [8.0126, 11.87725, 8.78126],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "bolt carry",
+							"origin": [8.38772, 21.19952, 10],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_bolt_handle",
+			"origin": [8, 8, 8],
+			"color": 3,
+			"children": [
+				{
+					"name": "bolthandle",
+					"origin": [10.19324, 16.29128, 41.5],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [0.77488, 14.68372, 27.1875],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_brake",
+			"origin": [8, 8, 8],
+			"color": 6,
+			"children": [
+				{
+					"name": "brake",
+					"origin": [8, 11.25, -4.96875],
+					"color": 6,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [15.875, 8, 8],
+							"color": 6,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [15.875, 8, 8],
+							"color": 6,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8, 11.25, -5.6875],
+							"color": 6,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8, 11.25, -5.6875],
+							"color": 6,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8, 11.25, -5.6875],
+							"color": 6,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_compensator",
+			"origin": [6.75, 8, 8],
+			"color": 6,
+			"children": [
+				{
+					"name": "compensator",
+					"origin": [6.75, 11.25, -4.96875],
+					"color": 6,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [15, 8, 8],
+							"color": 6,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [15, 8, 8],
+							"color": 6,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [6.75, 13.875, -2.125],
+							"color": 6,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [6.75, 11.25, -5.6875],
+							"color": 6,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [6.75, 8, 8],
+							"color": 6,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_silencer",
+			"origin": [8, 8, 8],
+			"color": 6,
+			"children": [
+				{
+					"name": "silencer",
+					"origin": [8, 8, 8],
+					"color": 6,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [15.14, 8, 8],
+							"color": 6,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 6,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_rail",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "rail",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "group",
+							"origin": [0, -0.0625, 0],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [0, -0.0625, 0],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [0, -0.0625, 0],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "group",
+							"origin": [0, -0.0625, 0],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [0, -0.0625, 0],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [0, -0.0625, 0],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "group",
+							"origin": [0, -0.0625, 0],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [0, -0.0625, 0],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [0, -0.0625, 0],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "group",
+							"origin": [0, -0.0625, 0],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [0, -0.0625, 0],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [0, -0.0625, 0],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "group",
+							"origin": [0, -0.0625, 0],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_extended_mag",
+			"origin": [-0.875, 8, 8],
+			"color": 9,
+			"children": [
+				{
+					"name": "extdm+b",
+					"origin": [-0.875, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "drum",
+							"origin": [-0.875, 8, 8],
+							"color": 9,
+							"children": [
+								{
+									"name": "group",
+									"origin": [4.96875, 0.1875, -0.0625],
+									"color": 0,
+									"children": [
+										{
+											"name": "hexadecagon",
+											"origin": [-0.875, 8, 8],
+											"color": 9,
+											"children": []
+										},
+										{
+											"name": "hexadecagon",
+											"origin": [-0.875, 8, 8],
+											"color": 9,
+											"children": []
+										},
+										{
+											"name": "hexadecagon",
+											"origin": [-0.875, 8, 8],
+											"color": 9,
+											"children": []
+										},
+										{
+											"name": "octagon",
+											"origin": [-0.875, 8, 8],
+											"color": 9,
+											"children": []
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_light_grip",
+			"origin": [8, 8, 8],
+			"color": 3,
+			"children": [
+				{
+					"name": "handstops",
+					"origin": [8, 7.25596, 5.85706],
+					"color": 3,
+					"children": [
+						{
+							"name": "pin",
+							"origin": [8, 9.46879, 3.91546],
+							"color": 8,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_tactical_grip",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "grip2",
+					"origin": [8.36601, 6.79862, 2.65625],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_light_stock",
+			"origin": [8, 8, 8],
+			"color": 5,
+			"children": [
+				{
+					"name": "base",
+					"origin": [0, 0, 0],
+					"color": 5,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [7.875, 8, 8],
+							"color": 5,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [7.875, 8, 8],
+							"color": 5,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [0, 0, 0],
+							"color": 5,
+							"children": [
+								{
+									"name": "group",
+									"origin": [0, 0, -0.1875],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [0, 0, -0.1875],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [0.3125, 9.42292, 16.40473],
+									"color": 0,
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "stock",
+					"origin": [0, 0, 0],
+					"color": 5,
+					"children": [
+						{
+							"name": "group",
+							"origin": [-4.52656, 9.67103, 0],
+							"color": 5,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [-4.52656, 9.67103, 0],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_heavy_stock",
+			"origin": [8, 8, 8],
+			"color": 5,
+			"children": [
+				{
+					"name": "heavy-stock",
+					"origin": [7.45201, 16.33146, 28.18375],
+					"color": 5,
+					"children": [
+						{
+							"name": "group",
+							"origin": [7.51517, 11.125, 24.02063],
+							"color": 3,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [6.71875, 21.6875, 17.125],
+							"color": 5,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [-0.125, -0.1875, -0.5],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_tactical_stock",
+			"origin": [8, 8, 8],
+			"color": 5,
+			"children": [
+				{
+					"name": "tac-stock",
+					"origin": [7.45201, 16.33146, 28.18375],
+					"color": 5,
+					"children": [
+						{
+							"name": "group",
+							"origin": [6.90625, 21.6875, 17.125],
+							"color": 5,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [7.63951, 6.33146, 27.43375],
+							"color": 5,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 5,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8.09822, 9.87387, 21.13636],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8.09822, 9.87387, 21.13636],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "hk_mp5a5_extended_handguard",
+			"origin": [8, 8, 8],
+			"color": 8,
+			"children": [
+				{
+					"name": "keymod handguard",
+					"origin": [8, 8, 8],
+					"color": 8,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [0.9375, 10.58088, 0],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8.0625, 8, 8],
+							"color": 8,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [10.19324, 13.29128, 41.5],
+							"color": 8,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "9mm",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": []
+		}
+	]
+}

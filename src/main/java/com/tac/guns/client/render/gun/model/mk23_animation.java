@@ -82,6 +82,7 @@ public class mk23_animation implements IOverrideModel
             }
             matrices.translate(0, 0, 0.025F);
         }
+        RenderUtil.renderModel(SpecialModels.MK23_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
         RenderUtil.renderModel(SpecialModels.MK23_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
         //Always pop
         matrices.pop();

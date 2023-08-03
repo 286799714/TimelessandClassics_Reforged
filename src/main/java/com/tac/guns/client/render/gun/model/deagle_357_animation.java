@@ -73,6 +73,7 @@ public class deagle_357_animation implements IOverrideModel {
             }
 
             RenderUtil.renderModel(SpecialModels.DEAGLE_50.getModel(), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(SpecialModels.DEAGLE_50_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
         }
         matrices.pop();
         //Always push

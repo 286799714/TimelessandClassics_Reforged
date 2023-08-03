@@ -58,6 +58,7 @@ public class mp7_animation implements IOverrideModel {
                 matrices.pop();
             }
             if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(SpecialModels.MP7_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.MP7_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {

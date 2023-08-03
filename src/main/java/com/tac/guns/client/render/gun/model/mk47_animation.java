@@ -39,8 +39,10 @@ public class mk47_animation implements IOverrideModel {
             controller.applySpecialModelTransform(SpecialModels.MK47_BODY.getModel(),MK47AnimationController.INDEX_BODY,transformType,matrices);
 
             if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(SpecialModels.MK47_SIGHTS_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.MK47_FSU.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
+                RenderUtil.renderModel(SpecialModels.MK47_SIGHTSF_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.MK47_FS.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.orElse(ItemStack.EMPTY.getItem())) {

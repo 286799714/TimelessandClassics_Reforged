@@ -39,6 +39,7 @@ public class m82a2_animation implements IOverrideModel {
         {
             controller.applySpecialModelTransform(SpecialModels.M82A2_BODY.getModel(), M82A2AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(SpecialModels.M82A2_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.M82A2_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
                 RenderUtil.renderModel(SpecialModels.M82A2_SIGHT_FOLDED.getModel(), stack, matrices, renderBuffer, light, overlay);

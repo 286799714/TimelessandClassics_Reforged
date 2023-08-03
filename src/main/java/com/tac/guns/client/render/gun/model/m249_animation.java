@@ -40,6 +40,7 @@ public class m249_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.M249_LIGHT_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 
+            RenderUtil.renderModel(SpecialModels.M249_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             RenderUtil.renderModel(SpecialModels.M249.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();

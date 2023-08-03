@@ -101,6 +101,7 @@ public class m4_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.M4_DEFAULT_BARREL.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 
+            RenderUtil.renderModel(SpecialModels.M4_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             RenderUtil.renderModel(SpecialModels.M4_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
 
             matrices.push();

@@ -32,8 +32,7 @@ public class timeless_50_animation implements IOverrideModel {
 
     //The render method, similar to what is in DartEntity. We can render the item
     @Override
-    public void render(float partialTicks, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
-    {
+    public void render(float partialTicks, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
         Timeless50AnimationController controller = Timeless50AnimationController.getInstance();
 
         boolean renderClumsy = Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get() ||
@@ -42,13 +41,12 @@ public class timeless_50_animation implements IOverrideModel {
 
         matrices.push();
         {
-            matrices.translate(0,yAdjust,0);
-            controller.applySpecialModelTransform(SpecialModels.TIMELESS_50.getModel(),Timeless50AnimationController.INDEX_BODY,transformType,matrices);
+            matrices.translate(0, yAdjust, 0);
+            controller.applySpecialModelTransform(SpecialModels.TIMELESS_50.getModel(), Timeless50AnimationController.INDEX_BODY, transformType, matrices);
             if (renderClumsy) {
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_E_BARREL.getModel(), stack, matrices, renderBuffer, light, overlay);
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_CLUMSYYY.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
-            }
-            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_S_BARREL.getModel(), stack, matrices, renderBuffer, light, overlay);
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_NEKOOO.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 matrices.push();
@@ -56,8 +54,7 @@ public class timeless_50_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
                 matrices.translate(0, 0, 0.3125);
                 matrices.pop();
-            }
-            else {
+            } else {
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_S_BARREL.getModel(), stack, matrices, renderBuffer, light, overlay);
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_NEKOOO.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             }
@@ -67,8 +64,8 @@ public class timeless_50_animation implements IOverrideModel {
 
         matrices.push();
         {
-            matrices.translate(0,yAdjust,0);
-            if(transformType.isFirstPerson()) {
+            matrices.translate(0, yAdjust, 0);
+            if (transformType.isFirstPerson()) {
                 controller.applySpecialModelTransform(SpecialModels.TIMELESS_50.getModel(), Timeless50AnimationController.INDEX_SLIDE, transformType, matrices);
                 Gun gun = ((GunItem) stack.getItem()).getGun();
                 float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 :
@@ -88,10 +85,13 @@ public class timeless_50_animation implements IOverrideModel {
                     }
                 }
             }
-            if(renderClumsy)
+            if (renderClumsy) {
+                RenderUtil.renderModel(SpecialModels.TIMELESS_50_E_SLIDE_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_E_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
-            else
+            } else {
+                RenderUtil.renderModel(SpecialModels.TIMELESS_50_S_SLIDE_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_S_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
+            }
         }
         matrices.pop();
 
@@ -105,20 +105,17 @@ public class timeless_50_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.TIMELESS_50.getModel(), Timeless50AnimationController.INDEX_MAG, transformType, matrices);
-            if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_EMPTY) || controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation()))
+            if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_EMPTY) || controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation()))
                 matrices.translate(-0.00175, 0, 0); //-0.02, 0.05);
-            if(GunModifierHelper.getAmmoCapacity(stack) > -1)
-            {
+            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_E_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-            else
-            {
+            } else {
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_S_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
         matrices.pop();
 
-        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
+        if (controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.TIMELESS_50.getModel(), Timeless50AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
@@ -133,18 +130,18 @@ public class timeless_50_animation implements IOverrideModel {
             matrices.pop();
         }
 
-        if(!controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation())) {
+        if (!controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation())) {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.TIMELESS_50.getModel(), Timeless50AnimationController.INDEX_BULLET1, transformType, matrices);
-                if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_EMPTY) || controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation()))
+                if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_EMPTY) || controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation()))
                     matrices.translate(-0.00175, 0, 0);
                 RenderUtil.renderModel(SpecialModels.TIMELESS_50_BULLET1.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             matrices.pop();
         }
 
-        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && !controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
+        if (controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && !controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.TIMELESS_50.getModel(), Timeless50AnimationController.INDEX_BULLET2, transformType, matrices);
@@ -155,6 +152,6 @@ public class timeless_50_animation implements IOverrideModel {
             matrices.pop();
         }
 
-        PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
+        PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
     }
 }

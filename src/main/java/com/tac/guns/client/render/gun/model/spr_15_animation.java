@@ -38,8 +38,10 @@ public class spr_15_animation implements IOverrideModel {
         {
             controller.applySpecialModelTransform(SpecialModels.SPR_15_BODY.getModel(), SPR15AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(SpecialModels.SPR_15_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.SPR_15_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
+                RenderUtil.renderModel(SpecialModels.SPR_15_SIGHT_FOLDED_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.SPR_15_SIGHT_FOLDED.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 

@@ -41,6 +41,7 @@ public class uzi_animation implements IOverrideModel {
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.UZI_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
+            RenderUtil.renderModel(SpecialModels.UZI_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             RenderUtil.renderModel(SpecialModels.UZI.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();

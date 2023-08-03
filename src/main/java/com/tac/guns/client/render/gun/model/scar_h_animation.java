@@ -39,8 +39,10 @@ public class scar_h_animation implements IOverrideModel {
         {
             controller.applySpecialModelTransform(SpecialModels.SCAR_H_BODY.getModel(), SCAR_HAnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(SpecialModels.SCAR_H_FSU_L.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.SCAR_H_FSU.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
+                RenderUtil.renderModel(SpecialModels.SCAR_H_FS_L.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.SCAR_H_FS.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 

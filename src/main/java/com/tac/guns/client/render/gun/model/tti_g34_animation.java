@@ -95,6 +95,7 @@ public class tti_g34_animation implements IOverrideModel {
             }
             matrices.translate(0, 0, 0.025F);
         }
+        RenderUtil.renderModel(SpecialModels.TTI_G34_SLIDE_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
         RenderUtil.renderModel(SpecialModels.TTI_G34_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop

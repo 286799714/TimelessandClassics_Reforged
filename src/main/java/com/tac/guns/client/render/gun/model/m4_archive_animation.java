@@ -102,6 +102,7 @@ public class m4_archive_animation implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.M4_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
 
+        RenderUtil.renderModel(SpecialModels.M4_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
         RenderUtil.renderModel(SpecialModels.M4_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         //RenderUtil.renderModel(SpecialModels.M4_BOLT_HANDLE.getModel(), stack, matrices, renderBuffer, light, overlay);
 

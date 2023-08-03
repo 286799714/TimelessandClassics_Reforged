@@ -41,6 +41,7 @@ public class qbz_191_animation implements IOverrideModel {
             if (Gun.getScope(stack) != null) {
                 RenderUtil.renderModel(SpecialModels.QBZ_191F.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
+                RenderUtil.renderModel(SpecialModels.QBZ_191NF_L.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.QBZ_191NF.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {

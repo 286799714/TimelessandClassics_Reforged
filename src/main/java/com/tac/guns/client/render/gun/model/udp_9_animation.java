@@ -44,8 +44,10 @@ public class udp_9_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.UDP_9_RAIL_COVER.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getScope(stack) != null) {
+                RenderUtil.renderModel(SpecialModels.UDP_9_SIGHT_FOLDED_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.UDP_9_SIGHT_FOLDED.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
+                RenderUtil.renderModel(SpecialModels.UDP_9_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.UDP_9_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) != ItemStack.EMPTY) {

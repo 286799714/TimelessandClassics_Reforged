@@ -36,6 +36,7 @@ public class m1014_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.M1014.getModel(), M1014AnimationController.INDEX_BODY, transformType, matrices);
+            RenderUtil.renderModel(SpecialModels.M1014_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             RenderUtil.renderModel(SpecialModels.M1014.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();

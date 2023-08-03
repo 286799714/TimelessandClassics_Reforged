@@ -84,6 +84,7 @@ public class hk_g3_animation implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.HK_G3_DEFAULT_STOCK.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
 
+            RenderUtil.renderModel(SpecialModels.HK_G3_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             RenderUtil.renderModel(SpecialModels.HK_G3_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();

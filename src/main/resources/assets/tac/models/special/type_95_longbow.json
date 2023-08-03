@@ -3863,19 +3863,6 @@
 		},
 		{
 			"name": "octagon",
-			"from": [8.00373, 12.73438, -0.20312],
-			"to": [8.09748, 13.00001, -0.10937],
-			"rotation": {"angle": 45, "axis": "y", "origin": [8.0287, 12.86719, -0.09375]},
-			"faces": {
-				"north": {"uv": [6, 13.75, 6.0625, 13.8125], "texture": "#4", "cullface": "north"},
-				"east": {"uv": [13.75, 6.5, 13.8125, 6.5625], "texture": "#4", "cullface": "north"},
-				"south": {"uv": [6.75, 13.75, 6.8125, 13.8125], "texture": "#4", "cullface": "north"},
-				"west": {"uv": [13.75, 7.25, 13.8125, 7.3125], "texture": "#4", "cullface": "north"},
-				"up": {"uv": [13.8125, 7.5625, 13.75, 7.5], "texture": "#4", "cullface": "north"}
-			}
-		},
-		{
-			"name": "octagon",
 			"from": [7.81878, 13.35938, -0.5],
 			"to": [8.18122, 13.48438, 0.34375],
 			"rotation": {"angle": 45, "axis": "z", "origin": [8, 13.04688, -0.25]},
@@ -4849,18 +4836,17 @@
 								349,
 								350,
 								351,
-								352,
 								{
 									"name": "octagon",
 									"origin": [8, 8, 8],
 									"color": 0,
-									"children": [353, 354, 355, 356]
+									"children": [352, 353, 354, 355]
 								},
 								{
 									"name": "group",
 									"origin": [8, 11.6875, 17],
 									"color": 0,
-									"children": [357, 358, 359, 360]
+									"children": [356, 357, 358, 359]
 								}
 							]
 						},
@@ -4868,41 +4854,41 @@
 							"name": "octagon",
 							"origin": [8, 8, 8],
 							"color": 8,
-							"children": [361, 362, 363, 364, 365, 366, 367, 368]
+							"children": [360, 361, 362, 363, 364, 365, 366, 367]
 						},
 						{
 							"name": "octagon",
 							"origin": [8, 8, 8],
 							"color": 8,
-							"children": [369, 370, 371, 372]
+							"children": [368, 369, 370, 371]
 						},
 						{
 							"name": "octagon",
 							"origin": [8, 8, 8],
 							"color": 8,
-							"children": [373, 374, 375, 376]
+							"children": [372, 373, 374, 375]
 						},
 						{
 							"name": "group",
 							"origin": [7.5, 12.3125, -2.25],
 							"color": 8,
 							"children": [
-								377,
+								376,
 								{
 									"name": "octagon",
 									"origin": [8, 8, 8],
 									"color": 8,
-									"children": [378, 379, 380, 381]
+									"children": [377, 378, 379, 380]
 								}
 							]
 						},
+						381,
 						382,
-						383,
 						{
 							"name": "octagon",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"children": [384, 385, 386, 387, 388, 389, 390, 391]
+							"children": [383, 384, 385, 386, 387, 388, 389, 390]
 						}
 					]
 				}

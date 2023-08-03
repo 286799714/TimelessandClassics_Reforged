@@ -1,0 +1,478 @@
+{
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"texture_size": [128, 128],
+	"textures": {
+		"12": "tac:items/mk18/mk18_mix_other"
+	},
+	"elements": [
+		{
+			"from": [8, 12.86206, -2.64062],
+			"to": [8.04419, 12.90625, -2.48437],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8, 12.90625, -2.5625]},
+			"faces": {
+				"north": {"uv": [1.75, 14, 1.8125, 14.0625], "texture": "#12", "cullface": "north"},
+				"south": {"uv": [2.25, 14, 2.3125, 14.0625], "texture": "#12", "cullface": "north"},
+				"west": {"uv": [2.5, 14, 2.5625, 14.0625], "texture": "#12", "cullface": "north"},
+				"up": {"uv": [14.0625, 2.5625, 14, 2.5], "texture": "#12", "cullface": "north"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 0.5, -3.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 0.5, -3.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"translation": [-6, 3.5, -2]
+		},
+		"firstperson_lefthand": {
+			"translation": [-6, 3.5, -2]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"gui": {
+			"rotation": [30, -145, 0],
+			"translation": [1.25, -1, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [-5, -0.5, -2],
+			"scale": [1.1, 1.1, 1.1]
+		}
+	},
+	"groups": [
+		0,
+		{
+			"name": "m4_default",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "pull",
+					"origin": [8, 15.64063, 16.95313],
+					"color": 0,
+					"children": [
+						{
+							"name": "pull",
+							"origin": [7.98169, 8.76835, 7.99608],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "body-rail",
+					"origin": [7.90717, 10.36951, 0.40625],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "buffer",
+					"origin": [8.01863, 10.04621, 5.59979],
+					"color": 6,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "barrel",
+					"origin": [8, 13.5, -1.5],
+					"color": 0,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "body",
+					"origin": [0, 0, -0.1875],
+					"color": 9,
+					"children": [
+						{
+							"name": "upper",
+							"origin": [7.98169, 9.03398, 7.80858],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [8.88597, 9.75161, 12.52344],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [7.98169, 8.65898, 7.55858],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "cap",
+							"origin": [7.80982, 8.83085, 7.99608],
+							"color": 9,
+							"children": []
+						},
+						{
+							"name": "deco",
+							"origin": [8, 8.35938, 17.57813],
+							"color": 7,
+							"children": [
+								{
+									"name": "group",
+									"origin": [8, 7.35938, 15.14063],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "light_part",
+									"origin": [7.98169, 8.76835, 7.99608],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [7.98169, 8.76835, 7.99608],
+											"color": 0,
+											"children": []
+										},
+										{
+											"name": "group",
+											"origin": [7.98169, 8.76835, 7.99608],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "grip",
+					"origin": [0, 0, -0.1875],
+					"color": 6,
+					"children": []
+				},
+				{
+					"name": "mk18_hg",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "screws",
+							"origin": [7.28125, 10.26563, 7.25],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "octagon",
+									"origin": [8, 8, 8],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "octagon",
+									"origin": [8, 8, 8],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "octagon",
+									"origin": [8, 8, 8],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "octagon",
+									"origin": [8, 8, 8],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "octagon",
+									"origin": [8, 8, 8],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "group",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "rail",
+									"origin": [10.29308, 9.17567, -2.75],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "rail",
+									"origin": [10.29308, 9.17567, -2.75],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "rail",
+									"origin": [9.12121, 9.17567, -2.75],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "rail",
+									"origin": [9.12121, 9.17567, -2.75],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "hg",
+									"origin": [9.29327, 10.84015, 0.5],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "gas_tube",
+							"origin": [8, 10.125, -7.07812],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "m+b",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "magazine",
+					"origin": [8, 3.77323, 4.01603],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "extdmag+b",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "extend-magazine",
+					"origin": [8, 3.77323, 4.01603],
+					"color": 9,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "muzzle-default",
+			"origin": [7.98169, 9.14335, 7.74608],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "silencer",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "m4-muzzle_c",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "compensator",
+					"origin": [7.98169, 8.76835, 6.74608],
+					"color": 0,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "group",
+					"origin": [8, 11.15625, -9],
+					"color": 0,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 7.15625, -8.85937],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8, 7.15625, -8.85937],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "m4-muzzle_b",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "group",
+					"origin": [8, 11.15625, -9],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "group",
+					"origin": [8, 11.15625, -8.29687],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "grip2",
+			"origin": [8.36601, 6.79862, 2.65625],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "handstops",
+			"origin": [8, 7.25596, 5.85706],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "bolt",
+			"origin": [8, 8, 8],
+			"color": 2,
+			"children": [
+				{
+					"name": "group",
+					"origin": [8.03503, 16.52602, 11.95135],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "fore sight fold",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "group",
+					"origin": [8, 11.25, -2.5625],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "rotate",
+					"origin": [0, 3.25, -10.5625],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "rear sight fold",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "rotate",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "group",
+					"origin": [8, 11.25, -2.5625],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "B5_stock",
+			"origin": [8, 12.41507, 28.09375],
+			"color": 0,
+			"children": [
+				{
+					"name": "group",
+					"origin": [9.07403, 8.40707, 18.75],
+					"color": 0,
+					"children": []
+				}
+			]
+		}
+	]
+}

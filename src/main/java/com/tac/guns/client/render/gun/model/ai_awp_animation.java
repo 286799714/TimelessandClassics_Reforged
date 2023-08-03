@@ -46,6 +46,7 @@ public class ai_awp_animation implements IOverrideModel {
             controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_BODY,transformType,matrices);
             if (Gun.getScope(stack) == null) {
                 RenderUtil.renderModel(SpecialModels.AI_AWP_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(SpecialModels.AI_AWP_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
                 matrices.push();

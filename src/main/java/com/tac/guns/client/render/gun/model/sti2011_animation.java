@@ -42,7 +42,7 @@ public class sti2011_animation implements IOverrideModel {
         STI2011AnimationController controller = STI2011AnimationController.getInstance();
         matrices.push();
         {
-            controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(),STI2011AnimationController.INDEX_BODY,transformType,matrices);
+            controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.STI2011_BASIC_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 RenderUtil.renderLaserModuleModel(SpecialModels.STI2011_BASIC_LASER.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
@@ -58,26 +58,27 @@ public class sti2011_animation implements IOverrideModel {
         matrices.pop();
 
         matrices.push();
-            controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_SLIDE, transformType, matrices);
-            if(transformType.isFirstPerson()) {
-                Gun gun = ((GunItem) stack.getItem()).getGun();
-                float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 :
-                        ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
+        controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_SLIDE, transformType, matrices);
+        if (transformType.isFirstPerson()) {
+            Gun gun = ((GunItem) stack.getItem()).getGun();
+            float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 :
+                    ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
-                AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
-                boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
-                //matrices.translate(0.00, 0.0, 0.035); // Issues with the slide starting out further forward, seems to be ~ a 0.035 movement
-                if (Gun.hasAmmo(stack) || shouldOffset) {
-                    // Math provided by Bomb787 on GitHub and Curseforge!!!
-                    matrices.translate(0, 0, 0.235f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
-                    GunRenderingHandler.get().opticMovement = 0.235f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0);
-                } else if (!Gun.hasAmmo(stack)) {
-                    matrices.translate(0, 0, 0.235f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
-                    GunRenderingHandler.get().opticMovement = 0.235f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0);
-                }
-                matrices.translate(0, 0, 0.025F);
+            AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
+            boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
+            //matrices.translate(0.00, 0.0, 0.035); // Issues with the slide starting out further forward, seems to be ~ a 0.035 movement
+            if (Gun.hasAmmo(stack) || shouldOffset) {
+                // Math provided by Bomb787 on GitHub and Curseforge!!!
+                matrices.translate(0, 0, 0.235f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
+                GunRenderingHandler.get().opticMovement = 0.235f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0);
+            } else if (!Gun.hasAmmo(stack)) {
+                matrices.translate(0, 0, 0.235f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
+                GunRenderingHandler.get().opticMovement = 0.235f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0);
             }
-            RenderUtil.renderModel(SpecialModels.STI2011_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
+            matrices.translate(0, 0, 0.025F);
+        }
+        RenderUtil.renderModel(SpecialModels.STI2011_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
+        RenderUtil.renderModel(SpecialModels.STI2011_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
         matrices.pop();
 
         matrices.push();
@@ -90,18 +91,15 @@ public class sti2011_animation implements IOverrideModel {
         matrices.push();
         {
             controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_MAG, transformType, matrices);
-            if(GunModifierHelper.getAmmoCapacity(stack) > -1)
-            {
+            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                 RenderUtil.renderModel(SpecialModels.STI2011_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-            else
-            {
+            } else {
                 RenderUtil.renderModel(SpecialModels.STI2011_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
         }
         matrices.pop();
 
-        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
+        if (controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
@@ -116,7 +114,7 @@ public class sti2011_animation implements IOverrideModel {
             matrices.pop();
         }
 
-        if(!controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation())) {
+        if (!controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation())) {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_BULLET1, transformType, matrices);
@@ -125,7 +123,7 @@ public class sti2011_animation implements IOverrideModel {
             matrices.pop();
         }
 
-        if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && !controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
+        if (controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && !controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation()) && transformType.isFirstPerson()) {
             matrices.push();
             {
                 controller.applySpecialModelTransform(SpecialModels.STI2011_BODY.getModel(), STI2011AnimationController.INDEX_BULLET2, transformType, matrices);
@@ -136,6 +134,6 @@ public class sti2011_animation implements IOverrideModel {
             matrices.pop();
         }
 
-        PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
+        PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
     }
 }

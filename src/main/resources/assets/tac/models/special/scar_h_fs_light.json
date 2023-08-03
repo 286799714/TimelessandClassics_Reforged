@@ -1,0 +1,487 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"3": "tac:items/scar_h/scar_h_3",
+		"particle": "tac:items/scar_h/extd_mag_6"
+	},
+	"elements": [
+		{
+			"from": [8.01942, 11.11044, -2.13736],
+			"to": [8.11317, 11.20419, -1.71361],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8, 11.22361, -0.49688]},
+			"faces": {
+				"north": {"uv": [4.75, 7.8125, 4.78125, 7.84375], "texture": "#3", "cullface": "north"},
+				"east": {"uv": [7.8125, 4.75, 7.84375, 4.78125], "texture": "#3", "cullface": "north"},
+				"south": {"uv": [4.875, 7.8125, 4.90625, 7.84375], "texture": "#3", "cullface": "north"},
+				"west": {"uv": [7.8125, 4.875, 7.84375, 4.90625], "texture": "#3", "cullface": "north"},
+				"up": {"uv": [5.15625, 7.84375, 5.125, 7.8125], "texture": "#3", "cullface": "north"},
+				"down": {"uv": [7.84375, 5.125, 7.8125, 5.15625], "texture": "#3", "cullface": "north"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 0.5, -4],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 0.5, -4],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"translation": [-4, 2.25, -6.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4, 2.25, -6.25]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"gui": {
+			"rotation": [30, -145, 0],
+			"translation": [0.75, -1.5, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [-7.5, -0.5, -2],
+			"scale": [1.1, 1.1, 1.1]
+		}
+	},
+	"groups": [
+		{
+			"name": "default_gun",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "body",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "metal",
+							"origin": [8.50379, 9.84175, 2.75781],
+							"color": 3,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.5, 0, 0],
+									"color": 3,
+									"children": []
+								},
+								{
+									"name": "hinge",
+									"origin": [8.875, 16.00937, 13.59375],
+									"color": 0,
+									"children": [
+										{
+											"name": "octagon",
+											"origin": [8, 8, 8],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "plastic",
+							"origin": [8, 5.1992, 10.71676],
+							"color": 2,
+							"children": [
+								{
+									"name": "upper",
+									"origin": [8.50693, 17.43371, 10.5],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [7.82664, 9.375, 6.1319],
+											"color": 0,
+											"children": []
+										},
+										{
+											"name": "group",
+											"origin": [8, 9.09218, 13.2279],
+											"color": 0,
+											"children": []
+										}
+									]
+								},
+								{
+									"name": "lower",
+									"origin": [7.5, 8.9375, 0],
+									"color": 0,
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "barrel",
+					"origin": [8, 8, 8],
+					"color": 8,
+					"children": [
+						{
+							"name": "gaslock",
+							"origin": [8.2961, 17.2336, -6.28125],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "gas_tube",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "rails",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "导轨(Gun rails)",
+							"origin": [7.90717, 10.36951, 0.40625],
+							"color": 3,
+							"children": []
+						},
+						{
+							"name": "导轨(Gun rails)",
+							"origin": [7.90717, 10.36951, 0.40625],
+							"color": 3,
+							"children": []
+						},
+						{
+							"name": "导轨(Gun rails)",
+							"origin": [7.90717, 10.36951, 0.40625],
+							"color": 3,
+							"children": []
+						},
+						{
+							"name": "导轨(Gun rails)",
+							"origin": [7.90717, 10.36951, 0.40625],
+							"color": 3,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "stock",
+					"origin": [8, 8, 8],
+					"color": 6,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 6,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "stock_extended_part",
+					"origin": [8, 7.50937, 23.57812],
+					"color": 0,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 5.16403, 27.66044],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "grip",
+					"origin": [0, 0, -0.1875],
+					"color": 9,
+					"children": []
+				},
+				{
+					"name": "trigger",
+					"origin": [8, 4.60545, 8.90909],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "buttons",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "switch",
+							"origin": [8, 8, 8],
+							"color": 8,
+							"children": []
+						},
+						{
+							"name": "mag release",
+							"origin": [7.28125, 6.2953, 5.93371],
+							"color": 0,
+							"children": [
+								{
+									"name": "octagon",
+									"origin": [8, 8, 8],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "hold release",
+							"origin": [6.5, 7, 7.0625],
+							"color": 4,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "screws",
+					"origin": [8, 8, 2.33081],
+					"color": 0,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.8125, 0.625],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "barrel",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "sights",
+			"origin": [8, 8, 8],
+			"color": 5,
+			"children": [
+				{
+					"name": "fore",
+					"origin": [8, 11.50284, 21.80938],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "rear",
+					"origin": [8, 11.50284, 21.80938],
+					"color": 9,
+					"children": [
+						{
+							"name": "group",
+							"origin": [9.125, 10.3125, 3.9375],
+							"color": 9,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 9,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 9,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 9,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 9,
+							"children": []
+						},
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 9,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		0,
+		{
+			"name": "bolt",
+			"origin": [8, 8, 8],
+			"color": 3,
+			"children": [
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "m+b",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "default_mag",
+					"origin": [7.5, -1, 11.625],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "extdm+b",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "extd_mag",
+					"origin": [8.68057, -0.6875, 12.56185],
+					"color": 0,
+					"children": [
+						{
+							"name": "group",
+							"origin": [7.5, 5, 9.4375],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [7.74114, 3.03125, 9.42297],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8, 1.02853, 11.05415],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8, 2.40353, 11.05415],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [8, 3.77853, 11.05415],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "handstops",
+			"origin": [8, 7.25596, 5.85706],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "grip2",
+			"origin": [8.36601, 6.79862, 2.65625],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "silencer move +2",
+			"origin": [8, 8, 8],
+			"color": 7,
+			"children": [
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 7,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 7,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 7,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "brake",
+			"origin": [8, 8, -12.75],
+			"color": 0,
+			"children": [
+				{
+					"name": "group",
+					"origin": [8, 9, -12.75],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "group",
+					"origin": [8, 9, -12],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "default_muzzle",
+			"origin": [8, 8, -12.75],
+			"color": 0,
+			"children": [
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "copensator",
+			"origin": [8, 8, -12.75],
+			"color": 0,
+			"children": [
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		}
+	]
+}

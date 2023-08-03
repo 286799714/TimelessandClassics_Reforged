@@ -40,6 +40,7 @@ public class vector45_animation implements IOverrideModel {
             controller.applySpecialModelTransform(SpecialModels.VECTOR45_BODY.getModel(), Vector45AnimationController.INDEX_BODY, transformType, matrices);
             if(Gun.getScope(stack) == null && Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack) == ItemStack.EMPTY)
             {
+                RenderUtil.renderModel(SpecialModels.VECTOR45_SIGHT_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(SpecialModels.VECTOR45_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
             if(Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.orElse(ItemStack.EMPTY.getItem()))
@@ -91,6 +92,7 @@ public class vector45_animation implements IOverrideModel {
                 }
             }
 
+            RenderUtil.renderModel(SpecialModels.VECTOR45_BODY_LIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
             RenderUtil.renderModel(SpecialModels.VECTOR45_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();

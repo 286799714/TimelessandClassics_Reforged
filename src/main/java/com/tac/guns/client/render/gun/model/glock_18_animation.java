@@ -101,6 +101,7 @@ public class glock_18_animation implements IOverrideModel
             }
             matrices.translate(0, 0, 0.025F);
         }
+        RenderUtil.renderModel(SpecialModels.GLOCK_18_SIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
         RenderUtil.renderModel(SpecialModels.GLOCK_18_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
         //Always pop
         matrices.pop();
