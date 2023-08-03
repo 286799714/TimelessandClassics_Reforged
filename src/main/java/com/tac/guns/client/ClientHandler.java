@@ -117,7 +117,7 @@ public class ClientHandler
 
         // Load key binds.
         InputHandler.initInputSystem();
-        keyBindsFile = new File( mc.gameDir, "config/tac-key-binds.json" );
+        keyBindsFile = new File( mc.gameDir, "config/tac-key-binds-v2.json" );
         if ( keyBindsFile.exists() ) {
             InputHandler.loadKeyBindsFrom( keyBindsFile );
         }
