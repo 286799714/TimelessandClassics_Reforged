@@ -7,12 +7,12 @@
       1
     ],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 2.9,
-    "recoilKick": 0.84999996,
+    "recoilAngle": 3.1,
+    "recoilKick": 0.5,
     "horizontalRecoilAngle": 1.375,
     "cameraRecoilModifier": 0.9125,
     "recoilDuration": 0.1925,
-    "weaponRecoilOffset": 0.935,
+    "weaponRecoilOffset": 0.9,
     "recoilAdsReduction": 0.295,
     "alwaysSpread": true,
     "spread": 1.375,
@@ -60,9 +60,9 @@
   },
   "modules": {
     "zoom": {
-      "fovModifier": 0.7,
+      "fovModifier": 0.8,
       "yOffset": 8.155,
-      "zOffset": -4.75
+      "zOffset": -5.5
     },
     "attachments":
     {

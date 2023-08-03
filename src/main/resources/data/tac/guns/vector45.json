@@ -7,7 +7,7 @@
     "rateSelector": [2, 3],
     "gripType": "tac:two_handed_vector",
     "recoilAngle": 1.575,
-    "horizontalRecoilAngle": 1.275,
+    "horizontalRecoilAngle": 2.5,
     "recoilKick": 2.575,
     "recoilAdsReduction": 0.205,
     "weaponRecoilOffset": 0.9275,
@@ -84,9 +84,9 @@
   },
   "modules": {
     "zoom":{
-      "fovModifier": 0.9,
-      "yOffset": 14.85,
-      "zOffset": 2.5
+      "fovModifier": 0.8,
+      "yOffset": 14.8,
+      "zOffset": 3
     },
     "attachments": {
       "barrel": {

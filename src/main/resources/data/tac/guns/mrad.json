@@ -5,11 +5,11 @@
     "rateSelector": [1],
     "gripType": "tac:two_handed_mosin",
     "recoilAngle": 7.85,
-    "recoilKick": 2.325,
+    "recoilKick": 1.25,
     "horizontalRecoilAngle": 0.325,
-    "recoilAdsReduction": 0.28,
+    "recoilAdsReduction": 0.325,
     "weaponRecoilDuration": 0.625,
-    "recoilDuration": 0.14,
+    "recoilDuration": 0.5,
     "cameraRecoilModifier": 1.325,
     "weightKilo": 6.0,
 
@@ -65,7 +65,7 @@
   "modules": {
     "zoom": {
       "fovModifier": 0.7,
-      "yOffset": 13.225,
+      "yOffset": 13.1875,
       "zOffset": 0
     },
     "attachments": {

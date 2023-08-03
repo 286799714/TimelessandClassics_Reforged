@@ -6,9 +6,9 @@
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 3.35,
     "horizontalRecoilAngle": 1.25,
-    "recoilKick": 1.325,
-    "recoilAdsReduction": 0.225,
-    "weaponRecoilOffset": 0.865,
+    "recoilKick": 1.375,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.78,
     "cameraRecoilDuration": 1.025,
     "cameraRecoilModifier": 1.125,
     "recoilDuration": 0.225,
@@ -85,7 +85,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 12.58,
-      "zOffset": -0.5
+      "zOffset": 0
     },
     "attachments": {
       "scope": {
