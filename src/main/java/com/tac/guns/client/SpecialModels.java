@@ -182,6 +182,7 @@ public enum SpecialModels
     DEAGLE_50("deagle_50_body"),
     DEAGLE_50_EXTENDED_MAG("deagle_50_extended_mag"),
     DEAGLE_50_SLIDE("deagle_50_slide"),
+    DEAGLE_50_SLIDE_LIGHT("deagle_50_slide_light"),
     DEAGLE_50_STANDARD_MAG("deagle_50_standard_mag"),
     DEAGLE_50_SIGHT_LIGHT("deagle_50_sight_light"),
     AA_12_BODY("aa_12_body"),
