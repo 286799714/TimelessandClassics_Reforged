@@ -19,7 +19,7 @@ import java.util.function.BiConsumer;
  * @see InputHandler
  * @author Giant_Salted_Fish
  */
-public final class KeyBind
+public class KeyBind
 {
 	public static final HashMap< String, KeyBind > REGISTRY = new HashMap<>();
 	
@@ -39,12 +39,12 @@ public final class KeyBind
 		add.accept( GLFW.GLFW_KEY_RIGHT_ALT, KeyModifier.ALT );
 	}
 	
+	protected final KeyBinding vanilla_key_bind;
+	
+	protected Input key_code;
+	protected KeyModifier key_modifier;
+	
 	private boolean is_down;
-	
-	private Input key_code;
-	private KeyModifier key_modifier;
-	
-	private final KeyBinding vanilla_key_bind;
 	
 	private final LinkedList< Runnable >
 		press_callbacks = new LinkedList<>(),
@@ -94,28 +94,34 @@ public final class KeyBind
 		
 		this.is_down = false;
 		this.setKeyCodeAndModifier( key_code, key_modifier );
-		this.vanilla_key_bind = new KeyBinding(
-			name, GunConflictContext.IN_GAME_HOLDING_WEAPON,
-			key_modifier, key_code, "key.categories.tac"
-		);
+		this.vanilla_key_bind = this._createVanillaShadowKeyBinding( name, key_code, key_modifier );
 		
 		// Clear key bind to avoid conflict.
 		this.vanilla_key_bind.setKeyModifierAndCode( KeyModifier.NONE, InputMappings.INPUT_INVALID );
+	}
+	
+	protected KeyBinding _createVanillaShadowKeyBinding(
+		String name, Input key_code, KeyModifier key_modifier
+	) {
+		return new KeyBinding(
+			name, GunConflictContext.IN_GAME_HOLDING_WEAPON,
+			key_modifier, key_code, "key.categories.tac"
+		);
 	}
 	
 	public String name() {
 		return this.vanilla_key_bind.getKeyDescription();
 	}
 	
-	public boolean isDown() {
+	public final boolean isDown() {
 		return this.is_down;
 	}
 	
-	public Input keyCode() {
+	public final Input keyCode() {
 		return this.key_code;
 	}
 	
-	public KeyModifier keyModifier() {
+	public final KeyModifier keyModifier() {
 		return this.key_modifier;
 	}
 	
@@ -131,7 +137,7 @@ public final class KeyBind
 	 *
 	 * @see #addReleaseCallback(Runnable)
 	 */
-	public void addPressCallback( Runnable callback ) {
+	public final void addPressCallback( Runnable callback ) {
 		this.press_callbacks.add( callback );
 	}
 	
@@ -140,11 +146,11 @@ public final class KeyBind
 	 *
 	 * @see #addPressCallback(Runnable)
 	 */
-	public void addReleaseCallback( Runnable callback ) {
+	public final void addReleaseCallback( Runnable callback ) {
 		this.release_callbacks.add( callback );
 	}
 	
-	void activeUpdate( boolean is_down )
+	final void _activeUpdate( boolean is_down )
 	{
 		if ( this.is_down != is_down )
 		{
@@ -153,7 +159,7 @@ public final class KeyBind
 		}
 	}
 	
-	void inactiveUpdate( boolean is_down )
+	final void _inactiveUpdate( boolean is_down )
 	{
 		if ( !is_down && this.is_down )
 		{
@@ -162,11 +168,11 @@ public final class KeyBind
 		}
 	}
 	
-	void restoreVanillaKeyBind() {
+	protected void _restoreVanillaKeyBind() {
 		this.vanilla_key_bind.setKeyModifierAndCode( this.key_modifier, this.key_code );
 	}
 	
-	boolean clearVanillaKeyBind()
+	protected boolean _clearVanillaKeyBind()
 	{
 		final Input key_code = this.vanilla_key_bind.getKey();
 		final KeyModifier key_modifier = this.vanilla_key_bind.getKeyModifier();
@@ -175,10 +181,14 @@ public final class KeyBind
 		if ( is_key_bind_changed ) {
 			this.setKeyCodeAndModifier( key_code, key_modifier );
 		}
+		
+		// Do not forget to clear vanilla key binding.
+		this.vanilla_key_bind.setKeyModifierAndCode(
+			KeyModifier.NONE, InputMappings.INPUT_INVALID );
 		return is_key_bind_changed;
 	}
 	
-	void selfRegis() {
+	protected void _selfRegis() {
 		ClientRegistry.registerKeyBinding( this.vanilla_key_bind );
 	}
 }
