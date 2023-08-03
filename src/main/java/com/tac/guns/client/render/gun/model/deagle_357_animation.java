@@ -36,13 +36,12 @@ public class deagle_357_animation implements IOverrideModel {
 
     //The render method, similar to what is in DartEntity. We can render the item
     @Override
-    public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay)
-    {
-        
+    public void render(float v, ItemCameraTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, MatrixStack matrices, IRenderTypeBuffer renderBuffer, int light, int overlay) {
+
         Deagle50AnimationController controller = Deagle50AnimationController.getInstance();
         matrices.push();
         {
-            controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(),Deagle50AnimationController.INDEX_MAG,transformType,matrices);
+            controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(), Deagle50AnimationController.INDEX_MAG, transformType, matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                 RenderUtil.renderModel(SpecialModels.DEAGLE_50_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
@@ -51,22 +50,20 @@ public class deagle_357_animation implements IOverrideModel {
         }
         matrices.pop();
 
-        if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_NORMAL)) {
-            matrices.push();
-            {
-                controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(), Deagle50AnimationController.EXTRA_MAG, transformType, matrices);
-                if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
-                    RenderUtil.renderModel(SpecialModels.DEAGLE_50_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-                } else {
-                    RenderUtil.renderModel(SpecialModels.DEAGLE_50_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-                }
+        matrices.push();
+        {
+            controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(), Deagle50AnimationController.EXTRA_MAG, transformType, matrices);
+            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
+                RenderUtil.renderModel(SpecialModels.DEAGLE_50_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+            } else {
+                RenderUtil.renderModel(SpecialModels.DEAGLE_50_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
-            matrices.pop();
         }
+        matrices.pop();
 
         matrices.push();
         {
-            controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(),Deagle50AnimationController.INDEX_BODY,transformType,matrices);
+            controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(), Deagle50AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(SpecialModels.DEAGLE_50_SILENCER.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem())) {
@@ -80,9 +77,9 @@ public class deagle_357_animation implements IOverrideModel {
         matrices.pop();
         //Always push
         matrices.push(); // push();
-        controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(),Deagle50AnimationController.INDEX_SLIDE,transformType,matrices);
+        controller.applySpecialModelTransform(SpecialModels.DEAGLE_50.getModel(), Deagle50AnimationController.INDEX_SLIDE, transformType, matrices);
 
-        if(transformType.isFirstPerson()) {
+        if (transformType.isFirstPerson()) {
             Gun gun = ((GunItem) stack.getItem()).getGun();
             float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -103,14 +100,13 @@ public class deagle_357_animation implements IOverrideModel {
             }
             matrices.translate(0.00, 0.0, 0.035);
         }
-            RenderUtil.renderModel(SpecialModels.DEAGLE_50_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(SpecialModels.DEAGLE_50_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
 
-            //Always pop
-            matrices.pop();
-        PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
+        //Always pop
+        matrices.pop();
+        PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
     }
 
-     
 
     //TODO comments
 }

@@ -40,7 +40,7 @@ public class glock_17_animation implements IOverrideModel {
         Glock17AnimationController controller = Glock17AnimationController.getInstance();
         matrices.push();
         {
-            controller.applySpecialModelTransform(SpecialModels.GLOCK_17.getModel(),Glock17AnimationController.INDEX_BODY,transformType,matrices);
+            controller.applySpecialModelTransform(SpecialModels.GLOCK_17.getModel(), Glock17AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderLaserModuleModel(SpecialModels.GLOCK_17_B_LASER_DEVICE.getModel(), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 matrices.translate(0, 0, -0.25);
@@ -56,18 +56,20 @@ public class glock_17_animation implements IOverrideModel {
 
         matrices.push();
         {
-            controller.applySpecialModelTransform(SpecialModels.GLOCK_17.getModel(),Glock17AnimationController.INDEX_MAG,transformType,matrices);
+            controller.applySpecialModelTransform(SpecialModels.GLOCK_17.getModel(), Glock17AnimationController.INDEX_MAG, transformType, matrices);
             if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
                 RenderUtil.renderModel(SpecialModels.GLOCK_17_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             } else {
                 RenderUtil.renderModel(SpecialModels.GLOCK_17_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
             }
+            if (!controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.INSPECT_EMPTY).equals(controller.getPreviousAnimation()))
+                RenderUtil.renderModel(SpecialModels.GLOCK_17_BULLET.getModel(), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.pop();
         //Always push
         matrices.push();
-        controller.applySpecialModelTransform(SpecialModels.GLOCK_17.getModel(),Glock17AnimationController.INDEX_SLIDE,transformType,matrices);
-        if(transformType.isFirstPerson()) {
+        controller.applySpecialModelTransform(SpecialModels.GLOCK_17.getModel(), Glock17AnimationController.INDEX_SLIDE, transformType, matrices);
+        if (transformType.isFirstPerson()) {
             Gun gun = ((GunItem) stack.getItem()).getGun();
             float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ?
                     1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
@@ -81,18 +83,19 @@ public class glock_17_animation implements IOverrideModel {
                 matrices.translate(0, 0, 0.185f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
                 GunRenderingHandler.get().opticMovement = 0.185f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0);
             }
-        }
-        else {
+        } else {
             matrices.translate(0, 0, 0.185f * (-4.5 * Math.pow(0 - 0.5, 2) + 1.0));
         }
+        matrices.translate(0, 0, 0.025F);
         RenderUtil.renderModel(SpecialModels.GLOCK_17_SLIDE.getModel(), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(SpecialModels.GLOCK_17_SIGHT.getModel(), stack, matrices, renderBuffer, 15728880, overlay);
 
         //Always pop
         matrices.pop();
 
-        PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
+        PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
     }
-     
+
 
     //TODO comments
 }
