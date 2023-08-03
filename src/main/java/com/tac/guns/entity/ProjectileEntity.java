@@ -1,7 +1,5 @@
 package com.tac.guns.entity;
 
-//import com.sun.tools.jdi.Packet;
-
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Config;
 import com.tac.guns.common.BoundingBoxManager;
@@ -37,6 +35,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SExplosionPacket;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.*;
@@ -215,11 +215,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (!this.world.isRemote()) {
             Vector3d startVec = this.getPositionVec();
             Vector3d endVec = startVec.add(this.getMotion());
-            if (this.shooter instanceof PlayerEntity) {
-                Vector3d v = cachePlayerVelocity.get((PlayerEntity) shooter);
-                startVec = startVec.subtract(v);
-                endVec = endVec.subtract(v);
-            }
+//            if (this.shooter instanceof PlayerEntity) {
+//                Vector3d v = cachePlayerVelocity.get((PlayerEntity) shooter);
+//                startVec = startVec.subtract(v);
+//                endVec = endVec.subtract(v);
+//            }
             RayTraceResult result = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
             if (result.getType() != RayTraceResult.Type.MISS) {
                 endVec = result.getHitVec();
@@ -333,12 +333,12 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         AxisAlignedBB boundingBox = entity.getBoundingBox();
         if (Config.COMMON.gameplay.improvedHitboxes.get() && entity instanceof ServerPlayerEntity && this.shooter != null) {
             int ping = (int) Math.floor((((ServerPlayerEntity) this.shooter).ping / 1000.0) * 20.0 + 0.5);
-            //boundingBox = BoundingBoxManager.getBoundingBox((PlayerEntity) entity, ping);
+            boundingBox = BoundingBoxManager.getBoundingBox((PlayerEntity) entity, ping);
         }
-        if (entity instanceof PlayerEntity) {
-            Vector3d v = cachePlayerVelocity.get(entity);
-            boundingBox = boundingBox.offset(-v.x, -v.y, -v.z);
-        }
+//        if (entity instanceof PlayerEntity) {
+//            Vector3d v = cachePlayerVelocity.get(entity);
+//            boundingBox = boundingBox.offset(-v.x, -v.y, -v.z);
+//        }
         boundingBox = boundingBox.expand(0, expandHeight, 0);
 
         Vector3d hitPos = boundingBox.rayTrace(startVec, endVec).orElse(null);
@@ -383,7 +383,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (modifiedGun == null)
             return;
 
-        MinecraftForge.EVENT_BUS.post(new GunProjectileHitEvent(result, this));
+        if (MinecraftForge.EVENT_BUS.post(new GunProjectileHitEvent(result, this)))
+            return;
 
         if (result instanceof BlockRayTraceResult) {
             BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) result;
@@ -396,11 +397,14 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             BlockState state = this.world.getBlockState(pos);
             Block block = state.getBlock();
 
+            if (!state.getMaterial().isReplaceable())
+                this.remove();
+
             if (block.getRegistryName().getPath().contains("_button"))
                 return;
 
             if (Config.COMMON.gameplay.enableGunGriefing.get() && (block instanceof BreakableBlock || block instanceof PaneBlock) && state.getMaterial() == Material.GLASS) {
-                this.world.destroyBlock(blockRayTraceResult.getPos(), false,this.shooter);
+                this.world.destroyBlock(blockRayTraceResult.getPos(), false, this.shooter);
             }
 
             /*if(modifiedGun.getProjectile().isRicochet() &&
@@ -416,16 +420,22 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
             this.onHitBlock(state, pos, blockRayTraceResult.getFace(), hitVec.x, hitVec.y, hitVec.z);
 
+            if (block instanceof BellBlock) {
+                BellBlock bell = (BellBlock) block;
+                bell.attemptRing(this.world, state, blockRayTraceResult, (PlayerEntity) this.shooter, true);
+            }
+
             int fireStarterLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
             if (fireStarterLevel > 0 && Config.COMMON.gameplay.fireStarterCauseFire.get()) {
                 BlockPos offsetPos = pos.offset(blockRayTraceResult.getFace());
                 if (AbstractFireBlock.canLightBlock(this.world, offsetPos, blockRayTraceResult.getFace())) {
                     BlockState fireState = AbstractFireBlock.getFireForPlacement(this.world, offsetPos);
                     this.world.setBlockState(offsetPos, fireState, 11);
+                    ((ServerWorld) this.world).spawnParticle(ParticleTypes.LAVA, hitVec.x - 1.0 + this.rand.nextDouble() * 2.0, hitVec.y, hitVec.z - 1.0 + this.rand.nextDouble() * 2.0, 4, 0, 0, 0, 0);
                 }
             }
             //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
-            this.remove();
+            //this.remove();
             return;
         }
 
@@ -575,6 +585,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.world.getChunkAt(pos)), new MessageProjectileHitBlock(x, y, z, pos, face));
+        if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon) > 0)
+            ((ServerWorld) this.world).spawnParticle(ParticleTypes.LAVA, x, y, z, 1, 0, 0, 0, 0);
     }
 
     protected void teleportToHitPoint(RayTraceResult rayTraceResult) {
@@ -846,11 +858,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         explosion.doExplosionA();
         explosion.doExplosionB(true);
 
-        // Clears the affected blocks if mode is none
-        if (mode == Explosion.Mode.NONE) {
-            explosion.clearAffectedBlockPositions();
-        }
-
         // Send event to blocks that are exploded (none if mode is none)
         explosion.getAffectedBlockPositions().forEach(pos ->
         {
@@ -858,6 +865,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 ((IExplosionDamageable) world.getBlockState(pos).getBlock()).onProjectileExploded(world, world.getBlockState(pos), pos, entity);
             }
         });
+
+        // Clears the affected blocks if mode is none
+        if (mode == Explosion.Mode.NONE) {
+            explosion.clearAffectedBlockPositions();
+        }
 
         for (ServerPlayerEntity player : ((ServerWorld) world).getPlayers()) {
             if (player.getDistanceSq(entity.getPosX(), entity.getPosY(), entity.getPosZ()) < 4096) {

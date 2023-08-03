@@ -8,6 +8,7 @@ import com.tac.guns.Config;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.util.InputMappings.Input;
 import net.minecraft.client.util.InputMappings.Type;
@@ -134,6 +135,9 @@ public final class InputHandler
 			
 			saveKeyBindsTo( file );
 		}
+		
+		// Do not forget to update vanilla key array and hash.
+		KeyBinding.resetKeyBindingArrayAndHash();
 	}
 	
 	static void saveKeyBindsTo( File file )

@@ -40,12 +40,15 @@ public class MouseHelperMixin
 
                         Scope scope = Gun.getScope(heldItem);
                         if (scope != null) {
-                            newFov -= scope.getAdditionalZoom().getFovZoom();// * (Config.CLIENT.display.scopeDoubleRender.get() ? 1:1.25);
-
-                            additionalAdsSensitivity = MathHelper.clamp(1.0F - (1.0F / newFov) / 10F, 0.0F, 1.0F) * ((Config.CLIENT.display.scopeDoubleRender.get() && scope.getAdditionalZoom().getFovZoom() > -1) || scope.getAdditionalZoom().getFovZoom() == 0 ? 1F:0.92F);
+                            if (scope.getTagName() == "gener8x" || scope.getTagName() == "vlpvo6" ||
+                                    scope.getTagName() == "acog4x" || scope.getTagName() == "elcan14x" ||
+                                    scope.getTagName() == "qmk152") {
+                                newFov = (0.8F - scope.getAdditionalZoom().getFovZoom() * (Config.CLIENT.display.scopeDoubleRender.get() ? 0.833F : 1F));
+                            } else {
+                                newFov -= scope.getAdditionalZoom().getFovZoom() * (Config.CLIENT.display.scopeDoubleRender.get() ? 0.833F : 1F);
+                            }
                         }
-                        else
-                            additionalAdsSensitivity = MathHelper.clamp(1.0F - (1.0F / newFov) / 10F, 0.0F, 1.0F);
+                        additionalAdsSensitivity = MathHelper.clamp(1.0F - (1.0F / newFov) / 10F, 0.0F, 1.0F);
                     }
                 }
             }

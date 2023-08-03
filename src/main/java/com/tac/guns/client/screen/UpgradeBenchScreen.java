@@ -263,7 +263,7 @@ public class UpgradeBenchScreen extends ContainerScreen<UpgradeBenchContainer>
                 this.font.drawString(matrixStack, "x "+moduleCount, startX, startY, Color.WHITE.getRGB());*/
                 ItemStack moduleRender = this.workbench.getInventory().get(1).copy();
                 if(moduleRender == null || moduleRender.isEmpty())
-                    moduleRender = new ItemStack(ModItems.MODULE.get().getItem());
+                    //moduleRender = new ItemStack(ModItems.MODULE.get().getItem());
                 moduleRender.setCount(moduleCount);
                 Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(moduleRender, startX, startY);
                 Minecraft.getInstance().getItemRenderer().renderItemOverlayIntoGUI(this.font, moduleRender, startX, startY, null);

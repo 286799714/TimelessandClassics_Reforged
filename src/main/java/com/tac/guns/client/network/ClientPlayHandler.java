@@ -40,6 +40,7 @@ import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.lwjgl.system.CallbackI;
@@ -180,12 +181,22 @@ public class ClientPlayHandler
             double distance = Math.sqrt(mc.player.getDistanceSq(message.getX(), message.getY(), message.getZ()));
             world.addParticle(new BulletHoleData(message.getFace(), message.getPos()), false, holeX, holeY, holeZ, 0, 0, 0);
             if (distance < 16.0) {
-                world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, state), false, message.getX(), message.getY(), message.getZ(), 0, 0, 0);
+                for (int i = 0; i < 3; i++) {
+                    Vector3i normal = message.getFace().getDirectionVec();
+                    Vector3d motion = new Vector3d(normal.getX(), normal.getY(), normal.getZ());
+                    motion.add(getRandomDir(world.rand), getRandomDir(world.rand), getRandomDir(world.rand));
+                    world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, state), false, message.getX(), message.getY(), message.getZ(), 0, 0, 0);
+                }
             }
             if (distance < 32.0) {
                 world.playSound(message.getX(), message.getY(), message.getZ(), state.getSoundType().getBreakSound(), SoundCategory.BLOCKS, 0.75F, 2.0F, false);
             }
         }
+    }
+
+    private static double getRandomDir(Random random)
+    {
+        return -0.25 + random.nextDouble() * 0.5;
     }
 
     public static void handleProjectileHitEntity(MessageProjectileHitEntity message)

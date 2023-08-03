@@ -11,6 +11,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.function.BiConsumer;
 
 /**
  * Helps to fix key conflict issue. Adapted solution from FMUM.
@@ -21,6 +22,22 @@ import java.util.LinkedList;
 public final class KeyBind
 {
 	public static final HashMap< String, KeyBind > REGISTRY = new HashMap<>();
+	
+	/**
+	 * To handle the special cases, for example, binding ctrl to a key bind.
+	 */
+	private static final HashMap< Input, KeyModifier > SP_KEY_2_MODIFIER = new HashMap<>();
+	static
+	{
+		final BiConsumer< Integer, KeyModifier > add = ( key_code, key_modifier )
+			-> SP_KEY_2_MODIFIER.put( Type.KEYSYM.getOrMakeInput( key_code ), key_modifier );
+		add.accept( GLFW.GLFW_KEY_LEFT_CONTROL, KeyModifier.CONTROL );
+		add.accept( GLFW.GLFW_KEY_RIGHT_CONTROL, KeyModifier.CONTROL );
+		add.accept( GLFW.GLFW_KEY_LEFT_SHIFT , KeyModifier.SHIFT );
+		add.accept( GLFW.GLFW_KEY_RIGHT_SHIFT , KeyModifier.SHIFT );
+		add.accept( GLFW.GLFW_KEY_LEFT_ALT, KeyModifier.ALT );
+		add.accept( GLFW.GLFW_KEY_RIGHT_ALT, KeyModifier.ALT );
+	}
 	
 	private boolean is_down;
 	
@@ -76,12 +93,14 @@ public final class KeyBind
 		REGISTRY.put( name, this );
 		
 		this.is_down = false;
-		this.key_code = key_code;
-		this.key_modifier = key_modifier;
+		this.setKeyCodeAndModifier( key_code, key_modifier );
 		this.vanilla_key_bind = new KeyBinding(
 			name, GunConflictContext.IN_GAME_HOLDING_WEAPON,
 			key_modifier, key_code, "key.categories.tac"
 		);
+		
+		// Clear key bind to avoid conflict.
+		this.vanilla_key_bind.setKeyModifierAndCode( KeyModifier.NONE, InputMappings.INPUT_INVALID );
 	}
 	
 	public String name() {
@@ -103,13 +122,24 @@ public final class KeyBind
 	public void setKeyCodeAndModifier( Input key_code, KeyModifier key_modifier )
 	{
 		this.key_code = key_code;
-		this.key_modifier = key_modifier;
+		this.key_modifier = SP_KEY_2_MODIFIER.getOrDefault( key_code, key_modifier );
 	}
 	
+	/**
+	 * This will be called once the key is pressed. It will never be called again until the key is
+	 * released and pressed again.
+	 *
+	 * @see #addReleaseCallback(Runnable)
+	 */
 	public void addPressCallback( Runnable callback ) {
 		this.press_callbacks.add( callback );
 	}
 	
+	/**
+	 * This will be called once the key is released.
+	 *
+	 * @see #addPressCallback(Runnable)
+	 */
 	public void addReleaseCallback( Runnable callback ) {
 		this.release_callbacks.add( callback );
 	}
@@ -142,10 +172,8 @@ public final class KeyBind
 		final KeyModifier key_modifier = this.vanilla_key_bind.getKeyModifier();
 		final boolean is_key_bind_changed
 			= this.key_code != key_code || this.key_modifier != key_modifier;
-		if ( is_key_bind_changed )
-		{
-			this.key_code = key_code;
-			this.key_modifier = key_modifier;
+		if ( is_key_bind_changed ) {
+			this.setKeyCodeAndModifier( key_code, key_modifier );
 		}
 		return is_key_bind_changed;
 	}
