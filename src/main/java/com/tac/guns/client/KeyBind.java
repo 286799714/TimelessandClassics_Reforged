@@ -11,6 +11,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.function.BiConsumer;
 
 /**
  * Helps to fix key conflict issue. Adapted solution from FMUM.
@@ -18,16 +19,32 @@ import java.util.LinkedList;
  * @see InputHandler
  * @author Giant_Salted_Fish
  */
-public final class KeyBind
+public class KeyBind
 {
 	public static final HashMap< String, KeyBind > REGISTRY = new HashMap<>();
 	
+	/**
+	 * To handle the special cases, for example, binding ctrl to a key bind.
+	 */
+	private static final HashMap< Input, KeyModifier > SP_KEY_2_MODIFIER = new HashMap<>();
+	static
+	{
+		final BiConsumer< Integer, KeyModifier > add = ( key_code, key_modifier )
+			-> SP_KEY_2_MODIFIER.put( Type.KEYSYM.getOrMakeInput( key_code ), key_modifier );
+		add.accept( GLFW.GLFW_KEY_LEFT_CONTROL, KeyModifier.CONTROL );
+		add.accept( GLFW.GLFW_KEY_RIGHT_CONTROL, KeyModifier.CONTROL );
+		add.accept( GLFW.GLFW_KEY_LEFT_SHIFT , KeyModifier.SHIFT );
+		add.accept( GLFW.GLFW_KEY_RIGHT_SHIFT , KeyModifier.SHIFT );
+		add.accept( GLFW.GLFW_KEY_LEFT_ALT, KeyModifier.ALT );
+		add.accept( GLFW.GLFW_KEY_RIGHT_ALT, KeyModifier.ALT );
+	}
+	
+	protected final KeyBinding vanilla_key_bind;
+	
+	protected Input key_code;
+	protected KeyModifier key_modifier;
+	
 	private boolean is_down;
-	
-	private Input key_code;
-	private KeyModifier key_modifier;
-	
-	private final KeyBinding vanilla_key_bind;
 	
 	private final LinkedList< Runnable >
 		press_callbacks = new LinkedList<>(),
@@ -76,9 +93,17 @@ public final class KeyBind
 		REGISTRY.put( name, this );
 		
 		this.is_down = false;
-		this.key_code = key_code;
-		this.key_modifier = key_modifier;
-		this.vanilla_key_bind = new KeyBinding(
+		this.setKeyCodeAndModifier( key_code, key_modifier );
+		this.vanilla_key_bind = this._createVanillaShadowKeyBinding( name, key_code, key_modifier );
+		
+		// Clear key bind to avoid conflict.
+		this.vanilla_key_bind.setKeyModifierAndCode( KeyModifier.NONE, InputMappings.INPUT_INVALID );
+	}
+	
+	protected KeyBinding _createVanillaShadowKeyBinding(
+		String name, Input key_code, KeyModifier key_modifier
+	) {
+		return new KeyBinding(
 			name, GunConflictContext.IN_GAME_HOLDING_WEAPON,
 			key_modifier, key_code, "key.categories.tac"
 		);
@@ -88,33 +113,44 @@ public final class KeyBind
 		return this.vanilla_key_bind.getKeyDescription();
 	}
 	
-	public boolean isDown() {
+	public final boolean isDown() {
 		return this.is_down;
 	}
 	
-	public Input keyCode() {
+	public final Input keyCode() {
 		return this.key_code;
 	}
 	
-	public KeyModifier keyModifier() {
+	public final KeyModifier keyModifier() {
 		return this.key_modifier;
 	}
 	
 	public void setKeyCodeAndModifier( Input key_code, KeyModifier key_modifier )
 	{
 		this.key_code = key_code;
-		this.key_modifier = key_modifier;
+		this.key_modifier = SP_KEY_2_MODIFIER.getOrDefault( key_code, key_modifier );
 	}
 	
-	public void addPressCallback( Runnable callback ) {
+	/**
+	 * This will be called once the key is pressed. It will never be called again until the key is
+	 * released and pressed again.
+	 *
+	 * @see #addReleaseCallback(Runnable)
+	 */
+	public final void addPressCallback( Runnable callback ) {
 		this.press_callbacks.add( callback );
 	}
 	
-	public void addReleaseCallback( Runnable callback ) {
+	/**
+	 * This will be called once the key is released.
+	 *
+	 * @see #addPressCallback(Runnable)
+	 */
+	public final void addReleaseCallback( Runnable callback ) {
 		this.release_callbacks.add( callback );
 	}
 	
-	void activeUpdate( boolean is_down )
+	final void _activeUpdate( boolean is_down )
 	{
 		if ( this.is_down != is_down )
 		{
@@ -123,7 +159,7 @@ public final class KeyBind
 		}
 	}
 	
-	void inactiveUpdate( boolean is_down )
+	final void _inactiveUpdate( boolean is_down )
 	{
 		if ( !is_down && this.is_down )
 		{
@@ -132,25 +168,27 @@ public final class KeyBind
 		}
 	}
 	
-	void restoreVanillaKeyBind() {
+	protected void _restoreVanillaKeyBind() {
 		this.vanilla_key_bind.setKeyModifierAndCode( this.key_modifier, this.key_code );
 	}
 	
-	boolean clearVanillaKeyBind()
+	protected boolean _clearVanillaKeyBind()
 	{
 		final Input key_code = this.vanilla_key_bind.getKey();
 		final KeyModifier key_modifier = this.vanilla_key_bind.getKeyModifier();
 		final boolean is_key_bind_changed
 			= this.key_code != key_code || this.key_modifier != key_modifier;
-		if ( is_key_bind_changed )
-		{
-			this.key_code = key_code;
-			this.key_modifier = key_modifier;
+		if ( is_key_bind_changed ) {
+			this.setKeyCodeAndModifier( key_code, key_modifier );
 		}
+		
+		// Do not forget to clear vanilla key binding.
+		this.vanilla_key_bind.setKeyModifierAndCode(
+			KeyModifier.NONE, InputMappings.INPUT_INVALID );
 		return is_key_bind_changed;
 	}
 	
-	void selfRegis() {
+	protected void _selfRegis() {
 		ClientRegistry.registerKeyBinding( this.vanilla_key_bind );
 	}
 }

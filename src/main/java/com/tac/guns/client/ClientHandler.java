@@ -117,9 +117,9 @@ public class ClientHandler
 
         // Load key binds.
         InputHandler.initInputSystem();
-        keyBindsFile = new File( mc.gameDir, "config/tac-key-binds-v2.json" );
+        keyBindsFile = new File( mc.gameDir, "config/tac-key-binds.json" );
         if ( keyBindsFile.exists() ) {
-            InputHandler.loadKeyBindsFrom( keyBindsFile );
+            InputHandler._loadKeyBindsFrom( keyBindsFile );
         }
         else
         {
@@ -129,7 +129,7 @@ public class ClientHandler
             catch ( IOException e ) {
                 GunMod.LOGGER.error( "Fail to create key bindings file" );
             }
-            InputHandler.saveKeyBindsTo( keyBindsFile );
+            InputHandler._saveKeyBindsTo( keyBindsFile );
         }
 
         setupRenderLayers();
@@ -278,10 +278,10 @@ public class ClientHandler
     	
     	// Show key binds if control GUI is activated
     	if( gui instanceof ControlsScreen ) {
-            InputHandler.restoreVanillaKeyBinds();
+            InputHandler._restoreVanillaKeyBinds();
         }
     	else if( prevScreen instanceof ControlsScreen ) {
-            InputHandler.clearVanillaKeyBinds( keyBindsFile );
+            InputHandler._clearVanillaKeyBinds( keyBindsFile );
         }
     	
     	prevScreen = gui;

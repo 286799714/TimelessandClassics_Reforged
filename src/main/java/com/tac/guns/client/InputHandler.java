@@ -8,6 +8,7 @@ import com.tac.guns.Config;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.util.InputMappings.Input;
 import net.minecraft.client.util.InputMappings.Type;
@@ -60,68 +61,82 @@ public final class InputHandler
 	
 	public static void initInputSystem()
 	{
-		GLOBAL_KEYS.forEach( KeyBind::selfRegis );
-		NORMAL_KEYS.forEach( KeyBind::selfRegis );
+		GLOBAL_KEYS.forEach( KeyBind::_selfRegis );
+		NORMAL_KEYS.forEach( KeyBind::_selfRegis );
 		if ( Config.COMMON.development.enableTDev.get() ) {
-			DEBUG_KEYS.forEach( KeyBind::selfRegis );
+			DEBUG_KEYS.forEach( KeyBind::_selfRegis );
 		}
 	}
 	
 	@SubscribeEvent( priority = EventPriority.HIGH )
 	public static void onMouseInput( InputEvent.RawMouseEvent evt )
 	{
-		if ( Minecraft.getInstance().currentScreen == null )
-		{
-			final Input button = Type.MOUSE.getOrMakeInput( evt.getButton() );
-			final boolean is_down = evt.getAction() == GLFW.GLFW_PRESS;
-			__dispatchInput( button, is_down, evt.getMods() );
-		}
+		final Input button = Type.MOUSE.getOrMakeInput( evt.getButton() );
+		final boolean is_down = evt.getAction() == GLFW.GLFW_PRESS;
+		__dispatchInput( button, is_down, evt.getMods() );
 	}
 	
 	@SubscribeEvent( priority = EventPriority.HIGH )
 	public static void onKeyInput( InputEvent.KeyInputEvent evt )
 	{
-		if ( Minecraft.getInstance().currentScreen == null )
-		{
-			final Input key = Type.KEYSYM.getOrMakeInput( evt.getKey() );
-			final boolean is_down = evt.getAction() == GLFW.GLFW_PRESS;
-			__dispatchInput( key, is_down, evt.getModifiers() );
-		}
+		final Input key = Type.KEYSYM.getOrMakeInput( evt.getKey() );
+		final boolean is_down = evt.getAction() == GLFW.GLFW_PRESS;
+		__dispatchInput( key, is_down, evt.getModifiers() );
 	}
 	
 	private static void __dispatchInput( Input input, boolean is_down, int modifier_bits )
 	{
-		final Consumer< KeyBind > active_updater = kb -> kb.activeUpdate( is_down );
-		final Consumer< KeyBind > inactive_updater = kb -> kb.inactiveUpdate( is_down );
-		
-		GLOBAL_TABLE.get( input ).forEach( active_updater );
-		
+		final Consumer< KeyBind > active_updater = kb -> kb._activeUpdate( is_down );
+		final Consumer< KeyBind > inactive_updater = kb -> kb._inactiveUpdate( is_down );
 		final boolean none_modifier_active = modifier_bits == 0;
-		NORMAL_TABLE.get( input ).forEach( none_modifier_active ? active_updater : inactive_updater );
-		
 		final boolean is_ctrl_active = ( modifier_bits & GLFW.GLFW_MOD_CONTROL ) != 0;
-		CTRL_TABLE.get( input ).forEach( is_ctrl_active ? active_updater : inactive_updater );
-		
 		final boolean is_shift_active = ( modifier_bits & GLFW.GLFW_MOD_SHIFT ) != 0;
-		SHIFT_TABLE.get( input ).forEach( is_shift_active ? active_updater : inactive_updater );
-		
 		final boolean is_alt_active = ( modifier_bits & GLFW.GLFW_MOD_ALT ) != 0;
-		ALT_TABLE.get( input ).forEach( is_alt_active ? active_updater : inactive_updater );
+		
+		if ( Minecraft.getInstance().currentScreen == null )
+		{
+			GLOBAL_TABLE.get( input ).forEach( active_updater );
+			
+			NORMAL_TABLE.get( input ).forEach( none_modifier_active ? active_updater : inactive_updater );
+			CTRL_TABLE.get( input ).forEach( is_ctrl_active ? active_updater : inactive_updater );
+			SHIFT_TABLE.get( input ).forEach( is_shift_active ? active_updater : inactive_updater );
+			ALT_TABLE.get( input ).forEach( is_alt_active ? active_updater : inactive_updater );
+		}
+		
+		final KeyBind kb = Keys.MORE_INFO_HOLD;
+		if ( input == kb.keyCode() )
+		{
+			switch( kb.keyModifier() )
+			{
+			case NONE:
+			( none_modifier_active ? active_updater : inactive_updater ).accept( kb );
+				break;
+			case CONTROL:
+				( is_ctrl_active ? active_updater : inactive_updater ).accept( kb );
+				break;
+			case SHIFT:
+				( is_shift_active ? active_updater : inactive_updater ).accept( kb );
+				break;
+			case ALT:
+				( is_alt_active ? active_updater : inactive_updater ).accept( kb );
+				break;
+			}
+		}
 	}
 	
 	private static KeyBind ori_aim_key;
-	static void restoreVanillaKeyBinds()
+	static void _restoreVanillaKeyBinds()
 	{
 		final boolean is_aim_hold_bounden = Keys.AIM_HOLD.keyCode() != InputMappings.INPUT_INVALID;
 		ori_aim_key = is_aim_hold_bounden ? Keys.AIM_HOLD : Keys.AIM_TOGGLE;
-		KeyBind.REGISTRY.values().forEach( KeyBind::restoreVanillaKeyBind );
+		KeyBind.REGISTRY.values().forEach( KeyBind::_restoreVanillaKeyBind );
 	}
 	
-	static void clearVanillaKeyBinds( File file )
+	static void _clearVanillaKeyBinds( File file )
 	{
 		boolean has_key_bind_changed = false;
 		for ( KeyBind kb : KeyBind.REGISTRY.values() ) {
-			has_key_bind_changed |= kb.clearVanillaKeyBind();
+			has_key_bind_changed |= kb._clearVanillaKeyBind();
 		}
 		
 		if ( has_key_bind_changed )
@@ -132,11 +147,14 @@ public final class InputHandler
 				ori_aim_key.setKeyCodeAndModifier( none, KeyModifier.NONE );
 			}
 			
-			saveKeyBindsTo( file );
+			_saveKeyBindsTo( file );
 		}
+		
+		// Do not forget to update vanilla key array and hash.
+		KeyBinding.resetKeyBindingArrayAndHash();
 	}
 	
-	static void saveKeyBindsTo( File file )
+	static void _saveKeyBindsTo( File file )
 	{
 		try ( FileWriter out = new FileWriter( file ) )
 		{
@@ -156,7 +174,7 @@ public final class InputHandler
 		__updateMappingTable();
 	}
 	
-	static void loadKeyBindsFrom( File file )
+	static void _loadKeyBindsFrom( File file )
 	{
 		try ( FileReader in = new FileReader( file ) )
 		{
@@ -185,19 +203,19 @@ public final class InputHandler
 		__updateMappingTable();
 	}
 	
-	static KeyBind addNormal( KeyBind kb )
+	static KeyBind _addNormal( KeyBind kb )
 	{
 		NORMAL_KEYS.add( kb );
 		return kb;
 	}
 	
-	static KeyBind addGlobal( KeyBind kb )
+	static KeyBind _addGlobal( KeyBind kb )
 	{
 		GLOBAL_KEYS.add( kb );
 		return kb;
 	}
 	
-	static KeyBind addDebug( KeyBind kb )
+	static KeyBind _addDebug( KeyBind kb )
 	{
 		DEBUG_KEYS.add( kb );
 		return kb;
