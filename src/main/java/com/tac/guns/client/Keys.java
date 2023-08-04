@@ -55,7 +55,7 @@ public final class Keys
 		LEFT = _addDebug( new KeyBind( "key.tac.ccc", GLFW.GLFW_KEY_LEFT ) ),
 		DOWN = _addDebug( new KeyBind( "key.tac.zzz", GLFW.GLFW_KEY_DOWN ) );
 	
-	public static final KeyBind MORE_INFO_HOLD = new KeyBind( "key.tac.moreInfoHold", GLFW.GLFW_KEY_LEFT_SHIFT )
+	public static final KeyBind MORE_INFO_HOLD = new KeyBind( "", GLFW.GLFW_KEY_LEFT_SHIFT )
 	{
 		@Override
 		protected KeyBinding _createVanillaShadowKeyBinding(
@@ -68,18 +68,28 @@ public final class Keys
 		}
 		
 		@Override
+		public Input keyCode() {
+			return this.vanilla_key_bind.getKey();
+		}
+		
+		@Override
+		public KeyModifier keyModifier()
+		{
+			return SP_KEY_2_MODIFIER.getOrDefault(
+				this.keyCode(), this.vanilla_key_bind.getKeyModifier() );
+		}
+		
+		@Override
+		public void setKeyCodeAndModifier( Input key_code, KeyModifier key_modifier ) { }
+		
+		@Override
 		protected void _restoreVanillaKeyBind() { }
 		
 		@Override
 		protected boolean _clearVanillaKeyBind()
 		{
-			final Input key_code = this.vanilla_key_bind.getKey();
-			final KeyModifier key_modifier = this.vanilla_key_bind.getKeyModifier();
-			final boolean is_key_bind_changed
-				= this.key_code != key_code || this.key_modifier != key_modifier;
-			if ( is_key_bind_changed ) {
-				this.setKeyCodeAndModifier( key_code, key_modifier );
-			}
+			// Always fetch from sneak key, so never need to save change.
+			final boolean is_key_bind_changed = false;
 			return is_key_bind_changed;
 		}
 		

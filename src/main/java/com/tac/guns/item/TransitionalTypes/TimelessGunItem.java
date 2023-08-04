@@ -89,7 +89,7 @@ public class TimelessGunItem extends GunItem {
         if(!isShift) {
             //String text = "SHIFT";
             //if(!InputHandler.MORE_INFO_HOLD.keyCode().equals(GLFW.GLFW_KEY_LEFT_SHIFT))
-            String text = (new KeybindTextComponent("key.tac.moreInfoHold")).getString().toUpperCase(Locale.ENGLISH);
+            String text = (new KeybindTextComponent("key.sneak")).getString().toUpperCase(Locale.ENGLISH);
             tooltip.add((new TranslationTextComponent("info.tac.more_info_gunitem", text)).mergeStyle(TextFormatting.YELLOW));
         }
         if(isShift) {

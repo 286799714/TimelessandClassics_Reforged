@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 @OnlyIn( Dist.CLIENT )
 @EventBusSubscriber( modid = Reference.MOD_ID, value = Dist.CLIENT )
@@ -68,6 +69,12 @@ public final class InputHandler
 		}
 	}
 	
+	public static void releaseAllKeys()
+	{
+		final boolean is_down = false;
+		KeyBind.REGISTRY.values().forEach( kb -> kb._inactiveUpdate( is_down ) );
+	}
+	
 	@SubscribeEvent( priority = EventPriority.HIGH )
 	public static void onMouseInput( InputEvent.RawMouseEvent evt )
 	{
@@ -86,22 +93,22 @@ public final class InputHandler
 	
 	private static void __dispatchInput( Input input, boolean is_down, int modifier_bits )
 	{
-		final Consumer< KeyBind > active_updater = kb -> kb._activeUpdate( is_down );
-		final Consumer< KeyBind > inactive_updater = kb -> kb._inactiveUpdate( is_down );
 		final boolean none_modifier_active = modifier_bits == 0;
 		final boolean is_ctrl_active = ( modifier_bits & GLFW.GLFW_MOD_CONTROL ) != 0;
 		final boolean is_shift_active = ( modifier_bits & GLFW.GLFW_MOD_SHIFT ) != 0;
 		final boolean is_alt_active = ( modifier_bits & GLFW.GLFW_MOD_ALT ) != 0;
 		
-		if ( Minecraft.getInstance().currentScreen == null )
-		{
-			GLOBAL_TABLE.get( input ).forEach( active_updater );
-			
-			NORMAL_TABLE.get( input ).forEach( none_modifier_active ? active_updater : inactive_updater );
-			CTRL_TABLE.get( input ).forEach( is_ctrl_active ? active_updater : inactive_updater );
-			SHIFT_TABLE.get( input ).forEach( is_shift_active ? active_updater : inactive_updater );
-			ALT_TABLE.get( input ).forEach( is_alt_active ? active_updater : inactive_updater );
-		}
+		final boolean active_mask = Minecraft.getInstance().currentScreen == null;
+		final Consumer< KeyBind > active_updater = kb -> kb._activeUpdate( is_down );
+		final Consumer< KeyBind > inactive_updater = kb -> kb._inactiveUpdate( is_down );
+		final Function< Boolean, Consumer< KeyBind > > kb_updater_dispatcher =
+			active_flag -> active_mask && active_flag ? active_updater : inactive_updater;
+		
+		GLOBAL_TABLE.get( input ).forEach( kb_updater_dispatcher.apply( true ) );
+		NORMAL_TABLE.get( input ).forEach( kb_updater_dispatcher.apply( none_modifier_active ) );
+		CTRL_TABLE.get( input ).forEach( kb_updater_dispatcher.apply( is_ctrl_active ) );
+		SHIFT_TABLE.get( input ).forEach( kb_updater_dispatcher.apply( is_shift_active ) );
+		ALT_TABLE.get( input ).forEach( kb_updater_dispatcher.apply( is_alt_active ) );
 		
 		final KeyBind kb = Keys.MORE_INFO_HOLD;
 		if ( input == kb.keyCode() )
@@ -109,7 +116,7 @@ public final class InputHandler
 			switch( kb.keyModifier() )
 			{
 			case NONE:
-			( none_modifier_active ? active_updater : inactive_updater ).accept( kb );
+				( none_modifier_active ? active_updater : inactive_updater ).accept( kb );
 				break;
 			case CONTROL:
 				( is_ctrl_active ? active_updater : inactive_updater ).accept( kb );

@@ -270,21 +270,27 @@ public class ClientHandler
         }*/
     }
     
-    private static Screen prevScreen = null;
+    private static Screen prev_screen = null;
     @SubscribeEvent
     public static void onGUIChange( GuiOpenEvent evt )
     {
-    	final Screen gui = evt.getGui();
-    	
-    	// Show key binds if control GUI is activated
-    	if( gui instanceof ControlsScreen ) {
+        final Screen gui = evt.getGui();
+        
+        // Show key binds if control GUI is activated
+        if( gui instanceof ControlsScreen ) {
             InputHandler._restoreVanillaKeyBinds();
         }
-    	else if( prevScreen instanceof ControlsScreen ) {
+        else if( prev_screen instanceof ControlsScreen ) {
             InputHandler._clearVanillaKeyBinds( keyBindsFile );
         }
-    	
-    	prevScreen = gui;
+        
+        // FIXME: It seems that comment these lines and the system will still work.
+        final boolean is_screen_open_and_not_before = gui != null && prev_screen == null;
+        if ( is_screen_open_and_not_before ) {
+            InputHandler.releaseAllKeys();
+        }
+        
+        prev_screen = gui;
     }
     
     static {
