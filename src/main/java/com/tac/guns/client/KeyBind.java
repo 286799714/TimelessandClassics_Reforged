@@ -26,7 +26,7 @@ public class KeyBind
 	/**
 	 * To handle the special cases, for example, binding ctrl to a key bind.
 	 */
-	private static final HashMap< Input, KeyModifier > SP_KEY_2_MODIFIER = new HashMap<>();
+	static final HashMap< Input, KeyModifier > SP_KEY_2_MODIFIER = new HashMap<>();
 	static
 	{
 		final BiConsumer< Integer, KeyModifier > add = ( key_code, key_modifier )
@@ -95,18 +95,19 @@ public class KeyBind
 		this.is_down = false;
 		this.setKeyCodeAndModifier( key_code, key_modifier );
 		this.vanilla_key_bind = this._createVanillaShadowKeyBinding( name, key_code, key_modifier );
-		
-		// Clear key bind to avoid conflict.
-		this.vanilla_key_bind.setKeyModifierAndCode( KeyModifier.NONE, InputMappings.INPUT_INVALID );
 	}
 	
 	protected KeyBinding _createVanillaShadowKeyBinding(
 		String name, Input key_code, KeyModifier key_modifier
 	) {
-		return new KeyBinding(
+		final KeyBinding vanilla_key_bind = new KeyBinding(
 			name, GunConflictContext.IN_GAME_HOLDING_WEAPON,
 			key_modifier, key_code, "key.categories.tac"
 		);
+		
+		// Clear key bind to avoid conflict.
+		vanilla_key_bind.setKeyModifierAndCode( KeyModifier.NONE, InputMappings.INPUT_INVALID );
+		return vanilla_key_bind;
 	}
 	
 	public String name() {
@@ -117,11 +118,11 @@ public class KeyBind
 		return this.is_down;
 	}
 	
-	public final Input keyCode() {
+	public Input keyCode() {
 		return this.key_code;
 	}
 	
-	public final KeyModifier keyModifier() {
+	public KeyModifier keyModifier() {
 		return this.key_modifier;
 	}
 	
