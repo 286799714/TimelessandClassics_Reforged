@@ -1,5 +1,6 @@
 package com.tac.guns.client;
 
+import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.settings.KeyBinding;
@@ -149,6 +150,10 @@ public class KeyBind
 	 */
 	public final void addReleaseCallback( Runnable callback ) {
 		this.release_callbacks.add( callback );
+	}
+
+	public final ITextComponent getBoundenKeyPrompt() {
+		return this.key_modifier.getCombinedName( this.key_code, this.key_code::func_237520_d_ );
 	}
 	
 	final void _activeUpdate( boolean is_down )

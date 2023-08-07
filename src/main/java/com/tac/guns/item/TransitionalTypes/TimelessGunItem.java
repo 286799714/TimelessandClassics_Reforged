@@ -32,6 +32,7 @@ import java.util.Objects;
 public class TimelessGunItem extends GunItem {
     private final IGunModifier[] modifiers;
     private Boolean integratedOptic = false;
+
     public TimelessGunItem(Process<Item.Properties> properties, IGunModifier... modifiers) {
         super(properties.process(new Item.Properties().maxStackSize(1).group(GunMod.GROUP)));
         this.modifiers = modifiers;
@@ -86,13 +87,13 @@ public class TimelessGunItem extends GunItem {
         }
 
         boolean isShift = Keys.MORE_INFO_HOLD.isDown();
-        if(!isShift) {
+        if (!isShift) {
             //String text = "SHIFT";
             //if(!InputHandler.MORE_INFO_HOLD.keyCode().equals(GLFW.GLFW_KEY_LEFT_SHIFT))
             String text = (new KeybindTextComponent("key.sneak")).getString().toUpperCase(Locale.ENGLISH);
             tooltip.add((new TranslationTextComponent("info.tac.more_info_gunitem", text)).mergeStyle(TextFormatting.YELLOW));
         }
-        if(isShift) {
+        if (isShift) {
             GunItem gun = (GunItem) stack.getItem();
             if (tagCompound != null) {
                 double armorPen = gun.getGun().getProjectile().getGunArmorIgnore() >= 0 ?
@@ -100,7 +101,7 @@ public class TimelessGunItem extends GunItem {
                 tooltip.add((new TranslationTextComponent("info.tac.armorPen", new TranslationTextComponent(String.format("%.1f", armorPen) + "%").mergeStyle(TextFormatting.RED)).mergeStyle(TextFormatting.DARK_AQUA)));
 
                 int headDamgeModifier = Config.COMMON.gameplay.headShotDamageMultiplier.get() * gun.getGun().getProjectile().getGunHeadDamage() >= 0 ?
-                        (int)(Config.COMMON.gameplay.headShotDamageMultiplier.get() * gun.getGun().getProjectile().getGunHeadDamage() * 100) : 0;
+                        (int) (Config.COMMON.gameplay.headShotDamageMultiplier.get() * gun.getGun().getProjectile().getGunHeadDamage() * 100) : 0;
                 tooltip.add((new TranslationTextComponent("info.tac.headDamageModifier", new TranslationTextComponent(String.format("%d", headDamgeModifier) + "%").mergeStyle(TextFormatting.RED)).mergeStyle(TextFormatting.DARK_AQUA)));
 
                 float speed = ServerPlayHandler.calceldGunWeightSpeed(gun.getGun(), stack);
@@ -116,7 +117,8 @@ public class TimelessGunItem extends GunItem {
                 tooltip.add((new TranslationTextComponent("info.tac.current_level").append(new TranslationTextComponent(" " + tagCompound.getInt("level") + " : " + String.format("%.2f", percentageToNextLevel) + "%")))
                         .mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.BOLD));
             }
-            tooltip.add((new TranslationTextComponent("info.tac.attachment_help", (new KeybindTextComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH))).mergeStyle(TextFormatting.YELLOW));
+
+            tooltip.add((new TranslationTextComponent("info.tac.attachment_help", Keys.ATTACHMENTS.getBoundenKeyPrompt().getString().toUpperCase(Locale.ENGLISH))).mergeStyle(TextFormatting.YELLOW));
             if (gun.getGun().canAttachType(IAttachment.Type.PISTOL_SCOPE))
                 tooltip.add((new TranslationTextComponent("info.tac.pistolScope", new TranslationTextComponent("MiniScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
             if (gun.getGun().canAttachType(IAttachment.Type.IR_DEVICE))
