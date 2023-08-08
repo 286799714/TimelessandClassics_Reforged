@@ -7,15 +7,13 @@ import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.render.pose.*;
 import com.tac.guns.common.BoundingBoxManager;
-import com.tac.guns.common.tooling.CommandsHandler;
-import com.tac.guns.common.tooling.CommandsManager;
 import com.tac.guns.common.GripType;
 import com.tac.guns.common.ProjectileManager;
+import com.tac.guns.common.tooling.CommandsHandler;
+import com.tac.guns.common.tooling.CommandsManager;
 import com.tac.guns.datagen.*;
 import com.tac.guns.enchantment.EnchantmentTypes;
-import com.tac.guns.entity.GrenadeEntity;
 import com.tac.guns.entity.MissileEntity;
-import com.tac.guns.extra_events.TacEventListeners;
 import com.tac.guns.init.*;
 import com.tac.guns.inventory.gear.GearSlotsHandler;
 import com.tac.guns.inventory.gear.IWearableItemHandler;
@@ -33,7 +31,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -62,170 +59,163 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 
 @Mod(Reference.MOD_ID)
-public class GunMod
-{
+public class GunMod {
     public static boolean controllableLoaded = false;
     public static boolean curiosLoaded = false;
     public static String curiosRigSlotId = "armor_rig";
     public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
 
-    public static final ItemGroup GROUP = new  ItemGroup(Reference.MOD_ID)
-    {
+    public static final ItemGroup GROUP = new ItemGroup(Reference.MOD_ID) {
         @Override
-        public ItemStack createIcon()
-        {
-            ItemStack stack = new ItemStack(ModItems.VORTEX_LPVO_1_6.get());
+        public ItemStack createIcon() {
+            ItemStack stack = new ItemStack(ModBlocks.WORKBENCH.get());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
-        {
+        public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
             CustomGunManager.fill(items);
             CustomRigManager.fill(items);
         }
     }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN, EnchantmentTypes.SEMI_AUTO_GUN);
 
-    public static final ItemGroup PISTOL = new  ItemGroup("Pistols")
-    {
+    public static final ItemGroup PISTOL = new ItemGroup("Pistols") {
         @Override
-        public ItemStack createIcon()
-        {
+        public ItemStack createIcon() {
             ItemStack stack = new ItemStack(ModItems.GLOCK_17.get());
-            stack.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem)ModItems.GLOCK_17.get()).getGun().getReloads().getMaxAmmo());
+            stack.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem) ModItems.GLOCK_17.get()).getGun().getReloads().getMaxAmmo());
             /*ItemStack stack = new ItemStack(ModItems.M1911.get());
             stack.getOrCreateTag().putInt("AmmoCount", ModItems.M1911.get().getGun().getReloads().getMaxAmmo());*/
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
-        {
+        public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    };
-    public static final ItemGroup SMG = new  ItemGroup("SMGs")
-    {
+    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+
+    public static final ItemGroup SMG = new ItemGroup("SMGs") {
         @Override
-        public ItemStack createIcon()
-        {
+        public ItemStack createIcon() {
             ItemStack stack = new ItemStack(ModItems.VECTOR45.get());
             stack.getOrCreateTag().putInt("AmmoCount", ModItems.VECTOR45.get().getGun().getReloads().getMaxAmmo());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
-        {
+        public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    };
-    public static final ItemGroup RIFLE = new  ItemGroup("AssaultRifles")
-    {
+    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+
+    public static final ItemGroup RIFLE = new ItemGroup("AssaultRifles") {
         @Override
-        public ItemStack createIcon()
-        {
+        public ItemStack createIcon() {
             ItemStack stack = new ItemStack(ModItems.AK47.get());
             stack.getOrCreateTag().putInt("AmmoCount", ModItems.AK47.get().getGun().getReloads().getMaxAmmo());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
-        {
+        public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    };
-    public static final ItemGroup SNIPER = new  ItemGroup("MarksmanRifles")
-    {
+    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+
+    public static final ItemGroup SNIPER = new ItemGroup("MarksmanRifles") {
         @Override
-        public ItemStack createIcon()
-        {
+        public ItemStack createIcon() {
             ItemStack stack = new ItemStack(ModItems.AI_AWP.get());
-            stack.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem)ModItems.AI_AWP.get()).getGun().getReloads().getMaxAmmo());
+            stack.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem) ModItems.AI_AWP.get()).getGun().getReloads().getMaxAmmo());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
-        {
+        public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    };
-    public static final ItemGroup SHOTGUN = new  ItemGroup("Shotguns")
-    {
+    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+
+    public static final ItemGroup SHOTGUN = new ItemGroup("Shotguns") {
         @Override
-        public ItemStack createIcon()
-        {
-            ItemStack stack = new ItemStack(ModItems.M1014.get());
-            stack.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem)ModItems.M1014.get()).getGun().getReloads().getMaxAmmo());
+        public ItemStack createIcon() {
+            ItemStack stack = new ItemStack(ModItems.M870_CLASSIC.get());
+            stack.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem) ModItems.M870_CLASSIC.get()).getGun().getReloads().getMaxAmmo());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
-        {
+        public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    };
-    public static final ItemGroup HEAVY_MATERIAL = new  ItemGroup("HeavyWeapons")
-    {
+    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+
+    public static final ItemGroup HEAVY_MATERIAL = new ItemGroup("HeavyWeapons") {
         @Override
-        public ItemStack createIcon()
-        {
+        public ItemStack createIcon() {
             ItemStack stack = new ItemStack(ModItems.M60.get());
             stack.getOrCreateTag().putInt("AmmoCount", ModItems.M60.get().getGun().getReloads().getMaxAmmo());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
-        {
+        public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    };
-    public static final ItemGroup AMMO = new  ItemGroup("Ammo")
-    {
+    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+
+    public static final ItemGroup AMMO = new ItemGroup("Ammo") {
         @Override
-        public ItemStack createIcon()
-        {
+        public ItemStack createIcon() {
             ItemStack stack = new ItemStack(ModItems.BULLET_308.get());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
-        {
+        public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
             CustomGunManager.fill(items);
         }
     };
-    public static final ItemGroup EXPLOSIVES = new  ItemGroup(Reference.MOD_ID)
-    {
+
+    public static final ItemGroup EXPLOSIVES = new ItemGroup(Reference.MOD_ID) {
         @Override
-        public ItemStack createIcon()
-        {
+        public ItemStack createIcon() {
             ItemStack stack = new ItemStack(ModItems.BASEBALL_GRENADE.get());
             //stack.getOrCreateTag().putInt("AmmoCount", ModItems.BASEBALL_GRENADE.get().getGun().getReloads().getMaxAmmo());
             return stack;
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
-        {
+        public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
             CustomGunManager.fill(items);
         }
     };
-    public GunMod()
-    {
+
+    public static final ItemGroup SKINS = new ItemGroup("Skins") {
+        @Override
+        public ItemStack createIcon() {
+            ItemStack stack = new ItemStack(ModItems.MODULE.get());
+            return stack;
+        }
+
+        @Override
+        public void fill(NonNullList<ItemStack> items) {
+            super.fill(items);
+            CustomGunManager.fill(items);
+        }
+    };
+
+    public GunMod() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.commonSpec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
@@ -253,8 +243,7 @@ public class GunMod
 
     public static IModInfo modInfo = null;
 
-    private void onCommonSetup(FMLCommonSetupEvent event)
-    {
+    private void onCommonSetup(FMLCommonSetupEvent event) {
         // Map projectile items to entities and renderer's
 //        ProjectileManager.getInstance().registerFactory(ModItems.GRENADE.get(), (worldIn, entity, weapon, item, modifiedGun) -> new GrenadeEntity(ModEntities.GRENADE.get(), worldIn, entity, weapon, item, modifiedGun));
         //TODO: Reimplement rocket and grenade based weapons, weapon trails must be disabled for these as well, aka requiring reimplementation
@@ -265,8 +254,7 @@ public class GunMod
         PacketHandler.init();
 
         // Updated hitboxes for better serverside feel
-        if(Config.COMMON.gameplay.improvedHitboxes.get())
-        {
+        if (Config.COMMON.gameplay.improvedHitboxes.get()) {
             MinecraftForge.EVENT_BUS.register(new BoundingBoxManager());
         }
 
@@ -354,18 +342,16 @@ public class GunMod
         MinecraftForge.EVENT_BUS.register(CommandsHandler.class);
     }
 
-    private void onEnqueueIMC(InterModEnqueueEvent event)
-    {
-        if(!curiosLoaded)
+    private void onEnqueueIMC(InterModEnqueueEvent event) {
+        if (!curiosLoaded)
             return;
 
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BACK.getMessageBuilder().build());
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE,
-                () -> new SlotTypeMessage.Builder(GunMod.curiosRigSlotId).size(1).priority(101).icon(new ResourceLocation( "curios:slot/bpv")).build());
+                () -> new SlotTypeMessage.Builder(GunMod.curiosRigSlotId).size(1).priority(101).icon(new ResourceLocation("curios:slot/bpv")).build());
     }
 
-    private void dataSetup(GatherDataEvent event)
-    {
+    private void dataSetup(GatherDataEvent event) {
         DataGenerator dataGenerator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         BlockTagGen blockTagGen = new BlockTagGen(dataGenerator, existingFileHelper);
@@ -376,8 +362,7 @@ public class GunMod
         dataGenerator.addProvider(new LanguageGen(dataGenerator));
     }
 
-    private void onClientSetup(FMLClientSetupEvent event)
-    {
+    private void onClientSetup(FMLClientSetupEvent event) {
         // Too much to keep in Gunmod file
         ClientHandler.setup(event.getMinecraftSupplier().get());
 
