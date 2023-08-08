@@ -268,8 +268,6 @@ public class ModItems {
             () -> new ArmorPlateItem(new Item.Properties().maxStackSize(12).group(GunMod.GROUP)));
 
     /* Misc */
-    public static final RegistryObject<Item> MODULE = REGISTER.register("module_item",
-            () -> new Item(new GunSkinItem.Properties().maxStackSize(1).group(GunMod.SKINS)));
     public static final RegistryObject<Item> UNCOMMON_MATERIAL = REGISTER.register("uncommon_material",
             () -> new Item(new Item.Properties().maxStackSize(64).group(GunMod.GROUP)));
     public static final RegistryObject<Item> RARE_MATERIAL = REGISTER.register("rare_material",
@@ -284,5 +282,6 @@ public class ModItems {
     //public static final RegistryObject<Item> ULTIMATE_CERTIFICATE = REGISTER.register("ultimate_certificate",() -> new Item(new Item.Properties().maxStackSize(16).group(GunMod.GROUP)));
 
     /* Skin */
-
+    public static final RegistryObject<Item> MODULE = REGISTER.register("module_item",
+            () -> new GunSkinItem(GunSkin.create(GunModifiers.SKIN_TEST), new Item.Properties().maxStackSize(1).group(GunMod.SKINS)));
 }

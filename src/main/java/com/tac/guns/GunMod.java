@@ -186,7 +186,7 @@ public class GunMod {
         }
     };
 
-    public static final ItemGroup EXPLOSIVES = new ItemGroup(Reference.MOD_ID) {
+    public static final ItemGroup EXPLOSIVES = new ItemGroup("Explosives") {
         @Override
         public ItemStack createIcon() {
             ItemStack stack = new ItemStack(ModItems.BASEBALL_GRENADE.get());

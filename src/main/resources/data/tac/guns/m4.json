@@ -122,6 +122,11 @@
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00
+      },
+      "gunSkin": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       }
     }
   }

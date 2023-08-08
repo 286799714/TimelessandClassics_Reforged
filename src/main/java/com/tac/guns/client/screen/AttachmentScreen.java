@@ -56,12 +56,14 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer> {
         if (SyncedPlayerData.instance().get(Minecraft.getInstance().player, ModSyncedDataKeys.RELOADING))
             Minecraft.getInstance().displayGuiScreen(null);
         if (this.minecraft != null && this.minecraft.player != null) {
-            if (!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) && !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem)) {
+            if (!(this.minecraft.player.getHeldItemMainhand().getItem() instanceof GunItem) &&
+                    !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) &&
+                    !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) &&
+                    !(this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem)) {
                 Minecraft.getInstance().displayGuiScreen(null);
             }
         }
     }
-
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -69,7 +71,6 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer> {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY); //Render tool tips
     }
-
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
@@ -80,7 +81,9 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer> {
         int left = (this.width - this.xSize) / 2;
         int top = (this.height - this.ySize) / 2;
 
-        if ((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) || (this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
+        if ((this.minecraft.player.getHeldItemMainhand().getItem() instanceof ScopeItem) ||
+                (this.minecraft.player.getHeldItemMainhand().getItem() instanceof SideRailItem) ||
+                (this.minecraft.player.getHeldItemMainhand().getItem() instanceof IrDeviceItem))
             RenderUtil.scissor(left + 97, top + 17, 67, 67);
         else
             RenderUtil.scissor(left + 26, top + 17, 123, 70);
@@ -167,7 +170,7 @@ public class AttachmentScreen extends ContainerScreen<AttachmentContainer> {
             }
         else
             for (int i = 0; i < IAttachment.Type.values().length - 7; i++) {
-                if (!this.container.isLoaded()) {
+                if (!this.container.getSlot(i).isEnabled()) {
                     if (i > 3)
                         if (i == 5 && this.container.hasExMag())
                             this.blit(matrixStack, left + 155, top + 17 + 18, 176 + 16, 0, 16, 16);

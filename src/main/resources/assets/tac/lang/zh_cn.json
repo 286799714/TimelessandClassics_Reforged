@@ -241,6 +241,7 @@
     "itemGroup.HeavyWeapons": "重火力武器",
     "itemGroup.Ammo": "弹药",
     "itemGroup.Skins": "皮肤",
+    "itemGroup.Explosives": "手雷",
 
     "death.attack.tac.bullet.killed": "%2$s 击倒了 %1$s",
     "death.attack.tac.bullet.eliminated": "%2$s 抹除了 %1$s",

@@ -248,6 +248,7 @@
     "itemGroup.HeavyWeapons": "Heavy Weapons",
     "itemGroup.Ammo": "Ammo",
     "itemGroup.Skins": "Skins",
+    "itemGroup.Explosives": "Explosives",
 
     "death.attack.tac.bullet.killed": "%1$s was taken down by %2$s",
     "death.attack.tac.bullet.eliminated": "%1$s was eliminated by %2$s",

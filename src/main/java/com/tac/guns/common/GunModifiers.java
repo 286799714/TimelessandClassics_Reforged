@@ -1462,4 +1462,13 @@ public class GunModifiers {
             return 0.01;
         }
     };
+
+    //////////////////////// SPECIFICS PER SKIN ////////////////////////
+
+    public static final IGunModifier SKIN_TEST = new IGunModifier() {
+        @Override
+        public String additionalSkin() {
+            return "TEST";
+        }
+    };
 }
