@@ -217,7 +217,6 @@ public class AttachmentContainer extends Container {
                 });
             }
         }
-        this.loaded = true;
     }
 
     public boolean hasExMag() {
@@ -256,7 +255,7 @@ public class AttachmentContainer extends Container {
                 }
             }
         } else if (this.weapon.getItem() instanceof TimelessOldRifleGunItem) {
-            for (int i = 0; i < IAttachment.Type.values().length - 7; i++) {
+            for (int i = 0; i < 7; i++) {
                 ItemStack attachment = this.getSlot(i).getStack();
                 if (i == 0) {
                     if (attachment.getItem() instanceof OldScopeItem) {
@@ -269,7 +268,7 @@ public class AttachmentContainer extends Container {
                 }
             }
         } else if (this.weapon.getItem() instanceof TimelessPistolGunItem) {
-            for (int i = 0; i < IAttachment.Type.values().length - 7; i++) {
+            for (int i = 0; i < 7; i++) {
                 if (i == 0) {
                     ItemStack attachment = this.getSlot(i).getStack();
                     if (attachment.getItem() instanceof PistolScopeItem) {
@@ -288,7 +287,7 @@ public class AttachmentContainer extends Container {
                 }
             }
         } else if (this.weapon.getItem() instanceof TimelessGunItem) {
-            for (int i = 0; i < IAttachment.Type.values().length - 7; i++) {
+            for (int i = 0; i < 7; i++) {
                 ItemStack attachment = this.getSlot(i).getStack();
                 if (attachment.getItem() instanceof IAttachment)
                     attachments.put(((IAttachment) attachment.getItem()).getType().getTagKey(), attachment.write(new CompoundNBT()));
