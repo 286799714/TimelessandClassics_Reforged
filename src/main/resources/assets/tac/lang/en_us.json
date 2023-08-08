@@ -241,12 +241,13 @@
 
     "itemGroup.tac": "Misc",
     "itemGroup.Pistols": "Pistols",
-    "itemGroup.SMGs": "SMG's",
+    "itemGroup.SMGs": "SMGs",
     "itemGroup.AssaultRifles": "Assault Rifles",
     "itemGroup.MarksmanRifles": "Sniper Rifles",
     "itemGroup.Shotguns": "Shotguns",
     "itemGroup.HeavyWeapons": "Heavy Weapons",
     "itemGroup.Ammo": "Ammo",
+    "itemGroup.Skins": "Skins",
 
     "death.attack.tac.bullet.killed": "%1$s was taken down by %2$s",
     "death.attack.tac.bullet.eliminated": "%1$s was eliminated by %2$s",

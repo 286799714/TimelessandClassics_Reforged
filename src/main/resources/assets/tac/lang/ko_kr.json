@@ -240,6 +240,7 @@
     "itemGroup.Shotguns": "산탄총",
     "itemGroup.HeavyWeapons": "중화기",
     "itemGroup.Ammo": "틴약",
+    "itemGroup.Skins": "Skins",
 
     "death.attack.tac.bullet.killed": "%1$s 이(가) %2$s 에게 제압당했습니다.",
     "death.attack.tac.bullet.eliminated": "%1$s 이(가) %2$s 에게 섬멸당했습니다",
