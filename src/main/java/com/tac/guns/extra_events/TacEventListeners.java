@@ -147,7 +147,12 @@ public class TacEventListeners {
             Vector3d p0 = ProjectileEntity.cachePlayerPosition.getOrDefault(event.player, event.player.getPositionVec());
             Vector3d p1 = event.player.getPositionVec();
             ProjectileEntity.cachePlayerPosition.put(event.player, p1);
-            Vector3d v = p1.subtract(p0).mul(5,5,5);
+            Vector3d v = p1.subtract(p0);
+            if (v.x * v.x + v.y * v.y + v.z * v.z >= 0.0625) {
+                v = v.mul(5,5,5);
+            } else {
+                v = new Vector3d(0,0,0);
+            }
             ProjectileEntity.cachePlayerVelocity.put(event.player, v);
         }
     }

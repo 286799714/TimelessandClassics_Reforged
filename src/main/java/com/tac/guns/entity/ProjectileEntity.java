@@ -215,11 +215,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (!this.world.isRemote()) {
             Vector3d startVec = this.getPositionVec();
             Vector3d endVec = startVec.add(this.getMotion());
-//            if (this.shooter instanceof PlayerEntity) {
-//                Vector3d v = cachePlayerVelocity.get((PlayerEntity) shooter);
-//                startVec = startVec.subtract(v);
-//                endVec = endVec.subtract(v);
-//            }
+            if (this.shooter instanceof PlayerEntity) {
+                Vector3d v = cachePlayerVelocity.get((PlayerEntity) shooter);
+                startVec = startVec.subtract(v);
+                endVec = endVec.subtract(v);
+            }
             RayTraceResult result = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
             if (result.getType() != RayTraceResult.Type.MISS) {
                 endVec = result.getHitVec();
@@ -335,10 +335,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             int ping = (int) Math.floor((((ServerPlayerEntity) this.shooter).ping / 1000.0) * 20.0 + 0.5);
             boundingBox = BoundingBoxManager.getBoundingBox((PlayerEntity) entity, ping);
         }
-//        if (entity instanceof PlayerEntity) {
-//            Vector3d v = cachePlayerVelocity.get(entity);
-//            boundingBox = boundingBox.offset(-v.x, -v.y, -v.z);
-//        }
+        if (entity instanceof PlayerEntity) {
+            Vector3d v = cachePlayerVelocity.get(entity);
+            boundingBox = boundingBox.offset(-v.x, -v.y, -v.z);
+        }
         boundingBox = boundingBox.expand(0, expandHeight, 0);
 
         Vector3d hitPos = boundingBox.rayTrace(startVec, endVec).orElse(null);
