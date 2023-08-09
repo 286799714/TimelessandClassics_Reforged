@@ -35,7 +35,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SExplosionPacket;
-import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
@@ -79,6 +78,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     private float randomRecoilP = 0f;
     private float randomRecoilY = 0f;
+
+    protected Vector3d startPos;
 
     public static HashMap<PlayerEntity, Vector3d> cachePlayerPosition = new HashMap<>();
     public static HashMap<PlayerEntity, Vector3d> cachePlayerVelocity = new HashMap<>();
@@ -214,6 +215,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         if (!this.world.isRemote()) {
             Vector3d startVec = this.getPositionVec();
+            if (this.ticksExisted < 1) {
+                startPos = startVec;
+            }
             Vector3d endVec = startVec.add(this.getMotion());
             if (this.shooter instanceof PlayerEntity) {
                 Vector3d v = cachePlayerVelocity.get((PlayerEntity) shooter);
@@ -403,7 +407,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             if (block.getRegistryName().getPath().contains("_button"))
                 return;
 
-            if (Config.COMMON.gameplay.enableGunGriefing.get() && (block instanceof BreakableBlock || block instanceof PaneBlock) && state.getMaterial() == Material.GLASS) {
+            if (Config.COMMON.gameplay.enableGunGriefing.get() && (block instanceof BreakableBlock ||
+                    block instanceof PaneBlock) && state.getMaterial() == Material.GLASS) {
                 this.world.destroyBlock(blockRayTraceResult.getPos(), false, this.shooter);
             }
 
@@ -467,7 +472,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     }
 
     protected void onHitEntity(Entity entity, Vector3d hitVec, Vector3d startVec, Vector3d endVec, boolean headshot) {
-        float damage = this.getDamage();
+        float damage = this.getDamage(hitVec);
         float newDamage = this.getCriticalDamage(this.weapon, this.rand, damage);
         boolean critical = damage != newDamage;
         damage = newDamage;
@@ -669,6 +674,22 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         return this.shooterId;
     }
 
+    //DamageReduceOverDistance
+    public float getDamage(Vector3d hitVec) {
+        float initialDamage = (this.projectile.getDamage() + this.additionalDamage);
+        double maxDistance = this.projectile.getLife() * this.projectile.getSpeed();
+        double projDistance = hitVec.distanceTo(this.startPos);
+        if (this.projectile.isDamageReduceOverLife()) {
+            float modifier = (float) ((maxDistance - projDistance) / maxDistance);
+            initialDamage *= modifier;
+        }
+        float damage = initialDamage / this.general.getProjectileAmount();
+        damage = GunModifierHelper.getModifiedDamage(this.weapon, this.modifiedGun, damage);
+        damage = GunEnchantmentHelper.getAcceleratorDamage(this.weapon, damage);
+        return Math.max(0F, damage);
+    }
+
+    //DamageReduceOverLife
     public float getDamage() {
         float initialDamage = (this.projectile.getDamage() + this.additionalDamage);
         if (this.projectile.isDamageReduceOverLife()) {
