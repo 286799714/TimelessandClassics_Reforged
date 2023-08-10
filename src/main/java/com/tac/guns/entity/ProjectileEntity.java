@@ -687,11 +687,15 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     decayEndDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayStart(), 0f, 1f) * maxDistance);
                     minDecayMultiplier = this.projectile.getGunMinDecayMultiplier();
                 } else {
-                    decayStartDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayStart(), 0f, 1f) * maxDistance);
-                    decayEndDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayEnd(), 0f, 1f) * maxDistance);
+                    if (this.projectile.getGunDecayStart() > this.projectile.getGunDecayEnd()) {
+                        decayStartDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayEnd(), 0f, 1f) * maxDistance);
+                        decayEndDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayStart(), 0f, 1f) * maxDistance);
+                    } else {
+                        decayStartDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayStart(), 0f, 1f) * maxDistance);
+                        decayEndDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayEnd(), 0f, 1f) * maxDistance);
+                    }
                     minDecayMultiplier = MathHelper.clamp(this.projectile.getGunMinDecayMultiplier(), 0f, 1f);
                 }
-
                 if (decayStartDistance == decayEndDistance)
                     modifier = projDistance > decayEndDistance ? minDecayMultiplier : 1f;
                 else
