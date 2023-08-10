@@ -38,9 +38,13 @@
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
+    "closeDamage": 1.15,
+    "decayStart": 0.0,
+    "minDecayMultiplier": 0.45,
+    "decayEnd": 0.85,
     "speed": 14,
     "trailLengthMultiplier": 3,
-    "life": 10
+    "life": 7
   },
   "sounds": {
     "fire": "tac:item.uzi_fire",

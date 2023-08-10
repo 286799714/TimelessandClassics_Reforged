@@ -23,14 +23,18 @@
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 14,
+    "damage": 13.7,
     "armorIgnore": 1.2,
     "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.0,
+    "minDecayMultiplier": 0.2,
+    "decayEnd": 0.8,
     "size": 0.15,
     "speed": 19.5,
-    "life": 14,
+    "life": 13,
     "trailLengthMultiplier": 2.75
   },
   "reloads": {

@@ -36,10 +36,14 @@
     "critical": 0.0,
     "criticalDamage": 0.875,
     "headDamage": 1.0,
+    "closeDamage": 1.0,
+    "decayStart": 0.05,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 1.0,
     "size": 0.175,
     "speed": 19,
     "trailLengthMultiplier": 2.75,
-    "life": 15
+    "life": 13
   },
   "sounds": {
     "fire": "tac:item.dp28_fire",

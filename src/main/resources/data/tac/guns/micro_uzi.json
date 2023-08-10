@@ -38,9 +38,13 @@
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
+    "closeDamage": 1.15,
+    "decayStart": 0.0,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.85,
     "speed": 12,
     "trailLengthMultiplier": 3,
-    "life": 11
+    "life": 8
   },
   "sounds": {
     "fire": "tac:item.mac10_fire",

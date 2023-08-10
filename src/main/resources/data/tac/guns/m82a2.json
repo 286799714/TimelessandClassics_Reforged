@@ -37,9 +37,13 @@
     "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 2.0,
+    "closeDamage": 1.0,
+    "decayStart": 0.0,
+    "minDecayMultiplier": 0.2,
+    "decayEnd": 0.8,
     "size": 0.35,
     "speed": 30.0,
-    "life": 20,
+    "life": 16,
     "trailLengthMultiplier": 3.75
   },
   "sounds": {

@@ -28,10 +28,14 @@
     "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.05,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.95,
     "size": 0.1,
     "speed": 20,
     "trailLengthMultiplier": 2.75,
-    "life": 13
+    "life": 10
   },
   "reloads": {
     "magFed": true,

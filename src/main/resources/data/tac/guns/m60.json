@@ -32,15 +32,19 @@
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 12,
+    "damage": 11.4,
     "armorIgnore": 1.1,
     "critical": 0.0,
     "criticalDamage": 0.875,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.0,
+    "minDecayMultiplier": 0.2,
+    "decayEnd": 0.85,
     "size": 0.15,
     "speed": 24.5,
     "trailLengthMultiplier": 3,
-    "life": 14
+    "life": 11
   },
   "sounds": {
     "fire": "tac:item.m60_fire",
