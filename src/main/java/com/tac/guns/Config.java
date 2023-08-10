@@ -349,6 +349,7 @@ public class Config
     public static class Gameplay
     {
         public final ForgeConfigSpec.BooleanValue enableGunGriefing;
+        public final ForgeConfigSpec.BooleanValue glassDrop;
         public final ForgeConfigSpec.BooleanValue enableExplosionBreak;
         public final ForgeConfigSpec.DoubleValue growBoundingBoxAmountV2;
         public final ForgeConfigSpec.BooleanValue enableHeadShots;
@@ -382,6 +383,7 @@ public class Config
             builder.comment("Properties relating to gameplay").push("gameplay");
             {
                 this.enableGunGriefing = builder.comment("If enable, allows guns to shoot out glass").define("enableGunGriefing", true);
+                this.glassDrop = builder.comment("True if you want glass drop while been broken by shoot").define("glassDrop",false);
                 this.enableExplosionBreak = builder.comment("If enable, allows guns to remove blocks on explosions").define("enableExplosionBreak", false);
                 this.growBoundingBoxAmountV2 = builder.comment("The extra amount to expand an entity's bounding box when checking for projectile collision. Setting this value higher will make it easier to hit entities").defineInRange(
                         "growBoundingBoxAmountV2", 0.0, 0.0, 1.0);

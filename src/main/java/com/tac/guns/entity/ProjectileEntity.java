@@ -404,7 +404,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
             if (Config.COMMON.gameplay.enableGunGriefing.get() && (block instanceof BreakableBlock ||
                     block instanceof PaneBlock) && state.getMaterial() == Material.GLASS) {
-                this.world.destroyBlock(blockRayTraceResult.getPos(), false, this.shooter);
+                this.world.destroyBlock(blockRayTraceResult.getPos(), Config.COMMON.gameplay.glassDrop.get(), this.shooter);
             }
 
             /*if(modifiedGun.getProjectile().isRicochet() &&
