@@ -76,9 +76,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     protected double modifiedGravity;
     public int life;
 
-    private float randomRecoilP = 0f;
-    private float randomRecoilY = 0f;
-
     protected Vector3d startPos;
 
     public static HashMap<PlayerEntity, Vector3d> cachePlayerPosition = new HashMap<>();
@@ -98,8 +95,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.entitySize = new EntitySize(this.projectile.getSize(), this.projectile.getSize(), false);
         this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.0285) : 0.0; // -0.0285 Default upcoming new -0.0125
         this.life = GunModifierHelper.getModifiedProjectileLife(weapon, this.projectile.getLife());
-        this.randomRecoilP = randP;
-        this.randomRecoilY = randY;
 
         /* Get speed and set motion */
         Vector3d dir = this.getDirection(shooter, weapon, item, modifiedGun);
@@ -404,7 +399,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             if (!state.getMaterial().isReplaceable())
                 this.remove();
 
-            if (block.getRegistryName().getPath().contains("_button"))
+            if (Objects.requireNonNull(block.getRegistryName()).getPath().contains("_button"))
                 return;
 
             if (Config.COMMON.gameplay.enableGunGriefing.get() && (block instanceof BreakableBlock ||
@@ -630,9 +625,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     @Override
     public void readSpawnData(PacketBuffer buffer) {
         this.projectile = new Gun.Projectile();
-        this.projectile.deserializeNBT(buffer.readCompoundTag());
+        this.projectile.deserializeNBT(Objects.requireNonNull(buffer.readCompoundTag()));
         this.general = new Gun.General();
-        this.general.deserializeNBT(buffer.readCompoundTag());
+        this.general.deserializeNBT(Objects.requireNonNull(buffer.readCompoundTag()));
         this.shooterId = buffer.readInt();
         this.item = BufferUtil.readItemStackFromBufIgnoreTag(buffer);
         this.modifiedGravity = buffer.readDouble();
@@ -680,7 +675,31 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         double maxDistance = this.projectile.getLife() * this.projectile.getSpeed();
         double projDistance = hitVec.distanceTo(this.startPos);
         if (this.projectile.isDamageReduceOverLife()) {
-            float modifier = (float) ((maxDistance - projDistance) / maxDistance);
+            float modifier;
+            if (projDistance <= Math.min(Math.min(this.projectile.getSpeed() / 10, maxDistance / 100), 2))
+                modifier = this.projectile.getGunCloseDamage() > 1 ? this.projectile.getGunCloseDamage() : 1;
+            else {
+                float decayStartDistance;
+                float decayEndDistance;
+                float minDecayMultiplier;
+                if (this.projectile.getGunDecayStart() > this.projectile.getGunDecayEnd() && this.projectile.getGunMinDecayMultiplier() > 1f) {
+                    decayStartDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayEnd(), 0f, 1f) * maxDistance);
+                    decayEndDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayStart(), 0f, 1f) * maxDistance);
+                    minDecayMultiplier = this.projectile.getGunMinDecayMultiplier();
+                } else {
+                    decayStartDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayStart(), 0f, 1f) * maxDistance);
+                    decayEndDistance = (float) (MathHelper.clamp(this.projectile.getGunDecayEnd(), 0f, 1f) * maxDistance);
+                    minDecayMultiplier = MathHelper.clamp(this.projectile.getGunMinDecayMultiplier(), 0f, 1f);
+                }
+
+                if (decayStartDistance == decayEndDistance)
+                    modifier = projDistance > decayEndDistance ? minDecayMultiplier : 1f;
+                else
+                    modifier = (float) MathHelper.clamp(
+                            (projDistance - decayEndDistance) * (1 - minDecayMultiplier) / (decayStartDistance - decayEndDistance) + minDecayMultiplier,
+                            Math.min(minDecayMultiplier, 1f),
+                            Math.max(minDecayMultiplier, 1f));
+            }
             initialDamage *= modifier;
         }
         float damage = initialDamage / this.general.getProjectileAmount();
