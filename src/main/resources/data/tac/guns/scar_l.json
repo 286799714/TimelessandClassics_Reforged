@@ -23,7 +23,7 @@
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 8.15,
+    "damage": 8.25,
     "armorIgnore": 1.0,
     "critical": 0.00,
     "criticalDamage": 0.75,

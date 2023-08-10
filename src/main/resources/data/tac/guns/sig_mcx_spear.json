@@ -30,7 +30,7 @@
   "projectile": {
     "item": "tac:bullet68",
     "visible": false,
-    "damage": 7.95,
+    "damage": 8,
     "armorIgnore": 1.0,
     "critical": 0.00,
     "criticalDamage": 0.75,
