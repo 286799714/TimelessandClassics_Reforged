@@ -95,7 +95,7 @@ public class GunMod {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+    };
 
     public static final ItemGroup SMG = new ItemGroup("SMGs") {
         @Override
@@ -110,7 +110,7 @@ public class GunMod {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+    };
 
     public static final ItemGroup RIFLE = new ItemGroup("AssaultRifles") {
         @Override
@@ -125,7 +125,7 @@ public class GunMod {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+    };
 
     public static final ItemGroup SNIPER = new ItemGroup("MarksmanRifles") {
         @Override
@@ -140,7 +140,7 @@ public class GunMod {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+    };
 
     public static final ItemGroup SHOTGUN = new ItemGroup("Shotguns") {
         @Override
@@ -155,7 +155,7 @@ public class GunMod {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+    };
 
     public static final ItemGroup HEAVY_MATERIAL = new ItemGroup("HeavyWeapons") {
         @Override
@@ -170,7 +170,7 @@ public class GunMod {
             super.fill(items);
             CustomGunManager.fill(items);
         }
-    }.setRelevantEnchantmentTypes(EnchantmentTypes.GUN);
+    };
 
     public static final ItemGroup AMMO = new ItemGroup("Ammo") {
         @Override
