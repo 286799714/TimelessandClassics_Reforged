@@ -256,6 +256,7 @@
 
     "info.tac.oldRifleScope": "瞄具可用 %s",
     "info.tac.pistolScope": "瞄具可用 %s",
+    "info.tac.irLaserEquip": "镭射可用 %s",
     "info.tac.pistolBarrel": "枪口可用 %s",
 
     "info.tac.oldScope_type": "老式瞄具",
@@ -458,19 +459,16 @@
     "tac.button.attachments": "配件管理",
     "tac.button.steadyAim": "屏息瞄准",
     "curios.identifier.armor_rig": "TAC 防弹衣",
-    "key.tac.aim_sights": "Toggle ADS",
-    "tac.options.toggleAim": "Toggle ADS",
-    "perk.tac.additional_damage.positive": "Additional Damage Â§r(Â§l+%s â™¥Â§r)",
-    "perk.tac.additional_damage.negative": "Negative Damage Â§r(Â§l-%s â™¥Â§r)",
-    "item.tac.sro_dot": "Trijicon SRO",
-    "info.tac.tac_armor_repair1": "Hold your ",
-    "info.tac.tac_armor_repair2": " in-game to repair Armor",
-    "info.tac.current_armor_amount": "Current Armor Durability: ",
-    "tac.options.weaponsVolume.format": "Gun fire Volume: %s",
-    "tac.options.toggleAim": "Toggle ADS",
-    "tac.options.showFirstPersonBulletTrails": "Show FPS trails",
-    "enchantment.tac.over_capacity": "Extended Capacity",
-    "enchantment.tac.over_capacity.desc": "Increases the ammunition count for the weapon"
+    "key.tac.aim_sights": "切换开镜",
+    "tac.options.toggleAim": "切换开镜",
+    "perk.tac.additional_damage.positive": "伤害修正 Â§r(Â§l+%s â™¥Â§r)",
+    "perk.tac.additional_damage.negative": "伤害修正 Â§r(Â§l-%s â™¥Â§r)",
+    "item.tac.sro_dot": "SRO 瞄具",
+    "info.tac.tac_armor_repair1": "按住 ",
+    "info.tac.tac_armor_repair2": " 以修复装甲",
+    "info.tac.current_armor_amount": "当前护甲耐久: ",
+    "tac.options.weaponsVolume.format": "枪声音量: %s",
+    "tac.options.showFirstPersonBulletTrails": "在第一人称下显示弹道"
     
     
 }
