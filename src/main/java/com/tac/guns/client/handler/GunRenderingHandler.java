@@ -739,7 +739,24 @@ public class GunRenderingHandler {
     // made public for adjusting hands within animator instances
     public float sOT = 0.0f;
     public float wSpeed = 0.0f;
+    private void applyLightWeightAnimation(MatrixStack matrixStack, float leftHanded, float draw) {
+        float result = sprintDynamicsHSS.update(0.05f, sOT) * draw;
+        float result2 = sprintDynamicsZHSS.update(0.05f, sOT) * draw;
 
+        matrixStack.translate(0.215 * leftHanded * result,
+                0.07f * result, -30F * leftHanded * result / 170);
+        matrixStack.rotate(Vector3f.XP.rotationDegrees(60f * result2));
+        matrixStack.rotate(Vector3f.ZP.rotationDegrees(-25f * result2));
+    }
+    private void applyDefaultAnimation(MatrixStack matrixStack, float leftHanded, float draw) {
+        float result = sprintDynamics.update(0.05f, sOT) * draw;
+        float result2 = sprintDynamicsZ.update(0.05f, sOT) * draw;
+
+        matrixStack.translate(-0.25 * leftHanded * result, -0.1 * result - 0.1 + Math.abs(0.5 - result) * 0.2, 0);
+        matrixStack.rotate(Vector3f.YP.rotationDegrees(28F * leftHanded * result));
+        matrixStack.rotate(Vector3f.XP.rotationDegrees(15F * result2));
+        matrixStack.rotate(Vector3f.ZP.rotationDegrees(20f * result2));
+    }
     private void applySprintingTransforms(ItemStack gun, HandSide hand,
                                           MatrixStack matrixStack, float partialTicks) {
         TimelessGunItem modifiedGun = (TimelessGunItem) gun.getItem();
@@ -747,35 +764,19 @@ public class GunRenderingHandler {
         float draw = (controller == null || !controller.isAnimationRunning(GunAnimationController.AnimationLabel.DRAW) ? 1 : 0);
         float leftHanded = hand == HandSide.LEFT ? -1 : 1;
         this.sOT = (this.prevSprintTransition + (this.sprintTransition - this.prevSprintTransition) * partialTicks) / 5F;
-        //TODO: Speed of the held weapon, make a static method? it's not that useful but will be cleaner
-        this.wSpeed = ServerPlayHandler.calceldGunWeightSpeed(modifiedGun.getGun(), gun);
-        // Light weight animation, used for SMGS and light rifles like the hk416
+        this.wSpeed = getGunWeightSpeed(modifiedGun.getGun(),gun);
+        // Lightweight animation, used for SMGS and light rifles like the hk416
         if (wSpeed > 0.094f) {
-            // Translation
-            float result = sprintDynamicsHSS.update(0.05f, sOT) * draw;
-
-            // Rotating to the left a bit
-            float result2 = sprintDynamicsZHSS.update(0.05f, sOT) * draw;
-
-            matrixStack.translate(0.215 * leftHanded * result,
-                    0.07f * result, -30F * leftHanded * result / 170);
-            matrixStack.rotate(Vector3f.XP.rotationDegrees(60f * result2));
-            matrixStack.rotate(Vector3f.ZP.rotationDegrees(-25f * result2));
+            applyLightWeightAnimation(matrixStack, leftHanded, draw);
         }
         // Default
         else {
-            //transition = (float) Math.sin((transition * Math.PI) / 2);
-            float result = sprintDynamics.update(0.05f, sOT) * draw;
-            float result2 = sprintDynamicsZ.update(0.05f, sOT) * draw;
-            //matrixStack.translate(-0.25 * leftHanded * transition, -0.1 * transition, 0);
-            matrixStack.translate(-0.25 * leftHanded * result, -0.1 * result - 0.1 + Math.abs(0.5 - result) * 0.2, 0);
-            //matrixStack.rotate(Vector3f.YP.rotationDegrees(45F * leftHanded * transition));
-            matrixStack.rotate(Vector3f.YP.rotationDegrees(28F * leftHanded * result));
-            matrixStack.rotate(Vector3f.XP.rotationDegrees(15F * result2));
-            matrixStack.rotate(Vector3f.ZP.rotationDegrees(20f * result2));
+            applyDefaultAnimation(matrixStack, leftHanded, draw);
         }
     }
-
+    private static float getGunWeightSpeed(Gun gunType, ItemStack gun) {
+        return ServerPlayHandler.calceldGunWeightSpeed(gunType, gun);
+    }
     private void applyReloadTransforms(MatrixStack matrixStack, HandSide hand, float partialTicks, ItemStack modifiedGun) {
         /*float reloadProgress = ReloadHandler.get().getRepairProgress(partialTicks, stack);
         matrixStack.translate(0, 0.35 * reloadProgress, 0);
