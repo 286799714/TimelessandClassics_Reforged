@@ -1,7 +1,6 @@
 package com.tac.guns.common;
 
 import com.tac.guns.interfaces.IGunModifier;
-import net.minecraftforge.fml.ModList;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
