@@ -30,6 +30,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 /**
  * Mainly controls when the animation should play.
  */
@@ -39,57 +42,75 @@ public enum AnimationHandler {
 
     public static void preloadAnimations() {
         //TODO: Make automatic or have some sort of check for this
-        AA12AnimationController.getInstance();
-        Dp28AnimationController.getInstance();
-        Glock17AnimationController.getInstance();
-        HkMp5a5AnimationController.getInstance();
-        HK416A5AnimationController.getInstance();
-        M870AnimationController.getInstance();
-        Mp7AnimationController.getInstance();
-        Type81AnimationController.getInstance();
-        Ak47AnimationController.getInstance();
-        AWPAnimationController.getInstance();
-        M60AnimationController.getInstance();
-        M1014AnimationController.getInstance();
-        TtiG34AnimationController.getInstance();
-        MK18MOD1AnimationController.getInstance();
-        M4AnimationController.getInstance();
-        STI2011AnimationController.getInstance();
-        Timeless50AnimationController.getInstance();
-        M1911AnimationController.getInstance();
-        MK47AnimationController.getInstance();
-        MK14AnimationController.getInstance();
-        SCAR_HAnimationController.getInstance();
-        SCAR_MK20AnimationController.getInstance();
-        SCAR_LAnimationController.getInstance();
-        CZ75AnimationController.getInstance();
-        CZ75AutoAnimationController.getInstance();
-        DBShotgunAnimationController.getInstance();
-        FNFALAnimationController.getInstance();
-        M16A4AnimationController.getInstance();
-        SPR15AnimationController.getInstance();
-        Deagle50AnimationController.getInstance();
-        Type95LAnimationController.getInstance();
-        Type191AnimationController.getInstance();
-        MAC10AnimationController.getInstance();
-        Vector45AnimationController.getInstance();
-        SKSTacticalAnimationController.getInstance();
-        M24AnimationController.getInstance();
-        M82A2AnimationController.getInstance();
-        RPKAnimationController.getInstance();
-        M249AnimationController.getInstance();
-        M1A1AnimationController.getInstance();
-        Glock18AnimationController.getInstance();
-        SIGMCXAnimationController.getInstance();
-        M92FSAnimationController.getInstance();
-        MP9AnimationController.getInstance();
-        MK23AnimationController.getInstance();
-        RPG7AnimationController.getInstance();
-        UDP9AnimationController.getInstance();
-        UZIAnimationController.getInstance();
-        MRADAnimationController.getInstance();
-        HK_G3AnimationController.getInstance();
+        String[] animationControllers = {
+                "AA12AnimationController",
+                "Dp28AnimationController",
+                "Glock17AnimationController",
+                "HkMp5a5AnimationController",
+                "HK416A5AnimationController",
+                "M870AnimationController",
+                "Mp7AnimationController",
+                "Type81AnimationController",
+                "Ak47AnimationController",
+                "AWPAnimationController",
+                "M60AnimationController",
+                "M1014AnimationController",
+                "TtiG34AnimationController",
+                "MK18MOD1AnimationController",
+                "M4AnimationController",
+                "STI2011AnimationController",
+                "Timeless50AnimationController",
+                "M1911AnimationController",
+                "MK47AnimationController",
+                "MK14AnimationController",
+                "SCAR_HAnimationController",
+                "SCAR_MK20AnimationController",
+                "SCAR_LAnimationController",
+                "CZ75AnimationController",
+                "CZ75AutoAnimationController",
+                "DBShotgunAnimationController",
+                "FNFALAnimationController",
+                "M16A4AnimationController",
+                "SPR15AnimationController",
+                "Deagle50AnimationController",
+                "Type95LAnimationController",
+                "Type191AnimationController",
+                "MAC10AnimationController",
+                "Vector45AnimationController",
+                "SKSTacticalAnimationController",
+                "M24AnimationController",
+                "M82A2AnimationController",
+                "RPKAnimationController",
+                "M249AnimationController",
+                "M1A1AnimationController",
+                "Glock18AnimationController",
+                "SIGMCXAnimationController",
+                "M92FSAnimationController",
+                "MP9AnimationController",
+                "MK23AnimationController",
+                "RPG7AnimationController",
+                "UDP9AnimationController",
+                "UZIAnimationController",
+                "MRADAnimationController",
+                "HK_G3AnimationController"
+
+        };
+
+
+        for (String controllerName : animationControllers) {
+            try {
+                String fullClassName = "com.tac.guns.client.render.animation." + controllerName;
+                Class<?> controllerClass = Class.forName(fullClassName);
+                Method getInstanceMethod = controllerClass.getMethod("getInstance");
+                getInstanceMethod.invoke(null);
+            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                     IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
+
+
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {
         PlayerEntity player = Minecraft.getInstance().player;
