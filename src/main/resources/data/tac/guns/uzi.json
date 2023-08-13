@@ -59,7 +59,8 @@
     "flash": {
       "yOffset": 8.25,
       "zOffset": -11.5,
-      "size": 0.845
+      "size": 0.845,
+      "trailAdjust": 0.75
     },
     "shellCasing": {
       "tickLife":10,
