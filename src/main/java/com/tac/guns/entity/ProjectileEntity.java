@@ -676,7 +676,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         double projDistance = hitVec.distanceTo(this.startPos);
         if (this.projectile.isDamageReduceOverLife()) {
             float modifier;
-            if (projDistance <= Math.min(Math.min(this.projectile.getSpeed() / 10, maxDistance / 80), 2))
+            if (projDistance <= Math.min(Math.min(this.projectile.getSpeed() / 5, maxDistance / 40), 4))
                 modifier = this.projectile.getGunCloseDamage() > 1 ? this.projectile.getGunCloseDamage() : 1;
             else {
                 float decayStartDistance;
