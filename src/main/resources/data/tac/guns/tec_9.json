@@ -3,11 +3,12 @@
     "auto": true,
     "rate": 1200,
     "rateSelector": [
+      1,
       2
     ],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 3.25,
-    "horizontalRecoilAngle": 3.25,
+    "recoilAngle": 2.5,
+    "horizontalRecoilAngle": 1.75,
     "recoilKick": 1.375,
     "recoilAdsReduction": 0.225,
     "weaponRecoilOffset": 0.8125,
