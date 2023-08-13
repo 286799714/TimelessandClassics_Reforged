@@ -38,7 +38,7 @@
     "criticalDamage": 0.625,
     "headDamage": 0.625,
     "closeDamage": 1.15,
-    "decayStart": 0.0,
+    "decayStart": 0.18,
     "minDecayMultiplier": 0.3,
     "decayEnd": 0.85,
     "size": 0.05,

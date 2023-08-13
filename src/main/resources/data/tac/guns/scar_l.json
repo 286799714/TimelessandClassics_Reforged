@@ -4,13 +4,13 @@
     "rate": 600,
     "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 1.975,
+    "recoilAngle": 1.75,
     "horizontalRecoilAngle": 1.125,
-    "recoilKick": 1.6,
-    "recoilAdsReduction": 0.24,
-    "weaponRecoilOffset": 0.755,
+    "recoilKick": 1.5,
+    "recoilAdsReduction": 0.275,
+    "weaponRecoilOffset": 0.7125,
     "cameraRecoilModifier": 1.275,
-    "recoilDuration": 0.35,
+    "recoilDuration": 0.275,
     "weightKilo": 5.60,
 
     "spread": 1.8,
@@ -29,7 +29,7 @@
     "criticalDamage": 0.75,
     "headDamage": 1.0,
     "closeDamage": 1.1,
-    "decayStart": 0.0,
+    "decayStart": 0.15,
     "minDecayMultiplier": 0.3,
     "decayEnd": 1.0,
     "size": 0.1,
@@ -88,7 +88,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 12.845,
-      "zOffset": -5.805
+      "zOffset": -5
     },
     "attachments": {
       "scope": {
