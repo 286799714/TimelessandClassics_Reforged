@@ -1404,7 +1404,7 @@ public class GunModifiers {
         }
     };
 
-    public static final IGunModifier TEC_9 = new IGunModifier() {
+    public static final IGunModifier TEC_9_MOD = new IGunModifier() {
         @Override
         public double modifyFireSoundRadius(double radius) {
             return radius * 0.85;
