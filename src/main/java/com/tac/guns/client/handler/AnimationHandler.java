@@ -3,27 +3,21 @@ package com.tac.guns.client.handler;
 import com.mrcrayfish.obfuscate.common.data.SyncedPlayerData;
 import com.tac.guns.Reference;
 import com.tac.guns.client.Keys;
-import com.tac.guns.client.render.animation.*;
 import com.tac.guns.client.render.animation.module.*;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
-import com.tac.guns.util.GunEnchantmentHelper;
-
 import com.tac.guns.util.GunModifierHelper;
 import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -92,10 +86,9 @@ public enum AnimationHandler {
                 "UDP9AnimationController",
                 "UZIAnimationController",
                 "MRADAnimationController",
-                "HK_G3AnimationController"
-
+                "HK_G3AnimationController",
+                "TEC9AnimationController"
         };
-
 
         for (String controllerName : animationControllers) {
             try {
@@ -109,8 +102,6 @@ public enum AnimationHandler {
             }
         }
     }
-
-
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {
         PlayerEntity player = Minecraft.getInstance().player;
@@ -202,13 +193,13 @@ public enum AnimationHandler {
     }
 
     static {
-        Keys.INSPECT.addPressCallback( () -> {
+        Keys.INSPECT.addPressCallback(() -> {
             final PlayerEntity player = Minecraft.getInstance().player;
             if (player == null) return;
-            
+
             final ItemStack stack = player.inventory.getCurrentItem();
             final GunAnimationController controller
-                = GunAnimationController.fromItem(stack.getItem());
+                    = GunAnimationController.fromItem(stack.getItem());
             if (controller != null && !controller.isAnimationRunning()) {
                 controller.stopAnimation();
                 if (Gun.hasAmmo(stack)) {
@@ -217,7 +208,7 @@ public enum AnimationHandler {
                     controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT_EMPTY);
                 }
             }
-        } );
+        });
     }
 
     @SubscribeEvent

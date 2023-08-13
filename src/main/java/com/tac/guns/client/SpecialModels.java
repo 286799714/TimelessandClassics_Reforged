@@ -15,8 +15,7 @@ import net.minecraftforge.fml.common.Mod;
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public enum SpecialModels
-{
+public enum SpecialModels {
     BULLET_SHELL("bullet_shell"), // Simply for testing fall back, FOR REMOVAL
     BULLET_SHELL_HIGH_CAL("shell_huge"),
     BULLET_SHELL_RIFLE("shell_large"),
@@ -419,10 +418,7 @@ public enum SpecialModels
     AI_AWP_BULLET_SHELL("ai_awp_bullet_shell"),
     AI_AWP_MAG("ai_awp_mag"),
     AI_AWP_MAG_EXTENDED("ai_awp_extended_mag"),
-    TEC_9("tec_9"),
-    TEC_9_BOLT("tec_9_bolt"),
-    TEC_9_STANDARD_MAG("tec_9_standard_mag"),
-    TEC_9_EXTENDED_MAG("tec_9_extended_mag"),
+
     RPK("rpk"),
     RPK_BOLT("rpk_bolt"),
     RPK_STANDARD_MAG("rpk_standard_mag"),
@@ -666,22 +662,22 @@ public enum SpecialModels
     MK47_HEAVY_STOCK("mk47_heavy_stock"),
     MK47_PULL("mk47_pull"),
 
-   AR_15_BODY("ar_15_body"),
-   AR_15_BOLT("ar_15h_bolt"),
-   AR_15_COMPENSATOR("ar_15_c_muzzle"),
-   AR_15_DEFAULT_BARREL("ar_15_d_muzzle"),
-   AR_15_EXTENDED_MAG("ar_15_extended_mag"),
-   AR_15_SUPPRESSOR("ar_15_s_muzzle"),
-   AR_15_STANDARD_MAG("ar_15_standard_mag"),
-   AR_15_FS("ar_15_fs"),
-   AR_15_FSU("ar_15_fsu"),
-   AR_15_BRAKE("ar_15_b_muzzle"),
-   AR_15_TACTICAL_STOCK("ar_15_tac_stock"),
-   AR_15_LIGHT_STOCK("ar_15_light_stock"),
-   AR_15_HEAVY_STOCK("ar_15_heavy_stock"),
-   AR_15_GRIP("ar_15_grip"),
-   AR_15_LIGHT_GRIP("ar_15_l_grip"),
-   AR_15_TAC_GRIP("ar_15_t_grip"),
+    AR_15_BODY("ar_15_body"),
+    AR_15_BOLT("ar_15h_bolt"),
+    AR_15_COMPENSATOR("ar_15_c_muzzle"),
+    AR_15_DEFAULT_BARREL("ar_15_d_muzzle"),
+    AR_15_EXTENDED_MAG("ar_15_extended_mag"),
+    AR_15_SUPPRESSOR("ar_15_s_muzzle"),
+    AR_15_STANDARD_MAG("ar_15_standard_mag"),
+    AR_15_FS("ar_15_fs"),
+    AR_15_FSU("ar_15_fsu"),
+    AR_15_BRAKE("ar_15_b_muzzle"),
+    AR_15_TACTICAL_STOCK("ar_15_tac_stock"),
+    AR_15_LIGHT_STOCK("ar_15_light_stock"),
+    AR_15_HEAVY_STOCK("ar_15_heavy_stock"),
+    AR_15_GRIP("ar_15_grip"),
+    AR_15_LIGHT_GRIP("ar_15_l_grip"),
+    AR_15_TAC_GRIP("ar_15_t_grip"),
 
     SPR_15_BODY("spr15"),
     SPR_15_PULL_HANDLE("spr15_pull_handle"),
@@ -862,15 +858,15 @@ public enum SpecialModels
     MK47_B_LASER_DEVICE("mk47_b_laser_device"),
     MK47_B_LASER("mk47_b_laser"),
 
-    MK14_BODY1 ("mk14"),
-    MK14_SIGHT_LIGHT ("mk14_sight_light"),
+    MK14_BODY1("mk14"),
+    MK14_SIGHT_LIGHT("mk14_sight_light"),
     BOLT1("mk14_bolt"),
-    STANDARD_MAG1 ("mk14_standard_mag"),
+    STANDARD_MAG1("mk14_standard_mag"),
     EXTENDED_MAG1("mk14_extended_mag"),
     T_GRIP1("mk14_tac_grip"),
-    L_GRIP1 ("mk14_light_grip"),
-    SCOPE_MOUNT1 ("mk14_mount"),
-    BOLT_HANDLE1 ("mk14_bolt_handle"),
+    L_GRIP1("mk14_light_grip"),
+    SCOPE_MOUNT1("mk14_mount"),
+    BOLT_HANDLE1("mk14_bolt_handle"),
 
     MK14_B_LASER_DEVICE("mk14_b_laser_device"),
     MK14_B_LASER("mk14_b_laser"),
@@ -893,6 +889,15 @@ public enum SpecialModels
     TIMELESS_50_BULLET2("timeless_50_bullet2"),
     TIMELESS_50_SUPPRESSOR("timeless_50_suppressor"),
 
+    TEC_9_BODY("tec_9_body"),
+
+    TEC_9_BOLT("tec_9_bolt"),
+
+    TEC_9_BULLET("tec_9_bullet"),
+
+    TEC_9_EXTENDED_MAG("tec_9_extended_mag"),
+
+    TEC_9_STANDARD_MAG("tec_9_standard_mag"),
 
     //Everything from this point on is all scope additions
 
@@ -927,8 +932,7 @@ public enum SpecialModels
      *
      * @param modelName name of the model file
      */
-    SpecialModels(String modelName)
-    {
+    SpecialModels(String modelName) {
         this(new ResourceLocation(Reference.MOD_ID, "special/" + modelName), true);
     }
 
@@ -937,19 +941,17 @@ public enum SpecialModels
      *
      * @param modelName name of the model file
      */
-    SpecialModels(SpecialModel modelName)
-    {
+    SpecialModels(SpecialModel modelName) {
         this(new ResourceLocation(Reference.MOD_ID, "special/" + modelName), true);
     }
 
     /**
      * Sets the model's location
      *
-     * @param resource name of the model file
+     * @param resource     name of the model file
      * @param specialModel if the model is a special model
      */
-    SpecialModels(ResourceLocation resource, boolean specialModel)
-    {
+    SpecialModels(ResourceLocation resource, boolean specialModel) {
         this.modelLocation = resource;
         this.specialModel = specialModel;
     }
@@ -960,13 +962,10 @@ public enum SpecialModels
      * @return isolated model
      */
     @OnlyIn(Dist.CLIENT)
-    public IBakedModel getModel()
-    {
-        if(this.cachedModel == null)
-        {
+    public IBakedModel getModel() {
+        if (this.cachedModel == null) {
             IBakedModel model = Minecraft.getInstance().getModelManager().getModel(this.modelLocation);
-            if(model == Minecraft.getInstance().getModelManager().getMissingModel())
-            {
+            if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
                 return model;
             }
             this.cachedModel = model;
@@ -976,12 +975,9 @@ public enum SpecialModels
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void register(ModelRegistryEvent event)
-    {
-        for(SpecialModels model : values())
-        {
-            if(model.specialModel)
-            {
+    public static void register(ModelRegistryEvent event) {
+        for (SpecialModels model : values()) {
+            if (model.specialModel) {
                 ModelLoader.addSpecialModel(model.modelLocation);
             }
         }

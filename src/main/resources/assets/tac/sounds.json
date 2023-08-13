@@ -775,6 +775,12 @@
          { "name": "tac:item/hk_g3_fire" }
       ]
    },
+   "item.tec_9_fire": {
+      "subtitle": "subtitle.tac.tec_9_fire",
+      "sounds": [
+         { "name": "tac:item/tec_9_fire" }
+      ]
+   },
 
 
 
@@ -2301,6 +2307,31 @@
       "subtitle": "animation.kar98_bolt",
       "sounds": [
          { "name": "tac:animation/kar98_bolt"}
+      ]
+   },
+
+   "animation.tec_9_reload_empty": {
+      "subtitle": "animation.tec_9_reload_empty",
+      "sounds": [
+         { "name": "tac:animation/tec_9_reload_empty"}
+      ]
+   },
+   "animation.tec_9_reload_norm": {
+      "subtitle": "animation.tec_9_reload_norm",
+      "sounds": [
+         { "name": "tac:animation/tec_9_reload_norm"}
+      ]
+   },
+   "animation.tec_9_inspect": {
+      "subtitle": "animation.tec_9_inspect",
+      "sounds": [
+         { "name": "tac:animation/tec_9_inspect"}
+      ]
+   },
+   "animation.tec_9_draw": {
+      "subtitle": "animation.tec_9_draw",
+      "sounds": [
+         { "name": "tac:animation/tec_9_draw"}
       ]
    }
 }

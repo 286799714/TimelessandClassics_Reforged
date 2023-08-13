@@ -39,7 +39,7 @@
     "headDamage": 0.55,
     "closeDamage": 1.1,
     "decayStart": 0.09,
-    "minDecayMultiplier": 0.8,
+    "minDecayMultiplier": 0.5,
     "decayEnd": 0.8,
     "size": 0.1,
     "speed": 18,

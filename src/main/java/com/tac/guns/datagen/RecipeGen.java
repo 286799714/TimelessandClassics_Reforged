@@ -104,6 +104,10 @@ public class RecipeGen extends RecipeProvider {
                 .addIngredient(Tags.Items.INGOTS_IRON, 22)
                 .build(consumer);
 
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.TEC_9.get())
+                .addIngredient(Tags.Items.INGOTS_IRON, 25)
+                .build(consumer);
+
         WorkbenchRecipeBuilder.workbenchRecipe(ModItems.TTI_G34.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 38)
                 .addIngredient(Tags.Items.INGOTS_GOLD, 4)

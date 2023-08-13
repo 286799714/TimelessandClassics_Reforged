@@ -91,7 +91,8 @@ public class ModItems {
             () -> new TimelessGunItem(properties -> properties.group(GunMod.SNIPER), GunModifiers.MRAD_MOD));
     public static final RegistryObject<GunItem> RPG7 = REGISTER.register("rpg7",
             () -> new TimelessGunItem(properties -> properties.group(GunMod.HEAVY_MATERIAL), GunModifiers.RPG7_MOD));
-    //public static final RegistryObject<Item> TEC_9 = REGISTER.register("tec_9", () -> new TimelessPistolGunItem(properties -> properties.group(GunMod.PISTOL)));
+    public static final RegistryObject<Item> TEC_9 = REGISTER.register("tec_9",
+            () -> new TimelessPistolGunItem(properties -> properties.group(GunMod.PISTOL), GunModifiers.GLOCK17_MOD));
     public static final RegistryObject<Item> RPK = REGISTER.register("rpk",
             () -> new TimelessGunItem(properties -> properties.group(GunMod.HEAVY_MATERIAL), GunModifiers.RPK_MOD));
     public static final RegistryObject<Item> FN_FAL = REGISTER.register("fn_fal",
