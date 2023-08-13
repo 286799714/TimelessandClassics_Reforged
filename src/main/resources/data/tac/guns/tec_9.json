@@ -6,20 +6,20 @@
       2
     ],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 6.5,
-    "horizontalRecoilAngle": 2.75,
-    "recoilKick": 1.2,
-    "recoilAdsReduction": 0.215,
-    "weaponRecoilOffset": 0.725,
-    "cameraRecoilModifier": 3.15,
-    "recoilDuration": 0.25,
+    "recoilAngle": 3.25,
+    "horizontalRecoilAngle": 3.25,
+    "recoilKick": 1.375,
+    "recoilAdsReduction": 0.225,
+    "weaponRecoilOffset": 0.8125,
+    "cameraRecoilModifier": 1.2875,
+    "recoilDuration": 0.225,
     "weightKilo": 1.4,
     "spread": 2.75,
-    "firstShotSpread": 0.275,
-    "hipFireInaccuracy": 2.95,
-    "projToMinAccuracy": 4,
+    "firstShotSpread": 0.75,
+    "hipFireInaccuracy": 3.5,
+    "projToMinAccuracy": 5,
     "msToAccuracyReset": 400,
-    "movementInaccuracy": 0.2
+    "movementInaccuracy": 0.25
   },
   "reloads": {
     "magFed": true,
@@ -27,9 +27,9 @@
     "reloadMagTimer": 24,
     "additionalReloadEmptyMagTimer": 9,
     "maxAdditionalAmmoPerOC": [
-      10,
-      22,
-      30
+      8,
+      14,
+      20
     ],
     "preReloadPauseTicks": 4,
     "openBolt": true
@@ -37,18 +37,18 @@
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "damage": 3,
+    "damage": 4,
     "armorIgnore": 0.7,
     "critical": 0.0,
     "criticalDamage": 1.0,
-    "headDamage": 0.75,
+    "headDamage": 0.625,
     "closeDamage": 1.2,
-    "decayStart": 0.08,
-    "minDecayMultiplier": 0.30,
+    "decayStart": 0.12,
+    "minDecayMultiplier": 0.50,
     "decayEnd": 0.85,
-    "size": 0.005,
-    "speed": 12,
-    "trailLengthMultiplier": 2,
+    "size": 0.01,
+    "speed": 12.5,
+    "trailLengthMultiplier": 3,
     "life": 8
   },
   "sounds": {
@@ -62,20 +62,20 @@
   },
   "display": {
     "flash": {
-      "yOffset": 10.35,
-      "zOffset": -12.09,
-      "size": 1.5,
-      "trailAdjust": 0.75
+      "yOffset": 10.5,
+      "zOffset": -17.5,
+      "size": 1.25,
+      "trailAdjust": 1.125
     },
     "shellCasing": {
       "tickLife": 10,
-      "yOffset": 2.5,
+      "yOffset": 2.25,
       "xOffset": -1,
-      "zOffset": 3.25,
-      "scale": 1.5,
-      "velocityX": 16,
-      "velocityY": 12,
-      "velocityZ": -2,
+      "zOffset": -3.5,
+      "scale": 1.75,
+      "velocityX": 14,
+      "velocityY": 10,
+      "velocityZ": 2,
       "rVelocityX": 1,
       "rVelocityY": 2,
       "rVelocityZ": 2.0,
@@ -92,8 +92,8 @@
   "modules": {
     "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 12.125,
-      "zOffset": -4.5
+      "yOffset": 13,
+      "zOffset": -2.5
     },
     "attachments": {
       "extendedMag": {

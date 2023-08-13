@@ -1,6 +1,6 @@
 {
   "general": {
-    "rate": 400,
+    "rate": 300,
     "rateSelector": [1],
     "gripType": "tac:one_handed_m1911",
     "recoilAngle": 20,
@@ -37,12 +37,12 @@
     "headDamage": 0.55,
     "closeDamage": 1.2,
     "decayStart": 0.15,
-    "minDecayMultiplier": 0.5,
-    "decayEnd": 0.8,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 0.6,
     "size": 0.025,
     "speed": 13.5,
     "life": 2,
-    "trailLengthMultiplier": 3,
+    "trailLengthMultiplier": 3.25,
     "ricochet": false
   },
   "sounds": {

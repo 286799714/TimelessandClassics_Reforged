@@ -15,7 +15,7 @@
     "projectileAmount": 12,
     "weightKilo": 5.0,
 
-    "spread": 5.85,
+    "spread": 6.85,
     "firstShotSpread": 3.85,
     "hipFireInaccuracy": 0.95,
     "projToMinAccuracy": 4,
@@ -41,12 +41,12 @@
     "headDamage": 0.55,
     "closeDamage": 1.1,
     "decayStart": 0.1,
-    "minDecayMultiplier": 0.5,
-    "decayEnd": 0.9,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 0.65,
     "size": 0.05,
     "speed": 16.5,
     "life": 3,
-    "trailLengthMultiplier": 2.5,
+    "trailLengthMultiplier": 3.25,
     "ricochet": false
   },
   "sounds": {
@@ -92,7 +92,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 15.23,
-      "zOffset": -3.2
+      "zOffset": -1.75
     },
     "attachments": {
       "barrel": {

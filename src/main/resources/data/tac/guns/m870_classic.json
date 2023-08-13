@@ -7,9 +7,9 @@
     "horizontalRecoilAngle": 0.55,
     "recoilKick": 2.25,
     "recoilAdsReduction": 0.175,
-    "cameraRecoilModifier": 2.175,
+    "cameraRecoilModifier": 2,
     "weaponRecoilOffset": 0.725,
-    "recoilDuration": 0.125,
+    "recoilDuration": 0.2125,
     "projectileAmount": 9,
     "weightKilo": 5.1,
 
@@ -39,8 +39,8 @@
     "headDamage": 0.55,
     "closeDamage": 1.1,
     "decayStart": 0.09,
-    "minDecayMultiplier": 0.5,
-    "decayEnd": 0.8,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.65,
     "size": 0.1,
     "speed": 18,
     "life": 3,
@@ -75,7 +75,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 10.175,
-      "zOffset": -2.1
+      "zOffset": -1.75
     },
     "attachments": {
       "extendedMag": {
