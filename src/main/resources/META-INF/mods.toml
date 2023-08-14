@@ -4,11 +4,11 @@ license="GPL3"
 
 [[mods]]
 modId="tac"
-version="0.3.6.1"
+version="0.3.8.1"
 displayName="Timeless and Classics Guns"
 updateJSONURL=""
 displayURL=""
-authors="Timeless Development Team"
+authors="TaC Squad"
 description='''
 '''
 
@@ -33,6 +33,6 @@ description='''
 [[dependencies.tac]]
     modId="curios"
     mandatory=true
-    versionRange="[1.16.5-4.0.8.1,)"
+    versionRange="[1.16.5-4.0.8.1,1.16.5-4.0.8.2)"
     ordering="NONE"
     side="BOTH"
