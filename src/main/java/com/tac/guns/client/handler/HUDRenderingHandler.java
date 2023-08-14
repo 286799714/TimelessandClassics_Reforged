@@ -362,10 +362,9 @@ public class HUDRenderingHandler extends AbstractGui {
                     else {
                         fireMode = Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode");
                         if (!Config.COMMON.gameplay.safetyExistence.get() && fireMode == 0) {
-                            if( Minecraft.getInstance().player != null ) {
-                                PacketHandler.getPlayChannel().sendToServer( new MessageFireMode() );
-                            }
-                            fireMode = Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode");
+                            fireMode = gunItemFireModes[0];
+                            if (fireMode == 0)
+                                fireMode = gunItemFireModes[1];
                         }
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
