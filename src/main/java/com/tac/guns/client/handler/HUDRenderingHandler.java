@@ -12,6 +12,7 @@ import com.tac.guns.item.GunItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
+import com.tac.guns.network.message.MessageFireMode;
 import com.tac.guns.network.message.MessageToClientRigInv;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
@@ -350,16 +351,23 @@ public class HUDRenderingHandler extends AbstractGui {
                     int[] gunItemFireModes = heldItem.getTag().getIntArray("supportedFireModes");
                     if (player.getHeldItemMainhand().getTag() == null) {
                         if (!Config.COMMON.gameplay.safetyExistence.get() && Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1)
-                            fireMode = gun.getGeneral().getRateSelector()[1];
+                            fireMode = gunItemFireModes[1];
                         else
-                            fireMode = gun.getGeneral().getRateSelector()[0];
+                            fireMode = gunItemFireModes[0];
                     } else if (player.getHeldItemMainhand().getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1)
                         if (!Config.COMMON.gameplay.safetyExistence.get())
-                            fireMode = gun.getGeneral().getRateSelector()[1];
+                            fireMode = gunItemFireModes[1];
                         else
-                            fireMode = gun.getGeneral().getRateSelector()[0];
-                    else
+                            fireMode = gunItemFireModes[0];
+                    else {
                         fireMode = Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode");
+                        if (!Config.COMMON.gameplay.safetyExistence.get() && fireMode == 0) {
+                            if( Minecraft.getInstance().player != null ) {
+                                PacketHandler.getPlayChannel().sendToServer( new MessageFireMode() );
+                            }
+                            fireMode = Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode");
+                        }
+                    }
                 } catch (ArrayIndexOutOfBoundsException e) {
                     fireMode = gun.getGeneral().getRateSelector()[0];
                 } catch (Exception e) {

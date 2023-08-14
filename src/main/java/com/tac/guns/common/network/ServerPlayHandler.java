@@ -421,8 +421,6 @@ public class ServerPlayHandler
     {
         ItemStack heldItem = player.getHeldItemMainhand();
         try {
-
-            //TODO Fix double click req
             if (heldItem.getItem() instanceof GunItem) {
                 if (heldItem.getTag() == null) {
                     heldItem.getOrCreateTag();
