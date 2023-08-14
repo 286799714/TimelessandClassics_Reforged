@@ -347,14 +347,13 @@ public class HUDRenderingHandler extends AbstractGui {
                 int fireMode;
 
                 try {
-                    int[] gunItemFireModes = heldItem.getTag().getIntArray("supportedFireModes");
                     if (player.getHeldItemMainhand().getTag() == null) {
-                        if (!Config.COMMON.gameplay.safetyExistence.get() && Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1)
+                        if (!Config.COMMON.gameplay.safetyExistence.get() && Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode") == 0)
                             fireMode = gun.getGeneral().getRateSelector()[1];
                         else
                             fireMode = gun.getGeneral().getRateSelector()[0];
                     } else if (player.getHeldItemMainhand().getTag().getInt("CurrentFireMode") == 0)
-                        if (!Config.COMMON.gameplay.safetyExistence.get() && gunItemFireModes.length > 1)
+                        if (!Config.COMMON.gameplay.safetyExistence.get() && Objects.requireNonNull(player.getHeldItemMainhand().getTag()).getInt("CurrentFireMode") == 0)
                             fireMode = gun.getGeneral().getRateSelector()[1];
                         else
                             fireMode = gun.getGeneral().getRateSelector()[0];
