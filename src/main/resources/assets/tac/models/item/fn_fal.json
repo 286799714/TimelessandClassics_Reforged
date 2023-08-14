@@ -37,9 +37,9 @@
     },
     "firstperson_lefthand": {
       "translation": [
-        -4,
-        3,
-        -5.75
+        -6.75,
+        3.75,
+        -4.75
       ]
     },
     "ground": {

@@ -16,6 +16,18 @@
         0.6
       ]
     },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        0,
+        -6.75
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
     "firstperson_righthand": {
       "translation": [
         -6.5,
@@ -25,9 +37,9 @@
     },
     "firstperson_lefthand": {
       "translation": [
-        -4,
-        2.25,
-        -8.75
+        -6.5,
+        1.5,
+        -7.25
       ]
     },
     "ground": {
