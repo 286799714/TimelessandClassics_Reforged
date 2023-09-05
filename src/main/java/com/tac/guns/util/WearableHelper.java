@@ -1,11 +1,9 @@
 package com.tac.guns.util;
 
-import com.tac.guns.GunMod;
 import com.tac.guns.common.Rig;
+import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.entity.ProjectileEntity;
-import com.tac.guns.inventory.gear.GearSlotsHandler;
-import com.tac.guns.inventory.gear.InventoryListener;
-import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageGunSound;
 import net.minecraft.resources.ResourceLocation;
@@ -13,15 +11,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.PacketDistributor;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import javax.annotation.Nonnull;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -30,39 +22,10 @@ public class WearableHelper
 {
     // Helpers, to maintain speed and efficency, we need to check if the tag is populated BEFORE running the helper methods
 
-    @Nullable
+    @Nonnull
     public static ItemStack PlayerWornRig(Player player)
     {
-        // Change slot for body
-        if(GunMod.curiosLoaded)
-        {
-            AtomicReference<ItemStack> backpack = new AtomicReference<>(ItemStack.EMPTY);
-            LazyOptional<ICuriosItemHandler> optional = CuriosApi.getCuriosHelper().getCuriosHandler(player);
-            optional.ifPresent(itemHandler ->
-            {
-                Optional<ICurioStacksHandler> stacksOptional = itemHandler.getStacksHandler(GunMod.curiosRigSlotId);
-                stacksOptional.ifPresent(stacksHandler ->
-                {
-                    ItemStack stack = stacksHandler.getStacks().getStackInSlot(0);
-                    if(stack.getItem() instanceof ArmorRigItem)
-                    {
-                        backpack.set(stack);
-                    }
-                });
-            });
-            if(backpack.get() != ItemStack.EMPTY)
-                return backpack.get();
-            else
-                return null;
-        }
-        else {
-            GearSlotsHandler ammoItemHandler = (GearSlotsHandler) player.getCapability(InventoryListener.ITEM_HANDLER_CAPABILITY).resolve().get();
-            for (ItemStack stack : ammoItemHandler.getStacks()) {
-                if (stack.getItem() instanceof ArmorRigItem)
-                    return stack;
-            }
-            return null;
-        }
+        return ((PlayerWithSynData)player).getRig();
     }
 
     public static void FillDefaults(ItemStack item, Rig rig)

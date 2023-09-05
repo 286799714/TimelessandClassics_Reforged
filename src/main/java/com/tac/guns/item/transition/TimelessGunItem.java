@@ -1,4 +1,4 @@
-package com.tac.guns.item.TransitionalTypes;
+package com.tac.guns.item.transition;
 
 
 import com.tac.guns.Config;
@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import com.tac.guns.util.GunModifierHelper;
 
 
 public class TimelessGunItem extends GunItem {

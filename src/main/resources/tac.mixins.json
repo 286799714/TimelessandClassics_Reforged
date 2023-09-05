@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "tac.refmap.json",
   "mixins": [
+    "client.PlayerMixin",
     "common.LivingEntityMixin",
     "common.PlayerListMixin",
     "common.ServerPlayNetHandlerMixin",
@@ -22,6 +23,7 @@
     "client.MinecraftStaticMixin",
     "client.MouseHelperMixin",
     "client.PlayerModelMixin",
+    "client.PlayerRendererMixin",
     "client.WorldRendererMixin"
   ],
   "injectors": {

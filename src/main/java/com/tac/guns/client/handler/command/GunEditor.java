@@ -5,7 +5,7 @@ import com.tac.guns.Config;
 import com.tac.guns.client.InputHandler;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.tooling.CommandsHandler;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.item.transition.TimelessGunItem;
 import com.tac.guns.item.attachment.IAttachment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

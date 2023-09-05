@@ -25,7 +25,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
@@ -54,9 +54,9 @@ public class ThrowableStunGrenadeEntity extends ThrowableGrenadeEntity
     }
 
     @SubscribeEvent
-    public static void blindMobs(LivingSetAttackTargetEvent event)
+    public static void blindMobs(LivingChangeTargetEvent event)
     {
-        if(Config.COMMON.stunGrenades.blind.blindMobs.get() && event.getTarget() != null && event.getEntityLiving() instanceof Mob && event.getEntityLiving().hasEffect(ModEffects.BLINDED.get()))
+        if(Config.COMMON.stunGrenades.blind.blindMobs.get() && event.getNewTarget() != null && event.getEntityLiving() instanceof Mob && event.getEntityLiving().hasEffect(ModEffects.BLINDED.get()))
         {
             ((Mob) event.getEntityLiving()).setTarget(null);
         }

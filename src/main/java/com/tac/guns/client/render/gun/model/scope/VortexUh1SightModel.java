@@ -9,7 +9,6 @@ import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
-import com.tac.guns.client.handler.HUDRenderingHandler;
 import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
 import com.tac.guns.client.render.gun.IOverrideModel;
@@ -126,24 +125,6 @@ public class VortexUh1SightModel implements IOverrideModel
                 builder.vertex(matrix, (float) (size / scale), 0, 0).color(red, green, blue, alpha).uv(0.9375F, 0.0F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
                 builder.vertex(matrix, (float) (size / scale), (float) (size / scale), 0).color(red, green, blue, alpha).uv(0.9375F, 0.9375F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
 
-                if(HUDRenderingHandler.get().hitMarkerTracker > 0)
-                {
-                    builder = renderTypeBuffer.getBuffer(RenderType.entityTranslucent(HIT_MARKER));
-
-                    if(HUDRenderingHandler.get().hitMarkerHeadshot)
-                    {
-                        green = 0;
-                        blue = 0;
-                        red = 1;
-                    }
-                    float opac = Math.max(Math.min(HUDRenderingHandler.get().hitMarkerTracker / HUDRenderingHandler.hitMarkerRatio, 100f), 0.25f);
-                    opac *= (float) AimingHandler.get().getNormalisedAdsProgress();
-                    builder.vertex(matrix, 0, (float) (size / scale), 0).color(red, green, blue, opac).uv(0.0F, 0.9375F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.vertex(matrix, 0, 0, 0).color(red, green, blue, opac).uv(0.0F, 0.0F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.vertex(matrix, (float) (size / scale), 0, 0).color(red, green, blue, opac).uv(0.9375F, 0.0F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    builder.vertex(matrix, (float) (size / scale), (float) (size / scale), 0).color(red, green, blue, opac).uv(0.9375F, 0.9375F).overlayCoords(overlay).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-                    
-                }
             }
             matrixStack.popPose();
         }

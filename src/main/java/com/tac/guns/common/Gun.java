@@ -8,7 +8,7 @@ import com.tac.guns.annotation.Ignored;
 import com.tac.guns.annotation.Optional;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.interfaces.TGExclude;
-import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.item.attachment.IScope;
 import com.tac.guns.item.attachment.impl.Scope;
@@ -2188,7 +2188,7 @@ public final class Gun implements INBTSerializable<CompoundTag>
         }
         // Get wearable that holds ammo
         ItemStack wornRig = WearableHelper.PlayerWornRig(player);
-        if(wornRig != null)
+        if(!wornRig.isEmpty())
         {
             ListTag nbtTagList = (ListTag) ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").get("Items");
             for (int i = 0; i < ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").getInt("Size"); i++)

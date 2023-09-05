@@ -3,7 +3,7 @@ package com.tac.guns.inventory.gear;
 import com.tac.guns.Reference;
 import com.tac.guns.inventory.gear.armor.ArmorRigInventoryCapability;
 import com.tac.guns.inventory.gear.armor.IAmmoItemHandler;
-import com.tac.guns.item.TransitionalTypes.wearables.IArmoredRigItem;
+import com.tac.guns.item.transition.wearables.IArmoredRigItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;

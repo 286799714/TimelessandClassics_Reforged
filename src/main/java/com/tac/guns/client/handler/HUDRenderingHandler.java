@@ -8,7 +8,7 @@ import com.tac.guns.Reference;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.ReloadTracker;
 import com.tac.guns.item.GunItem;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.item.transition.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageToClientRigInv;
 import net.minecraft.ChatFormatting;
@@ -167,8 +167,7 @@ public class HUDRenderingHandler extends GuiComponent {
         }
     }
 
-    private static ResourceLocation fleshHitMarker = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_128x.png");
-    private static ResourceLocation fleshHitMarkerADS = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_ads_128x.png");
+    private static final ResourceLocation fleshHitMarker = new ResourceLocation(Reference.MOD_ID, "textures/crosshair_hit/hit_marker_no_opac.png");
     public boolean hitMarkerHeadshot = false;
     public static final float hitMarkerRatio = 14f;
     public float hitMarkerTracker = 0;
@@ -202,36 +201,28 @@ public class HUDRenderingHandler extends GuiComponent {
         BufferBuilder buffer = Tesselator.getInstance().getBuilder();
         int width = event.getWindow().getScreenWidth();
         int height = event.getWindow().getScreenHeight();
+        int centerX = event.getWindow().getGuiScaledWidth() / 2;
+        int centerY = event.getWindow().getGuiScaledHeight() / 2;
 
-        // TODO: turn hitMarkerTracker into a float/frame time variable
-        if (this.hitMarkerTracker > 0 && ((AimingHandler.get().isAiming() && Gun.getScope(heldItem) == null) || !AimingHandler.get().isAiming()))//Hit Markers
-        {
-            RenderSystem.enableDepthTest();
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-            stack.pushPose();
+        if (Config.CLIENT.display.showHitMarkers.get()) {
+            if (this.hitMarkerTracker > 0)//Hit Markers
             {
-                stack.translate(width / 2F, height / 2F, 0);
-                //float size = 0.1f;
-                //stack.translate(anchorPointX - (size+data.getxMod()*10+(109.15*10)) / 4F, anchorPointY + (size*1.625F+data.getyMod()*10+(-25.1*10)) / 5F * 3F, 0);
-                //stack.scale(size,size,size);
+                RenderSystem.enableBlend();
+                stack.pushPose();
+                {
+                    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+                    RenderSystem.setShaderTexture(0, fleshHitMarker); // Future options to render bar types
 
-                ResourceLocation hitMarker;
-                if (AimingHandler.get().isAiming())
-                    hitMarker = fleshHitMarkerADS;
-                else
-                    hitMarker = fleshHitMarker;
-                RenderSystem.setShaderTexture(0, hitMarker);
-                float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.25f);
-
-                Matrix4f matrix = stack.last().pose();
-                buffer.vertex(matrix, 0, hitMarkerSize, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.vertex(matrix, hitMarkerSize, hitMarkerSize, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.vertex(matrix, hitMarkerSize, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
-                buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, opac).endVertex();
+                    float opac = Math.max(Math.min(this.hitMarkerTracker / hitMarkerRatio, 100f), 0.20f);
+                    if (hitMarkerHeadshot)
+                        RenderSystem.setShaderColor(1.0f, 0.075f, 0.075f, opac); // Only render red
+                    else
+                        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, opac);
+                    blit(stack, centerX - 8, centerY - 8, 0, 0, 16, 16, 16, 16); //-264 + (int)(-9.0/4),-134,
+                }
+                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+                stack.popPose();
             }
-            buffer.end();
-            BufferUploader.end(buffer);
-            stack.popPose();
         }
         //this.hitMarkerTracker--;
 

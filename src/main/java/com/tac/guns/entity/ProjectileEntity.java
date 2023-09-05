@@ -14,7 +14,7 @@ import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.interfaces.IExplosionDamageable;
 import com.tac.guns.interfaces.IHeadshotBox;
 import com.tac.guns.item.GunItem;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.item.transition.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.*;
 import com.tac.guns.util.BufferUtil;
@@ -241,6 +241,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             HitResult result = rayTraceBlocks(this.level, new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORE_LEAVES);
             BlockHitResult resultB = (BlockHitResult) result;
             BlockState blockState = level.getBlockState(resultB.getBlockPos());
+            /*
             if(blockState.getMaterial() == Material.WOOL)
             {
                 Predicate<BlockState> IGNORE_BLOCK = input -> input != null && input.getBlock().equals(blockState.getBlock());
@@ -249,6 +250,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 {
                     endVec = result2.getLocation();
                 }
+            }
+            */
+            if(resultB.getType() != HitResult.Type.MISS)
+            {
+                endVec = resultB.getLocation();
             }
 
             /*RayTraceResult result = rayTraceBlocks(this.world, new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this), IGNORE_LEAVES);
@@ -572,7 +578,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         }
 
         DamageSource source = new DamageSourceProjectile("bullet", this, shooter, weapon).setProjectile();
-        if(entity instanceof Player && WearableHelper.PlayerWornRig((Player) entity) != null)
+        if(entity instanceof Player && !WearableHelper.PlayerWornRig((Player) entity).isEmpty())
         {
             if(!WearableHelper.tickFromCurrentDurability((Player) entity, this))
                 PacketHandler.getPlayChannel().sendTo(new MessagePlayerShake((Player) entity), ((ServerPlayer)entity).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);

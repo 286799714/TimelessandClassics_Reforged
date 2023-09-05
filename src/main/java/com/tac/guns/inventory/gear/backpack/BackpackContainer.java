@@ -4,7 +4,7 @@ import com.tac.guns.init.ModContainers;
 import com.tac.guns.inventory.gear.GearSlotsHandler;
 import com.tac.guns.inventory.gear.WearableCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.AmmoSlot;
-import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;

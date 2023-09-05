@@ -1,4 +1,4 @@
-package com.tac.guns.item.TransitionalTypes;
+package com.tac.guns.item.transition;
 
 import com.tac.guns.GunMod;
 import com.tac.guns.item.AmmoItem;

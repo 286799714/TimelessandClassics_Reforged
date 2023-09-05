@@ -1,4 +1,4 @@
-package com.tac.guns.client.render.armor.VestLayer;
+package com.tac.guns.client.render.armor.vestlayer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

@@ -6,8 +6,8 @@ import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
-import com.tac.guns.mixin.client.MinecraftStaticMixin;
+import com.tac.guns.item.transition.TimelessGunItem;
+import com.tac.guns.duck.CurrentFpsGetter;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageEmptyMag;
 import com.tac.guns.network.message.MessageShoot;
@@ -15,7 +15,6 @@ import com.tac.guns.network.message.MessageShooting;
 import com.tac.guns.network.message.MessageUpdateMoveInacc;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -159,7 +158,7 @@ public class  ShootingHandler
 
     private static float hitmarkerCooldownMultiplier()
     {
-        int fps = ((MinecraftStaticMixin) Minecraft.getInstance()).getCurrentFPS();
+        int fps = ((CurrentFpsGetter) Minecraft.getInstance()).getCurrentFps();
         if(fps < 11)
             return 16f;
         else if(fps < 21)
@@ -179,7 +178,7 @@ public class  ShootingHandler
     }
     private static float visualCooldownMultiplier()
     {
-        int fps = ((MinecraftStaticMixin) Minecraft.getInstance()).getCurrentFPS();
+        int fps = ((CurrentFpsGetter) Minecraft.getInstance()).getCurrentFps();
         if(fps < 11)
             return 8f;
         else if(fps < 21)

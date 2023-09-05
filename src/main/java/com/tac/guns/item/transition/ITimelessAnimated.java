@@ -1,4 +1,4 @@
-package com.tac.guns.item.TransitionalTypes;
+package com.tac.guns.item.transition;
 
 import net.minecraft.world.item.ItemStack;
 

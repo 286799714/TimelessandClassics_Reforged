@@ -9,7 +9,7 @@ import com.mrcrayfish.framework.api.data.login.ILoginData;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Validator;
-import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.network.message.MessageUpdateRigs;
 import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;

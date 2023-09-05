@@ -5,7 +5,7 @@ import com.tac.guns.client.InputHandler;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.Rig;
 import com.tac.guns.init.ModSyncedDataKeys;
-import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageArmorRepair;
 import com.tac.guns.util.WearableHelper;
@@ -42,7 +42,7 @@ public class ArmorInteractionHandler
 	{
 		InputHandler.ARMOR_REPAIRING.addPressCallback( () -> {
 			final Minecraft mc = Minecraft.getInstance();
-			if(mc.player != null && WearableHelper.PlayerWornRig(mc.player) != null && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player))) {
+			if(mc.player != null && !WearableHelper.PlayerWornRig(mc.player).isEmpty() && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player))) {
                 this.repairing = true;
                 this.repairTime = ((ArmorRigItem) WearableHelper.PlayerWornRig(mc.player).getItem()).getRig().getRepair().getTicksToRepair();// Replace with enchantment checker
             }
@@ -164,7 +164,7 @@ public class ArmorInteractionHandler
         if(mc.screen != null)
             return false;
 
-        if(WearableHelper.PlayerWornRig(mc.player) == null)
+        if(WearableHelper.PlayerWornRig(mc.player).isEmpty())
             return false;
         Rig rig = ((ArmorRigItem)WearableHelper.PlayerWornRig(mc.player).getItem()).getRig();
         return this.repairTime != 0 && mc.player.getMainHandItem().getItem().getRegistryName().equals(rig.getRepair().getItem()) && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player));

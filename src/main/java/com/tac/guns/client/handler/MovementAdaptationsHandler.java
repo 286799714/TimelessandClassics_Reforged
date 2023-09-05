@@ -1,6 +1,6 @@
 package com.tac.guns.client.handler;
 
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.item.transition.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageUpdatePlayerMovement;
 import net.minecraft.client.CameraType;

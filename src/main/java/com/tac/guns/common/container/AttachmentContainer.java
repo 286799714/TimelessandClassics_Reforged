@@ -4,13 +4,10 @@ import com.tac.guns.common.Gun;
 import com.tac.guns.common.container.slot.AttachmentSlot;
 import com.tac.guns.init.ModContainers;
 import com.tac.guns.item.*;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
-import com.tac.guns.item.TransitionalTypes.TimelessOldRifleGunItem;
-import com.tac.guns.item.TransitionalTypes.TimelessPistolGunItem;
+import com.tac.guns.item.transition.TimelessGunItem;
+import com.tac.guns.item.transition.TimelessOldRifleGunItem;
+import com.tac.guns.item.transition.TimelessPistolGunItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.item.attachment.impl.SideRail;
-import com.tac.guns.util.GunModifierHelper;
-import com.tac.guns.item.attachment.IScope;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -20,7 +17,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
-import org.spongepowered.asm.mixin.MixinEnvironment;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

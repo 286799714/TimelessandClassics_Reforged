@@ -3,7 +3,6 @@ package com.tac.guns;
 import com.tac.guns.client.ClientHandler;
 import com.tac.guns.client.CustomGunManager;
 import com.tac.guns.client.CustomRigManager;
-import com.tac.guns.client.render.armor.VestLayer.ArmorCurioRenderer;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.render.pose.*;
@@ -18,9 +17,8 @@ import com.tac.guns.enchantment.EnchantmentTypes;
 import com.tac.guns.entity.MissileEntity;
 import com.tac.guns.init.*;
 import com.tac.guns.inventory.gear.IWearableItemHandler;
-import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.IAmmoItemHandler;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.tac.guns.item.transition.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
@@ -30,19 +28,16 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.forgespi.language.IModInfo;
@@ -50,10 +45,6 @@ import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
-import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
@@ -62,8 +53,6 @@ import java.util.Locale;
 public class GunMod
 {
     public static boolean controllableLoaded = false;
-    public static boolean curiosLoaded = false;
-    public static String curiosRigSlotId = "armor_rig";
     public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
 
     public static final CreativeModeTab GROUP = new  CreativeModeTab(Reference.MOD_ID)
@@ -242,9 +231,7 @@ public class GunMod
         bus.addListener(this::onCommonSetup);
         bus.addListener(this::onClientSetup);
         bus.addListener(this::dataSetup);
-        bus.addListener(this::onEnqueueIMC);
         controllableLoaded = ModList.get().isLoaded("controllable");
-        curiosLoaded = ModList.get().isLoaded("curios");
         modInfo = ModLoadingContext.get().getActiveContainer().getModInfo();
     }
 
@@ -354,16 +341,6 @@ public class GunMod
         MinecraftForge.EVENT_BUS.register(CommandsHandler.class);
     }
 
-    private void onEnqueueIMC(InterModEnqueueEvent event)
-    {
-        if(!curiosLoaded)
-            return;
-
-        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BACK.getMessageBuilder().build());
-        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE,
-                () -> new SlotTypeMessage.Builder(GunMod.curiosRigSlotId).size(1).priority(101).icon(new ResourceLocation( "curios:slot/bpv")).build());
-    }
-
     private void dataSetup(GatherDataEvent event)
     {
         DataGenerator dataGenerator = event.getGenerator();
@@ -380,8 +357,6 @@ public class GunMod
     {
         // Too much to keep in Gunmod file
         ClientHandler.setup(Minecraft.getInstance());
-        CuriosRendererRegistry.register(ModItems.LIGHT_ARMOR.get(), ArmorCurioRenderer::new);
-        CuriosRendererRegistry.register(ModItems.MEDIUM_STEEL_ARMOR.get(), ArmorCurioRenderer::new);
 
         // Auto register code animation files, such as firing, animation mapping is called in these files too
         for (Field field : ModItems.class.getDeclaredFields()) {

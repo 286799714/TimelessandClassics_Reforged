@@ -2,7 +2,7 @@ package com.tac.guns.inventory.gear.armor;
 
 import com.tac.guns.init.ModContainers;
 import com.tac.guns.inventory.gear.InventoryListener;
-import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -83,7 +83,10 @@ public class ArmorRigContainer extends AbstractContainerMenu {
 
     @Override
     public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-        if(slotId <= 0) super.clicked(slotId, dragType, clickTypeIn, player);
+        if(slotId <= 0) {
+            super.clicked(slotId, dragType, clickTypeIn, player);
+            return;
+        }
         Slot slot = this.slots.get(slotId);
         if(slot.hasItem()) {
             if(slot.getItem().getItem() instanceof ArmorRigItem) return;
@@ -91,6 +94,7 @@ public class ArmorRigContainer extends AbstractContainerMenu {
         super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
+    @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);

@@ -86,6 +86,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue weaponDelayedSwayYNOptical;
         public final ForgeConfigSpec.BooleanValue showBulletTrails;
         public final ForgeConfigSpec.DoubleValue bulletTrailOpacity;
+        public final ForgeConfigSpec.BooleanValue showHitMarkers;
         public Display(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Configuration for display related options").push("display");
@@ -115,6 +116,7 @@ public class Config
 
                 this.showBulletTrails = builder.comment("Choose to see any bullet trails, trails by you or any other player / bot will not appear. Helps with Shader compatability.").define("showBulletTrails", true);
                 this.bulletTrailOpacity = builder.comment("Adjusts the opacity, AKA how see through the bullet trails are seen as, higher values can be seen better indoors or at daytime.").defineInRange("bulletTrailOpacity", 0.5, 0.1, 1.0);
+                this.showHitMarkers = builder.comment("If enabled, when a bullet hits an entity, a cross will be briefly displayed at the center of the screen to indicate that the target has been hit.").define("showHitMarkers", true);
             }
             builder.pop();
         }

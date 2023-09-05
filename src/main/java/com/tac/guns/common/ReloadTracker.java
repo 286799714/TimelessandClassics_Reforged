@@ -92,7 +92,7 @@ public class ReloadTracker
         boolean reload;
         Gun gun = ((GunItem)this.stack.getItem()).getGun();
         ItemStack rig = WearableHelper.PlayerWornRig(player);
-        if(rig != null) {
+        if(!rig.isEmpty()) {
             PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, gun.getProjectile().getItem()), ((ServerPlayer)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
         if(gun.getReloads().isMagFed())
@@ -157,7 +157,7 @@ public class ReloadTracker
         ArrayList<ItemStack> stacks = new ArrayList<>();
 
         ItemStack rig = WearableHelper.PlayerWornRig(player);
-        if(rig != null) {
+        if(!rig.isEmpty()) {
             RigSlotsHandler itemHandler = (RigSlotsHandler) rig.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
             for (ItemStack x : itemHandler.getStacks()) {
                 if(Gun.isAmmo(x, this.gun.getProjectile().getItem()))

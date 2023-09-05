@@ -28,7 +28,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 
-version = "0.3.5.3-1.16.5"
+version = "0.3.10-1.18.2"
 group = "com.tac"
 archivesBaseName = "tac-a"
 
@@ -113,8 +113,6 @@ sourceSets.main.resources {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_version}")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_version}:api")
 
     //implementation fg.deobf('curse.maven:enchancedvisuals-255389:3419985')
     //implementation fg.deobf('curse.maven:ccore-257814:3419983')
@@ -175,7 +173,7 @@ publishing {
     }
     repositories {
         maven {
-            url "file://C:/dev/maven/mcmodsrepo"
+            url "./build/maven/"
         }
     }
 }

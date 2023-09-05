@@ -6,7 +6,7 @@ package com.tac.guns.client.render.armor.models;// Made with Blockbench 4.6.5
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.tac.guns.Reference;
-import com.tac.guns.client.render.armor.VestLayer.ArmorBase;
+import com.tac.guns.client.render.armor.vestlayer.ArmorBase;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

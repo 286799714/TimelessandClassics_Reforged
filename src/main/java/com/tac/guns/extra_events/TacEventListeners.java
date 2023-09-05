@@ -5,7 +5,7 @@ import com.tac.guns.Reference;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.LevelUpEvent;
 import com.tac.guns.init.ModSounds;
-import com.tac.guns.item.TransitionalTypes.M1GunItem;
+import com.tac.guns.item.transition.M1GunItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;

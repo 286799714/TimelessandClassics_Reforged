@@ -18,8 +18,8 @@ import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.interfaces.IProjectileFactory;
 import com.tac.guns.item.*;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
-import com.tac.guns.item.TransitionalTypes.wearables.ArmorRigItem;
+import com.tac.guns.item.transition.TimelessGunItem;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.*;
@@ -797,7 +797,7 @@ public class ServerPlayHandler
      */
     public static void handleArmorFixApplication(ServerPlayer player)
     {
-        if(WearableHelper.PlayerWornRig(player) != null && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(player)))
+        if(!WearableHelper.PlayerWornRig(player).isEmpty() && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(player)))
         {
             Rig rig = ((ArmorRigItem)WearableHelper.PlayerWornRig(player).getItem()).getRig();
             if(player.getMainHandItem().getItem().getRegistryName().equals(rig.getRepair().getItem()))
@@ -818,10 +818,10 @@ public class ServerPlayHandler
      */
     public static void handleRigAmmoCount(ServerPlayer player, ResourceLocation id)
     {
-        if(WearableHelper.PlayerWornRig(player) != null)
+        if(!WearableHelper.PlayerWornRig(player).isEmpty())
         {
             ItemStack rig = WearableHelper.PlayerWornRig(player);
-            if(rig != null) {
+            if(!rig.isEmpty()) {
                 PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, id), ((ServerPlayer)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
             }
         }

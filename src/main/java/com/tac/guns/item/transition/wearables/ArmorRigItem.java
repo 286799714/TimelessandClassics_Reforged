@@ -1,19 +1,16 @@
-package com.tac.guns.item.TransitionalTypes.wearables;
+package com.tac.guns.item.transition.wearables;
 
-import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.common.NetworkRigManager;
 import com.tac.guns.common.Rig;
+import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.ArmorRigContainerProvider;
 import com.tac.guns.inventory.gear.armor.ArmorRigInventoryCapability;
 import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
-import com.tac.guns.util.CompatUtil;
-import com.tac.guns.util.CurioCompatUtil;
 import com.tac.guns.util.RigEnchantmentHelper;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -26,13 +23,9 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.NotNull;
-import top.theillusivec4.curios.api.CuriosCapability;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -62,40 +55,24 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if(world.isClientSide) return super.use(world, player, hand);
         if(hand != InteractionHand.MAIN_HAND) return InteractionResultHolder.pass(player.getItemInHand(hand));
-        containerProvider = new ArmorRigContainerProvider(player.getItemInHand(hand));
-        NetworkHooks.openGui((ServerPlayer) player, containerProvider);
-        super.use(world, player, hand);
-        return InteractionResultHolder.pass(player.getItemInHand(hand));
+        if(player.isCrouching()){
+            ItemStack oldRig = ((PlayerWithSynData)player).getRig();
+            ((PlayerWithSynData)player).setRig(player.getItemInHand(hand));
+            player.setItemInHand(hand, oldRig);
+            super.use(world, player, hand);
+            return InteractionResultHolder.consume(player.getItemInHand(hand));
+        }else {
+            containerProvider = new ArmorRigContainerProvider(player.getItemInHand(hand));
+            NetworkHooks.openGui((ServerPlayer) player, containerProvider);
+            super.use(world, player, hand);
+            return InteractionResultHolder.pass(player.getItemInHand(hand));
+        }
     }
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
     {
-        if(GunMod.curiosLoaded)
-        {
-            return createBackpackProvider(stack);
-        }
         return new ArmorRigInventoryCapability();
-    }
-    public static ICapabilityProvider createBackpackProvider(ItemStack stack)
-    {
-        return new ICapabilityProvider() {
-            @NotNull
-            @Override
-            public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @org.jetbrains.annotations.Nullable Direction side) {
-
-                T provider = null;
-                if(CompatUtil.isCuriohere){
-                    provider = CurioCompatUtil.getCurioCapability(cap, stack);
-                }
-
-                if(provider != null){
-                    return CuriosCapability.ITEM.orEmpty(cap, LazyOptional.of(()-> new CurioCapabilityProvider(stack)));
-                }
-
-                return LazyOptional.empty();
-            }
-        };
     }
 
     private WeakHashMap<CompoundTag, Rig> modifiedRigCache = new WeakHashMap<>();
