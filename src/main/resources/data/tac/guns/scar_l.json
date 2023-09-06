@@ -4,34 +4,38 @@
     "rate": 600,
     "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 1.975,
-    "horizontalRecoilAngle": 1.25,
-    "recoilKick": 1.6,
-    "recoilAdsReduction": 0.24,
-    "weaponRecoilOffset": 0.755,
+    "recoilAngle": 1.75,
+    "horizontalRecoilAngle": 1.125,
+    "recoilKick": 1.5,
+    "recoilAdsReduction": 0.275,
+    "weaponRecoilOffset": 0.7125,
     "cameraRecoilModifier": 1.275,
-    "recoilDuration": 0.35,
+    "recoilDuration": 0.275,
     "weightKilo": 5.60,
 
     "spread": 1.8,
     "firstShotSpread": 0.105,
-    "hipFireInaccuracy": 6.05,
+    "hipFireInaccuracy": 4.05,
     "projToMinAccuracy": 4,
     "msToAccuracyReset": 300,
-    "movementInaccuracy": 0.65
+    "movementInaccuracy": 0.45
   },
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 8.15,
+    "damage": 8.25,
     "armorIgnore": 1.0,
-    "critical": 0.05,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.15,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 1.0,
     "size": 0.1,
     "speed": 20.5,
     "trailLengthMultiplier": 2.875,
-    "life": 12
+    "life": 10
   },
   "reloads": {
     "magFed": true,
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.scar_l_reload_empty",
     "draw": "tac:animation.scar_l_draw",
     "inspect": "tac:animation.scar_l_inspect",
-    "inspectEmpty": "tac:animation.scar_l_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.scarl_fire_s"
   },
@@ -58,13 +61,34 @@
       "size": 0.75,
       "trailAdjust": 1.125
     },
-    "hipfireScale": 2.5
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": 0,
+      "zOffset": 2,
+      "scale": 0.75,
+      "velocityX": 9,
+      "velocityY": 2,
+      "velocityZ": -2.0,
+      "rVelocityX": 1.0,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -75.0,
+      "aVelocityZ": 10.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.35,
+    "hipfireRecoilScale": 1,
+    "showDynamicHipfire": true
+    
   },
   "modules": {
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 12.845,
-      "zOffset": -5.805
+      "zOffset": -5
     },
     "attachments": {
       "scope": {

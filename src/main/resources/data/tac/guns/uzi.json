@@ -1,0 +1,113 @@
+{
+  "general": {
+    "auto": true,
+    "rate": 600,
+    "rateSelector": [2, 1],
+    "gripType": "tac:one_handed_m1911",
+    "recoilAngle": 2.25,
+    "horizontalRecoilAngle": 1.35,
+    "recoilKick": 1.375,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.75,
+    "recoilDuration": 0.25,
+    "cameraRecoilModifier": 1.375,
+    "weightKilo": 3.5,
+
+    "spread": 2.25,
+    "firstShotSpread": 0.225,
+    "hipFireInaccuracy": 2.875,
+    "projToMinAccuracy": 8,
+    "msToAccuracyReset": 540,
+    "movementInaccuracy": 0.25
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 20,
+    "reloadMagTimer": 26,
+    "additionalReloadEmptyMagTimer": 14,
+    "maxAdditionalAmmoPerOC": [12, 20, 30],
+    "preReloadPauseTicks": 0,
+    "openBolt": true
+  },
+  "projectile": {
+    "item": "tac:9mm_round",
+    "visible": false,
+    "size": 0.125,
+    "damage": 6.5,
+    "armorIgnore": 0.7,
+    "critical": 0.0,
+    "criticalDamage": 0.625,
+    "headDamage": 0.625,
+    "closeDamage": 1.15,
+    "decayStart": 0.18,
+    "minDecayMultiplier": 0.45,
+    "decayEnd": 0.85,
+    "speed": 14,
+    "trailLengthMultiplier": 3,
+    "life": 7
+  },
+  "sounds": {
+    "fire": "tac:item.uzi_fire",
+    "reloadNormal": "tac:animation.uzi_reload_norm",
+    "reloadEmpty": "tac:animation.uzi_reload_empty",
+    "draw": "tac:animation.uzi_draw",
+    "inspect": "tac:animation.uzi_inspect",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "tac:item.uzi_fire_s"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 8.25,
+      "zOffset": -11.5,
+      "size": 0.845,
+      "trailAdjust": 0.75
+    },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 0,
+      "xOffset": 0,
+      "zOffset": 1,
+      "scale": 0.8,
+      "velocityX": 7,
+      "velocityY": 2,
+      "velocityZ": 0.0,
+      "rVelocityX": 0.5,
+      "rVelocityY": 1,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -90.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_small"
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1.0,
+    "weaponType": 4
+  },
+  "modules": {
+    "zoom":{
+      "fovModifier": 0.8,
+      "yOffset": 10.6,
+      "zOffset": -2.5
+    },
+    "attachments": {
+      "pistolBarrel": {
+        "yOffset": -100829.84,
+        "zOffset": -11.55,
+        "scale": 0.00
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
+      "pistolScope": {
+        "yOffset": 9.825,
+        "zOffset": 3.925,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      }
+    }
+  }
+}

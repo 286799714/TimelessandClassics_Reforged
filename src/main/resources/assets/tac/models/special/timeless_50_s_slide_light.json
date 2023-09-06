@@ -1,0 +1,2036 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"4": "tac:items/timeless_50/cal_50_1911_final"
+	},
+	"elements": [
+		{
+			"from": [6.53986, 10.99921, -3],
+			"to": [6.66486, 11.12421, -2.03125],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8, 9.66407, 5.65113]},
+			"faces": {
+				"north": {"uv": [8.125, 14.875, 8.1875, 14.9375], "texture": "#4", "cullface": "north"},
+				"east": {"uv": [9.25, 14.25, 9.375, 14.3125], "texture": "#4", "cullface": "north"},
+				"south": {"uv": [8.375, 14.875, 8.4375, 14.9375], "texture": "#4", "cullface": "north"},
+				"west": {"uv": [14.25, 9.375, 14.375, 9.4375], "texture": "#4", "cullface": "north"},
+				"up": {"uv": [9.5625, 14.375, 9.5, 14.25], "texture": "#4", "cullface": "north"},
+				"down": {"uv": [14.3125, 9.625, 14.25, 9.75], "texture": "#4", "cullface": "north"}
+			}
+		},
+		{
+			"from": [8.24268, 11.59669, 13.74],
+			"to": [8.51268, 11.67919, 13.85375],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 9.66407, 5.65113]},
+			"faces": {
+				"north": {"uv": [4.75, 15.5, 4.8125, 15.5625], "texture": "#4"},
+				"east": {"uv": [15.5, 4.75, 15.5625, 4.8125], "texture": "#4"},
+				"south": {"uv": [6, 15.5, 6.0625, 15.5625], "texture": "#4"},
+				"west": {"uv": [15.5, 6, 15.5625, 6.0625], "texture": "#4"},
+				"up": {"uv": [15.5625, 6.3125, 15.5, 6.25], "texture": "#4"},
+				"down": {"uv": [15.5625, 6.5, 15.5, 6.5625], "texture": "#4"}
+			}
+		},
+		{
+			"from": [7.48732, 11.59669, 13.74],
+			"to": [7.75732, 11.67919, 13.85375],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 9.66407, 5.65113]},
+			"faces": {
+				"north": {"uv": [8.625, 14.875, 8.6875, 14.9375], "texture": "#4"},
+				"east": {"uv": [8.875, 14.875, 8.9375, 14.9375], "texture": "#4"},
+				"south": {"uv": [14.875, 11.25, 14.9375, 11.3125], "texture": "#4"},
+				"west": {"uv": [14.875, 11.875, 14.9375, 11.9375], "texture": "#4"},
+				"up": {"uv": [12.6875, 14.9375, 12.625, 14.875], "texture": "#4"},
+				"down": {"uv": [12.9375, 14.875, 12.875, 14.9375], "texture": "#4"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 0.25, -0.25],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 0.25, -0.25],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-0.5, 1.75, -11],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"firstperson_lefthand": {
+			"translation": [-0.5, 1.75, -11],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"ground": {
+			"translation": [0, 5, 0],
+			"scale": [0.275, 0.275, 0.275]
+		},
+		"gui": {
+			"rotation": [30, -145, 0],
+			"translation": [-0.5, 1.5, 0]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [0.25, 0.25, -1],
+			"scale": [0.55, 0.55, 0.55]
+		}
+	},
+	"groups": [
+		{
+			"name": "50cal_m1911_default",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "grip",
+					"origin": [8, 3.29575, 10.26026],
+					"color": 0,
+					"children": [
+						{
+							"name": "group",
+							"origin": [7.10897, -4.0582, 14.18094],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "trigger",
+					"origin": [8.00809, 7.57356, 8.04309],
+					"color": 1,
+					"children": []
+				},
+				{
+					"name": "hammer",
+					"origin": [7.9375, 14.20464, 13.73151],
+					"color": 4,
+					"children": []
+				},
+				{
+					"name": "parts",
+					"origin": [6.5625, 11.28453, 12.89306],
+					"color": 4,
+					"children": [
+						{
+							"name": "hold_release",
+							"origin": [6.44291, 9.22355, 8.81925],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "safety",
+							"origin": [6.41733, 17.43401, 14.45008],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "group",
+							"origin": [6.90147, 18.1566, 7.65205],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "lower",
+					"origin": [8, 9.9375, 5.9375],
+					"color": 6,
+					"children": [
+						{
+							"name": "parts",
+							"origin": [8.00809, 1.16046, 16.56882],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [8, 9.32397, 16.44584],
+									"color": 0,
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "timeless_50_bullet1",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": ".50",
+					"origin": [8, 15.25625, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "timeless_50_bullet2",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": ".50",
+					"origin": [8, 15.25625, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "timeless_50_e_mag",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "timeless_50_s_mag",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_default",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "grip",
+							"origin": [8, 3.29575, 10.26026],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.10897, -4.0582, 14.18094],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "trigger",
+							"origin": [8.00809, 7.57356, 8.04309],
+							"color": 1,
+							"children": []
+						},
+						{
+							"name": "hammer",
+							"origin": [7.9375, 14.20464, 13.73151],
+							"color": 4,
+							"children": []
+						},
+						{
+							"name": "parts",
+							"origin": [6.5625, 11.28453, 12.89306],
+							"color": 4,
+							"children": [
+								{
+									"name": "hold_release",
+									"origin": [6.44291, 9.22355, 8.81925],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "safety",
+									"origin": [6.41733, 17.43401, 14.45008],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [6.90147, 18.1566, 7.65205],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [8, 9.9375, 5.9375],
+							"color": 6,
+							"children": [
+								{
+									"name": "parts",
+									"origin": [8.00809, 1.16046, 16.56882],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [8, 9.32397, 16.44584],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "hammer",
+							"origin": [8, 9.25261, 13.33891],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "timeless_50",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_default",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "grip",
+							"origin": [8, 3.29575, 10.26026],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.10897, -4.0582, 14.18094],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "trigger",
+							"origin": [8.00809, 7.57356, 8.04309],
+							"color": 1,
+							"children": []
+						},
+						{
+							"name": "hammer",
+							"origin": [7.9375, 14.20464, 13.73151],
+							"color": 4,
+							"children": []
+						},
+						{
+							"name": "parts",
+							"origin": [6.5625, 11.28453, 12.89306],
+							"color": 4,
+							"children": [
+								{
+									"name": "hold_release",
+									"origin": [6.44291, 9.22355, 8.81925],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "safety",
+									"origin": [6.41733, 17.43401, 14.45008],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [6.90147, 18.1566, 7.65205],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [8, 9.9375, 5.9375],
+							"color": 6,
+							"children": [
+								{
+									"name": "parts",
+									"origin": [8.00809, 1.16046, 16.56882],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [8, 9.32397, 16.44584],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "timeless_50_clumsyyy",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_default",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "grip",
+							"origin": [8, 3.29575, 10.26026],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.10897, -4.0582, 14.18094],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "trigger",
+							"origin": [8.00809, 7.57356, 8.04309],
+							"color": 1,
+							"children": []
+						},
+						{
+							"name": "hammer",
+							"origin": [7.9375, 14.20464, 13.73151],
+							"color": 4,
+							"children": []
+						},
+						{
+							"name": "parts",
+							"origin": [6.5625, 11.28453, 12.89306],
+							"color": 4,
+							"children": [
+								{
+									"name": "hold_release",
+									"origin": [6.44291, 9.22355, 8.81925],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "safety",
+									"origin": [6.41733, 17.43401, 14.45008],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [6.90147, 18.1566, 7.65205],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [8, 9.9375, 5.9375],
+							"color": 6,
+							"children": [
+								{
+									"name": "parts",
+									"origin": [8.00809, 1.16046, 16.56882],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [8, 9.32397, 16.44584],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "hammer",
+							"origin": [8, 9.25261, 13.33891],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "timeless_50_e_barrel",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_default",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "grip",
+							"origin": [8, 3.29575, 10.26026],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.10897, -4.0582, 14.18094],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "trigger",
+							"origin": [8.00809, 7.57356, 8.04309],
+							"color": 1,
+							"children": []
+						},
+						{
+							"name": "hammer",
+							"origin": [7.9375, 14.20464, 13.73151],
+							"color": 4,
+							"children": []
+						},
+						{
+							"name": "parts",
+							"origin": [6.5625, 11.28453, 12.89306],
+							"color": 4,
+							"children": [
+								{
+									"name": "hold_release",
+									"origin": [6.44291, 9.22355, 8.81925],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "safety",
+									"origin": [6.41733, 17.43401, 14.45008],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [6.90147, 18.1566, 7.65205],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [8, 9.9375, 5.9375],
+							"color": 6,
+							"children": [
+								{
+									"name": "parts",
+									"origin": [8.00809, 1.16046, 16.56882],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [8, 9.32397, 16.44584],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "hammer",
+							"origin": [8, 9.25261, 13.33891],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "timeless_50_e_slide",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_default",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "grip",
+							"origin": [8, 3.29575, 10.26026],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.10897, -4.0582, 14.18094],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "trigger",
+							"origin": [8.00809, 7.57356, 8.04309],
+							"color": 1,
+							"children": []
+						},
+						{
+							"name": "hammer",
+							"origin": [7.9375, 14.20464, 13.73151],
+							"color": 4,
+							"children": []
+						},
+						{
+							"name": "parts",
+							"origin": [6.5625, 11.28453, 12.89306],
+							"color": 4,
+							"children": [
+								{
+									"name": "hold_release",
+									"origin": [6.44291, 9.22355, 8.81925],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "safety",
+									"origin": [6.41733, 17.43401, 14.45008],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [6.90147, 18.1566, 7.65205],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [8, 9.9375, 5.9375],
+							"color": 6,
+							"children": [
+								{
+									"name": "parts",
+									"origin": [8.00809, 1.16046, 16.56882],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [8, 9.32397, 16.44584],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "hammer",
+							"origin": [8, 9.25261, 13.33891],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "timeless_50_hammer",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_default",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "grip",
+							"origin": [8, 3.29575, 10.26026],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.10897, -4.0582, 14.18094],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "trigger",
+							"origin": [8.00809, 7.57356, 8.04309],
+							"color": 1,
+							"children": []
+						},
+						{
+							"name": "hammer",
+							"origin": [7.9375, 14.20464, 13.73151],
+							"color": 4,
+							"children": []
+						},
+						{
+							"name": "parts",
+							"origin": [6.5625, 11.28453, 12.89306],
+							"color": 4,
+							"children": [
+								{
+									"name": "hold_release",
+									"origin": [6.44291, 9.22355, 8.81925],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "safety",
+									"origin": [6.41733, 17.43401, 14.45008],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [6.90147, 18.1566, 7.65205],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [8, 9.9375, 5.9375],
+							"color": 6,
+							"children": [
+								{
+									"name": "parts",
+									"origin": [8.00809, 1.16046, 16.56882],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [8, 9.32397, 16.44584],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "hammer",
+					"origin": [8, 9.25261, 13.33891],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "timeless_50_nekooo",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_default",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "grip",
+							"origin": [8, 3.29575, 10.26026],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.10897, -4.0582, 14.18094],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "trigger",
+							"origin": [8.00809, 7.57356, 8.04309],
+							"color": 1,
+							"children": []
+						},
+						{
+							"name": "hammer",
+							"origin": [7.9375, 14.20464, 13.73151],
+							"color": 4,
+							"children": []
+						},
+						{
+							"name": "parts",
+							"origin": [6.5625, 11.28453, 12.89306],
+							"color": 4,
+							"children": [
+								{
+									"name": "hold_release",
+									"origin": [6.44291, 9.22355, 8.81925],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "safety",
+									"origin": [6.41733, 17.43401, 14.45008],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [6.90147, 18.1566, 7.65205],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [8, 9.9375, 5.9375],
+							"color": 6,
+							"children": [
+								{
+									"name": "parts",
+									"origin": [8.00809, 1.16046, 16.56882],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [8, 9.32397, 16.44584],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "hammer",
+							"origin": [8, 9.25261, 13.33891],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "timeless_50_s_barrel",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_default",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "grip",
+							"origin": [8, 3.29575, 10.26026],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.10897, -4.0582, 14.18094],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "trigger",
+							"origin": [8.00809, 7.57356, 8.04309],
+							"color": 1,
+							"children": []
+						},
+						{
+							"name": "hammer",
+							"origin": [7.9375, 14.20464, 13.73151],
+							"color": 4,
+							"children": []
+						},
+						{
+							"name": "parts",
+							"origin": [6.5625, 11.28453, 12.89306],
+							"color": 4,
+							"children": [
+								{
+									"name": "hold_release",
+									"origin": [6.44291, 9.22355, 8.81925],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "safety",
+									"origin": [6.41733, 17.43401, 14.45008],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [6.90147, 18.1566, 7.65205],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [8, 9.9375, 5.9375],
+							"color": 6,
+							"children": [
+								{
+									"name": "parts",
+									"origin": [8.00809, 1.16046, 16.56882],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [8, 9.32397, 16.44584],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "hammer",
+							"origin": [8, 9.25261, 13.33891],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "timeless_50_s_slide",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "50cal_m1911_default",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "grip",
+							"origin": [8, 3.29575, 10.26026],
+							"color": 0,
+							"children": [
+								{
+									"name": "group",
+									"origin": [7.10897, -4.0582, 14.18094],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "trigger",
+							"origin": [8.00809, 7.57356, 8.04309],
+							"color": 1,
+							"children": []
+						},
+						{
+							"name": "hammer",
+							"origin": [7.9375, 14.20464, 13.73151],
+							"color": 4,
+							"children": []
+						},
+						{
+							"name": "parts",
+							"origin": [6.5625, 11.28453, 12.89306],
+							"color": 4,
+							"children": [
+								{
+									"name": "hold_release",
+									"origin": [6.44291, 9.22355, 8.81925],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "safety",
+									"origin": [6.41733, 17.43401, 14.45008],
+									"color": 0,
+									"children": []
+								},
+								{
+									"name": "group",
+									"origin": [6.90147, 18.1566, 7.65205],
+									"color": 0,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": "lower",
+							"origin": [8, 9.9375, 5.9375],
+							"color": 6,
+							"children": [
+								{
+									"name": "parts",
+									"origin": [8.00809, 1.16046, 16.56882],
+									"color": 0,
+									"children": [
+										{
+											"name": "group",
+											"origin": [8, 9.32397, 16.44584],
+											"color": 0,
+											"children": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "hammer",
+							"origin": [8, 9.25261, 13.33891],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_extd_mag",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "extra_mag",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": [
+								{
+									"name": "magazine",
+									"origin": [7.25, 3.84375, 12.5],
+									"color": 6,
+									"children": []
+								}
+							]
+						},
+						{
+							"name": ".50",
+							"origin": [8, 15.25625, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_standard_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				0,
+				1,
+				2,
+				{
+					"name": "50cal_m1911_long_barrel",
+					"origin": [8, 8, 8],
+					"color": 3,
+					"children": [
+						{
+							"name": "group",
+							"origin": [8, 10.875, -4.43371],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "50cal_m1911_long_slide_group",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "m1911_sight",
+							"origin": [8, 12.10265, 13.09395],
+							"color": 0,
+							"children": []
+						},
+						{
+							"name": "slide",
+							"origin": [8.875, 17.65503, 13.26203],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

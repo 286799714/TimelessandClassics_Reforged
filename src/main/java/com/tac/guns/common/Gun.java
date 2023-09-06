@@ -8,14 +8,18 @@ import com.tac.guns.annotation.Ignored;
 import com.tac.guns.annotation.Optional;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.interfaces.TGExclude;
+import com.tac.guns.inventory.gear.InventoryListener;
+import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.item.attachment.IScope;
 import com.tac.guns.item.attachment.impl.Scope;
 import com.tac.guns.util.WearableHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -27,6 +31,8 @@ import org.apache.logging.log4j.core.config.plugins.validation.constraints.Requi
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 
 public final class Gun implements INBTSerializable<CompoundTag>
@@ -1169,6 +1175,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
         private Flash flash;
 
         @Optional
+        @Nullable
+        private ShellCasing shellCasing;
+
+        @Optional
         private int weaponType = 0;
 
         @Optional
@@ -1212,6 +1222,11 @@ public final class Gun implements INBTSerializable<CompoundTag>
         public Flash getFlash()
         {
             return this.flash;
+        }
+
+        @Nullable
+        public ShellCasing getShellCasing() {
+            return this.shellCasing;
         }
 
         public static class Flash extends Positioned
@@ -1288,6 +1303,9 @@ public final class Gun implements INBTSerializable<CompoundTag>
             {
                 tag.put("Flash", this.flash.serializeNBT());
             }
+            if (this.shellCasing != null) {
+                tag.put("ShellCasing", this.shellCasing.serializeNBT());
+            }
             tag.putFloat("HipFireScale", this.hipfireScale);
             tag.putFloat("HipFireMoveScale", this.hipfireMoveScale);
             tag.putFloat("HipFireRecoilScale", this.hipfireRecoilScale/2); // Compensate for camera changes
@@ -1311,6 +1329,16 @@ public final class Gun implements INBTSerializable<CompoundTag>
                 else
                 {
                     this.flash = null;
+                }
+            }
+            if (tag.contains("ShellCasing", Tag.TAG_COMPOUND)) {
+                CompoundTag casingTag = tag.getCompound("ShellCasing");
+                if (!casingTag.isEmpty()) {
+                    ShellCasing shellCasing = new ShellCasing();
+                    shellCasing.deserializeNBT(casingTag);
+                    this.shellCasing = shellCasing;
+                } else {
+                    this.shellCasing = null;
                 }
             }
             if(tag.contains("HipFireScale", Tag.TAG_ANY_NUMERIC))
@@ -1341,6 +1369,9 @@ public final class Gun implements INBTSerializable<CompoundTag>
             if(flash != null)
             {
                 display.flash = flash.copy();
+            }
+            if (shellCasing != null) {
+                display.shellCasing = shellCasing.copy();
             }
             if(hipfireScale != 0)
             {
@@ -1943,6 +1974,179 @@ public final class Gun implements INBTSerializable<CompoundTag>
         }
     }
 
+    public static class ShellCasing extends ScaledPositioned {
+        @Optional
+        protected float velocityX = 0f;
+
+        @Optional
+        protected float velocityY = 0f;
+
+        @Optional
+        protected float velocityZ = 0f;
+
+        @Optional
+        protected float rVelocityX = 0f;
+
+        @Optional
+        protected float rVelocityY = 0f;
+
+        @Optional
+        protected float rVelocityZ = 0f;
+
+        @Optional
+        protected float aVelocityX = 0f;
+
+        @Optional
+        protected float aVelocityY = 0f;
+
+        @Optional
+        protected float aVelocityZ = 0f;
+
+        @Optional
+        @Nullable
+        @TGExclude
+        private ResourceLocation casingModel;
+
+        @Optional
+        protected int tickLife = 40;
+
+        public ShellCasing() {
+        }
+
+        public ShellCasing(CompoundTag tag) {
+            this.deserializeNBT(tag);
+        }
+
+        @Override
+        public CompoundTag serializeNBT() {
+            CompoundTag tag = super.serializeNBT();
+            tag.putFloat("VelocityX", velocityX);
+            tag.putFloat("VelocityY", velocityY);
+            tag.putFloat("VelocityZ", velocityZ);
+            tag.putFloat("RVelocityX", rVelocityX);
+            tag.putFloat("RVelocityY", rVelocityY);
+            tag.putFloat("RVelocityZ", rVelocityZ);
+            tag.putFloat("AVelocityX", aVelocityX);
+            tag.putFloat("AVelocityY", aVelocityY);
+            tag.putFloat("AVelocityZ", aVelocityZ);
+            if (this.casingModel != null) {
+                tag.putString("CasingModel", this.casingModel.toString());
+            }
+            tag.putInt("TickLife", tickLife);
+            return tag;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag tag) {
+            super.deserializeNBT(tag);
+            if (tag.contains("VelocityX", Tag.TAG_ANY_NUMERIC)) {
+                this.velocityX = tag.getFloat("VelocityX");
+            }
+            if (tag.contains("VelocityY", Tag.TAG_ANY_NUMERIC)) {
+                this.velocityY = tag.getFloat("VelocityY");
+            }
+            if (tag.contains("VelocityZ", Tag.TAG_ANY_NUMERIC)) {
+                this.velocityZ = tag.getFloat("VelocityZ");
+            }
+            if (tag.contains("RVelocityX", Tag.TAG_ANY_NUMERIC)) {
+                this.rVelocityX = tag.getFloat("RVelocityX");
+            }
+            if (tag.contains("RVelocityY", Tag.TAG_ANY_NUMERIC)) {
+                this.rVelocityY = tag.getFloat("RVelocityY");
+            }
+            if (tag.contains("RVelocityZ", Tag.TAG_ANY_NUMERIC)) {
+                this.rVelocityZ = tag.getFloat("RVelocityZ");
+            }
+            if (tag.contains("AVelocityX", Tag.TAG_ANY_NUMERIC)) {
+                this.aVelocityX = tag.getFloat("AVelocityX");
+            }
+            if (tag.contains("AVelocityY", Tag.TAG_ANY_NUMERIC)) {
+                this.aVelocityY = tag.getFloat("AVelocityY");
+            }
+            if (tag.contains("AVelocityZ", Tag.TAG_ANY_NUMERIC)) {
+                this.aVelocityZ = tag.getFloat("AVelocityZ");
+            }
+            if (tag.contains("CasingModel", Tag.TAG_STRING)) {
+                this.casingModel = this.createResource(tag, "CasingModel");
+            }
+            if (tag.contains("TickLife", Tag.TAG_ANY_NUMERIC)) {
+                this.tickLife = tag.getInt("TickLife");
+            }
+        }
+
+        @Nullable
+        private ResourceLocation createResource(CompoundTag tag, String key) {
+            String resource = tag.getString(key);
+            return resource.isEmpty() ? null : new ResourceLocation(resource);
+        }
+
+        @Override
+        public ShellCasing copy() {
+            ShellCasing ms = new ShellCasing();
+            ms.xOffset = this.xOffset;
+            ms.yOffset = this.yOffset;
+            ms.zOffset = this.zOffset;
+            ms.scale = this.scale;
+            ms.velocityX = this.velocityX;
+            ms.velocityY = this.velocityY;
+            ms.velocityZ = this.velocityZ;
+            ms.rVelocityX = this.rVelocityX;
+            ms.rVelocityY = this.rVelocityY;
+            ms.rVelocityZ = this.rVelocityZ;
+            ms.aVelocityX = this.aVelocityX;
+            ms.aVelocityY = this.aVelocityY;
+            ms.aVelocityZ = this.aVelocityZ;
+            ms.casingModel = this.casingModel;
+            ms.tickLife = this.tickLife;
+            return ms;
+        }
+
+        public float getVelocityX() {
+            return velocityX;
+        }
+
+        public float getVelocityY() {
+            return velocityY;
+        }
+
+        public float getVelocityZ() {
+            return velocityZ;
+        }
+
+        public float getRVelocityX() {
+            return rVelocityX;
+        }
+
+        public float getRVelocityY() {
+            return rVelocityY;
+        }
+
+        public float getRVelocityZ() {
+            return rVelocityZ;
+        }
+
+        public float getAVelocityX() {
+            return aVelocityX;
+        }
+
+        public float getAVelocityY() {
+            return aVelocityY;
+        }
+
+        public float getAVelocityZ() {
+            return aVelocityZ;
+        }
+
+        public ResourceLocation getCasingModel() {
+            return casingModel;
+        }
+
+        public int getTickLife() {
+            return tickLife;
+        }
+    }
+
+
     @Override
     public CompoundTag serializeNBT()
     {
@@ -2190,13 +2394,14 @@ public final class Gun implements INBTSerializable<CompoundTag>
         ItemStack wornRig = WearableHelper.PlayerWornRig(player);
         if(!wornRig.isEmpty())
         {
-            ListTag nbtTagList = (ListTag) ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").get("Items");
-            for (int i = 0; i < ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").getInt("Size"); i++)
-            {
-                ItemStack ammoStack = ItemStack.of(nbtTagList.getCompound(i));
-                if(isAmmo(ammoStack, id))
+            int count = 0;
+            RigSlotsHandler itemHandler = (RigSlotsHandler) wornRig.getCapability(InventoryListener.RIG_HANDLER_CAPABILITY).resolve().get();
+            List<ItemStack> list = itemHandler.getStacks();
+            for(ItemStack ammoStack : list){
+                if(isAmmo(ammoStack, id)) {
                     stacks.add(ammoStack);
-                //Minecraft.getInstance().player.sendChatMessage(""+ammoStack.getItem().getRegistryName());
+                    count += ammoStack.getCount();
+                }
             }
         }
 

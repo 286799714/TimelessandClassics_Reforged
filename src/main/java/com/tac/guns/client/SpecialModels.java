@@ -687,7 +687,14 @@ public enum SpecialModels
     T_GRIP1("mk14_tac_grip"),
     L_GRIP1 ("mk14_light_grip"),
     SCOPE_MOUNT1 ("mk14_mount"),
-    BOLT_HANDLE1 ("mk14_bolt_handle");
+    BOLT_HANDLE1 ("mk14_bolt_handle"),
+    BULLET_SHELL("bullet_shell"), // Simply for testing fall back, FOR REMOVAL
+    BULLET_SHELL_HIGH_CAL("shell_huge"),
+    BULLET_SHELL_RIFLE("shell_large"),
+    BULLET_SHELL_SHOTGUN("shell_shotgun"),
+    BULLET_SHELL_PISTOL("shell_small"),
+    BULLET_SHELL_PISTOL_SILVER("shell_silver"),
+    BULLET_SHELL_RIFLE_SURPLUS("shell_steel");
 
     /**
      * The location of an item model in the [MOD_ID]/models/special/[NAME] folder

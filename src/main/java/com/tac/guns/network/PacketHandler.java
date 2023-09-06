@@ -47,8 +47,6 @@ public class PacketHandler
     .registerPlayMessage(MessageUpdatePlayerMovement.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageAnimationSound.class, NetworkDirection.PLAY_TO_CLIENT)
     .registerPlayMessage(MessageAnimationRun.class, NetworkDirection.PLAY_TO_SERVER)
-    .registerPlayMessage(MessageRigInvToClient.class, NetworkDirection.PLAY_TO_CLIENT)
-    .registerPlayMessage(MessageToClientRigInv.class, NetworkDirection.PLAY_TO_SERVER)
             .build();
     private static int nextMessageId = 0;
 

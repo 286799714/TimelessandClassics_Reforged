@@ -4,13 +4,13 @@
     "rate": 1200,
     "rateSelector": [2],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 2.75,
+    "recoilAngle": 2,
     "horizontalRecoilAngle": 1.35,
     "recoilKick": 1.2125,
     "recoilAdsReduction": 0.305,
     "weaponRecoilOffset": 0.525,
     "recoilDuration": 0.1025,
-    "cameraRecoilModifier": 1.325,
+    "cameraRecoilModifier": 1.5,
     "weightKilo": 2.5,
 
     "spread": 2.575,
@@ -38,9 +38,13 @@
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
-    "speed": 10,
+    "closeDamage": 1.15,
+    "decayStart": 0.2,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.85,
+    "speed": 12,
     "trailLengthMultiplier": 3,
-    "life": 11
+    "life": 8
   },
   "sounds": {
     "fire": "tac:item.mac10_fire",
@@ -48,7 +52,6 @@
     "reloadEmpty": "tac:animation.mac10_reload_empty",
     "draw": "tac:animation.mac10_draw",
     "inspect": "tac:animation.mac10_inspect",
-    "inspectEmpty": "tac:animation.mac10_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.mac10_fire_s"
   },
@@ -58,8 +61,24 @@
       "zOffset": -18.15,
       "size": 0.845
     },
-    "hipfireScale": 0.325,
-    "hipfireMoveScale": 0.525,
+    "shellCasing": {
+      "yOffset": 5,
+      "xOffset": 0,
+      "zOffset": -2,
+      "scale": 2,
+      "velocityX": 14,
+      "velocityY": 2,
+      "velocityZ": 1.0,
+      "rVelocityX": 0.5,
+      "rVelocityY": 1,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 15.0,
+      "aVelocityY": -60.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_small"
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.25,
     "hipfireRecoilScale": 1.0,
     "weaponType": 4
   },
@@ -67,7 +86,7 @@
     "zoom":{
       "fovModifier": 0.8,
       "yOffset": 15.660,
-      "zOffset": -9.0
+      "zOffset": -7.0
     },
     "attachments": {
       "extendedMag": {

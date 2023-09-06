@@ -31,15 +31,19 @@
   "projectile": {
     "item": "tac:762x54",
     "visible": false,
-    "damage": 9.55,
+    "damage": 9.5,
     "armorIgnore": 1.1,
     "critical": 0.0,
     "criticalDamage": 0.875,
     "headDamage": 1.0,
+    "closeDamage": 1.0,
+    "decayStart": 0.12,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 1.0,
     "size": 0.175,
     "speed": 19,
     "trailLengthMultiplier": 2.75,
-    "life": 15
+    "life": 13
   },
   "sounds": {
     "fire": "tac:item.dp28_fire",
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.dp28_reload_empty",
     "draw": "tac:animation.dp28_draw",
     "inspect": "tac:animation.dp28_inspect",
-    "inspectEmpty": "tac:animation.dp28_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.dp28_fire_s"
   },
@@ -58,6 +61,27 @@
       "size": 0.8,
       "trailAdjust": 1.4725
     },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 0,
+      "xOffset": 0,
+      "zOffset": 2.5,
+      "scale": 1,
+      "velocityX": 0,
+      "velocityY": -6,
+      "velocityZ": 0,
+      "rVelocityX": 1,
+      "rVelocityY": 2,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 45.0,
+      "aVelocityY": 10.0,
+      "aVelocityZ": 30.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 2.5,
+    "hipfireMoveScale": 0.5,
+    "hipfireRecoilScale": 1.0,
+    "showDynamicHipfire":true,
     "weaponType": 1
   },
   "modules": {

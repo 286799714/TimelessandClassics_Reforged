@@ -14,6 +14,7 @@ import com.tac.guns.client.render.animation.module.AnimationSoundManager;
 import com.tac.guns.client.render.animation.module.AnimationSoundMeta;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.common.NetworkRigManager;
+import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.init.ModParticleTypes;
 import com.tac.guns.network.message.*;
 import com.tac.guns.particles.BulletHoleData;
@@ -25,6 +26,7 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -248,19 +250,4 @@ public class ClientPlayHandler
         NetworkRigManager.updateRegisteredRigs(message);
         CustomRigManager.updateCustomRigs(message);
     }
-
-    public static void updateRigInv(MessageRigInvToClient message)
-    {
-        // Incase I manage to adjust counts on accident
-        //HUDRenderingHandler.get().serverSideRig = message.getRig().copy();
-        if(message.getOnlyResetRigCount()){HUDRenderingHandler.get().rigReserveCount = 0; ReloadHandler.get().rigAmmoCount = 0;}
-        else {
-            HUDRenderingHandler.get().rigReserveCount = 0;
-            HUDRenderingHandler.get().rigReserveCount += message.getCount();
-            ReloadHandler.get().rigAmmoCount = 0;
-            ReloadHandler.get().rigAmmoCount += message.getCount();
-        }
-
-    }
-
 }

@@ -5,11 +5,11 @@
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 13.175,
     "horizontalRecoilAngle": 0.55,
-    "recoilKick": 2.2,
+    "recoilKick": 2.25,
     "recoilAdsReduction": 0.175,
-    "cameraRecoilModifier": 2.175,
-    "weaponRecoilOffset": 0.825,
-    "recoilDuration": 0.125,
+    "cameraRecoilModifier": 2,
+    "weaponRecoilOffset": 0.725,
+    "recoilDuration": 0.2125,
     "projectileAmount": 9,
     "weightKilo": 5.1,
 
@@ -37,9 +37,13 @@
     "critical": 0.0,
     "criticalDamage": 0.75,
     "headDamage": 0.55,
+    "closeDamage": 1.1,
+    "decayStart": 0.09,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.65,
     "size": 0.1,
     "speed": 18,
-    "life": 5,
+    "life": 3,
     "trailLengthMultiplier": 3.25,
     "ricochet": false
   },
@@ -52,7 +56,6 @@
     "reloadEndEmpty": "tac:animation.m870_reload_empty_end",
     "draw": "tac:animation.m870_draw",
     "inspect": "tac:animation.m870_inspect",
-    "inspectEmpty": "tac:animation.m870_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.m870_fire_s"
   },
@@ -63,13 +66,16 @@
       "size": 1.20,
       "trailAdjust": 1.63
     },
+    "hipfireScale": 1.375,
+    "hipfireMoveScale": 0.15,
+    "hipfireRecoilScale": 0.45,
     "weaponType": 3
   },
   "modules": {
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 10.175,
-      "zOffset": -2.1
+      "zOffset": -1.75
     },
     "attachments": {
       "extendedMag": {

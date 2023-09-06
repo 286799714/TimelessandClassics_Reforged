@@ -1871,19 +1871,6 @@
 			}
 		},
 		{
-			"from": [7.90625, 11.96967, -3.3125],
-			"to": [8.09375, 12.15717, -1.875],
-			"rotation": {"angle": -45, "axis": "z", "origin": [8, 12.06342, -2.65625]},
-			"faces": {
-				"north": {"uv": [13.625, 6.875, 13.6875, 6.9375], "texture": "#14", "cullface": "north"},
-				"east": {"uv": [4.625, 12.25, 4.8125, 12.3125], "texture": "#14", "cullface": "north"},
-				"south": {"uv": [7.125, 13.625, 7.1875, 13.6875], "texture": "#14", "cullface": "north"},
-				"west": {"uv": [5.375, 12.25, 5.5625, 12.3125], "texture": "#14", "cullface": "north"},
-				"up": {"uv": [1.3125, 12.4375, 1.25, 12.25], "texture": "#14", "cullface": "north"},
-				"down": {"uv": [3.3125, 12.25, 3.25, 12.4375], "texture": "#14", "cullface": "north"}
-			}
-		},
-		{
 			"from": [7.84239, 11.53826, -3.32042],
 			"to": [8.15843, 11.88735, -2.01378],
 			"rotation": {"angle": 0, "axis": "y", "origin": [-2.11322, -4.89637, -8.39729]},
@@ -1892,32 +1879,6 @@
 				"east": {"uv": [12.125, 8.25, 12.3125, 8.3125], "texture": "#14", "cullface": "north"},
 				"west": {"uv": [12.125, 8.875, 12.3125, 8.9375], "texture": "#14", "cullface": "north"},
 				"up": {"uv": [3.8125, 12.3125, 3.75, 12.125], "texture": "#14", "cullface": "north"}
-			}
-		},
-		{
-			"from": [7.40625, 11.96967, 15.5],
-			"to": [7.59375, 12.15717, 15.875],
-			"rotation": {"angle": -45, "axis": "z", "origin": [7.5, 12.06342, -2.65625]},
-			"faces": {
-				"north": {"uv": [13.75, 14.875, 13.8125, 14.9375], "texture": "#14", "cullface": "up"},
-				"east": {"uv": [14.875, 14.625, 14.9375, 14.6875], "texture": "#14", "cullface": "up"},
-				"south": {"uv": [14.875, 14.875, 14.9375, 14.9375], "texture": "#14", "cullface": "up"},
-				"west": {"uv": [15, 0, 15.0625, 0.0625], "texture": "#14", "cullface": "up"},
-				"up": {"uv": [15.0625, 0.3125, 15, 0.25], "texture": "#14", "cullface": "up"},
-				"down": {"uv": [15.0625, 0.5, 15, 0.5625], "texture": "#14", "cullface": "up"}
-			}
-		},
-		{
-			"from": [8.40625, 11.96967, 15.5],
-			"to": [8.59375, 12.15717, 15.875],
-			"rotation": {"angle": 45, "axis": "z", "origin": [8.5, 12.06342, -2.65625]},
-			"faces": {
-				"north": {"uv": [1, 15, 1.0625, 15.0625], "texture": "#14", "cullface": "up"},
-				"east": {"uv": [2, 15, 2.0625, 15.0625], "texture": "#14", "cullface": "up"},
-				"south": {"uv": [15, 2, 15.0625, 2.0625], "texture": "#14", "cullface": "up"},
-				"west": {"uv": [15, 2.25, 15.0625, 2.3125], "texture": "#14", "cullface": "up"},
-				"up": {"uv": [2.5625, 15.0625, 2.5, 15], "texture": "#14", "cullface": "up"},
-				"down": {"uv": [2.8125, 15, 2.75, 15.0625], "texture": "#14", "cullface": "up"}
 			}
 		},
 		{
@@ -2081,23 +2042,17 @@
 			"name": "g34_slide",
 			"origin": [8.46823, 13.12507, 17.65625],
 			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"children": [
 				{
 					"name": "pattern",
 					"origin": [-1.83733, -4.62048, -11.43649],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [0, 1, 2]
 				},
 				{
 					"name": "slide",
 					"origin": [6.41789, 11.46063, 7],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [
 						3,
 						4,
@@ -2253,24 +2208,18 @@
 							"name": "octagon",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": [153, 154, 155, 156]
 						},
 						{
 							"name": "group",
 							"origin": [-2.05072, -3.07844, -7.88363],
 							"color": 5,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": [157, 158]
 						},
 						{
 							"name": "group",
 							"origin": [9.01517, 10.75081, 15.78405],
 							"color": 5,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": [159, 160, 161, 162, 163, 164, 165]
 						}
 					]
@@ -2279,24 +2228,18 @@
 					"name": "sight",
 					"origin": [8.46823, 13.12507, 17.65625],
 					"color": 5,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [
 						{
 							"name": "group",
 							"origin": [-2.11322, -4.89637, -6.27229],
 							"color": 5,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
-							"children": [166, 167, 168, 169, 170, 171, 172, 173]
+							"children": [166, 167, 168, 169, 170]
 						},
 						{
 							"name": "group",
 							"origin": [7.5, 11.84467, 15.3125],
 							"color": 5,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
-							"children": [174, 175, 176, 177, 178, 179, 180]
+							"children": [171, 172, 173, 174, 175, 176, 177]
 						}
 					]
 				}
@@ -2306,22 +2249,16 @@
 			"name": "g34_lower",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"children": [
 				{
 					"name": "barrel",
 					"origin": [8, 8, 8],
 					"color": 1,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [
 						{
 							"name": "octagon",
 							"origin": [8, 8, 8],
 							"color": 1,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": []
 						}
 					]
@@ -2330,39 +2267,29 @@
 					"name": "spring",
 					"origin": [8, 8, 8],
 					"color": 6,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": []
 				},
 				{
 					"name": "magwell",
 					"origin": [5.1254, -0.92317, 15.62413],
 					"color": 6,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": []
 				},
 				{
 					"name": "bottom",
 					"origin": [8, 7.78858, 14.73669],
 					"color": 4,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": []
 				},
 				{
 					"name": "trigger",
 					"origin": [7.89496, 9.03306, 8.81403],
 					"color": 5,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [
 						{
 							"name": "group",
 							"origin": [7.89496, 6.12171, 7.4239],
 							"color": 8,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": []
 						}
 					]
@@ -2371,31 +2298,23 @@
 					"name": "parts",
 					"origin": [-1.48112, -3.95177, 11.6176],
 					"color": 2,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [
 						{
 							"name": "slide_release",
 							"origin": [6.57819, 9.15852, 10.68696],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": []
 						},
 						{
 							"name": "mag_release",
 							"origin": [17.48112, -3.88927, 11.8051],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": []
 						},
 						{
 							"name": "barrel_lock",
 							"origin": [8, 8.73963, 6.54527],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": []
 						}
 					]
@@ -2404,15 +2323,11 @@
 					"name": "pins",
 					"origin": [4.6875, 8, 8],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [
 						{
 							"name": "octagon",
 							"origin": [6.09375, 8, 8],
 							"color": 5,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": []
 						}
 					]
@@ -2423,29 +2338,21 @@
 			"name": "g34_magazine",
 			"origin": [8, 8, 8],
 			"color": 8,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"children": [
 				{
 					"name": "m+b",
 					"origin": [8, 8, 8],
 					"color": 0,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [
 						{
 							"name": "magazine",
 							"origin": [5.9311, 2.92691, 16.97987],
 							"color": 8,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": [
 								{
 									"name": "group",
 									"origin": [13.46306, 8.3468, 14.96816],
 									"color": 0,
-									"nbt": "{}",
-									"armAnimationEnabled": false,
 									"children": []
 								}
 							]
@@ -2458,29 +2365,21 @@
 			"name": "g34_extd_magazine",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"children": [
 				{
 					"name": "m+b",
 					"origin": [30.9371, 8, 8],
 					"color": 8,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": [
 						{
 							"name": "magazine",
 							"origin": [28.8682, 2.92691, 16.97987],
 							"color": 8,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": [
 								{
 									"name": "group",
 									"origin": [31.28125, 6.26367, 6.79594],
 									"color": 0,
-									"nbt": "{}",
-									"armAnimationEnabled": false,
 									"children": []
 								}
 							]
@@ -2489,8 +2388,6 @@
 							"name": "9mm",
 							"origin": [0, 14.65234, 0],
 							"color": 0,
-							"nbt": "{}",
-							"armAnimationEnabled": false,
 							"children": []
 						}
 					]
@@ -2501,23 +2398,17 @@
 			"name": "g34_muzzle_brake",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"children": [
 				{
 					"name": "octagon",
 					"origin": [8, 8, 8],
 					"color": 1,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": []
 				},
 				{
 					"name": "octagon",
 					"origin": [8, 8, 8],
 					"color": 1,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": []
 				}
 			]
@@ -2526,15 +2417,11 @@
 			"name": "g34_silencer",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"nbt": "{}",
-			"armAnimationEnabled": false,
 			"children": [
 				{
 					"name": "octagon",
 					"origin": [8, 8, 8],
 					"color": 1,
-					"nbt": "{}",
-					"armAnimationEnabled": false,
 					"children": []
 				}
 			]

@@ -25,13 +25,17 @@
     "visible": false,
     "damage": 8,
     "armorIgnore": 1.0,
-    "critical": 0.05,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.13,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.95,
     "size": 0.1,
     "speed": 20,
     "trailLengthMultiplier": 2.75,
-    "life": 13
+    "life": 10
   },
   "reloads": {
     "magFed": true,
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.mk47_reload_empty",
     "draw": "tac:animation.mk47_draw",
     "inspect": "tac:animation.mk47_inspect",
-    "inspectEmpty": "tac:animation.mk47_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.mk47_fire_s"
   },
@@ -57,8 +60,25 @@
       "zOffset": -17.35,
       "size": 1
     },
-    "hipfireScale": 1.175,
-    "hipfireMoveScale": 0.8,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1.25,
+      "xOffset": 0,
+      "zOffset": -1,
+      "scale": 1,
+      "velocityX": 9,
+      "velocityY": 1.5,
+      "velocityZ": -2,
+      "rVelocityX": 1,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -60.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_steel"
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.5,
     "hipfireRecoilScale": 1.25,
     "showDynamicHipfire": true,
     "weaponType": 0
@@ -83,6 +103,16 @@
       "stock": {
         "yOffset": 7.75,
         "zOffset": -22.05,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
         "scale": 0.00
       },
       "scope": {

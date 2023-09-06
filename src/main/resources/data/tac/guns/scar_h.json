@@ -7,8 +7,8 @@
     "recoilAngle": 3.15,
     "horizontalRecoilAngle": 1.5,
     "recoilKick": 1.95,
-    "recoilAdsReduction": 0.22,
-    "weaponRecoilOffset": 0.785,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.725,
     "cameraRecoilModifier": 1.325,
     "recoilDuration": 0.27,
     "weightKilo": 6.90,
@@ -23,14 +23,18 @@
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 11,
-    "armorIgnore": 1.0,
-    "critical": 0.05,
+    "damage": 13.75,
+    "armorIgnore": 1.2,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.12,
+    "minDecayMultiplier": 0.2,
+    "decayEnd": 0.8,
     "size": 0.15,
     "speed": 19.5,
-    "life": 14,
+    "life": 13,
     "trailLengthMultiplier": 2.75
   },
   "reloads": {
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.scar_h_reload_empty",
     "draw": "tac:animation.scar_h_draw",
     "inspect": "tac:animation.scar_h_inspect",
-    "inspectEmpty": "tac:animation.scar_h_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.scarh_fire_s"
   },
@@ -58,8 +61,25 @@
       "size": 0.8,
       "trailAdjust": 1.2875
     },
-    "hipfireScale": 1.55,
-    "hipfireMoveScale": 0.71,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": 0,
+      "zOffset": 2,
+      "scale": 1,
+      "velocityX": 8,
+      "velocityY": 2,
+      "velocityZ": -2.0,
+      "rVelocityX": 1.0,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -75.0,
+      "aVelocityZ": 10.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.375,
     "hipfireRecoilScale": 0.95,
     "showDynamicHipfire": true,
     "weaponType": 0
@@ -94,6 +114,11 @@
         "scale": 0.00
       },
       "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

@@ -8,7 +8,7 @@
     "horizontalRecoilAngle": 1.65,
     "recoilKick": 1.575,
     "recoilAdsReduction": 0.25,
-    "weaponRecoilOffset": 0.8575,
+    "weaponRecoilOffset": 0.7875,
     "cameraRecoilModifier": 1.35,
     "recoilDuration": 0.205,
     "weightKilo": 6.5,
@@ -23,15 +23,19 @@
   "projectile": {
     "item":  "tac:762x39",
     "visible": false,
-    "damage": 7.75,
+    "damage": 9,
     "armorIgnore": 1.1,
     "critical": 0.0,
     "criticalDamage": 0.875,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.14,
+    "minDecayMultiplier": 0.25,
+    "decayEnd": 0.9,
     "size": 0.1,
     "speed": 23.5,
     "trailLengthMultiplier": 2.75,
-    "life": 13
+    "life": 11
   },
   "reloads": {
     "magFed": true,
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.rpk_reload_empty",
     "draw": "tac:animation.rpk_draw",
     "inspect": "tac:animation.rpk_inspect",
-    "inspectEmpty": "tac:animation.rpk_inspect_empty",
     "cock":  "tac:item.pistol.cock",
     "silencedFire":  "tac:item.rpk_fire_s"
   },
@@ -58,9 +61,26 @@
       "trailAdjust": 1.65,
       "size": 0.8
     },
-    "hipfireScale": 0.775,
-    "hipfireMoveScale": 0.41,
-    "hipfireRecoilScale": 0.75,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 4,
+      "xOffset": 0,
+      "zOffset": 3,
+      "scale": 1,
+      "velocityX": 9,
+      "velocityY": 1.5,
+      "velocityZ": -1,
+      "rVelocityX": 1,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 15.0,
+      "aVelocityY": -60.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_steel"
+    },
+    "hipfireScale": 3.5,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1,
     "showDynamicHipfire": true,
     "weaponType": 0
   },

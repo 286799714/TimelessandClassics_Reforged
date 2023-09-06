@@ -1,14 +1,14 @@
 {
   "general": {
     "auto": true,
-    "rate": 800,
+    "rate": 850,
     "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 1.875,
+    "recoilAngle": 2.75,
     "horizontalRecoilAngle": 2.025,
     "recoilKick": 1.325,
-    "recoilAdsReduction": 0.205,
-    "weaponRecoilOffset": 0.855,
+    "recoilAdsReduction": 0.1875,
+    "weaponRecoilOffset": 0.85,
     "cameraRecoilModifier": 1.475,
     "recoilDuration": 0.185,
     "weightKilo": 2.65,
@@ -18,7 +18,7 @@
     "hipFireInaccuracy": 5.7,
     "projToMinAccuracy": 6,
     "msToAccuracyReset": 300,
-    "movementInaccuracy": 0.425
+    "movementInaccuracy": 0.325
   },
   "reloads": {
     "magFed": true,
@@ -33,13 +33,17 @@
     "visible": false,
     "damage": 6.5,
     "armorIgnore": 1.0,
-    "critical": 0.05,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.11,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 0.95,
     "size": 0.075,
     "speed": 22.5,
     "trailLengthMultiplier": 2.75,
-    "life": 11
+    "life": 10
   },
   "sounds": {
     "fire": "tac:item.mk18_fire",
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.m4_reload_empty",
     "draw": "tac:animation.m4_draw",
     "inspect": "tac:animation.m4_inspect",
-    "inspectEmpty": "tac:animation.m4_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.mk18_fire_s"
   },
@@ -58,14 +61,33 @@
       "size": 1.15,
       "trailAdjust": 1.25
     },
-    "hipfireScale": 2.0,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": 0,
+      "zOffset": 0,
+      "scale": 0.75,
+      "velocityX": 9,
+      "velocityY": 1.5,
+      "velocityZ": -1,
+      "rVelocityX": 1,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 15.0,
+      "aVelocityY": -120.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 1.375,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1.00,
     "weaponType": 0
   },
   "modules": {
     "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 12.98,
-      "zOffset": -1.9
+      "yOffset": 12.875,
+      "zOffset": -1.75
     },
     "attachments": {
       "scope": {

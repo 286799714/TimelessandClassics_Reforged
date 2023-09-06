@@ -32,15 +32,19 @@
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 10.5,
+    "damage": 11.5,
     "armorIgnore": 1.1,
     "critical": 0.0,
     "criticalDamage": 0.875,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.15,
+    "minDecayMultiplier": 0.2,
+    "decayEnd": 0.85,
     "size": 0.15,
     "speed": 24.5,
     "trailLengthMultiplier": 3,
-    "life": 14
+    "life": 11
   },
   "sounds": {
     "fire": "tac:item.m60_fire",
@@ -48,7 +52,6 @@
     "reloadEmpty": "tac:animation.m60_reload_empty",
     "draw": "tac:animation.m60_draw",
     "inspect": "tac:animation.m60_inspect",
-    "inspectEmpty": "tac:animation.m60_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.m60_fire_s"
   },
@@ -59,6 +62,26 @@
       "size": 1.1,
       "trailAdjust": 1.5
     },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": -3,
+      "xOffset": 0,
+      "zOffset": 6,
+      "scale": 1,
+      "velocityX": 10,
+      "velocityY": 0.5,
+      "velocityZ": 0,
+      "rVelocityX": 1,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 15.0,
+      "aVelocityY": -60.0,
+      "aVelocityZ": 10,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 3.25,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1.00,
     "weaponType": 1
   },
   "modules": {

@@ -2,7 +2,7 @@
   "general": {
     "rate": 200,
     "rateSelector": [1],
-    "gripType": "tac:one_handed_m1911",
+    "gripType": "tac:bazooka",
     "recoilAngle": 3.25,
     "horizontalRecoilAngle": 3.25,
     "recoilKick": 1.5,
@@ -45,7 +45,6 @@
     "reloadEmpty": "tac:animation.rpg7_reload_empty",
     "draw": "tac:animation.rpg7_draw",
     "inspect": "tac:animation.rpg7_inspect",
-    "inspectEmpty": "tac:animation.rpg7_inspect_empty",
     "cock":  "tac:item.pistol.cock",
     "silencedFire":  "tac:item.rpg7_fire"
   },
@@ -55,7 +54,11 @@
       "zOffset": -22.80,
       "size": 0.0
     },
-    "weaponType": 5
+    "hipfireScale": 1,
+    "hipfireMoveScale": 0,
+    "hipfireRecoilScale": 0,
+    "showDynamicHipfire": true,
+    "weaponType": 6
   },
   "modules": {
     "zoom":{

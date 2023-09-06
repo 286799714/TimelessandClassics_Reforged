@@ -36,9 +36,13 @@
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
+    "closeDamage": 1.15,
+    "decayStart": 0.15,
+    "minDecayMultiplier": 0.25,
+    "decayEnd": 0.8,
     "size": 0.05,
     "speed": 15.0,
-    "life": 12,
+    "life": 9,
     "trailLengthMultiplier": 2,
     "ricochet": true
   },
@@ -48,7 +52,6 @@
     "reloadEmpty": "tac:animation.udp_9_reload_empty",
     "draw": "tac:animation.udp_9_draw",
     "inspect": "tac:animation.udp_9_inspect",
-    "inspectEmpty": "tac:animation.udp_9_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.udp_9_fire_s"
   },
@@ -59,9 +62,26 @@
       "size": 0.75,
       "trailAdjust": 0.75
     },
-    "hipfireScale": 0.60,
-    "hipfireMoveScale": 0.675,
-    "hipfireRecoilScale": 1.31,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": 0,
+      "zOffset": -3,
+      "scale": 0.8,
+      "velocityX": 7,
+      "velocityY": 3,
+      "velocityZ": -1.0,
+      "rVelocityX": 1.0,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 1.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -60.0,
+      "aVelocityZ": 30.0,
+      "casingModel": "tac:special/shell_small"
+    },
+    "hipfireScale": 1.15,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1,
     "weaponType": 4
   },
   "modules": {
@@ -96,6 +116,11 @@
       "stock": {
         "yOffset": 7.75,
         "zOffset": -22.05,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
         "scale": 0.00
       },
       "underBarrel": {

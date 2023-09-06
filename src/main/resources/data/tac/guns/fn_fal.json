@@ -4,10 +4,10 @@
     "rate": 600,
     "rateSelector": [2, 1],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 2.5,
+    "recoilAngle": 2.25,
     "horizontalRecoilAngle": 1.75,
     "recoilKick": 2.125,
-    "recoilAdsReduction": 0.2,
+    "recoilAdsReduction": 0.25,
     "weaponRecoilOffset": 0.85,
     "cameraRecoilModifier": 1.525,
     "recoilDuration": 0.375,
@@ -15,7 +15,7 @@
 
     "spread": 1.95,
     "firstShotSpread": 0.115,
-    "hipFireInaccuracy": 7.4,
+    "hipFireInaccuracy": 6.75,
     "projToMinAccuracy": 2,
     "msToAccuracyReset": 550,
     "movementInaccuracy": 0.8
@@ -23,14 +23,18 @@
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 9,
-    "armorIgnore": 1.0,
-    "critical": 0.05,
+    "damage": 9.5,
+    "armorIgnore": 1.2,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.13,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 0.8,
     "size": 0.125,
     "speed": 16.5,
-    "life": 15,
+    "life": 14,
     "trailLengthMultiplier": 2.5
   },
   "reloads": {
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.fn_fal_reload_empty",
     "draw": "tac:animation.fn_fal_draw",
     "inspect": "tac:animation.fn_fal_inspect",
-    "inspectEmpty": "tac:animation.fn_fal_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.fnfal_fire_s"
   },
@@ -58,8 +61,25 @@
       "size": 0.8,
       "trailAdjust": 1.25
     },
-    "hipfireScale": 3.05,
-    "hipfireMoveScale": 1.0,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": 0,
+      "zOffset": 1.5,
+      "scale": 1,
+      "velocityX": 9,
+      "velocityY": 1,
+      "velocityZ": 1,
+      "rVelocityX": 0.5,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.5,
+      "aVelocityX": 30.0,
+      "aVelocityY": -75.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 1,
+    "hipfireMoveScale": 0.5,
     "hipfireRecoilScale": 0.95,
     "showDynamicHipfire": true,
     "weaponType": 0
@@ -67,15 +87,10 @@
   "modules": {
     "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 11.125,
-      "zOffset": -6.125
+      "yOffset": 11.075,
+      "zOffset": -4.5
     },
     "attachments": {
-      "extendedMag": {
-        "yOffset": 1000.89,
-        "zOffset": 5.35,
-        "scale": 0.0
-      },
       "extendedMag": {
         "yOffset": 1000.89,
         "zOffset": 5.35,

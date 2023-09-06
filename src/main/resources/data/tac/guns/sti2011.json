@@ -5,16 +5,16 @@
     "gripType": "tac:one_handed_m1911",
     "recoilAngle": 11.75,
     "horizontalRecoilAngle": 5.325,
-    "recoilKick": 1.725,
+    "recoilKick": 1.125,
     "recoilAdsReduction": 0.165,
     "weaponRecoilOffset": 0.725,
     "cameraRecoilModifier": 5.35,
-    "recoilDuration": 0.235,
+    "recoilDuration": 0.25,
     "weightKilo": 1.7,
 
     "spread": 1.25,
     "firstShotSpread": 0.1,
-    "hipFireInaccuracy": 1.45,
+    "hipFireInaccuracy": 3.25,
     "projToMinAccuracy": 4,
     "msToAccuracyReset": 240,
     "movementInaccuracy": 0.1
@@ -35,10 +35,14 @@
     "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 0.75,
+    "closeDamage": 1.2,
+    "decayStart": 0.16,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.95,
     "size": 0.1,
     "speed": 12.5,
     "trailLengthMultiplier": 2.75,
-    "life": 13
+    "life": 9
   },
   "sounds": {
     "fire": "tac:item.ttisti2011_fire",
@@ -57,7 +61,28 @@
       "size": 1.1,
       "trailAdjust": 0.875
     },
-    "weaponType": 2
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1.75,
+      "xOffset": -1,
+      "zOffset": 2,
+      "scale": 1.75,
+      "velocityX": 12,
+      "velocityY": 9,
+      "velocityZ": 2,
+      "rVelocityX": 2,
+      "rVelocityY": 2,
+      "rVelocityZ": 1.0,
+      "aVelocityX": 60.0,
+      "aVelocityY": -120.0,
+      "aVelocityZ": 0.0,
+      "casingModel": "tac:special/shell_small"
+    },
+    "hipfireScale": 1.5,
+    "hipfireMoveScale": 0.35,
+    "hipfireRecoilScale": 1,
+    "weaponType": 2,
+    "showDynamicHipfire": true
   },
   "modules": {
     "zoom":

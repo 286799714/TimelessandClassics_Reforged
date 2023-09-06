@@ -1,0 +1,110 @@
+{
+  "general": {
+    "boltAction": false,
+    "rate": 200,
+    "rateSelector": [1],
+    "gripType": "tac:two_handed_mosin",
+    "recoilAngle": 7.85,
+    "recoilKick": 1.25,
+    "horizontalRecoilAngle": 0.325,
+    "recoilAdsReduction": 0.325,
+    "weaponRecoilDuration": 0.625,
+    "recoilDuration": 0.45,
+    "cameraRecoilModifier": 1.325,
+    "weightKilo": 6.0,
+
+    "spread": 0.002,
+    "firstShotSpread": 0.002,
+    "hipFireInaccuracy": 17.5,
+    "projToMinAccuracy": 2,
+    "msToAccuracyReset": 0,
+    "movementInaccuracy": 0.5
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 5,
+    "reloadMagTimer": 41,
+    "additionalReloadEmptyMagTimer": 24,
+    "maxAdditionalAmmoPerOC": [2, 3, 5],
+    "preReloadPauseTicks": 0
+  },
+  "projectile": {
+    "item": "tac:lapua338",
+    "visible": false,
+    "gravity": true,
+    "damage": 42,
+    "armorIgnore": 1.5,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 1.5,
+    "closeDamage": 1.0,
+    "decayStart": 0.12,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 0.8,
+    "size": 0.175,
+    "speed": 42,
+    "trailLengthMultiplier": 3.75,
+    "life": 11
+  },
+  "sounds": {
+    "fire": "tac:item.mrad_fire",
+    "reloadNormal": "tac:animation.mrad_reload_norm",
+    "reloadEmpty": "tac:animation.mrad_reload_empty",
+    "draw": "tac:animation.mrad_draw",
+    "inspect": "tac:animation.mrad_inspect",
+    "pullBolt": "tac:animation.mrad_bolt",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "tac:item.mrad_fire_s"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 10.5,
+      "zOffset": -28.5,
+      "size": 1.05,
+      "trailAdjust": 1.5
+    },
+    "weaponType": 5,
+    "showDynamicHipfire": false
+  },
+  "modules": {
+    "zoom": {
+      "fovModifier": 0.7,
+      "yOffset": 13.1875,
+      "zOffset": 0
+    },
+    "attachments": {
+      "scope": {
+        "yOffset": 11.55,
+        "zOffset": 2.425,
+        "scale": 1.0
+      },
+      "extendedMag": {
+        "yOffset": 1000.89,
+        "zOffset": 5.35,
+        "scale": 0.0
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "pistolScope": {
+        "yOffset": 11.615,
+        "zOffset": 2.025,
+        "scale": 1.0,
+        "doRenderMount": true,
+        "doOnSlideMovement": false
+      },
+      "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      }
+    }
+  }
+}

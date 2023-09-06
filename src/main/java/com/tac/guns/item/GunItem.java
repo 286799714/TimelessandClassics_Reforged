@@ -170,6 +170,7 @@ public class GunItem extends Item implements IColored
 
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+        /*
         if (isSelected && !worldIn.isClientSide)
         {
             if (entityIn instanceof Player)
@@ -189,6 +190,7 @@ public class GunItem extends Item implements IColored
                 }
             }
         }
+         */
     }
 
     public static boolean isSingleHanded(ItemStack stack)

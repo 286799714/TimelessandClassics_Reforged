@@ -23,14 +23,18 @@
   "projectile": {
     "item": "tac:762x39",
     "visible": false,
-    "damage": 8.25,
+    "damage": 8.5,
     "armorIgnore": 1.0,
-    "critical": 0.05,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.14,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 1.0,
     "size": 0.125,
     "speed": 18.5,
-    "life": 12,
+    "life": 10,
     "trailLengthMultiplier": 2.75
   },
   "reloads": {
@@ -38,7 +42,7 @@
     "maxAmmo": 30,
     "reloadMagTimer": 36,
     "additionalReloadEmptyMagTimer": 20,
-    "maxAdditionalAmmoPerOC": [5, 12, 20],
+    "maxAdditionalAmmoPerOC": [5, 7, 10],
     "preReloadPauseTicks": 0
   },
   "sounds": {
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.ak47_reload_empty",
     "draw": "tac:animation.ak47_draw",
     "inspect": "tac:animation.ak47_inspect",
-    "inspectEmpty": "tac:animation.ak47_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.ak47_fire_s"
   },
@@ -57,7 +60,28 @@
       "zOffset": -20.75,
       "trailAdjust": 1.325,
       "size": 0.8
-    }
+    },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": 0,
+      "zOffset": 0,
+      "scale": 1,
+      "velocityX": 8,
+      "velocityY": 1,
+      "velocityZ": -0.5,
+      "rVelocityX": 0,
+      "rVelocityY": 1.25,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 45.0,
+      "aVelocityY": -90.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_steel"
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.5,
+    "hipfireRecoilScale": 1.0,
+    "showDynamicHipfire":true
   },
   "modules": {
     "zoom": {

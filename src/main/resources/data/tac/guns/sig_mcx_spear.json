@@ -30,13 +30,17 @@
   "projectile": {
     "item": "tac:bullet68",
     "visible": false,
-    "damage": 7.95,
-    "armorIgnore": 1.0,
-    "critical": 0.05,
+    "damage": 9,
+    "armorIgnore": 1.5,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.14,
+    "minDecayMultiplier": 0.25,
+    "decayEnd": 1.0,
     "size": 0.1,
-    "speed": 23.5,
+    "speed": 24,
     "life": 10,
     "trailLengthMultiplier": 2.75,
     "ricochet": true
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.sig_mcx_spear_reload_empty",
     "draw": "tac:animation.sig_mcx_spear_draw",
     "inspect": "tac:animation.sig_mcx_spear_inspect",
-    "inspectEmpty": "tac:animation.sig_mcx_spear_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.sigmcx_fire_s"
   },
@@ -57,6 +60,26 @@
       "zOffset": -17.55,
       "size": 0.90
     },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 2,
+      "xOffset": 0,
+      "zOffset": 1.5,
+      "scale": 1,
+      "velocityX": 9,
+      "velocityY": 1.5,
+      "velocityZ": 0.0,
+      "rVelocityX": 1.0,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -70.0,
+      "aVelocityZ": 10.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 2,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1,
     "weaponType": 0
   },
   "modules": {
@@ -79,6 +102,16 @@
         "doOnSlideMovement": false
       },
       "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

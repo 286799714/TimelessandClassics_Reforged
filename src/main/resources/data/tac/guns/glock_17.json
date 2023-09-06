@@ -3,11 +3,11 @@
     "rate": 400,
     "rateSelector": [1],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 7.25,
-    "horizontalRecoilAngle": 10.75,
-    "recoilKick": 2.05,
+    "recoilAngle": 10.25,
+    "horizontalRecoilAngle": 5.75,
+    "recoilKick": 1.125,
     "recoilAdsReduction": 0.235,
-    "weaponRecoilOffset": 0.725,
+    "weaponRecoilOffset": 0.8,
     "cameraRecoilModifier": 5.15,
     "recoilDuration": 0.285,
     "weightKilo": 0.9,
@@ -30,15 +30,19 @@
   "projectile": {
     "item": "tac:9mm_round",
     "visible": false,
-    "damage": 4.5,
+    "damage": 5,
     "armorIgnore": 0.6,
     "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 0.75,
+    "closeDamage": 1.2,
+    "decayStart": 0.15,
+    "minDecayMultiplier": 0.5,
+    "decayEnd": 0.95,
     "size": 0.075,
-    "speed": 10,
+    "speed": 14,
     "trailLengthMultiplier": 3,
-    "life": 11
+    "life": 6
   },
   "sounds": {
     "fire": "tac:item.glock17_fire",
@@ -46,7 +50,6 @@
     "reloadEmpty": "tac:animation.glock17_reload_empty",
     "draw": "tac:animation.glock17_draw",
     "inspect": "tac:animation.glock17_inspect",
-    "inspectEmpty": "tac:animation.glock17_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.glock17_fire_s"
   },
@@ -57,9 +60,26 @@
       "size": 0.875,
       "trailAdjust": 0.625
     },
-    "hipfireScale": 1.5,
-    "hipfireMoveScale": 1.0,
-    "hipfireRecoilScale": 4.00,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 2.5,
+      "xOffset": -1,
+      "zOffset": 3.25,
+      "scale": 1.5,
+      "velocityX": 10,
+      "velocityY": 7,
+      "velocityZ": 1,
+      "rVelocityX": 2,
+      "rVelocityY": 4,
+      "rVelocityZ": 1.0,
+      "aVelocityX": 60.0,
+      "aVelocityY": -120.0,
+      "aVelocityZ": 0.0,
+      "casingModel": "tac:special/shell_small"
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1.00,
     "weaponType": 2
   },
   "modules": {
@@ -78,6 +98,11 @@
         "yOffset": 1000.89,
         "zOffset": 5.35,
         "scale": 0.0
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       },
       "pistolScope": {
         "yOffset": 10.275,

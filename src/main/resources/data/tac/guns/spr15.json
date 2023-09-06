@@ -20,7 +20,7 @@
     "hipFireInaccuracy": 9.75,
     "projToMinAccuracy": 3,
     "msToAccuracyReset": 520,
-    "movementInaccuracy": 0.6
+    "movementInaccuracy": 0.25
   },
   "reloads": {
     "magFed": true,
@@ -35,12 +35,16 @@
     "visible": false,
     "damage": 8.5,
     "armorIgnore": 1.2,
-    "critical": 0.1,
+    "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 1.25,
+    "closeDamage": 1.0,
+    "decayStart": 0.11,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.85,
     "speed": 30,
     "size": 0.075,
-    "life": 13,
+    "life": 11,
     "trailLengthMultiplier": 2.75,
     "ricochet": true
   },
@@ -50,7 +54,6 @@
     "reloadEmpty": "tac:animation.spr15_reload_empty",
     "draw": "tac:animation.spr15_draw",
     "inspect": "tac:animation.spr15_inspect",
-    "inspectEmpty": "tac:animation.spr15_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.spr15_fire_s"
   },
@@ -61,9 +64,26 @@
       "size": 1.10,
       "trailAdjust": 1.375
     },
-    "hipfireScale": 0.95,
-    "hipfireMoveScale": 0.55,
-    "hipfireRecoilScale": 0.525,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": -0.5,
+      "zOffset": 1,
+      "scale": 0.75,
+      "velocityX": 9,
+      "velocityY": 2,
+      "velocityZ": -1.0,
+      "rVelocityX": 1.0,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -75.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 1.375,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1,
     "weaponType": 0,
     "showDynamicHipfire": true
   },
@@ -104,6 +124,11 @@
       "underBarrel": {
         "yOffset": 7.799,
         "zOffset": -3.65,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
         "scale": 0.00
       }
     }

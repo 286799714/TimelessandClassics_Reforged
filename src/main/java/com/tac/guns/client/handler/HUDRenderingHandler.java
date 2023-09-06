@@ -5,17 +5,22 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
+import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.ReloadTracker;
+import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.transition.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
-import com.tac.guns.network.message.MessageToClientRigInv;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -76,7 +81,6 @@ public class HUDRenderingHandler extends GuiComponent {
     }
 
     private int ammoReserveCount = 0;
-    public int rigReserveCount = 0;
 
     private ResourceLocation heldAmmoID = new ResourceLocation("");
 
@@ -94,9 +98,7 @@ public class HUDRenderingHandler extends GuiComponent {
             if (player.isCreative())
                 return;
             //if(gunItem.getGun().getProjectile().getItem().compareTo(heldAmmoID) != 0 || ammoReserveCount == 0) {
-            PacketHandler.getPlayChannel().sendToServer(new MessageToClientRigInv(gunItem.getGun().getProjectile().getItem()));
             heldAmmoID = gunItem.getGun().getProjectile().getItem();
-            this.ammoReserveCount += rigReserveCount;
             //}
         }
 
@@ -223,6 +225,21 @@ public class HUDRenderingHandler extends GuiComponent {
                 RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
                 stack.popPose();
             }
+        }
+
+        ItemStack rig = ((PlayerWithSynData)player).getRig();
+        if(!rig.isEmpty()){
+            ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+            stack.pushPose();
+            {
+                MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+                float iconAnchorX = (anchorPointX - (counterSize*32) / 2) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.x.get().floatValue());
+                float iconAnchorY = (anchorPointY + 5 + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.y.get().floatValue()));
+                itemRenderer.renderGuiItem(rig, (int) iconAnchorX , (int) iconAnchorY);
+            }
+            stack.popPose();
+        }else {
+            //render empty texture
         }
         //this.hitMarkerTracker--;
 

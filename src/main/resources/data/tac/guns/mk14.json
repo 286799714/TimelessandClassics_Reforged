@@ -1,16 +1,16 @@
 {
   "general": {
-    "auto": false,
+    "auto": true,
     "rate": 300,
-    "rateSelector": [1],
+    "rateSelector": [1, 2],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 4.85,
+    "recoilAngle": 4.875,
     "horizontalRecoilAngle": 3.35,
-    "recoilKick": 1.75,
-    "recoilAdsReduction": 0.225,
-    "weaponRecoilOffset": 0.785,
+    "recoilKick": 1.875,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.725,
     "cameraRecoilModifier": 1.625,
-    "recoilDuration": 0.155,
+    "recoilDuration": 0.255,
     "weightKilo": 5.75,
 
     "spread": 0.925,
@@ -31,14 +31,18 @@
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 18.45,
+    "damage": 18,
     "armorIgnore": 1.2,
     "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 1.25,
+    "closeDamage": 1.0,
+    "decayStart": 0.12,
+    "minDecayMultiplier": 0.3,
+    "decayEnd": 0.75,
     "size": 0.15,
     "speed": 31.5,
-    "life": 13,
+    "life": 11,
     "trailLengthMultiplier": 3.5,
     "ricochet": true
   },
@@ -48,7 +52,6 @@
     "reloadEmpty": "tac:animation.mk14_reload_empty",
     "draw": "tac:animation.mk14_draw",
     "inspect": "tac:animation.mk14_inspect",
-    "inspectEmpty": "tac:animation.mk14_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.mk14ebr_fire_s"
   },
@@ -59,11 +62,28 @@
       "size": 0.75,
       "trailAdjust": 1.525
     },
-    "hipfireScale": 0.95,
-    "hipfireMoveScale": 0.55,
-    "hipfireRecoilScale": 0.525,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": -1.5,
+      "xOffset": 0,
+      "zOffset": 2.5,
+      "scale": 1,
+      "velocityX": 9,
+      "velocityY": 6,
+      "velocityZ": 1,
+      "rVelocityX": 2,
+      "rVelocityY": 2,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -120.0,
+      "aVelocityZ": 0.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 1.95,
+    "hipfireMoveScale": 0.5,
+    "hipfireRecoilScale": 1,
     "weaponType": 0,
-    "showDynamicHipfire": false
+    "showDynamicHipfire": true
   },
   "modules": {
     "zoom":
@@ -91,6 +111,16 @@
         "scale": 0.0
       },
       "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

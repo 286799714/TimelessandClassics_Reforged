@@ -31,14 +31,18 @@
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 6.5,
+    "damage": 6.75,
     "armorIgnore": 1.0,
-    "critical": 0.05,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.11,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.95,
     "size": 0.075,
     "speed": 22,
-    "life": 11,
+    "life": 10,
     "trailLengthMultiplier": 2.5,
     "ricochet": true
   },
@@ -48,7 +52,6 @@
     "reloadEmpty": "tac:animation.hk416_a5_reload_empty",
     "draw": "tac:animation.hk416_a5_draw",
     "inspect": "tac:animation.hk416_a5_inspect",
-    "inspectEmpty": "tac:animation.hk416_a5_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.hk416_fire_s"
   },
@@ -58,7 +61,27 @@
       "zOffset": -14,
       "size": 1.10,
       "trailAdjust": 0.9375
-    }
+    },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": 0,
+      "zOffset": 0.5,
+      "scale": 0.75,
+      "velocityX": 10,
+      "velocityY": 1.5,
+      "velocityZ": -2,
+      "rVelocityX": 0,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 1.0,
+      "aVelocityX": 15.0,
+      "aVelocityY": -90.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 1.5,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1.00
   },
   "modules": {
     "zoom": {
@@ -100,6 +123,11 @@
         "scale": 0.00
       },
       "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

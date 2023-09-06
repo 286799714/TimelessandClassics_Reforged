@@ -2,10 +2,7 @@ package com.tac.guns.mixin.client;
 
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
-import com.tac.guns.item.GunItem;
 import com.tac.guns.network.CommonStateBox;
-import com.tac.guns.network.PacketHandler;
-import com.tac.guns.network.message.MessageToClientRigInv;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.world.item.ItemStack;
@@ -50,7 +47,6 @@ public class FirstPersonRendererMixin {
         }else if(controller != null && controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.DRAW) != null) {
             this.mainHandItem = mainHandItemStack;
             controller.runAnimation(GunAnimationController.AnimationLabel.DRAW);
-            PacketHandler.getPlayChannel().sendToServer(new MessageToClientRigInv(((GunItem)mainHandItemStack.getItem()).getGun().getProjectile().getItem()));
         }
     }
     /*

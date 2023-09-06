@@ -1,17 +1,18 @@
 {
   "general": {
     "auto": true,
-    "rate": 900,
+    "rate": 700,
     "burstRate": 15,
-    "rateSelector": [1, 3],
+    "rateSelector": [3, 2, 1],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 1.875,
+    "recoilAngle": 1.75,
     "horizontalRecoilAngle": 1.25,
-    "recoilKick": 1.375,
-    "recoilAdsReduction": 0.21,
-    "weaponRecoilOffset": 0.9,
+    "recoilKick": 1.625,
+    "recoilAdsReduction": 0.225,
+    "weaponRecoilOffset": 0.75,
+    "cameraRecoilDuration": 1.25,
     "cameraRecoilModifier": 1.315,
-    "recoilDuration": 0.185,
+    "recoilDuration": 0.25,
     "weightKilo": 4.8,
 
     "spread": 1.875,
@@ -32,14 +33,18 @@
   "projectile": {
     "item": "tac:nato_556_bullet",
     "visible": false,
-    "damage": 7.15,
+    "damage": 7.25,
     "armorIgnore": 1.0,
-    "critical": 0.05,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.16,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.65,
     "size": 0.075,
-    "speed": 25,
-    "life": 11,
+    "speed": 28,
+    "life": 8,
     "trailLengthMultiplier": 3,
     "ricochet": true
   },
@@ -49,7 +54,6 @@
     "reloadEmpty": "tac:animation.m16a4_reload_empty",
     "draw": "tac:animation.m16a4_draw",
     "inspect": "tac:animation.m16a4_inspect",
-    "inspectEmpty": "tac:animation.m16a4_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.m16a4_fire_s"
   },
@@ -60,9 +64,26 @@
       "size": 0.90,
       "trailAdjust": 1.625
     },
-    "hipfireScale": 2.0,
-    "hipfireMoveScale": 1.0,
-    "hipfireRecoilScale": 0.95,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": 0,
+      "zOffset": 2,
+      "scale": 0.8,
+      "velocityX": 9,
+      "velocityY": 1.5,
+      "velocityZ": -1,
+      "rVelocityX": 1,
+      "rVelocityY": 2,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 30.0,
+      "aVelocityY": -80.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_large"
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.375,
+    "hipfireRecoilScale": 1,
     "showDynamicHipfire": true,
     "weaponType": 0
   },
@@ -70,7 +91,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 12.625,
-      "zOffset": -3
+      "zOffset": -2.875
     },
     "attachments": {
       "scope": {
@@ -94,6 +115,11 @@
         "scale": 0.00
       },
       "sideRail": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "irDevice": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

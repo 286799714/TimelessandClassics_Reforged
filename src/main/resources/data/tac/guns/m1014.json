@@ -3,13 +3,13 @@
     "rate": 300,
     "rateSelector": [1],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 6.175,
+    "recoilAngle": 8.175,
     "horizontalRecoilAngle": 2.775,
-    "recoilKick": 3.0,
+    "recoilKick": 1.625,
     "recoilAdsReduction": 0.175,
-    "cameraRecoilModifier": 2.175,
+    "cameraRecoilModifier": 2,
     "weaponRecoilOffset": 0.825,
-    "recoilDuration": 0.125,
+    "recoilDuration": 0.2,
     "projectileAmount": 10,
     "weightKilo": 5.6,
 
@@ -22,8 +22,8 @@
   },
   "reloads": {
     "magFed": false,
-    "maxAmmo": 7,
-    "reloadAmount": 1,
+    "maxAmmo": 8,
+    "reloadAmount": 2,
     "preReloadPauseTicks": 0,
     "interReloadPauseTicks": 15,
     "openBolt": true
@@ -31,14 +31,18 @@
   "projectile": {
     "item": "tac:10_gauge_round",
     "visible": false,
-    "damage": 29,
+    "damage": 30,
     "armorIgnore": 0.5,
     "critical": 0.0,
     "criticalDamage": 0.75,
     "headDamage": 0.55,
+    "closeDamage": 1.1,
+    "decayStart": 0.11,
+    "minDecayMultiplier": 0.4,
+    "decayEnd": 0.65,
     "size": 0.05,
     "speed": 15.5,
-    "life": 5,
+    "life": 3,
     "trailLengthMultiplier": 3.25,
     "ricochet": false
   },
@@ -61,8 +65,25 @@
       "zOffset": -24.05,
       "trailAdjust": 1.555
     },
-    "hipfireScale": 0.325,
-    "hipfireMoveScale": 0.225,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1,
+      "xOffset": 0,
+      "zOffset": -1,
+      "scale": 1,
+      "velocityX": 10,
+      "velocityY": 2,
+      "velocityZ": 1.0,
+      "rVelocityX": 0.0,
+      "rVelocityY": 1.5,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 15.0,
+      "aVelocityY": -60.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_shotgun"
+    },
+    "hipfireScale": 1.5,
+    "hipfireMoveScale": 0.15,
     "hipfireRecoilScale": 0.45,
     "weaponType": 3
   },
@@ -70,7 +91,7 @@
     "zoom":{
       "fovModifier": 0.8,
       "yOffset": 11.12,
-      "zOffset": -4.5
+      "zOffset": -2
     },
     "attachments": {
       "scope": {

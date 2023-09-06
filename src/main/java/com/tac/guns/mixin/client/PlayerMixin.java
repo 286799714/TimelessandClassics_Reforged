@@ -32,7 +32,10 @@ public abstract class PlayerMixin extends LivingEntity implements net.minecraftf
 
     @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
     public void saveData(CompoundTag p_36265_, CallbackInfo ci){
-        p_36265_.put("TacRig", this.entityData.get(RIG_ID).save(new CompoundTag()));
+        ItemStack rig = this.entityData.get(RIG_ID);
+        if(!rig.isEmpty()) {
+            p_36265_.put("TacRig", rig.save(new CompoundTag()));
+        }
     }
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
@@ -44,17 +47,13 @@ public abstract class PlayerMixin extends LivingEntity implements net.minecraftf
     }
 
     @Override
-    public EntityDataAccessor<ItemStack> getRigDataAccessor() {
-        return RIG_ID;
-    }
-
-    @Override
     public ItemStack getRig(){
         return this.getEntityData().get(RIG_ID);
     }
 
     @Override
     public void setRig(ItemStack itemStack){
+        this.getEntityData().set(RIG_ID, ItemStack.EMPTY);
         this.getEntityData().set(RIG_ID, itemStack);
     }
 }

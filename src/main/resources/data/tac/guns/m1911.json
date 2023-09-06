@@ -3,13 +3,13 @@
     "rate": 300,
     "rateSelector": [1],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 8.25,
-    "horizontalRecoilAngle": 3.25,
-    "recoilKick": 1.55,
-    "recoilAdsReduction": 0.185,
-    "weaponRecoilOffset": 0.545,
+    "recoilAngle": 13.75,
+    "horizontalRecoilAngle": 5.325,
+    "recoilKick": 1.125,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.625,
     "cameraRecoilModifier": 4.65,
-    "recoilDuration": 0.28,
+    "recoilDuration": 0.325,
     "weightKilo": 1.2,
 
     "spread": 2.35,
@@ -35,9 +35,13 @@
     "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 0.75,
+    "closeDamage": 1.2,
+    "decayStart": 0.13,
+    "minDecayMultiplier": 0.35,
+    "decayEnd": 0.95,
     "size": 0.075,
     "speed": 10.5,
-    "life": 12,
+    "life": 8,
     "trailLengthMultiplier": 3
   },
   "sounds": {
@@ -46,7 +50,6 @@
     "reloadEmpty": "tac:animation.m1911_reload_empty",
     "draw": "tac:animation.m1911_draw",
     "inspect": "tac:animation.m1911_inspect",
-    "inspectEmpty": "tac:animation.m1911_inspect_empty",
     "cock": "tac:item.pistol.cock",
     "silencedFire": "tac:item.m1911_fire_s"
   },
@@ -57,15 +60,35 @@
       "size": 1.1,
       "trailAdjust": 0.88
     },
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1.75,
+      "xOffset": -0.5,
+      "zOffset": 2,
+      "scale": 1.75,
+      "velocityX": 12,
+      "velocityY": 9,
+      "velocityZ": 2,
+      "rVelocityX": 2,
+      "rVelocityY": 2,
+      "rVelocityZ": 1.0,
+      "aVelocityX": 60.0,
+      "aVelocityY": -120.0,
+      "aVelocityZ": 0.0,
+      "casingModel": "tac:special/shell_small"
+    },
+    "hipfireScale": 1,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1.00,
     "weaponType": 2
   },
   "modules": {
     "zoom":
-      {
-        "fovModifier": 0.9,
-        "yOffset": 12.5125,
-        "zOffset": -5.78
-      },
+    {
+      "fovModifier": 0.8,
+      "yOffset": 12.5125,
+      "zOffset": -5.78
+    },
     "attachments": {
       "extendedMag": {
         "yOffset": 1000.89,

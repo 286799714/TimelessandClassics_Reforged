@@ -812,20 +812,4 @@ public class ServerPlayHandler
             }
         }
     }
-
-    /**
-     * @param player
-     */
-    public static void handleRigAmmoCount(ServerPlayer player, ResourceLocation id)
-    {
-        if(!WearableHelper.PlayerWornRig(player).isEmpty())
-        {
-            ItemStack rig = WearableHelper.PlayerWornRig(player);
-            if(!rig.isEmpty()) {
-                PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, id), ((ServerPlayer)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
-            }
-        }
-        else
-            PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(), ((ServerPlayer)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
-    }
 }

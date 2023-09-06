@@ -6,7 +6,7 @@
     "gripType":  "tac:two_handed_ak47",
     "recoilAngle": 3.025,
     "horizontalRecoilAngle": 2.525,
-    "recoilKick": 1.85,
+    "recoilKick": 1.75,
     "recoilAdsReduction": 0.2315,
     "weaponRecoilOffset": 0.805,
     "cameraRecoilModifier": 1.625,
@@ -15,7 +15,7 @@
 
     "spread": 2.25,
     "firstShotSpread": 0.185,
-    "hipFireInaccuracy": 6.75,
+    "hipFireInaccuracy": 5.5,
     "projToMinAccuracy": 5,
     "msToAccuracyReset": 460,
     "movementInaccuracy": 0.7
@@ -23,22 +23,26 @@
   "projectile": {
     "item":  "tac:762x39",
     "visible": false,
-    "damage": 8,
+    "damage": 8.5,
     "armorIgnore": 1.0,
-    "critical": 0.05,
+    "critical": 0.00,
     "criticalDamage": 0.75,
     "headDamage": 1.0,
+    "closeDamage": 1.1,
+    "decayStart": 0.14,
+    "minDecayMultiplier": 0.25,
+    "decayEnd": 1.0,
     "size": 0.15,
     "speed": 17.5,
     "trailLengthMultiplier": 2.5,
-    "life": 13
+    "life": 10
   },
   "reloads": {
     "magFed": true,
     "maxAmmo": 30,
     "reloadMagTimer": 41,
     "additionalReloadEmptyMagTimer": 12,
-    "maxAdditionalAmmoPerOC": [5, 12, 20],
+    "maxAdditionalAmmoPerOC": [5, 7, 10],
     "preReloadPauseTicks": 0
   },
   "sounds": {
@@ -47,7 +51,6 @@
     "reloadEmpty": "tac:animation.type81_reload_empty",
     "draw": "tac:animation.type81_draw",
     "inspect": "tac:animation.type81_inspect",
-    "inspectEmpty": "tac:animation.type81_inspect_empty",
     "cock":  "tac:item.pistol.cock",
     "silencedFire":  "tac:item.type81_fire_s"
   },
@@ -58,9 +61,26 @@
       "size": 0.755,
       "trailAdjust": 1.555
     },
-    "hipfireScale": 1.275,
-    "hipfireMoveScale": 0.7,
-    "hipfireRecoilScale": 2.15,
+    "shellCasing": {
+      "tickLife":10,
+      "yOffset": 1.5,
+      "xOffset": 0,
+      "zOffset": -1,
+      "scale": 1,
+      "velocityX": 8,
+      "velocityY": 1.75,
+      "velocityZ": -2.0,
+      "rVelocityX": 0.5,
+      "rVelocityY": 1,
+      "rVelocityZ": 0.0,
+      "aVelocityX": 45.0,
+      "aVelocityY": -60.0,
+      "aVelocityZ": 15.0,
+      "casingModel": "tac:special/shell_steel"
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 2,
     "showDynamicHipfire": true,
     "weaponType": 0
   },
@@ -69,7 +89,7 @@
     {
       "fovModifier": 0.8,
       "yOffset": 11.015,
-      "zOffset": -1.5
+      "zOffset": -0.5
     },
     "attachments": {
       "scope": {

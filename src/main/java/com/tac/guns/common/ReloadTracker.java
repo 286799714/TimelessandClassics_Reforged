@@ -2,21 +2,19 @@ package com.tac.guns.common;
 
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Reference;
-import com.tac.guns.common.network.ServerPlayHandler;
+import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageGunSound;
-import com.tac.guns.network.message.MessageRigInvToClient;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,13 +22,11 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.WeakHashMap;
-import com.tac.guns.util.GunModifierHelper;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -92,9 +88,7 @@ public class ReloadTracker
         boolean reload;
         Gun gun = ((GunItem)this.stack.getItem()).getGun();
         ItemStack rig = WearableHelper.PlayerWornRig(player);
-        if(!rig.isEmpty()) {
-            PacketHandler.getPlayChannel().sendTo(new MessageRigInvToClient(rig, gun.getProjectile().getItem()), ((ServerPlayer)player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
-        }
+        //MessageRigInvToClient
         if(gun.getReloads().isMagFed())
         {
             if(this.isWeaponEmpty())
@@ -157,30 +151,35 @@ public class ReloadTracker
         ArrayList<ItemStack> stacks = new ArrayList<>();
 
         ItemStack rig = WearableHelper.PlayerWornRig(player);
-        if(!rig.isEmpty()) {
+        if(!rig.isEmpty() && !player.isCreative()) {
             RigSlotsHandler itemHandler = (RigSlotsHandler) rig.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
             for (ItemStack x : itemHandler.getStacks()) {
                 if(Gun.isAmmo(x, this.gun.getProjectile().getItem()))
                     stacks.add(x);
             }
+            boolean flag = false;
             for (ItemStack x: stacks)
             {
                 if(!x.isEmpty())
                 {
-                    int max = shrinkAmt > x.getCount() ? x.getCount() : shrinkAmt;
+                    int max = Math.min(shrinkAmt, x.getCount());
                     x.shrink(max);
                     shrinkAmt-=max;
                 }
-                if(shrinkAmt==0)
-                    return;
+                if(shrinkAmt==0) {
+                    flag = true;
+                    break;
+                }
             }
+            ((PlayerWithSynData)player).setRig(rig);
+            if(flag) return;
         }
 
         for (ItemStack x: ammoStacks)
         {
             if(!x.isEmpty())
             {
-                int max = shrinkAmt > x.getCount() ? x.getCount() : shrinkAmt;
+                int max = Math.min(shrinkAmt, x.getCount());
                 x.shrink(max);
                 shrinkAmt-=max;
             }
@@ -275,7 +274,6 @@ public class ReloadTracker
                     if(gun.getReloads().isMagFed())
                     {
                         tracker.increaseMagAmmo(player);
-                        ServerPlayHandler.handleRigAmmoCount((ServerPlayer)player, gun.getProjectile().getItem());
                         RELOAD_TRACKER_MAP.remove(player);
                         SyncedEntityData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
                         SyncedEntityData.instance().set(player, ModSyncedDataKeys.STOP_ANIMA, false);
@@ -290,7 +288,6 @@ public class ReloadTracker
                     }
                     else {
                         tracker.increaseAmmo(player);
-                        ServerPlayHandler.handleRigAmmoCount((ServerPlayer)player, gun.getProjectile().getItem());
                         if (tracker.isWeaponFull() || tracker.hasNoAmmo(player)) {
                             RELOAD_TRACKER_MAP.remove(player);
                             SyncedEntityData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
