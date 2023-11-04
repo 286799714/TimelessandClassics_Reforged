@@ -112,6 +112,7 @@ sourceSets.main.resources {
 //}
 
 dependencies {
+    implementation 'org.jetbrains:annotations:24.0.0'
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
 
     //implementation fg.deobf('curse.maven:enchancedvisuals-255389:3419985')

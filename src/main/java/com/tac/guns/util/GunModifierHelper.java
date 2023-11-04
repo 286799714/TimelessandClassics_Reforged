@@ -545,4 +545,23 @@ public class GunModifierHelper
         }
         return modifierWeight;
     }
+
+    public static int getAmmoCapacityWeight(ItemStack weapon)
+    {
+        int modifierWeight = -1;
+        for(int i = 0; i < IAttachment.Type.values().length; i++)
+        {
+            IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
+            for(IGunModifier modifier : modifiers)
+            {
+                modifierWeight = Math.max(modifier.additionalAmmunition(), modifierWeight);
+            }
+        }
+        IGunModifier[] modifiers = getModifiers(weapon);
+        for(IGunModifier modifier : modifiers)
+        {
+            modifierWeight = Math.max(modifier.additionalAmmunition(), modifierWeight);
+        }
+        return modifierWeight;
+    }
 }

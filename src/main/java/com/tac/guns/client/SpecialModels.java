@@ -1,9 +1,12 @@
 package com.tac.guns.client;
 
 import com.tac.guns.Reference;
+import com.tac.guns.client.gunskin.ResourceReloadListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -774,6 +777,16 @@ public enum SpecialModels
             {
                 ForgeModelBakery.addSpecialModel(model.modelLocation);
             }
+        }
+
+        ResourceManager manager = Minecraft.getInstance().getResourceManager();
+        ((ReloadableResourceManager)manager).registerReloadListener(new ResourceReloadListener());
+    }
+
+
+    public static void cleanCache() {
+        for (SpecialModels model : values()) {
+            model.cachedModel = null;
         }
     }
 }
