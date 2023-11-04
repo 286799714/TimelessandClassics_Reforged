@@ -1,0 +1,19 @@
+{
+  "ak47": {
+    "spent_bullet": {
+      "type": "custom",
+      "models": {
+        "auto": "tac:gunskin/ak47/ak47_spent_bullet"
+      },
+      "icon": "tac:gunskin/icon/ak47_spent_bullet"
+    },
+    "common": {
+      "type": "common_texture",
+      "textures": {
+        "0": "tac:gunskin/ak47/ak47",
+        "2": "tac:gunskin/ak47/rpk47"
+      },
+      "icon": "tac:gunskin/icon/ak47"
+    }
+  }
+}
