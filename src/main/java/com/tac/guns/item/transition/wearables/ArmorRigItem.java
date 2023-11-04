@@ -1,16 +1,17 @@
 package com.tac.guns.item.transition.wearables;
 
+import com.mojang.logging.LogUtils;
 import com.tac.guns.Reference;
 import com.tac.guns.common.NetworkRigManager;
 import com.tac.guns.common.Rig;
 import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.ArmorRigContainerProvider;
-import com.tac.guns.inventory.gear.armor.ArmorRigInventoryCapability;
 import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.util.RigEnchantmentHelper;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -60,7 +61,7 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
             ((PlayerWithSynData)player).setRig(player.getItemInHand(hand));
             player.setItemInHand(hand, oldRig);
             super.use(world, player, hand);
-            return InteractionResultHolder.consume(player.getItemInHand(hand));
+            return InteractionResultHolder.pass(player.getItemInHand(hand));
         }else {
             containerProvider = new ArmorRigContainerProvider(player.getItemInHand(hand));
             NetworkHooks.openGui((ServerPlayer) player, containerProvider);
@@ -72,7 +73,7 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
     {
-        return new ArmorRigInventoryCapability();
+        return new ArmorRigCapabilityProvider();
     }
 
     private WeakHashMap<CompoundTag, Rig> modifiedRigCache = new WeakHashMap<>();

@@ -1,11 +1,11 @@
-package com.tac.guns.mixin.client;
+package com.tac.guns.mixin.common;
 
 import com.mojang.authlib.GameProfile;
+import com.tac.guns.common.network.RigItemStackDataSerializer;
 import com.tac.guns.duck.PlayerWithSynData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity implements net.minecraftforge.common.extensions.IForgePlayer, PlayerWithSynData {
-    private static final EntityDataAccessor<ItemStack> RIG_ID = SynchedEntityData.defineId(Player.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<ItemStack> RIG_ID = SynchedEntityData.defineId(Player.class, RigItemStackDataSerializer.INSTANCE);
 
     protected PlayerMixin(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
         super(p_20966_, p_20967_);

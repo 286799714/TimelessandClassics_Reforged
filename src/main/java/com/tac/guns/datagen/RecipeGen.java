@@ -71,7 +71,7 @@ public class RecipeGen extends RecipeProvider
                 .define('i', Tags.Items.INGOTS_IRON)
                 .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
                 .save(consumer);
-
+/*
         ShapedRecipeBuilder.shaped(ModItems.LIGHT_ARMOR.get())
                 .pattern("# #")
                 .pattern("iIi")
@@ -89,6 +89,7 @@ public class RecipeGen extends RecipeProvider
                 .define('i', Tags.Items.INGOTS_IRON)
                 .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
                 .save(consumer);
+ */
 
         ShapedRecipeBuilder.shaped(ModItems.MODULE.get(), 3)
                 .pattern("#I#")

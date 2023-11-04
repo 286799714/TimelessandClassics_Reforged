@@ -16,8 +16,12 @@ import javax.annotation.Nullable;
 public class ArmorRigCapabilityProvider implements ICapabilitySerializable<ListTag> {
 
     public static Capability<IAmmoItemHandler> capability = InventoryListener.RIG_HANDLER_CAPABILITY;
-    private IAmmoItemHandler itemHandler = new RigSlotsHandler(90);
+    private RigSlotsHandler itemHandler = new RigSlotsHandler(27);
     private LazyOptional<IAmmoItemHandler> optionalStorage = LazyOptional.of(() -> itemHandler);
+
+    public LazyOptional<IAmmoItemHandler> getOptionalStorage() {
+        return optionalStorage;
+    }
 
     @Nonnull
     @Override

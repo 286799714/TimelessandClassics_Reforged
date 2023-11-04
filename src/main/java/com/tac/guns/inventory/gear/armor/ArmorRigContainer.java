@@ -1,7 +1,7 @@
 package com.tac.guns.inventory.gear.armor;
 
+import com.mojang.logging.LogUtils;
 import com.tac.guns.init.ModContainers;
-import com.tac.guns.inventory.gear.InventoryListener;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,7 +21,7 @@ public class ArmorRigContainer extends AbstractContainerMenu {
         super(ModContainers.ARMOR_TEST.get(), windowId);
         this.item = item;
 
-        RigSlotsHandler itemHandler = (RigSlotsHandler) this.item.getCapability(InventoryListener.RIG_HANDLER_CAPABILITY).resolve().get();
+        RigSlotsHandler itemHandler = (RigSlotsHandler) item.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
         this.numRows = ((ArmorRigItem)inv.player.getMainHandItem().getItem()).getNumOfRows();
         int i = (this.numRows - 4) * 18;
         //RigSlotsHandler itemHandler = new RigSlotsHandler(maxSlots);
@@ -47,7 +47,6 @@ public class ArmorRigContainer extends AbstractContainerMenu {
 
     public ArmorRigContainer(int windowId, Inventory inv) {
         super(ModContainers.ARMOR_TEST.get(), windowId);
-        this.item = item;
 
         int i = (2 - 4) * 18;
         //int i = (this.numRows - 4) * 18;

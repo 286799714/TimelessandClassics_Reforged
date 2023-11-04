@@ -1,5 +1,6 @@
 package com.tac.guns.inventory.gear.armor;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

@@ -1,9 +1,12 @@
 package com.tac.guns.inventory.gear;
 
+import com.mojang.logging.LogUtils;
 import com.tac.guns.Reference;
-import com.tac.guns.inventory.gear.armor.ArmorRigInventoryCapability;
+import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.IAmmoItemHandler;
 import com.tac.guns.item.transition.wearables.IArmoredRigItem;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
@@ -48,9 +51,12 @@ public class InventoryListener {
     @SubscribeEvent
     public static void onAttachCapabilitiesStack(AttachCapabilitiesEvent<ItemStack> event) throws InvocationTargetException, IllegalAccessException {
         if(!(event.getObject().getItem() instanceof IArmoredRigItem)) return;
-
-        ArmorRigInventoryCapability armorRigInventoryCapability = new ArmorRigInventoryCapability();
-        event.addCapability(new ResourceLocation("tac", "rig"), armorRigInventoryCapability);
-        event.addListener(armorRigInventoryCapability.getOptionalStorage()::invalidate);
+        Exception exception = new RuntimeException();
+        exception.printStackTrace();
+        if(!event.getCapabilities().containsKey(new ResourceLocation("tac", "rig"))) {
+            ArmorRigCapabilityProvider armorRigInventoryCapability = new ArmorRigCapabilityProvider();
+            event.addCapability(new ResourceLocation("tac", "rig"), armorRigInventoryCapability);
+            event.addListener(armorRigInventoryCapability.getOptionalStorage()::invalidate);
+        }
     }
 }

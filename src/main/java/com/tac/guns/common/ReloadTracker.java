@@ -7,6 +7,7 @@ import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.GunItem;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageGunSound;
 import com.tac.guns.util.GunEnchantmentHelper;
@@ -151,7 +152,7 @@ public class ReloadTracker
         ArrayList<ItemStack> stacks = new ArrayList<>();
 
         ItemStack rig = WearableHelper.PlayerWornRig(player);
-        if(!rig.isEmpty() && !player.isCreative()) {
+        if(!rig.isEmpty() && !player.isCreative() && rig.getItem() instanceof ArmorRigItem) {
             RigSlotsHandler itemHandler = (RigSlotsHandler) rig.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
             for (ItemStack x : itemHandler.getStacks()) {
                 if(Gun.isAmmo(x, this.gun.getProjectile().getItem()))
@@ -171,6 +172,7 @@ public class ReloadTracker
                     break;
                 }
             }
+            if(rig.getTag() != null) rig.getTag().put("storage", itemHandler.serializeNBT());
             ((PlayerWithSynData)player).setRig(rig);
             if(flag) return;
         }

@@ -2,6 +2,7 @@ package com.tac.guns.common;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
+import com.mojang.logging.LogUtils;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.annotation.Ignored;
@@ -9,6 +10,7 @@ import com.tac.guns.annotation.Optional;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.interfaces.TGExclude;
 import com.tac.guns.inventory.gear.InventoryListener;
+import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.IAttachment;
@@ -2394,13 +2396,23 @@ public final class Gun implements INBTSerializable<CompoundTag>
         ItemStack wornRig = WearableHelper.PlayerWornRig(player);
         if(!wornRig.isEmpty())
         {
-            int count = 0;
-            RigSlotsHandler itemHandler = (RigSlotsHandler) wornRig.getCapability(InventoryListener.RIG_HANDLER_CAPABILITY).resolve().get();
+            /*
+            ListTag nbtTagList = (ListTag) ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").get("Items");
+            for (int i = 0; i < ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").getInt("Size"); i++)
+            {
+                ItemStack ammoStack = ItemStack.of(nbtTagList.getCompound(i));
+                //player.sendMessage(new TextComponent("" + nbtTagList.size()), UUID.randomUUID());
+                if(isAmmo(ammoStack, id)) {
+                    stacks.add(ammoStack);
+                    count += ammoStack.getCount();
+                }
+            }
+            */
+            RigSlotsHandler itemHandler = (RigSlotsHandler) wornRig.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
             List<ItemStack> list = itemHandler.getStacks();
             for(ItemStack ammoStack : list){
                 if(isAmmo(ammoStack, id)) {
                     stacks.add(ammoStack);
-                    count += ammoStack.getCount();
                 }
             }
         }

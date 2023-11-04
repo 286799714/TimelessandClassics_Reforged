@@ -1,16 +1,21 @@
 package com.tac.guns.client.handler;
 
+import com.mojang.logging.LogUtils;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.client.InputHandler;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.Rig;
 import com.tac.guns.init.ModSyncedDataKeys;
+import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
+import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageArmorRepair;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.event.TickEvent;

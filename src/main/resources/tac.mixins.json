@@ -5,9 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "tac.refmap.json",
   "mixins": [
-    "client.PlayerMixin",
     "common.LivingEntityMixin",
     "common.PlayerListMixin",
+    "common.PlayerMixin",
     "common.ServerPlayNetHandlerMixin",
     "common.SittingPhaseMixin"
   ],

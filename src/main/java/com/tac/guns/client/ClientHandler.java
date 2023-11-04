@@ -197,8 +197,8 @@ public class ClientHandler
         ModelOverrides.register(ModItems.SRO_DOT.get(), new SroDotSightModel());
 
         // Armor registry, kept manual cause nice and simple, requires registry on client side only
-        VestLayerRender.registerModel(ModItems.LIGHT_ARMOR.get(), new ModernArmor());
-        VestLayerRender.registerModel(ModItems.MEDIUM_STEEL_ARMOR.get(), new MediumArmor());
+        //VestLayerRender.registerModel(ModItems.LIGHT_ARMOR.get(), new ModernArmor());
+        //VestLayerRender.registerModel(ModItems.MEDIUM_STEEL_ARMOR.get(), new MediumArmor());
         //VestLayerRender.registerModel(ModItems.CARDBOARD_ARMOR_FUN.get(), new CardboardArmor());
     }
 
