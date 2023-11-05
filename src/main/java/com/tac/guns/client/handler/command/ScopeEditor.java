@@ -3,7 +3,7 @@ package com.tac.guns.client.handler.command;
 import com.google.gson.GsonBuilder;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.client.handler.command.data.ScopeData;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.tooling.CommandsHandler;
@@ -80,23 +80,23 @@ public class ScopeEditor
     private void handleScopeMod(InputEvent.KeyInputEvent event, ScopeData data)
     {
         double stepModifier = 1;
-        boolean isLeft = InputHandler.LEFT.down;
-        boolean isRight = InputHandler.RIGHT.down;
-        boolean isUp = InputHandler.UP.down;
-        boolean isDown = InputHandler.DOWN.down;
-        boolean isControlDown = InputHandler.CONTROLLY.down || InputHandler.CONTROLLYR.down; // Increase Module Size
-        boolean isShiftDown = InputHandler.SHIFTY.down || InputHandler.SHIFTYR.down; // Increase Step Size
-        boolean isAltDown = InputHandler.ALTY.down || InputHandler.ALTYR.down; // Swap X -> Z modify
+        boolean isLeft = Keys.LEFT.isDown();
+        boolean isRight = Keys.RIGHT.isDown();
+        boolean isUp = Keys.UP.isDown();
+        boolean isDown = Keys.DOWN.isDown();
+        boolean isControlDown = Keys.CONTROLLY.isDown() || Keys.CONTROLLYR.isDown(); // Increase Module Size
+        boolean isShiftDown = Keys.SHIFTY.isDown() || Keys.SHIFTYR.isDown(); // Increase Step Size
+        boolean isAltDown = Keys.ALTY.isDown() || Keys.ALTYR.isDown(); // Swap X -> Z modify
 
         if(isShiftDown)
             stepModifier*=10;
         if(isControlDown)
             stepModifier/=10;
 
-        boolean isPeriodDown = InputHandler.SIZE_OPT.down;
+        boolean isPeriodDown = Keys.SIZE_OPT.isDown();
 
         Player player = Minecraft.getInstance().player;
-        if(InputHandler.P.down) // P will be for adjusting double render
+        if(Keys.P.isDown()) // P will be for adjusting double render
         {
             if(isShiftDown)
                 stepModifier*=10;
@@ -140,7 +140,7 @@ public class ScopeEditor
                 player.displayClientMessage(new TranslatableComponent("DR X: "+data.getDrXZoomMod()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
-        else if(InputHandler.L.down) // L will be for adjusting reticle pos
+        else if(Keys.L.isDown()) // L will be for adjusting reticle pos
         {
             if(isShiftDown)
                 stepModifier*=5;
@@ -182,7 +182,7 @@ public class ScopeEditor
                 player.displayClientMessage(new TranslatableComponent("Reticle X: "+data.getReticleXMod()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
-        else if(InputHandler.M.down) // L will be for adjusting reticle pos
+        else if(Keys.M.isDown()) // L will be for adjusting reticle pos
         {
             if(isShiftDown)
                 stepModifier*=10;

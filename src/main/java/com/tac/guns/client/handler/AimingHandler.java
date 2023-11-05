@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.GunMod;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModBlocks;
@@ -71,7 +71,7 @@ public class AimingHandler
 
 	private AimingHandler()
 	{
-		InputHandler.SIGHT_SWITCH.addPressCallback( () -> {
+		Keys.SIGHT_SWITCH.addPressCallback( () -> {
 			final Minecraft mc = Minecraft.getInstance();
 			if(
 				mc.player != null
@@ -81,8 +81,8 @@ public class AimingHandler
 				)
 			) this.currentScopeZoomIndex++;
 		} );
-		
-		InputHandler.AIM_TOGGLE.addPressCallback( () -> {
+        
+        Keys.AIM_TOGGLE.addPressCallback( () -> {
 			final Minecraft mc = Minecraft.getInstance();
 			if(
 				mc.player != null
@@ -265,9 +265,9 @@ public class AimingHandler
 
         boolean zooming;
 
-        if( InputHandler.AIM_HOLD.keyCode() != InputConstants.UNKNOWN )
+        if( Keys.AIM_HOLD.getKey() != InputConstants.UNKNOWN )
         {
-            zooming = InputHandler.AIM_HOLD.down;
+            zooming = Keys.AIM_HOLD.isDown();
 
             if (GunMod.controllableLoaded) {
                 // zooming |= ControllerHandler.isAiming();

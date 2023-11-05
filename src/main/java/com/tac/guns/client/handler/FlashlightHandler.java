@@ -1,6 +1,6 @@
 package com.tac.guns.client.handler;
 
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.item.GunItem;
@@ -39,7 +39,7 @@ public class FlashlightHandler
     
     private FlashlightHandler()
     {
-    	InputHandler.ACTIVATE_SIDE_RAIL.addPressCallback( () -> {
+    	Keys.ACTIVATE_SIDE_RAIL.addPressCallback( () -> {
     		final Minecraft mc = Minecraft.getInstance();
     		final Player player = mc.player;
     		if(

@@ -71,8 +71,6 @@ public class ClientHandler
 {
     private static Field mouseOptionsField;
 
-    private static File keyBindsFile;
-    
     public static void setup( Minecraft mc ) {
         MinecraftForge.EVENT_BUS.register(AimingHandler.get());
         MinecraftForge.EVENT_BUS.register(BulletTrailRenderingHandler.get());
@@ -102,18 +100,6 @@ public class ClientHandler
         }
 
         //ClientRegistry.bindTileEntityRenderer(ModTileEntities.UPGRADE_BENCH.get(), UpgradeBenchRenderUtil::new);
-
-        // Load key binds
-        InputHandler.initKeys();
-        keyBindsFile = new File(mc.gameDirectory, "config/tac-key-binds.json");
-        if (!keyBindsFile.exists()) {
-            try {
-                keyBindsFile.createNewFile();
-            } catch (IOException e) {
-                GunMod.LOGGER.error("Fail to create key bindings file");
-            }
-            InputHandler.saveTo(keyBindsFile);
-        } else InputHandler.readFrom(keyBindsFile);
 
         setupRenderLayers();
         registerColors();
@@ -253,41 +239,23 @@ public class ClientHandler
 */
     }
     
-    private static Screen prevScreen = null;
-
-    @SubscribeEvent
-    public static void onGUIChange(ScreenOpenEvent evt )
-    {
-        final Screen gui = evt.getScreen();
-
-        // Show key binds if control GUI is activated
-        if( gui instanceof ControlsScreen )
-            InputHandler.restoreKeyBinds();
-        else if( prevScreen instanceof ControlsScreen )
-            InputHandler.clearKeyBinds( keyBindsFile );
-
-        prevScreen = gui;
-    }
-    
     static {
-        InputHandler.ATTACHMENTS.addPressCallback(() -> {
+        Keys.ATTACHMENTS.addPressCallback(() -> {
             final Minecraft mc = Minecraft.getInstance();
             if (mc.player != null && mc.screen == null)
                 PacketHandler.getPlayChannel().sendToServer(new MessageAttachments());
         });
 
-        final Runnable callback = () -> {
+        Keys.INSPECT.addPressCallback(() -> {
             final Minecraft mc = Minecraft.getInstance();
             if (
-                    mc.player != null
-                            && mc.screen == null
-                            && GunAnimationController.fromItem(
-                            Minecraft.getInstance().player.getInventory().getSelected().getItem()
-                    ) == null
+                mc.player != null
+                    && mc.screen == null
+                    && GunAnimationController.fromItem(
+                    Minecraft.getInstance().player.getInventory().getSelected().getItem()
+                ) == null
             ) PacketHandler.getPlayChannel().sendToServer(new MessageInspection());
-        };
-        InputHandler.INSPECT.addPressCallback(callback);
-        InputHandler.CO_INSPECT.addPressCallback(callback);
+        });
     }
 
 

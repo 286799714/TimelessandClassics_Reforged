@@ -1,7 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.tac.guns.Config;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
@@ -113,7 +113,7 @@ public class  ShootingHandler
             {
                 event.setCanceled(true);
             }
-            if( InputHandler.PULL_TRIGGER.down )
+            if( Keys.PULL_TRIGGER.isDown() )
             {
                 if (magError(player, heldItem)) {
                     player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
@@ -259,7 +259,7 @@ public class  ShootingHandler
                 PacketHandler.getPlayChannel().sendToServer( new MessageUpdateMoveInacc( dist ) );
                 
                 // Update #shooting state if it has changed
-                final boolean shooting = InputHandler.PULL_TRIGGER.down && GunRenderingHandler.get().sprintTransition == 0;
+                final boolean shooting = Keys.PULL_TRIGGER.isDown() && GunRenderingHandler.get().sprintTransition == 0;
                 // TODO: check if this is needed
 //              if(GunMod.controllableLoaded)
 //              {
@@ -319,7 +319,7 @@ public class  ShootingHandler
                         fire(player, heldItem);
                     return;
                 }
-                else if( InputHandler.PULL_TRIGGER.down )
+                else if( Keys.PULL_TRIGGER.isDown() )
                 {
                     Gun gun = ((TimelessGunItem) heldItem.getItem()).getModifiedGun(heldItem);
                     if (gun.getGeneral().isAuto() && heldItem.getTag().getInt("CurrentFireMode") == 2) {

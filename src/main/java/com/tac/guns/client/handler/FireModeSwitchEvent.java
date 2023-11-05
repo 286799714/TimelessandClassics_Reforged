@@ -1,7 +1,7 @@
 package com.tac.guns.client.handler;
 
 
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageFireMode;
 import net.minecraft.client.Minecraft;
@@ -28,7 +28,7 @@ public class FireModeSwitchEvent
     
     private FireModeSwitchEvent()
     {
-    	InputHandler.FIRE_SELECT.addPressCallback( () -> {
+    	Keys.FIRE_SELECT.addPressCallback( () -> {
     		if( Minecraft.getInstance().player != null )
     			PacketHandler.getPlayChannel().sendToServer( new MessageFireMode() );
     	} );

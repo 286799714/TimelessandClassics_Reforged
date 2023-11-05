@@ -2,7 +2,7 @@ package com.tac.guns.client.handler;
 
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Reference;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.animation.*;
 import com.tac.guns.client.render.animation.module.*;
 import com.tac.guns.common.Gun;
@@ -161,25 +161,23 @@ public enum AnimationHandler {
     
     static
     {
-    	final Runnable callback = () -> {
-    		final Player player = Minecraft.getInstance().player;
-    		if( player == null ) return;
-    		
-    		final ItemStack stack = player.getInventory().getSelected();
-    		final GunAnimationController controller
-    			= GunAnimationController.fromItem( stack.getItem() );
-    		if( controller != null && !controller.isAnimationRunning() )
-    		{
-    			controller.stopAnimation();
+        Keys.INSPECT.addPressCallback( () -> {
+            final Player player = Minecraft.getInstance().player;
+            if( player == null ) return;
+            
+            final ItemStack stack = player.getInventory().getSelected();
+            final GunAnimationController controller
+                = GunAnimationController.fromItem( stack.getItem() );
+            if( controller != null && !controller.isAnimationRunning() )
+            {
+                controller.stopAnimation();
                 if (Gun.hasAmmo(stack)) {
                     controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT);
                 } else {
                     controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT_EMPTY);
                 }
-    		}
-    	};
-    	InputHandler.INSPECT.addPressCallback( callback );
-    	InputHandler.CO_INSPECT.addPressCallback( callback );
+            }
+        } );
     }
     
     @SubscribeEvent
