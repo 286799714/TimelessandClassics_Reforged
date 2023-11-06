@@ -3,6 +3,7 @@ package com.tac.guns.client.handler;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
+import com.tac.guns.Config.RightClickUse;
 import com.tac.guns.GunMod;
 import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.crosshair.Crosshair;
@@ -26,10 +27,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.FOVModifierEvent;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.common.Tags;
@@ -112,6 +115,87 @@ public class AimingHandler
         }
         if (this.aiming)
             player.setSprinting(false);
+    }
+
+    @SubscribeEvent
+    public void onClickInput( InputEvent.ClickInputEvent event )
+    {
+        if ( !event.isUseItem() ) {
+            return;
+        }
+
+        final Minecraft mc = Minecraft.getInstance();
+        final boolean hasMouseOverBlock = mc.hitResult instanceof BlockHitResult;
+        if ( !hasMouseOverBlock ) {
+            return;
+        }
+
+        final Player player = mc.player; assert player != null;
+        final ItemStack heldItem = player.getMainHandItem();
+        final boolean isGunInHand = heldItem.getItem() instanceof TimelessGunItem;
+        if ( !isGunInHand ) {
+            return;
+        }
+
+        assert mc.level != null;
+        final BlockHitResult result = ( BlockHitResult ) mc.hitResult;
+        final BlockState state = mc.level.getBlockState( result.getBlockPos() );
+        final Block block = state.getBlock();
+        final RightClickUse config = Config.CLIENT.rightClickUse;
+        if ( block instanceof EntityBlock )
+        {
+            if ( config.allowChests.get() ) {
+                return;
+            }
+        }
+        else if ( block == Blocks.CRAFTING_TABLE || block == ModBlocks.WORKBENCH.get() )
+        {
+            if ( config.allowCraftingTable.get() ) {
+                return;
+            }
+        }
+        else if ( state.is(BlockTags.DOORS) )
+        {
+            if ( config.allowDoors.get() ) {
+                return;
+            }
+        }
+        else if ( state.is(BlockTags.TRAPDOORS) )
+        {
+            if ( config.allowTrapDoors.get() ) {
+                return;
+            }
+        }
+        else if ( state.is(Tags.Blocks.CHESTS) )
+        {
+            if ( config.allowChests.get() ) {
+                return;
+            }
+        }
+        else if ( state.is(Tags.Blocks.FENCE_GATES) )
+        {
+            if ( config.allowFenceGates.get() ) {
+                return;
+            }
+        }
+        else if ( state.is(BlockTags.BUTTONS) )
+        {
+            if ( config.allowButton.get() ) {
+                return;
+            }
+        }
+        else if ( block == Blocks.LEVER )
+        {
+            if ( config.allowLever.get() ) {
+                return;
+            }
+        }
+        else if ( config.allowRestUse.get() ) {
+            return;
+        }
+
+        event.setCanceled(true);
+        event.setSwingHand(false);
     }
 
     @Nullable

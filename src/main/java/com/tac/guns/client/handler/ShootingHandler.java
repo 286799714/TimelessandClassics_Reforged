@@ -296,6 +296,17 @@ public class  ShootingHandler
     }
 
     @SubscribeEvent
+    public void onClickInput( InputEvent.ClickInputEvent event ) {
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+        ItemStack heldItem = player.getMainHandItem();
+        if (heldItem.getItem() instanceof TimelessGunItem && event.isAttack()) {
+            event.setCanceled(true);
+            event.setSwingHand(false);
+        }
+    }
+
+    @SubscribeEvent
     public void onPostClientTick(TickEvent.ClientTickEvent event)
     {
         if(event.phase != TickEvent.Phase.END)

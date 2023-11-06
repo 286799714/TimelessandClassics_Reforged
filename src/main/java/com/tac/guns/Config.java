@@ -18,9 +18,9 @@ public class Config
         public final Display display;
         public final Particle particle;
         public final Controls controls;
-
         public final WeaponGUI weaponGUI;
         public final Quality quality;
+        public final RightClickUse rightClickUse;
 
         public Client(ForgeConfigSpec.Builder builder)
         {
@@ -32,6 +32,7 @@ public class Config
                 this.controls = new Controls(builder);
                 this.quality = new Quality(builder);
                 this.weaponGUI = new WeaponGUI(builder);
+                this.rightClickUse = new RightClickUse(builder);
             }
             builder.pop();
         }
@@ -146,6 +147,34 @@ public class Config
             builder.pop();
         }
     }
+
+    public static class RightClickUse
+    {
+        public final ForgeConfigSpec.BooleanValue allowRestUse;
+        public final ForgeConfigSpec.BooleanValue allowChests;
+        public final ForgeConfigSpec.BooleanValue allowLever;
+        public final ForgeConfigSpec.BooleanValue allowButton;
+        public final ForgeConfigSpec.BooleanValue allowDoors;
+        public final ForgeConfigSpec.BooleanValue allowTrapDoors;
+        public final ForgeConfigSpec.BooleanValue allowCraftingTable;
+        public final ForgeConfigSpec.BooleanValue allowFenceGates;
+
+        public RightClickUse( ForgeConfigSpec.Builder builder) {
+            builder.comment("Control what can interact with when holding gun in hand.").push("rightClickUses");
+            {
+                this.allowChests = builder.comment("Whether allow chest use").define("allowChests", false);
+                this.allowLever = builder.comment("Whether allow lever use").define("allowLever", true);
+                this.allowButton = builder.comment("Whether allow button use").define("allowButton", true);
+                this.allowDoors = builder.comment("Whether allow door use").define("allowDoors", false);
+                this.allowTrapDoors = builder.comment("Whether allow trap door use").define("allowTrapDoors", false);
+                this.allowCraftingTable = builder.comment("Whether allow crafting table use").define("allowCraftingTable", false);
+                this.allowFenceGates = builder.comment("Whether allow fence gates use").define("allowFenceGates", false);
+                this.allowRestUse = builder.comment("Whether allow to interact with rest stuffs.").define("allowRestUse", false);
+            }
+            builder.pop();
+        }
+    }
+
     public static class WeaponTypeIcon
     {
         public final ForgeConfigSpec.BooleanValue showWeaponIcon;
