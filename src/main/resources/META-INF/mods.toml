@@ -3,13 +3,13 @@ loaderVersion="[32,)"
 license="GPL3"
 
 [[mods]]
-modId="tac"
-version="0.3.5.2"
-displayName="Timeless and Classics Guns"
-updateJSONURL=""
-displayURL=""
-authors="Timeless Development Team"
-description='''
+    modId="tac"
+    version="${file.jarVersion}"
+    displayName="Timeless and Classics Guns"
+    updateJSONURL=""
+    displayURL=""
+    authors="Timeless Development Team"
+    description='''
 '''
 
 [[dependencies.tac]]

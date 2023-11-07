@@ -1,7 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.tac.guns.Config;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
@@ -91,52 +91,37 @@ public class  ShootingHandler
         return mc.isWindowActive();
     }
 
-    @SubscribeEvent
-    public void onKeyPressed(InputEvent.RawMouseEvent event)
-    {
-        if(!this.isInGame())
-            return;
+    // FIXME: 需要迁移，具体代码段见下方注释。
+//    @SubscribeEvent
+//    public void onKeyPressed(InputEvent.RawMouseEvent event)
+//    {
+//        if(!this.isInGame())
+//            return;
+//
+//        if(event.getAction() != GLFW.GLFW_PRESS)
+//            return;
+//
+//        Minecraft mc = Minecraft.getInstance();
+//        Player player = mc.player;
+//        if(player == null)
+//            return;
+//
+//        ItemStack heldItem = player.getMainHandItem();
+//        if(heldItem.getItem() instanceof GunItem)
+//        {
+//            int button = event.getButton();
+//            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
+//            {
+//                event.setCanceled(true);
+//            }
+//            if( Keys.PULL_TRIGGER.isDown() )
+//            {
+                // FIXME: 从这里开始 >>>
 
-        if(event.getAction() != GLFW.GLFW_PRESS)
-            return;
-
-        Minecraft mc = Minecraft.getInstance();
-        Player player = mc.player;
-        if(player == null)
-            return;
-
-        ItemStack heldItem = player.getMainHandItem();
-        if(heldItem.getItem() instanceof GunItem)
-        {
-            int button = event.getButton();
-            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
-            {
-                event.setCanceled(true);
-            }
-            if( InputHandler.PULL_TRIGGER.down )
-            {
-                if (magError(player, heldItem)) {
-                    player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
-                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
-                    return;
-                }
-
-                if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0)
-                {
-                    this.burstTracker = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstCount();
-                    fire(player, heldItem);
-                    this.burstCooldown = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstRate();
-                }
-                else if(this.burstCooldown == 0)
-                    fire(player, heldItem);
-
-                if(!(heldItem.getTag().getInt("AmmoCount") > 0)) {
-                    player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
-                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
-                }
-            }
-        }
-    }
+                // FIXME: <<< 到这里结束。
+//            }
+//        }
+//    }
     
     // CHECK HERE: Indicates the ticks left for next shot
     private static float shootTickGapLeft = 0F;
@@ -259,7 +244,7 @@ public class  ShootingHandler
                 PacketHandler.getPlayChannel().sendToServer( new MessageUpdateMoveInacc( dist ) );
                 
                 // Update #shooting state if it has changed
-                final boolean shooting = InputHandler.PULL_TRIGGER.down && GunRenderingHandler.get().sprintTransition == 0;
+                final boolean shooting = Keys.PULL_TRIGGER.isDown() && GunRenderingHandler.get().sprintTransition == 0;
                 // TODO: check if this is needed
 //              if(GunMod.controllableLoaded)
 //              {
@@ -296,6 +281,37 @@ public class  ShootingHandler
     }
 
     @SubscribeEvent
+    public void onClickInput( InputEvent.ClickInputEvent event ) {
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+        ItemStack heldItem = player.getMainHandItem();
+        if (heldItem.getItem() instanceof TimelessGunItem && event.isAttack()) {
+            event.setCanceled(true);
+            event.setSwingHand(false);
+        }
+
+        if (magError(player, heldItem)) {
+            player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
+            PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+            return;
+        }
+
+        if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0)
+        {
+            this.burstTracker = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstCount();
+            fire(player, heldItem);
+            this.burstCooldown = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstRate();
+        }
+        else if(this.burstCooldown == 0)
+            fire(player, heldItem);
+
+        if(!(heldItem.getTag().getInt("AmmoCount") > 0)) {
+            player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
+            PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+        }
+    }
+
+    @SubscribeEvent
     public void onPostClientTick(TickEvent.ClientTickEvent event)
     {
         if(event.phase != TickEvent.Phase.END)
@@ -319,7 +335,7 @@ public class  ShootingHandler
                         fire(player, heldItem);
                     return;
                 }
-                else if( InputHandler.PULL_TRIGGER.down )
+                else if( Keys.PULL_TRIGGER.isDown() )
                 {
                     Gun gun = ((TimelessGunItem) heldItem.getItem()).getModifiedGun(heldItem);
                     if (gun.getGeneral().isAuto() && heldItem.getTag().getInt("CurrentFireMode") == 2) {

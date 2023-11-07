@@ -32,10 +32,6 @@ version = "0.3.10-1.18.2"
 group = "com.tac"
 archivesBaseName = "tac-a"
 
-
-
-//name = "tac-a-0.3.0.44-1.16.5"
-
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 //sourceSets.main.resources { srcDir 'src/generated/resources' }
@@ -46,15 +42,14 @@ mixin {
 }
 
 minecraft {
-    //mappings channel: 'official', version: '1.16.5'
-    //mappings channel: 'official', version: '1.16.5'
-
     mappings channel: 'official', version: '1.18.2'
 
     runs {
         client {
             workingDirectory project.file('run')
-            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+//            property 'mixin.env.disableRefMap', 'true'
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -127,12 +122,7 @@ dependencies {
     minecraftLibrary 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
-/*repositories {
-    maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
-    maven {
-        url = "https://www.cursemaven.com"
-    }
-}*/
+
 repositories {
     maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven {
@@ -144,16 +134,20 @@ repositories {
     maven {
         url = "https://maven.theillusivec4.top/"
     }
+    flatDir {
+        dir 'libs'
+    }
 }
+
 jar {
     manifest {
         attributes([
             "Specification-Title": "Timeless and Classics",
-            "Specification-Vendor": "ClumsyAlien",
+            "Specification-Vendor": "TaC Squad",
             "Specification-Version": "0.04",
             "Implementation-Title": "Timeless and Classics",
             "Implementation-Version": project.version,
-            "Implementation-Vendor" : "ClumsyAlien",
+            "Implementation-Vendor" : "TaC Squad",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
             "MixinConfigs": "tac.mixins.json"
         ])
@@ -165,6 +159,7 @@ def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
     builtBy 'reobfJar'
 }
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -181,7 +176,6 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
-
 
 shadowJar {
     dependencies {

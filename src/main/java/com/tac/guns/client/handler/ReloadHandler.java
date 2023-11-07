@@ -1,7 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PumpShotgunAnimationController;
 import com.tac.guns.common.Gun;
@@ -206,7 +206,7 @@ public class ReloadHandler {
 
     private ReloadHandler()
     {
-    	InputHandler.RELOAD.addPressCallback( () -> {
+    	Keys.RELOAD.addPressCallback( () -> {
     		final LocalPlayer player = Minecraft.getInstance().player;
 			if( player == null ) return;
 			
@@ -228,17 +228,15 @@ public class ReloadHandler {
 			}
 		} );
     	
-    	final Runnable callback = () -> {
-    		if( !this.isReloading() )
-			{
-				final SimpleChannel channel = PacketHandler.getPlayChannel();
-				channel.sendToServer( new MessageUpdateGunID() );
-				this.setReloading( false );
-				channel.sendToServer( new MessageUnload() );
-			}
-    	};
-    	InputHandler.UNLOAD.addPressCallback( callback );
-    	InputHandler.CO_UNLOAD.addPressCallback( callback );
+    	Keys.UNLOAD.addPressCallback( () -> {
+            if( !this.isReloading() )
+            {
+                final SimpleChannel channel = PacketHandler.getPlayChannel();
+                channel.sendToServer( new MessageUpdateGunID() );
+                this.setReloading( false );
+                channel.sendToServer( new MessageUnload() );
+            }
+        } );
     }
 
     @SubscribeEvent

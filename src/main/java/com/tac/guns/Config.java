@@ -18,9 +18,9 @@ public class Config
         public final Display display;
         public final Particle particle;
         public final Controls controls;
-
         public final WeaponGUI weaponGUI;
         public final Quality quality;
+        public final RightClickUse rightClickUse;
 
         public Client(ForgeConfigSpec.Builder builder)
         {
@@ -32,6 +32,7 @@ public class Config
                 this.controls = new Controls(builder);
                 this.quality = new Quality(builder);
                 this.weaponGUI = new WeaponGUI(builder);
+                this.rightClickUse = new RightClickUse(builder);
             }
             builder.pop();
         }
@@ -146,6 +147,34 @@ public class Config
             builder.pop();
         }
     }
+
+    public static class RightClickUse
+    {
+        public final ForgeConfigSpec.BooleanValue allowRestUse;
+        public final ForgeConfigSpec.BooleanValue allowChests;
+        public final ForgeConfigSpec.BooleanValue allowLever;
+        public final ForgeConfigSpec.BooleanValue allowButton;
+        public final ForgeConfigSpec.BooleanValue allowDoors;
+        public final ForgeConfigSpec.BooleanValue allowTrapDoors;
+        public final ForgeConfigSpec.BooleanValue allowCraftingTable;
+        public final ForgeConfigSpec.BooleanValue allowFenceGates;
+
+        public RightClickUse( ForgeConfigSpec.Builder builder) {
+            builder.comment("Control what can interact with when holding gun in hand.").push("rightClickUses");
+            {
+                this.allowChests = builder.comment("Whether allow chest use").define("allowChests", false);
+                this.allowLever = builder.comment("Whether allow lever use").define("allowLever", true);
+                this.allowButton = builder.comment("Whether allow button use").define("allowButton", true);
+                this.allowDoors = builder.comment("Whether allow door use").define("allowDoors", false);
+                this.allowTrapDoors = builder.comment("Whether allow trap door use").define("allowTrapDoors", false);
+                this.allowCraftingTable = builder.comment("Whether allow crafting table use").define("allowCraftingTable", false);
+                this.allowFenceGates = builder.comment("Whether allow fence gates use").define("allowFenceGates", false);
+                this.allowRestUse = builder.comment("Whether allow to interact with rest stuffs.").define("allowRestUse", false);
+            }
+            builder.pop();
+        }
+    }
+
     public static class WeaponTypeIcon
     {
         public final ForgeConfigSpec.BooleanValue showWeaponIcon;
@@ -258,7 +287,7 @@ public class Config
     public static class Controls
     {
         public final ForgeConfigSpec.DoubleValue aimDownSightSensitivity;
-
+        public final ForgeConfigSpec.BooleanValue holdToAim;
         public final ForgeConfigSpec.IntValue toggleAimDelay;
         public final ForgeConfigSpec.BooleanValue burstPress;
         public Controls(ForgeConfigSpec.Builder builder)
@@ -266,8 +295,8 @@ public class Config
             builder.comment("Properties relating to controls").push("controls");
             {
                 this.aimDownSightSensitivity = builder.comment("A value to multiple the mouse sensitivity by when aiming down weapon sights. Go to (Options > Controls > Mouse Settings > ADS Sensitivity) in game to change this!").defineInRange("aimDownSightSensitivity", 1.0, 0.0, 2.0);
-
-                this.toggleAimDelay = builder.comment("The delay in ticks before being able to activate your toggleAim again, recommended to leave alone or increase past default!").defineInRange("toggleAimDelay", 8, 1, 60);
+                this.holdToAim = builder.comment("If true, you need to hold the aim key to aim, false to toggle the aim state by aim key").define("holdToAim", false);
+                this.toggleAimDelay = builder.comment("The delay in ticks before being able to activate your toggleAim again, recommended to leave alone or increase past default!").defineInRange("toggleAimDelay", 0, 0, 60);
                 this.burstPress = builder.comment("Press to use a burst fire a gun, or hold to continue a burst, un-clicking cancels your burst").define("burstPress", true);
             }
             builder.pop();

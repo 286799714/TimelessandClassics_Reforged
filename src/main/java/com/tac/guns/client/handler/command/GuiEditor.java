@@ -2,7 +2,7 @@ package com.tac.guns.client.handler.command;
 
 import com.google.gson.GsonBuilder;
 import com.tac.guns.Config;
-import com.tac.guns.client.InputHandler;
+import com.tac.guns.client.Keys;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.tooling.CommandsHandler;
 import net.minecraft.client.Minecraft;
@@ -130,7 +130,7 @@ public class GuiEditor
         boolean isDown = event.getKeyCode() == GLFW.GLFW_KEY_DOWN;
 
         boolean isShiftDown = event.getKeyCode() == GLFW.GLFW_KEY_LEFT_SHIFT; // Increase Step Size
-        boolean isPeriodDown = InputHandler.SIZE_OPT.down;
+        boolean isPeriodDown = Keys.SIZE_OPT.isDown();
 
         GUI_Element element = this.elements.size() == 0 || !this.elements.containsKey(this.currElement) ? new GUI_Element(0, 0, 0, 0) : this.elements.get(this.currElement);
         double xMod = element.xMod;
