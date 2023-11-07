@@ -350,17 +350,21 @@ public class AimingHandler
 
         boolean zooming;
 
-        if( Keys.AIM_HOLD.getKey() != InputConstants.UNKNOWN )
+        if( Config.CLIENT.controls.holdToAim.get() )
         {
             zooming = Keys.AIM_HOLD.isDown();
 
-            if (GunMod.controllableLoaded) {
-                // zooming |= ControllerHandler.isAiming();
-            }
         }
         else
+        {
+            if ( Keys.AIM_TOGGLE.isDown() )
+                if ( this.toggledAimAwaiter <= 0 )
+                {
+                    this.forceToggleAim();
+                    this.toggledAimAwaiter = Config.CLIENT.controls.toggleAimDelay.get();
+                }
             zooming = this.toggledAim;
-
+        }
         return zooming;
     }
 
@@ -375,31 +379,6 @@ public class AimingHandler
             this.toggledAim = false;
         else
             this.toggledAim = true;
-    }
-
-    public boolean isLookingAtInteractableBlock()
-    {
-        Minecraft mc = Minecraft.getInstance();
-        if(mc.hitResult != null && mc.level != null)
-        {
-            if(mc.hitResult instanceof BlockHitResult)
-            {
-                BlockHitResult result = (BlockHitResult) mc.hitResult;
-                BlockState state = mc.level.getBlockState(result.getBlockPos());
-                Block block = state.getBlock();
-                // Forge should add a tag for intractable blocks so modders can know which blocks can be interacted with :)
-                /*if(block == ModBlocks.UPGRADE_BENCH.get())
-                    return false;*/
-                return block instanceof BaseEntityBlock || mc.level.getBlockEntity(result.getBlockPos()) != null || block == Blocks.CRAFTING_TABLE || block == ModBlocks.WORKBENCH.get() || /* ||*/ state.is(BlockTags.DOORS) || state.is(BlockTags.TRAPDOORS) || state.is(Tags.Blocks.CHESTS) || state.is(Tags.Blocks.FENCE_GATES);
-            }
-            // FOR TEST PURPOSES ONLY
-            /*else if(mc.objectMouseOver instanceof EntityRayTraceResult)
-            {
-                EntityRayTraceResult result = (EntityRayTraceResult) mc.objectMouseOver;
-                return result.getEntity() instanceof ItemFrameEntity;
-            }*/
-        }
-        return false;
     }
 
     public double getNormalisedAdsProgress()

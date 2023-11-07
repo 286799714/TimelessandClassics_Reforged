@@ -117,25 +117,7 @@ public class  ShootingHandler
 //            if( Keys.PULL_TRIGGER.isDown() )
 //            {
                 // FIXME: 从这里开始 >>>
-//                if (magError(player, heldItem)) {
-//                    player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
-//                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
-//                    return;
-//                }
-//
-//                if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0)
-//                {
-//                    this.burstTracker = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstCount();
-//                    fire(player, heldItem);
-//                    this.burstCooldown = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstRate();
-//                }
-//                else if(this.burstCooldown == 0)
-//                    fire(player, heldItem);
-//
-//                if(!(heldItem.getTag().getInt("AmmoCount") > 0)) {
-//                    player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
-//                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
-//                }
+
                 // FIXME: <<< 到这里结束。
 //            }
 //        }
@@ -306,6 +288,26 @@ public class  ShootingHandler
         if (heldItem.getItem() instanceof TimelessGunItem && event.isAttack()) {
             event.setCanceled(true);
             event.setSwingHand(false);
+        }
+
+        if (magError(player, heldItem)) {
+            player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
+            PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+            return;
+        }
+
+        if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0)
+        {
+            this.burstTracker = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstCount();
+            fire(player, heldItem);
+            this.burstCooldown = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstRate();
+        }
+        else if(this.burstCooldown == 0)
+            fire(player, heldItem);
+
+        if(!(heldItem.getTag().getInt("AmmoCount") > 0)) {
+            player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
+            PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
         }
     }
 
