@@ -2,43 +2,29 @@ package com.tac.guns.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.Key;
-import com.mojang.blaze3d.platform.InputConstants.Type;
 import com.tac.guns.Config;
-import gsf.kbp.client.api.PatchedKeyBinding;
+import com.tac.guns.client.TacKeyMapping.TacKeyBuilder;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.settings.KeyConflictContext;
-
-import java.util.Collections;
-import java.util.Set;
+import net.minecraftforge.client.settings.KeyModifier;
 
 @OnlyIn(Dist.CLIENT)
 public final class Keys
 {
-    private static final class Builder extends PatchedKeyBinding.Builder
-    {
-        private Builder( String description )
-        {
-            super( description );
-            
-            this.category = "key.categories.tac";
-            this.conflict_context = GunConflictContext.IN_GAME_HOLDING_WEAPON;
-        }
-    }
     
-    private static class MouseKeyBinding extends PatchedKeyBinding
+    private static class MouseKeyBinding extends KeyMapping
     {
         private MouseKeyBinding( String description, Key mouse_button )
         {
             super(
                 description,
                 GunConflictContext.IN_GAME_HOLDING_WEAPON,
+                KeyModifier.NONE,
                 mouse_button,
-                Collections.emptySet(),
                 "key.categories.tac"
             );
         }
@@ -56,64 +42,29 @@ public final class Keys
         }
     }
     
-    public static final PatchedKeyBinding
-        PULL_TRIGGER = new MouseKeyBinding(
-            "key.tac.pull_trigger",
-            Type.MOUSE.getOrCreate( InputConstants.MOUSE_BUTTON_LEFT )
-        ),
-        AIM_TOGGLE = new MouseKeyBinding(
-            "key.tac.aim_toggle",
-            InputConstants.UNKNOWN
-        ) {
-            @Override
-            public void setKeyAndCombinations( Key key, Set< Key > combinations )
-            {
-                if ( key != InputConstants.UNKNOWN ) {
-                    AIM_HOLD.setKeyAndCombinations( InputConstants.UNKNOWN, Collections.emptySet() );
-                }
-                
-                super.setKeyAndCombinations( key, combinations );
-            }
-        },
-        AIM_HOLD = new MouseKeyBinding(
-            "key.tac.aim_hold",
-            Type.MOUSE.getOrCreate( InputConstants.MOUSE_BUTTON_RIGHT )
-        ) {
-            @Override
-            public void setKeyAndCombinations( Key key, Set< Key > combinations )
-            {
-                if ( key != InputConstants.UNKNOWN ) {
-                    AIM_TOGGLE.setKeyAndCombinations( InputConstants.UNKNOWN, Collections.emptySet() );
-                }
-                
-                super.setKeyAndCombinations( key, combinations );
-            }
-        };
-    static
-    {
-        ClientRegistry.registerKeyBinding( PULL_TRIGGER );
-        ClientRegistry.registerKeyBinding( AIM_HOLD );
-        ClientRegistry.registerKeyBinding( AIM_TOGGLE );
-    }
+    public static final KeyMapping
+        PULL_TRIGGER = Minecraft.getInstance().options.keyAttack,
+        AIM_HOLD = Minecraft.getInstance().options.keyUse,
+        AIM_TOGGLE = AIM_HOLD;
     
-    public static final PatchedKeyBinding
-        RELOAD = new Builder( "key.tac.reload" ).withKeyboardKey( InputConstants.KEY_R ).buildAndRegis(),
-        UNLOAD = new Builder( "key.tac.unload" ).withKeyboardKey( InputConstants.KEY_R ).withKeyboardCombinations( InputConstants.KEY_LALT ).buildAndRegis(),
-        ATTACHMENTS = new Builder( "key.tac.attachments" ).withKeyboardKey( InputConstants.KEY_Z ).buildAndRegis(),
-        FIRE_SELECT = new Builder( "key.tac.fireSelect" ).withKeyboardKey( InputConstants.KEY_G ).buildAndRegis(),
-        INSPECT = new Builder( "key.tac.inspect" ).withKeyboardKey( InputConstants.KEY_H ).buildAndRegis(),
-        SIGHT_SWITCH = new Builder( "key.tac.sight_switch" ).withKeyboardKey( InputConstants.KEY_V ).buildAndRegis(),
-        ACTIVATE_SIDE_RAIL = new Builder( "key.tac.activeSideRail" ).withKeyboardKey( InputConstants.KEY_B ).buildAndRegis(),
+    public static final TacKeyMapping
+        RELOAD = new TacKeyBuilder( "key.tac.reload" ).withKeyboardKey( InputConstants.KEY_R ).buildAndRegis(),
+        UNLOAD = new TacKeyBuilder( "key.tac.unload" ).withKeyboardKey( InputConstants.KEY_R ).withKeyModifier( KeyModifier.ALT ).buildAndRegis(),
+        ATTACHMENTS = new TacKeyBuilder( "key.tac.attachments" ).withKeyboardKey( InputConstants.KEY_Z ).buildAndRegis(),
+        FIRE_SELECT = new TacKeyBuilder( "key.tac.fireSelect" ).withKeyboardKey( InputConstants.KEY_G ).buildAndRegis(),
+        INSPECT = new TacKeyBuilder( "key.tac.inspect" ).withKeyboardKey( InputConstants.KEY_H ).buildAndRegis(),
+        SIGHT_SWITCH = new TacKeyBuilder( "key.tac.sight_switch" ).withKeyboardKey( InputConstants.KEY_V ).buildAndRegis(),
+        ACTIVATE_SIDE_RAIL = new TacKeyBuilder( "key.tac.activeSideRail" ).withKeyboardKey( InputConstants.KEY_B ).buildAndRegis(),
         
-        ARMOR_REPAIRING = new Builder( "key.tac.armor_repairing" ).withKeyboardKey( InputConstants.KEY_K ).buildAndRegis();
+        ARMOR_REPAIRING = new TacKeyBuilder( "key.tac.armor_repairing" ).withKeyboardKey( InputConstants.KEY_K ).buildAndRegis();
     
-    public static final PatchedKeyBinding MORE_INFO_HOLD =
-        new Builder( "key.tac.more_info_hold" )
+    public static final KeyMapping MORE_INFO_HOLD =
+        new TacKeyBuilder( "key.tac.more_info_hold" )
             .withKeyboardKey( InputConstants.KEY_LSHIFT )
             .withConflictContext( KeyConflictContext.GUI )
             .buildAndRegis();
     
-    public static PatchedKeyBinding
+    public static KeyMapping
         SHIFTY = null,
         CONTROLLY = null,
         ALTY = null,
@@ -138,25 +89,25 @@ public final class Keys
     {
         if ( Config.COMMON.development.enableTDev.get() )
         {
-            SHIFTY = new Builder( "key.tac.ss" ).withKeyboardKey( InputConstants.KEY_LSHIFT ).buildAndRegis();
-            CONTROLLY = new Builder( "key.tac.cc" ).withKeyboardKey( InputConstants.KEY_LCONTROL ).buildAndRegis();
-            ALTY = new Builder( "key.tac.aa" ).withKeyboardKey( InputConstants.KEY_LALT ).buildAndRegis();
-            SHIFTYR = new Builder( "key.tac.ssr" ).withKeyboardKey( InputConstants.KEY_RSHIFT ).buildAndRegis();
-            CONTROLLYR = new Builder( "key.tac.ccr" ).withKeyboardKey( InputConstants.KEY_RCONTROL ).buildAndRegis();
-            ALTYR = new Builder("key.tac.aar" ).withKeyboardKey( InputConstants.KEY_RALT ).buildAndRegis();
-            SIZE_OPT = new Builder( "key.tac.sizer" ).withKeyboardKey( InputConstants.KEY_PERIOD ).buildAndRegis();
-            P = new Builder( "key.tac.p" ).withKeyboardKey( InputConstants.KEY_P ).buildAndRegis();
-            L = new Builder( "key.tac.l" ).withKeyboardKey( InputConstants.KEY_L ).buildAndRegis();
-            O = new Builder( "key.tac.o" ).withKeyboardKey( InputConstants.KEY_O ).buildAndRegis();
-            K = new Builder( "key.tac.k" ).withKeyboardKey( InputConstants.KEY_K ).buildAndRegis();
-            M = new Builder( "key.tac.m" ).withKeyboardKey( InputConstants.KEY_M ).buildAndRegis();
-            I = new Builder( "key.tac.i" ).withKeyboardKey( InputConstants.KEY_I ).buildAndRegis();
-            J = new Builder( "key.tac.j" ).withKeyboardKey( InputConstants.KEY_J ).buildAndRegis();
-            N = new Builder( "key.tac.n" ).withKeyboardKey( InputConstants.KEY_N ).buildAndRegis();
-            UP = new Builder( "key.tac.bbb" ).withKeyboardKey( InputConstants.KEY_UP ).buildAndRegis();
-            RIGHT = new Builder( "key.tac.vvv" ).withKeyboardKey( InputConstants.KEY_RIGHT ).buildAndRegis();
-            LEFT = new Builder( "key.tac.ccc" ).withKeyboardKey( InputConstants.KEY_LEFT ).buildAndRegis();
-            DOWN = new Builder( "key.tac.zzz" ).withKeyboardKey( InputConstants.KEY_DOWN ).buildAndRegis();
+            SHIFTY = new TacKeyBuilder( "key.tac.ss" ).withKeyboardKey( InputConstants.KEY_LSHIFT ).buildAndRegis();
+            CONTROLLY = new TacKeyBuilder( "key.tac.cc" ).withKeyboardKey( InputConstants.KEY_LCONTROL ).buildAndRegis();
+            ALTY = new TacKeyBuilder( "key.tac.aa" ).withKeyboardKey( InputConstants.KEY_LALT ).buildAndRegis();
+            SHIFTYR = new TacKeyBuilder( "key.tac.ssr" ).withKeyboardKey( InputConstants.KEY_RSHIFT ).buildAndRegis();
+            CONTROLLYR = new TacKeyBuilder( "key.tac.ccr" ).withKeyboardKey( InputConstants.KEY_RCONTROL ).buildAndRegis();
+            ALTYR = new TacKeyBuilder("key.tac.aar" ).withKeyboardKey( InputConstants.KEY_RALT ).buildAndRegis();
+            SIZE_OPT = new TacKeyBuilder( "key.tac.sizer" ).withKeyboardKey( InputConstants.KEY_PERIOD ).buildAndRegis();
+            P = new TacKeyBuilder( "key.tac.p" ).withKeyboardKey( InputConstants.KEY_P ).buildAndRegis();
+            L = new TacKeyBuilder( "key.tac.l" ).withKeyboardKey( InputConstants.KEY_L ).buildAndRegis();
+            O = new TacKeyBuilder( "key.tac.o" ).withKeyboardKey( InputConstants.KEY_O ).buildAndRegis();
+            K = new TacKeyBuilder( "key.tac.k" ).withKeyboardKey( InputConstants.KEY_K ).buildAndRegis();
+            M = new TacKeyBuilder( "key.tac.m" ).withKeyboardKey( InputConstants.KEY_M ).buildAndRegis();
+            I = new TacKeyBuilder( "key.tac.i" ).withKeyboardKey( InputConstants.KEY_I ).buildAndRegis();
+            J = new TacKeyBuilder( "key.tac.j" ).withKeyboardKey( InputConstants.KEY_J ).buildAndRegis();
+            N = new TacKeyBuilder( "key.tac.n" ).withKeyboardKey( InputConstants.KEY_N ).buildAndRegis();
+            UP = new TacKeyBuilder( "key.tac.bbb" ).withKeyboardKey( InputConstants.KEY_UP ).buildAndRegis();
+            RIGHT = new TacKeyBuilder( "key.tac.vvv" ).withKeyboardKey( InputConstants.KEY_RIGHT ).buildAndRegis();
+            LEFT = new TacKeyBuilder( "key.tac.ccc" ).withKeyboardKey( InputConstants.KEY_LEFT ).buildAndRegis();
+            DOWN = new TacKeyBuilder( "key.tac.zzz" ).withKeyboardKey( InputConstants.KEY_DOWN ).buildAndRegis();
         }
     }
     

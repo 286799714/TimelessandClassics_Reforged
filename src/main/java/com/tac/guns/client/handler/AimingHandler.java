@@ -85,17 +85,18 @@ public class AimingHandler
 			) this.currentScopeZoomIndex++;
 		} );
         
-        Keys.AIM_TOGGLE.addPressCallback( () -> {
-			final Minecraft mc = Minecraft.getInstance();
-			if(
-				mc.player != null
-				&& mc.player.getMainHandItem().getItem() instanceof GunItem
-				&& this.toggledAimAwaiter <= 0
-			) {
-				this.forceToggleAim();
-				this.toggledAimAwaiter = Config.CLIENT.controls.toggleAimDelay.get();
-			}
-		} );
+        // FIXME: 需要迁移。
+//        Keys.AIM_TOGGLE.addPressCallback( () -> {
+//			final Minecraft mc = Minecraft.getInstance();
+//			if(
+//				mc.player != null
+//				&& mc.player.getMainHandItem().getItem() instanceof GunItem
+//				&& this.toggledAimAwaiter <= 0
+//			) {
+//				this.forceToggleAim();
+//				this.toggledAimAwaiter = Config.CLIENT.controls.toggleAimDelay.get();
+//			}
+//		} );
 	}
 
     @SubscribeEvent

@@ -91,52 +91,55 @@ public class  ShootingHandler
         return mc.isWindowActive();
     }
 
-    @SubscribeEvent
-    public void onKeyPressed(InputEvent.RawMouseEvent event)
-    {
-        if(!this.isInGame())
-            return;
-
-        if(event.getAction() != GLFW.GLFW_PRESS)
-            return;
-
-        Minecraft mc = Minecraft.getInstance();
-        Player player = mc.player;
-        if(player == null)
-            return;
-
-        ItemStack heldItem = player.getMainHandItem();
-        if(heldItem.getItem() instanceof GunItem)
-        {
-            int button = event.getButton();
-            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
-            {
-                event.setCanceled(true);
-            }
-            if( Keys.PULL_TRIGGER.isDown() )
-            {
-                if (magError(player, heldItem)) {
-                    player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
-                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
-                    return;
-                }
-
-                if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0)
-                {
-                    this.burstTracker = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstCount();
-                    fire(player, heldItem);
-                    this.burstCooldown = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstRate();
-                }
-                else if(this.burstCooldown == 0)
-                    fire(player, heldItem);
-
-                if(!(heldItem.getTag().getInt("AmmoCount") > 0)) {
-                    player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
-                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
-                }
-            }
-        }
-    }
+    // FIXME: 需要迁移，具体代码段见下方注释。
+//    @SubscribeEvent
+//    public void onKeyPressed(InputEvent.RawMouseEvent event)
+//    {
+//        if(!this.isInGame())
+//            return;
+//
+//        if(event.getAction() != GLFW.GLFW_PRESS)
+//            return;
+//
+//        Minecraft mc = Minecraft.getInstance();
+//        Player player = mc.player;
+//        if(player == null)
+//            return;
+//
+//        ItemStack heldItem = player.getMainHandItem();
+//        if(heldItem.getItem() instanceof GunItem)
+//        {
+//            int button = event.getButton();
+//            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
+//            {
+//                event.setCanceled(true);
+//            }
+//            if( Keys.PULL_TRIGGER.isDown() )
+//            {
+                // FIXME: 从这里开始 >>>
+//                if (magError(player, heldItem)) {
+//                    player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
+//                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+//                    return;
+//                }
+//
+//                if(heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0)
+//                {
+//                    this.burstTracker = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstCount();
+//                    fire(player, heldItem);
+//                    this.burstCooldown = ((TimelessGunItem)heldItem.getItem()).getGun().getGeneral().getBurstRate();
+//                }
+//                else if(this.burstCooldown == 0)
+//                    fire(player, heldItem);
+//
+//                if(!(heldItem.getTag().getInt("AmmoCount") > 0)) {
+//                    player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
+//                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+//                }
+                // FIXME: <<< 到这里结束。
+//            }
+//        }
+//    }
     
     // CHECK HERE: Indicates the ticks left for next shot
     private static float shootTickGapLeft = 0F;
