@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -41,10 +42,12 @@ public class ArmorInteractionHandler
 	private ArmorInteractionHandler()
 	{
         Keys.ARMOR_REPAIRING.addPressCallback( () -> {
-			final Minecraft mc = Minecraft.getInstance();
-			if(mc.player != null && !WearableHelper.PlayerWornRig(mc.player).isEmpty() && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player))) {
-                this.repairing = true;
-                this.repairTime = ((ArmorRigItem) WearableHelper.PlayerWornRig(mc.player).getItem()).getRig().getRepair().getTicksToRepair();// Replace with enchantment checker
+            if (Keys.ARMOR_REPAIRING.getKeyModifier().isActive(KeyConflictContext.GUI)) {
+                final Minecraft mc = Minecraft.getInstance();
+                if (mc.player != null && !WearableHelper.PlayerWornRig(mc.player).isEmpty() && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player))) {
+                    this.repairing = true;
+                    this.repairTime = ((ArmorRigItem) WearableHelper.PlayerWornRig(mc.player).getItem()).getRig().getRepair().getTicksToRepair();// Replace with enchantment checker
+                }
             }
 		} );
 	}

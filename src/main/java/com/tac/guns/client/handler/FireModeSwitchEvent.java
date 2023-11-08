@@ -5,7 +5,7 @@ import com.tac.guns.client.Keys;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageFireMode;
 import net.minecraft.client.Minecraft;
-
+import net.minecraftforge.client.settings.KeyConflictContext;
 
 
 /**
@@ -29,8 +29,10 @@ public class FireModeSwitchEvent
     private FireModeSwitchEvent()
     {
     	Keys.FIRE_SELECT.addPressCallback( () -> {
-    		if( Minecraft.getInstance().player != null )
-    			PacketHandler.getPlayChannel().sendToServer( new MessageFireMode() );
+            if (Keys.FIRE_SELECT.getKeyModifier().isActive(KeyConflictContext.GUI)) {
+                if (Minecraft.getInstance().player != null)
+                    PacketHandler.getPlayChannel().sendToServer(new MessageFireMode());
+            }
     	} );
     }
 }

@@ -35,6 +35,7 @@ import net.minecraftforge.client.event.FOVModifierEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -75,14 +76,16 @@ public class AimingHandler
 	private AimingHandler()
 	{
 		Keys.SIGHT_SWITCH.addPressCallback( () -> {
-			final Minecraft mc = Minecraft.getInstance();
-			if(
-				mc.player != null
-				&& (
-					mc.player.getMainHandItem().getItem() instanceof GunItem
-					|| Gun.getScope( mc.player.getMainHandItem() ) != null
-				)
-			) this.currentScopeZoomIndex++;
+            if (Keys.SIGHT_SWITCH.getKeyModifier().isActive(KeyConflictContext.GUI)) {
+                final Minecraft mc = Minecraft.getInstance();
+                if (
+                        mc.player != null
+                                && (
+                                mc.player.getMainHandItem().getItem() instanceof GunItem
+                                        || Gun.getScope(mc.player.getMainHandItem()) != null
+                        )
+                ) this.currentScopeZoomIndex++;
+            }
 		} );
 
         // FIXME: 需要迁移。

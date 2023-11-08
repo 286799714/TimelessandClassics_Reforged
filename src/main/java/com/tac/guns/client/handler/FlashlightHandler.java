@@ -10,6 +10,7 @@ import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageLightChange;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,16 +41,18 @@ public class FlashlightHandler
     private FlashlightHandler()
     {
     	Keys.ACTIVATE_SIDE_RAIL.addPressCallback( () -> {
-    		final Minecraft mc = Minecraft.getInstance();
-    		final Player player = mc.player;
-    		if(
-    			player != null
-    			&& player.getMainHandItem().getItem() instanceof GunItem
-    			&& Gun.getAttachment(
-    				IAttachment.Type.SIDE_RAIL,
-    				player.getMainHandItem()
-    			) != null
-    		) this.active = !active;
+            if (Keys.ACTIVATE_SIDE_RAIL.getKeyModifier().isActive(KeyConflictContext.GUI)) {
+                final Minecraft mc = Minecraft.getInstance();
+                final Player player = mc.player;
+                if (
+                        player != null
+                                && player.getMainHandItem().getItem() instanceof GunItem
+                                && Gun.getAttachment(
+                                IAttachment.Type.SIDE_RAIL,
+                                player.getMainHandItem()
+                        ) != null
+                ) this.active = !active;
+            }
     	} );
     }
 
