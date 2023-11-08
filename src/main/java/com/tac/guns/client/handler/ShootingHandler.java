@@ -62,6 +62,7 @@ public class ShootingHandler {
     private boolean clickUp = false;
     public int burstTracker = 0;
     private int burstCooldown = 0;
+    private boolean isPressed = false;
 
     private ShootingHandler() {
     }
@@ -283,12 +284,15 @@ public class ShootingHandler {
                 return;
             }
 
-            if (heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0) {
+            if (heldItem.getItem() instanceof TimelessGunItem && heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0 && !this.isPressed) {
+                this.isPressed = true;
                 this.burstTracker = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstCount();
                 fire(player, heldItem);
                 this.burstCooldown = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstRate();
-            } else if (this.burstCooldown == 0)
+            } else if (this.burstCooldown == 0 && !this.isPressed) {
+                this.isPressed = true;
                 fire(player, heldItem);
+            }
 
             if (!(heldItem.getTag().getInt("AmmoCount") > 0)) {
                 player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
@@ -301,8 +305,13 @@ public class ShootingHandler {
     public void onPostClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
+
         if (!isInGame())
             return;
+
+        if (!Keys.PULL_TRIGGER.isDown())
+            this.isPressed = false;
+
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player != null) {

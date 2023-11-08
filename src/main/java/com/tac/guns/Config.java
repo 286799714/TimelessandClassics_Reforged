@@ -295,7 +295,7 @@ public class Config
             {
                 this.aimDownSightSensitivity = builder.comment("A value to multiple the mouse sensitivity by when aiming down weapon sights. Go to (Options > Controls > Mouse Settings > ADS Sensitivity) in game to change this!").defineInRange("aimDownSightSensitivity", 1.0, 0.0, 2.0);
                 this.holdToAim = builder.comment("If true, you need to hold the aim key to aim, false to toggle the aim state by aim key").define("holdToAim", false);
-                this.burstPress = builder.comment("Press to use a burst fire a gun, or hold to continue a burst, un-clicking cancels your burst").define("burstPress", true);
+                this.burstPress = builder.comment("Press to use a burst fire a gun, if false, burst will become semi shoot").define("burstPress", true);
             }
             builder.pop();
         }
