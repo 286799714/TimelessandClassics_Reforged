@@ -1,19 +1,26 @@
 package com.tac.guns.client.render.gun.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.tac.guns.client.SpecialModels;
+import com.mojang.math.Vector3d;
+import com.tac.guns.client.gunskin.GunSkin;
+import com.tac.guns.client.gunskin.SkinManager;
+import com.tac.guns.client.handler.ShootingHandler;
+import com.tac.guns.client.render.animation.AA12AnimationController;
 import com.tac.guns.client.render.animation.AWPAnimationController;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.gun.IOverrideModel;
+import com.tac.guns.client.render.gun.SkinAnimationModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
+import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+
+import static com.tac.guns.client.gunskin.ModelComponent.*;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -23,73 +30,61 @@ import net.minecraft.world.item.ItemStack;
 /**
  * Author: ClumsyAlien, codebase and design based off Mr.Pineapple's original addon
  */
-public class ai_awp_animation implements IOverrideModel {
+public class ai_awp_animation extends SkinAnimationModel {
 
-    /*
-        I plan on making a very comprehensive description on my render / rendering methods, currently I am unable to give a good explanation on each part and will be supplying one later one in development!
+    public ai_awp_animation() {
+        extraOffset.put(MUZZLE_SILENCER, new Vector3d(0, 0, -0.4));
+    }
 
-        If you are just starting out I don't recommend attempting to create an animated part of your weapon is as much as I can comfortably give at this point!
-    */
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay)
-    {
+    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         AWPAnimationController controller = AWPAnimationController.getInstance();
+        GunSkin skin = SkinManager.getSkin(stack);
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_BODY,transformType,matrices);
+            controller.applySpecialModelTransform(getModelComponent(skin, BODY), AWPAnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
-                RenderUtil.renderModel(SpecialModels.AI_AWP_SIGHT.getModel(), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, SIGHT), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
             }
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem())) {
-                matrices.pushPose();
-                matrices.translate(0, 0, -0.4);
-                RenderUtil.renderModel(SpecialModels.AI_AWP_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-                matrices.translate(0, 0, 0.4);
-                matrices.popPose();
-            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderModel(SpecialModels.AI_AWP_COMPENSATOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderModel(SpecialModels.AI_AWP_BRAKE.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-            RenderUtil.renderModel(SpecialModels.AI_AWP.getModel(), stack, matrices, renderBuffer, light, overlay);
+
+            renderBarrel(stack, matrices, renderBuffer, light, overlay, skin);
+
+            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_HANDLE, transformType, matrices);
-            RenderUtil.renderModel(SpecialModels.AI_AWP_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getModelComponent(skin, BODY), AWPAnimationController.INDEX_BOLT, transformType, matrices);
+            RenderUtil.renderModel(getModelComponent(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_BOLT, transformType, matrices);
-            RenderUtil.renderModel(SpecialModels.AI_AWP_BOLT_EXTRA.getModel(), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getModelComponent(skin, BODY), AWPAnimationController.INDEX_BOLT_EXTRA, transformType, matrices);
+            RenderUtil.renderModel(getModelComponent(skin, BOLT_EXTRA), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_MAGAZINE, transformType, matrices);
-            if (GunModifierHelper.getAmmoCapacity(stack) > -1) {
-                RenderUtil.renderModel(SpecialModels.AI_AWP_MAG_EXTENDED.getModel(), stack, matrices, renderBuffer, light, overlay);
-            } else {
-                RenderUtil.renderModel(SpecialModels.AI_AWP_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getModelComponent(skin, BODY), AWPAnimationController.INDEX_MAGAZINE, transformType, matrices);
+            renderMag(stack, matrices, renderBuffer, light, overlay, skin);
+        }
+        matrices.popPose();
+
+        matrices.pushPose();
+        {
+            if (controller.isAnimationRunning() && controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.PULL_BOLT).equals(controller.getPreviousAnimation())) {
+                controller.applySpecialModelTransform(getModelComponent(skin, BODY), AWPAnimationController.INDEX_BULLET, transformType, matrices);
+                RenderUtil.renderModel(getModelComponent(skin, BULLET_SHELL), stack, matrices, renderBuffer, light, overlay);
             }
         }
         matrices.popPose();
 
-        matrices.pushPose();
-        {
-            if(controller.isAnimationRunning()) {
-                controller.applySpecialModelTransform(SpecialModels.AI_AWP.getModel(), AWPAnimationController.INDEX_BULLET, transformType, matrices);
-                RenderUtil.renderModel(SpecialModels.AI_AWP_BULLET_SHELL.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-        }
-        matrices.popPose();
-
-        PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
+        PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
     }
 }
