@@ -66,11 +66,11 @@ public class AimingHandler
     private double normalisedAdsProgress;
     private boolean aiming = false;
     private boolean toggledAim = false;
-    private int toggledAimAwaiter = 0;
 
     public int getCurrentScopeZoomIndex() {return this.currentScopeZoomIndex;}
     public void resetCurrentScopeZoomIndex() {this.currentScopeZoomIndex = 0;}
     private int currentScopeZoomIndex = 0;
+    private boolean isPressed = false;
 
 	private AimingHandler()
 	{
@@ -234,8 +234,11 @@ public class AimingHandler
         if(player == null)
             return;
 
-        if(this.toggledAimAwaiter > 0)
-            this.toggledAimAwaiter--;
+        if( !Config.CLIENT.controls.holdToAim.get() )
+        {
+            if ( !Keys.AIM_TOGGLE.isDown() )
+                this.isPressed = false;
+        }
 
         if(this.isAiming())
         {
@@ -358,10 +361,10 @@ public class AimingHandler
         else
         {
             if ( Keys.AIM_TOGGLE.isDown() )
-                if ( this.toggledAimAwaiter <= 0 )
+                if ( !this.isPressed )
                 {
+                    this.isPressed = true;
                     this.forceToggleAim();
-                    this.toggledAimAwaiter = Config.CLIENT.controls.toggleAimDelay.get();
                 }
             zooming = this.toggledAim;
         }
