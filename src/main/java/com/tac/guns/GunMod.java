@@ -192,7 +192,7 @@ public class GunMod
             CustomGunManager.fill(items);
         }
     };
-    public static final CreativeModeTab EXPLOSIVES = new  CreativeModeTab(Reference.MOD_ID)
+    public static final CreativeModeTab EXPLOSIVES = new  CreativeModeTab("Explosives")
     {
         @Override
         public ItemStack makeIcon()

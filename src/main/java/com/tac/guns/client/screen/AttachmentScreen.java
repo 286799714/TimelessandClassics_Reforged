@@ -57,7 +57,10 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
         super.containerTick();
         if(this.minecraft != null && this.minecraft.player != null)
         {
-            if(!(this.minecraft.player.getMainHandItem().getItem() instanceof GunItem) && !(this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem))
+            if(!(this.minecraft.player.getMainHandItem().getItem() instanceof GunItem) &&
+                    !(this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) &&
+                    !(this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem) &&
+                    !(this.minecraft.player.getMainHandItem().getItem() instanceof IrDeviceItem))
             {
                 Minecraft.getInstance().setScreen(null);
             }
@@ -83,7 +86,9 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         int left = (this.width - this.imageWidth) / 2;
         int top = (this.height - this.imageHeight) / 2;
-        if((this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof IrDeviceItem))
+        if((this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) ||
+                (this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem) ||
+                (this.minecraft.player.getMainHandItem().getItem() instanceof IrDeviceItem))
             RenderUtil.scissor(left + 97, top + 17, 67, 67);
         else
             RenderUtil.scissor(left + 26, top + 17, 123, 70);

@@ -1574,6 +1574,9 @@ public final class Gun implements INBTSerializable<CompoundTag>
             private ScaledPositioned underBarrel;
             @Optional
             @Nullable
+            private ScaledPositioned gunSkin;
+            @Optional
+            @Nullable
             private ScaledPositioned sideRail;
             @Optional
             @Nullable
@@ -1614,6 +1617,13 @@ public final class Gun implements INBTSerializable<CompoundTag>
             {
                 return this.underBarrel;
             }
+
+            @Nullable
+            public ScaledPositioned getGunSkin()
+            {
+                return this.gunSkin;
+            }
+
             @Nullable
             public ScaledPositioned getSideRail()
             {
@@ -1666,6 +1676,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
                 {
                     tag.put("UnderBarrel", this.underBarrel.serializeNBT());
                 }
+                if(this.gunSkin != null)
+                {
+                    tag.put("GunSkin", this.gunSkin.serializeNBT());
+                }
                 if(this.oldScope != null)
                 {
                     tag.put("OldScope", this.oldScope.serializeNBT());
@@ -1712,6 +1726,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
                 {
                     this.underBarrel = this.createScaledPositioned(tag, "UnderBarrel");
                 }
+                if(tag.contains("GunSkin", Tag.TAG_COMPOUND))
+                {
+                    this.gunSkin = this.createScaledPositioned(tag, "GunSkin");
+                }
                 if(tag.contains("OldScope", Tag.TAG_COMPOUND))
                 {
                     this.oldScope = this.createOldScope(tag, "OldScope");
@@ -1756,6 +1774,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
                 if(this.underBarrel != null)
                 {
                     attachments.underBarrel = this.underBarrel.copy();
+                }
+                if(this.gunSkin != null)
+                {
+                    attachments.gunSkin = this.gunSkin.copy();
                 }
                 if(this.oldScope != null)
                 {
@@ -2303,6 +2325,8 @@ public final class Gun implements INBTSerializable<CompoundTag>
                     return this.modules.attachments.stock != null;
                 case UNDER_BARREL:
                     return this.modules.attachments.underBarrel != null;
+                case GUN_SKIN:
+                    return this.modules.attachments.gunSkin != null;
                 case SIDE_RAIL:
                     return this.modules.attachments.sideRail != null;
                 case IR_DEVICE:
@@ -2335,6 +2359,8 @@ public final class Gun implements INBTSerializable<CompoundTag>
                     return this.modules.attachments.stock;
                 case UNDER_BARREL:
                     return this.modules.attachments.underBarrel;
+                case GUN_SKIN:
+                    return this.modules.attachments.gunSkin;
                 case SIDE_RAIL:
                     return this.modules.attachments.sideRail;
                 case IR_DEVICE:
