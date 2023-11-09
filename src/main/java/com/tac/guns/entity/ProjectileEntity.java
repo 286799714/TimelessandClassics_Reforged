@@ -573,7 +573,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if(headshot)
         {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
-            //damage *= this.projectile.getGunHeadDamage();
+            damage *= this.projectile.getGunHeadDamage();
             damage *= GunModifierHelper.getAdditionalHeadshotDamage(this.weapon) == 0F ? 1F : GunModifierHelper.getAdditionalHeadshotDamage(this.weapon);
         }
 
@@ -614,15 +614,15 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     {
         if(Config.COMMON.gameplay.bulletsIgnoreStandardArmor.get()) {
             float damageToMcArmor = 0;
-            if (Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get()/* * this.projectile.getGunArmorIgnore()*/ <= 1.0) {
-                damageToMcArmor = (float) (damage * (1 - Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get()/* * this.projectile.getGunArmorIgnore()*/));
+            if (Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore() <= 1.0) {
+                damageToMcArmor = (float) (damage * (1 - Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore()));
                 entity.hurt(source, damageToMcArmor); // Apply vanilla armor aware damage
             }
 
             entity.invulnerableTime = 0;
             source.bypassArmor();
             source.bypassMagic();
-            if(Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get()/* * this.projectile.getGunArmorIgnore()*/ > 0.0)
+            if(Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * this.projectile.getGunArmorIgnore() > 0.0)
                 entity.hurt(source, (damage - damageToMcArmor)); // Apply pure damage
         }
         else
@@ -799,10 +799,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     private float getCriticalDamage(ItemStack weapon, Random rand, float damage)
     {
-        float chance = GunModifierHelper.getCriticalChance(weapon)/* + this.projectile.getGunCritical()*/;
+        float chance = GunModifierHelper.getCriticalChance(weapon) + this.projectile.getGunCritical();
         if (rand.nextFloat() < chance)
         {
-            return (float) (damage * Config.COMMON.gameplay.criticalDamageMultiplier.get()/* * this.projectile.getGunCriticalDamage()*/);
+            return (float) (damage * Config.COMMON.gameplay.criticalDamageMultiplier.get() * this.projectile.getGunCriticalDamage());
         }
         return damage;
     }
