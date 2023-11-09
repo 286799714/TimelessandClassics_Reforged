@@ -18,6 +18,7 @@ public final class TacKeyMapping extends KeyMapping
 {
 	private final LinkedList< Runnable > press_callbacks = new LinkedList<>();
 	private boolean is_down;
+	private boolean isPressed = false;
 	
 	public TacKeyMapping(
 		String description,
@@ -30,13 +31,19 @@ public final class TacKeyMapping extends KeyMapping
 	public void addPressCallback( Runnable callback ) {
 		this.press_callbacks.add( callback );
 	}
-	
+
+	@Override
+	public boolean isDown() {
+		return this.isPressed;
+	}
+
 	@Override
 	public void setDown( boolean is_down )
 	{
 		if ( is_down && !this.is_down ) {
 			this.press_callbacks.forEach( Runnable::run );
 		}
+		this.isPressed = is_down;
 		
 		super.setDown( is_down );
 	}

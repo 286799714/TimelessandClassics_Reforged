@@ -218,7 +218,7 @@ public class ClientHandler {
         {
             MainMenuScreen screen = (MainMenuScreen) event.getGui();
 
-            event.addWidget((new Button(screen.width / 2 - 215, 10, 75, 20, new TranslationTextComponent("tac.options.gui_settings"), (p_213126_1_) -> {
+            event.addWidget((new Button(screen.width / 2 - 215, 10, 75, 20, new TranslatableComponent("tac.options.gui_settings"), (p_213126_1_) -> {
                 Minecraft.getInstance().displayGuiScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().gameSettings));
             })));
         }

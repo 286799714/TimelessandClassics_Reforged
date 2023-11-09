@@ -647,8 +647,8 @@ public class ServerPlayHandler
 
         MovementAdaptationsHandler.get().setPreviousWeight(gun.getGeneral().getWeightKilo());
         //DEBUGGING AND BALANCE TOOL
-        //player.sendStatusMessage(new TranslationTextComponent("Speed is: " + player.getAttribute(MOVEMENT_SPEED).getValue()) ,true);
-        //new TranslationTextComponent("Speed is: " + player.getAttribute(MOVEMENT_SPEED).getValue()) ,true); new TranslationTextComponent(SyncedPlayerData.instance().get(player, ModSyncedDataKeys.MOVING)+""), true);
+        //player.sendStatusMessage(new TranslatableComponent("Speed is: " + player.getAttribute(MOVEMENT_SPEED).getValue()) ,true);
+        //new TranslatableComponent("Speed is: " + player.getAttribute(MOVEMENT_SPEED).getValue()) ,true); new TranslatableComponent(SyncedPlayerData.instance().get(player, ModSyncedDataKeys.MOVING)+""), true);
     }
 
     public static float calceldGunWeightSpeed(Gun gun, ItemStack gunStack)

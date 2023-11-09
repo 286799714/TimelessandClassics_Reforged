@@ -83,12 +83,12 @@ public class MBPGunItem extends TimelessGunItem {
                 tooltip.add((new TranslatableComponent("info.tac.standardWeightGun", new TranslatableComponent( -((int)((0.1 - speed)*1000))+"%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_GREEN)));
             else
                 tooltip.add((new TranslatableComponent("info.tac.heavyWeightGun", new TranslatableComponent(-((int)((0.1 - speed)*1000))+"%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)));
-            //tooltip.add((new TranslationTextComponent("info.tac.oldRifleScope", new TranslationTextComponent("OldScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
+            //tooltip.add((new TranslatableComponent("info.tac.oldRifleScope", new TranslatableComponent("OldScope").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE)));
         }
 
         if(tagCompound != null)
         {
-            //tooltip.add((new TranslationTextComponent("info.tac.oldRifle", new TranslationTextComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).mergeStyle(TextFormatting.GREEN)));
+            //tooltip.add((new TranslatableComponent("info.tac.oldRifle", new TranslatableComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).withStyle(ChatFormatting.GREEN)));
             tooltip.add((new TranslatableComponent("info.moonshine.oldRifleScope", new TranslatableComponent("Rain").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.BLUE)));
         }
         tooltip.add((new TranslatableComponent("info.tac.attachment_help", new Object[]{(new KeybindComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH)})).withStyle(ChatFormatting.YELLOW));

@@ -79,10 +79,10 @@ public abstract class Attachment
                 outputSound = modifier.modifyFireSoundVolume(outputSound);
             }
             if (outputSound > inputSound) {
-                addPerk(negativePerks, "perk.tac.fire_volume.negative", new TranslationTextComponent("+" + String.valueOf((1.0F - Math.round(outputSound)) * 100) + "% Volume").mergeStyle(TextFormatting.RED));
+                addPerk(negativePerks, "perk.tac.fire_volume.negative", new TranslatableComponent("+" + String.valueOf((1.0F - Math.round(outputSound)) * 100) + "% Volume").withStyle(ChatFormatting.RED));
             } else if (outputSound < inputSound) {
-                addPerk(negativePerks, "perk.tac.fire_volume.negative", new TranslationTextComponent("" + String.valueOf((1.0F - Math.round(outputSound)) * 100) + "% Volume").mergeStyle(TextFormatting.GREEN));
-                //addPerk(positivePerks, "perk.tac.fire_volume.positive", TextFormatting.GREEN, "-" + String.valueOf((1.0F - outputSound) * 100) + new TranslationTextComponent("perk.tac.vol"));
+                addPerk(negativePerks, "perk.tac.fire_volume.negative", new TranslatableComponent("" + String.valueOf((1.0F - Math.round(outputSound)) * 100) + "% Volume").withStyle(ChatFormatting.GREEN));
+                //addPerk(positivePerks, "perk.tac.fire_volume.positive", ChatFormatting.GREEN, "-" + String.valueOf((1.0F - outputSound) * 100) + new TranslatableComponent("perk.tac.vol"));
             }*/
 
             /* Test for silenced */
@@ -260,17 +260,17 @@ public abstract class Attachment
 
     private static void addPerk(List<Component> components, String id, Object... params)
     {
-        //TextFormatting format,   components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(format)));
+        //ChatFormatting format,   components.add(new TranslatableComponent("perk.tac.entry.negative", new TranslatableComponent(id, params).withStyle(format)));
         components.add(new TranslatableComponent("perk.tac.entry.negative", new TranslatableComponent(id, params).withStyle(ChatFormatting.AQUA)));
     }
     private static void addPerkP(List<Component> components, String id, Object... params)
     {
-        //TextFormatting format,   components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(format)));
+        //ChatFormatting format,   components.add(new TranslatableComponent("perk.tac.entry.negative", new TranslatableComponent(id, params).withStyle(format)));
         components.add( new TranslatableComponent(id, params).withStyle(ChatFormatting.GREEN));
     }
     private static void addPerkN(List<Component> components, String id, Object... params)
     {
-        //TextFormatting format,   components.add(new TranslationTextComponent("perk.tac.entry.negative", new TranslationTextComponent(id, params).mergeStyle(format)));
+        //ChatFormatting format,   components.add(new TranslatableComponent("perk.tac.entry.negative", new TranslatableComponent(id, params).withStyle(format)));
         components.add( new TranslatableComponent(id, params).withStyle(ChatFormatting.RED));
     }
 }
