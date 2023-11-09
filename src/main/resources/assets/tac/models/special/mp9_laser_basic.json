@@ -1,0 +1,351 @@
+{
+  "credit": "Made with Blockbench",
+  "texture_size": [
+    128,
+    128
+  ],
+  "textures": {
+    "1_2": "tac:items/test_laser_mini/beam",
+    "particle": "tac:items/test_laser_peq15/extra_base"
+  },
+  "elements": [
+    {
+      "from": [
+        9.34819,
+        8.46431,
+        -6.375
+      ],
+      "to": [
+        9.47319,
+        8.58931,
+        2.625
+      ],
+      "rotation": {
+        "angle": 45,
+        "axis": "z",
+        "origin": [
+          9,
+          9,
+          -1.875
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2.25,
+            2.25,
+            2,
+            2
+          ],
+          "rotation": 270,
+          "texture": "#1_2",
+          "tintindex": 1
+        },
+        "east": {
+          "uv": [
+            1,
+            12.5,
+            1.25,
+            2
+          ],
+          "rotation": 90,
+          "texture": "#1_2",
+          "tintindex": 1
+        },
+        "south": {
+          "uv": [
+            2.25,
+            3.25,
+            2,
+            3
+          ],
+          "rotation": 90,
+          "texture": "#1_2",
+          "tintindex": 1
+        },
+        "west": {
+          "uv": [
+            0,
+            2,
+            0.25,
+            12.5
+          ],
+          "rotation": 90,
+          "texture": "#1_2",
+          "tintindex": 1
+        },
+        "up": {
+          "uv": [
+            10.5,
+            0.25,
+            0,
+            0
+          ],
+          "rotation": 90,
+          "texture": "#1_2",
+          "tintindex": 1
+        },
+        "down": {
+          "uv": [
+            10.5,
+            1.25,
+            0,
+            1
+          ],
+          "rotation": 90,
+          "texture": "#1_2",
+          "tintindex": 1
+        }
+      }
+    }
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "thirdperson_lefthand": {
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "firstperson_righthand": {
+      "translation": [
+        0,
+        1.25,
+        0
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        0,
+        1.25,
+        0
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "gui": {
+      "rotation": [
+        30,
+        -145,
+        0
+      ],
+      "translation": [
+        1.5,
+        0,
+        0
+      ],
+      "scale": [
+        3,
+        3,
+        3
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "translation": [
+        0.75,
+        1,
+        -1
+      ],
+      "scale": [
+        1.1,
+        1.1,
+        1.1
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "body",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "color": 0,
+      "nbt": "{}",
+      "children": []
+    },
+    {
+      "name": "top rail",
+      "origin": [
+        7.90717,
+        10.36951,
+        0.40625
+      ],
+      "color": 6,
+      "nbt": "{}",
+      "children": []
+    },
+    {
+      "name": "sight",
+      "origin": [
+        8,
+        9.6875,
+        -3.36717
+      ],
+      "color": 0,
+      "nbt": "{}",
+      "children": []
+    },
+    {
+      "name": "side rail",
+      "origin": [
+        9.9375,
+        11.33359,
+        -0.06138
+      ],
+      "color": 0,
+      "nbt": "{}",
+      "children": []
+    },
+    {
+      "name": "(Grip)",
+      "origin": [
+        8,
+        8.6945,
+        -2.27866
+      ],
+      "color": 1,
+      "nbt": "{}",
+      "children": [
+        {
+          "name": "group",
+          "origin": [
+            8,
+            6.04687,
+            -2.75965
+          ],
+          "color": 0,
+          "nbt": "{}",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "(Gun barrel)",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "color": 3,
+      "nbt": "{}",
+      "children": [
+        {
+          "name": "octagon",
+          "origin": [
+            8,
+            8,
+            8
+          ],
+          "color": 0,
+          "nbt": "{}",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "(Trigger)",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "color": 3,
+      "nbt": "{}",
+      "children": []
+    },
+    {
+      "name": "deco",
+      "origin": [
+        6.9614,
+        7.69688,
+        2.91406
+      ],
+      "color": 0,
+      "nbt": "{}",
+      "children": [
+        {
+          "name": "group",
+          "origin": [
+            7.16406,
+            7.53906,
+            -2.35156
+          ],
+          "color": 0,
+          "nbt": "{}",
+          "children": []
+        },
+        {
+          "name": "group",
+          "origin": [
+            8,
+            6.56623,
+            1.3507
+          ],
+          "color": 0,
+          "nbt": "{}",
+          "children": []
+        },
+        {
+          "name": "screws",
+          "origin": [
+            8,
+            8,
+            8
+          ],
+          "color": 0,
+          "nbt": "{}",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "mini_laser_s",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "color": 0,
+      "nbt": "{}",
+      "children": [
+        {
+          "name": "beam_dye",
+          "origin": [
+            8,
+            7.36616,
+            -4
+          ],
+          "color": 0,
+          "nbt": "{}",
+          "children": [
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

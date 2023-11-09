@@ -132,9 +132,9 @@ public class DynamicScalingTexturedCrosshair extends TexturedCrosshair implement
         /*Minecraft mc = Minecraft.getInstance();
         ClientPlayerEntity playerEntity = mc.player;
 
-        TimelessGunItem gunItem = (TimelessGunItem) playerEntity.getHeldItemMainhand().getItem();
-        float gunRecoil = GunModifierHelper.getRecoilModifier(playerEntity.getHeldItemMainhand());
-        float gunRecoilH = GunModifierHelper.getHorizontalRecoilModifier(playerEntity.getHeldItemMainhand());
+        TimelessGunItem gunItem = (TimelessGunItem) playerentity.getMainHandItem().getItem();
+        float gunRecoil = GunModifierHelper.getRecoilModifier(playerentity.getMainHandItem());
+        float gunRecoilH = GunModifierHelper.getHorizontalRecoilModifier(playerentity.getMainHandItem());
 */
         // Calculating average Vertical and Horizontal recoil along with reducing modifier to a useful metric
         //float recoil = -((gunRecoilH + gunRecoil)) * (gunItem.getGun().getDisplay().getHipfireRecoilScale());

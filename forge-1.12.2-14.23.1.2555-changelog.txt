@@ -5902,7 +5902,7 @@ Build 1.7.10-10.13.3.1403-1.7.10:
 	cpw: MinecraftForge/FML@0b84b6aa297bdf6ab9f010e340f286442cb242dc Expose the state of the loader
 
 Build 1.8-11.14.1.1402:
-	silfadur: Added hook for  IPerspectiveAwareModel in RenderItem.renderItemIntoGUI for  ItemCameraTransforms.TransformType.GUI
+	silfadur: Added hook for  IPerspectiveAwareModel in RenderItem.renderItemIntoGUI for  ItemTransforms.TransformType.GUI
 
 Build 1.7.10-10.13.3.1401-1710ls:
 	fry:

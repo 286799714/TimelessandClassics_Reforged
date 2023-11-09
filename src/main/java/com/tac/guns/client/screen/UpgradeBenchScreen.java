@@ -213,7 +213,7 @@ public class UpgradeBenchScreen extends AbstractContainerScreen<UpgradeBenchCont
             buffer = this.minecraft.renderBuffers().bufferSource();
 
             GunRenderingHandler.get().renderWeapon(Minecraft.getInstance().player, currentItem, ItemTransforms.TransformType.FIXED, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY);
-            //Minecraft.getInstance().getItemRenderer().renderItem(currentItem, ItemCameraTransforms.TransformType.FIXED, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(currentItem));
+            //Minecraft.getInstance().getItemRenderer().renderItem(currentItem, ItemTransforms.TransformType.FIXED, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, RenderUtil.getModel(currentItem));
 
             buffer.endBatch();
 

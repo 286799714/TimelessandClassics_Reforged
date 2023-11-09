@@ -1,0 +1,177 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [128, 128],
+	"textures": {
+		"2": "tac:items/test_laser_mini/beam",
+		"particle": "tac:items/test_laser_mini/beam"
+	},
+	"elements": [
+		{
+			"from": [8.575, 6.4667, -15.7375],
+			"to": [8.825, 6.7167, 2.2625],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 5.8417, -19.1875]},
+			"faces": {
+				"north": {"uv": [2, 2, 2.25, 2.25], "texture": "#2", "tintindex": 1},
+				"east": {"uv": [0, 0, 10.5, 0.25], "texture": "#2", "tintindex": 1},
+				"south": {"uv": [2, 3, 2.25, 3.25], "texture": "#2", "tintindex": 1},
+				"west": {"uv": [0, 1, 10.5, 1.25], "texture": "#2", "tintindex": 1},
+				"up": {"uv": [0.25, 12.5, 0, 2], "texture": "#2", "tintindex": 1},
+				"down": {"uv": [1.25, 2, 1, 12.5], "texture": "#2", "tintindex": 1}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 0.5, 0.5],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 0.5, 0.5],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 1.25, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 1.25, 0]
+		},
+		"ground": {
+			"translation": [0, 1, 0],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"gui": {
+			"rotation": [25, -145, 0],
+			"translation": [-0.75, 0.75, 0],
+			"scale": [4, 4, 4]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [0.25, 0.5, -1],
+			"scale": [1.1, 1.1, 1.1]
+		}
+	},
+	"groups": [
+		{
+			"name": "slide",
+			"origin": [6.41789, 11.46063, 7],
+			"color": 4,
+			"children": [
+				{
+					"name": "group",
+					"origin": [9.01517, 10.75081, 15.78405],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "sight",
+					"origin": [8.46823, 13.12507, 17.65625],
+					"color": 4,
+					"children": [
+						{
+							"name": "group",
+							"origin": [7.5, 11.84467, 15.3125],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "octagon",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "m+b",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "magazine",
+					"origin": [5.9311, 2.92691, 16.97987],
+					"color": 5,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "extra_extdmag",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "extended_magazine",
+					"origin": [5.9311, 2.92691, 16.97987],
+					"color": 5,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "9mm",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "body",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "barrel",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "bottom",
+					"origin": [8, 7.78858, 14.73669],
+					"color": 0,
+					"children": [
+						{
+							"name": "octagon",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				},
+				{
+					"name": "trigger",
+					"origin": [8.03992, 9.03306, 8.81403],
+					"color": 1,
+					"children": []
+				},
+				{
+					"name": "parts",
+					"origin": [-1.48112, -3.95177, 11.6176],
+					"color": 6,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "mini_laser_v",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "beam_dye",
+					"origin": [8, 7.36616, -4],
+					"color": 0,
+					"children": [0]
+				}
+			]
+		}
+	]
+}

@@ -42,7 +42,7 @@ public class ACOG_4x_ScopeModel implements IOverrideModel
     {
         matrixStack.pushPose();
 
-        /*if ((OptifineHelper.isShadersEnabled()) || !Config.CLIENT.display.scopeDoubleRender.get() && transformType.isFirstPerson() && entity.equals(Minecraft.getInstance().player)) {
+        /*if ((OptifineHelper.isShadersEnabled()) || !Config.CLIENT.display.scopeDoubleRender.get() && transformType.firstPerson() && entity.equals(Minecraft.getInstance().player)) {
             double transition = 1.0D - Math.pow(1.0D - AimingHandler.get().getNormalisedRepairProgress(), 2.0D);
             double zScale = 0.05D + 0.75D * (1.0D - transition);
             //if(AimingHandler.get().getNormalisedRepairProgress() > 0.525)

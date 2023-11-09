@@ -36,7 +36,7 @@ public class UpgradeBenchRenderUtil implements BlockEntityRenderer<UpgradeBenchT
     @Override
     public void render(UpgradeBenchTileEntity tileEntityMBE21, float partialTicks, PoseStack matrixStack, MultiBufferSource renderBuffers,
                        int combinedLight, int combinedOverlay) {
-        //ItemCameraTransforms.TransformType.GROUND,
+        //ItemTransforms.TransformType.GROUND,
         matrixStack.pushPose();
         matrixStack.translate(0.5, 1.05, 0.5);
         matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90F));
