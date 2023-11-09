@@ -42,17 +42,7 @@ public class VortexLPVO_1_4xScopeModel implements IOverrideModel
     @Override
     public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light, int overlay) {
         matrixStack.pushPose();
-        if (!Config.CLIENT.display.scopeDoubleRender.get() && transformType.firstPerson() && entity.equals(Minecraft.getInstance().player)) {
-            double prog = 0;
-            if(AimingHandler.get().getNormalisedAdsProgress() > 0.375) {
-                prog = (AimingHandler.get().getNormalisedAdsProgress() - 0.375) * 1.6;
-            }
-            double transition = 1.0D - Math.pow(1.0D - prog, 2.0D);
-            double zScale = 0.05D + 0.95D * (1.0D - transition);
-            matrixStack.translate(0,0,transition*0.12);
-            matrixStack.scale(1.0F, 1.0F, (float) zScale);
 
-        }
         matrixStack.translate(0, 0.074, 0);
 
         if(AimingHandler.get().getNormalisedAdsProgress() < 0.525 || Config.CLIENT.display.scopeDoubleRender.get())
