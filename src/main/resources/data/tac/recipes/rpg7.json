@@ -3,15 +3,27 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/epic"
+        "tag": "forge:ingots/gold"
+      },
+      "count": 10
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 50
+    },
+    {
+      "item": {
+        "tag": "forge:gems/quartz"
       },
       "count": 5
     },
     {
       "item": {
-        "tag": "forge:leather"
+        "tag": "minecraft:logs"
       },
-      "count": 12
+      "count": 20
     }
   ],
   "result": {

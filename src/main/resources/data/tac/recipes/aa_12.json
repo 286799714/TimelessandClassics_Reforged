@@ -3,14 +3,26 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/legendary"
-      }
+        "tag": "forge:gems/diamond"
+      },
+      "count": 2
     },
     {
       "item": {
-        "tag": "forge:materials/epic"
+        "tag": "forge:ingots/gold"
       },
-      "count": 9
+      "count": 20
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 100
+    },
+    {
+      "item": {
+        "tag": "forge:rods/blaze"
+      }
     }
   ],
   "result": {

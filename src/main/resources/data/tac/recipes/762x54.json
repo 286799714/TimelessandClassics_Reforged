@@ -3,15 +3,20 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/uncommon"
+        "tag": "forge:ingots/copper"
       },
-      "count": 5
+      "count": 30
+    },
+    {
+      "item": {
+        "tag": "forge:gems/lapis"
+      }
     },
     {
       "item": {
         "tag": "forge:gunpowder"
       },
-      "count": 5
+      "count": 10
     }
   ],
   "result": {

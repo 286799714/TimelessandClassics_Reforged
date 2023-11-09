@@ -3,9 +3,9 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/uncommon"
+        "tag": "forge:ingots/copper"
       },
-      "count": 2
+      "count": 10
     },
     {
       "item": {
@@ -16,6 +16,6 @@
   ],
   "result": {
     "item": "tac:round45",
-    "count": 40
+    "count": 45
   }
 }

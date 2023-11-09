@@ -3,19 +3,24 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/uncommon"
+        "tag": "forge:ingots/copper"
       },
-      "count": 3
+      "count": 30
+    },
+    {
+      "item": {
+        "tag": "forge:gems/lapis"
+      }
     },
     {
       "item": {
         "tag": "forge:gunpowder"
       },
-      "count": 5
+      "count": 10
     }
   ],
   "result": {
     "item": "tac:lapua338",
-    "count": 10
+    "count": 24
   }
 }

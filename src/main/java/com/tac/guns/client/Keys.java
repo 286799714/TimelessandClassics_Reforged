@@ -4,6 +4,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.Key;
 import com.tac.guns.Config;
 import com.tac.guns.client.TacKeyMapping.TacKeyBuilder;
+import com.tac.guns.network.PacketHandler;
+import com.tac.guns.network.message.MessageArmorEquip;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -55,9 +57,15 @@ public final class Keys
         INSPECT = new TacKeyBuilder( "key.tac.inspect" ).withKeyboardKey( InputConstants.KEY_H ).buildAndRegis(),
         SIGHT_SWITCH = new TacKeyBuilder( "key.tac.sight_switch" ).withKeyboardKey( InputConstants.KEY_V ).buildAndRegis(),
         ACTIVATE_SIDE_RAIL = new TacKeyBuilder( "key.tac.activeSideRail" ).withKeyboardKey( InputConstants.KEY_B ).buildAndRegis(),
+        EQUIP_ARMOR = new TacKeyBuilder("key.tac.equipArmor").withKeyboardKey( InputConstants.KEY_O).buildAndRegis(),
         
         ARMOR_REPAIRING = new TacKeyBuilder( "key.tac.armor_repairing" ).withKeyboardKey( InputConstants.KEY_K ).buildAndRegis();
-    
+
+        static {
+            EQUIP_ARMOR.addPressCallback(()->{
+                PacketHandler.getPlayChannel().sendToServer(new MessageArmorEquip());
+            });
+        }
     public static final KeyMapping MORE_INFO_HOLD =
         new TacKeyBuilder( "key.tac.more_info_hold" )
             .withKeyboardKey( InputConstants.KEY_LSHIFT )

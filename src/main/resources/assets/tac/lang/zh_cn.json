@@ -292,6 +292,7 @@
 	"key.tac.co_inspect": "检视武器组合键",
 
     "key.tac.armor_repairing": "修复防弹衣",
+    "key.tac.equipArmor": "装备防弹衣",
 
     "effect.tac.blinded": "致盲",
     "effect.tac.deafened": "失聪",

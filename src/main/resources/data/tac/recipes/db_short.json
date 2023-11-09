@@ -3,13 +3,13 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:materials/uncommon"
+        "tag": "forge:ingots/iron"
       },
       "count": 12
     },
     {
       "item": {
-        "tag": "forge:leather"
+        "tag": "minecraft:logs"
       },
       "count": 4
     }

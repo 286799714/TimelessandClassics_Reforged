@@ -1,0 +1,19 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 8
+    },
+    {
+      "item": {
+        "tag": "minecraft:wool"
+      }
+    }
+  ],
+  "result": {
+    "item": "tac:blank_skin_mod_lvl1"
+  }
+}
