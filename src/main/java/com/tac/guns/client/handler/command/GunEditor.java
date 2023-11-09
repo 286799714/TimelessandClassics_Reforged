@@ -358,6 +358,10 @@ public class GunEditor
     public float getCriticalMod() {return this.criticalMod;}
     public float getCriticalDamageMod() {return this.criticalDamageMod;}
     public float getHeadDamageMod() {return this.headDamageMod;}
+    public float getCloseDamageMod() {return this.closeDamageMod;}
+    public float getDecayStartMod() {return this.decayStartMod;}
+    public float getMinDecayMultiplierMod() {return this.minDecayMultiplierMod;}
+    public float getDecayEndMod() {return this.decayEndMod;}
     public float getSizePrjMod() {return this.sizePrjMod;}
     public double getSpeedMod() {return this.speedMod;}
     public double getLifeMod() {return this.lifeMod;}
@@ -366,6 +370,10 @@ public class GunEditor
     private float criticalMod = 0;
     private float criticalDamageMod = 0;
     private float headDamageMod = 0;
+    private float closeDamageMod = 0;
+    private float decayStartMod = 0;
+    private float minDecayMultiplierMod = 0;
+    private float decayEndMod = 0;
     private float sizePrjMod = 0;
     private double speedMod = 0;
     private double lifeMod = 0;
@@ -395,6 +403,14 @@ public class GunEditor
                 player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunCriticalDamage()).withStyle(ChatFormatting.GREEN), true);
                 this.headDamageMod += 0.025f * stepModifier;
                 player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunHeadDamage()).withStyle(ChatFormatting.GREEN), true);
+                this.closeDamageMod += 0.025f * stepModifier;
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunCloseDamage()).withStyle(ChatFormatting.GREEN), true);
+                this.decayStartMod += 0.025f * stepModifier;
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunDecayStart()).withStyle(ChatFormatting.GREEN), true);
+                this.minDecayMultiplierMod += 0.025f * stepModifier;
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunMinDecayMultiplier()).withStyle(ChatFormatting.GREEN), true);
+                this.decayEndMod += 0.025f * stepModifier;
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunDecayEnd()).withStyle(ChatFormatting.GREEN), true);
             }
             else if (isDown) {
                 this.damageMod -= 0.025f * stepModifier;
@@ -407,6 +423,14 @@ public class GunEditor
                 player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunCriticalDamage()).withStyle(ChatFormatting.DARK_RED), true);
                 this.headDamageMod -= 0.025f * stepModifier;
                 player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunHeadDamage()).withStyle(ChatFormatting.DARK_RED), true);
+                this.closeDamageMod -= 0.025f * stepModifier;
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunCloseDamage()).withStyle(ChatFormatting.DARK_RED), true);
+                this.decayStartMod -= 0.025f * stepModifier;
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunDecayStart()).withStyle(ChatFormatting.DARK_RED), true);
+                this.minDecayMultiplierMod -= 0.025f * stepModifier;
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunMinDecayMultiplier()).withStyle(ChatFormatting.DARK_RED), true);
+                this.decayEndMod -= 0.025f * stepModifier;
+                player.displayClientMessage(new TranslatableComponent("Damage: "+gunTmp.getProjectile().getGunDecayEnd()).withStyle(ChatFormatting.DARK_RED), true);
             }
         }
         else if(Keys.L.isDown())
@@ -822,6 +846,10 @@ public class GunEditor
                 this.criticalMod = 0;
                 this.criticalDamageMod = 0;
                 this.headDamageMod = 0;
+                this.closeDamageMod = 0;
+                this.decayStartMod = 0;
+                this.minDecayMultiplierMod = 0;
+                this.decayEndMod = 0;
                 this.sizePrjMod = 0;
                 this.speedMod = 0;
                 this.lifeMod = 0;

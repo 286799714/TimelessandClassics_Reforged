@@ -2,6 +2,7 @@ package com.tac.guns.entity;
 
 //import com.sun.tools.jdi.Packet;
 
+import com.mojang.math.Vector3d;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.common.BoundingBoxManager;
@@ -78,8 +79,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     public double modifiedGravity;
     public int life;
 
-    private float randomRecoilP = 0f;
-    private float randomRecoilY = 0f;
+    protected Vec3 startPos;
 
     public ProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn)
     {
@@ -97,8 +97,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.entitySize = new EntityDimensions(this.projectile.getSize(), this.projectile.getSize(), false);
         this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.0285) : 0.0; // -0.0285 Default upcoming new -0.0125
         this.life = GunModifierHelper.getModifiedProjectileLife(weapon, this.projectile.getLife());
-        this.randomRecoilP = randP;
-        this.randomRecoilY = randY;
 
         /* Get speed and set motion */
         Vec3 dir = this.getDirection(shooter, weapon, item, modifiedGun);
@@ -234,6 +232,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if(!this.level.isClientSide())
         {
             Vec3 startVec = this.position();
+            if (this.tickCount < 1) {
+                startPos = startVec;
+            }
             Vec3 endVec = startVec.add(this.getDeltaMovement());
 
             //TODO: Make RayTraceBlocks return the meta class, use end vec as a new start vec if a tracked block was the hit vec, pretty much re-running the raytrace
@@ -489,7 +490,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             if(block.getRegistryName().getPath().contains("_button"))
                 return;
 
-            if(Config.COMMON.gameplay.enableGunGriefing.get() && (block instanceof HalfTransparentBlock || block instanceof IronBarsBlock) && state.getMaterial() == Material.GLASS)
+            if(Config.COMMON.gameplay.enableGunGriefing.get() &&
+                    (block instanceof HalfTransparentBlock || block instanceof IronBarsBlock) &&
+                    state.getMaterial() == Material.GLASS)
             {
                 this.level.destroyBlock(blockRayTraceResult.getBlockPos(), false);
             }
@@ -565,7 +568,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot)
     {
-        float damage = this.getDamage();
+        float damage = this.getDamage(hitVec);
         float newDamage = this.getCriticalDamage(this.weapon, this.random, damage);
         boolean critical = damage != newDamage;
         damage = newDamage;
@@ -783,6 +786,46 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         return this.shooterId;
     }
 
+    //DamageReduceOverDistance
+    public float getDamage(Vec3 hitVec) {
+        float initialDamage = (this.projectile.getDamage() + this.additionalDamage);
+        double maxDistance = this.projectile.getLife() * this.projectile.getSpeed();
+        double projDistance = hitVec.distanceTo(this.startPos);
+        if (this.projectile.isDamageReduceOverLife()) {
+            float modifier;
+            if (projDistance <= Math.min(Math.min(this.projectile.getSpeed() / 10, maxDistance / 100), 2))
+                modifier = this.projectile.getGunCloseDamage() > 1 ? this.projectile.getGunCloseDamage() : 1;
+            else {
+                float decayStartDistance;
+                float decayEndDistance;
+                float minDecayMultiplier;
+                if (this.projectile.getGunDecayStart() > this.projectile.getGunDecayEnd() && this.projectile.getGunMinDecayMultiplier() > 1f) {
+                    decayStartDistance = (float) (Mth.clamp(this.projectile.getGunDecayEnd(), 0f, 1f) * maxDistance);
+                    decayEndDistance = (float) (Mth.clamp(this.projectile.getGunDecayStart(), 0f, 1f) * maxDistance);
+                    minDecayMultiplier = this.projectile.getGunMinDecayMultiplier();
+                } else {
+                    decayStartDistance = (float) (Mth.clamp(this.projectile.getGunDecayStart(), 0f, 1f) * maxDistance);
+                    decayEndDistance = (float) (Mth.clamp(this.projectile.getGunDecayEnd(), 0f, 1f) * maxDistance);
+                    minDecayMultiplier = Mth.clamp(this.projectile.getGunMinDecayMultiplier(), 0f, 1f);
+                }
+
+                if (decayStartDistance == decayEndDistance)
+                    modifier = projDistance > decayEndDistance ? minDecayMultiplier : 1f;
+                else
+                    modifier = (float) Mth.clamp(
+                            (projDistance - decayEndDistance) * (1 - minDecayMultiplier) / (decayStartDistance - decayEndDistance) + minDecayMultiplier,
+                            Math.min(minDecayMultiplier, 1f),
+                            Math.max(minDecayMultiplier, 1f));
+            }
+            initialDamage *= modifier;
+        }
+        float damage = initialDamage / this.general.getProjectileAmount();
+        damage = GunModifierHelper.getModifiedDamage(this.weapon, this.modifiedGun, damage);
+        damage = GunEnchantmentHelper.getAcceleratorDamage(this.weapon, damage);
+        return Math.max(0F, damage);
+    }
+
+    //DamageReduceOverLife
     public float getDamage()
     {
         float initialDamage = (this.projectile.getDamage() + this.additionalDamage);

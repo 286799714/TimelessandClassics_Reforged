@@ -658,6 +658,14 @@ public final class Gun implements INBTSerializable<CompoundTag>
         private float criticalDamage = 1f;
         @Optional
         private float headDamage = 1f;
+        @Optional
+        private float closeDamage = 1f;
+        @Optional
+        private float decayStart = 0f;
+        @Optional
+        private float minDecayMultiplier = 0.1f;
+        @Optional
+        private float decayEnd = 1f;
         @Ignored
         private float size = 0.1f;
         @Optional
@@ -695,6 +703,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
             tag.putFloat("Critical", this.critical);
             tag.putFloat("CriticalDamage", this.criticalDamage);
             tag.putFloat("HeadDamage", this.headDamage);
+            tag.putFloat("CloseDamage", this.closeDamage);
+            tag.putFloat("DecayStart", this.decayStart);
+            tag.putFloat("MinDecayMultiplier", this.minDecayMultiplier);
+            tag.putFloat("DecayEnd", this.decayEnd);
             tag.putFloat("Size", this.size);
             tag.putDouble("Speed", this.speed);
             tag.putInt("Life", this.life);
@@ -739,6 +751,18 @@ public final class Gun implements INBTSerializable<CompoundTag>
             if(tag.contains("HeadDamage", Tag.TAG_ANY_NUMERIC))
             {
                 this.headDamage = tag.getFloat("HeadDamage");
+            }
+            if (tag.contains("CloseDamage", Tag.TAG_ANY_NUMERIC)) {
+                this.closeDamage = tag.getFloat("CloseDamage");
+            }
+            if (tag.contains("DecayStart", Tag.TAG_ANY_NUMERIC)) {
+                this.decayStart = tag.getFloat("DecayStart");
+            }
+            if (tag.contains("MinDecayMultiplier", Tag.TAG_ANY_NUMERIC)) {
+                this.minDecayMultiplier = tag.getFloat("MinDecayMultiplier");
+            }
+            if (tag.contains("DecayEnd", Tag.TAG_ANY_NUMERIC)) {
+                this.decayEnd = tag.getFloat("DecayEnd");
             }
             if(tag.contains("Size", Tag.TAG_ANY_NUMERIC))
             {
@@ -796,6 +820,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
             projectile.critical = this.critical;
             projectile.criticalDamage = this.criticalDamage;
             projectile.headDamage = this.headDamage;
+            projectile.closeDamage = this.closeDamage;
+            projectile.decayStart = this.decayStart;
+            projectile.minDecayMultiplier = this.minDecayMultiplier;
+            projectile.decayEnd = this.decayEnd;
             projectile.size = this.size;
             projectile.speed = this.speed;
             projectile.life = this.life;
@@ -864,6 +892,34 @@ public final class Gun implements INBTSerializable<CompoundTag>
         public float getGunHeadDamage()
         {
             return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.headDamage + GunEditor.get().getHeadDamageMod()) : this.headDamage;
+        }
+
+        /**
+         * @return The CloseDamage caused by this projectile
+         */
+        public float getGunCloseDamage() {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.closeDamage + GunEditor.get().getCloseDamageMod()) : this.closeDamage;
+        }
+
+        /**
+         * @return The decay start position of this projectile
+         */
+        public float getGunDecayStart() {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.decayStart + GunEditor.get().getDecayStartMod()) : this.decayStart;
+        }
+
+        /**
+         * @return The min decay percentage of this projectile
+         */
+        public float getGunMinDecayMultiplier() {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.minDecayMultiplier + GunEditor.get().getMinDecayMultiplierMod()) : this.minDecayMultiplier;
+        }
+
+        /**
+         * @return The decay end position of this projectile
+         */
+        public float getGunDecayEnd() {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.decayEnd + GunEditor.get().getDecayEndMod()) : this.decayEnd;
         }
 
         /**
