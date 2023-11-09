@@ -57,7 +57,22 @@ public final class Keys
         ACTIVATE_SIDE_RAIL = new TacKeyBuilder( "key.tac.activeSideRail" ).withKeyboardKey( InputConstants.KEY_B ).buildAndRegis(),
         
         ARMOR_REPAIRING = new TacKeyBuilder( "key.tac.armor_repairing" ).withKeyboardKey( InputConstants.KEY_K ).buildAndRegis();
-    
+
+    public static final TacKeyMapping[] KEYS_VALUE = {RELOAD, UNLOAD, ATTACHMENTS, FIRE_SELECT, INSPECT, SIGHT_SWITCH, ACTIVATE_SIDE_RAIL, ARMOR_REPAIRING};
+
+    public static boolean noConflict(TacKeyMapping key) {
+        for (TacKeyMapping k : KEYS_VALUE) {
+            if (k == key) {
+                if (!k.getKeyModifier().isActive(null))
+                    return false;
+            } else {
+                if (k.isDown() && k.getKeyModifier().isActive(null))
+                    return false;
+            }
+        }
+        return true;
+    }
+
     public static final KeyMapping MORE_INFO_HOLD =
         new TacKeyBuilder( "key.tac.more_info_hold" )
             .withKeyboardKey( InputConstants.KEY_LSHIFT )

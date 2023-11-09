@@ -23,61 +23,56 @@ import static com.tac.guns.GunMod.LOGGER;
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class FlashlightHandler
-{
+public class FlashlightHandler {
     private static FlashlightHandler instance;
 
-    public static FlashlightHandler get()
-    {
-        if(instance == null)
-        {
+    public static FlashlightHandler get() {
+        if (instance == null) {
             instance = new FlashlightHandler();
         }
         return instance;
     }
 
     private boolean active = false;
-    
-    private FlashlightHandler()
-    {
-    	Keys.ACTIVATE_SIDE_RAIL.addPressCallback( () -> {
-            if (Keys.ACTIVATE_SIDE_RAIL.getKeyModifier().isActive(KeyConflictContext.GUI)) {
-                final Minecraft mc = Minecraft.getInstance();
-                final Player player = mc.player;
-                if (
-                        player != null
-                                && player.getMainHandItem().getItem() instanceof GunItem
-                                && Gun.getAttachment(
-                                IAttachment.Type.SIDE_RAIL,
-                                player.getMainHandItem()
-                        ) != null
-                ) this.active = !active;
-            }
-    	} );
+
+    private FlashlightHandler() {
+        Keys.ACTIVATE_SIDE_RAIL.addPressCallback(() -> {
+            if (!Keys.noConflict(Keys.ACTIVATE_SIDE_RAIL))
+                return;
+
+            final Minecraft mc = Minecraft.getInstance();
+            final Player player = mc.player;
+            if (
+                    player != null
+                            && player.getMainHandItem().getItem() instanceof GunItem
+                            && Gun.getAttachment(
+                            IAttachment.Type.SIDE_RAIL,
+                            player.getMainHandItem()
+                    ) != null
+            ) this.active = !active;
+        });
     }
 
-    private boolean isInGame()
-    {
+    private boolean isInGame() {
         Minecraft mc = Minecraft.getInstance();
-        if(mc.getOverlay() != null)
+        if (mc.getOverlay() != null)
             return false;
-        if(mc.screen != null)
+        if (mc.screen != null)
             return false;
-        if(!mc.mouseHandler.isMouseGrabbed())
+        if (!mc.mouseHandler.isMouseGrabbed())
             return false;
         return mc.isWindowActive();
     }
 
     @SubscribeEvent
-    public void onPlayerUpdate(PlayerTickEvent event)
-    {
-        if(!isInGame())
+    public void onPlayerUpdate(PlayerTickEvent event) {
+        if (!isInGame())
             return;
         Player player = event.player;
-        if(player == null)
+        if (player == null)
             return;
 
-        if(NetworkGunManager.get() != null && NetworkGunManager.get().StackIds != null) {
+        if (NetworkGunManager.get() != null && NetworkGunManager.get().StackIds != null) {
             if (player.getMainHandItem().getItem() instanceof TimelessGunItem && player.getMainHandItem().getTag() != null) {
                 if (!player.getMainHandItem().getTag().contains("ID")) {
                     UUID id;
@@ -93,8 +88,7 @@ public class FlashlightHandler
             }
         }
 
-        if (event.phase == Phase.START && (player.getMainHandItem() != null && this.active && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, player.getMainHandItem()) != null))
-        {
+        if (event.phase == Phase.START && (player.getMainHandItem() != null && this.active && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, player.getMainHandItem()) != null)) {
             PacketHandler.getPlayChannel().sendToServer(new MessageLightChange(new int[]{32}));//(new int[]{2,32}));
             //PacketHandler.getPlayChannel().sendToServer(new MessageLightChange(6));
             /*int lightNumber = 32 / 5;

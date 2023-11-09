@@ -205,39 +205,40 @@ public class ReloadHandler {
 
     public int rigAmmoCount = 0;
 
-    private ReloadHandler()
-    {
-    	Keys.RELOAD.addPressCallback( () -> {
-            if (Keys.RELOAD.getKeyModifier().isActive(KeyConflictContext.GUI)) {
-                final LocalPlayer player = Minecraft.getInstance().player;
-                if (player == null) return;
+    private ReloadHandler() {
+        Keys.RELOAD.addPressCallback(() -> {
+            if (!Keys.noConflict(Keys.RELOAD))
+                return;
 
-                final ItemStack stack = player.getMainHandItem();
-                if (stack.getItem() instanceof GunItem) {
-                    PacketHandler.getPlayChannel().sendToServer(new MessageUpdateGunID());
-                    if (!SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
-                        ShootingHandler.get().burstTracker = 0;
-                        this.setReloading(true);
-                    } else if (
-                            GunAnimationController.fromItem(stack.getItem())
-                                    instanceof PumpShotgunAnimationController
-                    ) {
-                        this.setReloading(false);
-                    }
-                }
-            }
-		} );
-    	
-    	Keys.UNLOAD.addPressCallback( () -> {
-            if (Keys.UNLOAD.getKeyModifier().isActive(KeyConflictContext.GUI)) {
-                if (!this.isReloading()) {
-                    final SimpleChannel channel = PacketHandler.getPlayChannel();
-                    channel.sendToServer(new MessageUpdateGunID());
+            final LocalPlayer player = Minecraft.getInstance().player;
+            if (player == null) return;
+
+            final ItemStack stack = player.getMainHandItem();
+            if (stack.getItem() instanceof GunItem) {
+                PacketHandler.getPlayChannel().sendToServer(new MessageUpdateGunID());
+                if (!SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
+                    ShootingHandler.get().burstTracker = 0;
+                    this.setReloading(true);
+                } else if (
+                        GunAnimationController.fromItem(stack.getItem())
+                                instanceof PumpShotgunAnimationController
+                ) {
                     this.setReloading(false);
-                    channel.sendToServer(new MessageUnload());
                 }
             }
-        } );
+        });
+
+        Keys.UNLOAD.addPressCallback(() -> {
+            if (!Keys.noConflict(Keys.UNLOAD))
+                return;
+
+            if (!this.isReloading()) {
+                final SimpleChannel channel = PacketHandler.getPlayChannel();
+                channel.sendToServer(new MessageUpdateGunID());
+                this.setReloading(false);
+                channel.sendToServer(new MessageUnload());
+            }
+        });
     }
 
     @SubscribeEvent
@@ -294,13 +295,11 @@ public class ReloadHandler {
                             return;
                         }
                         ItemStack rig = WearableHelper.PlayerWornRig(player);
-                        if(!player.isCreative() && !rig.isEmpty())
-                        {
+                        if (!player.isCreative() && !rig.isEmpty()) {
                             if (Gun.findAmmo(player, gun.getProjectile().getItem()).length < 1 && rigAmmoCount < 1) {
                                 return;
                             }
-                        }
-                        else if (!player.isCreative() && Gun.findAmmo(player, gun.getProjectile().getItem()).length < 1) {
+                        } else if (!player.isCreative() && Gun.findAmmo(player, gun.getProjectile().getItem()).length < 1) {
                             return;
                         }
                         if (MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Pre(player, stack)))
@@ -313,7 +312,7 @@ public class ReloadHandler {
                     }
                 }
             } else {
-                if(prevItemStack != null) AnimationHandler.INSTANCE.onGunReload(false, prevItemStack);
+                if (prevItemStack != null) AnimationHandler.INSTANCE.onGunReload(false, prevItemStack);
                 SyncedEntityData.instance().set(player, ModSyncedDataKeys.RELOADING, false);
                 PacketHandler.getPlayChannel().sendToServer(new MessageReload(false));
                 this.reloadingSlot = -1;
@@ -424,26 +423,28 @@ public class ReloadHandler {
             isEmpty = tag.getInt("AmmoCount") <= 0;
         }
         return this.startUpReloadTimer == 0 ? (gunItem.getGun().getReloads().isMagFed() ? (isEmpty ? ((this.prevReloadTimer + ((this.reloadTimer - this.prevReloadTimer) * partialTicks) + this.startUpReloadTimer) / ((float) gunItem.getGun().getReloads().getReloadMagTimer() + gunItem.getGun().getReloads().getAdditionalReloadEmptyMagTimer())) : ((this.prevReloadTimer + ((this.reloadTimer - this.prevReloadTimer) * partialTicks) + this.startUpReloadTimer) / (float) gunItem.getGun().getReloads().getReloadMagTimer())) : ((this.reloadTimer + ((this.reloadTimer - this.prevReloadTimer) * partialTicks)) / ((float) gunItem.getGun().getReloads().getinterReloadPauseTicks()))
-                )
+        )
                 : 1F;
     }
 
     @SubscribeEvent
     public void onGunFire(GunFireEvent.Pre event) {
         Player player = event.getPlayer();
-        if(player == null) return;
+        if (player == null) return;
         ItemStack stack = player.getMainHandItem();
-        if (!(stack.getItem() instanceof GunItem)) return; // Fails on server instances where all plays must be holding a gun
+        if (!(stack.getItem() instanceof GunItem))
+            return; // Fails on server instances where all plays must be holding a gun
         Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
-        if(GunAnimationController.fromItem(stack.getItem()) instanceof PumpShotgunAnimationController && isReloading()) event.setCanceled(true);
+        if (GunAnimationController.fromItem(stack.getItem()) instanceof PumpShotgunAnimationController && isReloading())
+            event.setCanceled(true);
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.getInt("AmmoCount") <= 0) {
             if (gun.getReloads().getReloadMagTimer() + gun.getReloads().getAdditionalReloadEmptyMagTimer() - reloadTimer > 5) {
-                if(isReloading()) event.setCanceled(true);
+                if (isReloading()) event.setCanceled(true);
             }
         } else {
-            if (gun.getReloads().getReloadMagTimer() - reloadTimer >5) {
-                if(isReloading()) event.setCanceled(true);
+            if (gun.getReloads().getReloadMagTimer() - reloadTimer > 5) {
+                if (isReloading()) event.setCanceled(true);
             }
         }
     }

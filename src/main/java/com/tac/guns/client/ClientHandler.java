@@ -227,24 +227,26 @@ public class ClientHandler {
 
     static {
         Keys.ATTACHMENTS.addPressCallback(() -> {
-            if (Keys.ATTACHMENTS.getKeyModifier().isActive(KeyConflictContext.GUI)) {
-                final Minecraft mc = Minecraft.getInstance();
-                if (mc.player != null && mc.screen == null)
-                    PacketHandler.getPlayChannel().sendToServer(new MessageAttachments());
-            }
+            if (!Keys.noConflict(Keys.ATTACHMENTS))
+                return;
+
+            final Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null && mc.screen == null)
+                PacketHandler.getPlayChannel().sendToServer(new MessageAttachments());
         });
 
         Keys.INSPECT.addPressCallback(() -> {
-            if (Keys.INSPECT.getKeyModifier().isActive(KeyConflictContext.GUI)) {
-                final Minecraft mc = Minecraft.getInstance();
-                if (
-                        mc.player != null
-                                && mc.screen == null
-                                && GunAnimationController.fromItem(
-                                Minecraft.getInstance().player.getInventory().getSelected().getItem()
-                        ) == null
-                ) PacketHandler.getPlayChannel().sendToServer(new MessageInspection());
-            }
+            if (!Keys.noConflict(Keys.INSPECT))
+                return;
+
+            final Minecraft mc = Minecraft.getInstance();
+            if (
+                    mc.player != null
+                            && mc.screen == null
+                            && GunAnimationController.fromItem(
+                            Minecraft.getInstance().player.getInventory().getSelected().getItem()
+                    ) == null
+            ) PacketHandler.getPlayChannel().sendToServer(new MessageInspection());
         });
     }
 
