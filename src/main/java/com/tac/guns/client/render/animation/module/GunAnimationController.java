@@ -128,7 +128,7 @@ public abstract class GunAnimationController {
                 case RELOAD_NORMAL: return new AnimationSoundMeta(sounds.getReloadNormal());
                 case DRAW: return new AnimationSoundMeta(sounds.getDraw());
                 case INSPECT: return new AnimationSoundMeta(sounds.getInspect());
-                /*case INSPECT_EMPTY: return new AnimationSoundMeta(sounds.getInspectEmpty());*/
+                case INSPECT_EMPTY: return new AnimationSoundMeta(sounds.getInspectEmpty());
                 default: return null;
             }
         }

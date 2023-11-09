@@ -650,6 +650,22 @@ public final class Gun implements INBTSerializable<CompoundTag>
         private boolean visible = true;
         @Optional
         private float damage;
+        @Optional
+        private float armorIgnore = 1f;
+        @Optional
+        private float critical = 0f;
+        @Optional
+        private float criticalDamage = 1f;
+        @Optional
+        private float headDamage = 1f;
+        @Optional
+        private float closeDamage = 1f;
+        @Optional
+        private float decayStart = 0f;
+        @Optional
+        private float minDecayMultiplier = 0.1f;
+        @Optional
+        private float decayEnd = 1f;
         @Ignored
         private float size = 0.1f;
         @Optional
@@ -675,7 +691,7 @@ public final class Gun implements INBTSerializable<CompoundTag>
         @Optional
         private int bulletClass = 1;
         @Optional
-        private float bluntDamagePercentage = 0.20f;
+        private float bluntDamagePercentage = 0.5f;
         @Override
         public CompoundTag serializeNBT()
         {
@@ -683,6 +699,14 @@ public final class Gun implements INBTSerializable<CompoundTag>
             tag.putString("Item", this.item.toString());
             tag.putBoolean("Visible", this.visible);
             tag.putFloat("Damage", this.damage);
+            tag.putFloat("ArmorIgnore", this.armorIgnore);
+            tag.putFloat("Critical", this.critical);
+            tag.putFloat("CriticalDamage", this.criticalDamage);
+            tag.putFloat("HeadDamage", this.headDamage);
+            tag.putFloat("CloseDamage", this.closeDamage);
+            tag.putFloat("DecayStart", this.decayStart);
+            tag.putFloat("MinDecayMultiplier", this.minDecayMultiplier);
+            tag.putFloat("DecayEnd", this.decayEnd);
             tag.putFloat("Size", this.size);
             tag.putDouble("Speed", this.speed);
             tag.putInt("Life", this.life);
@@ -711,6 +735,34 @@ public final class Gun implements INBTSerializable<CompoundTag>
             if(tag.contains("Damage", Tag.TAG_ANY_NUMERIC))
             {
                 this.damage = tag.getFloat("Damage");
+            }
+            if(tag.contains("ArmorIgnore",Tag.TAG_ANY_NUMERIC))
+            {
+                this.armorIgnore = tag.getFloat("ArmorIgnore");
+            }
+            if(tag.contains("Critical", Tag.TAG_ANY_NUMERIC))
+            {
+                this.critical = tag.getFloat("Critical");
+            }
+            if(tag.contains("CriticalDamage", Tag.TAG_ANY_NUMERIC))
+            {
+                this.criticalDamage = tag.getFloat("CriticalDamage");
+            }
+            if(tag.contains("HeadDamage", Tag.TAG_ANY_NUMERIC))
+            {
+                this.headDamage = tag.getFloat("HeadDamage");
+            }
+            if (tag.contains("CloseDamage", Tag.TAG_ANY_NUMERIC)) {
+                this.closeDamage = tag.getFloat("CloseDamage");
+            }
+            if (tag.contains("DecayStart", Tag.TAG_ANY_NUMERIC)) {
+                this.decayStart = tag.getFloat("DecayStart");
+            }
+            if (tag.contains("MinDecayMultiplier", Tag.TAG_ANY_NUMERIC)) {
+                this.minDecayMultiplier = tag.getFloat("MinDecayMultiplier");
+            }
+            if (tag.contains("DecayEnd", Tag.TAG_ANY_NUMERIC)) {
+                this.decayEnd = tag.getFloat("DecayEnd");
             }
             if(tag.contains("Size", Tag.TAG_ANY_NUMERIC))
             {
@@ -764,6 +816,14 @@ public final class Gun implements INBTSerializable<CompoundTag>
             projectile.item = this.item;
             projectile.visible = this.visible;
             projectile.damage = this.damage;
+            projectile.armorIgnore = this.armorIgnore;
+            projectile.critical = this.critical;
+            projectile.criticalDamage = this.criticalDamage;
+            projectile.headDamage = this.headDamage;
+            projectile.closeDamage = this.closeDamage;
+            projectile.decayStart = this.decayStart;
+            projectile.minDecayMultiplier = this.minDecayMultiplier;
+            projectile.decayEnd = this.decayEnd;
             projectile.size = this.size;
             projectile.speed = this.speed;
             projectile.life = this.life;
@@ -795,11 +855,71 @@ public final class Gun implements INBTSerializable<CompoundTag>
         }
 
         /**
-         * @return The damage caused by this projectile
+         * @return The Damage caused by this projectile
          */
         public float getDamage()
         {
             return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.damage + GunEditor.get().getDamageMod()) : this.damage;
+        }
+
+        /**
+         * @return The ArmorIgnore caused by this projectile
+         */
+        public float getGunArmorIgnore()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.armorIgnore + GunEditor.get().getArmorIgnoreMod()) : this.armorIgnore;
+        }
+
+        /**
+         * @return The Critical caused by this projectile
+         */
+        public float getGunCritical()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.critical + GunEditor.get().getCriticalMod()) : this.critical;
+        }
+
+        /**
+         * @return The CriticalDamage caused by this projectile
+         */
+        public float getGunCriticalDamage()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.criticalDamage + GunEditor.get().getCriticalDamageMod()) : this.criticalDamage;
+        }
+
+        /**
+         * @return The HeadDamage caused by this projectile
+         */
+        public float getGunHeadDamage()
+        {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.headDamage + GunEditor.get().getHeadDamageMod()) : this.headDamage;
+        }
+
+        /**
+         * @return The CloseDamage caused by this projectile
+         */
+        public float getGunCloseDamage() {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.closeDamage + GunEditor.get().getCloseDamageMod()) : this.closeDamage;
+        }
+
+        /**
+         * @return The decay start position of this projectile
+         */
+        public float getGunDecayStart() {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.decayStart + GunEditor.get().getDecayStartMod()) : this.decayStart;
+        }
+
+        /**
+         * @return The min decay percentage of this projectile
+         */
+        public float getGunMinDecayMultiplier() {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.minDecayMultiplier + GunEditor.get().getMinDecayMultiplierMod()) : this.minDecayMultiplier;
+        }
+
+        /**
+         * @return The decay end position of this projectile
+         */
+        public float getGunDecayEnd() {
+            return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ? (this.decayEnd + GunEditor.get().getDecayEndMod()) : this.decayEnd;
         }
 
         /**
@@ -816,7 +936,7 @@ public final class Gun implements INBTSerializable<CompoundTag>
         public double getSpeed()
         {
             return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ?
-                    (this.speed + GunEditor.get().getSpeedMod()) : this.speed/1.15;
+                    (this.speed + GunEditor.get().getSpeedMod()) : this.speed;
         }
 
         /**
@@ -825,7 +945,7 @@ public final class Gun implements INBTSerializable<CompoundTag>
         public int getLife()
         {
             return (Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER && Config.COMMON.development.enableTDev.get() && GunEditor.get().getMode() == GunEditor.TaCWeaponDevModes.projectile) ?
-                    (int) (this.life*1.5 + GunEditor.get().getLifeMod()) : (int)(this.life*1.5);
+                    (int) (this.life + GunEditor.get().getLifeMod()) : this.life;
         }
 
         /**
@@ -943,6 +1063,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
         @Optional
         @Nullable
         @TGExclude
+        private ResourceLocation inspectEmpty;
+        @Optional
+        @Nullable
+        @TGExclude
         private ResourceLocation cock;
         @Optional
         @Nullable
@@ -976,6 +1100,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
             if(draw != null)
             {
                 tag.putString("Draw", this.draw.toString());
+            }
+            if(inspectEmpty != null)
+            {
+                tag.putString("InspectEmpty", this.inspectEmpty.toString());
             }
             if(inspect != null)
             {
@@ -1038,6 +1166,9 @@ public final class Gun implements INBTSerializable<CompoundTag>
             if(tag.contains("Draw", Tag.TAG_STRING)){
                 this.draw = this.createSound(tag, "Draw");
             }
+            if(tag.contains("InspectEmpty", Tag.TAG_STRING)){
+                this.inspectEmpty = this.createSound(tag, "InspectEmpty");
+            }
             if(tag.contains("Inspect", Tag.TAG_STRING)){
                 this.inspect = this.createSound(tag, "Inspect");
             }
@@ -1073,6 +1204,7 @@ public final class Gun implements INBTSerializable<CompoundTag>
             sounds.silencedFire = this.silencedFire;
             sounds.reloadEmpty = this.reloadEmpty;
             sounds.draw = this.draw;
+            sounds.inspectEmpty = this.inspectEmpty;
             sounds.inspect = this.inspect;
             sounds.reloadNormal = this.reloadNormal;
             sounds.pump = this.pump;
@@ -1139,6 +1271,8 @@ public final class Gun implements INBTSerializable<CompoundTag>
         @Nullable
         public ResourceLocation getDraw() { return this.draw; }
 
+        @Nullable
+        public ResourceLocation getInspectEmpty() { return this.inspectEmpty != null ? this.inspectEmpty : this.inspect; }
         /**
          * @return The registry id of the sound event when inspecting.
          */
@@ -1235,7 +1369,6 @@ public final class Gun implements INBTSerializable<CompoundTag>
         {
             private double size = 0.5;
             private double smokeSize = 2.0;
-
             private double trailAdjust = 1.15;
 
             @Override
@@ -1421,7 +1554,7 @@ public final class Gun implements INBTSerializable<CompoundTag>
         public static class Zoom extends Positioned
         {
             @Optional
-            private float fovModifier;
+            private float fovModifier = 0.8F;
 
             @Optional
             private double stabilityOffset = 0.225;
@@ -1497,6 +1630,9 @@ public final class Gun implements INBTSerializable<CompoundTag>
             private ScaledPositioned underBarrel;
             @Optional
             @Nullable
+            private ScaledPositioned gunSkin;
+            @Optional
+            @Nullable
             private ScaledPositioned sideRail;
             @Optional
             @Nullable
@@ -1537,6 +1673,13 @@ public final class Gun implements INBTSerializable<CompoundTag>
             {
                 return this.underBarrel;
             }
+
+            @Nullable
+            public ScaledPositioned getGunSkin()
+            {
+                return this.gunSkin;
+            }
+
             @Nullable
             public ScaledPositioned getSideRail()
             {
@@ -1589,6 +1732,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
                 {
                     tag.put("UnderBarrel", this.underBarrel.serializeNBT());
                 }
+                if(this.gunSkin != null)
+                {
+                    tag.put("GunSkin", this.gunSkin.serializeNBT());
+                }
                 if(this.oldScope != null)
                 {
                     tag.put("OldScope", this.oldScope.serializeNBT());
@@ -1635,6 +1782,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
                 {
                     this.underBarrel = this.createScaledPositioned(tag, "UnderBarrel");
                 }
+                if(tag.contains("GunSkin", Tag.TAG_COMPOUND))
+                {
+                    this.gunSkin = this.createScaledPositioned(tag, "GunSkin");
+                }
                 if(tag.contains("OldScope", Tag.TAG_COMPOUND))
                 {
                     this.oldScope = this.createOldScope(tag, "OldScope");
@@ -1679,6 +1830,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
                 if(this.underBarrel != null)
                 {
                     attachments.underBarrel = this.underBarrel.copy();
+                }
+                if(this.gunSkin != null)
+                {
+                    attachments.gunSkin = this.gunSkin.copy();
                 }
                 if(this.oldScope != null)
                 {
@@ -2226,6 +2381,8 @@ public final class Gun implements INBTSerializable<CompoundTag>
                     return this.modules.attachments.stock != null;
                 case UNDER_BARREL:
                     return this.modules.attachments.underBarrel != null;
+                case GUN_SKIN:
+                    return this.modules.attachments.gunSkin != null;
                 case SIDE_RAIL:
                     return this.modules.attachments.sideRail != null;
                 case IR_DEVICE:
@@ -2258,6 +2415,8 @@ public final class Gun implements INBTSerializable<CompoundTag>
                     return this.modules.attachments.stock;
                 case UNDER_BARREL:
                     return this.modules.attachments.underBarrel;
+                case GUN_SKIN:
+                    return this.modules.attachments.gunSkin;
                 case SIDE_RAIL:
                     return this.modules.attachments.sideRail;
                 case IR_DEVICE:

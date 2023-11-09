@@ -22,7 +22,7 @@ public class HkMp5a5AnimationController extends GunAnimationController {
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/hk_mp5a5_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/hk_mp5a5_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/hk_mp5a5_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/hk_mp5a5_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/hk_mp5a5_inspect.gltf"));
     private static final HkMp5a5AnimationController instance = new HkMp5a5AnimationController();
 
     private HkMp5a5AnimationController(){

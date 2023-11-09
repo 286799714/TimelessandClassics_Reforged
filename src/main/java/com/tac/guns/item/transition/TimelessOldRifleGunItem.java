@@ -2,6 +2,7 @@ package com.tac.guns.item.transition;
 
 
 import com.tac.guns.GunMod;
+import com.tac.guns.client.Keys;
 import com.tac.guns.common.Gun;
 import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.util.Process;
@@ -28,10 +29,12 @@ public class TimelessOldRifleGunItem extends TimelessGunItem {
         Gun modifiedGun = this.getModifiedGun(stack);
         CompoundTag tagCompound = stack.getTag();
         super.appendHoverText(stack, worldIn, tooltip, flag);
-        if(tagCompound != null)
-        {
-            //tooltip.add((new TranslationTextComponent("info.tac.oldRifle", new TranslationTextComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).mergeStyle(TextFormatting.GREEN)));
-            tooltip.add((new TranslatableComponent("info.tac.oldRifleScope", new TranslatableComponent("OldScope").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE)));
+        boolean isShift = Keys.MORE_INFO_HOLD.isDown();
+        if (isShift) {
+            if (tagCompound != null) {
+                //tooltip.add((new TranslatableComponent("info.tac.oldRifle", new TranslatableComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).withStyle(ChatFormatting.GREEN)));
+                tooltip.add((new TranslatableComponent("info.tac.oldRifleScope", new TranslatableComponent("OldScope").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE)));
+            }
         }
     }
 

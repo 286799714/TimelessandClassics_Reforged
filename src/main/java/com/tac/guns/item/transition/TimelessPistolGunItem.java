@@ -2,6 +2,7 @@ package com.tac.guns.item.transition;
 
 
 import com.tac.guns.GunMod;
+import com.tac.guns.client.Keys;
 import com.tac.guns.common.Gun;
 import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.util.Process;
@@ -31,11 +32,13 @@ public class TimelessPistolGunItem extends TimelessGunItem {
         Gun modifiedGun = this.getModifiedGun(stack);
         CompoundTag tagCompound = stack.getTag();
         super.appendHoverText(stack, worldIn, tooltip, flag);
-        if(tagCompound != null)
-        {
-            //tooltip.add((new TranslationTextComponent("info.tac.oldRifle", new TranslationTextComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).mergeStyle(TextFormatting.GREEN)));
-            //tooltip.add((new TranslationTextComponent("info.tac.pistolScope", new TranslationTextComponent("MiniScope").mergeStyle(TextFormatting.BOLD)).mergeStyle(TextFormatting.LIGHT_PURPLE)));
-            tooltip.add((new TranslatableComponent("info.tac.pistolBarrel", new TranslatableComponent("PistolBarrel").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE)));
+        boolean isShift = Keys.MORE_INFO_HOLD.isDown();
+        if (isShift) {
+            if (tagCompound != null) {
+                //tooltip.add((new TranslatableComponent("info.tac.oldRifle", new TranslatableComponent(IAttachment.Type.OLD_SCOPE.getTranslationKey())).withStyle(ChatFormatting.GREEN)));
+                //tooltip.add((new TranslatableComponent("info.tac.pistolScope", new TranslatableComponent("MiniScope").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE)));
+                tooltip.add((new TranslatableComponent("info.tac.pistolBarrel", new TranslatableComponent("PistolBarrel").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE)));
+            }
         }
     }
     public TimelessPistolGunItem() {

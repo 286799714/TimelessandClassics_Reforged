@@ -87,10 +87,10 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
        super.addInformation(stack, worldIn, tooltip, flag);
 
-       tooltip.add(new TranslationTextComponent("info.tac.current_armor_amount").append(new TranslationTextComponent(ItemStack.DECIMALFORMAT.format(WearableHelper.GetCurrentDurability(stack))+"")).mergeStyle(TextFormatting.BLUE));
+       tooltip.add(new TranslatableComponent("info.tac.current_armor_amount").append(new TranslatableComponent(ItemStack.DECIMALFORMAT.format(WearableHelper.GetCurrentDurability(stack))+"")).withStyle(ChatFormatting.BLUE));
        int scancode = GLFW.glfwGetKeyScancode(InputHandler.ARMOR_REPAIRING.getKeyCode());
        if(GLFW.glfwGetKeyName(InputHandler.ARMOR_REPAIRING.getKeyCode(),scancode) != null)
-           tooltip.add((new TranslationTextComponent("info.tac.tac_armor_repair1").append(new TranslationTextComponent(GLFW.glfwGetKeyName(InputHandler.ARMOR_REPAIRING.getKeyCode(), scancode)).mergeStyle(TextFormatting.AQUA)).append(new TranslationTextComponent("info.tac.tac_armor_repair2"))).mergeStyle(TextFormatting.YELLOW));
+           tooltip.add((new TranslatableComponent("info.tac.tac_armor_repair1").append(new TranslatableComponent(GLFW.glfwGetKeyName(InputHandler.ARMOR_REPAIRING.getKeyCode(), scancode)).withStyle(ChatFormatting.AQUA)).append(new TranslatableComponent("info.tac.tac_armor_repair2"))).withStyle(ChatFormatting.YELLOW));
     }*/
 
     @Override

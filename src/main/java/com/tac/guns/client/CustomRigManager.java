@@ -34,7 +34,7 @@ public class CustomRigManager
             customRigMap.forEach((id, gun) ->
             {
                 ItemStack stack = new ItemStack(ModItems.AK47.get());
-                stack.setDisplayName(new TranslationTextComponent("item." + id.getNamespace() + "." + id.getPath() + ".name"));
+                stack.setDisplayName(new TranslatableComponent("item." + id.getNamespace() + "." + id.getPath() + ".name"));
                 CompoundNBT tag = stack.getOrCreateTag();
                *//* tag.put("Model", gun.getModel().serializeNBT());
                 tag.put("Gun", gun.getGun().serializeNBT());

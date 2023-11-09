@@ -80,9 +80,8 @@ public final class Keys
         }
         return true;
     }
-    
-    public static final KeyMapping MORE_INFO_HOLD =
-        new TacKeyBuilder( "key.tac.more_info_hold" )
+  
+    public static final TacKeyMapping MORE_INFO_HOLD = new TacKeyBuilder( "key.tac.more_info_hold" )
             .withKeyboardKey( InputConstants.KEY_LSHIFT )
             .withConflictContext( KeyConflictContext.GUI )
             .buildAndRegis();

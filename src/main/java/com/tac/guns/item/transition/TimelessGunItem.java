@@ -3,6 +3,7 @@ package com.tac.guns.item.transition;
 
 import com.tac.guns.Config;
 import com.tac.guns.GunMod;
+import com.tac.guns.client.Keys;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.network.ServerPlayHandler;
 import com.tac.guns.interfaces.IGunModifier;
@@ -84,33 +85,44 @@ public class TimelessGunItem extends GunItem {
             }
         }
 
-        if (tagCompound != null) {
-            if (tagCompound.get("CurrentFireMode") == null) {
-            } else if (tagCompound.getInt("CurrentFireMode") == 0)
-                tooltip.add((new TranslatableComponent("info.tac.firemode_safe", (new KeybindComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.GREEN));
-            else if (tagCompound.getInt("CurrentFireMode") == 1)
-                tooltip.add((new TranslatableComponent("info.tac.firemode_semi", (new KeybindComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.RED));
-            else if (tagCompound.getInt("CurrentFireMode") == 2)
-                tooltip.add((new TranslatableComponent("info.tac.firemode_auto", (new KeybindComponent("key.tac.fireSelect")).getString().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.RED));
+        boolean isShift = Keys.MORE_INFO_HOLD.isDown();
+        if (!isShift) {
+            //String text = "SHIFT";
+            //if(!InputHandler.MORE_INFO_HOLD.keyCode().equals(GLFW.GLFW_KEY_LEFT_SHIFT))
+            String text = (new KeybindComponent("key.tac.more_info_hold")).getString().toUpperCase(Locale.ENGLISH);
+            tooltip.add((new TranslatableComponent("info.tac.more_info_gunitem", text)).withStyle(ChatFormatting.YELLOW));
         }
-        GunItem gun = (GunItem) stack.getItem();
-        if (tagCompound != null) {
-            float speed = ServerPlayHandler.calceldGunWeightSpeed(gun.getGun(), stack);
-            speed = Math.max(Math.min(speed, 0.1F), 0.075F);
-            if (speed > 0.094f)
-                tooltip.add((new TranslatableComponent("info.tac.lightWeightGun", new TranslatableComponent(-((int) ((0.1 - speed) * 1000)) + "%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_AQUA)));
-            else if (speed < 0.095 && speed > 0.0875)
-                tooltip.add((new TranslatableComponent("info.tac.standardWeightGun", new TranslatableComponent(-((int) ((0.1 - speed) * 1000)) + "%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_GREEN)));
-            else
-                tooltip.add((new TranslatableComponent("info.tac.heavyWeightGun", new TranslatableComponent(-((int) ((0.1 - speed) * 1000)) + "%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)));
+        if (isShift) {
+            GunItem gun = (GunItem) stack.getItem();
+            if (tagCompound != null) {
+                double armorPen = gun.getGun().getProjectile().getGunArmorIgnore() >= 0 ?
+                        Math.min((Config.COMMON.gameplay.percentDamageIgnoresStandardArmor.get() * gun.getGun().getProjectile().getGunArmorIgnore() * 100), 100F) : 0F;
+                tooltip.add((new TranslatableComponent("info.tac.armorPen", new TranslatableComponent(String.format("%.1f", armorPen) + "%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_AQUA)));
 
-            float percentageToNextLevel = ( tagCompound.getFloat("levelDmg") * 100) / (modifiedGun.getGeneral().getLevelReq()*(((tagCompound.getInt("level"))*3.0f)));
-            tooltip.add((new TranslatableComponent("info.tac.current_level").append(new TranslatableComponent( " " + tagCompound.getInt("level") + " : " + String.format("%.2f", percentageToNextLevel)+"%")))
-                    .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.BOLD));
+                int headDamgeModifier = Config.COMMON.gameplay.headShotDamageMultiplier.get() * gun.getGun().getProjectile().getGunHeadDamage() >= 0 ?
+                        (int) (Config.COMMON.gameplay.headShotDamageMultiplier.get() * gun.getGun().getProjectile().getGunHeadDamage() * 100) : 0;
+                tooltip.add((new TranslatableComponent("info.tac.headDamageModifier", new TranslatableComponent(String.format("%d", headDamgeModifier) + "%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_AQUA)));
+
+                float speed = ServerPlayHandler.calceldGunWeightSpeed(gun.getGun(), stack);
+                speed = Math.max(Math.min(speed, 0.1F), 0.075F);
+                if (speed > 0.094f)
+                    tooltip.add((new TranslatableComponent("info.tac.lightWeightGun", new TranslatableComponent(-((int) ((0.1 - speed) * 1000)) + "%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_AQUA)));
+                else if (speed < 0.095 && speed > 0.0875)
+                    tooltip.add((new TranslatableComponent("info.tac.standardWeightGun", new TranslatableComponent(-((int) ((0.1 - speed) * 1000)) + "%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_GREEN)));
+                else
+                    tooltip.add((new TranslatableComponent("info.tac.heavyWeightGun", new TranslatableComponent(-((int) ((0.1 - speed) * 1000)) + "%").withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)));
+
+                float percentageToNextLevel = (tagCompound.getFloat("levelDmg") * 100) / (modifiedGun.getGeneral().getLevelReq() * (((tagCompound.getInt("level")) * 3.0f)));
+                tooltip.add((new TranslatableComponent("info.tac.current_level").append(new TranslatableComponent(" " + tagCompound.getInt("level") + " : " + String.format("%.2f", percentageToNextLevel) + "%")))
+                        .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.BOLD));
+            }
+
+            tooltip.add((new TranslatableComponent("info.tac.attachment_help", Keys.ATTACHMENTS.getKey().getDisplayName().getContents().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.YELLOW));
+            if (gun.getGun().canAttachType(IAttachment.Type.PISTOL_SCOPE))
+                tooltip.add((new TranslatableComponent("info.tac.pistolScope", new TranslatableComponent("MiniScope").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE)));
+            if (gun.getGun().canAttachType(IAttachment.Type.IR_DEVICE))
+                tooltip.add((new TranslatableComponent("info.tac.irLaserEquip", new TranslatableComponent("IrLaser").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.AQUA)));
         }
-        tooltip.add((new TranslatableComponent("info.tac.attachment_help", (new KeybindComponent("key.tac.attachments")).getString().toUpperCase(Locale.ENGLISH))).withStyle(ChatFormatting.YELLOW));
-        if(gun.getGun().canAttachType(IAttachment.Type.PISTOL_SCOPE))
-            tooltip.add((new TranslatableComponent("info.tac.pistolScope", new TranslatableComponent("MiniScope").withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE)));
     }
 
     public IGunModifier[] getModifiers() {

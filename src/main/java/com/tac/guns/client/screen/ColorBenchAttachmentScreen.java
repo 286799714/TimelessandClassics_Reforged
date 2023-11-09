@@ -74,7 +74,7 @@ public class ColorBenchAttachmentScreen extends Screen
     {
         super.init();
 
-        this.btnApply = this.addButton(new Button(this.guiLeft + 195, this.guiTop + 16, 74, 20, new TranslationTextComponent("gui.tac.workbench.assemble"), button ->
+        this.btnApply = this.addButton(new Button(this.guiLeft + 195, this.guiTop + 16, 74, 20, new TranslatableComponent("gui.tac.workbench.assemble"), button ->
         {
             PacketHandler.getPlayChannel().sendToServer(new MessageCraft(registryName, this.workbench.getPos()));
         }));

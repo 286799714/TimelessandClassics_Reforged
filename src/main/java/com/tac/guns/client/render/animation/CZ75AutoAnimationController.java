@@ -21,7 +21,7 @@ public class CZ75AutoAnimationController extends PistalAnimationController {
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_draw.gltf"));
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_reload_empty.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_inspect.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/cz75_auto_static.gltf"));
     private static final CZ75AutoAnimationController instance = new CZ75AutoAnimationController();
 
