@@ -56,18 +56,10 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if(world.isClientSide) return super.use(world, player, hand);
         if(hand != InteractionHand.MAIN_HAND) return InteractionResultHolder.pass(player.getItemInHand(hand));
-        if(player.isCrouching()){
-            ItemStack oldRig = ((PlayerWithSynData)player).getRig();
-            ((PlayerWithSynData)player).setRig(player.getItemInHand(hand));
-            player.setItemInHand(hand, oldRig);
-            super.use(world, player, hand);
-            return InteractionResultHolder.pass(player.getItemInHand(hand));
-        }else {
-            containerProvider = new ArmorRigContainerProvider(player.getItemInHand(hand));
-            NetworkHooks.openGui((ServerPlayer) player, containerProvider);
-            super.use(world, player, hand);
-            return InteractionResultHolder.pass(player.getItemInHand(hand));
-        }
+        containerProvider = new ArmorRigContainerProvider(player.getItemInHand(hand));
+        NetworkHooks.openGui((ServerPlayer) player, containerProvider);
+        super.use(world, player, hand);
+        return InteractionResultHolder.pass(player.getItemInHand(hand));
     }
 
     @Override

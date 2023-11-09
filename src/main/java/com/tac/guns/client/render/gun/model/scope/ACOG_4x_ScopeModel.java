@@ -49,6 +49,7 @@ public class ACOG_4x_ScopeModel implements IOverrideModel
                 matrixStack.translate(0,0,transition*0.18);
             matrixStack.scale(1.0F, 1.0F, (float)zScale);
         }*/
+        /*
         if (!Config.CLIENT.display.scopeDoubleRender.get() && transformType.firstPerson() && entity.equals(Minecraft.getInstance().player)) {
             double prog = 0;
             if(AimingHandler.get().getNormalisedAdsProgress() > 0.725) {
@@ -60,6 +61,7 @@ public class ACOG_4x_ScopeModel implements IOverrideModel
             matrixStack.scale(1.0F, 1.0F, (float) zScale);
 
         }
+         */
         matrixStack.translate(0, 0.074, 0);
 
         RenderUtil.renderModel(stack, parent, matrixStack, renderTypeBuffer, light, overlay);

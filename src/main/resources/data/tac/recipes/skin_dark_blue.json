@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "I"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:dyes/blue"
+    },
+    "I": {
+      "item": "tac:blank_skin_mod_lvl1"
+    }
+  },
+  "result": {
+    "item": "tac:skin_dark_blue"
+  }
+}

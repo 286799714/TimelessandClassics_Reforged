@@ -1,10 +1,9 @@
 package com.tac.guns.client.handler;
 
-import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.logging.LogUtils;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.Config.RightClickUse;
-import com.tac.guns.GunMod;
 import com.tac.guns.client.Keys;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.Gun;
@@ -20,11 +19,11 @@ import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
@@ -62,6 +61,8 @@ public class AimingHandler {
     private final AimTracker localTracker = new AimTracker();
     private final Map<Player, AimTracker> aimingMap = new WeakHashMap<>();
     private double normalisedAdsProgress;
+    private double oldProgress;
+    private double newProgress;
     private boolean aiming = false;
     private boolean toggledAim = false;
 
@@ -213,6 +214,8 @@ public class AimingHandler {
         if (event.phase != TickEvent.Phase.START)
             return;
 
+        tickLerpProgress();
+
         Player player = Minecraft.getInstance().player;
         if (player == null)
             return;
@@ -244,17 +247,13 @@ public class AimingHandler {
             ItemStack heldItem = mc.player.getMainHandItem();
             if (heldItem.getItem() instanceof TimelessGunItem) {
                 TimelessGunItem gunItem = (TimelessGunItem) heldItem.getItem();
-                if (AimingHandler.get().isAiming() && !SyncedEntityData.instance().get(mc.player, ModSyncedDataKeys.RELOADING)) {
+                if(AimingHandler.get().normalisedAdsProgress != 0 && !SyncedEntityData.instance().get(mc.player, ModSyncedDataKeys.RELOADING))
+                {
                     Gun modifiedGun = gunItem.getModifiedGun(heldItem);
                     if (modifiedGun.getModules().getZoom() != null) {
                         float newFov = modifiedGun.getModules().getZoom().getFovModifier();
                         Scope scope = Gun.getScope(heldItem);
                         if (scope != null) {
-                            if (scope.getTagName() == "gener8x" || scope.getTagName() == "vlpvo6" ||
-                                    scope.getTagName() == "acog4x" || scope.getTagName() == "elcan14x" ||
-                                    scope.getTagName() == "qmk152")
-                                newFov = 0.8F;
-
                             if (!Config.COMMON.gameplay.realisticLowPowerFovHandling.get() || (scope.getAdditionalZoom().getFovZoom() > 0 && Config.COMMON.gameplay.realisticLowPowerFovHandling.get()) || gunItem.isIntegratedOptic()) {
                                 newFov -= scope.getAdditionalZoom().getFovZoom() * (Config.CLIENT.display.scopeDoubleRender.get() ? 1F : 1.2F);
                                 event.setNewfov(newFov + (1.0F - newFov) * (1.0F - (float) this.normalisedAdsProgress));
@@ -268,8 +267,14 @@ public class AimingHandler {
     }
 
     @SubscribeEvent
-    public void onClientTick(ClientPlayerNetworkEvent.LoggedOutEvent event) {
+    public void onLoggedOut(ClientPlayerNetworkEvent.LoggedOutEvent event)
+    {
         this.aimingMap.clear();
+    }
+
+    private void tickLerpProgress(){
+        oldProgress = newProgress;
+        newProgress += (normalisedAdsProgress - newProgress) * 0.5;
     }
 
     /**
@@ -349,7 +354,12 @@ public class AimingHandler {
         return this.normalisedAdsProgress;
     }
 
-    public class AimTracker {
+    public double getLerpAdsProgress(float partialTicks){
+        return Mth.lerp(partialTicks, oldProgress, newProgress);
+    }
+
+    public class AimTracker
+    {
         private double currentAim;
         private double previousAim;
         private double amplifier = 0.8;

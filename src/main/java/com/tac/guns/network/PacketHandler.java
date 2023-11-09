@@ -43,6 +43,7 @@ public class PacketHandler
     .registerPlayMessage(MessageUpdateMoveInacc.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageEmptyMag.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageArmorRepair.class, NetworkDirection.PLAY_TO_SERVER)
+    .registerPlayMessage(MessageArmorEquip.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessagePlayerShake.class, NetworkDirection.PLAY_TO_CLIENT)
     .registerPlayMessage(MessageUpdatePlayerMovement.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageAnimationSound.class, NetworkDirection.PLAY_TO_CLIENT)
