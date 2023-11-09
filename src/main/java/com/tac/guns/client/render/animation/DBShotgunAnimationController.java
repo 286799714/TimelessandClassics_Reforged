@@ -24,7 +24,7 @@ public class DBShotgunAnimationController extends GunAnimationController {
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/db_shotgun_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/db_shotgun_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/db_shotgun_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/db_shotgun_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/db_shotgun_inspect.gltf"));
     private static final DBShotgunAnimationController instance = new DBShotgunAnimationController();
 
     private DBShotgunAnimationController(){

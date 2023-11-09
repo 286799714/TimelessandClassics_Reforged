@@ -27,7 +27,7 @@ public class M60AnimationController extends MachineGunAnimationController {
     public static final AnimationMeta RELOAD_EMPTY_SCOPE = new AnimationMeta(new ResourceLocation("tac","animations/m60_reload_empty_scope.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/m60_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/m60_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m60_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m60_inspect.gltf"));
     private static final M60AnimationController instance = new M60AnimationController();
 
     private M60AnimationController(){

@@ -21,7 +21,7 @@ public class AWPAnimationController extends BoltActionAnimationController {
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/ai_awp_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/ai_awp_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/ai_awp_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/ai_awp_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/ai_awp_inspect.gltf"));
     public static final AnimationMeta BOLT = new AnimationMeta(new ResourceLocation("tac","animations/ai_awp_bolt.gltf"));
     private static final AWPAnimationController instance = new AWPAnimationController();
 

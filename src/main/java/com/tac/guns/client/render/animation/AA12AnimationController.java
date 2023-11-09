@@ -22,7 +22,7 @@ public class AA12AnimationController extends GunAnimationController {
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/aa12_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/aa12_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/aa12_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/aa12_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/aa12_inspect.gltf"));
     private static final AA12AnimationController instance = new AA12AnimationController();
 
     private AA12AnimationController(){

@@ -23,7 +23,7 @@ public class Mp7AnimationController extends GunAnimationController{
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/mp7_draw.gltf"));
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/mp7_reload_empty.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/mp7_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/mp7_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/mp7_inspect.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/mp7_static.gltf"));
     private static final Mp7AnimationController instance = new Mp7AnimationController();
 

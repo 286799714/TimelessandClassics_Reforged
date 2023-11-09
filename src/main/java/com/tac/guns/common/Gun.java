@@ -1216,7 +1216,7 @@ public final class Gun implements INBTSerializable<CompoundTag>
         public ResourceLocation getDraw() { return this.draw; }
 
         @Nullable
-        public ResourceLocation getInspectEmpty() { return this.inspectEmpty; }
+        public ResourceLocation getInspectEmpty() { return this.inspectEmpty != null ? this.inspectEmpty : this.inspect; }
         /**
          * @return The registry id of the sound event when inspecting.
          */

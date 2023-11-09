@@ -22,7 +22,7 @@ public class M1911AnimationController extends PistalAnimationController {
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m1911_reload_empty.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/m1911_static.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/m1911_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m1911_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/m1911_inspect.gltf"));
     private static final M1911AnimationController instance = new M1911AnimationController();
 
     @Override

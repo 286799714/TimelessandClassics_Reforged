@@ -26,7 +26,7 @@ public class SPR15AnimationController extends GunAnimationController{
     public static final AnimationMeta RELOAD_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/spr15_reload_empty.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/spr15_draw.gltf"));
     public static final AnimationMeta INSPECT = new AnimationMeta(new ResourceLocation("tac","animations/spr15_inspect.gltf"));
-    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/spr15_inspect_empty.gltf"));
+    public static final AnimationMeta INSPECT_EMPTY = new AnimationMeta(new ResourceLocation("tac","animations/spr15_inspect.gltf"));
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/spr15_static.gltf"));
     private static final SPR15AnimationController instance = new SPR15AnimationController();
 
