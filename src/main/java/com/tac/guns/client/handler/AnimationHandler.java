@@ -162,6 +162,9 @@ public enum AnimationHandler {
     static
     {
         Keys.INSPECT.addPressCallback( () -> {
+            if (!Keys.noConflict(Keys.INSPECT))
+                return;
+
             final Player player = Minecraft.getInstance().player;
             if( player == null ) return;
             

@@ -280,4 +280,14 @@ public interface IGunModifier
     {
         return -1;
     }
+
+    /**
+     * Return's the index value to obtain
+     *
+     * @return additional skin code to render the skin
+     */
+    default String additionalSkin()
+    {
+        return "NONE";
+    }
 }

@@ -66,6 +66,21 @@ public final class Keys
                 PacketHandler.getPlayChannel().sendToServer(new MessageArmorEquip());
             });
         }
+    public static final TacKeyMapping[] KEYS_VALUE = {RELOAD, UNLOAD, ATTACHMENTS, FIRE_SELECT, INSPECT, SIGHT_SWITCH, ACTIVATE_SIDE_RAIL, ARMOR_REPAIRING};
+
+    public static boolean noConflict(TacKeyMapping key) {
+        for (TacKeyMapping k : KEYS_VALUE) {
+            if (k == key) {
+                if (!k.getKeyModifier().isActive(null))
+                    return false;
+            } else {
+                if (k.isDown() && k.getKeyModifier().isActive(null))
+                    return false;
+            }
+        }
+        return true;
+    }
+    
     public static final KeyMapping MORE_INFO_HOLD =
         new TacKeyBuilder( "key.tac.more_info_hold" )
             .withKeyboardKey( InputConstants.KEY_LSHIFT )

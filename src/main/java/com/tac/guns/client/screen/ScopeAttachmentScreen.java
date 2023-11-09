@@ -122,7 +122,7 @@ public class ScopeAttachmentScreen extends AbstractContainerScreen<AttachmentCon
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             IRenderTypeBuffer.Impl buffer = this.minecraft.getRenderTypeBuffers().getBufferSource();
-            GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getHeldItemMainhand(), ItemCameraTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F);
+            GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getHeldItemMainhand(), ItemTransforms.TransformType.GROUND, matrixStack, buffer, 15728880, 0F);
             buffer.finish();
 
             RenderSystem.disableAlphaTest();

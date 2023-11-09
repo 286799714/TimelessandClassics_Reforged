@@ -13,20 +13,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class ArmorInteractionHandler
-{
+public class ArmorInteractionHandler {
     private static ArmorInteractionHandler instance;
 
-    public static ArmorInteractionHandler get()
-    {
-        if(instance == null)
-        {
+    public static ArmorInteractionHandler get() {
+        if (instance == null) {
             instance = new ArmorInteractionHandler();
         }
         return instance;
@@ -38,20 +36,23 @@ public class ArmorInteractionHandler
     private boolean repairing = false;
     private int repairTime = -1;
     private int prevRepairTime = 0;
-	private ArmorInteractionHandler()
-	{
-        Keys.ARMOR_REPAIRING.addPressCallback( () -> {
-			final Minecraft mc = Minecraft.getInstance();
-			if(mc.player != null && !WearableHelper.PlayerWornRig(mc.player).isEmpty() && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player))) {
+
+    private ArmorInteractionHandler() {
+        Keys.ARMOR_REPAIRING.addPressCallback(() -> {
+            if (!Keys.noConflict(Keys.ARMOR_REPAIRING))
+                return;
+
+            final Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null && !WearableHelper.PlayerWornRig(mc.player).isEmpty() && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player))) {
                 this.repairing = true;
                 this.repairTime = ((ArmorRigItem) WearableHelper.PlayerWornRig(mc.player).getItem()).getRig().getRepair().getTicksToRepair();// Replace with enchantment checker
             }
-		} );
-	}
+        });
+    }
 
 
     public float getRepairProgress(float partialTicks, Player player) {
-        return this.repairTime != 0 ? ((this.prevRepairTime + ((this.repairTime - this.prevRepairTime) * partialTicks)) / (float) ((ArmorRigItem)WearableHelper.PlayerWornRig(player).getItem()).getRig().getRepair().getTicksToRepair()) : 1F;
+        return this.repairTime != 0 ? ((this.prevRepairTime + ((this.repairTime - this.prevRepairTime) * partialTicks)) / (float) ((ArmorRigItem) WearableHelper.PlayerWornRig(player).getItem()).getRig().getRepair().getTicksToRepair()) : 1F;
     }
 
     /*public float getRepairProgress(float partialTicks, ItemStack stack) {
@@ -102,36 +103,30 @@ public class ArmorInteractionHandler
     }*/
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event)
-    {
-        if(event.phase != TickEvent.Phase.START)
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.START)
             return;
 
         Player player = Minecraft.getInstance().player;
-        if(player == null)
+        if (player == null)
             return;
 
         this.prevRepairTime = this.repairTime;
-        if(Keys.ARMOR_REPAIRING.isDown() && this.repairTime > 0)
+        if (Keys.ARMOR_REPAIRING.isDown() && this.repairTime > 0)
             this.repairTime--;
-        else if (this.repairTime == 0)
-        {
+        else if (this.repairTime == 0) {
             PacketHandler.getPlayChannel().sendToServer(new MessageArmorRepair(true, true));
             this.repairTime = -1;
             return;
         }
 
-        if(Keys.AIM_HOLD.isDown())
-        {
-            if(!this.repairing)
-            {
+        if (Keys.AIM_HOLD.isDown()) {
+            if (!this.repairing) {
                 SyncedEntityData.instance().set(player, ModSyncedDataKeys.QREPAIRING, true);
                 PacketHandler.getPlayChannel().sendToServer(new MessageArmorRepair(true, false));
                 this.repairing = true;
             }
-        }
-        else if(this.repairing && !Keys.AIM_HOLD.isDown())
-        {
+        } else if (this.repairing && !Keys.AIM_HOLD.isDown()) {
             SyncedEntityData.instance().set(player, ModSyncedDataKeys.QREPAIRING, false);
             PacketHandler.getPlayChannel().sendToServer(new MessageArmorRepair(false, false));
             this.repairing = false;
@@ -142,36 +137,32 @@ public class ArmorInteractionHandler
      * I think was supposed to be used to replace current crosshair with a repair crosshair, disable for now
      */
     //@SubscribeEvent(receiveCanceled = true)
-    public void onRenderOverlay(RenderGameOverlayEvent.PreLayer event)
-    {
+    public void onRenderOverlay(RenderGameOverlayEvent.PreLayer event) {
         //this.normalisedRepairProgress = this.localTracker.getNormalProgress(event.getPartialTicks());
         Crosshair crosshair = CrosshairHandler.get().getCurrentCrosshair();
-        if(this.repairing && event.getOverlay() == ForgeIngameGui.CROSSHAIR_ELEMENT && (crosshair == null || crosshair.isDefault()))
-        {
+        if (this.repairing && event.getOverlay() == ForgeIngameGui.CROSSHAIR_ELEMENT && (crosshair == null || crosshair.isDefault())) {
             event.setCanceled(true);
         }
     }
 
-    public boolean isRepairing()
-    {
+    public boolean isRepairing() {
         Minecraft mc = Minecraft.getInstance();
-        if(mc.player == null)
+        if (mc.player == null)
             return false;
 
-        if(mc.player.isSpectator())
+        if (mc.player.isSpectator())
             return false;
 
-        if(mc.screen != null)
+        if (mc.screen != null)
             return false;
 
-        if(WearableHelper.PlayerWornRig(mc.player).isEmpty())
+        if (WearableHelper.PlayerWornRig(mc.player).isEmpty())
             return false;
-        Rig rig = ((ArmorRigItem)WearableHelper.PlayerWornRig(mc.player).getItem()).getRig();
+        Rig rig = ((ArmorRigItem) WearableHelper.PlayerWornRig(mc.player).getItem()).getRig();
         return this.repairTime != 0 && mc.player.getMainHandItem().getItem().getRegistryName().equals(rig.getRepair().getItem()) && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(mc.player));
     }
 
-    public double getNormalisedRepairProgress()
-    {
+    public double getNormalisedRepairProgress() {
         return this.normalisedRepairProgress;
     }
 

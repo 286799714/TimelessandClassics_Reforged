@@ -1,26 +1,26 @@
 package com.tac.guns.client.render.gun.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.tac.guns.client.SpecialModels;
+import com.mojang.math.Vector3d;
+import com.tac.guns.Config;
+import com.tac.guns.client.gunskin.GunSkin;
+import com.tac.guns.client.gunskin.SkinManager;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.AA12AnimationController;
 import com.tac.guns.client.render.animation.M16A4AnimationController;
-import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.gun.IOverrideModel;
-import com.tac.guns.client.render.gun.ModelOverrides;
+import com.tac.guns.client.render.gun.SkinAnimationModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
-import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.attachment.IAttachment;
-import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import com.tac.guns.util.GunModifierHelper;
+
+import static com.tac.guns.client.gunskin.ModelComponent.*;
 
 /*
  * Because the revolver has a rotating chamber, we need to render it in a
@@ -30,91 +30,64 @@ import com.tac.guns.util.GunModifierHelper;
 /**
  * Author: Timeless Development, and associates.
  */
-public class m16a4_animation implements IOverrideModel {
+public class m16a4_animation extends SkinAnimationModel {
+
+    public m16a4_animation() {
+        extraOffset.put(MUZZLE_SILENCER, new Vector3d(0, 0, -0.3));
+    }
 
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay)
-    {
-        
+    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         M16A4AnimationController controller = M16A4AnimationController.getInstance();
+        GunSkin skin = SkinManager.getSkin(stack);
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(SpecialModels.M16A4_BODY.getModel(), M16A4AnimationController.INDEX_BODY,transformType,matrices);
-            if(Gun.getScope(stack) == null)
-            {
-                RenderUtil.renderModel(SpecialModels.M16A4_CARRY.getModel(), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M16A4AnimationController.INDEX_BODY, transformType, matrices);
+            if (Gun.getScope(stack) == null) {
+                RenderUtil.renderModel(getModelComponent(skin, CARRY), stack, matrices, renderBuffer, light, overlay);
             }
-            if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY)
-            {
-                RenderUtil.renderModel(SpecialModels.M16A4_DEFAULT_HANDGUARD.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-            else
-            {
-                // Use when more rail implementations are ready.
-                //RenderUtil.renderModel(SpecialModels.M4_EXTENDED_HANDGUARD.getModel(), stack, matrices, renderBuffer, light, overlay);
-                RenderUtil.renderModel(SpecialModels.M16A4_EXTENDED_HANDGUARD.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-            if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem()))
-            {
-                // M16a4 light grip missing, updated with m4 grip place holder, same model based on showcase images
-                RenderUtil.renderModel(SpecialModels.M4_L_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-            else if(Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem()))
-            {
-                RenderUtil.renderModel(SpecialModels.M16A4_TAC_GRIP.getModel(), stack, matrices, renderBuffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack) == ItemStack.EMPTY) {
+                RenderUtil.renderModel(getModelComponent(skin, RAIL_DEFAULT), stack, matrices, renderBuffer, light, overlay);
+            } else {
+                RenderUtil.renderModel(getModelComponent(skin, RAIL_EXTENDED), stack, matrices, renderBuffer, light, overlay);
             }
 
-            if(Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.orElse(ItemStack.EMPTY.getItem()))
-            {
-                matrices.pushPose();
-                matrices.translate(0, 0, -0.3f);
-                RenderUtil.renderModel(SpecialModels.M16A4_SUPPRESSOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-                matrices.translate(0, 0, 0.3f);
-                matrices.popPose();
-            }
-            else if(Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_COMPENSATOR.orElse(ItemStack.EMPTY.getItem()))
-            {
-                RenderUtil.renderModel(SpecialModels.M16A4_COMPENSATOR.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-            else if(Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.orElse(ItemStack.EMPTY.getItem()))
-            {
-                RenderUtil.renderModel(SpecialModels.M16A4_BRAKE.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-            else
-                RenderUtil.renderModel(SpecialModels.M16A4_DEFAULT_BARREL.getModel(), stack, matrices, renderBuffer, light, overlay);
+            renderLaserDevice(stack, matrices, renderBuffer, light, overlay, skin);
 
-            RenderUtil.renderModel(SpecialModels.M16A4_BODY.getModel(), stack, matrices, renderBuffer, light, overlay);
+            if (transformType.firstPerson() || Config.COMMON.gameplay.canSeeLaserThirdSight.get())
+                renderLaser(stack, matrices, renderBuffer, light, overlay, skin);
+
+            renderGrip(stack, matrices, renderBuffer, light, overlay, skin);
+
+            renderBarrelWithDefault(stack, matrices, renderBuffer, light, overlay, skin);
+
+            RenderUtil.renderModel(getModelComponent(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(SpecialModels.M16A4_BODY.getModel(), M16A4AnimationController.INDEX_MAGAZINE,transformType,matrices);
-            if(GunModifierHelper.getAmmoCapacity(stack) > -1)
-            {
-                RenderUtil.renderModel(SpecialModels.M16A4_EXTENDED_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
-            else
-            {
-                RenderUtil.renderModel(SpecialModels.M16A4_STANDARD_MAG.getModel(), stack, matrices, renderBuffer, light, overlay);
-            }
+            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M16A4AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(SpecialModels.M16A4_BODY.getModel(), M16A4AnimationController.INDEX_HANDLE,transformType,matrices);
-            RenderUtil.renderModel(SpecialModels.M16A4_PULL_HANDLE.getModel(), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M16A4AnimationController.INDEX_HANDLE, transformType, matrices);
+            RenderUtil.renderModel(getModelComponent(skin, HANDLE), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
-        controller.applySpecialModelTransform(SpecialModels.M16A4_BODY.getModel(), M16A4AnimationController.INDEX_BODY,transformType,matrices);
+        controller.applySpecialModelTransform(getModelComponent(skin, BODY), M16A4AnimationController.INDEX_BODY, transformType, matrices);
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-        if(transformType.firstPerson()) {
+
+        if (transformType.firstPerson()) {
             if (Gun.hasAmmo(stack)) {
                 // Math provided by Bomb787 on GitHub and Curseforge!!!
                 matrices.translate(0, 0, 0.185f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
@@ -127,9 +100,9 @@ public class m16a4_animation implements IOverrideModel {
                 }
             }
         }
-        RenderUtil.renderModel(SpecialModels.M16A4_BOLT.getModel(), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getModelComponent(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
-        PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);
+        PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);
     }
 }

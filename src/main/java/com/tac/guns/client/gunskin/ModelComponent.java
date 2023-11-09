@@ -9,6 +9,23 @@ public enum ModelComponent {
     CLUMSYYY("clumsyyy"),
     NEKOOO("nekooo"),
     BODY_LIGHT("body_light"),
+    LOADER("loader"),
+    ROTATE("rotate"),
+    SCOPE_DEFAULT("scope_default"),
+    LIGHT("light"),
+    SAFETY("safety"),
+
+    //crossbow
+    BEND_L("bend_l"),
+    BEND_R("bend_r"),
+    BONE_L("bone_l"),
+    BONE_R("bone_r"),
+    STRING_L_MAIN("string_l_main"),
+    STRING_R_MAIN("string_r_main"),
+    STRING_L_MOVE("string_l_move"),
+    STRING_R_MOVE("string_r_move"),
+    WHEEL_L("wheel_l"),
+    WHEEL_R("wheel_r"),
 
     //main
     BODY("main"),                                   //static main part

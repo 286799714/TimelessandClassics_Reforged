@@ -52,6 +52,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.event.ScreenOpenEvent;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -67,11 +68,10 @@ import java.util.Map;
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
-public class ClientHandler
-{
+public class ClientHandler {
     private static Field mouseOptionsField;
 
-    public static void setup( Minecraft mc ) {
+    public static void setup(Minecraft mc) {
         MinecraftForge.EVENT_BUS.register(AimingHandler.get());
         MinecraftForge.EVENT_BUS.register(BulletTrailRenderingHandler.get());
         MinecraftForge.EVENT_BUS.register(CrosshairHandler.get());
@@ -114,19 +114,17 @@ public class ClientHandler
         //addVestLayer(skins.get("default"));
         //addVestLayer(skins.get("slim"));
     }
-    private static void addVestLayer(LivingEntityRenderer<? extends Player, HumanoidModel<Player>> renderer)
-    {
+
+    private static void addVestLayer(LivingEntityRenderer<? extends Player, HumanoidModel<Player>> renderer) {
         //renderer.addLayer(new VestLayerRender<>(RenderLayerParent));
     }
 
-    private static void setupRenderLayers()
-    {
+    private static void setupRenderLayers() {
         //ItemBlockRenderTypes.setRenderLayer(ModBlocks.UPGRADE_BENCH.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WORKBENCH.get(), RenderType.cutout());
     }
 
-    private static void registerEntityRenders()
-    {
+    private static void registerEntityRenders() {
         EntityRenderers.register(ModEntities.PROJECTILE.get(), ProjectileRenderer::new);
         EntityRenderers.register(ModEntities.GRENADE.get(), GrenadeRenderer::new);
         EntityRenderers.register(ModEntities.THROWABLE_GRENADE.get(), ThrowableGrenadeRenderer::new);
@@ -135,29 +133,24 @@ public class ClientHandler
         EntityRenderers.register(ModEntities.RPG7_MISSILE.get(), MissileRenderer::new);
     }
 
-    private static void registerColors()
-    {
+    private static void registerColors() {
         ItemColor color = (stack, index) -> {
-            if(!((IColored) stack.getItem()).canColor(stack))
-            {
+            if (!((IColored) stack.getItem()).canColor(stack)) {
                 return -1;
             }
-            if(index == 0)
-            {
-                return IDLNBTUtil.getInt(stack,"Color",-1);
+            if (index == 0) {
+                return IDLNBTUtil.getInt(stack, "Color", -1);
             }
             return -1;
         };
         ForgeRegistries.ITEMS.forEach(item -> {
-            if(item instanceof IColored)
-            {
+            if (item instanceof IColored) {
                 Minecraft.getInstance().getItemColors().register(color, item);
             }
         });
     }
 
-    private static void registerModelOverrides()
-    {
+    private static void registerModelOverrides() {
         ModelOverrides.register(ModItems.COYOTE_SIGHT.get(), new CoyoteSightModel());
         ModelOverrides.register(ModItems.LONGRANGE_8x_SCOPE.get(), new LongRange8xScopeModel());
         ModelOverrides.register(ModItems.VORTEX_LPVO_1_6.get(), new VortexLPVO_1_4xScopeModel());
@@ -188,8 +181,7 @@ public class ClientHandler
         //VestLayerRender.registerModel(ModItems.CARDBOARD_ARMOR_FUN.get(), new CardboardArmor());
     }
 
-    private static void registerScreenFactories()
-    {
+    private static void registerScreenFactories() {
         MenuScreens.register(ModContainers.WORKBENCH.get(), WorkbenchScreen::new);
         MenuScreens.register(ModContainers.UPGRADE_BENCH.get(), UpgradeBenchScreen::new);
         MenuScreens.register(ModContainers.ATTACHMENTS.get(), AttachmentScreen::new);
@@ -199,30 +191,24 @@ public class ClientHandler
     }
 
     @SubscribeEvent
-    public static void onScreenInit(ScreenEvent.InitScreenEvent.Post event)
-    {
-        if(event.getScreen() instanceof MouseSettingsScreen)
-        {
+    public static void onScreenInit(ScreenEvent.InitScreenEvent.Post event) {
+        if (event.getScreen() instanceof MouseSettingsScreen) {
             MouseSettingsScreen screen = (MouseSettingsScreen) event.getScreen();
-            if(mouseOptionsField == null)
-            {
+            if (mouseOptionsField == null) {
                 mouseOptionsField = ObfuscationReflectionHelper.findField(MouseSettingsScreen.class, "f_96218_");
                 mouseOptionsField.setAccessible(true);
             }
-            try
-            {
+            try {
                 OptionsList list = (OptionsList) mouseOptionsField.get(screen);
                 list.addSmall(new Option[]{GunOptions.ADS_SENSITIVITY}/*, GunOptions.CROSSHAIR*/);
                 /*, GunOptions.BURST_MECH);*/
-            }
-            catch(IllegalAccessException e)
-            {
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-        if(event.getScreen() instanceof VideoSettingsScreen)
-        {
-            VideoSettingsScreen screen = (VideoSettingsScreen) event.getScreen();;
+        if (event.getScreen() instanceof VideoSettingsScreen) {
+            VideoSettingsScreen screen = (VideoSettingsScreen) event.getScreen();
+            ;
 
             event.addListener((new Button(screen.width / 2 - 215, 10, 75, 20, new TranslatableComponent("tac.options.gui_settings"), (p_213126_1_) -> {
                 Minecraft.getInstance().setScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().options));
@@ -238,22 +224,28 @@ public class ClientHandler
         }
 */
     }
-    
+
     static {
         Keys.ATTACHMENTS.addPressCallback(() -> {
+            if (!Keys.noConflict(Keys.ATTACHMENTS))
+                return;
+
             final Minecraft mc = Minecraft.getInstance();
             if (mc.player != null && mc.screen == null)
                 PacketHandler.getPlayChannel().sendToServer(new MessageAttachments());
         });
 
         Keys.INSPECT.addPressCallback(() -> {
+            if (!Keys.noConflict(Keys.INSPECT))
+                return;
+
             final Minecraft mc = Minecraft.getInstance();
             if (
-                mc.player != null
-                    && mc.screen == null
-                    && GunAnimationController.fromItem(
-                    Minecraft.getInstance().player.getInventory().getSelected().getItem()
-                ) == null
+                    mc.player != null
+                            && mc.screen == null
+                            && GunAnimationController.fromItem(
+                            Minecraft.getInstance().player.getInventory().getSelected().getItem()
+                    ) == null
             ) PacketHandler.getPlayChannel().sendToServer(new MessageInspection());
         });
     }

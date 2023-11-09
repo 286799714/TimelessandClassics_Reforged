@@ -12,8 +12,8 @@ public class AWPAnimationController extends BoltActionAnimationController {
     public static int INDEX_LEFT_HAND = 8;
     public static int INDEX_RIGHT_HAND = 0;
     public static int INDEX_MAGAZINE = 4;
-    public static int INDEX_BOLT = 2;
-    public static int INDEX_HANDLE = 3;
+    public static int INDEX_BOLT_EXTRA = 2;
+    public static int INDEX_BOLT = 3;
     public static int INDEX_BULLET = 6;
 
     public static final AnimationMeta STATIC = new AnimationMeta(new ResourceLocation("tac","animations/ai_awp_static.gltf"));

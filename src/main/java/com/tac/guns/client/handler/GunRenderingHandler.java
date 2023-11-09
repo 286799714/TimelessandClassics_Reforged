@@ -1194,7 +1194,7 @@ public class GunRenderingHandler {
 
         //MK47AnimationController x = MK47AnimationController.getInstance();
         //PlayerHandAnimation.render(x,event.getTransformType(),event.getPoseStack(),event.getRenderTypeBuffer(),event.getLight());
-        if (!Config.CLIENT.quality.reducedQualityHotBar.get()/* && event.getTransformType().equals(ItemCameraTransforms.TransformType.GUI)*/)
+        if (!Config.CLIENT.quality.reducedQualityHotBar.get()/* && event.getTransformType().equals(ItemTransforms.TransformType.GUI)*/)
         {
             Minecraft mc = Minecraft.getInstance();
             event.setCanceled(this.renderWeapon(mc.player, event.getItem(), event.getTransformType(), event.getPoseStack(), event.getBufferSource(), event.getLight(), event.getPartialTicks()));
@@ -1269,7 +1269,7 @@ public class GunRenderingHandler {
         }
         return false;
     }
-    /*public boolean renderColored(LivingEntity entity, IBakedModel model, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, float partialTicks) {
+    /*public boolean renderColored(LivingEntity entity, IBakedModel model, ItemTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, float partialTicks) {
 
             matrixStack.push();
 
@@ -1306,7 +1306,7 @@ public class GunRenderingHandler {
         if(ModelOverrides.hasModel(stack) && transformType.equals(ItemTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedQualityHotBar.get())
             matrixStack.popPose();
     }
-    /*private void renderColoredModel(LivingEntity entity, ItemCameraTransforms.TransformType transformType, IBakedModel model, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, float partialTicks)
+    /*private void renderColoredModel(LivingEntity entity, ItemTransforms.TransformType transformType, IBakedModel model, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, float partialTicks)
     {
         //if(stack.getItem() instanceof ITimelessAnimated) RenderUtil.renderModel(stack, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, entity);
         IOverrideModel model = ModelOverrides.getModel(stack);
@@ -1545,7 +1545,7 @@ public class GunRenderingHandler {
                     }
                 }
 
-                RenderUtil.renderModel(ammo, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, matrixStack, buffer, light, OverlayTexture.NO_OVERLAY, null);
+                RenderUtil.renderModel(ammo, ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND, matrixStack, buffer, light, OverlayTexture.NO_OVERLAY, null);
                 matrixStack.pop();
 
                 if (!isModel) {

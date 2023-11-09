@@ -1,25 +1,25 @@
 package com.tac.guns.client.render.gun.model;
 
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3d;
 import com.tac.guns.client.gunskin.GunSkin;
 import com.tac.guns.client.gunskin.SkinManager;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.ShootingHandler;
+import com.tac.guns.client.render.animation.AA12AnimationController;
 import com.tac.guns.client.render.animation.Ak47AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.gun.SkinAnimationModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
+import com.tac.guns.init.ModItems;
 import com.tac.guns.item.GunItem;
-
+import com.tac.guns.item.attachment.IAttachment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-
 
 import static com.tac.guns.client.gunskin.ModelComponent.*;
 
@@ -44,7 +44,7 @@ public class ak47_animation extends SkinAnimationModel {
 
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
-
+//        GunSkin skin = SkinManager.getSkin(stack);
 
         matrices.pushPose();
         {
