@@ -11,7 +11,6 @@ import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
 import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
-import com.tac.guns.client.handler.HUDRenderingHandler;
 import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
 import com.tac.guns.client.render.gun.IOverrideModel;
@@ -33,7 +32,7 @@ import static com.tac.guns.client.SpecialModels.Sx8_FRONT;
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class LongRange8xScopeModel implements IOverrideModel
+public class Standard6_10xScopeModel implements IOverrideModel
 {
     private static final ResourceLocation RED_DOT_RETICLE = new ResourceLocation(Reference.MOD_ID, "textures/items/timeless_scopes/standard_8x_scope_reticle.png");
     private static final ResourceLocation HIT_MARKER = new ResourceLocation(Reference.MOD_ID, "textures/items/timeless_scopes/hit_marker/standard_8x_scope_reticle.png");

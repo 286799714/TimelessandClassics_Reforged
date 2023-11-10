@@ -1,7 +1,6 @@
 package com.tac.guns.client;
 
 import com.tac.guns.Config;
-import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.*;
 import com.tac.guns.client.handler.command.GuiEditor;
@@ -9,9 +8,6 @@ import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.client.handler.command.ObjectRenderEditor;
 import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
-import com.tac.guns.client.render.armor.vestlayer.VestLayerRender;
-import com.tac.guns.client.render.armor.models.MediumArmor;
-import com.tac.guns.client.render.armor.models.ModernArmor;
 import com.tac.guns.client.render.entity.GrenadeRenderer;
 import com.tac.guns.client.render.entity.MissileRenderer;
 import com.tac.guns.client.render.entity.ProjectileRenderer;
@@ -38,9 +34,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.MouseSettingsScreen;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.VideoSettingsScreen;
-import net.minecraft.client.gui.screens.controls.ControlsScreen;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -51,16 +45,12 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.client.event.ScreenOpenEvent;
-import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -152,7 +142,7 @@ public class ClientHandler {
 
     private static void registerModelOverrides() {
         ModelOverrides.register(ModItems.COYOTE_SIGHT.get(), new CoyoteSightModel());
-        ModelOverrides.register(ModItems.LONGRANGE_8x_SCOPE.get(), new LongRange8xScopeModel());
+        ModelOverrides.register(ModItems.STANDARD_6_10x_SCOPE.get(), new Standard6_10xScopeModel());
         ModelOverrides.register(ModItems.VORTEX_LPVO_1_6.get(), new VortexLPVO_1_4xScopeModel());
         //TODO: Fix up the SLX 2x, give a new reticle, new scope data, new mount and eye pos, pretty much remake the code end.
         //ModelOverrides.register(ModItems.SLX_2X.get(), new SLX_2X_ScopeModel());

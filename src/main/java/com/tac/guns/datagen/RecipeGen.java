@@ -356,7 +356,7 @@ public class RecipeGen extends RecipeProvider
                 .build(consumer);
 
         //Scope
-        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.LONGRANGE_8x_SCOPE.get())
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.STANDARD_6_10x_SCOPE.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 36)
                 .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 60)
                 .build(consumer);
