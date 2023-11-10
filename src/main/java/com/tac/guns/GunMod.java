@@ -60,7 +60,7 @@ public class GunMod
         @Override
         public @NotNull ItemStack makeIcon()
         {
-            return new ItemStack(ModItems.VORTEX_LPVO_1_6.get());
+            return new ItemStack(ModItems.VORTEX_LPVO_3_6.get());
         }
 
         @Override

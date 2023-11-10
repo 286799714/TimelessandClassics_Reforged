@@ -143,7 +143,7 @@ public class ClientHandler {
     private static void registerModelOverrides() {
         ModelOverrides.register(ModItems.COYOTE_SIGHT.get(), new CoyoteSightModel());
         ModelOverrides.register(ModItems.STANDARD_6_10x_SCOPE.get(), new Standard6_10xScopeModel());
-        ModelOverrides.register(ModItems.VORTEX_LPVO_1_6.get(), new VortexLPVO_1_4xScopeModel());
+        ModelOverrides.register(ModItems.VORTEX_LPVO_3_6.get(), new VortexLPVO_3_6xScopeModel());
         //TODO: Fix up the SLX 2x, give a new reticle, new scope data, new mount and eye pos, pretty much remake the code end.
         //ModelOverrides.register(ModItems.SLX_2X.get(), new SLX_2X_ScopeModel());
         ModelOverrides.register(ModItems.ACOG_4.get(), new ACOG_4x_ScopeModel());

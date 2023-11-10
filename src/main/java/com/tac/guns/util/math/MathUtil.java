@@ -7,4 +7,8 @@ public class MathUtil {
         double newFov = Math.toDegrees(Math.atan(newTan)) * 2;
         return newFov / currentFov;
     }
+
+    public static double fovToMagnification(double currentFov, double originFov){
+        return Math.tan(Math.toRadians(originFov / 2)) /  Math.tan(Math.toRadians(currentFov / 2));
+    }
 }

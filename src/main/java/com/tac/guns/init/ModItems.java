@@ -141,14 +141,13 @@ public class ModItems
             GunModifiers.EOTECH_SHORT_SIGHT_ADS).viewFinderOffset(0.455).viewFinderOffsetSpecial(0.455), new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
     public static final RegistryObject<Item> SRS_RED_DOT_SIGHT = REGISTER.register("srs_red_dot", () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(1.0F,0.00F)}, 2.2675F, 0.325, "srsdot",GunModifiers.SRS_RED_DOT_SIGHT_ADS).viewFinderOffset(0.355).viewFinderOffsetSpecial(0.355), new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
 
-    public static final RegistryObject<Item> ACOG_4 = REGISTER.register("acog_4x_scope", () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(4f,0.4F,1.5f)}, 2.325F,0.21, "acog4x",true,GunModifiers.ACOG_4_ADS).viewFinderOffset(0.45).viewFinderOffsetDR(0.40).viewFinderOffsetSpecial(0.425).viewFinderOffsetSpecialDR(0.35), new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
+    public static final RegistryObject<Item> ACOG_4 = REGISTER.register("acog_4x_scope", () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(4f,0.4F,1.5f),new ScopeZoomData(2f,0.4F,1.5f)}, 2.325F,0.21, "acog4x",true,GunModifiers.ACOG_4_ADS).viewFinderOffset(0.45).viewFinderOffsetDR(0.40).viewFinderOffsetSpecial(0.425).viewFinderOffsetSpecialDR(0.35), new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
     public static final RegistryObject<Item> QMK152 = REGISTER.register("qmk152",
             () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(3F,0.4F, -0.4f)}, 2.39F,0.11, "qmk152",true,GunModifiers.QMK152_ADS).viewFinderOffset(0.45).viewFinderOffsetDR(0.315).viewFinderOffsetSpecial(0.34).viewFinderOffsetSpecialDR(0.238), new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
     public static final RegistryObject<Item> ELCAN_DR_14X = REGISTER.register("elcan_14x", () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(4f,0.4225F,2.0f),new ScopeZoomData(1.2f,0.333F+0.016F,2.0f)}, 2.45F,0.23, "elcan14x", true,
             GunModifiers.ELCAN_DR_14X_ADS).viewFinderOffset(0.515).viewFinderOffsetDR(0.46).viewFinderOffsetSpecial(0.435).viewFinderOffsetSpecialDR(0.38), new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
 
-    public static final RegistryObject<Item> VORTEX_LPVO_1_6 = REGISTER.register("lpvo_1_6", () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(6f,0.4175F,2.6f),new ScopeZoomData(3f,0.365F, 2.6f),new ScopeZoomData(1.2f,
-            0.333F+0.016F,2.6f)}, 2.2625F,0.1725, "vlpvo6",true,GunModifiers.VORTEX_LPVO_1_6_ADS).viewFinderOffset(0.475).viewFinderOffsetDR(0.375).viewFinderOffsetSpecial(0.505).viewFinderOffsetSpecialDR(0.355),
+    public static final RegistryObject<Item> VORTEX_LPVO_3_6 = REGISTER.register("lpvo_1_6", () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(6f,0.4175F,2.6f),new ScopeZoomData(3f,0.365F, 2.6f)}, 2.2625F,0.1725, "vlpvo6",true,GunModifiers.VORTEX_LPVO_1_6_ADS).viewFinderOffset(0.475).viewFinderOffsetDR(0.375).viewFinderOffsetSpecial(0.505).viewFinderOffsetSpecialDR(0.355),
             new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));//.viewFinderOffset(0.475), new Item.Properties().maxStackSize(1)tab(GunMod.GROUP)));
 /*
 

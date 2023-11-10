@@ -255,7 +255,7 @@ public class AimingHandler {
                         if (scope != null) {
                             if (!Config.COMMON.gameplay.realisticLowPowerFovHandling.get() || (scope.getAdditionalZoom().getZoomMultiple() > 1 && Config.COMMON.gameplay.realisticLowPowerFovHandling.get()) || gunItem.isIntegratedOptic()) {
                                 newFov = (float) MathUtil.magnificationToFovMultiplier(scope.getAdditionalZoom().getZoomMultiple(), Minecraft.getInstance().options.fov);
-                                if(newFov == 1) newFov = modifiedGun.getModules().getZoom().getFovModifier();
+                                if(newFov >= 1) newFov = modifiedGun.getModules().getZoom().getFovModifier();
                                 event.setNewfov(newFov + (1.0F - newFov) * (1.0F - (float) this.normalisedAdsProgress));
                             }
                         } else if (!Config.COMMON.gameplay.realisticIronSightFovHandling.get() || gunItem.isIntegratedOptic())
