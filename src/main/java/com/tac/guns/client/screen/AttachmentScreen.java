@@ -1,5 +1,6 @@
 package com.tac.guns.client.screen;
 
+import com.mojang.authlib.minecraft.TelemetrySession;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -254,7 +255,10 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
             {
                 if(!this.menu.getSlot(i).isActive())
                 {
-                    this.blit(matrixStack, left + 5, top + 17 + i * 18, 176, 0, 16, 16);
+                    if (i > 3)
+                        this.blit(matrixStack, left + 155, top + 17 + (i-4) * 18, 176, 0, 16, 16);
+                    else
+                        this.blit(matrixStack, left + 5, top + 17 + i * 18, 176, 0, 16, 16);
                 }
                 else if (i > 3)
                 {
