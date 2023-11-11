@@ -360,6 +360,8 @@
 
     "key.tac.armor_repairing": "Armor Repairing",
     "key.tac.equipArmor": "Equip Armor",
+    "key.tac.removeArmor": "Remove Armor",
+    "key.tac.openArmorAmmoPack": "Open Ammo Pack( When Wearing a rig)",
 
     "effect.tac.blinded": "Blinded",
     "effect.tac.deafened": "Deafened",

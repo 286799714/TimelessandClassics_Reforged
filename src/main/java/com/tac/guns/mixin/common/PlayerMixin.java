@@ -54,6 +54,6 @@ public abstract class PlayerMixin extends LivingEntity implements net.minecraftf
     @Override
     public void setRig(ItemStack itemStack){
         this.getEntityData().set(RIG_ID, ItemStack.EMPTY);
-        this.getEntityData().set(RIG_ID, itemStack);
+        if(!itemStack.isEmpty()) this.getEntityData().set(RIG_ID, itemStack);
     }
 }

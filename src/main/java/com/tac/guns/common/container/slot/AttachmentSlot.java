@@ -1,9 +1,10 @@
 package com.tac.guns.common.container.slot;
 
-import com.tac.guns.client.handler.ReloadHandler;
+import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.container.AttachmentContainer;
 import com.tac.guns.init.ModSounds;
+import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.SideRailItem;
@@ -52,7 +53,7 @@ public class AttachmentSlot extends Slot
         {
             return false;
         }*/
-        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo())/* || ReloadHandler.get().isReloading()*/) {
+        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
             return false;
         }
         if(this.player.getMainHandItem().getItem() instanceof ScopeItem || this.player.getMainHandItem().getItem() instanceof SideRailItem)
@@ -79,7 +80,7 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean mayPlace(ItemStack stack)
     {
-        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || ReloadHandler.get().isReloading()) {
+        if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
             return false;
         }
         if((this.player.getMainHandItem().getItem() instanceof ScopeItem || this.player.getMainHandItem().getItem() instanceof SideRailItem) && stack.getItem() instanceof DyeItem /*instanceof DyeItem && !(this.weapon.getItem() instanceof
