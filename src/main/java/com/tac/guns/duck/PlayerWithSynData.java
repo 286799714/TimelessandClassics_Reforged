@@ -7,5 +7,7 @@ public interface PlayerWithSynData {
 
     ItemStack getRig();
 
-    void setRig(ItemStack itemStack);
+    void setRig(ItemStack newRig);
+
+    void updateRig();
 }

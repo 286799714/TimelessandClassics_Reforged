@@ -1,8 +1,11 @@
 package com.tac.guns.network.message;
 
+import com.mojang.logging.LogUtils;
 import com.mrcrayfish.framework.api.network.PlayMessage;
 import com.tac.guns.duck.PlayerWithSynData;
+import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.ArmorRigContainerProvider;
+import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

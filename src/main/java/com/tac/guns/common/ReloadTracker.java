@@ -172,8 +172,7 @@ public class ReloadTracker
                     break;
                 }
             }
-            if(rig.getTag() != null) rig.getTag().put("storage", itemHandler.serializeNBT());
-            ((PlayerWithSynData)player).setRig(rig);
+            ((PlayerWithSynData)player).updateRig();
             if(flag) return;
         }
 

@@ -40,7 +40,7 @@ public abstract class ModelBakeryMixin {
             ),
             remap = true)
     public void addSpecialModels(ProfilerFiller p_119249_, int p_119250_, CallbackInfo ci) {
-        /*
+
         SkinLoader.missingModel = getModel(MISSING_MODEL_LOCATION);
         SkinLoader.unbakedModels = unbakedCache;
         SkinLoader.topUnbakedModels = topLevelModels;
@@ -52,7 +52,7 @@ public abstract class ModelBakeryMixin {
 
         SkinManager.reload();
 
-         */
+
 
 //        ResourceLocation raw = new ResourceLocation(Reference.MOD_ID,"special/ak47");
 //
