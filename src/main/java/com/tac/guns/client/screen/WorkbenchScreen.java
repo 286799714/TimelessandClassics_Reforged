@@ -190,7 +190,7 @@ public class WorkbenchScreen extends AbstractContainerScreen<WorkbenchContainer>
                 this.loadItem(index + 1);
             }
         }));
-        this.btnCraft = this.addRenderableWidget(new Button(this.leftPos + 195, this.topPos + 16, 74, 20, new TranslatableComponent("gui.cgm.workbench.assemble"), button ->
+        this.btnCraft = this.addRenderableWidget(new Button(this.leftPos + 195, this.topPos + 16, 74, 20, new TranslatableComponent("gui.tac.workbench.assemble"), button ->
         {
             int index = this.currentTab.getCurrentIndex();
             WorkbenchRecipe recipe = this.currentTab.getRecipes().get(index);
@@ -198,7 +198,7 @@ public class WorkbenchScreen extends AbstractContainerScreen<WorkbenchContainer>
             PacketHandler.getPlayChannel().sendToServer(new MessageCraft(registryName, this.workbench.getBlockPos()));
         }));
         this.btnCraft.active = false;
-        this.checkBoxMaterials = this.addRenderableWidget(new CheckBox(this.leftPos + 172, this.topPos + 51, new TranslatableComponent("gui.cgm.workbench.show_remaining")));
+        this.checkBoxMaterials = this.addRenderableWidget(new CheckBox(this.leftPos + 172, this.topPos + 51, new TranslatableComponent("gui.tac.workbench.show_remaining")));
         this.checkBoxMaterials.setToggled(WorkbenchScreen.showRemaining);
         this.loadItem(this.currentTab.getCurrentIndex());
     }
