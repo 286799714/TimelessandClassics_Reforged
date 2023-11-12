@@ -64,7 +64,6 @@ public abstract class PlayerMixin extends LivingEntity implements net.minecraftf
     @Override
     public void updateRig(){
         ItemStack rig = getRig();
-        LogUtils.getLogger().info("update");
         if(rig.getItem() instanceof ArmorRigItem) {
             RigSlotsHandler itemHandler = (RigSlotsHandler) rig.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
             if (rig.getTag() != null) rig.getTag().put("storage", itemHandler.serializeNBT());

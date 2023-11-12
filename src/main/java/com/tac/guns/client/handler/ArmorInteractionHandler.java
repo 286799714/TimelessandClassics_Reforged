@@ -8,6 +8,7 @@ import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageArmorRepair;
+import com.tac.guns.network.message.MessageArmorUpdate;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
@@ -111,6 +112,7 @@ public class ArmorInteractionHandler {
         if (player == null)
             return;
 
+        PacketHandler.getPlayChannel().sendToServer(new MessageArmorUpdate());
         this.prevRepairTime = this.repairTime;
         if (Keys.ARMOR_REPAIRING.isDown() && this.repairTime > 0)
             this.repairTime--;

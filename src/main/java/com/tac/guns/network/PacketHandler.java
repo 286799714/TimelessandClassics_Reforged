@@ -45,6 +45,7 @@ public class PacketHandler
     .registerPlayMessage(MessageArmorRepair.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageArmorEquip.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageArmorRemove.class, NetworkDirection.PLAY_TO_SERVER)
+    .registerPlayMessage(MessageArmorUpdate.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageArmorOpenAmmoPack.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessagePlayerShake.class, NetworkDirection.PLAY_TO_CLIENT)
     .registerPlayMessage(MessageUpdatePlayerMovement.class, NetworkDirection.PLAY_TO_SERVER)
