@@ -2522,7 +2522,10 @@ public final class Gun implements INBTSerializable<CompoundTag>
             if(attachment.contains(type.getTagKey(), Tag.TAG_COMPOUND))
             {
                 return ItemStack.of(attachment.getCompound(type.getTagKey()));
-            }
+            } else if(type == IAttachment.Type.SCOPE && (attachment.contains(IAttachment.Type.PISTOL_SCOPE.getTagKey(), Tag.TAG_COMPOUND) || attachment.contains(IAttachment.Type.OLD_SCOPE.getTagKey(), Tag.TAG_COMPOUND)))
+                return !attachment.getCompound(IAttachment.Type.PISTOL_SCOPE.getTagKey()).isEmpty() ? ItemStack.of(attachment.getCompound(IAttachment.Type.PISTOL_SCOPE.getTagKey())) :
+                        ItemStack.of(attachment.getCompound(IAttachment.Type.OLD_SCOPE.getTagKey()));
+
         }
         return ItemStack.EMPTY;
     }
