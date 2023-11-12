@@ -4,8 +4,6 @@ import com.mojang.logging.LogUtils;
 import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,8 +22,10 @@ public class RigItemStackDataSerializer implements EntityDataSerializer<ItemStac
 
     public ItemStack read(FriendlyByteBuf p_135188_) {
         ItemStack itemStack = p_135188_.readItem();
-        RigSlotsHandler itemHandler = (RigSlotsHandler) itemStack.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
-        itemHandler.deserializeNBT(itemStack.getTag().getCompound("storage"));
+        if(itemStack.getItem() instanceof ArmorRigItem) {
+            RigSlotsHandler itemHandler = (RigSlotsHandler) itemStack.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
+            itemHandler.deserializeNBT(itemStack.getTag().getCompound("storage"));
+        }
         return itemStack;
     }
 

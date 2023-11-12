@@ -1,8 +1,12 @@
 package com.tac.guns.mixin.common;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.logging.LogUtils;
 import com.tac.guns.common.network.RigItemStackDataSerializer;
 import com.tac.guns.duck.PlayerWithSynData;
+import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
+import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -51,9 +55,31 @@ public abstract class PlayerMixin extends LivingEntity implements net.minecraftf
         return this.getEntityData().get(RIG_ID);
     }
 
+    private void updateRigOwner(ItemStack rig, LivingEntity owner){
+        if(rig.getItem() instanceof ArmorRigItem) {
+            RigSlotsHandler itemHandler = (RigSlotsHandler) rig.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
+            itemHandler.setOwner(owner);
+        }
+    }
+
     @Override
-    public void setRig(ItemStack itemStack){
+    public void setRig(ItemStack newRig){
+        ItemStack oldRig = getRig();
+        updateRigOwner(oldRig, null);
+        updateRigOwner(newRig, this);
         this.getEntityData().set(RIG_ID, ItemStack.EMPTY);
-        if(!itemStack.isEmpty()) this.getEntityData().set(RIG_ID, itemStack);
+        this.getEntityData().set(RIG_ID, newRig);
+    }
+
+    @Override
+    public void updateRig(){
+        ItemStack rig = getRig();
+        LogUtils.getLogger().info("update");
+        if(rig.getItem() instanceof ArmorRigItem) {
+            RigSlotsHandler itemHandler = (RigSlotsHandler) rig.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
+            if (rig.getTag() != null) rig.getTag().put("storage", itemHandler.serializeNBT());
+            this.getEntityData().set(RIG_ID, ItemStack.EMPTY);
+            this.getEntityData().set(RIG_ID, rig);
+        }
     }
 }

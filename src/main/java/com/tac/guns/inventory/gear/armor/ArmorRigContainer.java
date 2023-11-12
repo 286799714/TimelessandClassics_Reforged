@@ -22,7 +22,7 @@ public class ArmorRigContainer extends AbstractContainerMenu {
         this.item = item;
 
         RigSlotsHandler itemHandler = (RigSlotsHandler) item.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
-        this.numRows = ((ArmorRigItem)inv.player.getMainHandItem().getItem()).getNumOfRows();
+        this.numRows = ((ArmorRigItem)item.getItem()).getNumOfRows();
         int i = (this.numRows - 4) * 18;
         //RigSlotsHandler itemHandler = new RigSlotsHandler(maxSlots);
 
