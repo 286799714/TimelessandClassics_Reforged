@@ -9,6 +9,7 @@ import com.tac.guns.item.transition.grenades.BaseballGrenadeItem;
 import com.tac.guns.item.transition.grenades.LightGrenadeItem;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.item.attachment.impl.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -210,6 +211,8 @@ public class ModItems
     public static final RegistryObject<Item> MODULE = REGISTER.register("module_item",
             () -> new Item(new Item.Properties().stacksTo(3).tab(GunMod.GROUP)));
 
+    public static final RegistryObject<Item> BLANK_SKIN_MOD_LVL1 = REGISTER.register("blank_skin_mod_lvl1",
+            () -> new Item(new Item.Properties().stacksTo(64).tab(GunMod.SKINS)));
     public static final RegistryObject<Item> UNCOMMON_MATERIAL = REGISTER.register("uncommon_material", () -> new Item(new Item.Properties().stacksTo(64).tab(GunMod.GROUP)));
     public static final RegistryObject<Item> RARE_MATERIAL = REGISTER.register("rare_material", () -> new Item(new Item.Properties().stacksTo(48).tab(GunMod.GROUP)));
     public static final RegistryObject<Item> EPIC_MATERIAL = REGISTER.register("epic_material", () -> new Item(new Item.Properties().stacksTo(32).tab(GunMod.GROUP)));
@@ -217,4 +220,46 @@ public class ModItems
     public static final RegistryObject<Item> ULTIMATE_MATERIAL = REGISTER.register("ultimate_material", () -> new Item(new Item.Properties().stacksTo(16).tab(GunMod.GROUP)));
     //public static final RegistryObject<Item> LEGENDARY_CERTIFICATE = REGISTER.register("legendary_certificate",() -> new Item(new Item.Properties().maxStackSize(32)tab(GunMod.GROUP)));
     //public static final RegistryObject<Item> ULTIMATE_CERTIFICATE = REGISTER.register("ultimate_certificate",() -> new Item(new Item.Properties().maxStackSize(16)tab(GunMod.GROUP)));
+    /* Skin */
+//    public static final RegistryObject<Item> SKIN_CUSTOM = REGISTER.register("skin_custom",
+//            () -> new GunSkinItem(GunSkin.create((ResourceLocation) null),new Item.Properties().maxStackSize(1).group(GunMod.SKINS)));
+    /*** Skin ***/
+    public static final RegistryObject<Item> SKIN_AK_SPENT_BULLET = REGISTER.register("skin_ak_spent_bullet",
+            () -> new GunSkinItem(GunSkin.create(new ResourceLocation("skin_ak_spent_bullet")), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_MP9_THUNDER = REGISTER.register("skin_mp9_thunder",
+            () -> new GunSkinItem(GunSkin.create(new ResourceLocation("skin_mp9_thunder")), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+
+    /* Common Skin */
+    public static final RegistryObject<Item> SKIN_BLACK = REGISTER.register("skin_black",
+            () -> new GunSkinItem(GunSkin.create("black"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_BLUE = REGISTER.register("skin_blue",
+            () -> new GunSkinItem(GunSkin.create("blue"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_BROWN = REGISTER.register("skin_brown",
+            () -> new GunSkinItem(GunSkin.create("brown"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_DARK_BLUE = REGISTER.register("skin_dark_blue",
+            () -> new GunSkinItem(GunSkin.create("dark_blue"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_DARK_GREEN = REGISTER.register("skin_dark_green",
+            () -> new GunSkinItem(GunSkin.create("dark_green"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_GRAY = REGISTER.register("skin_gray",
+            () -> new GunSkinItem(GunSkin.create("gray"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_GREEN = REGISTER.register("skin_green",
+            () -> new GunSkinItem(GunSkin.create("green"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_JADE = REGISTER.register("skin_jade",
+            () -> new GunSkinItem(GunSkin.create("jade"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_LIGHT_GRAY = REGISTER.register("skin_light_gray",
+            () -> new GunSkinItem(GunSkin.create("light_gray"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_MAGENTA = REGISTER.register("skin_magenta",
+            () -> new GunSkinItem(GunSkin.create("magenta"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_ORANGE = REGISTER.register("skin_orange",
+            () -> new GunSkinItem(GunSkin.create("orange"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_PINK = REGISTER.register("skin_pink",
+            () -> new GunSkinItem(GunSkin.create("pink"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_PURPLE = REGISTER.register("skin_purple",
+            () -> new GunSkinItem(GunSkin.create("purple"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_RAD = REGISTER.register("skin_red",
+            () -> new GunSkinItem(GunSkin.create("red"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_SAND = REGISTER.register("skin_sand",
+            () -> new GunSkinItem(GunSkin.create("sand"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
+    public static final RegistryObject<Item> SKIN_WHITE = REGISTER.register("skin_white",
+            () -> new GunSkinItem(GunSkin.create("white"), new Item.Properties().stacksTo(1).tab(GunMod.SKINS)));
 }

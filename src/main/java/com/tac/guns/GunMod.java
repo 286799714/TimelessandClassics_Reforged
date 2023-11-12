@@ -209,6 +209,20 @@ public class GunMod
             CustomGunManager.fill(items);
         }
     };
+
+    public static final CreativeModeTab SKINS = new CreativeModeTab("Skins") {
+        @Override
+        public ItemStack makeIcon() {
+            ItemStack stack = new ItemStack(ModItems.BLANK_SKIN_MOD_LVL1.get());
+            return stack;
+        }
+
+        @Override
+        public void fillItemList(NonNullList<ItemStack> items) {
+            super.fillItemList(items);
+            CustomGunManager.fill(items);
+        }
+    };
     public GunMod()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
