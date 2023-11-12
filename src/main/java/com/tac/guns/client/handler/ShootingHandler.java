@@ -90,38 +90,6 @@ public class ShootingHandler {
         return mc.isWindowActive();
     }
 
-    // FIXME: 需要迁移，具体代码段见下方注释。
-//    @SubscribeEvent
-//    public void onKeyPressed(InputEvent.RawMouseEvent event)
-//    {
-//        if(!this.isInGame())
-//            return;
-//
-//        if(event.getAction() != GLFW.GLFW_PRESS)
-//            return;
-//
-//        Minecraft mc = Minecraft.getInstance();
-//        Player player = mc.player;
-//        if(player == null)
-//            return;
-//
-//        ItemStack heldItem = player.getMainHandItem();
-//        if(heldItem.getItem() instanceof GunItem)
-//        {
-//            int button = event.getButton();
-//            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
-//            {
-//                event.setCanceled(true);
-//            }
-//            if( Keys.PULL_TRIGGER.isDown() )
-//            {
-    // FIXME: 从这里开始 >>>
-
-    // FIXME: <<< 到这里结束。
-//            }
-//        }
-//    }
-
     // CHECK HERE: Indicates the ticks left for next shot
     private static float shootTickGapLeft = 0F;
 
