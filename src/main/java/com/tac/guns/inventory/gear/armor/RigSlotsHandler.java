@@ -18,7 +18,6 @@ import java.util.UUID;
 public class RigSlotsHandler implements IAmmoItemHandler, IItemHandlerModifiable, INBTSerializable<CompoundTag> {
     protected NonNullList<ItemStack> stacks;
 
-    private UUID owner;
     public RigSlotsHandler()
     {
         this(18);
@@ -180,7 +179,6 @@ public class RigSlotsHandler implements IAmmoItemHandler, IItemHandlerModifiable
         CompoundTag nbt = new CompoundTag();
         nbt.put("Items", nbtTagList);
         nbt.putInt("Size", stacks.size());
-        if(owner != null) nbt.putUUID("Owner", owner);
         return nbt;
     }
 
@@ -199,17 +197,7 @@ public class RigSlotsHandler implements IAmmoItemHandler, IItemHandlerModifiable
                 stacks.set(slot, ItemStack.of(itemTags));
             }
         }
-        if(nbt.contains("Owner")){
-            this.owner = nbt.getUUID("Owner");
-        }
         onLoad();
-    }
-
-    public void setOwner(LivingEntity owner){
-        if(owner == null)
-            this.owner = null;
-        else if(owner instanceof Player)
-            this.owner = owner.getUUID();
     }
 
     protected void validateSlotIndex(int slot)
@@ -225,13 +213,7 @@ public class RigSlotsHandler implements IAmmoItemHandler, IItemHandlerModifiable
 
     protected void onContentsChanged(int slot)
     {
-        /*
-        if(owner != null){
 
-            ((PlayerWithSynData)owner).updateRig();
-        }
-        
-         */
     }
 
     public NonNullList<ItemStack> getStacks() {
