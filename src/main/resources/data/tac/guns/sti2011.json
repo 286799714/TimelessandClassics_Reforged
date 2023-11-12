@@ -21,17 +21,17 @@
   },
   "reloads": {
     "magFed": true,
-    "maxAmmo": 13,
+    "maxAmmo": 9,
     "reloadMagTimer": 28,
     "additionalReloadEmptyMagTimer": 12,
-    "maxAdditionalAmmoPerOC": [3, 5, 8],
+    "maxAdditionalAmmoPerOC": [1, 3, 5],
     "preReloadPauseTicks": 0
   },
   "projectile": {
     "item": "tac:round45",
     "visible": false,
-    "damage": 9.5,
-    "armorIgnore": 0.6,
+    "damage": 10,
+    "armorIgnore": 0.5,
     "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 0.75,
@@ -89,7 +89,7 @@
     {
       "fovModifier": 0.9,
       "yOffset": 11.685,
-      "zOffset": -4.125
+      "zOffset": -3.5
     },
     "attachments": {
       "pistolBarrel": {

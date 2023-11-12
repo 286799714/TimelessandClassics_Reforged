@@ -6,7 +6,7 @@
     "gripType": "tac:two_handed_ak47",
     "recoilAngle": 2.375,
     "horizontalRecoilAngle": 1.55,
-    "recoilKick": 1.65,
+    "recoilKick": 1.35,
     "recoilAdsReduction": 0.205,
     "weaponRecoilOffset": 0.805,
     "cameraRecoilModifier": 1.15,
@@ -32,10 +32,10 @@
     "item": "tac:nato_556_bullet",
     "visible": false,
     "damage": 6.75,
-    "armorIgnore": 1.0,
+    "armorIgnore": 0.5,
     "critical": 0.00,
     "criticalDamage": 0.75,
-    "headDamage": 1.0,
+    "headDamage": 0.75,
     "closeDamage": 1.1,
     "decayStart": 0.11,
     "minDecayMultiplier": 0.35,
@@ -87,7 +87,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 13.0125,
-      "zOffset": -2.5
+      "zOffset": -1
     },
     "attachments": {
       "barrel": {

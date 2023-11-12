@@ -1,7 +1,7 @@
 {
   "general": {
     "auto": true,
-    "rate": 750,
+    "rate": 900,
     "rateSelector": [2, 1],
     "gripType": "tac:two_handed_vector",
     "recoilAngle": 1.75,
@@ -32,7 +32,7 @@
     "item": "tac:9mm_round",
     "visible": false,
     "damage": 5.5,
-    "armorIgnore": 0.7,
+    "armorIgnore": 0.0,
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
@@ -87,7 +87,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 10.025,
-      "zOffset": 0.5
+      "zOffset": 1.5
     },
     "attachments": {
       "scope": {
@@ -111,6 +111,11 @@
         "yOffset": 1000.89,
         "zOffset": 5.35,
         "scale": 0.0
+      },
+      "gunSkin": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       }
     }
   }

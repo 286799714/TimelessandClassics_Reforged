@@ -31,7 +31,7 @@
     "item": "tac:9mm_round",
     "visible": false,
     "damage": 5,
-    "armorIgnore": 0.6,
+    "armorIgnore": 0.0,
     "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 0.75,
@@ -85,7 +85,7 @@
   "modules": {
     "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 12.295,
+      "yOffset": 12.155,
       "zOffset": -4.8
     },
     "attachments": {

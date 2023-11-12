@@ -29,10 +29,10 @@
     "preReloadPauseTicks": 0
   },
   "projectile": {
-    "item": "tac:46x30",
+    "item": "tac:round45",
     "visible": false,
     "damage": 5.0,
-    "armorIgnore": 1.5,
+    "armorIgnore": 1.4,
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,

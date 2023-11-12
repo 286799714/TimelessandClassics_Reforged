@@ -24,10 +24,10 @@
     "item": "tac:nato_556_bullet",
     "visible": false,
     "damage": 8.25,
-    "armorIgnore": 1.0,
+    "armorIgnore": 0.5,
     "critical": 0.00,
     "criticalDamage": 0.75,
-    "headDamage": 1.0,
+    "headDamage": 0.75,
     "closeDamage": 1.1,
     "decayStart": 0.15,
     "minDecayMultiplier": 0.3,
@@ -127,6 +127,11 @@
         "yOffset": -100829.84,
         "zOffset": -22.80,
         "scale": 1.00
+      },
+      "gunSkin": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       }
     }
   }

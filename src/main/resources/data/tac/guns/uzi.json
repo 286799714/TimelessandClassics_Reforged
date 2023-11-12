@@ -34,7 +34,7 @@
     "visible": false,
     "size": 0.125,
     "damage": 6.5,
-    "armorIgnore": 0.7,
+    "armorIgnore": 0.0,
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
