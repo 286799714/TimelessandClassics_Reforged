@@ -1112,4 +1112,121 @@ public class GunModifiers
             return -0.02;
         }
     };
+    public static final IGunModifier SCAR_MK20_MOD = new IGunModifier() {
+        @Override
+        public float modifyFireSoundVolume(float volume) {
+            return volume * 2.5F;
+        }
+
+        @Override
+        public double modifyFireSoundRadius(double radius) {
+            return radius * 1.25;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 0.75;
+        }
+
+        @Override
+        public double additionalProjectileGravity() {
+            return 0.015;
+        }
+    };
+    public static final IGunModifier HK_G3_MOD = new IGunModifier() {
+        @Override
+        public float modifyFireSoundVolume(float volume) {
+            return volume * 1.25F;
+        }
+
+        @Override
+        public double modifyFireSoundRadius(double radius) {
+            return radius * 1.05;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 0.8;
+        }
+
+        @Override
+        public double additionalProjectileGravity() {
+            return 0.01;
+        }
+    };
+    public static final IGunModifier COLT_PYTHON_MOD = new IGunModifier() {
+        @Override
+        public double modifyFireSoundRadius(double radius) {
+            return radius * 1.25;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 1.25;
+        }
+
+        @Override
+        public double additionalProjectileGravity() {
+            return 0.0125;
+        }
+    };
+    public static final IGunModifier UZI_MOD = new IGunModifier() {
+        @Override
+        public double modifyFireSoundRadius(double radius) {
+            return radius * 0.9;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 1.20;
+        }
+
+        @Override
+        public double additionalProjectileGravity() {
+            return -0.015;
+        }
+    };
+    public static final IGunModifier TEC_9_MOD = new IGunModifier() {
+        @Override
+        public double modifyFireSoundRadius(double radius) {
+            return radius * 0.85;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 1.5;
+        }
+
+        @Override
+        public double additionalProjectileGravity() {
+            return -0.01;
+        }
+    };
+    public static final IGunModifier P90_MOD = new IGunModifier() {
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 1.0;
+        }
+
+        @Override
+        public float modifyFireSoundVolume(float volume) {
+            return volume * 0.90F;
+        }
+    };
+    public static final IGunModifier MRAD_MOD = new IGunModifier() {
+        @Override
+        public double modifyFireSoundRadius(double radius) {
+            return radius * 1.2;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 0.80;
+        }
+
+        @Override
+        public double additionalProjectileGravity() {
+            return 0.015;
+        }
+    };
 }

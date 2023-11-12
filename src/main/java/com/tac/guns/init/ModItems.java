@@ -98,12 +98,38 @@ public class ModItems
     public static final RegistryObject<Item> MK18_MOD1 = REGISTER.register("mk18_mod1", () -> new TimelessGunItem(properties -> properties.tab(GunMod.RIFLE), GunModifiers.MK18_MOD1_MOD));
     public static final RegistryObject<Item> UDP_9 = REGISTER.register("udp_9", () -> new TimelessGunItem(properties -> properties.tab(GunMod.SMG), GunModifiers.UDP_9_MOD));
 
+    public static final RegistryObject<Item> SCAR_MK20 = REGISTER.register("scar_mk20",
+            () -> new TimelessGunItem(properties -> properties.tab(GunMod.SNIPER), GunModifiers.SCAR_MK20_MOD));
+
+    public static final RegistryObject<Item> HK_G3 = REGISTER.register("hk_g3",
+            () -> new TimelessGunItem(properties -> properties.tab(GunMod.RIFLE), GunModifiers.HK_G3_MOD));
+
+    public static final RegistryObject<Item> TIMELESS_50 = REGISTER.register("timeless_50",
+            () -> new TimelessGunItem(properties -> properties.tab(GunMod.PISTOL), GunModifiers.STI2011_MOD));
+
+    public static final RegistryObject<Item> COLT_PYTHON = REGISTER.register("colt_python",
+            () -> new TimelessGunItem(properties -> properties.tab(GunMod.PISTOL), GunModifiers.COLT_PYTHON_MOD));
+
+    public static final RegistryObject<Item> P90 = REGISTER.register("p90",
+            () -> new TimelessGunItem(properties -> properties.tab(GunMod.SMG), GunModifiers.P90_MOD));
+
+    public static final RegistryObject<Item> TEC_9 = REGISTER.register("tec_9",
+            () -> new TimelessPistolGunItem(properties -> properties.tab(GunMod.PISTOL), GunModifiers.TEC_9_MOD));
+
+    public static final RegistryObject<Item> UZI = REGISTER.register("uzi",
+            () -> new TimelessPistolGunItem(properties -> properties.tab(GunMod.SMG), GunModifiers.UZI_MOD));
+
+    public static final RegistryObject<Item> MRAD = REGISTER.register("mrad",
+            () -> new TimelessGunItem(properties -> properties.tab(GunMod.SNIPER), GunModifiers.MRAD_MOD));
+
     //public static final RegistryObject<Item> DEVELOPMENT_SLOW_BULLET = REGISTER.register("devgun1", () -> new TimelessGunItem(properties -> propertiestab(GunMod.RIFLE)));
 
 
     /* Ammunition */
     //public static final RegistryObject<Item> MAGNUM_BULLET = REGISTER.register("magnumround", TimelessAmmoItem::new);
+    public static final RegistryObject<Item> BULLET_MAGNUM = REGISTER.register("b_magnum", TimelessAmmoItem::new);
     public static final RegistryObject<Item> BULLET_45 = REGISTER.register("round45", TimelessAmmoItem::new);
+    public static final RegistryObject<Item> BULLET_46 = REGISTER.register("46x30", TimelessAmmoItem::new);
     public static final RegistryObject<Item> BULLET_50AE = REGISTER.register("ae50", TimelessAmmoItem::new);
     public static final RegistryObject<Item> BULLET_30_WIN = REGISTER.register("win_30-30", TimelessLRFAmmoItem::new);
     public static final RegistryObject<Item> BULLET_308 = REGISTER.register("bullet_308", TimelessAmmoItem::new);
@@ -119,6 +145,7 @@ public class ModItems
     public static final RegistryObject<Item> BULLET_LAPUA338 = REGISTER.register("lapua338", TimelessRFAmmoItem::new);
     //public static final RegistryObject<Item> GRENADE_40MM = REGISTER.register("grenade40mm", Timeless40AmmoItem::new);
     public static final RegistryObject<Item> BULLET_68 = REGISTER.register("bullet68", TimelessAmmoItem::new);
+    public static final RegistryObject<Item> BULLET_57 = REGISTER.register("57x28", TimelessAmmoItem::new);
 
     /* Explosives */
     public static final RegistryObject<Item> RPG7_MISSILE = REGISTER.register("rpg7_missile", () -> new AmmoItem(new Item.Properties().stacksTo(6).tab(GunMod.AMMO)));
