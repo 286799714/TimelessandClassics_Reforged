@@ -294,8 +294,7 @@
 	"key.tac.co_inspect": "检视武器组合键",
 
     "key.tac.armor_repairing": "修复防弹衣",
-    "key.tac.equipArmor": "装备防弹衣",
-    "key.tac.removeArmor": "卸下防弹衣",
+    "key.tac.equipArmor": "装备/卸下防弹衣",
     "key.tac.openArmorAmmoPack": "打开备弹背包（当穿着防弹衣）",
 
     "effect.tac.blinded": "致盲",

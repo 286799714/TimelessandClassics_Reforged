@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.Key;
 import com.tac.guns.Config;
 import com.tac.guns.client.TacKeyMapping.TacKeyBuilder;
+import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.inventory.gear.armor.ArmorRigContainerProvider;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageArmorEquip;
@@ -13,6 +14,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -65,7 +67,6 @@ public final class Keys
         SIGHT_SWITCH = new TacKeyBuilder( "key.tac.sight_switch" ).withKeyboardKey( InputConstants.KEY_V ).buildAndRegis(),
         ACTIVATE_SIDE_RAIL = new TacKeyBuilder( "key.tac.activeSideRail" ).withKeyboardKey( InputConstants.KEY_B ).buildAndRegis(),
         EQUIP_ARMOR = new TacKeyBuilder("key.tac.equipArmor").withKeyboardKey( InputConstants.KEY_O).buildAndRegis(),
-        REMOVE_ARMOR = new TacKeyBuilder("key.tac.removeArmor").withKeyboardKey( InputConstants.KEY_M).buildAndRegis(),
         OPEN_ARMOR_AMMO_PACK = new TacKeyBuilder("key.tac.openArmorAmmoPack").withKeyboardKey( InputConstants.KEY_B).buildAndRegis(),
         
         ARMOR_REPAIRING = new TacKeyBuilder( "key.tac.armor_repairing" ).withKeyboardKey( InputConstants.KEY_K ).buildAndRegis();
@@ -74,12 +75,12 @@ public final class Keys
             EQUIP_ARMOR.addPressCallback(()->{
                 if (!Keys.noConflict(Keys.EQUIP_ARMOR))
                     return;
-                PacketHandler.getPlayChannel().sendToServer(new MessageArmorEquip());
-            });
-            REMOVE_ARMOR.addPressCallback(()->{
-                if (!Keys.noConflict(Keys.REMOVE_ARMOR))
-                    return;
-                PacketHandler.getPlayChannel().sendToServer(new MessageArmorRemove());
+                Player player = Minecraft.getInstance().player;
+                if(player == null) return;
+                if(((PlayerWithSynData)player).getRig().isEmpty())
+                    PacketHandler.getPlayChannel().sendToServer(new MessageArmorEquip());
+                else
+                    PacketHandler.getPlayChannel().sendToServer(new MessageArmorRemove());
             });
             OPEN_ARMOR_AMMO_PACK.addPressCallback(()->{
                 if (!Keys.noConflict(Keys.OPEN_ARMOR_AMMO_PACK))
@@ -87,7 +88,7 @@ public final class Keys
                 PacketHandler.getPlayChannel().sendToServer(new MessageArmorOpenAmmoPack());
             });
         }
-    public static final TacKeyMapping[] KEYS_VALUE = {RELOAD, UNLOAD, ATTACHMENTS, FIRE_SELECT, INSPECT, SIGHT_SWITCH, ACTIVATE_SIDE_RAIL, ARMOR_REPAIRING, EQUIP_ARMOR, REMOVE_ARMOR, OPEN_ARMOR_AMMO_PACK};
+    public static final TacKeyMapping[] KEYS_VALUE = {RELOAD, UNLOAD, ATTACHMENTS, FIRE_SELECT, INSPECT, SIGHT_SWITCH, ACTIVATE_SIDE_RAIL, ARMOR_REPAIRING, EQUIP_ARMOR, OPEN_ARMOR_AMMO_PACK};
 
     public static boolean noConflict(TacKeyMapping key) {
         for (TacKeyMapping k : KEYS_VALUE) {
