@@ -2,9 +2,10 @@ package com.tac.guns.entity;
 
 //import com.sun.tools.jdi.Packet;
 
-import com.mojang.math.Vector3d;
+import com.mojang.logging.LogUtils;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
+import com.tac.guns.common.AimingManager;
 import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.Gun.Projectile;
@@ -60,6 +61,7 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jline.utils.Log;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -170,7 +172,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     gunSpread = GunModifierHelper.getModifiedFirstShotSpread(weapon, gunSpread);
                 }
             }
-            if(SyncedEntityData.instance().get((Player) shooter, ModSyncedDataKeys.AIMING_STATE) > 0.1f)
+
+            AimingManager.AimTracker tracker = AimingManager.get().getAimTracker((Player) shooter);
+            if(tracker == null || tracker.getLerpProgress() < 0.95f)
             {
                 if(gunSpread < 0.5)
                     gunSpread+=0.5f;

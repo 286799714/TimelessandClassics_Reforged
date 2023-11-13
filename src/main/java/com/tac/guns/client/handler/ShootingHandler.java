@@ -262,7 +262,6 @@ public class ShootingHandler {
                     }
                 }
 
-
                 if (heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0 && !this.isPressed) {
                     this.isPressed = true;
                     this.burstTracker = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstCount();
