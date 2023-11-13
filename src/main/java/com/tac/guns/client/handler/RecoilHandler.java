@@ -139,7 +139,10 @@ public class RecoilHandler
 
         float progressForward = mc.player.getMainHandItem().getItem() instanceof GunItem ? ((GunItem) mc.player.getMainHandItem().getItem()).getGun().getGeneral().getRecoilDuration() *
                 GunModifierHelper.getRecoilSmootheningTime(mc.player.getMainHandItem()) : 0.25F;
-        if(startProgress < progressForward) // && startProgress > 0.125F
+
+        float delay = 0.10F;
+        float slow = 1.75F;
+        if(startProgress < progressForward - delay) // && startProgress > 0.125F
         {
             mc.player.setXRot(mc.player.getXRot() - ((endProgress - startProgress) / progressForward) * this.cameraRecoil / cameraRecoilModifer);
             if(recoilRand == 1)
@@ -148,11 +151,11 @@ public class RecoilHandler
                 mc.player.setYRot(mc.player.getYRot() -  ((endProgress - startProgress) / progressForward) * -this.horizontalCameraRecoil / cameraRecoilModifer);
         }
         else if(startProgress > progressForward) {
-            mc.player.setXRot((float) (mc.player.getXRot() + ((endProgress - startProgress) / (1 - progressForward)) * this.cameraRecoil / (cameraRecoilModifer * 1.05))); // 0.75F
+            mc.player.setXRot((float) (mc.player.getXRot() + ((endProgress - startProgress) / (1 - progressForward)) * this.cameraRecoil / (cameraRecoilModifer * slow))); // 0.75F
             if (recoilRand == 1)
-                mc.player.setYRot((float) (mc.player.getYRot() - ((endProgress - startProgress) / (1 - progressForward)) * -this.horizontalCameraRecoil / (cameraRecoilModifer * 1.05)));
+                mc.player.setYRot((float) (mc.player.getYRot() - ((endProgress - startProgress) / (1 - progressForward)) * -this.horizontalCameraRecoil / (cameraRecoilModifer * slow)));
             else
-                mc.player.setYRot((float) (mc.player.getYRot() - ((endProgress - startProgress) / (1 - progressForward)) * this.horizontalCameraRecoil / (cameraRecoilModifer * 1.05)));
+                mc.player.setYRot((float) (mc.player.getYRot() - ((endProgress - startProgress) / (1 - progressForward)) * this.horizontalCameraRecoil / (cameraRecoilModifer * slow)));
         }
 
             this.progressCameraRecoil += recoilAmount;

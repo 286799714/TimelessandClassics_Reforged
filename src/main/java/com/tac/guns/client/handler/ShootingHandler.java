@@ -252,7 +252,7 @@ public class ShootingHandler {
                     event.setCanceled(true);
                     event.setSwingHand(false);
                 }
-
+            }
 
             if(emptyCheckCountDown > emptyCheckCoolDown) {
                 if (magError(player, heldItem)) {
