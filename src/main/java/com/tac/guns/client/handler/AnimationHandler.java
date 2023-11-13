@@ -175,7 +175,10 @@ public enum AnimationHandler {
 
             final Player player = Minecraft.getInstance().player;
             if( player == null ) return;
-            
+
+            if(AimingHandler.get().getNormalisedAdsProgress() != 0)
+                return;
+
             final ItemStack stack = player.getInventory().getSelected();
             final GunAnimationController controller
                 = GunAnimationController.fromItem( stack.getItem() );

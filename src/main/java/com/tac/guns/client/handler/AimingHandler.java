@@ -4,6 +4,7 @@ import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.Config.RightClickUse;
 import com.tac.guns.client.Keys;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.AimingManager;
 import com.tac.guns.common.Gun;
@@ -191,6 +192,12 @@ public class AimingHandler {
                 ModSyncedDataKeys.AIMING.setValue(player, true);
                 PacketHandler.getPlayChannel().sendToServer(new MessageAim(true));
                 this.aiming = true;
+
+                final ItemStack stack = player.getInventory().getSelected();
+                final GunAnimationController controller
+                        = GunAnimationController.fromItem( stack.getItem() );
+                if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT))
+                    controller.stopAnimation();
             }
             this.localTracker.handleAiming(player.getItemInHand(InteractionHand.MAIN_HAND), true);
         } else {
