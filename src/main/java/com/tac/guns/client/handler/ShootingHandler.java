@@ -64,6 +64,10 @@ public class ShootingHandler {
     private int burstCooldown = 0;
     private boolean isPressed = false;
 
+    private final int emptyCheckCoolDown = 40;
+
+    private int emptyCheckCountDown = 40;
+
     private ShootingHandler() {
     }
 
@@ -233,6 +237,8 @@ public class ShootingHandler {
         if (player != null)
             if (this.burstCooldown > 0)
                 this.burstCooldown -= 1;
+        if(emptyCheckCountDown <= emptyCheckCoolDown)
+            emptyCheckCountDown++;
     }
 
     @SubscribeEvent
@@ -246,10 +252,13 @@ public class ShootingHandler {
                 event.setSwingHand(false);
             }
 
-            if (magError(player, heldItem)) {
-                player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
-                PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
-                return;
+            if(emptyCheckCountDown > emptyCheckCoolDown) {
+                if (magError(player, heldItem)) {
+                    emptyCheckCountDown = 0;
+                    player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
+                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+                    return;
+                }
             }
 
             if (heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0) {
