@@ -33,57 +33,57 @@ public class GunOptions
 
     public static final CycleOption<Boolean> DOUBLE_RENDER_EXIST = CycleOption.createOnOff("tac.options.doubleRender", (settings) -> {
         return Config.CLIENT.display.scopeDoubleRender.get();
-    }, (settings, p_168397_, value) -> {
+    }, (settings, function, value) -> {
         Config.CLIENT.display.scopeDoubleRender.set(value);
         Config.saveClientConfig();
     });
 
     public static final CycleOption<Boolean> HOLD_TO_AIM = CycleOption.createOnOff("tac.options.holdToAim", (settings) -> {
         return Config.CLIENT.controls.holdToAim.get();
-    }, (settings, p_168397_, value) -> {
+    }, (settings, function, value) -> {
         Config.CLIENT.controls.holdToAim.set(value);
         Config.saveClientConfig();
     });
 
     public static final CycleOption<Boolean> ALLOW_LEVER = CycleOption.createOnOff("tac.options.allowLever", (settings) -> {
         return Config.CLIENT.rightClickUse.allowLever.get();
-    }, (settings, p_168397_, value) -> {
+    }, (settings, function, value) -> {
         Config.CLIENT.rightClickUse.allowLever.set(value);
         Config.saveClientConfig();
     });
     public static final CycleOption<Boolean> ALLOW_BUTTON = CycleOption.createOnOff("tac.options.allowButton", (settings) -> {
         return Config.CLIENT.rightClickUse.allowButton.get();
-    }, (settings, p_168397_, value) -> {
+    }, (settings, function, value) -> {
         Config.CLIENT.rightClickUse.allowButton.set(value);
         Config.saveClientConfig();
     });
     public static final CycleOption<Boolean> ALLOW_DOORS = CycleOption.createOnOff("tac.options.allowDoors", (settings) -> {
         return Config.CLIENT.rightClickUse.allowDoors.get();
-    }, (settings, p_168397_, value) -> {
+    }, (settings, function, value) -> {
         Config.CLIENT.rightClickUse.allowDoors.set(value);
         Config.saveClientConfig();
     });
     public static final CycleOption<Boolean> ALLOW_TRAP_DOORS = CycleOption.createOnOff("tac.options.allowTrapDoors", (settings) -> {
         return Config.CLIENT.rightClickUse.allowTrapDoors.get();
-    }, (settings, p_168397_, value) -> {
+    }, (settings, function, value) -> {
         Config.CLIENT.rightClickUse.allowTrapDoors.set(value);
         Config.saveClientConfig();
     });
     public static final CycleOption<Boolean> ALLOW_CRAFTING_TABLE = CycleOption.createOnOff("tac.options.allowCraftingTable", (settings) -> {
         return Config.CLIENT.rightClickUse.allowCraftingTable.get();
-    }, (settings, p_168397_, value) -> {
+    }, (settings, function, value) -> {
         Config.CLIENT.rightClickUse.allowCraftingTable.set(value);
         Config.saveClientConfig();
     });
     public static final CycleOption<Boolean> ALLOW_CHESTS = CycleOption.createOnOff("tac.options.allowChests", (settings) -> {
         return Config.CLIENT.rightClickUse.allowChests.get();
-    }, (settings, p_168397_, value) -> {
+    }, (settings, function, value) -> {
         Config.CLIENT.rightClickUse.allowChests.set(value);
         Config.saveClientConfig();
     });
     public static final CycleOption<Boolean> ALLOW_FENCE_GATES = CycleOption.createOnOff("tac.options.allowFenceGates", (settings) -> {
         return Config.CLIENT.rightClickUse.allowFenceGates.get();
-    }, (settings, p_168397_, value) -> {
+    }, (settings, function, value) -> {
         Config.CLIENT.rightClickUse.allowFenceGates.set(value);
         Config.saveClientConfig();
     });
