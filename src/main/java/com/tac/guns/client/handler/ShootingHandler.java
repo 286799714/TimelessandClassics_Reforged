@@ -268,9 +268,12 @@ public class ShootingHandler {
             } else if (this.burstCooldown == 0)
                 fire(player, heldItem);
 
-            if (!(heldItem.getTag().getInt("AmmoCount") > 0)) {
-                player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
-                PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+            if(emptyCheckCountDown > emptyCheckCoolDown) {
+                if (!(heldItem.getTag().getInt("AmmoCount") > 0)) {
+                    emptyCheckCountDown = 0;
+                    player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
+                    PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
+                }
             }
         }
     }
