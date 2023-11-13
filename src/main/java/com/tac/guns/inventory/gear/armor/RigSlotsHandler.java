@@ -1,16 +1,19 @@
 package com.tac.guns.inventory.gear.armor;
 
-import com.mojang.logging.LogUtils;
+import com.tac.guns.duck.PlayerWithSynData;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
+import java.util.UUID;
 
 public class RigSlotsHandler implements IAmmoItemHandler, IItemHandlerModifiable, INBTSerializable<CompoundTag> {
     protected NonNullList<ItemStack> stacks;

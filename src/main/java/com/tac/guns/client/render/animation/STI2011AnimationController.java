@@ -11,15 +11,15 @@ import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class STI2011AnimationController extends PistalAnimationController {
-    public static int INDEX_BODY = 7;
-    public static int INDEX_SLIDE = 5;
-    public static int INDEX_MAG = 3;
-    public static int INDEX_EXTRA_MAG = 1;
-    public static int INDEX_LEFT_HAND = 11;
-    public static int INDEX_RIGHT_HAND = 8;
-    public static int INDEX_BULLET1 = 2;
+    public static int INDEX_BODY = 9;
+    public static int INDEX_SLIDE = 7;
+    public static int INDEX_MAG = 5;
+    public static int INDEX_EXTRA_MAG = 2;
+    public static int INDEX_LEFT_HAND = 13;
+    public static int INDEX_RIGHT_HAND = 10;
+    public static int INDEX_BULLET1 = 3;
     public static int INDEX_BULLET2 = 0;
-    public static int INDEX_HAMMER = 4;
+    public static int INDEX_HAMMER = 6;
 
     public static final AnimationMeta RELOAD_NORM = new AnimationMeta(new ResourceLocation("tac","animations/sti2011_reload_norm.gltf"));
     public static final AnimationMeta DRAW = new AnimationMeta(new ResourceLocation("tac","animations/sti2011_draw.gltf"));

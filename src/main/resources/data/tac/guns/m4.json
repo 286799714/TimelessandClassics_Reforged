@@ -33,10 +33,10 @@
     "item": "tac:nato_556_bullet",
     "visible": false,
     "damage": 6.25,
-    "armorIgnore": 1.0,
+    "armorIgnore": 0.4,
     "critical": 0.00,
     "criticalDamage": 0.75,
-    "headDamage": 1.0,
+    "headDamage": 0.75,
     "closeDamage": 1.1,
     "decayStart": 0.17,
     "minDecayMultiplier": 0.5,
@@ -89,7 +89,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 12.58,
-      "zOffset": 0
+      "zOffset": 1
     },
     "attachments": {
       "scope": {
@@ -123,11 +123,6 @@
         "scale": 0.00
       },
       "irDevice": {
-        "yOffset": 7.799,
-        "zOffset": -2.35,
-        "scale": 0.00
-      },
-      "gunSkin": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

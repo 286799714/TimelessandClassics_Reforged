@@ -24,10 +24,10 @@
     "item":  "tac:762x39",
     "visible": false,
     "damage": 9,
-    "armorIgnore": 1.1,
+    "armorIgnore": 0.6,
     "critical": 0.0,
     "criticalDamage": 0.875,
-    "headDamage": 1.0,
+    "headDamage": 0.75,
     "closeDamage": 1.1,
     "decayStart": 0.14,
     "minDecayMultiplier": 0.25,
@@ -112,6 +112,11 @@
         "scale": 1.0,
         "doRenderMount": true,
         "doOnSlideMovement": false
+      },
+      "gunSkin": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       }
     }
   }

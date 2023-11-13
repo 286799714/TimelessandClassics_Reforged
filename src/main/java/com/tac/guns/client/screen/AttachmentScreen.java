@@ -1,5 +1,6 @@
 package com.tac.guns.client.screen;
 
+import com.mojang.authlib.minecraft.TelemetrySession;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -7,10 +8,7 @@ import com.mojang.math.Vector3f;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.container.AttachmentContainer;
-import com.tac.guns.item.GunItem;
-import com.tac.guns.item.IrDeviceItem;
-import com.tac.guns.item.ScopeItem;
-import com.tac.guns.item.SideRailItem;
+import com.tac.guns.item.*;
 import com.tac.guns.item.attachment.IAttachment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -147,7 +145,7 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
     {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft minecraft = Minecraft.getInstance();
-        if(!(this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem) && !(this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem))
+        if(!(this.minecraft.player.getMainHandItem().getItem() instanceof IEasyColor))
             RenderSystem.setShaderTexture(0, GUN_GUI_TEXTURES);
         else
             RenderSystem.setShaderTexture(0, SCOPE_GUI_TEXTURES);
@@ -156,7 +154,8 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
         int top = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, left, top, 0, 0, this.imageWidth, this.imageHeight);
 
-        if((this.minecraft.player.getMainHandItem().getItem() instanceof ScopeItem) || (this.minecraft.player.getMainHandItem().getItem() instanceof SideRailItem))
+        if(this.minecraft.player.getMainHandItem().getItem() instanceof IEasyColor)
+            //TODO: Sync attachment slot rendering with iteration from AttachmentContainer
             for(int i = 9; i < IAttachment.Type.values().length; i++)
             {
                 if(i == 8 && !this.menu.getSlot(i).isActive())
@@ -254,7 +253,10 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
             {
                 if(!this.menu.getSlot(i).isActive())
                 {
-                    this.blit(matrixStack, left + 5, top + 17 + i * 18, 176, 0, 16, 16);
+                    if (i > 3)
+                        this.blit(matrixStack, left + 155, top + 17 + (i-4) * 18, 176, 0, 16, 16);
+                    else
+                        this.blit(matrixStack, left + 5, top + 17 + i * 18, 176, 0, 16, 16);
                 }
                 else if (i > 3)
                 {

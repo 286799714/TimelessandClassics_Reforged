@@ -1,0 +1,80 @@
+{
+  "general": {
+    "rate": 133,
+    "auto": false,
+    "rateSelector": [1],
+    "gripType": "tac:one_handed_m1911",
+    "recoilAngle": 18.75,
+    "horizontalRecoilAngle": 5.5,
+    "recoilKick": 1.25,
+    "recoilAdsReduction": 0.25,
+    "weaponRecoilOffset": 0.625,
+    "cameraRecoilModifier": 3,
+    "recoilDuration": 0.375,
+    "weightKilo": 2.8,
+
+    "spread": 1.45,
+    "firstShotSpread": 0.085,
+    "hipFireInaccuracy": 5.35,
+    "projToMinAccuracy": 3,
+    "msToAccuracyReset": 660,
+    "movementInaccuracy": 0.25
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 6,
+    "reloadMagTimer": 40,
+    "additionalReloadEmptyMagTimer": 0,
+    "preReloadPauseTicks": 0,
+    "openBolt": true
+  },
+  "projectile": {
+    "item": "tac:b_magnum",
+    "visible": false,
+    "damage": 14,
+    "armorIgnore": 0,
+    "critical": 0.0,
+    "criticalDamage": 1.0,
+    "headDamage": 1.0,
+    "closeDamage": 1.5,
+    "decayStart": 0.1,
+    "minDecayMultiplier": 0.2,
+    "decayEnd": 0.5,
+    "size": 0.125,
+    "speed": 15.0,
+    "trailLengthMultiplier": 3,
+    "life": 8
+  },
+  "sounds": {
+    "fire": "tac:item.colt_python_fire",
+    "reloadNormal": "tac:animation.colt_python_reload_norm",
+    "reloadEmpty": "tac:animation.colt_python_reload_empty",
+    "draw": "tac:animation.colt_python_draw",
+    "inspect": "tac:animation.colt_python_inspect",
+    "cock": "tac:item.pistol.cock"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 11.15,
+      "zOffset": -19.5,
+      "size": 1.1,
+      "trailAdjust": 0.5
+    },
+    "shellCasing": {
+      "tickLife": 0
+    },
+    "hipfireScale": 1.25,
+    "hipfireMoveScale": 0.25,
+    "hipfireRecoilScale": 1.0,
+    "weaponType": 2,
+    "showDynamicHipfire":true
+
+  },
+  "modules": {
+    "zoom": {
+      "fovModifier": 0.67,
+      "yOffset": 13.5,
+      "zOffset": -2.5
+    }
+  }
+}

@@ -64,6 +64,10 @@ public class ShootingHandler {
     private int burstCooldown = 0;
     private boolean isPressed = false;
 
+    private final int emptyCheckCoolDown = 40;
+
+    private int emptyCheckCountDown = 40;
+
     private ShootingHandler() {
     }
 
@@ -89,38 +93,6 @@ public class ShootingHandler {
             return false;
         return mc.isWindowActive();
     }
-
-    // FIXME: 需要迁移，具体代码段见下方注释。
-//    @SubscribeEvent
-//    public void onKeyPressed(InputEvent.RawMouseEvent event)
-//    {
-//        if(!this.isInGame())
-//            return;
-//
-//        if(event.getAction() != GLFW.GLFW_PRESS)
-//            return;
-//
-//        Minecraft mc = Minecraft.getInstance();
-//        Player player = mc.player;
-//        if(player == null)
-//            return;
-//
-//        ItemStack heldItem = player.getMainHandItem();
-//        if(heldItem.getItem() instanceof GunItem)
-//        {
-//            int button = event.getButton();
-//            if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT || button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
-//            {
-//                event.setCanceled(true);
-//            }
-//            if( Keys.PULL_TRIGGER.isDown() )
-//            {
-    // FIXME: 从这里开始 >>>
-
-    // FIXME: <<< 到这里结束。
-//            }
-//        }
-//    }
 
     // CHECK HERE: Indicates the ticks left for next shot
     private static float shootTickGapLeft = 0F;
@@ -265,6 +237,8 @@ public class ShootingHandler {
         if (player != null)
             if (this.burstCooldown > 0)
                 this.burstCooldown -= 1;
+        if(emptyCheckCountDown <= emptyCheckCoolDown)
+            emptyCheckCountDown++;
     }
 
     @SubscribeEvent
@@ -279,11 +253,16 @@ public class ShootingHandler {
                     event.setSwingHand(false);
                 }
 
+
+            if(emptyCheckCountDown > emptyCheckCoolDown) {
                 if (magError(player, heldItem)) {
+                    emptyCheckCountDown = 0;
                     player.displayClientMessage(new TranslatableComponent("info.tac.mag_error").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
                     PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
                     return;
                 }
+            }
+
 
                 if (heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0) {
                     this.burstTracker = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstCount();
@@ -292,7 +271,10 @@ public class ShootingHandler {
                 } else if (this.burstCooldown == 0)
                     fire(player, heldItem);
 
+
+            if(emptyCheckCountDown > emptyCheckCoolDown) {
                 if (!(heldItem.getTag().getInt("AmmoCount") > 0)) {
+                    emptyCheckCountDown = 0;
                     player.displayClientMessage(new TranslatableComponent("info.tac.out_of_ammo").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED), true);
                     PacketHandler.getPlayChannel().sendToServer(new MessageEmptyMag());
                 }

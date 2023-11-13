@@ -32,7 +32,7 @@
     "item": "tac:9mm_round",
     "visible": false,
     "damage": 5,
-    "armorIgnore": 0.7,
+    "armorIgnore": 0.2,
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
@@ -97,12 +97,12 @@
         "scale": 1.00
       },
       "scope": {
-        "yOffset": 10.025,
+        "yOffset": 9.9375,
         "zOffset": 1.175,
         "scale": 1.00
       },
       "pistolScope": {
-        "yOffset": 10.05,
+        "yOffset": 9.9375,
         "zOffset": 1.5,
         "scale": 1.0,
         "doRenderMount": true,
@@ -124,6 +124,11 @@
         "scale": 0.00
       },
       "underBarrel": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
+      },
+      "gunSkin": {
         "yOffset": 7.799,
         "zOffset": -2.35,
         "scale": 0.00

@@ -60,7 +60,7 @@ public class GunMod
         @Override
         public @NotNull ItemStack makeIcon()
         {
-            return new ItemStack(ModItems.VORTEX_LPVO_1_6.get());
+            return new ItemStack(ModItems.VORTEX_LPVO_3_6.get());
         }
 
         @Override
@@ -205,6 +205,20 @@ public class GunMod
         @Override
         public void fillItemList(NonNullList<ItemStack> items)
         {
+            super.fillItemList(items);
+            CustomGunManager.fill(items);
+        }
+    };
+
+    public static final CreativeModeTab SKINS = new CreativeModeTab("Skins") {
+        @Override
+        public ItemStack makeIcon() {
+            ItemStack stack = new ItemStack(ModItems.BLANK_SKIN_MOD_LVL1.get());
+            return stack;
+        }
+
+        @Override
+        public void fillItemList(NonNullList<ItemStack> items) {
             super.fillItemList(items);
             CustomGunManager.fill(items);
         }

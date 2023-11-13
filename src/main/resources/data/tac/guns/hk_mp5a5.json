@@ -33,7 +33,7 @@
     "item": "tac:9mm_round",
     "visible": false,
     "damage": 6.5,
-    "armorIgnore": 0.7,
+    "armorIgnore": 0.2,
     "critical": 0.0,
     "criticalDamage": 0.625,
     "headDamage": 0.625,
@@ -90,7 +90,7 @@
     "zoom": {
       "fovModifier": 0.8,
       "yOffset": 13.225,
-      "zOffset": -2.65
+      "zOffset": 0
     },
     "attachments": {
       "barrel": {
@@ -105,7 +105,7 @@
       },
       "scope": {
         "yOffset": 12.525,
-        "zOffset": 3.85,
+        "zOffset": 5,
         "scale": 1.00
       },
       "pistolScope": {

@@ -7,7 +7,7 @@
     "recoilAngle": 7.85,
     "recoilKick": 1.75,
     "horizontalRecoilAngle": 0.325,
-    "recoilAdsReduction": 0.35,
+    "recoilAdsReduction": 0.285,
     "weaponRecoilDuration": 0.625,
     "recoilDuration": 0.35,
     "cameraRecoilModifier": 1.325,
@@ -33,7 +33,7 @@
     "visible": false,
     "gravity": true,
     "damage": 40.5,
-    "armorIgnore": 1.5,
+    "armorIgnore": 1,
     "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 1.0,
@@ -71,12 +71,12 @@
     "zoom": {
       "fovModifier": 0.67,
       "yOffset": 8.515,
-      "zOffset": -4.5
+      "zOffset": -3
     },
     "attachments": {
       "scope": {
-        "yOffset": 7.545,
-        "zOffset": 6.425,
+        "yOffset": 7.4,
+        "zOffset": 7.5,
         "scale": 1.0
       },
       "extendedMag": {
@@ -86,7 +86,7 @@
       },
       "pistolScope": {
         "yOffset": 7.6,
-        "zOffset": 5.025,
+        "zOffset": 8,
         "scale": 1.0,
         "doRenderMount": true,
         "doOnSlideMovement": false
@@ -95,6 +95,11 @@
         "yOffset": -100829.84,
         "zOffset": -22.80,
         "scale": 1.00
+      },
+      "gunSkin": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       }
     }
   }

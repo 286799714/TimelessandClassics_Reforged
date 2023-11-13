@@ -80,6 +80,14 @@ public enum AnimationHandler {
         MK23AnimationController.getInstance();
         RPG7AnimationController.getInstance();
         UDP9AnimationController.getInstance();
+        COLTPYTHONAnimationController.getInstance();
+        HK_G3AnimationController.getInstance();
+        MRADAnimationController.getInstance();
+        P90AnimationController.getInstance();
+        SCAR_MK20AnimationController.getInstance();
+        TEC9AnimationController.getInstance();
+        Timeless50AnimationController.getInstance();
+        UZIAnimationController.getInstance();
     }
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {

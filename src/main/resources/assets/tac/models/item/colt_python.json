@@ -1,0 +1,34 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "tac:items/hotbar_icons/colt_python"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 0.25, -1],
+			"scale": [0.35, 0.35, 0.35]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 0.25, -1],
+			"scale": [0.35, 0.35, 0.35]
+		},
+		"firstperson_righthand": {
+			"translation": [-6.5, 4.75, -2],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-6.5, 4.75, -2],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"ground": {
+			"translation": [0, 5, 0],
+			"scale": [0.35, 0.35, 0.35]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [2.25, -1.25, -1],
+			"scale": [0.7, 0.7, 0.7]
+		}
+	}
+}

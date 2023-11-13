@@ -356,7 +356,7 @@ public class RecipeGen extends RecipeProvider
                 .build(consumer);
 
         //Scope
-        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.LONGRANGE_8x_SCOPE.get())
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.STANDARD_6_10x_SCOPE.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 36)
                 .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 60)
                 .build(consumer);
@@ -409,7 +409,7 @@ public class RecipeGen extends RecipeProvider
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)
                 .build(consumer);*/
 
-        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.VORTEX_LPVO_1_6.get())
+        WorkbenchRecipeBuilder.workbenchRecipe(ModItems.VORTEX_LPVO_3_6.get())
                 .addIngredient(Tags.Items.INGOTS_IRON, 32)
                 .addIngredient(Tags.Items.GLASS_PANES_COLORLESS, 24)
                 .addIngredient(Tags.Items.STORAGE_BLOCKS_REDSTONE, 1)

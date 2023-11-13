@@ -1,0 +1,32 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "tac:items/hotbar_icons/p90"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 0.5, 3.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 0.5, 3.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"translation": [-6.75, 2.75, 5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5, 2.75, 5.5]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [2, 1, -1],
+			"scale": [1.1, 1.1, 1.1]
+		}
+	}
+}

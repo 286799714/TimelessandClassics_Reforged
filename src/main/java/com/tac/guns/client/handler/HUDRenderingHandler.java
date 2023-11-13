@@ -2,6 +2,7 @@ package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.logging.LogUtils;
 import com.mojang.math.Matrix4f;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
@@ -97,7 +98,6 @@ public class HUDRenderingHandler extends GuiComponent {
             heldAmmoID = gunItem.getGun().getProjectile().getItem();
             //}
         }
-
     }
 
 

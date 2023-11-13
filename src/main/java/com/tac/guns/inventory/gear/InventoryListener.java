@@ -51,8 +51,6 @@ public class InventoryListener {
     @SubscribeEvent
     public static void onAttachCapabilitiesStack(AttachCapabilitiesEvent<ItemStack> event) throws InvocationTargetException, IllegalAccessException {
         if(!(event.getObject().getItem() instanceof IArmoredRigItem)) return;
-        Exception exception = new RuntimeException();
-        exception.printStackTrace();
         if(!event.getCapabilities().containsKey(new ResourceLocation("tac", "rig"))) {
             ArmorRigCapabilityProvider armorRigInventoryCapability = new ArmorRigCapabilityProvider();
             event.addCapability(new ResourceLocation("tac", "rig"), armorRigInventoryCapability);

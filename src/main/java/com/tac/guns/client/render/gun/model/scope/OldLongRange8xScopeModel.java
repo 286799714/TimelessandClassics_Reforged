@@ -48,6 +48,7 @@ public class OldLongRange8xScopeModel implements IOverrideModel
             matrixStack.scale(1.0F, 1.0F, (float)zScale);
         }*/
         if ((OptifineHelper.isShadersEnabled()) || !Config.CLIENT.display.scopeDoubleRender.get() && transformType.firstPerson() && entity.equals(Minecraft.getInstance().player)) {
+            /*
             double prog = 0;
             if(AimingHandler.get().getNormalisedAdsProgress() > 0.725) {
                 prog = (AimingHandler.get().getNormalisedAdsProgress() - 0.725) * 3.63;
@@ -56,6 +57,8 @@ public class OldLongRange8xScopeModel implements IOverrideModel
             double zScale = 0.05D + 0.95D * (1.0D - transition);
             matrixStack.translate(0,0,transition*0.18);
             matrixStack.scale(1.0F, 1.0F, (float) zScale);
+
+             */
 
         }
         matrixStack.translate(0, -0.15, -0.42);

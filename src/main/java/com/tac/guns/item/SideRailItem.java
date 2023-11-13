@@ -12,7 +12,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
  *
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class SideRailItem extends Item implements ISideRail, IColored
+public class SideRailItem extends Item implements ISideRail, IColored, IEasyColor
 {
     private final SideRail sideRail;
     private final boolean colored;

@@ -41,6 +41,7 @@ public class AimpointT2SightModel implements IOverrideModel
             double zScale = 0.05D + 0.95D * (1.0D - transition);
             matrixStack.scale(1.0F, 1.0F, (float)zScale);
         }*/
+         /*
         if (Config.CLIENT.display.redDotSquishUpdate.get() && transformType.firstPerson() && entity.equals(Minecraft.getInstance().player)) {
             double prog = 0;
             if(AimingHandler.get().getNormalisedAdsProgress() > 0.725) {
@@ -49,7 +50,6 @@ public class AimpointT2SightModel implements IOverrideModel
             double transition = 1.0D - Math.pow(1.0D - prog, 2.0D);
             double zScale = 0.05D + 0.95D * (1.0D - transition);
             matrixStack.scale(1.0F, 1.0F, (float) zScale);
-
         }
         else if (transformType.firstPerson() && entity.equals(Minecraft.getInstance().player)) {
             double prog = 0;
@@ -66,6 +66,7 @@ public class AimpointT2SightModel implements IOverrideModel
             }
 
         }
+          */
         matrixStack.translate(0, 0.074, -0.1075);
 
         RenderUtil.renderModel(stack, parent, matrixStack, renderTypeBuffer, light, overlay);

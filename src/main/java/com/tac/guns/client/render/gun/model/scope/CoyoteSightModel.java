@@ -40,6 +40,7 @@ public class CoyoteSightModel implements IOverrideModel
             double zScale = 0.05D + 0.95D * (1.0D - transition);
             matrixStack.scale(1.0F, 1.0F, (float)zScale);
         }*/
+         /*
         if (Config.CLIENT.display.redDotSquishUpdate.get() && transformType.firstPerson() && entity.equals(Minecraft.getInstance().player)) {
             double prog = 0;
             if(AimingHandler.get().getNormalisedAdsProgress() > 0.725) {
@@ -63,8 +64,8 @@ public class CoyoteSightModel implements IOverrideModel
                 double zScale = 0.05D + 0.95D * (1.0D - transition);
                 matrixStack.scale(1.0F, 1.0F, (float) zScale);
             }
-
         }
+        */
         int bodyColor = RenderUtil.getItemStackColor(stack, parent, IAttachment.Type.SCOPE_BODY_COLOR,0);
 
         matrixStack.translate(0, 0.074, -0.035-0.1025);

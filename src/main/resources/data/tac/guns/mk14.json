@@ -4,13 +4,13 @@
     "rate": 300,
     "rateSelector": [1, 2],
     "gripType": "tac:two_handed_ak47",
-    "recoilAngle": 4.875,
+    "recoilAngle": 6.875,
     "horizontalRecoilAngle": 3.35,
-    "recoilKick": 1.875,
+    "recoilKick": 1.625,
     "recoilAdsReduction": 0.25,
-    "weaponRecoilOffset": 0.725,
-    "cameraRecoilModifier": 1.625,
-    "recoilDuration": 0.255,
+    "weaponRecoilOffset": 0.6875,
+    "cameraRecoilModifier": 1.5,
+    "recoilDuration": 0.2625,
     "weightKilo": 5.75,
 
     "spread": 0.925,
@@ -31,11 +31,11 @@
   "projectile": {
     "item": "tac:bullet_308",
     "visible": false,
-    "damage": 18,
-    "armorIgnore": 1.2,
+    "damage": 16,
+    "armorIgnore": 1,
     "critical": 0.0,
     "criticalDamage": 1.0,
-    "headDamage": 1.25,
+    "headDamage": 1,
     "closeDamage": 1.0,
     "decayStart": 0.12,
     "minDecayMultiplier": 0.3,
@@ -89,13 +89,13 @@
     "zoom":
     {
       "fovModifier": 0.67,
-      "yOffset": 8.715,
-      "zOffset": -2.75
+      "yOffset": 8.6875,
+      "zOffset": -1.5
     },
     "attachments": {
       "scope": {
-        "yOffset": 8.15,
-        "zOffset": 5.225,
+        "yOffset": 8.25,
+        "zOffset": 6.25,
         "scale": 1.00
       },
       "pistolScope": {

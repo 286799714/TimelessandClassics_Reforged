@@ -12,7 +12,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
  *
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
-public class ScopeItem extends Item implements IScope, IColored
+public class ScopeItem extends Item implements IScope, IColored, IEasyColor
 {
     private final Scope scope;
     private final boolean colored;

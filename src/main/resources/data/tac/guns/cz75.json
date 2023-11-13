@@ -31,7 +31,7 @@
     "item": "tac:9mm_round",
     "visible": false,
     "damage": 6,
-    "armorIgnore": 0.6,
+    "armorIgnore": 0.0,
     "critical": 0.0,
     "criticalDamage": 1.0,
     "headDamage": 0.75,
@@ -99,6 +99,11 @@
         "yOffset": 1000.89,
         "zOffset": 5.35,
         "scale": 0.0
+      },
+      "gunSkin": {
+        "yOffset": 7.799,
+        "zOffset": -2.35,
+        "scale": 0.00
       }
     }
   }
