@@ -6,6 +6,7 @@ import com.tac.guns.common.container.AttachmentContainer;
 import com.tac.guns.init.ModSounds;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
+import com.tac.guns.item.IEasyColor;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.SideRailItem;
 import com.tac.guns.item.transition.TimelessGunItem;
@@ -49,14 +50,10 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean isActive()
     {
-        /*if(!(this.weapon.getItem() instanceof GunItem) || !(this.weapon.getItem() instanceof ScopeItem) && !(this.weapon.getItem() instanceof SideRailItem))
-        {
-            return false;
-        }*/
         if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
             return false;
         }
-        if(this.player.getMainHandItem().getItem() instanceof ScopeItem || this.player.getMainHandItem().getItem() instanceof SideRailItem)
+        if(this.player.getMainHandItem().getItem() instanceof IEasyColor)
         {
             return true;
         }
@@ -83,8 +80,7 @@ public class AttachmentSlot extends Slot
         if((this.type == IAttachment.Type.EXTENDED_MAG && this.weapon.getOrCreateTag().getInt("AmmoCount") > ((TimelessGunItem)this.weapon.getItem()).getGun().getReloads().getMaxAmmo()) || SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
             return false;
         }
-        if((this.player.getMainHandItem().getItem() instanceof ScopeItem || this.player.getMainHandItem().getItem() instanceof SideRailItem) && stack.getItem() instanceof DyeItem /*instanceof DyeItem && !(this.weapon.getItem() instanceof
-        GunItem)*/)
+        if((this.player.getMainHandItem().getItem() instanceof IEasyColor) && stack.getItem() instanceof DyeItem)
             return true;
         else
         {
@@ -98,7 +94,7 @@ public class AttachmentSlot extends Slot
                         return true;
                 }
             }
-            return false;//stack.getItem() instanceof IAttachment && ((IAttachment) stack.getItem()).getType() == this.type && modifiedGun.canAttachType(this.type);
+            return false;
         }
     }
 
@@ -120,7 +116,6 @@ public class AttachmentSlot extends Slot
     @Override
     public boolean mayPickup(Player player)
     {
-        //ItemStack itemstack = this.getStack();
         return true;
     }
 }
