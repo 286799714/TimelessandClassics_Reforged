@@ -13,11 +13,11 @@ public interface IAttachment<T extends Attachment>
 {
     Type getType();
     T getProperties();
-    public final int easyColorStart = 11;
-    public final int easyColorEnd = 13;
+    int easyColorStart = 11;
+    int easyColorEnd = 13;
 
-    public final int standardAttStart = 0;
-    public final int standardAttEnd = 7;
+    int standardAttStart = 0;
+    int standardAttEnd = 6;
 
     /*
         Instructions for editing type enum
@@ -33,10 +33,8 @@ public interface IAttachment<T extends Attachment>
         SIDE_RAIL("side_rail", "Side_Rail",4),
         EXTENDED_MAG("extended_mag", "Extended_Mag",5),
         GUN_SKIN("gun_skin", "Gun_Skin",6),
-
-        IR_DEVICE("ir_device", "Ir_Device",7),
-
         // additional types
+        IR_DEVICE("ir_device", "Ir_Device",7),
         OLD_SCOPE("oldScope", "OldScope",8),
         PISTOL_SCOPE("pistolScope", "PistolScope",9),
         PISTOL_BARREL("pistolBarrel", "PistolBarrel",10),

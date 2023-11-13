@@ -366,7 +366,7 @@ public class ServerPlayHandler
     public static void handleAttachments(ServerPlayer player)
     {
         ItemStack heldItem = player.getMainHandItem();
-        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof ScopeItem)
+        if(heldItem.getItem() instanceof GunItem || heldItem.getItem() instanceof IEasyColor)
         {
             NetworkHooks.openGui(player, new SimpleMenuProvider((windowId, playerInventory, player1) -> new AttachmentContainer(windowId, playerInventory, heldItem), new TranslatableComponent("container.tac.attachments")));
         }

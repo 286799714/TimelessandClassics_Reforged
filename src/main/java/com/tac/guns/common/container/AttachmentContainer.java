@@ -104,7 +104,7 @@ public class AttachmentContainer extends AbstractContainerMenu
             {
                 if(i==0)
                 {
-                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_RETICLE_COLOR, playerInventory.player, 10, 70, 32 + (2) * 18){
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_RETICLE_COLOR, playerInventory.player, i, 70, 32 + (2) * 18){
                         @Override
                         public boolean mayPickup(Player playerIn)
                         {
@@ -114,7 +114,7 @@ public class AttachmentContainer extends AbstractContainerMenu
                 }
                 if(i==1)
                 {
-                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_BODY_COLOR, playerInventory.player, 11, 40, -1 + (1) * 18){
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_BODY_COLOR, playerInventory.player, i, 40, -1 + (1) * 18){
                         @Override
                         public boolean mayPickup(Player playerIn)
                         {
@@ -124,7 +124,7 @@ public class AttachmentContainer extends AbstractContainerMenu
                 }
                 if(i==2)
                 {
-                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_GLASS_COLOR, playerInventory.player, 12, 10, 50 + (1) * 18){
+                    this.addSlot(new AttachmentSlot(this, this.weaponInventory, this.weapon, IAttachment.Type.SCOPE_GLASS_COLOR, playerInventory.player, i, 10, 50 + (1) * 18){
                         @Override
                         public boolean mayPickup(Player playerIn)
                         {
