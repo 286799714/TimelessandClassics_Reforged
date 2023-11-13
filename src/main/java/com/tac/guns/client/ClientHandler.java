@@ -27,6 +27,7 @@ import com.tac.guns.network.message.MessageInspection;
 import com.tac.guns.util.IDLNBTUtil;
 import com.tac.guns.util.math.SecondOrderDynamics;
 import de.javagl.jgltf.model.animation.AnimationRunner;
+import net.minecraft.client.CycleOption;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Option;
 import net.minecraft.client.color.item.ItemColor;
@@ -190,7 +191,11 @@ public class ClientHandler {
             }
             try {
                 OptionsList list = (OptionsList) mouseOptionsField.get(screen);
-                list.addSmall(new Option[]{GunOptions.ADS_SENSITIVITY}/*, GunOptions.CROSSHAIR*/);
+                list.addSmall(GunOptions.ADS_SENSITIVITY, GunOptions.HOLD_TO_AIM/*, GunOptions.CROSSHAIR*/);
+                list.addSmall(GunOptions.ALLOW_CHESTS, GunOptions.ALLOW_FENCE_GATES);
+                list.addSmall(GunOptions.ALLOW_LEVER, GunOptions.ALLOW_BUTTON);
+                list.addSmall(GunOptions.ALLOW_DOORS, GunOptions.ALLOW_TRAP_DOORS);
+                list.addSmall(new CycleOption[]{GunOptions.ALLOW_CRAFTING_TABLE});
                 /*, GunOptions.BURST_MECH);*/
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

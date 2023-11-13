@@ -247,10 +247,12 @@ public class ShootingHandler {
         Player player = mc.player;
         ItemStack heldItem = player.getMainHandItem();
         if(heldItem.getItem() instanceof TimelessGunItem) {
-            if (event.isAttack()) {
-                event.setCanceled(true);
-                event.setSwingHand(false);
-            }
+            if (Keys.PULL_TRIGGER.isDown()) {
+                if (event.isAttack()) {
+                    event.setCanceled(true);
+                    event.setSwingHand(false);
+                }
+
 
             if(emptyCheckCountDown > emptyCheckCoolDown) {
                 if (magError(player, heldItem)) {
@@ -261,12 +263,14 @@ public class ShootingHandler {
                 }
             }
 
-            if (heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0) {
-                this.burstTracker = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstCount();
-                fire(player, heldItem);
-                this.burstCooldown = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstRate();
-            } else if (this.burstCooldown == 0)
-                fire(player, heldItem);
+
+                if (heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0) {
+                    this.burstTracker = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstCount();
+                    fire(player, heldItem);
+                    this.burstCooldown = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstRate();
+                } else if (this.burstCooldown == 0)
+                    fire(player, heldItem);
+
 
             if(emptyCheckCountDown > emptyCheckCoolDown) {
                 if (!(heldItem.getTag().getInt("AmmoCount") > 0)) {
