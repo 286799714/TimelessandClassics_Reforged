@@ -391,6 +391,8 @@ public class Config
 
         public final ForgeConfigSpec.BooleanValue canSeeLaserThirdSight;
 
+        public final ForgeConfigSpec.BooleanValue glassDrop;
+
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
@@ -426,7 +428,7 @@ public class Config
                 this.forceCameraShakeOnFire = builder.comment("Force camera shake on for all players, since control over the weapon is reduced with this off, having a client only options could lead to balance issues.").define("forceCameraShakeOnFire",
                         false);
                 this.canSeeLaserThirdSight = builder.comment("Allow players to see the laser sight when they are third person sight, false means they can't see it.").define("canSeeLaserThirdSight", true);
-
+                this.glassDrop = builder.comment("Allow glass to be dropped, false means it will be totally broken.").define("glassDrop", true);
             }
             builder.pop();
         }

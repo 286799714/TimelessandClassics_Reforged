@@ -389,6 +389,8 @@ public class GunRenderingHandler {
     public float translateX = 0f;
     public float translateY = 0f;
     public float translateZ = 0f;
+
+    private double fix = 0;
     /*@SubscribeEvent(priority = EventPriority.LOWEST)
     public void onRenderPreOverlay(RenderHandEvent event)
     {
@@ -549,6 +551,24 @@ public class GunRenderingHandler {
                     } catch (NullPointerException e) {
                         GunMod.LOGGER.info("GunRenderingHandler NPE @509");
                     }
+
+                    if (Objects.equals(scope.getTagName(), "qmk152"))
+                        this.fix = -0.05;
+                    else if (Objects.equals(scope.getTagName(), "elcan14x"))
+                        this.fix = -0.06;
+                    else if (Objects.equals(scope.getTagName(), "acog4x"))
+                        this.fix = -0.03;
+                    else if (Objects.equals(scope.getTagName(), "vlpvo6"))
+                        this.fix = -0.05;
+                    else if (Objects.equals(scope.getTagName(), "gener8x"))
+                        this.fix = -0.06;
+                    else if (Objects.equals(scope.getTagName(), "aimpoint2") ||
+                            Objects.equals(scope.getTagName(), "eotechn") ||
+                            Objects.equals(scope.getTagName(), "vortex1") ||
+                            Objects.equals(scope.getTagName(), "eotechshort"))
+                        this.fix = -0.02;
+                    else
+                        this.fix = 0;
                 }
                 else if (modifiedGun.canAttachType(IAttachment.Type.OLD_SCOPE) && scope != null) {
                     double viewFinderOffset = isScopeOffsetType || isScopeRenderType ? scope.getViewFinderOffsetSpecial() : scope.getViewFinderOffset(); // switches between either, but either must be populated
@@ -558,6 +578,7 @@ public class GunRenderingHandler {
                     yOffset = -translateY + (8 - scaledPos.getYOffset()) * 0.0625 * scaleY - scope.getCenterOffset() * scaleY * 0.0625 * scaledPos.getScale();
                     zOffset = -translateZ - scaledPos.getZOffset() * 0.0625 * scaleZ + 0.72 - viewFinderOffset * scaleZ * scaledPos.getScale();
 
+                    this.fix = -0.05;
                 }
                 else if (modifiedGun.canAttachType(IAttachment.Type.PISTOL_SCOPE) && scope != null) {
                     double viewFinderOffset = isScopeOffsetType || isScopeRenderType ? scope.getViewFinderOffsetSpecial() : scope.getViewFinderOffset(); // switches between either, but either must be populated
@@ -568,12 +589,16 @@ public class GunRenderingHandler {
                     yOffset = -translateY + (8 - scaledPos.getYOffset()) * 0.0625 * scaleY - scope.getCenterOffset() * scaleY * 0.0625 * scaledPos.getScale();
                     zOffset = Config.CLIENT.display.sight1xRealisticPosition.get() && scope.getAdditionalZoom().getZoomMultiple() == 1 ? -translateZ + modifiedGun.getModules().getZoom().getZOffset() * 0.0625 * scaleZ :
                             -translateZ - scaledPos.getZOffset() * 0.0625 * scaleZ + 0.72 - viewFinderOffset * scaleZ * scaledPos.getScale();
+
+                    this.fix = 0;
                 }
                 else if (modifiedGun.getModules().getZoom() != null)
                 {
                     xOffset = -translateX + modifiedGun.getModules().getZoom().getXOffset() * 0.0625 * scaleX;
                     yOffset = -translateY + (8 - modifiedGun.getModules().getZoom().getYOffset()-0.2) * 0.0625 * scaleY;
                     zOffset = -translateZ + modifiedGun.getModules().getZoom().getZOffset() * 0.0625 * scaleZ;
+
+                    this.fix = 0;
                 }
 
 
@@ -587,12 +612,12 @@ public class GunRenderingHandler {
                 /* Reverses the original first person translations */
                 //matrixStack.translate(-0.56 * side * transition, 0.52 * transition, 0);
                 matrixStack.translate(  xOffset * side * result - 0.56 * side * result,
-                                        yOffset * result + 0.52 * result + 0.033 - Math.abs(0.5 - result) * 0.066,
+                                        yOffset * result + 0.52 * result + 0.033 - Math.abs(0.5 - result) * 0.066 + this.fix,
                                         zOffset * result);
                 matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) (5*(1-transition))) );
                 /* Reverses the first person translations of the item in order to position it in the center of the screen */
                 //matrixStack.translate(xOffset * side * transition, yOffset * transition, zOffset * transition);
-                matrixStack.translate(0, 0.015*transition, 0);
+                matrixStack.translate(0, (0.015 - this.fix)*transition, 0);
 
                 if(Config.COMMON.gameplay.realisticAimedBreathing.get()) {
                     /* Apply scope jitter*/
@@ -778,21 +803,28 @@ public class GunRenderingHandler {
     private void applyRecoilTransforms(PoseStack matrixStack, ItemStack item, Gun gun)
     {
         Minecraft mc = Minecraft.getInstance();
+        double kickReduce = 1;
         double recoilNormal = RecoilHandler.get().getGunRecoilNormal();
         if (Gun.hasAttachmentEquipped(item, gun, IAttachment.Type.SCOPE) || Gun.hasAttachmentEquipped(item, gun, IAttachment.Type.PISTOL_SCOPE) || Gun.hasAttachmentEquipped(item, gun, IAttachment.Type.OLD_SCOPE)) {
             recoilNormal -= recoilNormal * (0.25 * AimingHandler.get().getNormalisedAdsProgress());
+            kickReduce = gun.getModules().getZoom().getFovModifier();
+            if (kickReduce > 1)
+                kickReduce = 1;
+            if (kickReduce < 0)
+                kickReduce = 0;
         }
         this.kickReduction = 1.0F - GunModifierHelper.getKickReduction(item);
         this.recoilReduction = 1.0F - GunModifierHelper.getRecoilModifier(item);
         this.kick = gun.getGeneral().getRecoilKick() * 0.0625 * recoilNormal * RecoilHandler.get().getAdsRecoilReduction(gun);
         //this.recoilLift = ((float) (gun.getGeneral().getRecoilAngle() * recoilNormal) * (float) RecoilHandler.get().getAdsRecoilReduction(gun));
-        this.recoilLift = ((float) (RecoilHandler.get().getGunRecoilAngle() * recoilNormal) * (float) RecoilHandler.get().getAdsRecoilReduction(gun));
+        this.recoilLift = (float) ((float) (RecoilHandler.get().getGunRecoilAngle() * recoilNormal) * (float) RecoilHandler.get().getAdsRecoilReduction(gun) * kickReduce);
         this.newSwayYawAmount = ((float) (2F + 1F * (1.0 - AimingHandler.get().getNormalisedAdsProgress())));// * 1.5f;
         this.newSwayYawPitch = ((float) ((RecoilHandler.get().lastRandPitch * this.newSwayYawAmount - this.newSwayYawAmount / 2F) * recoilNormal)) / 2;
         this.newSwayYawYaw = ((float) ((RecoilHandler.get().lastRandYaw * this.newSwayYawAmount - this.newSwayYawAmount / 2F) * recoilNormal)) / 2;
         float kickTiming = 0.11f;
         if (IDLNBTUtil.getInt(item, "CurrentFireMode") == 1) {
             this.newSwayYawAmount *= 0.5;
+            this.recoilLift *= 0.925;
             kickTiming += 0.06f; // Soften the kick a little, helps with tracking and feel
         }
         if (mc.player != null && mc.player.isCrouching()) {
@@ -806,7 +838,7 @@ public class GunRenderingHandler {
         newKick *= 1 / Math.pow(magnification, 0.3);
 
         matrixStack.translate(0, 0, newKick);
-        matrixStack.translate(0, 0, 0.35);
+        matrixStack.translate(0, 0.05 * newKick, 0.35 * newKick);
 
         // TODO: have T/Time updatable per gun, weapons like the pistols, especially the deagle benifits from forcing accurate shots and awaiting front sight reset, unlike the m4 which should have little effect
         newSwayYaw = swayYawDynamics.update(0.12f, newSwayYawYaw * recoilReduction * weaponsHorizontalAngle);
@@ -818,7 +850,7 @@ public class GunRenderingHandler {
 
         if(gun.getGeneral().getWeaponRecoilOffset() != 0)
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(this.recoilLift * this.recoilReduction));
-        matrixStack.translate(0, 0, -0.35);
+        matrixStack.translate(0, -0.05 * newKick, -0.35 * newKick);
     }
     private int backwardTicker = 0;
     public void applyBobbingTransforms(PoseStack matrixStack, boolean convert){

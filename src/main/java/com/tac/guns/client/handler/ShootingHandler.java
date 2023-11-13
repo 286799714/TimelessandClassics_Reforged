@@ -262,12 +262,15 @@ public class ShootingHandler {
                     }
                 }
 
-                if (heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0) {
+                if (heldItem.getTag().getInt("CurrentFireMode") == 3 && this.burstCooldown == 0 && !this.isPressed) {
+                    this.isPressed = true;
                     this.burstTracker = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstCount();
                     fire(player, heldItem);
                     this.burstCooldown = ((TimelessGunItem) heldItem.getItem()).getGun().getGeneral().getBurstRate();
-                } else if (this.burstCooldown == 0)
+                } else if (this.burstCooldown == 0 && !this.isPressed) {
+                    this.isPressed = true;
                     fire(player, heldItem);
+                }
 
                 if (emptyCheckCountDown > emptyCheckCoolDown) {
                     if (!(heldItem.getTag().getInt("AmmoCount") > 0)) {
