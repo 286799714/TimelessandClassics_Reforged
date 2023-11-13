@@ -2510,7 +2510,6 @@ public final class Gun implements INBTSerializable<CompoundTag>
             }
         }
         return scope;
-        //return null;
     }
 
     public static ItemStack getAttachment(IAttachment.Type type, ItemStack gun)
@@ -2525,6 +2524,8 @@ public final class Gun implements INBTSerializable<CompoundTag>
             } else if(type == IAttachment.Type.SCOPE && (attachment.contains(IAttachment.Type.PISTOL_SCOPE.getTagKey(), Tag.TAG_COMPOUND) || attachment.contains(IAttachment.Type.OLD_SCOPE.getTagKey(), Tag.TAG_COMPOUND)))
                 return !attachment.getCompound(IAttachment.Type.PISTOL_SCOPE.getTagKey()).isEmpty() ? ItemStack.of(attachment.getCompound(IAttachment.Type.PISTOL_SCOPE.getTagKey())) :
                         ItemStack.of(attachment.getCompound(IAttachment.Type.OLD_SCOPE.getTagKey()));
+            else if(type == IAttachment.Type.SIDE_RAIL && (attachment.contains(IAttachment.Type.IR_DEVICE.getTagKey(), Tag.TAG_COMPOUND)))
+                return ItemStack.of(attachment.getCompound(IAttachment.Type.IR_DEVICE.getTagKey()));
 
         }
         return ItemStack.EMPTY;
