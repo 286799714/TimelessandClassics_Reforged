@@ -18,6 +18,11 @@ public class ModSyncedDataKeys
             .defaultValueSupplier(() -> false)
             .resetOnDeath()
             .build();
+    public static final SyncedDataKey<LivingEntity, Float> AIMING_STATE = SyncedDataKey.builder(SyncedClassKey.LIVING_ENTITY, Serializers.FLOAT)
+            .id(new ResourceLocation(Reference.MOD_ID, "aiming_state"))
+            .defaultValueSupplier(() -> 0f)
+            .resetOnDeath()
+            .build();
 
     public static final SyncedDataKey<LivingEntity, Boolean> SHOOTING = SyncedDataKey.builder(SyncedClassKey.LIVING_ENTITY, Serializers.BOOLEAN)
             .id(new ResourceLocation(Reference.MOD_ID, "shooting"))
@@ -51,6 +56,7 @@ public class ModSyncedDataKeys
     public static void register()
     {
         SyncedEntityData.instance().registerDataKey(AIMING);
+        SyncedEntityData.instance().registerDataKey(AIMING_STATE);
         SyncedEntityData.instance().registerDataKey(SHOOTING);
         SyncedEntityData.instance().registerDataKey(RELOADING);
         SyncedEntityData.instance().registerDataKey(MOVING);

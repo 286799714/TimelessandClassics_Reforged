@@ -13,6 +13,7 @@ import com.tac.guns.item.transition.TimelessGunItem;
 import com.tac.guns.item.attachment.impl.Scope;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageAim;
+import com.tac.guns.network.message.MessageAimingState;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.math.MathUtil;
@@ -41,6 +42,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Objects;
 import java.util.WeakHashMap;
 
 /**
@@ -76,6 +78,8 @@ public class AimingHandler {
     private int currentScopeZoomIndex = 0;
     private boolean isPressed = false;
 
+    private boolean canceling = false;
+
     private AimingHandler() {
         Keys.SIGHT_SWITCH.addPressCallback(() -> {
             if (!Keys.noConflict(Keys.SIGHT_SWITCH))
@@ -92,6 +96,8 @@ public class AimingHandler {
         });
     }
 
+    private boolean originalSprint = false;
+
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.START)
@@ -106,8 +112,17 @@ public class AimingHandler {
                 this.aimingMap.remove(player);
             }
         }
-        if (this.aiming)
-            player.setSprinting(false);
+        if (player == Minecraft.getInstance().player) {
+            if (isAiming()) {
+                if (player.isSprinting()) {
+                    originalSprint = true;
+                    player.setSprinting(false);
+                }
+            } else if (originalSprint) {
+                originalSprint = false;
+                player.setSprinting(true);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -211,8 +226,14 @@ public class AimingHandler {
                 this.isPressed = false;
         }
 
+        ItemStack heldItem = player.getMainHandItem();
+        if (heldItem.getItem() instanceof TimelessGunItem) {
+            ModSyncedDataKeys.AIMING_STATE.setValue(player, 1F - (float) this.normalisedAdsProgress);
+            PacketHandler.getPlayChannel().sendToServer(new MessageAimingState(1F - (float) this.normalisedAdsProgress));
+        }
+
         if (this.isAiming()) {
-            if (!this.aiming) {
+            if (!canceling && !this.aiming) {
                 ModSyncedDataKeys.AIMING.setValue(player, true);
                 PacketHandler.getPlayChannel().sendToServer(new MessageAim(true));
                 this.aiming = true;
@@ -240,6 +261,13 @@ public class AimingHandler {
                         float newFov = modifiedGun.getModules().getZoom().getFovModifier();
                         Scope scope = Gun.getScope(heldItem);
                         if (scope != null) {
+                            if (Objects.equals(scope.getTagName(), "gener8x") ||
+                                    Objects.equals(scope.getTagName(), "vlpvo6") ||
+                                    Objects.equals(scope.getTagName(), "acog4x") ||
+                                    Objects.equals(scope.getTagName(), "elcan14x") ||
+                                    Objects.equals(scope.getTagName(), "qmk152"))
+                                newFov = 0.8F;
+
                             if (!Config.COMMON.gameplay.realisticLowPowerFovHandling.get() || (scope.getAdditionalZoom().getZoomMultiple() > 1 && Config.COMMON.gameplay.realisticLowPowerFovHandling.get()) || gunItem.isIntegratedOptic()) {
                                 newFov = (float) MathUtil.magnificationToFovMultiplier(scope.getAdditionalZoom().getZoomMultiple(), Minecraft.getInstance().options.fov);
                                 if(newFov >= 1) newFov = modifiedGun.getModules().getZoom().getFovModifier();
@@ -279,6 +307,9 @@ public class AimingHandler {
 
     public boolean isAiming() {
         Minecraft mc = Minecraft.getInstance();
+        if (this.canceling)
+            return false;
+
         if (mc.player == null)
             return false;
 
@@ -331,10 +362,11 @@ public class AimingHandler {
     }
 
     public void forceToggleAim() {
-        if (this.toggledAim)
+        if (this.toggledAim) {
             this.toggledAim = false;
-        else
+        } else if (!canceling) {
             this.toggledAim = true;
+        }
     }
 
     public double getNormalisedAdsProgress() {
@@ -390,5 +422,30 @@ public class AimingHandler {
         public double getNormalProgress(float partialTicks) {
             return (this.previousAim + (this.currentAim - this.previousAim) * (this.previousAim == 0 || this.previousAim == MAX_AIM_PROGRESS ? 0 : partialTicks)) / (float) MAX_AIM_PROGRESS;
         }
+    }
+
+    public void cancelAim() {
+        Player player = Minecraft.getInstance().player;
+        canceling = true;
+        cancel(player);
+    }
+
+    private void cancel(Player player) {
+        if (this.aiming || this.toggledAim) {
+            ModSyncedDataKeys.AIMING.setValue(player, false);
+            PacketHandler.getPlayChannel().sendToServer(new MessageAim(false));
+            this.aiming = false;
+            this.toggledAim = false;
+        }
+
+        this.localTracker.handleAiming(player, player.getMainHandItem());
+    }
+
+    public void setCanceling() {
+        if (this.canceling) this.canceling = false;
+    }
+
+    public boolean getCanceling() {
+        return this.canceling;
     }
 }

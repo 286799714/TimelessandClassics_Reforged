@@ -9,9 +9,11 @@ import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.Gun.Projectile;
 import com.tac.guns.common.SpreadTracker;
+import com.tac.guns.event.GunProjectileHitEvent;
 import com.tac.guns.event.LevelUpEvent;
 import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModSyncedDataKeys;
+import com.tac.guns.interfaces.IDamageable;
 import com.tac.guns.interfaces.IExplosionDamageable;
 import com.tac.guns.interfaces.IHeadshotBox;
 import com.tac.guns.item.GunItem;
@@ -24,8 +26,10 @@ import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
 import com.tac.guns.util.math.ExtendedEntityRayTraceResult;
 import com.tac.guns.world.ProjectileExplosion;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,6 +37,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -165,11 +170,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     gunSpread = GunModifierHelper.getModifiedFirstShotSpread(weapon, gunSpread);
                 }
             }
-            if(!SyncedEntityData.instance().get((Player) shooter, ModSyncedDataKeys.AIMING))
+            if(SyncedEntityData.instance().get((Player) shooter, ModSyncedDataKeys.AIMING_STATE) > 0.1f)
             {
                 if(gunSpread < 0.5)
                     gunSpread+=0.5f;
-                gunSpread *= modifiedGun.getGeneral().getHipFireInaccuracy();
+                gunSpread *= (modifiedGun.getGeneral().getHipFireInaccuracy());
                 gunSpread = GunModifierHelper.getModifiedHipFireSpread(weapon, gunSpread);
                 if(SyncedEntityData.instance().get((Player) shooter, ModSyncedDataKeys.MOVING) != 0)
                 {
@@ -472,7 +477,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if(modifiedGun == null)
             return;
 
-        //MinecraftForge.EVENT_BUS.post(new GunProjectileHitEvent(result, this));
+//        if (MinecraftForge.EVENT_BUS.post(new GunProjectileHitEvent(result, this)))
+//            return;
 
         if(result instanceof BlockHitResult)
         {
@@ -487,14 +493,14 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             BlockState state = this.level.getBlockState(pos);
             Block block = state.getBlock();
 
-            if(block.getRegistryName().getPath().contains("_button"))
+            if(Objects.requireNonNull(block.getRegistryName()).getPath().contains("_button"))
                 return;
 
             if(Config.COMMON.gameplay.enableGunGriefing.get() &&
                     (block instanceof HalfTransparentBlock || block instanceof IronBarsBlock) &&
                     state.getMaterial() == Material.GLASS)
             {
-                this.level.destroyBlock(blockRayTraceResult.getBlockPos(), false);
+                this.level.destroyBlock(blockRayTraceResult.getBlockPos(), Config.COMMON.gameplay.glassDrop.get(), this.shooter);
             }
 
             /*if(modifiedGun.getProjectile().isRicochet() &&
@@ -508,6 +514,17 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 this.onHitBlock(blockRayTraceResult);
             }*/
 
+            if(block instanceof IDamageable)
+            {
+                ((IDamageable) block).onBlockDamaged(this.level, state, pos, this, this.getDamage(), (int) Math.ceil(this.getDamage() / 2.0) + 1);
+            }
+
+            this.onHitBlock(state, pos, blockRayTraceResult.getDirection(), hitVec.x, hitVec.y, hitVec.z);
+
+            if (block instanceof BellBlock bell) {
+                bell.attemptToRing(this.level, pos, blockRayTraceResult.getDirection());
+            }
+
             int fireStarterLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
             if(fireStarterLevel > 0 && Config.COMMON.gameplay.enableGunGriefing.get())
             {
@@ -516,20 +533,22 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 {
                     BlockState fireState = BaseFireBlock.getState(this.level, offsetPos);
                     this.level.setBlock(offsetPos, fireState, 11);
+                    ((ServerLevel) this.level).sendParticles(ParticleTypes.LAVA, hitVec.x - 1.0 + this.random.nextDouble() * 2.0, hitVec.y, hitVec.z - 1.0 + this.random.nextDouble() * 2.0, 4, 0, 0, 0, 0);
                 }
             }
+            return;
             // Build pen checks and results per passing through materials
-            if(state.getMaterial() == Material.WOOL || state.getMaterial() == Material.WOOD)
-            {
-                return;
-            }
-            else {
-                this.onHitBlock(state, pos, blockRayTraceResult.getDirection(), hitVec.x, hitVec.y, hitVec.z);
-
-                //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
-                this.remove(RemovalReason.DISCARDED);
-                return;
-            }
+//            if(state.getMaterial() == Material.WOOL || state.getMaterial() == Material.WOOD)
+//            {
+//                return;
+//            }
+//            else {
+//                this.onHitBlock(state, pos, blockRayTraceResult.getDirection(), hitVec.x, hitVec.y, hitVec.z);
+//
+//                //TODO: Add wall pen, simple, similar to ricochet but without anything crazy nor issues caused with block-face detection
+//                this.remove(RemovalReason.DISCARDED);
+//                return;
+//            }
         }
 
         if(result instanceof ExtendedEntityRayTraceResult)
@@ -575,9 +594,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         if(headshot)
         {
-            damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
-            damage *= this.projectile.getGunHeadDamage();
-            damage *= GunModifierHelper.getAdditionalHeadshotDamage(this.weapon) == 0F ? 1F : GunModifierHelper.getAdditionalHeadshotDamage(this.weapon);
+            if (Config.COMMON.gameplay.headShotDamageMultiplier.get() * this.projectile.getGunHeadDamage() >= 0)
+                damage *= (float) (Config.COMMON.gameplay.headShotDamageMultiplier.get() * this.projectile.getGunHeadDamage());
+            damage += GunModifierHelper.getAdditionalHeadshotDamage(this.weapon) == 0F ? 1F : GunModifierHelper.getAdditionalHeadshotDamage(this.weapon);
         }
 
         DamageSource source = new DamageSourceProjectile("bullet", this, shooter, weapon).setProjectile();
@@ -694,6 +713,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z)
     {
         PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(pos)), new MessageProjectileHitBlock(x, y, z, pos, face));
+        if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon) > 0)
+            ((ServerLevel) this.level).sendParticles(ParticleTypes.LAVA, x, y, z, 1, 0, 0, 0, 0);
     }
 
     protected void teleportToHitPoint(HitResult rayTraceResult)

@@ -18,6 +18,7 @@ public class PacketHandler
 
 
     .registerPlayMessage(MessageAim.class, NetworkDirection.PLAY_TO_SERVER)
+    .registerPlayMessage(MessageAimingState.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageReload.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageShoot.class, NetworkDirection.PLAY_TO_SERVER)
     .registerPlayMessage(MessageSaveItemUpgradeBench.class, NetworkDirection.PLAY_TO_SERVER)
