@@ -421,23 +421,11 @@ public class ServerPlayHandler
                 }
 
                 int toCheck = ArrayUtils.indexOf(gunItemFireModes, heldItem.getTag().getInt("CurrentFireMode")) + 1;
-                if (toCheck > (heldItem.getTag().getIntArray("supportedFireModes").length - 1)) {
-                    heldItem.getTag().remove("CurrentFireMode");
-                    heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
-                } else {
-                    heldItem.getTag().remove("CurrentFireMode");
-                    heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[toCheck]);
-                }
+                CurrentFireMode(heldItem, gunItemFireModes, toCheck);
 
                 if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0 && gunItemFireModes.length > 1) {
                     toCheck = ArrayUtils.indexOf(gunItemFireModes, heldItem.getTag().getInt("CurrentFireMode")) + 1;
-                    if (toCheck > (heldItem.getTag().getIntArray("supportedFireModes").length - 1)) {
-                        heldItem.getTag().remove("CurrentFireMode");
-                        heldItem.getTag().putInt("CurrentFireMode", heldItem.getTag().getIntArray("supportedFireModes")[1]);
-                    } else {
-                        heldItem.getTag().remove("CurrentFireMode");
-                        heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[toCheck]);
-                    }
+                    CurrentFireMode(heldItem, gunItemFireModes, toCheck);
                 } else if (!Config.COMMON.gameplay.safetyExistence.get() && heldItem.getTag().getInt("CurrentFireMode") == 0) {
                     heldItem.getTag().remove("CurrentFireMode");
                     heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
@@ -454,6 +442,16 @@ public class ServerPlayHandler
         catch (Exception e)
         {
             GunMod.LOGGER.log(ERROR, "Fire Mode check did not function properly");//TODO: For now the issue seems to be minimal, this will be eventually reworked, while still having server capability
+        }
+    }
+
+    private static void CurrentFireMode(ItemStack heldItem, int[] gunItemFireModes, int toCheck) {
+        if (toCheck > (heldItem.getTag().getIntArray("supportedFireModes").length - 1)) {
+            heldItem.getTag().remove("CurrentFireMode");
+            heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[0]);
+        } else {
+            heldItem.getTag().remove("CurrentFireMode");
+            heldItem.getTag().putInt("CurrentFireMode", gunItemFireModes[toCheck]);
         }
     }
 
