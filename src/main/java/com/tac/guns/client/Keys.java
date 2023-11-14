@@ -2,14 +2,19 @@ package com.tac.guns.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.Key;
+import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.client.TacKeyMapping.TacKeyBuilder;
+import com.tac.guns.client.handler.ReloadHandler;
+import com.tac.guns.client.handler.ShootingHandler;
+import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.render.animation.module.PumpShotgunAnimationController;
 import com.tac.guns.duck.PlayerWithSynData;
+import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.inventory.gear.armor.ArmorRigContainerProvider;
+import com.tac.guns.item.GunItem;
 import com.tac.guns.network.PacketHandler;
-import com.tac.guns.network.message.MessageArmorEquip;
-import com.tac.guns.network.message.MessageArmorOpenAmmoPack;
-import com.tac.guns.network.message.MessageArmorRemove;
+import com.tac.guns.network.message.*;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -17,11 +22,13 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 @OnlyIn(Dist.CLIENT)
 public final class Keys
@@ -82,10 +89,45 @@ public final class Keys
                 else
                     PacketHandler.getPlayChannel().sendToServer(new MessageArmorRemove());
             });
+
             OPEN_ARMOR_AMMO_PACK.addPressCallback(()->{
                 if (!Keys.noConflict(Keys.OPEN_ARMOR_AMMO_PACK))
                     return;
                 PacketHandler.getPlayChannel().sendToServer(new MessageArmorOpenAmmoPack());
+            });
+
+            Keys.RELOAD.addPressCallback(() -> {
+                if (!Keys.noConflict(Keys.RELOAD))
+                    return;
+
+                final LocalPlayer player = Minecraft.getInstance().player;
+                if (player == null) return;
+
+                final ItemStack stack = player.getMainHandItem();
+                if (stack.getItem() instanceof GunItem) {
+                    PacketHandler.getPlayChannel().sendToServer(new MessageUpdateGunID());
+                    if (!SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
+                        ShootingHandler.get().burstTracker = 0;
+                        ReloadHandler.get().setReloading(true);
+                    } else if (
+                            GunAnimationController.fromItem(stack.getItem())
+                                    instanceof PumpShotgunAnimationController
+                    ) {
+                        ReloadHandler.get().setReloading(false);
+                    }
+                }
+            });
+
+            Keys.UNLOAD.addPressCallback(() -> {
+                if (!Keys.noConflict(Keys.UNLOAD))
+                    return;
+
+                if (!ReloadHandler.get().isReloading()) {
+                    final SimpleChannel channel = PacketHandler.getPlayChannel();
+                    channel.sendToServer(new MessageUpdateGunID());
+                    ReloadHandler.get().setReloading(false);
+                    channel.sendToServer(new MessageUnload());
+                }
             });
         }
     public static final TacKeyMapping[] KEYS_VALUE = {RELOAD, UNLOAD, ATTACHMENTS, FIRE_SELECT, INSPECT, SIGHT_SWITCH, ACTIVATE_SIDE_RAIL, ARMOR_REPAIRING, EQUIP_ARMOR, OPEN_ARMOR_AMMO_PACK};

@@ -16,12 +16,10 @@ import com.tac.guns.network.message.MessageUpdateGunID;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -205,41 +203,7 @@ public class ReloadHandler {
 
     public int rigAmmoCount = 0;
 
-    private ReloadHandler() {
-        Keys.RELOAD.addPressCallback(() -> {
-            if (!Keys.noConflict(Keys.RELOAD))
-                return;
-
-            final LocalPlayer player = Minecraft.getInstance().player;
-            if (player == null) return;
-
-            final ItemStack stack = player.getMainHandItem();
-            if (stack.getItem() instanceof GunItem) {
-                PacketHandler.getPlayChannel().sendToServer(new MessageUpdateGunID());
-                if (!SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
-                    ShootingHandler.get().burstTracker = 0;
-                    this.setReloading(true);
-                } else if (
-                        GunAnimationController.fromItem(stack.getItem())
-                                instanceof PumpShotgunAnimationController
-                ) {
-                    this.setReloading(false);
-                }
-            }
-        });
-
-        Keys.UNLOAD.addPressCallback(() -> {
-            if (!Keys.noConflict(Keys.UNLOAD))
-                return;
-
-            if (!this.isReloading()) {
-                final SimpleChannel channel = PacketHandler.getPlayChannel();
-                channel.sendToServer(new MessageUpdateGunID());
-                this.setReloading(false);
-                channel.sendToServer(new MessageUnload());
-            }
-        });
-    }
+    private ReloadHandler() { }
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
