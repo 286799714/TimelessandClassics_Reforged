@@ -98,7 +98,7 @@ public class Config
                 this.weaponAmmoBar = builder.comment("Show % of your ammo in your gun via a colored durability bar. Set to false to remove bar entirely for more realistic gameplay").define("weaponAmmoBar", false);
 
                 this.gameplayEnchancedScopeOffset = builder.comment("Scopes are brought closer to the shooter to help fill FOV with a scope view at all times").define("gameplayEnchancedScopeOffset", true);
-                this.scopeDoubleRender = builder.comment("Enable picture in picture rendering for scopes, saves on some performance and issues with Optifine").define("scopeDoubleRender", true);
+                this.scopeDoubleRender = builder.comment("Enable picture in picture rendering for scopes, saves on some performance and issues with Optifine").define("scopeDoubleRender", false);
                 this.redDotSquishUpdate = builder.comment("Enable 0 fov multiplied sights (Dot/Holo sights) to render in 2d when aimed like the scopeDoubleRender(false) effect.").define("redDotSquishUpdate", false);
                 this.sight1xRealisticPosition = builder.comment("Enable 0 fov multiplied sights (Dot/Holo sights) to be viewed realisticly, with the players head static for iron sights, and 1x optics").define("sight1xRealisticPostion", false);
 
@@ -294,7 +294,7 @@ public class Config
             builder.comment("Properties relating to controls").push("controls");
             {
                 this.aimDownSightSensitivity = builder.comment("A value to multiple the mouse sensitivity by when aiming down weapon sights. Go to (Options > Controls > Mouse Settings > ADS Sensitivity) in game to change this!").defineInRange("aimDownSightSensitivity", 1.0, 0.0, 2.0);
-                this.holdToAim = builder.comment("If true, you need to hold the aim key to aim, false to toggle the aim state by aim key").define("holdToAim", false);
+                this.holdToAim = builder.comment("If true, you need to hold the aim key to aim, false to toggle the aim state by aim key").define("holdToAim", true);
                 this.burstPress = builder.comment("Press to use a burst fire a gun, if false, burst will become semi shoot").define("burstPress", true);
             }
             builder.pop();
