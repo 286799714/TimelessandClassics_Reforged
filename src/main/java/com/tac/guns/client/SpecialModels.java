@@ -29,6 +29,7 @@ public enum SpecialModels
     LPVO_1_6("optics/lpvo_1_6"),
     Sx8_FRONT("optics/8x_scope_front"),
     Sx8_BODY("optics/8x_scope"),
+    ACOG_SCOPE_MIRROR("scope_mirror/acog_4x_scope_mirror"),
     //Everything from this point on is all LOD renders
     BULLET_SHELL("bullet_shell"), // Simply for testing fall back, FOR REMOVAL
     BULLET_SHELL_HIGH_CAL("shell_huge"),
