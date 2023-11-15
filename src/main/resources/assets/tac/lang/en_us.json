@@ -427,6 +427,12 @@
     "gui.tac.workbench.tab.attachments": "Attachments",
     "gui.tac.workbench.tab.ammo": "Ammo",
     "gui.tac.workbench.tab.misc": "Miscellaneous",
+    "gui.tac.workbench.tab.weapons_ar": "AssaultRifles",
+    "gui.tac.workbench.tab.weapons_hmg": "HeavyWeapons",
+    "gui.tac.workbench.tab.weapons_pt": "Pistols",
+    "gui.tac.workbench.tab.weapons_sg": "Shotguns",
+    "gui.tac.workbench.tab.weapons_smg": "SMGs",
+    "gui.tac.workbench.tab.weapons_sr": "MarksmanRifles",
 
     "container.tac.workbench": "",
     "container.tac.attachments": "Modify Attachments",
@@ -482,6 +488,15 @@
     "tac.options.ammoCounterExist": "Show Ammo Counter",
     "tac.options.iconExist": "Show Weapon Icon",
     "tac.options.doubleRender": "Enable DR for Scopes" ,
+
+    "tac.options.disableAllUse": "Disable all use",
+    "tac.options.allowLever": "Allow lever use",
+    "tac.options.allowButton": "Allow button use",
+    "tac.options.allowDoors": "Allow door use",
+    "tac.options.allowTrapDoors": "Allow trap door use",
+    "tac.options.allowCraftingTable": "Allow crafting table use",
+    "tac.options.allowChests": "Allow chest use",
+    "tac.options.allowFenceGates": "Allow fence gate use",
 
     "info.tac.current_level": "Current level",
     "info.tac.out_of_ammo": "RELOAD!",
