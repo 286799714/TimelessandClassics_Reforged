@@ -1,7 +1,7 @@
 package com.tac.guns.mixin.client;
 
-import com.tac.guns.client.gunskin.SkinLoader;
-import com.tac.guns.client.gunskin.SkinManager;
+import com.tac.guns.client.render.gunskin.SkinLoader;
+import com.tac.guns.client.render.gunskin.SkinManager;
 
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;

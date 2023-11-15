@@ -1,4 +1,4 @@
-package com.tac.guns.client.gunskin;
+package com.tac.guns.client.render.gunskin;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

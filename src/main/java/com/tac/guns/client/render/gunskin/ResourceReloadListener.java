@@ -1,4 +1,4 @@
-package com.tac.guns.client.gunskin;
+package com.tac.guns.client.render.gunskin;
 
 import com.tac.guns.client.SpecialModels;
 import net.minecraft.server.packs.resources.ResourceManager;

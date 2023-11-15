@@ -1,11 +1,12 @@
-package com.tac.guns.client.gunskin;
+package com.tac.guns.client.render.gunskin;
 
+import com.tac.guns.client.render.gun.GunModelComponent;
 import com.tac.guns.init.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.RegistryObject;
 
 
-import static com.tac.guns.client.gunskin.ModelComponent.*;
+import static com.tac.guns.client.render.gun.CommonComponents.*;
 
 public enum SkinLoaders {
     AA_12(ModItems.AA_12, BODY, BOLT, BOLT_HANDLE, GRIP_LIGHT, GRIP_TACTICAL, LASER_BASIC, LASER_BASIC_DEVICE, MAG_DRUM,
@@ -181,7 +182,7 @@ public enum SkinLoaders {
     ;
 
 
-    private final ModelComponent[] components;
+    private final GunModelComponent[] components;
     private final ResourceLocation name;
 
     public static void init(){
@@ -191,12 +192,12 @@ public enum SkinLoaders {
         }
     }
 
-    SkinLoaders(ResourceLocation name, ModelComponent... components) {
+    SkinLoaders(ResourceLocation name, GunModelComponent... components) {
         this.components = components;
         this.name = name;
     }
 
-    SkinLoaders(RegistryObject<?> item, ModelComponent... components) {
+    SkinLoaders(RegistryObject<?> item, GunModelComponent... components) {
         this(item.getId(), components);
     }
 

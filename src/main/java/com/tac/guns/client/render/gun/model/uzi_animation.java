@@ -1,14 +1,14 @@
 package com.tac.guns.client.render.gun.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.tac.guns.client.gunskin.GunSkin;
-import com.tac.guns.client.gunskin.SkinManager;
+import com.tac.guns.client.render.gunskin.GunSkin;
+import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.UZIAnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.gun.SkinAnimationModel;
+import com.tac.guns.client.render.gun.DeconstructedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
@@ -19,9 +19,9 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-import static com.tac.guns.client.gunskin.ModelComponent.*;
+import static com.tac.guns.client.render.gun.CommonComponents.*;
 
-public class uzi_animation extends SkinAnimationModel {
+public class uzi_animation extends DeconstructedGunModel {
 
     //The render method, similar to what is in DartEntity. We can render the item
     @Override

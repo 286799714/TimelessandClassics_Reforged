@@ -1,7 +1,7 @@
 package com.tac.guns.client;
 
 import com.tac.guns.Reference;
-import com.tac.guns.client.gunskin.ResourceReloadListener;
+import com.tac.guns.client.render.gunskin.ResourceReloadListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;

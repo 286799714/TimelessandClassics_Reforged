@@ -12,10 +12,8 @@ import com.tac.guns.client.GunRenderType;
 import com.tac.guns.client.SpecialModels;
 import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
-import com.tac.guns.client.handler.HUDRenderingHandler;
 import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
-import com.tac.guns.client.render.ScreenTextureState;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.item.ScopeItem;
@@ -29,8 +27,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-
-import static com.tac.guns.client.gunskin.ModelComponent.RAIL_SCOPE;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

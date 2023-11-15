@@ -3,8 +3,7 @@ package com.tac.guns.client.render.gun;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3d;
-import com.tac.guns.client.gunskin.GunSkin;
-import com.tac.guns.client.gunskin.ModelComponent;
+import com.tac.guns.client.render.gunskin.GunSkin;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
@@ -20,19 +19,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tac.guns.client.gunskin.ModelComponent.*;
+import static com.tac.guns.client.render.gun.CommonComponents.*;
 
 
-public abstract class SkinAnimationModel implements IOverrideModel {
-    protected Map<ModelComponent, Vector3d> extraOffset = new HashMap<>();
+public abstract class DeconstructedGunModel implements IOverrideModel {
+    protected Map<GunModelComponent, Vector3d> extraOffset = new HashMap<>();
     //    protected Map<ModelComponent,IBakedModel> defaultModels;
-    private static List<SkinAnimationModel> models = new ArrayList<>();
+    private static List<DeconstructedGunModel> models = new ArrayList<>();
 
-    public SkinAnimationModel() {
+    public DeconstructedGunModel() {
         models.add(this);
     }
 
-    public BakedModel getModelComponent(GunSkin skin, ModelComponent key) {
+    public BakedModel getModelComponent(GunSkin skin, GunModelComponent key) {
         return (skin == null || skin.getModel(key) == null ?
                 Minecraft.getInstance().getModelManager().getMissingModel() :
                 skin.getModel(key).getModel());
@@ -48,7 +47,7 @@ public abstract class SkinAnimationModel implements IOverrideModel {
 //        }
 //    }
 
-    private void renderComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, ModelComponent modelComponent) {
+    private void renderComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, GunModelComponent modelComponent) {
         if (extraOffset.containsKey(modelComponent)) {
             Vector3d x = extraOffset.get(modelComponent);
             matrices.pushPose();
@@ -60,7 +59,7 @@ public abstract class SkinAnimationModel implements IOverrideModel {
             RenderUtil.renderModel(getModelComponent(skin, modelComponent), stack, matrices, renderBuffer, light, overlay);
     }
 
-    private void renderLaserModuleComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, ModelComponent modelComponent) {
+    private void renderLaserModuleComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, GunModelComponent modelComponent) {
         if (extraOffset.containsKey(modelComponent)) {
             Vector3d x = extraOffset.get(modelComponent);
             matrices.pushPose();

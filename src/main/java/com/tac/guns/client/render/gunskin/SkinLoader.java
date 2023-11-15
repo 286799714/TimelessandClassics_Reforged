@@ -1,4 +1,4 @@
-package com.tac.guns.client.gunskin;
+package com.tac.guns.client.render.gunskin;
 
 
 import com.google.common.collect.Lists;
@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.tac.guns.client.SpecialModel;
+import com.tac.guns.client.render.gun.GunModelComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.renderer.block.model.BlockModel;
@@ -28,14 +29,14 @@ public class SkinLoader {
     public static UnbakedModel missingModel;
     public static Map<ResourceLocation, UnbakedModel> unbakedModels;
     public static Map<ResourceLocation, UnbakedModel> topUnbakedModels;
-    private final List<ModelComponent> components;
+    private final List<GunModelComponent> components;
     private final ResourceLocation name;
-    public SkinLoader(ResourceLocation name, ModelComponent... components) {
+    public SkinLoader(ResourceLocation name, GunModelComponent... components) {
         this.components = Arrays.asList(components);
         this.name = name;
     }
 
-    public SkinLoader(RegistryObject<?> item, ModelComponent... components) {
+    public SkinLoader(RegistryObject<?> item, GunModelComponent... components) {
         this(item.getId(), components);
     }
 
@@ -43,7 +44,7 @@ public class SkinLoader {
         skinLoaders.put(name,loader);
     }
 
-    public List<ModelComponent> getComponents() {
+    public List<GunModelComponent> getComponents() {
         return components;
     }
     public static SkinLoader getSkinLoader(String name) {
@@ -68,7 +69,7 @@ public class SkinLoader {
     public DefaultSkin loadDefaultSkin() {
         DefaultSkin skin = new DefaultSkin(this.name);
         String mainLoc = this.name.getNamespace()+ ":special/" + getGun().getPath();
-        for (ModelComponent key : this.components) {
+        for (GunModelComponent key : this.components) {
             tryLoadComponent(skin, mainLoc, key);
         }
         this.defaultSkin = skin;
@@ -101,11 +102,11 @@ public class SkinLoader {
 
         if (models.containsKey("auto")) {
             String main = models.get("auto");
-            for (ModelComponent key : this.components) {
+            for (GunModelComponent key : this.components) {
                 tryLoadComponent(skin, main, key);
             }
         } else {
-            for (ModelComponent key : this.components) {
+            for (GunModelComponent key : this.components) {
                 tryLoadComponent(skin, models, key);
             }
         }
@@ -142,7 +143,7 @@ public class SkinLoader {
         }
     }
 
-    private static void tryLoadComponent(GunSkin skin, Map<String, String> models, ModelComponent component) {
+    private static void tryLoadComponent(GunSkin skin, Map<String, String> models, GunModelComponent component) {
         if (models.containsKey(component.key)) {
             ResourceLocation loc = ResourceLocation.tryParse(models.get(component.key));
             if (loc != null) {
@@ -153,7 +154,7 @@ public class SkinLoader {
         }
     }
 
-    private static void tryLoadComponent(GunSkin skin, String mainLocation, ModelComponent component) {
+    private static void tryLoadComponent(GunSkin skin, String mainLocation, GunModelComponent component) {
         ResourceLocation loc = component.getModelLocation(mainLocation);
         if (loc != null) {
             ResourceLocation test = new ResourceLocation(loc.getNamespace(), "models/" + loc.getPath() + ".json");
@@ -178,7 +179,7 @@ public class SkinLoader {
         GunSkin skin = new GunSkin(skinName, this.getGun());
         skin.setDefaultSkin(this.defaultSkin);
         //create unbaked models for every component of this gun.
-        for (ModelComponent component : this.components) {
+        for (GunModelComponent component : this.components) {
             ResourceLocation parent = component.getModelLocation(this.name.getNamespace()+ ":special/" + this.name.getPath());
             TextureModel model = TextureModel.tryCreateCopy(parent);
             if (model != null) {
