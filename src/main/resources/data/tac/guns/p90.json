@@ -1,24 +1,22 @@
 {
   "general": {
     "auto": true,
-    "rate": 1200,
-    "burstRate": 20,
-    "burstCount": 4,
-    "rateSelector": [3, 1],
+    "rate": 600,
+    "rateSelector": [2, 1],
     "gripType": "tac:two_handed_vector",
-    "recoilAngle": 2.625,
-    "horizontalRecoilAngle": 1.75,
+    "recoilAngle": 2,
+    "horizontalRecoilAngle": 1,
     "recoilKick": 2,
     "recoilAdsReduction": 0.2375,
     "weaponRecoilOffset": 0.8125,
-    "cameraRecoilModifier": 1.325,
+    "cameraRecoilModifier": 1.375,
     "recoilDuration": 0.2125,
     "weightKilo": 2.9,
 
-    "spread": 3,
+    "spread": 2,
     "firstShotSpread": 0.195,
-    "hipFireInaccuracy": 3.125,
-    "projToMinAccuracy": 4,
+    "hipFireInaccuracy": 3.5,
+    "projToMinAccuracy": 5,
     "msToAccuracyReset": 400,
     "movementInaccuracy": 0.15
   },
@@ -28,16 +26,16 @@
     "reloadMagTimer": 43,
     "additionalReloadEmptyMagTimer": 2,
     "preReloadPauseTicks": 0,
-    "openBolt": true
+    "openBolt": false
   },
   "projectile": {
     "item": "tac:57x28",
     "visible": false,
     "damage": 6,
-    "armorIgnore": 1.5,
+    "armorIgnore": 1.4,
     "critical": 0.0,
     "criticalDamage": 0.625,
-    "headDamage": 0.625,
+    "headDamage": 0.75,
     "closeDamage": 1.25,
     "decayStart": 0.15,
     "minDecayMultiplier": 0.25,
@@ -86,7 +84,7 @@
       },
       "scope": {
         "yOffset": 11.525,
-        "zOffset": -5,
+        "zOffset": -4,
         "scale": 1.00
       },
       "pistolScope": {
