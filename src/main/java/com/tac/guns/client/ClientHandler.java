@@ -35,6 +35,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.MouseSettingsScreen;
+import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.VideoSettingsScreen;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -83,12 +84,12 @@ public class ClientHandler {
         MinecraftForge.EVENT_BUS.register(ScopeJitterHandler.getInstance()); // All built by MayDayMemory part of the Timeless dev team, amazing work!!!!!!!!!!!
         MinecraftForge.EVENT_BUS.register(MovementAdaptationsHandler.get());
         MinecraftForge.EVENT_BUS.register(AnimationHandler.INSTANCE); //Mainly controls when the animation should play.
-        if (Config.COMMON.development.enableTDev.get()) {
+        /*if (Config.COMMON.development.enableTDev.get()) {
             MinecraftForge.EVENT_BUS.register(GuiEditor.get());
             MinecraftForge.EVENT_BUS.register(GunEditor.get());
             MinecraftForge.EVENT_BUS.register(ScopeEditor.get());
             MinecraftForge.EVENT_BUS.register(ObjectRenderEditor.get());
-        }
+        }*/
 
         //ClientRegistry.bindTileEntityRenderer(ModTileEntities.UPGRADE_BENCH.get(), UpgradeBenchRenderUtil::new);
 
@@ -196,28 +197,17 @@ public class ClientHandler {
                 list.addSmall(GunOptions.ALLOW_LEVER, GunOptions.ALLOW_BUTTON);
                 list.addSmall(GunOptions.ALLOW_DOORS, GunOptions.ALLOW_TRAP_DOORS);
                 list.addSmall(new CycleOption[]{GunOptions.ALLOW_CRAFTING_TABLE});
-                /*, GunOptions.BURST_MECH);*/
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-        if (event.getScreen() instanceof VideoSettingsScreen) {
-            VideoSettingsScreen screen = (VideoSettingsScreen) event.getScreen();
-            ;
+        if (event.getScreen() instanceof PauseScreen) {
+            PauseScreen  screen = (PauseScreen ) event.getScreen();
 
             event.addListener((new Button(screen.width / 2 - 215, 10, 75, 20, new TranslatableComponent("tac.options.gui_settings"), (p_213126_1_) -> {
                 Minecraft.getInstance().setScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().options));
             })));
         }
-        /*if(event.getGui() instanceof MainMenuScreen)
-        {
-            MainMenuScreen screen = (MainMenuScreen) event.getGui();
-
-            event.addWidget((new Button(screen.width / 2 - 215, 10, 75, 20, new TranslatableComponent("tac.options.gui_settings"), (p_213126_1_) -> {
-                Minecraft.getInstance().displayGuiScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().gameSettings));
-            })));
-        }
-*/
     }
 
     static {
