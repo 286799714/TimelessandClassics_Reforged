@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.tac.guns.client.SpecialModel;
-import com.tac.guns.client.render.gun.GunModelComponent;
+import com.tac.guns.client.render.model.GunModelComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.renderer.block.model.BlockModel;

@@ -1,12 +1,12 @@
 package com.tac.guns.client.render.gunskin;
 
-import com.tac.guns.client.render.gun.GunModelComponent;
+import com.tac.guns.client.render.model.GunModelComponent;
 import com.tac.guns.init.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.RegistryObject;
 
 
-import static com.tac.guns.client.render.gun.CommonComponents.*;
+import static com.tac.guns.client.render.model.CommonComponents.*;
 
 public enum SkinLoaders {
     AA_12(ModItems.AA_12, BODY, BOLT, BOLT_HANDLE, GRIP_LIGHT, GRIP_TACTICAL, LASER_BASIC, LASER_BASIC_DEVICE, MAG_DRUM,

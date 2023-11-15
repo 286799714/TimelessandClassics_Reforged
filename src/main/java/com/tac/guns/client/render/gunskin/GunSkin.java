@@ -3,7 +3,7 @@ package com.tac.guns.client.render.gunskin;
 import com.mojang.math.Vector3d;
 import com.tac.guns.client.SpecialModel;
 
-import com.tac.guns.client.render.gun.GunModelComponent;
+import com.tac.guns.client.render.model.GunModelComponent;
 import net.minecraft.resources.ResourceLocation;
 
 
