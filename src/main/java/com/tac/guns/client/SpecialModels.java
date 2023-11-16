@@ -1,7 +1,7 @@
 package com.tac.guns.client;
 
 import com.tac.guns.Reference;
-import com.tac.guns.client.gunskin.ResourceReloadListener;
+import com.tac.guns.client.render.gunskin.ResourceReloadListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
@@ -30,8 +30,6 @@ public enum SpecialModels
     Sx8_FRONT("optics/8x_scope_front"),
     Sx8_BODY("optics/8x_scope"),
     ACOG_SCOPE_MIRROR("scope_mirror/acog_4x_scope_mirror"),
-    //Everything from this point on is all LOD renders
-    BULLET_SHELL("bullet_shell"), // Simply for testing fall back, FOR REMOVAL
     BULLET_SHELL_HIGH_CAL("shell_huge"),
     BULLET_SHELL_RIFLE("shell_large"),
     BULLET_SHELL_SHOTGUN("shell_shotgun"),
