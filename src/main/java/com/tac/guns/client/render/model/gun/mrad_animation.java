@@ -9,6 +9,7 @@ import com.tac.guns.client.render.animation.MRADAnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -37,9 +38,9 @@ public class mrad_animation extends ProgrammableGunModel {
             renderGrip(stack, matrices, renderBuffer, light, overlay, skin);
 
             matrices.translate(0, 0, -0.55);
-            RenderUtil.renderModel(getModelComponent(skin, BARREL), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.BARREL), stack, matrices, renderBuffer, light, overlay);
             matrices.translate(0, 0, 0.3);
-            RenderUtil.renderModel(getModelComponent(skin, BIPOD), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.BIPOD), stack, matrices, renderBuffer, light, overlay);
             matrices.translate(0, 0, 0.25);
 
             renderLaserDevice(stack, matrices, renderBuffer, light, overlay, skin);

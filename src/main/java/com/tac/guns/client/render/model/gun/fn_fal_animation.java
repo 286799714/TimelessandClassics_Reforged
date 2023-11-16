@@ -11,6 +11,7 @@ import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModEnchantments;
@@ -60,11 +61,11 @@ public class fn_fal_animation extends ProgrammableGunModel {
             }
 
             if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), stack) > 0) {
-                RenderUtil.renderModel(getModelComponent(skin, BARREL_EXTENDED), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.BARREL_EXTENDED), stack, matrices, renderBuffer, light, overlay);
                 if (GunRenderingHandler.get().muzzleExtraOnEnch == 0 && entity.getMainHandItem() == stack)
                     GunRenderingHandler.get().muzzleExtraOnEnch = -8.125f;
             } else {
-                RenderUtil.renderModel(getModelComponent(skin, BARREL_STANDARD), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.BARREL_STANDARD), stack, matrices, renderBuffer, light, overlay);
             }
 
             renderGrip(stack, matrices, renderBuffer, light, overlay, skin);

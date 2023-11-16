@@ -7,6 +7,7 @@ import com.tac.guns.client.render.animation.RPG7AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -42,7 +43,7 @@ public class rpg7_animation extends ProgrammableGunModel {
         {
             controller.applySpecialModelTransform(getModelComponent(skin, BODY), RPG7AnimationController.INDEX_MAGAZINE, transformType, matrices);
             if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_EMPTY)) {
-                RenderUtil.renderModel(getModelComponent(skin, ROCKET), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.ROCKET), stack, matrices, renderBuffer, light, overlay);
             }
         }
         matrices.popPose();
@@ -51,7 +52,7 @@ public class rpg7_animation extends ProgrammableGunModel {
         {
             controller.applySpecialModelTransform(getModelComponent(skin, BODY), RPG7AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.hasAmmo(stack)) {
-                RenderUtil.renderModel(getModelComponent(skin, ROCKET), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.ROCKET), stack, matrices, renderBuffer, light, overlay);
             }
         }
         matrices.popPose();

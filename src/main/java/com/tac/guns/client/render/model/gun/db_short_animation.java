@@ -6,6 +6,7 @@ import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.DBShotgunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -30,14 +31,14 @@ public class db_short_animation extends ProgrammableGunModel {
         matrices.pushPose();
         {
             controller.applySpecialModelTransform(getModelComponent(skin, BODY), DBShotgunAnimationController.INDEX_FRONT, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, BARREL), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.BARREL), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
             controller.applySpecialModelTransform(getModelComponent(skin, BODY), DBShotgunAnimationController.INDEX_LEVER, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, HAMMER), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.HAMMER), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

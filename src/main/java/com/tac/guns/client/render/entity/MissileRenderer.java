@@ -2,7 +2,7 @@ package com.tac.guns.client.render.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import com.tac.guns.client.render.model.MyCachedModels;
+import com.tac.guns.client.render.model.internal.MyCachedModels;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.entity.MissileEntity;
 import net.minecraft.client.Minecraft;

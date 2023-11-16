@@ -10,6 +10,7 @@ import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
@@ -98,7 +99,7 @@ public class hk_g3_animation extends ProgrammableGunModel {
 
         matrices.pushPose();
         controller.applySpecialModelTransform(getModelComponent(skin, BODY), HK_G3AnimationController.INDEX_PULL, transformType, matrices);
-        RenderUtil.renderModel(getModelComponent(skin, PULL), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.PULL), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         matrices.pushPose();

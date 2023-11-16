@@ -9,6 +9,7 @@ import com.tac.guns.client.render.animation.SIGMCXAnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -79,7 +80,7 @@ public class sig_mcx_spear_animation extends ProgrammableGunModel {
         matrices.pushPose();
         {
             controller.applySpecialModelTransform(getModelComponent(skin, BODY), SIGMCXAnimationController.INDEX_HANDLE2, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, HANDLE_EXTRA), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.HANDLE_EXTRA), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

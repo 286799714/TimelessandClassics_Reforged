@@ -7,6 +7,7 @@ import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.M82A2AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -59,7 +60,7 @@ public class m82a2_animation extends ProgrammableGunModel {
                 matrices.translate(0, 0, 0.025F);
             }
             matrices.translate(0, 0, -1.5F);
-            RenderUtil.renderModel(getModelComponent(skin, BARREL), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.BARREL), stack, matrices, renderBuffer, light, overlay);
             matrices.translate(0, 0, 1.5F);
             //matrices.popPose();
         }

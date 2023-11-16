@@ -8,6 +8,7 @@ import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.MP9AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
@@ -48,10 +49,10 @@ public class mp9_animation extends ProgrammableGunModel {
             }
             if (Gun.getScope(stack) != null) {
                 if (Objects.equals(GunModifierHelper.getAdditionalSkin(stack), "THUNDER"))
-                    RenderUtil.renderModel(getModelComponent(skin, LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
+                    RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
                 RenderUtil.renderModel(getModelComponent(skin, STOCK_DEFAULT), stack, matrices, renderBuffer, light, overlay);
             } else {
-                RenderUtil.renderModel(getModelComponent(skin, STOCK_FOLDED), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.STOCK_FOLDED), stack, matrices, renderBuffer, light, overlay);
             }
             if (Objects.equals(GunModifierHelper.getAdditionalSkin(stack), "THUNDER")) {
                 RenderUtil.renderModel(getModelComponent(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
@@ -59,12 +60,12 @@ public class mp9_animation extends ProgrammableGunModel {
                     matrices.pushPose();
                     matrices.mulPose(Vector3f.XN.rotationDegrees(20F));
                     matrices.translate(0, 0.004, -0.02);
-                    RenderUtil.renderModel(getModelComponent(skin, SAFETY), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.SAFETY), stack, matrices, renderBuffer, light, overlay);
                     matrices.mulPose(Vector3f.XP.rotationDegrees(20F));
                     matrices.translate(0, -0.004, 0.02);
                     matrices.popPose();
                 } else
-                    RenderUtil.renderModel(getModelComponent(skin, SAFETY), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.SAFETY), stack, matrices, renderBuffer, light, overlay);
             }
             RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
