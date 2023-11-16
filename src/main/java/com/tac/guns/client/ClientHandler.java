@@ -1,12 +1,7 @@
 package com.tac.guns.client;
 
-import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.*;
-import com.tac.guns.client.handler.command.GuiEditor;
-import com.tac.guns.client.handler.command.GunEditor;
-import com.tac.guns.client.handler.command.ObjectRenderEditor;
-import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.entity.GrenadeRenderer;
 import com.tac.guns.client.render.entity.MissileRenderer;
@@ -15,6 +10,8 @@ import com.tac.guns.client.render.entity.ThrowableGrenadeRenderer;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.render.gun.model.scope.*;
 import com.tac.guns.client.screen.*;
+import com.tac.guns.client.screen.ammo_screens.R1_AmmoScreen;
+import com.tac.guns.client.screen.ammo_screens.R2_AmmoScreen;
 import com.tac.guns.client.settings.GunOptions;
 import com.tac.guns.init.ModBlocks;
 import com.tac.guns.init.ModContainers;
@@ -29,14 +26,12 @@ import com.tac.guns.util.math.SecondOrderDynamics;
 import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.CycleOption;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Option;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.MouseSettingsScreen;
 import net.minecraft.client.gui.screens.PauseScreen;
-import net.minecraft.client.gui.screens.VideoSettingsScreen;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -178,7 +173,8 @@ public class ClientHandler {
         MenuScreens.register(ModContainers.UPGRADE_BENCH.get(), UpgradeBenchScreen::new);
         MenuScreens.register(ModContainers.ATTACHMENTS.get(), AttachmentScreen::new);
         MenuScreens.register(ModContainers.INSPECTION.get(), InspectScreen::new);
-        MenuScreens.register(ModContainers.ARMOR_TEST.get(), AmmoPackScreen::new);
+        MenuScreens.register(ModContainers.ARMOR_R1.get(), R1_AmmoScreen::new);
+        MenuScreens.register(ModContainers.ARMOR_R2.get(), R2_AmmoScreen::new);
         //ScreenManager.registerFactory(ModContainers.COLOR_BENCH.get(), ColorBenchAttachmentScreen::new);
     }
 

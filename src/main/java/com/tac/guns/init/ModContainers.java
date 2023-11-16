@@ -2,7 +2,8 @@ package com.tac.guns.init;
 
 import com.tac.guns.Reference;
 import com.tac.guns.common.container.*;
-import com.tac.guns.inventory.gear.armor.ArmorRigContainer;
+import com.tac.guns.inventory.gear.armor.implementations.R2_RigContainer;
+import com.tac.guns.inventory.gear.armor.implementations.R1_RigContainer;
 import com.tac.guns.tileentity.UpgradeBenchTileEntity;
 import com.tac.guns.tileentity.WorkbenchTileEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -34,8 +35,11 @@ public class ModContainers
         return new UpgradeBenchContainer(windowId, playerInventory, workstation);
     });
 
-    public static final RegistryObject<MenuType<ArmorRigContainer>> ARMOR_TEST = register("armor_test", (IContainerFactory<ArmorRigContainer>) (windowId, playerInventory, data) -> {
-        return new ArmorRigContainer(windowId, playerInventory);
+    public static final RegistryObject<MenuType<R2_RigContainer>> ARMOR_R2 = register("armor_r2", (IContainerFactory<R2_RigContainer>) (windowId, playerInventory, data) -> {
+        return new R2_RigContainer(windowId, playerInventory);
+    });
+    public static final RegistryObject<MenuType<R1_RigContainer>> ARMOR_R1 = register("armor_r1", (IContainerFactory<R1_RigContainer>) (windowId, playerInventory, data) -> {
+        return new R1_RigContainer(windowId, playerInventory);
     });
     // ITEM -> CONTAINER
     /*public static final HashMap<RegistryObject, RegistryObject> containerVitem = new HashMap()
