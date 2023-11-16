@@ -10,6 +10,7 @@ import com.tac.guns.client.render.animation.COLTPYTHONAnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModSyncedDataKeys;
@@ -57,7 +58,7 @@ public class colt_python_animation extends ProgrammableGunModel {
                 matrices.translate(0, -(cooldownOg * 1.74F) * 0.135, 0.0625F * (cooldownOg * 1.74F));
             }
         }
-        RenderUtil.renderModel(getModelComponent(skin, HAMMER), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.HAMMER), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         matrices.pushPose();
@@ -66,7 +67,7 @@ public class colt_python_animation extends ProgrammableGunModel {
             matrices.mulPose(Vector3f.ZN.rotationDegrees(-45F * (cooldownOg * 1.74F)));
             matrices.translate(1.45 * (cooldownOg * 1.74F) * 0.0625, -0.625 * (cooldownOg * 1.74F) * 0.0625, 0);
         }
-        RenderUtil.renderModel(getModelComponent(skin, ROTATE), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.ROTATE), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         matrices.pushPose();
@@ -74,7 +75,7 @@ public class colt_python_animation extends ProgrammableGunModel {
                 controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation())) &&
                 transformType.firstPerson() && controller.isAnimationRunning()) {
             controller.applySpecialModelTransform(getModelComponent(skin, BODY), COLTPYTHONAnimationController.INDEX_LOADER, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, LOADER), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.LOADER), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

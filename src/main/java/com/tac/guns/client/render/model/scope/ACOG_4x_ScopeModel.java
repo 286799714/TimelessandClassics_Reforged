@@ -9,7 +9,7 @@ import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
-import com.tac.guns.client.render.model.MyCachedModels;
+import com.tac.guns.client.render.model.internal.MyCachedModels;
 import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.command.ScopeEditor;

@@ -1,6 +1,6 @@
 package com.tac.guns.client.render.gunskin;
 
-import com.tac.guns.client.render.model.MyCachedModels;
+import com.tac.guns.client.render.model.internal.MyCachedModels;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
