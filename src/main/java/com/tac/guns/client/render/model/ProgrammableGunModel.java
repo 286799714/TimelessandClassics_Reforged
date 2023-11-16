@@ -18,7 +18,9 @@ import java.util.Map;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-
+/**
+ * Contains methods for rendering common components.
+ * */
 public abstract class ProgrammableGunModel implements IOverrideModel {
     @Deprecated
     protected Map<GunComponent, Vector3d> extraOffset = new HashMap<>();

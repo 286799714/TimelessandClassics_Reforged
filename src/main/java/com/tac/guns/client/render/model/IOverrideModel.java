@@ -9,22 +9,10 @@ import net.minecraft.world.item.ItemStack;
 
 /**
  * A simple interface to render custom models. This can only be used for overriding the models of
- * weapons or attachments.
- * <p>
- * Author: Forked from MrCrayfish, continued by Timeless devs
+ * guns or attachments.
  */
 public interface IOverrideModel
 {
-    /**
-     * Called on every game tick for each player if they are holding an item with an overridden
-     * model. Useful for creating animations.
-     *
-     * @param entity the player holding the
-     */
-    default void tick(Player entity)
-    {
-    }
-
     /**
      * Renders the overridden model.
      *

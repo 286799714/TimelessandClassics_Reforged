@@ -17,9 +17,6 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Author: Forked from MrCrayfish, continued by Timeless devs
- */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
 public class OverrideModelManager
 {
@@ -27,9 +24,11 @@ public class OverrideModelManager
 
     /**
      * Registers an override model to the given item.
-     *
-     * @param item  the item to override it's model
-     * @param model a custom IOverrideModel implementation
+     * OverrideModels will not affect the common rendering of items.
+     * Only when rendering guns and their attachments, {@link com.tac.guns.client.handler.GunRenderingHandler} will call them at the appropriate time.
+     * @param item  the item to override it's model.
+     *              It should be an item related to guns. It may be the gun item itself, or it may be an attachment such as a scope.
+     * @param model an IOverrideModel implementation
      */
     public static void register(Item item, IOverrideModel model)
     {
@@ -55,34 +54,11 @@ public class OverrideModelManager
     /**
      * Gets the overridden model for the given ItemStack.
      *
-     * @param stack the stack of the overriden model
      * @return The overridden model for the stack or null if no overridden model exists.
      */
     @Nullable
     public static IOverrideModel getModel(ItemStack stack)
     {
         return MODEL_MAP.get(stack.getItem());
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onClientPlayerTick(TickEvent.PlayerTickEvent event)
-    {
-        if(event.phase == TickEvent.Phase.START && event.side == LogicalSide.CLIENT)
-        {
-            tick(event.player);
-        }
-    }
-
-    private static void tick(Player player)
-    {
-        ItemStack heldItem = player.getMainHandItem();
-        if(!heldItem.isEmpty() && heldItem.getItem() instanceof GunItem)
-        {
-            IOverrideModel model = OverrideModelManager.getModel(heldItem);
-            if(model != null)
-            {
-                model.tick(player);
-            }
-        }
     }
 }

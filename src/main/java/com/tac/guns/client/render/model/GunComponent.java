@@ -9,12 +9,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This is used to identify and reorganize guns' component models.
+ *
+ * "key" is used to identify a component model. It appears in the file name in suffix form.
+ * For example, ak47_stock_light.json is a model file that contain the light stock of the ak47. Its corresponding component key is "stock_light".
+ *
+ * "namespace" is used to distinguish GunComponents under different organizations.
+ * If two GunComponent with the same key have different namespaces, they are not regarded as the same.
+ *
+ * "group" is used to group components. It is strictly corresponds to the node name in the animation file.
+ * */
 public class GunComponent implements Comparable<GunComponent>{
     public final String key;
     public final String namespace;
     public String group;
 
-    private static final HashMap<String, HashMap<String, GunComponent>> componentMap = new HashMap<>();
+    private static final HashMap<String, HashMap<String, GunComponent>> componentMap = new HashMap<>(); // namespace -> (key -> GunComponent)
 
     public GunComponent(@Nullable String key){
         this(key, key);
