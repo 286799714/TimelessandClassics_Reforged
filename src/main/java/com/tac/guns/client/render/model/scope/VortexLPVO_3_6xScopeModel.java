@@ -28,8 +28,8 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-import static com.tac.guns.client.SpecialModels.LPVO_1_6;
-import static com.tac.guns.client.SpecialModels.LPVO_1_6_FRONT;
+import static com.tac.guns.client.render.model.MyCachedModels.LPVO_1_6;
+import static com.tac.guns.client.render.model.MyCachedModels.LPVO_1_6_FRONT;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs

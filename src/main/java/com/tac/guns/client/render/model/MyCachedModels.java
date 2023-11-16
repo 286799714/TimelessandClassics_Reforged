@@ -1,4 +1,4 @@
-package com.tac.guns.client;
+package com.tac.guns.client.render.model;
 
 import com.tac.guns.Reference;
 import com.tac.guns.client.render.gunskin.ResourceReloadListener;
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public enum SpecialModels
+public enum MyCachedModels
 {
     FLAME("flame"),
     //Everything from this point on is all scope additions
@@ -37,52 +37,29 @@ public enum SpecialModels
     BULLET_SHELL_PISTOL_SILVER("shell_silver"),
     BULLET_SHELL_RIFLE_SURPLUS("shell_steel");
 
-    /**
-     * The location of an item model in the [MOD_ID]/models/special/[NAME] folder
-     */
-    private ResourceLocation modelLocation;
+    private final ResourceLocation modelLocation;
 
-    /**
-     * Determines if the model should be loaded as a special model.
-     */
-    private boolean specialModel;
-
-    /**
-     * Cached model
-     */
-    @OnlyIn(Dist.CLIENT)
-    private BakedModel cachedModel;
+    private final CachedModel cachedModel;
 
     /**
      * Sets the model's location
      *
      * @param modelName name of the model file
      */
-    SpecialModels(String modelName)
+    MyCachedModels(String modelName)
     {
-        this(new ResourceLocation(Reference.MOD_ID, "special/" + modelName), true);
-    }
-
-    /**
-     * Sets the model's location
-     *
-     * @param modelName name of the model file
-     */
-    SpecialModels(SpecialModel modelName)
-    {
-        this(new ResourceLocation(Reference.MOD_ID, "special/" + modelName), true);
+        this(new ResourceLocation(Reference.MOD_ID, "special/" + modelName));
     }
 
     /**
      * Sets the model's location
      *
      * @param resource name of the model file
-     * @param specialModel if the model is a special model
      */
-    SpecialModels(ResourceLocation resource, boolean specialModel)
+    MyCachedModels(ResourceLocation resource)
     {
         this.modelLocation = resource;
-        this.specialModel = specialModel;
+        cachedModel = new CachedModel(resource);
     }
 
     /**
@@ -93,28 +70,16 @@ public enum SpecialModels
     @OnlyIn(Dist.CLIENT)
     public BakedModel getModel()
     {
-        if(this.cachedModel == null)
-        {
-            BakedModel model = Minecraft.getInstance().getModelManager().getModel(this.modelLocation);
-            if(model == Minecraft.getInstance().getModelManager().getMissingModel())
-            {
-                return model;
-            }
-            this.cachedModel = model;
-        }
-        return this.cachedModel;
+        return cachedModel.getModel();
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void register(ModelRegistryEvent event)
     {
-        for(SpecialModels model : values())
+        for(MyCachedModels model : values())
         {
-            if(model.specialModel)
-            {
-                ForgeModelBakery.addSpecialModel(model.modelLocation);
-            }
+            ForgeModelBakery.addSpecialModel(model.modelLocation);
         }
 
         ResourceManager manager = Minecraft.getInstance().getResourceManager();
@@ -123,8 +88,8 @@ public enum SpecialModels
 
 
     public static void cleanCache() {
-        for (SpecialModels model : values()) {
-            model.cachedModel = null;
+        for (MyCachedModels model : values()) {
+            model.cachedModel.cleanCache();
         }
     }
 }

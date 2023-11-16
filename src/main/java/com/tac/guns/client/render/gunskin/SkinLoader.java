@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
-import com.tac.guns.client.SpecialModel;
+import com.tac.guns.client.render.model.CachedModel;
 import com.tac.guns.client.render.model.GunComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BlockElement;
@@ -24,62 +24,57 @@ import java.util.List;
 import java.util.Map;
 
 public class SkinLoader {
-    public final static Map<ResourceLocation, SkinLoader> skinLoaders = new HashMap<>();
+    public final static Map<ResourceLocation, SkinLoader> skinLoaders = new HashMap<>();  // Gun Item Registry Name -> SkinLoader
     private DefaultSkin defaultSkin;
     public static UnbakedModel missingModel;
     public static Map<ResourceLocation, UnbakedModel> unbakedModels;
     public static Map<ResourceLocation, UnbakedModel> topUnbakedModels;
     private final List<GunComponent> components;
-    private final ResourceLocation name;
-    public SkinLoader(ResourceLocation name, GunComponent... components) {
+    private final ResourceLocation gunItemRegistryName;
+    public SkinLoader(ResourceLocation gunItemRegistryName, GunComponent... components) {
         this.components = Arrays.asList(components);
-        this.name = name;
+        this.gunItemRegistryName = gunItemRegistryName;
     }
 
-    public SkinLoader(RegistryObject<?> item, GunComponent... components) {
-        this(item.getId(), components);
-    }
-
-    public static void register(ResourceLocation name, SkinLoader loader){
-        skinLoaders.put(name,loader);
+    public SkinLoader(RegistryObject<?> gunItemRegistry, GunComponent... components) {
+        this(gunItemRegistry.getId(), components);
     }
 
     public List<GunComponent> getComponents() {
         return components;
     }
-    public static SkinLoader getSkinLoader(String name) {
-        ResourceLocation rl = null;
-        if(name.indexOf(':')>=0){
-                        rl = ResourceLocation.tryParse(name);
-        }else{
-            rl = ResourceLocation.tryParse("tac:"+name);
-        }
-        if(rl==null)return null;
+
+    public static void register(ResourceLocation gunItemRegistryName, SkinLoader loader){
+        skinLoaders.put(gunItemRegistryName, loader);
+    }
+
+    public static SkinLoader getSkinLoader(String gunItemRegistryName) {
+        ResourceLocation rl = ResourceLocation.tryParse(gunItemRegistryName);
         return skinLoaders.get(rl);
     }
 
-    public static SkinLoader getSkinLoader(ResourceLocation name) {
-        return skinLoaders.get(name);
+    public static SkinLoader getSkinLoader(ResourceLocation gunItemRegistryName) {
+        return skinLoaders.get(gunItemRegistryName);
     }
 
     public ResourceLocation getGun() {
-        return name;
+        return gunItemRegistryName;
     }
 
     public DefaultSkin loadDefaultSkin() {
-        DefaultSkin skin = new DefaultSkin(this.name);
-        String mainLoc = this.name.getNamespace()+ ":special/" + getGun().getPath();
+        DefaultSkin skin = new DefaultSkin(this.gunItemRegistryName);
+        String mainLoc = this.gunItemRegistryName.getNamespace()+ ":special/" + getGun().getPath();
         for (GunComponent key : this.components) {
             tryLoadComponent(skin, mainLoc, key);
         }
         this.defaultSkin = skin;
 
-        ResourceLocation iconLoc = ResourceLocation.tryParse(this.name.getNamespace()+":textures/gui/icon/"+this.name.getPath()+".png");
+        ResourceLocation iconLoc = ResourceLocation.tryParse(this.gunItemRegistryName.getNamespace()+":textures/gui/icon/"+this.gunItemRegistryName.getPath()+".png");
         if(iconLoc!=null && Minecraft.getInstance().getResourceManager().hasResource(iconLoc)){
             skin.setIcon(iconLoc);
         }
 
-        ResourceLocation miniIconLoc = ResourceLocation.tryParse(this.name.getNamespace()+":textures/gui/icon/mini/"+this.name.getPath()+".png");
+        ResourceLocation miniIconLoc = ResourceLocation.tryParse(this.gunItemRegistryName.getNamespace()+":textures/gui/icon/mini/"+this.gunItemRegistryName.getPath()+".png");
         if(iconLoc!=null && Minecraft.getInstance().getResourceManager().hasResource(iconLoc)){
             skin.setMiniIcon(miniIconLoc);
         }
@@ -147,7 +142,7 @@ public class SkinLoader {
         if (models.containsKey(component.key)) {
             ResourceLocation loc = ResourceLocation.tryParse(models.get(component.key));
             if (loc != null) {
-                SpecialModel mainModel = new SpecialModel(loc);
+                CachedModel mainModel = new CachedModel(loc);
                 ForgeModelBakery.addSpecialModel(loc);
                 skin.addComponent(component, mainModel);
             }
@@ -159,7 +154,7 @@ public class SkinLoader {
         if (loc != null) {
             ResourceLocation test = new ResourceLocation(loc.getNamespace(), "models/" + loc.getPath() + ".json");
             if (Minecraft.getInstance().getResourceManager().hasResource(test)) {
-                SpecialModel mainModel = new SpecialModel(loc);
+                CachedModel mainModel = new CachedModel(loc);
                 ForgeModelBakery.addSpecialModel(loc);
                 skin.addComponent(component, mainModel);
             }
@@ -180,13 +175,13 @@ public class SkinLoader {
         skin.setDefaultSkin(this.defaultSkin);
         //create unbaked models for every component of this gun.
         for (GunComponent component : this.components) {
-            ResourceLocation parent = component.getModelLocation(this.name.getNamespace()+ ":special/" + this.name.getPath());
+            ResourceLocation parent = component.getModelLocation(this.gunItemRegistryName.getNamespace()+ ":special/" + this.gunItemRegistryName.getPath());
             TextureModel model = TextureModel.tryCreateCopy(parent);
             if (model != null) {
                 model.applyTextures(textures);
                 ResourceLocation componentLoc = component.getModelLocation(skinName.getNamespace()+
-                        ":gunskin/generated/"+this.name.getNamespace()+this.name.getPath()+"_"+skinName.getPath());
-                skin.addComponent(component, new SpecialModel(componentLoc));
+                        ":gunskin/generated/"+this.gunItemRegistryName.getNamespace()+this.gunItemRegistryName.getPath()+"_"+skinName.getPath());
+                skin.addComponent(component, new CachedModel(componentLoc));
 
                 unbakedModels.put(componentLoc, model.getModel());
                 topUnbakedModels.put(componentLoc, model.getModel());

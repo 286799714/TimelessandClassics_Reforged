@@ -3,7 +3,6 @@ package com.tac.guns.client.render.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3d;
-import com.tac.guns.client.SpecialModel;
 import com.tac.guns.client.render.gunskin.GunSkin;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -21,16 +20,17 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 
 
 public abstract class ProgrammableGunModel implements IOverrideModel {
+    @Deprecated
     protected Map<GunComponent, Vector3d> extraOffset = new HashMap<>();
 
     public ProgrammableGunModel() {
     }
 
-    public BakedModel getModelComponent(GunSkin skin, GunComponent key) {
+    protected BakedModel getModelComponent(GunSkin skin, GunComponent key) {
         if(skin == null) return null;
-        SpecialModel specialModel = skin.getModel(key);
-        if(specialModel == null) return null;
-        return specialModel.getModel();
+        CachedModel cachedModel = skin.getModel(key);
+        if(cachedModel == null) return null;
+        return cachedModel.getModel();
     }
 
 //    public void cleanCache(){

@@ -1,4 +1,4 @@
-package com.tac.guns.client;
+package com.tac.guns.client.render.model;
 
 import com.tac.guns.Reference;
 import net.minecraft.client.Minecraft;
@@ -10,11 +10,11 @@ import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class SpecialModel {
-    private ResourceLocation modelLocation;
+public class CachedModel {
+    private final ResourceLocation modelLocation;
     private BakedModel cachedModel;
 
-    public SpecialModel(ResourceLocation location)
+    public CachedModel(ResourceLocation location)
     {
         this.modelLocation = location;
     }

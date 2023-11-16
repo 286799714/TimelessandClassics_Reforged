@@ -11,7 +11,6 @@ import com.tac.guns.Config;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
-import com.tac.guns.client.SpecialModels;
 import com.tac.guns.client.event.PlayerModelEvent;
 import com.tac.guns.client.event.RenderItemEvent;
 import com.tac.guns.client.handler.command.GunEditor;

@@ -1,7 +1,6 @@
 package com.tac.guns.client.render.gunskin;
 
-import com.mojang.math.Vector3d;
-import com.tac.guns.client.SpecialModel;
+import com.tac.guns.client.render.model.CachedModel;
 
 import com.tac.guns.client.render.model.GunComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -11,36 +10,24 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class GunSkin {
-    protected final Map<GunComponent, SpecialModel> models = new HashMap<>();
-    protected Map<GunComponent, Vector3d> extraOffset;
-    public final ResourceLocation registerName;
-    public final ResourceLocation gun;
+    protected final Map<GunComponent, CachedModel> models = new HashMap<>();
+    public final ResourceLocation skinName;
+    public final ResourceLocation gunItemRegistryName;
     protected ResourceLocation icon;
     protected ResourceLocation miniIcon;
     private DefaultSkin defaultSkin;
 
-    public GunSkin(String skinName, String gun, DefaultSkin skin){
-        this.registerName = ResourceLocation.tryParse("tac:"+skinName);
-        this.gun = ResourceLocation.tryParse("tac:" + gun);
+    public GunSkin(ResourceLocation skinName, ResourceLocation gunItemRegistryName, DefaultSkin skin){
+        this.skinName = skinName;
+        this.gunItemRegistryName = gunItemRegistryName;
         this.defaultSkin=skin;
     }
 
-    public GunSkin(ResourceLocation registerName, String gun, DefaultSkin skin){
-        this.gun = ResourceLocation.tryParse("tac:" + gun);
-        this.registerName = registerName;
-        this.defaultSkin=skin;
-    }
-
-    public GunSkin(ResourceLocation skinName, ResourceLocation gun, DefaultSkin skin){
-        this.registerName = skinName;
-        this.gun = gun;
-        this.defaultSkin=skin;
-    }
-
-    protected GunSkin(ResourceLocation registerName, ResourceLocation gun){
-        this.gun = gun;
-        this.registerName = registerName;
+    protected GunSkin(ResourceLocation skinName, ResourceLocation gunItemRegistryName){
+        this.skinName = skinName;
+        this.gunItemRegistryName = gunItemRegistryName;
     }
 
     public void setDefaultSkin(DefaultSkin defaultSkin) {
@@ -48,14 +35,14 @@ public class GunSkin {
     }
 
     @Nullable
-    public SpecialModel getModel(GunComponent component){
+    public CachedModel getModel(GunComponent component){
         return models.getOrDefault(component,defaultSkin.getModel(component));
     }
-    protected void addComponent(GunComponent component, SpecialModel model){
+    protected void addComponent(GunComponent component, CachedModel model){
         this.models.put(component, model);
     }
 
-    public Map<GunComponent,SpecialModel> getModels(){
+    public Map<GunComponent, CachedModel> getModels(){
         return this.models;
     }
 
@@ -78,7 +65,7 @@ public class GunSkin {
     }
 
     public void cleanCache(){
-        for(SpecialModel model : models.values()){
+        for(CachedModel model : models.values()){
             model.cleanCache();
         }
     }

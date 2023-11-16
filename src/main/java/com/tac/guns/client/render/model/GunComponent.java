@@ -2,13 +2,14 @@ package com.tac.guns.client.render.model;
 
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class GunComponent {
+public class GunComponent implements Comparable<GunComponent>{
     public final String key;
     public final String namespace;
     public String group;
@@ -53,6 +54,18 @@ public class GunComponent {
         }
         else
             return false;
+    }
+
+    @Override
+    public int hashCode(){
+        return (namespace == null ? 0 : namespace.hashCode()) * 31 + (key == null ? 0 : key.hashCode());
+    }
+
+    @Override
+    public int compareTo(@Nonnull GunComponent o) {
+        int r = namespace.compareTo(o.namespace);
+        if(r != 0) return r;
+        return key.compareTo(o.key);
     }
 
     @Nullable
