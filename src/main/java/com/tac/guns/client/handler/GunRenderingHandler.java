@@ -1199,6 +1199,10 @@ public class GunRenderingHandler {
         PoseStack matrixStack = event.getPoseStack();
         Player player = event.getPlayer();
         ItemStack heldItem = player.getOffhandItem();
+        // First Person Check for rendering offhand gun
+        if(Minecraft.getInstance().options.getCameraType().isFirstPerson())
+            return;
+        
         if (!heldItem.isEmpty() && heldItem.getItem() instanceof GunItem) {
             matrixStack.pushPose();
             Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
