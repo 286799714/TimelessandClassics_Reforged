@@ -16,7 +16,7 @@ import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
 import com.tac.guns.client.render.animation.P90AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
@@ -32,7 +32,7 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class p90_animation extends DeconstructedGunModel {
+public class p90_animation extends ProgrammableGunModel {
 
     private static final ResourceLocation RED_DOT_RETICLE = new ResourceLocation(Reference.MOD_ID, "textures/items/timeless_scopes/dot_reticle.png");
 
@@ -144,7 +144,6 @@ public class p90_animation extends DeconstructedGunModel {
             renderBarrelWithDefault(stack, matrices, renderBuffer, light, overlay, skin);
 
             RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
-            RenderUtil.renderModel(getModelComponent(skin, RELEASE), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

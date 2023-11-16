@@ -21,7 +21,7 @@ import java.util.Map;
  * Author: Forked from MrCrayfish, continued by Timeless devs
  */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
-public class ModelOverrides
+public class OverrideModelManager
 {
     private static final Map<Item, IOverrideModel> MODEL_MAP = new HashMap<>();
 
@@ -67,13 +67,8 @@ public class ModelOverrides
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onClientPlayerTick(TickEvent.PlayerTickEvent event)
     {
-        if(event.phase == TickEvent.Phase.START && event.side == LogicalSide.CLIENT) //  && event.type == TickEvent.Type.RENDER
+        if(event.phase == TickEvent.Phase.START && event.side == LogicalSide.CLIENT)
         {
-            /*if(!ScreenTextureState.instance().isRenderGun)
-            {
-                ScreenTextureState.instance().isRenderGun = true;
-                return;
-            }*/
             tick(event.player);
         }
     }
@@ -83,7 +78,7 @@ public class ModelOverrides
         ItemStack heldItem = player.getMainHandItem();
         if(!heldItem.isEmpty() && heldItem.getItem() instanceof GunItem)
         {
-            IOverrideModel model = ModelOverrides.getModel(heldItem);
+            IOverrideModel model = OverrideModelManager.getModel(heldItem);
             if(model != null)
             {
                 model.tick(player);

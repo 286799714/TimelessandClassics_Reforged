@@ -10,7 +10,7 @@ import com.tac.guns.client.render.animation.FNFALAnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModEnchantments;
@@ -33,7 +33,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class fn_fal_animation extends DeconstructedGunModel {
+public class fn_fal_animation extends ProgrammableGunModel {
 
     @Override
     public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
@@ -56,7 +56,7 @@ public class fn_fal_animation extends DeconstructedGunModel {
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) != ItemStack.EMPTY || Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) != ItemStack.EMPTY || Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
                 RenderUtil.renderModel(getModelComponent(skin, HAND_GUARD_EXTENDED), stack, matrices, renderBuffer, light, overlay);
             } else {
-                RenderUtil.renderModel(getModelComponent(skin, HAND_GUARD_STANDARD), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, HAND_GUARD_DEFAULT), stack, matrices, renderBuffer, light, overlay);
             }
 
             if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), stack) > 0) {

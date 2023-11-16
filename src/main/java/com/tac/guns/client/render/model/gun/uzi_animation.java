@@ -8,7 +8,7 @@ import com.tac.guns.client.render.animation.UZIAnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class uzi_animation extends DeconstructedGunModel {
+public class uzi_animation extends ProgrammableGunModel {
 
     //The render method, similar to what is in DartEntity. We can render the item
     @Override

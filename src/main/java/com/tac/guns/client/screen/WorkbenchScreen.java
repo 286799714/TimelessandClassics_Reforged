@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Vector3f;
 import com.tac.guns.client.handler.GunRenderingHandler;
-import com.tac.guns.client.render.model.ModelOverrides;
+import com.tac.guns.client.render.model.OverrideModelManager;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
@@ -492,7 +492,7 @@ public class WorkbenchScreen extends AbstractContainerScreen<WorkbenchContainer>
             modelViewStack.mulPose(Vector3f.YP.rotationDegrees(Minecraft.getInstance().player.tickCount + partialTicks));
             RenderSystem.applyModelViewMatrix();
             MultiBufferSource.BufferSource buffer = this.minecraft.renderBuffers().bufferSource();
-            if(ModelOverrides.hasModel(currentItem) && currentItem.getItem() instanceof ScopeItem || currentItem.getItem() instanceof OldScopeItem || currentItem.getItem() instanceof PistolScopeItem) {
+            if(OverrideModelManager.hasModel(currentItem) && currentItem.getItem() instanceof ScopeItem || currentItem.getItem() instanceof OldScopeItem || currentItem.getItem() instanceof PistolScopeItem) {
                 matrixStack.scale(2,2,2);
                 GunRenderingHandler.get().renderScope(this.minecraft.player, currentItem, ItemTransforms.TransformType.HEAD, matrixStack, buffer, 15728880, 0F); // GROUND, matrixStack, buffer, 15728880, 0F);
                 matrixStack.scale(0.5f,0.5f,0.5f);

@@ -10,7 +10,7 @@ import com.tac.guns.client.render.animation.SCAR_LAnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -29,7 +29,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class scar_l_animation extends DeconstructedGunModel {
+public class scar_l_animation extends ProgrammableGunModel {
 
     public scar_l_animation() {
         extraOffset.put(MUZZLE_SILENCER, new Vector3d(0, 0, -0.0225));

@@ -19,7 +19,7 @@ import com.tac.guns.client.render.IHeldAnimation;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PistalAnimationController;
 import com.tac.guns.client.render.model.IOverrideModel;
-import com.tac.guns.client.render.model.ModelOverrides;
+import com.tac.guns.client.render.model.OverrideModelManager;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.network.ServerPlayHandler;
@@ -1320,12 +1320,12 @@ public class GunRenderingHandler {
     private void renderGun(LivingEntity entity, ItemTransforms.TransformType transformType, ItemStack stack, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks)
     {
         if(stack.getItem() instanceof ITimelessAnimated) RenderUtil.renderModel(stack, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, entity);
-        if (ModelOverrides.hasModel(stack)) {
-            IOverrideModel model = ModelOverrides.getModel(stack);
+        if (OverrideModelManager.hasModel(stack)) {
+            IOverrideModel model = OverrideModelManager.getModel(stack);
             if (model != null) {
 
                 //TODO: Only when needed
-                if(ModelOverrides.hasModel(stack) && transformType.equals(ItemTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedQualityHotBar.get()) {
+                if(OverrideModelManager.hasModel(stack) && transformType.equals(ItemTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedQualityHotBar.get()) {
                     matrixStack.pushPose();
                     matrixStack.mulPose(Vector3f.XP.rotationDegrees(25.0F));
                     matrixStack.mulPose(Vector3f.YP.rotationDegrees(-145.0F));
@@ -1336,7 +1336,7 @@ public class GunRenderingHandler {
         } else {
             RenderUtil.renderModel(stack, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, entity);
         }
-        if(ModelOverrides.hasModel(stack) && transformType.equals(ItemTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedQualityHotBar.get())
+        if(OverrideModelManager.hasModel(stack) && transformType.equals(ItemTransforms.TransformType.GUI) && !Config.CLIENT.quality.reducedQualityHotBar.get())
             matrixStack.popPose();
     }
     /*private void renderColoredModel(LivingEntity entity, ItemTransforms.TransformType transformType, IBakedModel model, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, float partialTicks)
@@ -1380,7 +1380,7 @@ public class GunRenderingHandler {
                             matrixStack.translate(0, -0.5, 0);
                             matrixStack.scale((float) positioned.getScale(), (float) positioned.getScale(), (float) positioned.getScale());
 
-                            IOverrideModel model = ModelOverrides.getModel(attachmentStack);
+                            IOverrideModel model = OverrideModelManager.getModel(attachmentStack);
                             if (model != null) {
                                 model.render(partialTicks, transformType, attachmentStack, stack, entity, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
                             } else {
@@ -1474,6 +1474,10 @@ public class GunRenderingHandler {
         if (modifiedGun.getDisplay().getShellCasing() == null) {
             return;
         }
+        ResourceLocation modelResource = modifiedGun.getDisplay().getShellCasing().getCasingModel();
+        if(modelResource == null) return;
+        BakedModel caseModel = Minecraft.getInstance().getModelManager().getModel(modelResource);
+        if(caseModel == Minecraft.getInstance().getModelManager().getMissingModel()) return;
 
         if (transformType == ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND || transformType == ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND) {
             for (ShellInAir shell : shells) {
@@ -1506,11 +1510,6 @@ public class GunRenderingHandler {
                 matrixStack.mulPose(Vector3f.ZP.rotationDegrees(rot.z()));
                 matrixStack.scale(scale, scale, scale);
 
-                BakedModel caseModel;
-                if (modifiedGun.getDisplay().getShellCasing().getCasingModel() != null)
-                    caseModel = Minecraft.getInstance().getModelManager().getModel(modifiedGun.getDisplay().getShellCasing().getCasingModel());
-                else
-                    caseModel = SpecialModels.BULLET_SHELL.getModel();
                 RenderUtil.renderModel(caseModel, weapon, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
 
                 matrixStack.popPose();

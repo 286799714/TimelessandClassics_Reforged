@@ -1,7 +1,7 @@
 package com.tac.guns.client.render.gunskin;
 
 import com.tac.guns.client.SpecialModel;
-import com.tac.guns.client.render.model.GunModelComponent;
+import com.tac.guns.client.render.model.GunComponent;
 import net.minecraft.resources.ResourceLocation;
 
 
@@ -15,7 +15,7 @@ public class DefaultSkin extends GunSkin{
     }
 
     @Override
-    public SpecialModel getModel(GunModelComponent component){
+    public SpecialModel getModel(GunComponent component){
         return models.get(component);
     }
 

@@ -6,7 +6,7 @@ import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.HkMp5a5AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
@@ -27,7 +27,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class hk_mp5a5_animation extends DeconstructedGunModel {
+public class hk_mp5a5_animation extends ProgrammableGunModel {
 
     @Override
     public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
@@ -44,9 +44,9 @@ public class hk_mp5a5_animation extends DeconstructedGunModel {
             renderStockWithDefault(stack, matrices, renderBuffer, light, overlay, skin);
 
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY && Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack) == ItemStack.EMPTY) {
-                RenderUtil.renderModel(getModelComponent(skin, RAIL_DEFAULT), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, HAND_GUARD_DEFAULT), stack, matrices, renderBuffer, light, overlay);
             } else {
-                RenderUtil.renderModel(getModelComponent(skin, RAIL_EXTENDED), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, HAND_GUARD_EXTENDED), stack, matrices, renderBuffer, light, overlay);
             }
 
             renderGrip(stack, matrices, renderBuffer, light, overlay, skin);

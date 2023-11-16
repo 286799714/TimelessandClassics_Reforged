@@ -5,7 +5,7 @@ import com.tac.guns.client.render.gunskin.GunSkin;
 import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.DBShotgunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class db_short_animation extends DeconstructedGunModel {
+public class db_short_animation extends ProgrammableGunModel {
     @Override
     public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         DBShotgunAnimationController controller = DBShotgunAnimationController.getInstance();

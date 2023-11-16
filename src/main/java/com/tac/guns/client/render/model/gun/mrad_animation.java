@@ -8,7 +8,7 @@ import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.MRADAnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class mrad_animation extends DeconstructedGunModel {
+public class mrad_animation extends ProgrammableGunModel {
 
     public mrad_animation() {
         extraOffset.put(LASER_BASIC, new Vector3d(0, 0, -0.3));
@@ -54,7 +54,7 @@ public class mrad_animation extends DeconstructedGunModel {
         matrices.pushPose();
         {
             controller.applySpecialModelTransform(getModelComponent(skin, BODY), MRADAnimationController.INDEX_HANDLE, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, BOLT_EXTRA), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, BOLT_TAIL), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

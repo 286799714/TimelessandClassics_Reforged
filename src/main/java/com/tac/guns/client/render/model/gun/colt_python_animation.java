@@ -9,7 +9,7 @@ import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.COLTPYTHONAnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModSyncedDataKeys;
@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class colt_python_animation extends DeconstructedGunModel {
+public class colt_python_animation extends ProgrammableGunModel {
     @Override
     public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         COLTPYTHONAnimationController controller = COLTPYTHONAnimationController.getInstance();

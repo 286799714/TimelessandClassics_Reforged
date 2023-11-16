@@ -3,7 +3,7 @@ package com.tac.guns.client.render.gunskin;
 import com.mojang.math.Vector3d;
 import com.tac.guns.client.SpecialModel;
 
-import com.tac.guns.client.render.model.GunModelComponent;
+import com.tac.guns.client.render.model.GunComponent;
 import net.minecraft.resources.ResourceLocation;
 
 
@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GunSkin {
-    protected final Map<GunModelComponent, SpecialModel> models = new HashMap<>();
-    protected Map<GunModelComponent, Vector3d> extraOffset;
+    protected final Map<GunComponent, SpecialModel> models = new HashMap<>();
+    protected Map<GunComponent, Vector3d> extraOffset;
     public final ResourceLocation registerName;
     public final ResourceLocation gun;
     protected ResourceLocation icon;
@@ -48,14 +48,14 @@ public class GunSkin {
     }
 
     @Nullable
-    public SpecialModel getModel(GunModelComponent component){
+    public SpecialModel getModel(GunComponent component){
         return models.getOrDefault(component,defaultSkin.getModel(component));
     }
-    protected void addComponent(GunModelComponent component, SpecialModel model){
+    protected void addComponent(GunComponent component, SpecialModel model){
         this.models.put(component, model);
     }
 
-    public Map<GunModelComponent,SpecialModel> getModels(){
+    public Map<GunComponent,SpecialModel> getModels(){
         return this.models;
     }
 

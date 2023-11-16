@@ -3,38 +3,34 @@ package com.tac.guns.client.render.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3d;
+import com.tac.guns.client.SpecialModel;
 import com.tac.guns.client.render.gunskin.GunSkin;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.util.GunModifierHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
 
-public abstract class DeconstructedGunModel implements IOverrideModel {
-    protected Map<GunModelComponent, Vector3d> extraOffset = new HashMap<>();
-    //    protected Map<ModelComponent,IBakedModel> defaultModels;
-    private static List<DeconstructedGunModel> models = new ArrayList<>();
+public abstract class ProgrammableGunModel implements IOverrideModel {
+    protected Map<GunComponent, Vector3d> extraOffset = new HashMap<>();
 
-    public DeconstructedGunModel() {
-        models.add(this);
+    public ProgrammableGunModel() {
     }
 
-    public BakedModel getModelComponent(GunSkin skin, GunModelComponent key) {
-        return (skin == null || skin.getModel(key) == null ?
-                Minecraft.getInstance().getModelManager().getMissingModel() :
-                skin.getModel(key).getModel());
+    public BakedModel getModelComponent(GunSkin skin, GunComponent key) {
+        if(skin == null) return null;
+        SpecialModel specialModel = skin.getModel(key);
+        if(specialModel == null) return null;
+        return specialModel.getModel();
     }
 
 //    public void cleanCache(){
@@ -47,19 +43,21 @@ public abstract class DeconstructedGunModel implements IOverrideModel {
 //        }
 //    }
 
-    private void renderComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, GunModelComponent modelComponent) {
+    private void renderComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, GunComponent modelComponent) {
+        BakedModel bakedModel = getModelComponent(skin, modelComponent);
+        if(bakedModel == null) return;
         if (extraOffset.containsKey(modelComponent)) {
             Vector3d x = extraOffset.get(modelComponent);
             matrices.pushPose();
             matrices.translate(x.x, x.y, x.z);
-            RenderUtil.renderModel(getModelComponent(skin, modelComponent), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(bakedModel, stack, matrices, renderBuffer, light, overlay);
             matrices.translate(-x.x, -x.y, -x.z);
             matrices.popPose();
         } else
-            RenderUtil.renderModel(getModelComponent(skin, modelComponent), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(bakedModel, stack, matrices, renderBuffer, light, overlay);
     }
 
-    private void renderLaserModuleComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, GunModelComponent modelComponent) {
+    private void renderLaserModuleComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, GunComponent modelComponent) {
         if (extraOffset.containsKey(modelComponent)) {
             Vector3d x = extraOffset.get(modelComponent);
             matrices.pushPose();

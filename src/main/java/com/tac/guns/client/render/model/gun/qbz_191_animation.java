@@ -8,7 +8,7 @@ import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.Type191AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -27,7 +27,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class qbz_191_animation extends DeconstructedGunModel {
+public class qbz_191_animation extends ProgrammableGunModel {
 
     public qbz_191_animation() {
         extraOffset.put(MUZZLE_SILENCER, new Vector3d(0, 0, -0.0125));

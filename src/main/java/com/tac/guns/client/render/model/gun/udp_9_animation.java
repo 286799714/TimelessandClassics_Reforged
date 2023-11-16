@@ -7,7 +7,7 @@ import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.UDP9AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class udp_9_animation extends DeconstructedGunModel {
+public class udp_9_animation extends ProgrammableGunModel {
 
     @Override
     public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
@@ -35,13 +35,13 @@ public class udp_9_animation extends DeconstructedGunModel {
                 if (transformType.firstPerson() || Config.COMMON.gameplay.canSeeLaserThirdSight.get())
                     RenderUtil.renderLaserModuleModel(getModelComponent(skin, LASER_BASIC), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
             } else {
-                RenderUtil.renderModel(getModelComponent(skin, RAIL_COVER_SIDE), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, SIDE_RAIL_COVER), stack, matrices, renderBuffer, light, overlay);
             }
 
             renderSight(stack, matrices, renderBuffer, light, overlay, skin);
 
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack) == ItemStack.EMPTY) {
-                RenderUtil.renderModel(getModelComponent(skin, RAIL_COVER_UNDER), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getModelComponent(skin, GRIP_RAIL_COVER), stack, matrices, renderBuffer, light, overlay);
             }
 
             renderStock(stack, matrices, renderBuffer, light, overlay, skin);

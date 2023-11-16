@@ -4,7 +4,7 @@ import com.tac.guns.client.ClientHandler;
 import com.tac.guns.client.CustomGunManager;
 import com.tac.guns.client.CustomRigManager;
 import com.tac.guns.client.render.model.IOverrideModel;
-import com.tac.guns.client.render.model.ModelOverrides;
+import com.tac.guns.client.render.model.OverrideModelManager;
 import com.tac.guns.client.render.pose.*;
 import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.GripType;
@@ -382,7 +382,7 @@ public class GunMod
             }
             if (TimelessGunItem.class.isAssignableFrom(object.get().getClass())) {
                 try {
-                    ModelOverrides.register(
+                    OverrideModelManager.register(
                             (Item) object.get(),
                             (IOverrideModel) Class.forName("com.tac.guns.client.render.model.gun." + field.getName().toLowerCase(Locale.ENGLISH) + "_animation").newInstance()
                     );

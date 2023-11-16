@@ -7,7 +7,7 @@ import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.AWPAnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.DeconstructedGunModel;
+import com.tac.guns.client.render.model.ProgrammableGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -25,7 +25,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: ClumsyAlien, codebase and design based off Mr.Pineapple's original addon
  */
-public class ai_awp_animation extends DeconstructedGunModel {
+public class ai_awp_animation extends ProgrammableGunModel {
 
     public ai_awp_animation() {
         extraOffset.put(MUZZLE_SILENCER, new Vector3d(0, 0, -0.4));
@@ -60,7 +60,7 @@ public class ai_awp_animation extends DeconstructedGunModel {
         matrices.pushPose();
         {
             controller.applySpecialModelTransform(getModelComponent(skin, BODY), AWPAnimationController.INDEX_BOLT_EXTRA, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, BOLT_EXTRA), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getModelComponent(skin, BOLT_TAIL), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
