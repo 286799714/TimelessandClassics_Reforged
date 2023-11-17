@@ -3,9 +3,9 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
+        "tag": "forge:ingots/copper"
       },
-      "count": 6
+      "count": 25
     },
     {
       "item": {
@@ -20,7 +20,7 @@
     }
   ],
   "result": {
-    "item": "tac:ae50",
+    "item": "tac:b_magnum",
     "count": 48
   }
 }
