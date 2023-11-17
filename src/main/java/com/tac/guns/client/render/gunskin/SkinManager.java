@@ -9,9 +9,16 @@ import com.tac.guns.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,9 +26,11 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
 public class SkinManager {
     private static Map<ResourceLocation, Map<ResourceLocation, GunSkin>> skins = new HashMap<>();
     private static final Map<ResourceLocation, DefaultSkin> defaultSkins = new HashMap<>();
+    private static boolean isReloadListenerRegister = false;
 
     public static void reload() {
         skins = new HashMap<>();
@@ -53,6 +62,11 @@ public class SkinManager {
                 GunMod.LOGGER.warn("Failed to load skins from {} {}", loc, e);
             }
         }
+        if(!isReloadListenerRegister) {
+            isReloadListenerRegister = true;
+            ResourceManager manager = Minecraft.getInstance().getResourceManager();
+            ((ReloadableResourceManager) manager).registerReloadListener((ResourceManagerReloadListener) resourceManager -> SkinManager.cleanCache());
+        }
     }
 
     private static void loadSkinList(Resource resource) throws IOException {
@@ -81,7 +95,7 @@ public class SkinManager {
                     if (skinLoc == null) {
                         GunMod.LOGGER.warn("Failed to load skins of {} named {}: invalid name.", gun, skinName);
                         continue;
-                    } else if (!defaultSkins.containsKey(loader.getGun())) {
+                    } else if (!defaultSkins.containsKey(loader.getGunRegistryName())) {
                         GunMod.LOGGER.warn("Failed to load skins of {} named {}: default skin no loaded.", gun, skinName);
                         continue;
                     }
@@ -144,7 +158,7 @@ public class SkinManager {
 
                     if(skinObject.get("icon")!=null){
                         ResourceLocation rl = ResourceLocation.tryParse(skinObject.get("icon").getAsString());
-                        GunSkin skin = getSkin(loader.getGun(),skinLoc);
+                        GunSkin skin = getSkin(loader.getGunRegistryName(),skinLoc);
                         if(skin!=null && rl!=null){
                             loader.loadSkinIcon(skin,rl);
                         }
@@ -152,7 +166,7 @@ public class SkinManager {
 
                     if(skinObject.get("mini_icon")!=null){
                         ResourceLocation rl = ResourceLocation.tryParse(skinObject.get("mini_icon").getAsString());
-                        GunSkin skin = getSkin(loader.getGun(),skinLoc);
+                        GunSkin skin = getSkin(loader.getGunRegistryName(),skinLoc);
                         if(skin!=null && rl!=null){
                             loader.loadSkinMiniIcon(skin,rl);
                         }
@@ -169,7 +183,7 @@ public class SkinManager {
     public static void loadDefaultSkins() {
         SkinLoaders.init();
         for (SkinLoader loader : SkinLoader.skinLoaders.values()) {
-            loadDefaultSkin(loader.getGun(),loader.loadDefaultSkin());
+            loadDefaultSkin(loader.getGunRegistryName(),loader.loadDefaultSkin());
         }
     }
 
@@ -196,7 +210,7 @@ public class SkinManager {
                     ).collect(Collectors.toList());
             if(registerTextureOnlySkin(loader,rl,skinTextures)){
                 cnt++;
-                GunSkin gunSkin = getSkin(loader.getGun(),rl);
+                GunSkin gunSkin = getSkin(loader.getGunRegistryName(),rl);
                 if(gunSkin!=null){
                     if(icon!=null){
                         loader.loadSkinIcon(gunSkin,icon);
@@ -215,8 +229,8 @@ public class SkinManager {
         GunSkin skin = loader.loadCustomSkin(skinLocation, models);
 
         if (skin != null) {
-            skins.putIfAbsent(loader.getGun(), new HashMap<>());
-            skins.get(loader.getGun()).put(skinLocation, skin);
+            skins.putIfAbsent(loader.getGunRegistryName(), new HashMap<>());
+            skins.get(loader.getGunRegistryName()).put(skinLocation, skin);
             return true;
         } else return false;
     }
@@ -231,60 +245,29 @@ public class SkinManager {
         GunSkin skin = loader.loadTextureOnlySkin(skinLocation, textures);
 
         if (skin != null) {
-            skins.putIfAbsent(loader.getGun(), new HashMap<>());
-            skins.get(loader.getGun()).put(skinLocation, skin);
+            skins.putIfAbsent(loader.getGunRegistryName(), new HashMap<>());
+            skins.get(loader.getGunRegistryName()).put(skinLocation, skin);
             return true;
         } else return false;
     }
 
-    public static GunSkin getSkin(String gun, ResourceLocation skinLocation) {
-        ResourceLocation rl = ResourceLocation.tryParse("tac:"+gun);
-        if (skinLocation != null && skins.containsKey(rl)) return skins.get(rl).get(skinLocation);
-        else return null;
-    }
-
-    public static GunSkin getSkin(ResourceLocation gun, ResourceLocation skinLocation) {
+    public static @Nullable GunSkin getSkin(ResourceLocation gun, ResourceLocation skinLocation) {
         if (skinLocation != null && skins.containsKey(gun)) return skins.get(gun).get(skinLocation);
         else return null;
     }
 
-//    private static GunSkin getAttachedSkin(ItemStack weapon) {
-//        if (weapon.getItem() instanceof TimelessGunItem) {
-//            ResourceLocation gun = weapon.getItem().getRegistryName();
-//            ResourceLocation skin = GunModifierHelper.getAdditionalSkin(weapon);
-//            return getSkin(gun,skin);
-//        }
-//        return null;
-//    }
-
-    public static GunSkin getSkin(ItemStack stack) {
-        GunSkin skin = null;
+    public static @Nonnull GunSkin getSkin(ItemStack stack) {
         ResourceLocation gun = stack.getItem().getRegistryName();
         if (stack.getTag() != null) {
             if (stack.getTag().contains("Skin", Tag.TAG_STRING)) {
                 String skinLoc = stack.getTag().getString("Skin");
-                ResourceLocation loc;
-                if (skinLoc.contains(":")) {
-                    loc = ResourceLocation.tryParse(skinLoc);
-                } else {
-                    loc = new ResourceLocation(Reference.MOD_ID, skinLoc);
-                }
-                skin = getSkin(gun, loc);
+                ResourceLocation loc = ResourceLocation.tryParse(skinLoc);
+                GunSkin skin = getSkin(gun, loc);
+                return skin == null ? MissingSkin.INSTANCE : skin;
             }
         }
-//        if (skin == null) {
-//            skin = getAttachedSkin(stack);
-//        }
-        if (skin == null && defaultSkins.containsKey(gun)) {
-            return defaultSkins.get(gun);
-        }
-        return skin;
-    }
-
-    public static DefaultSkin getDefaultSkin(String gun) {
-        ResourceLocation rl = ResourceLocation.tryParse("tac:"+gun);
-        if(rl==null)return null;
-        return defaultSkins.get(rl);
+        GunSkin skin = getDefaultSkin(gun);
+        return skin == null ? MissingSkin.INSTANCE : skin;
     }
 
     public static DefaultSkin getDefaultSkin(ResourceLocation gun) {

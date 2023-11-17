@@ -9,7 +9,7 @@ import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.COLTPYTHONAnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -24,27 +24,27 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class colt_python_animation extends ProgrammableGunModel {
+public class colt_python_animation extends AbstractSkinnedGunModel {
     @Override
-    public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         COLTPYTHONAnimationController controller = COLTPYTHONAnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
         matrices.pushPose();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), COLTPYTHONAnimationController.INDEX_BODY, transformType, matrices);
-        RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
-        RenderUtil.renderModel(getModelComponent(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), COLTPYTHONAnimationController.INDEX_BODY, transformType, matrices);
+        RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getComponentModel(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
         matrices.popPose();
 
         matrices.pushPose();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), COLTPYTHONAnimationController.INDEX_MAG, transformType, matrices);
-        RenderUtil.renderModel(getModelComponent(skin, MAG), stack, matrices, renderBuffer, light, overlay);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), COLTPYTHONAnimationController.INDEX_MAG, transformType, matrices);
+        RenderUtil.renderModel(getComponentModel(skin, MAG), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         matrices.pushPose();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), COLTPYTHONAnimationController.INDEX_BODY, transformType, matrices);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), COLTPYTHONAnimationController.INDEX_BODY, transformType, matrices);
 //        if ((!(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) &&
 //                controller.isAnimationRunning()) ||
 //                !(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation()) &&
@@ -58,42 +58,42 @@ public class colt_python_animation extends ProgrammableGunModel {
                 matrices.translate(0, -(cooldownOg * 1.74F) * 0.135, 0.0625F * (cooldownOg * 1.74F));
             }
         }
-        RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.HAMMER), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.HAMMER), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         matrices.pushPose();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), COLTPYTHONAnimationController.INDEX_MAG, transformType, matrices);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), COLTPYTHONAnimationController.INDEX_MAG, transformType, matrices);
         if (cooldownOg < 0.74) {
             matrices.mulPose(Vector3f.ZN.rotationDegrees(-45F * (cooldownOg * 1.74F)));
             matrices.translate(1.45 * (cooldownOg * 1.74F) * 0.0625, -0.625 * (cooldownOg * 1.74F) * 0.0625, 0);
         }
-        RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.ROTATE), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.ROTATE), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         matrices.pushPose();
         if ((controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) ||
                 controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation())) &&
                 transformType.firstPerson() && controller.isAnimationRunning()) {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), COLTPYTHONAnimationController.INDEX_LOADER, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.LOADER), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), COLTPYTHONAnimationController.INDEX_LOADER, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.LOADER), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), COLTPYTHONAnimationController.INDEX_BULLET1, transformType, matrices);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), COLTPYTHONAnimationController.INDEX_BULLET1, transformType, matrices);
         if (cooldownOg < 0.74) {
             matrices.mulPose(Vector3f.ZN.rotationDegrees(-45F * (cooldownOg * 1.74F)));
             matrices.translate(1.45 * (cooldownOg * 1.74F) * 0.0625, -0.625 * (cooldownOg * 1.74F) * 0.0625, 0);
         }
-        RenderUtil.renderModel(getModelComponent(skin, BULLET1), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getComponentModel(skin, BULLET1), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         matrices.pushPose();
         if ((controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) ||
                 controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation())) &&
                 transformType.firstPerson() && controller.isAnimationRunning()) {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), COLTPYTHONAnimationController.INDEX_BULLET2, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, BULLET2), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), COLTPYTHONAnimationController.INDEX_BULLET2, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, BULLET2), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

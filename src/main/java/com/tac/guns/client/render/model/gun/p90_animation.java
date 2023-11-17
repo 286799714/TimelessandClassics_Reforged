@@ -16,7 +16,7 @@ import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
 import com.tac.guns.client.render.animation.P90AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -33,20 +33,20 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class p90_animation extends ProgrammableGunModel {
+public class p90_animation extends AbstractSkinnedGunModel {
 
     private static final ResourceLocation RED_DOT_RETICLE = new ResourceLocation(Reference.MOD_ID, "textures/items/timeless_scopes/dot_reticle.png");
 
     @Override
-    public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         P90AnimationController controller = P90AnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), P90AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), P90AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) == null) {
-                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.SCOPE_DEFAULT), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.SCOPE_DEFAULT), stack, matrices, renderBuffer, light, overlay);
 
                 //scope dot render
                 matrices.translate(0, 0.017, 0);
@@ -86,7 +86,7 @@ public class p90_animation extends ProgrammableGunModel {
                         matrices.translate(size / 2, size / 2, 0);
                         matrices.translate(-(size / scale) / 2, -(size / scale) / 2, 0);
 
-                        int reticleGlowColor = RenderUtil.getItemStackColor(stack, parent, IAttachment.Type.SCOPE_RETICLE_COLOR, 1);
+                        int reticleGlowColor = RenderUtil.getItemStackColor(stack, ItemStack.EMPTY, IAttachment.Type.SCOPE_RETICLE_COLOR, 1);
 
                         float red = ((reticleGlowColor >> 16) & 0xFF) / 255F;
                         float green = ((reticleGlowColor >> 8) & 0xFF) / 255F;
@@ -135,30 +135,30 @@ public class p90_animation extends ProgrammableGunModel {
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), P90AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), P90AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderLaserModuleModel(getModelComponent(skin, LASER_BASIC_DEVICE), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(getComponentModel(skin, LASER_BASIC_DEVICE), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 if (transformType.firstPerson() || Config.COMMON.gameplay.canSeeLaserThirdSight.get())
-                    RenderUtil.renderLaserModuleModel(getModelComponent(skin, LASER_BASIC), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                    RenderUtil.renderLaserModuleModel(getComponentModel(skin, LASER_BASIC), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
             }
 
             renderBarrelWithDefault(stack, matrices, renderBuffer, light, overlay, skin);
 
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), P90AnimationController.INDEX_MAG, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, MAG), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), P90AnimationController.INDEX_MAG, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, MAG), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), P90AnimationController.INDEX_PULL, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.PULL), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), P90AnimationController.INDEX_PULL, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.PULL), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

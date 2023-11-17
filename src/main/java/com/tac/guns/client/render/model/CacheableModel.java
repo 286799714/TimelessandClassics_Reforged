@@ -10,11 +10,11 @@ import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class CachedModel {
+public class CacheableModel {
     private final ResourceLocation modelLocation;
     private BakedModel cachedModel;
 
-    public CachedModel(ResourceLocation location)
+    public CacheableModel(ResourceLocation location)
     {
         this.modelLocation = location;
     }
@@ -26,10 +26,7 @@ public class CachedModel {
         {
             BakedModel model = Minecraft.getInstance().getModelManager().getModel(this.modelLocation);
             if(model == Minecraft.getInstance().getModelManager().getMissingModel())
-            {
-                ForgeModelBakery.addSpecialModel(this.modelLocation);
                 return model;
-            }
             this.cachedModel = model;
         }
         return this.cachedModel;
@@ -38,4 +35,14 @@ public class CachedModel {
     public void cleanCache(){
         this.cachedModel = null;
     }
+
+    public static final CacheableModel MISSING_MODEL = new CacheableModel(null){
+        @Override
+        public BakedModel getModel(){
+            return Minecraft.getInstance().getModelManager().getMissingModel();
+        }
+
+        @Override
+        public void cleanCache(){}
+    };
 }

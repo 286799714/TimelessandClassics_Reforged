@@ -10,7 +10,7 @@ import com.tac.guns.client.render.animation.SCAR_HAnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -29,21 +29,21 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class scar_h_animation extends ProgrammableGunModel {
+public class scar_h_animation extends AbstractSkinnedGunModel {
 
     public scar_h_animation() {
         extraOffset.put(MUZZLE_SILENCER, new Vector3d(0, 0, -0.1));
     }
 
     @Override
-    public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay)
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay)
     {
         SCAR_HAnimationController controller = SCAR_HAnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), SCAR_HAnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), SCAR_HAnimationController.INDEX_BODY, transformType, matrices);
 
             renderSight(stack, matrices, renderBuffer, light, overlay, skin);
 
@@ -56,7 +56,7 @@ public class scar_h_animation extends ProgrammableGunModel {
             if (transformType.firstPerson() || Config.COMMON.gameplay.canSeeLaserThirdSight.get())
                 renderLaser(stack, matrices, renderBuffer, light, overlay, skin);
 
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
@@ -64,7 +64,7 @@ public class scar_h_animation extends ProgrammableGunModel {
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), SCAR_HAnimationController.INDEX_MAGAZINE, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), SCAR_HAnimationController.INDEX_MAGAZINE, transformType, matrices);
             renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
@@ -72,7 +72,7 @@ public class scar_h_animation extends ProgrammableGunModel {
         matrices.pushPose();
         {
             if(transformType.firstPerson()) {
-                controller.applySpecialModelTransform(getModelComponent(skin, BODY), SCAR_HAnimationController.INDEX_MAGAZINE2, transformType, matrices);
+                controller.applySpecialModelTransform(getComponentModel(skin, BODY), SCAR_HAnimationController.INDEX_MAGAZINE2, transformType, matrices);
                 renderMag(stack, matrices, renderBuffer, light, overlay, skin);
             }
         }
@@ -81,7 +81,7 @@ public class scar_h_animation extends ProgrammableGunModel {
         matrices.pushPose();
         {
             if(transformType.firstPerson()) {
-                controller.applySpecialModelTransform(getModelComponent(skin, BODY), SCAR_HAnimationController.INDEX_BOLT, transformType, matrices);
+                controller.applySpecialModelTransform(getComponentModel(skin, BODY), SCAR_HAnimationController.INDEX_BOLT, transformType, matrices);
                 Gun gun = ((GunItem) stack.getItem()).getGun();
                 float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -97,7 +97,7 @@ public class scar_h_animation extends ProgrammableGunModel {
                 }
                 matrices.translate(0, 0, 0.025F);
             }
-            RenderUtil.renderModel(getModelComponent(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
         PlayerHandAnimation.render(controller,transformType,matrices,renderBuffer,light);

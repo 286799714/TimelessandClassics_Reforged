@@ -8,7 +8,7 @@ import com.tac.guns.client.render.animation.UZIAnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -22,40 +22,40 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class uzi_animation extends ProgrammableGunModel {
+public class uzi_animation extends AbstractSkinnedGunModel {
 
     //The render method, similar to what is in DartEntity. We can render the item
     @Override
-    public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         UZIAnimationController controller = UZIAnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), UZIAnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), UZIAnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) != null) {
-                RenderUtil.renderModel(getModelComponent(skin, STOCK_DEFAULT), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, STOCK_DEFAULT), stack, matrices, renderBuffer, light, overlay);
             } else {
-                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.STOCK_FOLDED), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.STOCK_FOLDED), stack, matrices, renderBuffer, light, overlay);
             }
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
-                RenderUtil.renderModel(getModelComponent(skin, MUZZLE_SILENCER), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, MUZZLE_SILENCER), stack, matrices, renderBuffer, light, overlay);
             }
-            RenderUtil.renderModel(getModelComponent(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), UZIAnimationController.INDEX_MAGAZINE, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), UZIAnimationController.INDEX_MAGAZINE, transformType, matrices);
             renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), UZIAnimationController.INDEX_BOLT, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), UZIAnimationController.INDEX_BOLT, transformType, matrices);
             Gun gun = ((GunItem) stack.getItem()).getGun();
             float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -68,36 +68,36 @@ public class uzi_animation extends ProgrammableGunModel {
                     matrices.translate(0, 0, -0.175f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1.0));
                 }
             }
-            RenderUtil.renderModel(getModelComponent(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), UZIAnimationController.INDEX_HANDLE, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, HANDLE), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), UZIAnimationController.INDEX_HANDLE, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, HANDLE), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), UZIAnimationController.INDEX_BULLET1, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, BULLET), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), UZIAnimationController.INDEX_BULLET1, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, BULLET), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         if (controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL).equals(controller.getPreviousAnimation()) && transformType.firstPerson()) {
             matrices.pushPose();
             {
-                controller.applySpecialModelTransform(getModelComponent(skin, BODY), UZIAnimationController.INDEX_EXTENDED_MAGAZINE, transformType, matrices);
+                controller.applySpecialModelTransform(getComponentModel(skin, BODY), UZIAnimationController.INDEX_EXTENDED_MAGAZINE, transformType, matrices);
                 renderMag(stack, matrices, renderBuffer, light, overlay, skin);
             }
             matrices.popPose();
 
             matrices.pushPose();
             {
-                controller.applySpecialModelTransform(getModelComponent(skin, BODY), UZIAnimationController.INDEX_BULLET2, transformType, matrices);
-                RenderUtil.renderModel(getModelComponent(skin, BULLET), stack, matrices, renderBuffer, light, overlay);
+                controller.applySpecialModelTransform(getComponentModel(skin, BODY), UZIAnimationController.INDEX_BULLET2, transformType, matrices);
+                RenderUtil.renderModel(getComponentModel(skin, BULLET), stack, matrices, renderBuffer, light, overlay);
             }
             matrices.popPose();
         }

@@ -10,7 +10,7 @@ import com.tac.guns.client.render.animation.SKSTacticalAnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -29,23 +29,23 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class sks_tactical_animation extends ProgrammableGunModel {
+public class sks_tactical_animation extends AbstractSkinnedGunModel {
 
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         Gun gun = ((GunItem) stack.getItem()).getGun();
         float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
         SKSTacticalAnimationController controller = SKSTacticalAnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), SKSTacticalAnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), SKSTacticalAnimationController.INDEX_BODY, transformType, matrices);
 
             if (Gun.getScope(stack) != null) {
-                RenderUtil.renderModel(getModelComponent(skin, RAIL_SCOPE), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, RAIL_SCOPE), stack, matrices, renderBuffer, light, overlay);
             } else {
-                RenderUtil.renderModel(getModelComponent(skin, SIGHT), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, SIGHT), stack, matrices, renderBuffer, light, overlay);
             }
 
             renderLaserDevice(stack, matrices, renderBuffer, light, overlay, skin);
@@ -58,20 +58,20 @@ public class sks_tactical_animation extends ProgrammableGunModel {
 
             renderGrip(stack, matrices, renderBuffer, light, overlay, skin);
 
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), SKSTacticalAnimationController.INDEX_MAGAZINE, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), SKSTacticalAnimationController.INDEX_MAGAZINE, transformType, matrices);
             renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), SKSTacticalAnimationController.INDEX_BOLT, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), SKSTacticalAnimationController.INDEX_BOLT, transformType, matrices);
             if (transformType.firstPerson()) {
                 AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
                 boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
@@ -86,7 +86,7 @@ public class sks_tactical_animation extends ProgrammableGunModel {
                 }
                 matrices.translate(0, 0, 0.025F);
             }
-            RenderUtil.renderModel(getModelComponent(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

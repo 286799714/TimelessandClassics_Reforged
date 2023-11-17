@@ -6,7 +6,7 @@ import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.M60AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,33 +24,33 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class m60_animation extends ProgrammableGunModel {
+public class m60_animation extends AbstractSkinnedGunModel {
 
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         M60AnimationController controller = M60AnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M60AnimationController.INDEX_BODY, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), M60AnimationController.INDEX_BODY, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M60AnimationController.INDEX_MAGAZINE, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, MAG), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), M60AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, MAG), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M60AnimationController.INDEX_CHAIN, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), M60AnimationController.INDEX_CHAIN, transformType, matrices);
             if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_EMPTY)
                     || Gun.hasAmmo(stack)) {
-                RenderUtil.renderModel(getModelComponent(skin, BULLET_CHAIN), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, BULLET_CHAIN), stack, matrices, renderBuffer, light, overlay);
 
             }
         }
@@ -58,20 +58,20 @@ public class m60_animation extends ProgrammableGunModel {
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M60AnimationController.INDEX_CAPS, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), M60AnimationController.INDEX_CAPS, transformType, matrices);
             if (Gun.getScope(stack) == null) {
-                RenderUtil.renderModel(getModelComponent(skin, SIGHT), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, SIGHT), stack, matrices, renderBuffer, light, overlay);
             } else {
-                RenderUtil.renderModel(getModelComponent(skin, SIGHT_FOLDED), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, SIGHT_FOLDED), stack, matrices, renderBuffer, light, overlay);
             }
-            RenderUtil.renderModel(getModelComponent(skin, CAP), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, CAP), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M60AnimationController.INDEX_HANDLE, transformType, matrices);//HANDLE?
-            RenderUtil.renderModel(getModelComponent(skin, HANDLE), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), M60AnimationController.INDEX_HANDLE, transformType, matrices);//HANDLE?
+            RenderUtil.renderModel(getComponentModel(skin, HANDLE), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

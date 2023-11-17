@@ -6,7 +6,7 @@ import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.Dp28AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -25,17 +25,17 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class dp28_animation extends ProgrammableGunModel {
+public class dp28_animation extends AbstractSkinnedGunModel {
 
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         Dp28AnimationController controller = Dp28AnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), Dp28AnimationController.INDEX_BODY, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), Dp28AnimationController.INDEX_BODY, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
             //Always push
             matrices.pushPose();
             if (transformType.firstPerson()) {
@@ -50,7 +50,7 @@ public class dp28_animation extends ProgrammableGunModel {
                     matrices.translate(0, 0, 0.198f * (-4.5 * Math.pow(0.5 - 0.5, 2) + 1.0));
                 }
             }
-            RenderUtil.renderModel(getModelComponent(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
 
             //Always pop
             matrices.popPose();
@@ -59,8 +59,8 @@ public class dp28_animation extends ProgrammableGunModel {
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), Dp28AnimationController.INDEX_MAGAZINE, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, MAG), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), Dp28AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, MAG), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

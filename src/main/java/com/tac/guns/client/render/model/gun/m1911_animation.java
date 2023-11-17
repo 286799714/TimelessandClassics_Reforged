@@ -9,7 +9,7 @@ import com.tac.guns.client.render.animation.M1911AnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
@@ -30,27 +30,27 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class m1911_animation extends ProgrammableGunModel {
+public class m1911_animation extends AbstractSkinnedGunModel {
 
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         M1911AnimationController controller = M1911AnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M1911AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), M1911AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getAttachment(IAttachment.Type.PISTOL_BARREL, stack).getItem() == ModItems.PISTOL_SILENCER.get()) {
                 matrices.translate(0, 0, -0.0475);
-                RenderUtil.renderModel(getModelComponent(skin, MUZZLE_SILENCER), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, MUZZLE_SILENCER), stack, matrices, renderBuffer, light, overlay);
                 matrices.translate(0, 0, 0.0475);
             }
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), M1911AnimationController.INDEX_MAG, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), M1911AnimationController.INDEX_MAG, transformType, matrices);
             renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
@@ -61,7 +61,7 @@ public class m1911_animation extends ProgrammableGunModel {
         matrices.pushPose();
         {
             if (transformType.firstPerson()) {
-                controller.applySpecialModelTransform(getModelComponent(skin, BODY), M1911AnimationController.INDEX_SLIDE, transformType, matrices);
+                controller.applySpecialModelTransform(getComponentModel(skin, BODY), M1911AnimationController.INDEX_SLIDE, transformType, matrices);
                 AnimationMeta reloadEmpty = controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY);
                 boolean shouldOffset = reloadEmpty != null && reloadEmpty.equals(controller.getPreviousAnimation()) && controller.isAnimationRunning();
 
@@ -76,7 +76,7 @@ public class m1911_animation extends ProgrammableGunModel {
                 }
                 matrices.translate(0, 0, 0.025F);
             }
-            RenderUtil.renderModel(getModelComponent(skin, SLIDE), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, SLIDE), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 

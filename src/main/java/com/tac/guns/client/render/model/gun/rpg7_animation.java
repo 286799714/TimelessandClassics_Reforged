@@ -6,7 +6,7 @@ import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.RPG7AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -25,34 +25,34 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class rpg7_animation extends ProgrammableGunModel {
+public class rpg7_animation extends AbstractSkinnedGunModel {
 
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         RPG7AnimationController controller = RPG7AnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), RPG7AnimationController.INDEX_BODY, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), RPG7AnimationController.INDEX_BODY, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), RPG7AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), RPG7AnimationController.INDEX_MAGAZINE, transformType, matrices);
             if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_EMPTY)) {
-                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.ROCKET), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.ROCKET), stack, matrices, renderBuffer, light, overlay);
             }
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), RPG7AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), RPG7AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.hasAmmo(stack)) {
-                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.ROCKET), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.ROCKET), stack, matrices, renderBuffer, light, overlay);
             }
         }
         matrices.popPose();

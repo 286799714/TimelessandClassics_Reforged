@@ -7,7 +7,7 @@ import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.MP9AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -32,69 +32,69 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class mp9_animation extends ProgrammableGunModel {
+public class mp9_animation extends AbstractSkinnedGunModel {
 
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         MP9AnimationController controller = MP9AnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), MP9AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), MP9AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderLaserModuleModel(getModelComponent(skin, LASER_BASIC_DEVICE), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(getComponentModel(skin, LASER_BASIC_DEVICE), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
                 if (transformType.firstPerson())
-                    RenderUtil.renderLaserModuleModel(getModelComponent(skin, LASER_BASIC), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                    RenderUtil.renderLaserModuleModel(getComponentModel(skin, LASER_BASIC), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
             }
             if (Gun.getScope(stack) != null) {
                 if (Objects.equals(GunModifierHelper.getAdditionalSkin(stack), "THUNDER"))
-                    RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
-                RenderUtil.renderModel(getModelComponent(skin, STOCK_DEFAULT), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, STOCK_DEFAULT), stack, matrices, renderBuffer, light, overlay);
             } else {
-                RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.STOCK_FOLDED), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.STOCK_FOLDED), stack, matrices, renderBuffer, light, overlay);
             }
             if (Objects.equals(GunModifierHelper.getAdditionalSkin(stack), "THUNDER")) {
-                RenderUtil.renderModel(getModelComponent(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
                 if (stack.getTag().getInt("CurrentFireMode") == 1) {
                     matrices.pushPose();
                     matrices.mulPose(Vector3f.XN.rotationDegrees(20F));
                     matrices.translate(0, 0.004, -0.02);
-                    RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.SAFETY), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.SAFETY), stack, matrices, renderBuffer, light, overlay);
                     matrices.mulPose(Vector3f.XP.rotationDegrees(20F));
                     matrices.translate(0, -0.004, 0.02);
                     matrices.popPose();
                 } else
-                    RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.SAFETY), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.SAFETY), stack, matrices, renderBuffer, light, overlay);
             }
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), MP9AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), MP9AnimationController.INDEX_MAGAZINE, transformType, matrices);
             renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), MP9AnimationController.INDEX_HANDLE, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, HANDLE), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), MP9AnimationController.INDEX_HANDLE, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, HANDLE), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), MP9AnimationController.INDEX_BULLET, transformType, matrices);
-            RenderUtil.renderModel(getModelComponent(skin, BULLET), stack, matrices, renderBuffer, light, overlay);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), MP9AnimationController.INDEX_BULLET, transformType, matrices);
+            RenderUtil.renderModel(getComponentModel(skin, BULLET), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         if (transformType.firstPerson()) {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), MP9AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), MP9AnimationController.INDEX_BODY, transformType, matrices);
             Gun gun = ((GunItem) stack.getItem()).getGun();
             float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -106,7 +106,7 @@ public class mp9_animation extends ProgrammableGunModel {
             }
             matrices.translate(0, 0, 0.025F);
         }
-        RenderUtil.renderModel(getModelComponent(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getComponentModel(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);

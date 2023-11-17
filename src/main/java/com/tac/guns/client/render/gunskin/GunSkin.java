@@ -1,6 +1,6 @@
 package com.tac.guns.client.render.gunskin;
 
-import com.tac.guns.client.render.model.CachedModel;
+import com.tac.guns.client.render.model.CacheableModel;
 
 import com.tac.guns.client.render.model.GunComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -12,44 +12,32 @@ import java.util.Map;
 
 
 public class GunSkin {
-    protected final Map<GunComponent, CachedModel> models = new HashMap<>();
+    protected final Map<GunComponent, CacheableModel> models = new HashMap<>();
     public final ResourceLocation skinName;
     public final ResourceLocation gunItemRegistryName;
     protected ResourceLocation icon;
     protected ResourceLocation miniIcon;
-    private DefaultSkin defaultSkin;
 
-    public GunSkin(ResourceLocation skinName, ResourceLocation gunItemRegistryName, DefaultSkin skin){
+    public GunSkin(ResourceLocation skinName, ResourceLocation gunItemRegistryName){
         this.skinName = skinName;
         this.gunItemRegistryName = gunItemRegistryName;
-        this.defaultSkin=skin;
-    }
-
-    protected GunSkin(ResourceLocation skinName, ResourceLocation gunItemRegistryName){
-        this.skinName = skinName;
-        this.gunItemRegistryName = gunItemRegistryName;
-    }
-
-    public void setDefaultSkin(DefaultSkin defaultSkin) {
-        this.defaultSkin = defaultSkin;
     }
 
     @Nullable
-    public CachedModel getModel(GunComponent component){
-        return models.getOrDefault(component,defaultSkin.getModel(component));
+    public CacheableModel getModel(GunComponent component){
+        return models.get(component);
     }
-    protected void addComponent(GunComponent component, CachedModel model){
+    protected void addComponent(GunComponent component, CacheableModel model){
         this.models.put(component, model);
     }
 
-    public Map<GunComponent, CachedModel> getModels(){
+    public Map<GunComponent, CacheableModel> getModels(){
         return this.models;
     }
 
     @Nullable
     public ResourceLocation getIcon() {
-        if(icon!=null)return icon;
-        else return defaultSkin.getIcon();
+        return icon;
     }
 
     public void setIcon(ResourceLocation icon) {
@@ -57,15 +45,22 @@ public class GunSkin {
     }
     @Nullable
     public ResourceLocation getMiniIcon() {
-        if(miniIcon!=null)return miniIcon;
-        else return defaultSkin.getMiniIcon();
+        return miniIcon;
     }
     public void setMiniIcon(ResourceLocation miniIcon) {
         this.miniIcon = miniIcon;
     }
 
+    public boolean isDefaultSkin(){
+        return skinName == null;
+    }
+
+    public boolean isMissingSkin(){
+        return gunItemRegistryName == null;
+    }
+
     public void cleanCache(){
-        for(CachedModel model : models.values()){
+        for(CacheableModel model : models.values()){
             model.cleanCache();
         }
     }

@@ -8,7 +8,7 @@ import com.tac.guns.client.render.animation.CZ75AnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -27,31 +27,31 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class cz75_animation extends ProgrammableGunModel {
+public class cz75_animation extends AbstractSkinnedGunModel {
     @Override
-    public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         CZ75AnimationController controller = CZ75AnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), CZ75AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), CZ75AnimationController.INDEX_BODY, transformType, matrices);
 
             renderBarrel(stack, matrices, renderBuffer, light, overlay, skin);
 
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), CZ75AnimationController.INDEX_MAG, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), CZ75AnimationController.INDEX_MAG, transformType, matrices);
             renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
         //Always push
         matrices.pushPose();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), CZ75AnimationController.INDEX_SLIDE, transformType, matrices);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), CZ75AnimationController.INDEX_SLIDE, transformType, matrices);
 
         if (transformType.firstPerson()) {
             Gun gun = ((GunItem) stack.getItem()).getGun();
@@ -69,7 +69,7 @@ public class cz75_animation extends ProgrammableGunModel {
             }
             matrices.translate(0.00, 0.0, 0.025F);
         }
-        RenderUtil.renderModel(getModelComponent(skin, SLIDE), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getComponentModel(skin, SLIDE), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
         matrices.popPose();

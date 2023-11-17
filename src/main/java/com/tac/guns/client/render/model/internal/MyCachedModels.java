@@ -1,13 +1,13 @@
 package com.tac.guns.client.render.model.internal;
 
 import com.tac.guns.Reference;
-import com.tac.guns.client.render.gunskin.ResourceReloadListener;
-import com.tac.guns.client.render.model.CachedModel;
+import com.tac.guns.client.render.model.CacheableModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -40,7 +40,7 @@ public enum MyCachedModels
 
     private final ResourceLocation modelLocation;
 
-    private final CachedModel cachedModel;
+    private final CacheableModel cacheableModel;
 
     /**
      * Sets the model's location
@@ -60,7 +60,7 @@ public enum MyCachedModels
     MyCachedModels(ResourceLocation resource)
     {
         this.modelLocation = resource;
-        cachedModel = new CachedModel(resource);
+        cacheableModel = new CacheableModel(resource);
     }
 
     /**
@@ -71,12 +71,12 @@ public enum MyCachedModels
     @OnlyIn(Dist.CLIENT)
     public BakedModel getModel()
     {
-        return cachedModel.getModel();
+        return cacheableModel.getModel();
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void register(ModelRegistryEvent event)
+    public static void init(ModelRegistryEvent event)
     {
         for(MyCachedModels model : values())
         {
@@ -84,13 +84,12 @@ public enum MyCachedModels
         }
 
         ResourceManager manager = Minecraft.getInstance().getResourceManager();
-        ((ReloadableResourceManager)manager).registerReloadListener(new ResourceReloadListener());
+        ((ReloadableResourceManager)manager).registerReloadListener((ResourceManagerReloadListener) resourceManager -> MyCachedModels.cleanCache());
     }
-
 
     public static void cleanCache() {
         for (MyCachedModels model : values()) {
-            model.cachedModel.cleanCache();
+            model.cacheableModel.cleanCache();
         }
     }
 }

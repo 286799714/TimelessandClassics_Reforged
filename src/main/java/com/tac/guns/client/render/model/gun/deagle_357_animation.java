@@ -8,7 +8,7 @@ import com.tac.guns.client.render.animation.Deagle50AnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -27,25 +27,25 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class deagle_357_animation extends ProgrammableGunModel {
+public class deagle_357_animation extends AbstractSkinnedGunModel {
 
     protected boolean isEmp = false;
 
     @Override
-    public void render(float v, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         Deagle50AnimationController controller = Deagle50AnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), Deagle50AnimationController.INDEX_MAG, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), Deagle50AnimationController.INDEX_MAG, transformType, matrices);
             renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), Deagle50AnimationController.EXTRA_MAG, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), Deagle50AnimationController.EXTRA_MAG, transformType, matrices);
             if (controller.isAnimationRunning())
                 if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_EMPTY))
                     isEmp = true;
@@ -58,17 +58,17 @@ public class deagle_357_animation extends ProgrammableGunModel {
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), Deagle50AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), Deagle50AnimationController.INDEX_BODY, transformType, matrices);
 
             renderBarrel(stack, matrices, renderBuffer, light, overlay, skin);
 
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
-            RenderUtil.renderModel(getModelComponent(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
         }
         matrices.popPose();
         //Always push
         matrices.pushPose(); // push();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), Deagle50AnimationController.INDEX_SLIDE, transformType, matrices);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), Deagle50AnimationController.INDEX_SLIDE, transformType, matrices);
 
         if (transformType.firstPerson()) {
             Gun gun = ((GunItem) stack.getItem()).getGun();
@@ -84,8 +84,8 @@ public class deagle_357_animation extends ProgrammableGunModel {
             }
             matrices.translate(0.00, 0.0, 0.035);
         }
-        RenderUtil.renderModel(getModelComponent(skin, SLIDE_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
-        RenderUtil.renderModel(getModelComponent(skin, SLIDE), stack, matrices, renderBuffer, light, overlay);
+        RenderUtil.renderModel(getComponentModel(skin, SLIDE_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
+        RenderUtil.renderModel(getComponentModel(skin, SLIDE), stack, matrices, renderBuffer, light, overlay);
 
         //Always pop
         matrices.popPose();

@@ -9,7 +9,7 @@ import com.tac.guns.client.render.animation.HK_G3AnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.ProgrammableGunModel;
+import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
 import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class hk_g3_animation extends ProgrammableGunModel {
+public class hk_g3_animation extends AbstractSkinnedGunModel {
 
     public hk_g3_animation() {
         extraOffset.put(MUZZLE_SILENCER, new Vector3d(0, 0, -0.485));
@@ -33,27 +33,27 @@ public class hk_g3_animation extends ProgrammableGunModel {
     }
 
     @Override
-    public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay)  {
+    public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay)  {
         HK_G3AnimationController controller = HK_G3AnimationController.getInstance();
-        GunSkin skin = SkinManager.getSkin(stack);
+
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), HK_G3AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), HK_G3AnimationController.INDEX_BODY, transformType, matrices);
             if (Gun.getScope(stack) != null) {
-                RenderUtil.renderModel(getModelComponent(skin, RAIL_SCOPE), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderModel(getComponentModel(skin, RAIL_SCOPE), stack, matrices, renderBuffer, light, overlay);
             }
 
             if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
-                RenderUtil.renderLaserModuleModel(getModelComponent(skin, LASER_BASIC_DEVICE), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
-                RenderUtil.renderLaserModuleModel(getModelComponent(skin, LASER_BASIC), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
-                RenderUtil.renderModel(getModelComponent(skin, HAND_GUARD_EXTENDED), stack, matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(getComponentModel(skin, LASER_BASIC_DEVICE), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay);
+                RenderUtil.renderLaserModuleModel(getComponentModel(skin, LASER_BASIC), Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay); // 15728880 For fixed max light
+                RenderUtil.renderModel(getComponentModel(skin, HAND_GUARD_EXTENDED), stack, matrices, renderBuffer, light, overlay);
             } else {
                 if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.orElse(ItemStack.EMPTY.getItem()) ||
                         Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.SPECIALISED_GRIP.orElse(ItemStack.EMPTY.getItem())) {
-                    RenderUtil.renderModel(getModelComponent(skin, HAND_GUARD_EXTENDED), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderModel(getComponentModel(skin, HAND_GUARD_EXTENDED), stack, matrices, renderBuffer, light, overlay);
                 } else {
-                    RenderUtil.renderModel(getModelComponent(skin, HAND_GUARD_DEFAULT), stack, matrices, renderBuffer, light, overlay);
+                    RenderUtil.renderModel(getComponentModel(skin, HAND_GUARD_DEFAULT), stack, matrices, renderBuffer, light, overlay);
                 }
             }
 
@@ -63,14 +63,14 @@ public class hk_g3_animation extends ProgrammableGunModel {
 
             renderStockWithDefault(stack, matrices, renderBuffer, light, overlay, skin);
 
-            RenderUtil.renderModel(getModelComponent(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
-            RenderUtil.renderModel(getModelComponent(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, SIGHT_LIGHT), stack, matrices, renderBuffer, 15728880, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getModelComponent(skin, BODY), HK_G3AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            controller.applySpecialModelTransform(getComponentModel(skin, BODY), HK_G3AnimationController.INDEX_MAGAZINE, transformType, matrices);
             renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
@@ -78,7 +78,7 @@ public class hk_g3_animation extends ProgrammableGunModel {
         matrices.pushPose();
         {
             if (transformType.firstPerson()) {
-                controller.applySpecialModelTransform(getModelComponent(skin, BODY), HK_G3AnimationController.INDEX_BOLT, transformType, matrices);
+                controller.applySpecialModelTransform(getComponentModel(skin, BODY), HK_G3AnimationController.INDEX_BOLT, transformType, matrices);
                 Gun gun = ((GunItem) stack.getItem()).getGun();
                 float cooldownOg = ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate()) < 0 ? 1 : ShootingHandler.get().getshootMsGap() / ShootingHandler.calcShootTickGap(gun.getGeneral().getRate());
 
@@ -93,23 +93,23 @@ public class hk_g3_animation extends ProgrammableGunModel {
                     }
                 }
             }
-            RenderUtil.renderModel(getModelComponent(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
+            RenderUtil.renderModel(getComponentModel(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
         }
         matrices.popPose();
 
         matrices.pushPose();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), HK_G3AnimationController.INDEX_PULL, transformType, matrices);
-        RenderUtil.renderModel(getModelComponent(skin, TacGunComponents.PULL), stack, matrices, renderBuffer, light, overlay);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), HK_G3AnimationController.INDEX_PULL, transformType, matrices);
+        RenderUtil.renderModel(getComponentModel(skin, TacGunComponents.PULL), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         matrices.pushPose();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), HK_G3AnimationController.INDEX_HANDLE, transformType, matrices);
-        RenderUtil.renderModel(getModelComponent(skin, HANDLE), stack, matrices, renderBuffer, light, overlay);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), HK_G3AnimationController.INDEX_HANDLE, transformType, matrices);
+        RenderUtil.renderModel(getComponentModel(skin, HANDLE), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         matrices.pushPose();
-        controller.applySpecialModelTransform(getModelComponent(skin, BODY), HK_G3AnimationController.INDEX_BULLET, transformType, matrices);
-        RenderUtil.renderModel(getModelComponent(skin, BULLET), stack, matrices, renderBuffer, light, overlay);
+        controller.applySpecialModelTransform(getComponentModel(skin, BODY), HK_G3AnimationController.INDEX_BULLET, transformType, matrices);
+        RenderUtil.renderModel(getComponentModel(skin, BULLET), stack, matrices, renderBuffer, light, overlay);
         matrices.popPose();
 
         PlayerHandAnimation.render(controller, transformType, matrices, renderBuffer, light);

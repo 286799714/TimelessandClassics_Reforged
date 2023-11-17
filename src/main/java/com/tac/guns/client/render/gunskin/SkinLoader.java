@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
-import com.tac.guns.client.render.model.CachedModel;
+import com.tac.guns.client.render.model.CacheableModel;
 import com.tac.guns.client.render.model.GunComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BlockElement;
@@ -24,13 +24,16 @@ import java.util.List;
 import java.util.Map;
 
 public class SkinLoader {
-    public final static Map<ResourceLocation, SkinLoader> skinLoaders = new HashMap<>();  // Gun Item Registry Name -> SkinLoader
+    public final static Map<ResourceLocation, SkinLoader> skinLoaders = new HashMap<>();  // gunItemRegistryName -> SkinLoader
     private DefaultSkin defaultSkin;
-    public static UnbakedModel missingModel;
-    public static Map<ResourceLocation, UnbakedModel> unbakedModels;
-    public static Map<ResourceLocation, UnbakedModel> topUnbakedModels;
-    private final List<GunComponent> components;
+    public static UnbakedModel missingModel;                             //Reference to unbaked missing model
+    public static Map<ResourceLocation, UnbakedModel> unbakedModels;     //Reference to unbakedModels in ModelBakery,
+                                                                         //which is used to cache and bake texture changed component model
+    public static Map<ResourceLocation, UnbakedModel> topUnbakedModels;  //Reference to topUnbakedModels in ModelBakery,
+                                                                         //which is used to cache and bake texture changed component model
+    protected final List<GunComponent> components;
     private final ResourceLocation gunItemRegistryName;
+
     public SkinLoader(ResourceLocation gunItemRegistryName, GunComponent... components) {
         this.components = Arrays.asList(components);
         this.gunItemRegistryName = gunItemRegistryName;
@@ -57,13 +60,13 @@ public class SkinLoader {
         return skinLoaders.get(gunItemRegistryName);
     }
 
-    public ResourceLocation getGun() {
+    public ResourceLocation getGunRegistryName() {
         return gunItemRegistryName;
     }
 
     public DefaultSkin loadDefaultSkin() {
         DefaultSkin skin = new DefaultSkin(this.gunItemRegistryName);
-        String mainLoc = this.gunItemRegistryName.getNamespace()+ ":special/" + getGun().getPath();
+        String mainLoc = this.gunItemRegistryName.getNamespace()+ ":special/" + getGunRegistryName().getPath();
         for (GunComponent key : this.components) {
             tryLoadComponent(skin, mainLoc, key);
         }
@@ -84,7 +87,7 @@ public class SkinLoader {
 
     /**
      * Should be called during model loading.<br>
-     * Try to load a gun skin with unique models, then add them into bake queue.<br>
+     * Try to load a gun skin with models, then add them into bake queue.<br>
      * If there exist the key 'auto', it will attempt to load all model components that comply with the default naming format.
      *
      * @return the skin, or return null if the default skin is null.
@@ -92,8 +95,7 @@ public class SkinLoader {
     public GunSkin loadCustomSkin(ResourceLocation skinName, Map<String, String> models) {
         if (defaultSkin == null) return null;
 
-        GunSkin skin = new GunSkin(skinName, getGun());
-        skin.setDefaultSkin(this.defaultSkin);
+        GunSkin skin = new GunSkin(skinName, getGunRegistryName());
 
         if (models.containsKey("auto")) {
             String main = models.get("auto");
@@ -142,7 +144,7 @@ public class SkinLoader {
         if (models.containsKey(component.key)) {
             ResourceLocation loc = ResourceLocation.tryParse(models.get(component.key));
             if (loc != null) {
-                CachedModel mainModel = new CachedModel(loc);
+                CacheableModel mainModel = new CacheableModel(loc);
                 ForgeModelBakery.addSpecialModel(loc);
                 skin.addComponent(component, mainModel);
             }
@@ -154,7 +156,7 @@ public class SkinLoader {
         if (loc != null) {
             ResourceLocation test = new ResourceLocation(loc.getNamespace(), "models/" + loc.getPath() + ".json");
             if (Minecraft.getInstance().getResourceManager().hasResource(test)) {
-                CachedModel mainModel = new CachedModel(loc);
+                CacheableModel mainModel = new CacheableModel(loc);
                 ForgeModelBakery.addSpecialModel(loc);
                 skin.addComponent(component, mainModel);
             }
@@ -171,20 +173,25 @@ public class SkinLoader {
     public GunSkin loadTextureOnlySkin(ResourceLocation skinName, List<Pair<String, ResourceLocation>> textures) {
         if (defaultSkin == null) return null;
 
-        GunSkin skin = new GunSkin(skinName, this.getGun());
-        skin.setDefaultSkin(this.defaultSkin);
+        GunSkin skin = new GunSkin(skinName, this.getGunRegistryName());
         //create unbaked models for every component of this gun.
         for (GunComponent component : this.components) {
             ResourceLocation parent = component.getModelLocation(this.gunItemRegistryName.getNamespace()+ ":special/" + this.gunItemRegistryName.getPath());
-            TextureModel model = TextureModel.tryCreateCopy(parent);
-            if (model != null) {
-                model.applyTextures(textures);
+            //Copy one because we need to change the texture
+            TextureModel componentModel = TextureModel.tryCreateCopy(parent);
+            if (componentModel != null) {
+                //Change the component model's texture
+                componentModel.applyTextures(textures);
+
+                //Used as an identifier for component models with changed textures.
                 ResourceLocation componentLoc = component.getModelLocation(skinName.getNamespace()+
                         ":gunskin/generated/"+this.gunItemRegistryName.getNamespace()+this.gunItemRegistryName.getPath()+"_"+skinName.getPath());
-                skin.addComponent(component, new CachedModel(componentLoc));
 
-                unbakedModels.put(componentLoc, model.getModel());
-                topUnbakedModels.put(componentLoc, model.getModel());
+                //Add the component model into bakery's cache, so that it will be baked and become accessible for CacheableModel.
+                unbakedModels.put(componentLoc, componentModel.getModel());
+                topUnbakedModels.put(componentLoc, componentModel.getModel());
+
+                skin.addComponent(component, new CacheableModel(componentLoc));
             }
         }
         return skin;
