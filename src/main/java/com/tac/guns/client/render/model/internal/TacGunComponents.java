@@ -1,6 +1,10 @@
 package com.tac.guns.client.render.model.internal;
 
+import com.tac.guns.client.render.model.CommonComponents;
 import com.tac.guns.client.render.model.GunComponent;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public class TacGunComponents {
     //crossbow
@@ -35,4 +39,21 @@ public class TacGunComponents {
     public static final GunComponent SLIDE_EXTENDED = new GunComponent("tac", "slide_extended", "slide");               //long pistol slide
     public static final GunComponent SLIDE_EXTENDED_LIGHT = new GunComponent("tac", "slide_extended_light", "slide");   //the light part move with slide
     public static final GunComponent PULL = new GunComponent("tac", "pull", "pull");                                   //something in barrel connect to bolt handle
+
+    static {
+        Field[] fields = CommonComponents.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            if(GunComponent.class.isAssignableFrom(field.getType())){
+                if (Modifier.isStatic(field.getModifiers())) {
+                    try {
+                        GunComponent component = (GunComponent) field.get(null);
+                        component.registerThis();
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
 }

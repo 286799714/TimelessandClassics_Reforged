@@ -48,7 +48,10 @@ public abstract class AbstractSkinnedGunModel implements IOverrideModel {
     protected BakedModel getComponentModel(GunSkin skin, GunComponent key) {
         if(skin == null) return null;
         CacheableModel cacheableModel = skin.getModel(key);
-        if(cacheableModel == null) return null;
+        if(cacheableModel == null) {
+            GunSkin defaultSkin =  SkinManager.getDefaultSkin(skin.gunItemRegistryName);
+            if(defaultSkin != null) cacheableModel = defaultSkin.getModel(key);
+        }
         return cacheableModel.getModel();
     }
 

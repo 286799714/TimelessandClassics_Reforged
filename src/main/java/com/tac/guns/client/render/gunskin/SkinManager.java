@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
 public class SkinManager {
-    private static Map<ResourceLocation, Map<ResourceLocation, GunSkin>> skins = new HashMap<>();
-    private static final Map<ResourceLocation, DefaultSkin> defaultSkins = new HashMap<>();
+    private static Map<ResourceLocation, Map<ResourceLocation, GunSkin>> skins = new HashMap<>();  //gunItemRegistryName -> (skinName -> GunSkin)
+    private static final Map<ResourceLocation, DefaultSkin> defaultSkins = new HashMap<>();        //gunItemRegistryName -> DefaultSkin
     private static boolean isReloadListenerRegister = false;
 
     public static void reload() {
@@ -187,8 +187,8 @@ public class SkinManager {
         }
     }
 
-    public static void loadDefaultSkin(ResourceLocation gun, DefaultSkin skin){
-        defaultSkins.put(gun,skin);
+    public static void loadDefaultSkin(ResourceLocation gunItemRegistryName, DefaultSkin skin){
+        defaultSkins.put(gunItemRegistryName, skin);
     }
 
     /**
@@ -251,8 +251,8 @@ public class SkinManager {
         } else return false;
     }
 
-    public static @Nullable GunSkin getSkin(ResourceLocation gun, ResourceLocation skinLocation) {
-        if (skinLocation != null && skins.containsKey(gun)) return skins.get(gun).get(skinLocation);
+    public static @Nullable GunSkin getSkin(ResourceLocation gunItemRegistryName, ResourceLocation skinLocation) {
+        if (skinLocation != null && skins.containsKey(gunItemRegistryName)) return skins.get(gunItemRegistryName).get(skinLocation);
         else return null;
     }
 
@@ -270,8 +270,8 @@ public class SkinManager {
         return skin == null ? MissingSkin.INSTANCE : skin;
     }
 
-    public static DefaultSkin getDefaultSkin(ResourceLocation gun) {
-        if(gun==null)return null;
-        return defaultSkins.get(gun);
+    public static DefaultSkin getDefaultSkin(ResourceLocation gunItemRegistryName) {
+        if(gunItemRegistryName==null)return null;
+        return defaultSkins.get(gunItemRegistryName);
     }
 }

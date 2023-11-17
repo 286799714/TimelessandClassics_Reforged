@@ -23,8 +23,7 @@ public class GunSkin {
         this.gunItemRegistryName = gunItemRegistryName;
     }
 
-    @Nullable
-    public CacheableModel getModel(GunComponent component){
+    public @Nullable CacheableModel getModel(GunComponent component){
         return models.get(component);
     }
     protected void addComponent(GunComponent component, CacheableModel model){

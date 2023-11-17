@@ -39,6 +39,9 @@ public class GunComponent implements Comparable<GunComponent>{
         this.key = key;
         this.namespace = namespace;
         this.group = group;
+    }
+
+    public void registerThis(){
         componentMap.compute(namespace, (k, map)->{
             if(map == null){
                 map = new HashMap<>();
@@ -46,6 +49,10 @@ public class GunComponent implements Comparable<GunComponent>{
             map.put(key, this);
             return map;
         });
+    }
+
+    public static void register(GunComponent component){
+        component.registerThis();
     }
 
     public static GunComponent getComponent(@Nullable String namespace, @Nullable String key){

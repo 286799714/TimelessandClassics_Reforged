@@ -1,5 +1,8 @@
 package com.tac.guns.client.render.model;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 public class CommonComponents {
     private CommonComponents(){}
 
@@ -81,4 +84,21 @@ public class CommonComponents {
     public static final GunComponent STOCK_TACTICAL = new GunComponent("stock_tactical", "body");               //tactical stock
     public static final GunComponent STOCK_HEAVY = new GunComponent("stock_heavy", "body");            //heavy stock
 
+    //register all these component
+    static {
+        Field[] fields = CommonComponents.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            if(GunComponent.class.isAssignableFrom(field.getType())){
+                if (Modifier.isStatic(field.getModifiers())) {
+                    try {
+                        GunComponent component = (GunComponent) field.get(null);
+                        component.registerThis();
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
 }
