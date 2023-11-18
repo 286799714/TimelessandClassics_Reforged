@@ -5,7 +5,6 @@ import com.tac.guns.client.render.model.CacheableModel;
 import com.tac.guns.client.render.model.GunComponent;
 import net.minecraft.resources.ResourceLocation;
 
-
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,12 +26,25 @@ public class GunSkin {
     public @Nullable CacheableModel getModel(GunComponent component){
         return models.get(component);
     }
-    protected void addComponentModel(GunComponent component, CacheableModel model){
+
+    public void putComponentModel(GunComponent component, CacheableModel model){
         this.models.put(component, model);
     }
 
     public Map<GunComponent, CacheableModel> getModels(){
         return this.models;
+    }
+
+    public @Nullable String getGroup(GunComponent component){
+        return componentGroupMap.get(component);
+    }
+
+    public void mapComponentGroup(GunComponent component, String group){
+        this.componentGroupMap.put(component, group);
+    }
+
+    public Map<GunComponent, String> getComponentGroupMap(){
+        return componentGroupMap;
     }
 
     @Nullable

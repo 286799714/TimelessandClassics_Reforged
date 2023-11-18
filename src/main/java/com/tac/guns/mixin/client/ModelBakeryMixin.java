@@ -1,5 +1,7 @@
 package com.tac.guns.mixin.client;
 
+import com.mojang.logging.LogUtils;
+import com.tac.guns.client.render.gunskin.GunSkinLoader;
 import com.tac.guns.client.render.gunskin.SkinLoader;
 import com.tac.guns.client.render.gunskin.SkinManager;
 
@@ -30,8 +32,6 @@ public abstract class ModelBakeryMixin implements CacheableModelBakery {
     @Final
     private Map<ResourceLocation, UnbakedModel> topLevelModels;
     @Shadow @Final public static ModelResourceLocation MISSING_MODEL_LOCATION;
-    @Unique
-    private boolean timelessandClassics_Reforged$flag = true;
 
     @Inject(method = "processLoading",
             at = @At(
@@ -46,12 +46,11 @@ public abstract class ModelBakeryMixin implements CacheableModelBakery {
         SkinLoader.missingModel = getModel(MISSING_MODEL_LOCATION);
         SkinLoader.unbakedModels = unbakedCache;
         SkinLoader.topUnbakedModels = topLevelModels;
+        GunSkinLoader.missingModel = getModel(MISSING_MODEL_LOCATION);
+        GunSkinLoader.unbakedModels = unbakedCache;
+        GunSkinLoader.topUnbakedModels = topLevelModels;
 
-        if (timelessandClassics_Reforged$flag) {
-            SkinManager.loadDefaultSkins();
-            timelessandClassics_Reforged$flag = false;
-        }
-
+        //reload
         SkinManager.reload();
     }
 }

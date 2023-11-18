@@ -29,11 +29,16 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
 public class SkinManager {
     private static Map<ResourceLocation, Map<ResourceLocation, GunSkin>> skins = new HashMap<>();  //gunItemRegistryName -> (skinName -> GunSkin)
-    private static final Map<ResourceLocation, DefaultSkin> defaultSkins = new HashMap<>();        //gunItemRegistryName -> DefaultSkin
-    private static boolean isReloadListenerRegister = false;
+    private static Map<ResourceLocation, DefaultSkin> defaultSkins = new HashMap<>();        //gunItemRegistryName -> DefaultSkin
+
+    static {
+        ResourceManager manager = Minecraft.getInstance().getResourceManager();
+        ((ReloadableResourceManager) manager).registerReloadListener((ResourceManagerReloadListener) resourceManager -> SkinManager.cleanCache());
+    }
 
     public static void reload() {
         skins = new HashMap<>();
+        defaultSkins = new HashMap<>();
         init();
     }
 
@@ -62,18 +67,14 @@ public class SkinManager {
                 GunMod.LOGGER.warn("Failed to load skins from {} {}", loc, e);
             }
         }
-        if(!isReloadListenerRegister) {
-            isReloadListenerRegister = true;
-            ResourceManager manager = Minecraft.getInstance().getResourceManager();
-            ((ReloadableResourceManager) manager).registerReloadListener((ResourceManagerReloadListener) resourceManager -> SkinManager.cleanCache());
-        }
+        loadDefaultSkins();
     }
 
     private static void loadSkinList(Resource resource) throws IOException {
         JsonObject json;
         InputStream stream = resource.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        json = new JsonParser().parse(reader).getAsJsonObject();
+        json = JsonParser.parseReader(reader).getAsJsonObject();
         String nameSpace = resource.getLocation().getNamespace();
 
         for (Map.Entry<String, JsonElement> e : json.entrySet()) {
@@ -183,7 +184,7 @@ public class SkinManager {
     public static void loadDefaultSkins() {
         SkinLoaders.init();
         for (SkinLoader loader : SkinLoader.skinLoaders.values()) {
-            loadDefaultSkin(loader.getGunRegistryName(),loader.loadDefaultSkin());
+            loadDefaultSkin(loader.getGunRegistryName(), loader.loadDefaultSkin());
         }
     }
 

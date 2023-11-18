@@ -19,6 +19,8 @@ import java.util.Objects;
  * If two GunComponent with the same key have different namespaces, they are not regarded as the same.
  * */
 public class GunComponent implements Comparable<GunComponent>{
+    private static final Map<String, Map<String, GunComponent>> registeredComponents = new HashMap<>();
+
     public final String key;
     public final String namespace;
 

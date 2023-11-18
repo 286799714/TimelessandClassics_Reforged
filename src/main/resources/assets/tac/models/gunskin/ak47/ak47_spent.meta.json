@@ -1,0 +1,22 @@
+{
+  "type": "custom",
+  "gun_registry_name": "tac:ak47",
+  "components": {
+    "body": "body",
+    "bolt": "bolt",
+    "mag_extended": "mag",
+    "mag_standard": "mag",
+    "muzzle_brake": "body",
+    "muzzle_compensator": "body",
+    "muzzle_silencer": "body",
+    "rail_scope": "body",
+    "stock_heavy": "body",
+    "stock_light": "body",
+    "stock_tactical": "body"
+  },
+  "textures": {
+    "0": "tac:gunskin/ak47/ak47_golden"
+  },
+  "icon": "tac:textures/gui/gun_icons/icon/ak47.png",
+  "mini_icon": "tac:textures/gui/gun_icons/mini_icon/ak47.png"
+}
