@@ -24,7 +24,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Contains methods for rendering common components.
  * */
-public abstract class AbstractSkinnedGunModel implements IOverrideModel {
+public abstract class SkinnedGunModel implements IOverrideModel {
     @Deprecated
     protected Map<GunComponent, Vector3d> extraOffset = new HashMap<>();
 
@@ -36,15 +36,6 @@ public abstract class AbstractSkinnedGunModel implements IOverrideModel {
 
     public abstract void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay);
 
-//    public void cleanCache(){
-//        defaultModels = null;
-//    }
-
-//    public static void cleanAllCache(){
-//        for (SkinAnimationModel model : models) {
-//            model.cleanCache();
-//        }
-//    }
     protected BakedModel getComponentModel(GunSkin skin, GunComponent key) {
         if(skin == null) return null;
         CacheableModel cacheableModel = skin.getModel(key);
@@ -52,6 +43,7 @@ public abstract class AbstractSkinnedGunModel implements IOverrideModel {
             GunSkin defaultSkin =  SkinManager.getDefaultSkin(skin.gunItemRegistryName);
             if(defaultSkin != null) cacheableModel = defaultSkin.getModel(key);
         }
+        if(cacheableModel == null) return null;
         return cacheableModel.getModel();
     }
 

@@ -2,10 +2,9 @@ package com.tac.guns.client.render.model.gun;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.render.gunskin.GunSkin;
-import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.DBShotgunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
+import com.tac.guns.client.render.model.SkinnedGunModel;
 import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.tac.guns.client.render.model.CommonComponents.*;
 
-public class db_short_animation extends AbstractSkinnedGunModel {
+public class db_short_animation extends SkinnedGunModel {
     @Override
     public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
         DBShotgunAnimationController controller = DBShotgunAnimationController.getInstance();

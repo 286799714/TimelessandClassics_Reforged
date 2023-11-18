@@ -146,7 +146,7 @@ public class SkinLoader {
             if (loc != null) {
                 CacheableModel mainModel = new CacheableModel(loc);
                 ForgeModelBakery.addSpecialModel(loc);
-                skin.addComponent(component, mainModel);
+                skin.addComponentModel(component, mainModel);
             }
         }
     }
@@ -158,7 +158,7 @@ public class SkinLoader {
             if (Minecraft.getInstance().getResourceManager().hasResource(test)) {
                 CacheableModel mainModel = new CacheableModel(loc);
                 ForgeModelBakery.addSpecialModel(loc);
-                skin.addComponent(component, mainModel);
+                skin.addComponentModel(component, mainModel);
             }
         }
     }
@@ -191,7 +191,7 @@ public class SkinLoader {
                 unbakedModels.put(componentLoc, componentModel.getModel());
                 topUnbakedModels.put(componentLoc, componentModel.getModel());
 
-                skin.addComponent(component, new CacheableModel(componentLoc));
+                skin.addComponentModel(component, new CacheableModel(componentLoc));
             }
         }
         return skin;

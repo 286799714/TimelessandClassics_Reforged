@@ -3,11 +3,10 @@ package com.tac.guns.client.render.model.gun;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3d;
 import com.tac.guns.client.render.gunskin.GunSkin;
-import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.AWPAnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
+import com.tac.guns.client.render.model.SkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -25,7 +24,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: ClumsyAlien, codebase and design based off Mr.Pineapple's original addon
  */
-public class ai_awp_animation extends AbstractSkinnedGunModel {
+public class ai_awp_animation extends SkinnedGunModel {
 
     public ai_awp_animation() {
         extraOffset.put(MUZZLE_SILENCER, new Vector3d(0, 0, -0.4));

@@ -2,11 +2,10 @@ package com.tac.guns.client.render.model.gun;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.render.gunskin.GunSkin;
-import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.M82A2AnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
+import com.tac.guns.client.render.model.SkinnedGunModel;
 import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -26,7 +25,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class m82a2_animation extends AbstractSkinnedGunModel {
+public class m82a2_animation extends SkinnedGunModel {
 
     public m82a2_animation() {
         //extraOffset.put(BARREL, new Vector3d(0, 0, -1.5));

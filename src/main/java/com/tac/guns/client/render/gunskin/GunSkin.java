@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class GunSkin {
     protected final Map<GunComponent, CacheableModel> models = new HashMap<>();
+    protected final Map<GunComponent, String> componentGroupMap = new HashMap<>();
     public final ResourceLocation skinName;
     public final ResourceLocation gunItemRegistryName;
     protected ResourceLocation icon;
@@ -26,7 +27,7 @@ public class GunSkin {
     public @Nullable CacheableModel getModel(GunComponent component){
         return models.get(component);
     }
-    protected void addComponent(GunComponent component, CacheableModel model){
+    protected void addComponentModel(GunComponent component, CacheableModel model){
         this.models.put(component, model);
     }
 

@@ -17,50 +17,18 @@ import java.util.Objects;
  *
  * "namespace" is used to distinguish GunComponents under different organizations.
  * If two GunComponent with the same key have different namespaces, they are not regarded as the same.
- *
- * "group" is used to group components. It is strictly corresponds to the node name in the animation file.
  * */
 public class GunComponent implements Comparable<GunComponent>{
     public final String key;
     public final String namespace;
-    public String group;
-
-    private static final HashMap<String, HashMap<String, GunComponent>> componentMap = new HashMap<>(); // namespace -> (key -> GunComponent)
 
     public GunComponent(@Nullable String key){
-        this(key, key);
+        this(null, key);
     }
 
-    public GunComponent(@Nullable String key, @Nullable String group){
-        this(null, key, group);
-    }
-
-    public GunComponent(@Nullable String namespace, @Nullable String key, @Nullable String group){
+    public GunComponent(@Nullable String namespace, @Nullable String key){
         this.key = key;
         this.namespace = namespace;
-        this.group = group;
-    }
-
-    public void registerThis(){
-        componentMap.compute(namespace, (k, map)->{
-            if(map == null){
-                map = new HashMap<>();
-            }
-            map.put(key, this);
-            return map;
-        });
-    }
-
-    public static void register(GunComponent component){
-        component.registerThis();
-    }
-
-    public static GunComponent getComponent(@Nullable String namespace, @Nullable String key){
-        Map<String, GunComponent> map = componentMap.get(namespace);
-        if(map != null){
-            return map.get(key);
-        }
-        return null;
     }
 
     @Override
@@ -81,9 +49,9 @@ public class GunComponent implements Comparable<GunComponent>{
 
     @Override
     public int compareTo(@Nonnull GunComponent o) {
-        int r = namespace.compareTo(o.namespace);
+        int r = Objects.compare(namespace, o.namespace, String::compareTo);
         if(r != 0) return r;
-        return key.compareTo(o.key);
+        return Objects.compare(key, o.key, String::compareTo);
     }
 
     @Nullable

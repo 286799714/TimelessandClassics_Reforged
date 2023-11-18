@@ -2,13 +2,12 @@ package com.tac.guns.client.render.model.gun;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.render.gunskin.GunSkin;
-import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.render.animation.Deagle50AnimationController;
 import com.tac.guns.client.render.animation.module.AnimationMeta;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
+import com.tac.guns.client.render.model.SkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -27,7 +26,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class deagle_357_animation extends AbstractSkinnedGunModel {
+public class deagle_357_animation extends SkinnedGunModel {
 
     protected boolean isEmp = false;
 

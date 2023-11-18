@@ -2,11 +2,10 @@ package com.tac.guns.client.render.model.gun;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.render.gunskin.GunSkin;
-import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.M249AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
+import com.tac.guns.client.render.model.SkinnedGunModel;
 import com.tac.guns.client.render.model.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -25,7 +24,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class m249_animation extends AbstractSkinnedGunModel {
+public class m249_animation extends SkinnedGunModel {
 
     @Override
     public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {

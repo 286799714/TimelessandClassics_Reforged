@@ -2,11 +2,10 @@ package com.tac.guns.client.render.model.gun;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.render.gunskin.GunSkin;
-import com.tac.guns.client.render.gunskin.SkinManager;
 import com.tac.guns.client.render.animation.M870AnimationController;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
 import com.tac.guns.client.render.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.model.AbstractSkinnedGunModel;
+import com.tac.guns.client.render.model.SkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,7 +23,7 @@ import static com.tac.guns.client.render.model.CommonComponents.*;
 /**
  * Author: Timeless Development, and associates.
  */
-public class m870_classic_animation extends AbstractSkinnedGunModel {
+public class m870_classic_animation extends SkinnedGunModel {
 
     @Override
     public void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay) {
