@@ -1,8 +1,7 @@
 package com.tac.guns.inventory.gear.armor;
 
 import com.tac.guns.GunMod;
-import com.tac.guns.inventory.gear.armor.implementations.R2_RigContainer;
-import com.tac.guns.inventory.gear.armor.implementations.R1_RigContainer;
+import com.tac.guns.inventory.gear.armor.implementations.*;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -41,8 +40,18 @@ public class ArmorRigContainerProvider implements MenuProvider {
                 case 2:
                     this.container = new R2_RigContainer(windowId, inv, this.item);
                     break;
+                case 3:
+                    this.container = new R3_RigContainer(windowId, inv, this.item);
+                    break;
+                case 4:
+                    this.container = new R4_RigContainer(windowId, inv, this.item);
+                    break;
+                case 5:
+                    this.container = new R5_RigContainer(windowId, inv, this.item);
+                    break;
                 default: {
                     this.container = new R1_RigContainer(windowId, inv, this.item);
+                    GunMod.LOGGER.log(Level.ERROR, item.getDisplayName().getString()+" | Row could is out of bounds 1-5");
                     break;
                 }
             }

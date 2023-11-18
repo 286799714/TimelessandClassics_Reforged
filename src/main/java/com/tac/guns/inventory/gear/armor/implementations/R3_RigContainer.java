@@ -15,10 +15,10 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class R2_RigContainer extends AbstractContainerMenu implements IRigContainer {
-    public final static int ROW_NUM = 2; //swap per row count
-    public R2_RigContainer(int windowId, Inventory inv, ItemStack item) {
-        super(ModContainers.ARMOR_R2.get(), windowId); // Swap per row count
+public class R3_RigContainer extends AbstractContainerMenu implements IRigContainer {
+    public final static int ROW_NUM = 3; //swap per row count
+    public R3_RigContainer(int windowId, Inventory inv, ItemStack item) {
+        super(ModContainers.ARMOR_R3.get(), windowId); // Swap per row count
         RigSlotsHandler itemHandler = (RigSlotsHandler) item.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
         int i = (this.getNumRows() - 4) * 18;
 
@@ -39,8 +39,8 @@ public class R2_RigContainer extends AbstractContainerMenu implements IRigContai
         }
     }
 
-    public R2_RigContainer(int windowId, Inventory inv) {
-        super(ModContainers.ARMOR_R2.get(), windowId);  // Swap per row count
+    public R3_RigContainer(int windowId, Inventory inv) {
+        super(ModContainers.ARMOR_R3.get(), windowId);  // Swap per row count
 
         int i = (this.getNumRows() - 4) * 18;
         ItemStackHandler itemHandler = new ItemStackHandler(9*getNumRows());

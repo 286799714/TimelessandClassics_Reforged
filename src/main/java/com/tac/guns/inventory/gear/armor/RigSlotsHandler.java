@@ -20,7 +20,7 @@ public class RigSlotsHandler implements IAmmoItemHandler, IItemHandlerModifiable
 
     public RigSlotsHandler()
     {
-        this(18);
+        this(9*6);
     }
 
     public RigSlotsHandler(int size) {

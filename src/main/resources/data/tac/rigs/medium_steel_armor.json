@@ -4,7 +4,7 @@
     "ergonomics": 2,
     "speedReduction": 0.09,
     "movementInaccuracy": 1.15,
-    "inventoryRows": 2
+    "inventoryRows": 5
   },
   "repair": {
     "ticksToRepair": 45,
