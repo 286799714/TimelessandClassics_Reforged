@@ -4,11 +4,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tac.guns.GunMod;
+import com.tac.guns.client.render.model.CacheableModel;
 import com.tac.guns.client.render.model.GunComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraftforge.client.model.ForgeModelBakery;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
@@ -25,6 +27,8 @@ public class GunSkinLoader {
     public static Map<ResourceLocation, UnbakedModel> topUnbakedModels;  //Reference to topUnbakedModels in ModelBakery,
                                                                          //which is used to cache and bake texture changed component model
 
+    private static final String extension = ".meta.json";
+
     protected HashSet<String> componentsNamespaces = new HashSet<>();
 
     public void usingComponentsNamespace(String namespace){
@@ -40,21 +44,22 @@ public class GunSkinLoader {
      * When loading texture only skin,
      * The loader will simply load the textures specified in meta json.
      *
-     * @param resourceLocation the ResourceLocation of gun skin meta json file.
+     * @param metaLocation the ResourceLocation of gun skin meta json file.
      *                         Filename must end with ".meta.json".
      *                         For example, "ak47_skin1.meta.json".
      *                         The file name before ".meta.json" will be used as the skin's id.
      */
-    public GunSkin loadGunSkin(ResourceLocation resourceLocation) {
-        //check file extension and get skin id.
-        String path = resourceLocation.getPath();
-        String extension = ".meta.json";
-        if (!path.endsWith(extension)) return null;
-        String namespace = resourceLocation.getNamespace();
-        String skinId = path.substring(0, path.length() - extension.length());
-
+    public GunSkin loadGunSkin(ResourceLocation metaLocation) {
         try {
-            Resource resource = Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
+            Resource resource = Minecraft.getInstance().getResourceManager().getResource(metaLocation);
+
+            String path = metaLocation.getPath();
+            String fileName = path.substring(path.lastIndexOf("/") + 1);
+            if(!fileName.endsWith(extension)) return null;
+
+            String namespace = metaLocation.getNamespace();
+            String skinId = fileName.substring(0, fileName.length() - extension.length());
+
             InputStream stream = resource.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
@@ -78,12 +83,26 @@ public class GunSkinLoader {
             GunSkin gunSkin = new GunSkin(new ResourceLocation(namespace, skinId), gunRegistryName);
             gunSkin.setIcon(icon);
             gunSkin.setMiniIcon(miniIcon);
+
             switch (skinType) {
                 case CUSTOM -> {
+                    String mainPath = namespace + ":" + path.substring(0, path.length() - extension.length());
+
                     JsonObject componentsJson = json.getAsJsonObject("components");
                     for (Map.Entry<String, JsonElement> entry : componentsJson.entrySet()) {
                         String componentKey = entry.getKey();
                         String group = entry.getValue().getAsString();
+                        GunComponent component = getComponent(componentKey);
+
+                        //try to load the component model
+                        ResourceLocation modelRL = component.getModelLocation(mainPath);
+                        if (modelRL != null && Minecraft.getInstance().getResourceManager().hasResource(modelRL)) {
+                            CacheableModel componentModel = new CacheableModel(modelRL);
+                            ForgeModelBakery.addSpecialModel(modelRL);
+                            gunSkin.putComponentModel(component, componentModel);
+                        }
+
+                        gunSkin.mapComponentGroup(component, group);
                     }
                 }
                 case TEXTURE_ONLY -> {
@@ -95,16 +114,20 @@ public class GunSkinLoader {
             }
             return gunSkin;
 
-        } catch (IOException e) {
-            GunMod.LOGGER.warn("Failed to load skins from {}\n{}", resourceLocation, e);
+        } catch (Exception e) {
+            GunMod.LOGGER.warn("Failed to load skins from {}\n{}", metaLocation, e);
         }
+
         return null;
     }
 
     public @Nonnull GunComponent getComponent(String componentKey){
         for(String namespace : componentsNamespaces){
-
+            GunComponent component = GunComponent.getComponent(namespace, componentKey);
+            if(component != null) return component;
         }
+        //Registered component not found, return a no registration required default GunComponent.
+        return new GunComponent(null, componentKey);
     }
 
     public enum SkinType {

@@ -39,4 +39,21 @@ public class TacGunComponents {
     public static final GunComponent SLIDE_EXTENDED = new GunComponent("tac", "slide_extended");               //long pistol slide
     public static final GunComponent SLIDE_EXTENDED_LIGHT = new GunComponent("tac", "slide_extended_light");   //the light part move with slide
     public static final GunComponent PULL = new GunComponent("tac", "pull");                                   //something in barrel connect to bolt handle
+
+    //register all these component
+    static {
+        Field[] fields = TacGunComponents.class.getDeclaredFields();
+        for (Field field : fields) {
+            if(GunComponent.class.isAssignableFrom(field.getType())){
+                if (Modifier.isStatic(field.getModifiers())) {
+                    try {
+                        GunComponent component = (GunComponent) field.get(null);
+                        component.registerThis();
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
 }
