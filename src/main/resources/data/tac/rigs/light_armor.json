@@ -3,7 +3,8 @@
     "armorClass": 2,
     "ergonomics": 3,
     "speedReduction": 0.04,
-    "movementInaccuracy": 1.0
+    "movementInaccuracy": 1.0,
+    "inventoryRows": 1
   },
   "repair": {
     "ticksToRepair": 30,

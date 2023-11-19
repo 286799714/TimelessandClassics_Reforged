@@ -1,17 +1,14 @@
 package com.tac.guns.item.transition.wearables;
 
-import com.mojang.logging.LogUtils;
 import com.tac.guns.Reference;
 import com.tac.guns.common.NetworkRigManager;
 import com.tac.guns.common.Rig;
-import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.ArmorRigContainerProvider;
 import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.util.RigEnchantmentHelper;
 import com.tac.guns.util.WearableHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -36,24 +33,12 @@ import java.util.WeakHashMap;
 public class ArmorRigItem extends Item implements IArmoredRigItem {
     public ArmorRigItem(Properties properties) {
         super(properties);
-        numOfRows = 1;
-    }
-
-    private final int numOfRows;
-    public int getNumOfRows() {
-        return this.numOfRows;
-    }
-
-    public ArmorRigItem(/*String model, */int rows, Properties properties)
-    {
-        super(properties);
-        //this.armorModelName = model;
-        this.numOfRows = rows
-        ;
     }
     private ArmorRigContainerProvider containerProvider;
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        if(player.getItemInHand(hand).getOrCreateTag().get("rig_rows") == null)
+            player.getItemInHand(hand).getOrCreateTag().putInt("rig_rows", rig.getGeneral().getInventoryRows());
         if(world.isClientSide) return super.use(world, player, hand);
         if(hand != InteractionHand.MAIN_HAND) return InteractionResultHolder.pass(player.getItemInHand(hand));
         containerProvider = new ArmorRigContainerProvider(player.getItemInHand(hand));
@@ -169,9 +154,4 @@ public class ArmorRigItem extends Item implements IArmoredRigItem {
         }
         return this.rig;
     }
-
-    /*@Override
-    public ArmorBase getArmorModelName() {
-        return this.armorModelName == null ? new ModernArmor() : this.armorModelName;
-    }*/
 }

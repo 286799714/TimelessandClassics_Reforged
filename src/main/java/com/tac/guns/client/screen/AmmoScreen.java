@@ -2,18 +2,19 @@ package com.tac.guns.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.tac.guns.inventory.gear.armor.ArmorRigContainer;
+import com.tac.guns.inventory.gear.armor.IRigContainer;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
-public class AmmoPackScreen extends AbstractContainerScreen<ArmorRigContainer> implements MenuAccess<ArmorRigContainer> {
+public class AmmoScreen<T extends AbstractContainerMenu & IRigContainer> extends AbstractContainerScreen<T> implements MenuAccess<T> {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
     private final int rows;
 
-    public AmmoPackScreen(ArmorRigContainer container, Inventory playerInventory, Component title) {
+    public AmmoScreen(T container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
         this.passEvents = false;
         int i = 222;

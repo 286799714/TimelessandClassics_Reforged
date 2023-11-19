@@ -114,10 +114,9 @@ dependencies {
     //implementation fg.deobf('curse.maven:extra-player-render-481042:3305584')
 
     implementation fg.deobf('curse.maven:framework-549225:3723144')
-    // Need test in server so disable it
-    //implementation fg.deobf('curse.maven:rubidium-574856:4494903')
-    //implementation fg.deobf('curse.maven:oculus-581495:4578744')
-    implementation fg.deobf('curse.maven:ysm-784675:4667056')
+    implementation fg.deobf('curse.maven:rubidium-574856:4494903')
+    implementation fg.deobf('curse.maven:oculus-581495:4578744')
+    //implementation fg.deobf('curse.maven:ysm-784675:4667056')
 
 
     //compileOnly fg.deobf(fileTree(dir: 'lib4', include: '*.jar'))

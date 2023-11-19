@@ -1,10 +1,12 @@
-package com.tac.guns.inventory.gear.backpack;
+package com.tac.guns.inventory.gear.armor.implementations;
 
 import com.tac.guns.init.ModContainers;
-import com.tac.guns.inventory.gear.GearSlotsHandler;
-import com.tac.guns.inventory.gear.WearableCapabilityProvider;
 import com.tac.guns.inventory.gear.armor.AmmoSlot;
+import com.tac.guns.inventory.gear.armor.ArmorRigCapabilityProvider;
+import com.tac.guns.inventory.gear.armor.IRigContainer;
+import com.tac.guns.inventory.gear.armor.RigSlotsHandler;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -13,18 +15,14 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class BackpackContainer extends AbstractContainerMenu {
+public class R3_RigContainer extends AbstractContainerMenu implements IRigContainer {
+    public final static int ROW_NUM = 3; //swap per row count
+    public R3_RigContainer(int windowId, Inventory inv, ItemStack item) {
+        super(ModContainers.ARMOR_R3.get(), windowId); // Swap per row count
+        RigSlotsHandler itemHandler = (RigSlotsHandler) item.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
+        int i = (this.getNumRows() - 4) * 18;
 
-    private ItemStack item;
-    private int numRows = 2;
-
-    public BackpackContainer(int windowId, Inventory inv, ItemStack item) {
-        super(ModContainers.ARMOR_R2.get(), windowId);
-        this.item = item;
-        GearSlotsHandler itemHandler = (GearSlotsHandler)this.item.getCapability(WearableCapabilityProvider.capability).resolve().get();
-        int i = (this.numRows - 4) * 18;
-
-        for(int j = 0; j < this.numRows; ++j) {
+        for(int j = 0; j < this.getNumRows(); ++j) {
             for(int k = 0; k < 9; ++k) {
                 this.addSlot(new AmmoSlot(itemHandler, k + j * 9, 8 + k * 18, 18 + j * 18));
             }
@@ -39,17 +37,14 @@ public class BackpackContainer extends AbstractContainerMenu {
         for(int i1 = 0; i1 < 9; ++i1) {
             this.addSlot(new Slot(inv, i1, 8 + i1 * 18, 161 + i));
         }
-
-        //this.setAll(itemHandler.getStacks());
     }
 
-    public BackpackContainer(int windowId, Inventory inv) {
-        super(ModContainers.ARMOR_R2.get(), windowId);
-        this.item = item;
-        int i = (this.numRows - 4) * 18;
+    public R3_RigContainer(int windowId, Inventory inv) {
+        super(ModContainers.ARMOR_R3.get(), windowId);  // Swap per row count
 
-        ItemStackHandler itemHandler = new ItemStackHandler(18);
-        for(int j = 0; j < this.numRows; ++j) {
+        int i = (this.getNumRows() - 4) * 18;
+        ItemStackHandler itemHandler = new ItemStackHandler(9*getNumRows());
+        for(int j = 0; j < this.getNumRows(); ++j) {
             for(int k = 0; k < 9; ++k) {
                 this.addSlot(new AmmoSlot(itemHandler, k + j * 9, 8 + k * 18, 18 + j * 18));
             }
@@ -74,7 +69,10 @@ public class BackpackContainer extends AbstractContainerMenu {
 
     @Override
     public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-        if(slotId <= 0) super.clicked(slotId, dragType, clickTypeIn, player);
+        if(slotId <= 0) {
+            super.clicked(slotId, dragType, clickTypeIn, player);
+            return;
+        }
         Slot slot = this.slots.get(slotId);
         if(slot.hasItem()) {
             if(slot.getItem().getItem() instanceof ArmorRigItem) return;
@@ -82,17 +80,18 @@ public class BackpackContainer extends AbstractContainerMenu {
         super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
+    @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (index < this.numRows * 9) {
-                if (!this.moveItemStackTo(itemstack1, this.numRows * 9, this.slots.size(), true)) {
+            if (index < this.getNumRows() * 9) {
+                if (!this.moveItemStackTo(itemstack1, this.getNumRows() * 9, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(itemstack1, 0, this.numRows * 9, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, this.getNumRows() * 9, false)) {
                 return ItemStack.EMPTY;
             }
 
@@ -105,8 +104,14 @@ public class BackpackContainer extends AbstractContainerMenu {
 
         return itemstack;
     }
-
-    public int getNumRows() {
-        return numRows;
+    @Override
+    public AbstractContainerMenu getSelf() {
+        return this;
+    }
+    @Override
+    public int getNumRows(){return ROW_NUM;}
+    private static boolean isAmmo(ItemStack stack, ResourceLocation id)
+    {
+        return stack != null && stack.getItem().getRegistryName().equals(id);
     }
 }

@@ -18,9 +18,10 @@ import java.util.UUID;
 public class RigSlotsHandler implements IAmmoItemHandler, IItemHandlerModifiable, INBTSerializable<CompoundTag> {
     protected NonNullList<ItemStack> stacks;
 
+    //TODO: Simplify and add unlimited system with generic containers, will be needed eventually.
     public RigSlotsHandler()
     {
-        this(18);
+        this(9*6);
     }
 
     public RigSlotsHandler(int size) {
