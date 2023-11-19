@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [256, 256],
 	"textures": {
-		"1": "tac:gunskin/ak47/762x39",
-		"2": "tac:gunskin/ak47/ak47_spent_bullet",
-		"particle": "tac:gunskin/ak47/762x39"
+		"1": "tac:items/gunskin/ak47/762x39",
+		"2": "tac:items/gunskin/ak47/ak47_spent_bullet",
+		"particle": "tac:items/gunskin/ak47/762x39"
 	},
 	"elements": [
 		{

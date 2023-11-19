@@ -1,6 +1,5 @@
 package com.tac.guns.client;
 
-import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.*;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
@@ -11,8 +10,8 @@ import com.tac.guns.client.render.entity.GrenadeRenderer;
 import com.tac.guns.client.render.entity.MissileRenderer;
 import com.tac.guns.client.render.entity.ProjectileRenderer;
 import com.tac.guns.client.render.entity.ThrowableGrenadeRenderer;
-import com.tac.guns.client.render.gun.ModelOverrides;
-import com.tac.guns.client.render.gun.model.scope.*;
+import com.tac.guns.client.render.model.scope.*;
+import com.tac.guns.client.render.model.OverrideModelManager;
 import com.tac.guns.client.screen.*;
 import com.tac.guns.client.screen.AmmoScreen;
 import com.tac.guns.client.settings.GunOptions;
@@ -142,29 +141,29 @@ public class ClientHandler {
     }
 
     private static void registerModelOverrides() {
-        ModelOverrides.register(ModItems.COYOTE_SIGHT.get(), new CoyoteSightModel());
-        ModelOverrides.register(ModItems.STANDARD_6_10x_SCOPE.get(), new Standard6_10xScopeModel());
-        ModelOverrides.register(ModItems.VORTEX_LPVO_3_6.get(), new VortexLPVO_3_6xScopeModel());
+        OverrideModelManager.register(ModItems.COYOTE_SIGHT.get(), new CoyoteSightModel());
+        OverrideModelManager.register(ModItems.STANDARD_6_10x_SCOPE.get(), new Standard6_10xScopeModel());
+        OverrideModelManager.register(ModItems.VORTEX_LPVO_3_6.get(), new VortexLPVO_3_6xScopeModel());
         //TODO: Fix up the SLX 2x, give a new reticle, new scope data, new mount and eye pos, pretty much remake the code end.
         //ModelOverrides.register(ModItems.SLX_2X.get(), new SLX_2X_ScopeModel());
-        ModelOverrides.register(ModItems.ACOG_4.get(), new ACOG_4x_ScopeModel());
-        ModelOverrides.register(ModItems.ELCAN_DR_14X.get(), new elcan_14x_ScopeModel());
-        ModelOverrides.register(ModItems.AIMPOINT_T2_SIGHT.get(), new AimpointT2SightModel());
+        OverrideModelManager.register(ModItems.ACOG_4.get(), new ACOG_4x_ScopeModel());
+        OverrideModelManager.register(ModItems.ELCAN_DR_14X.get(), new elcan_14x_ScopeModel());
+        OverrideModelManager.register(ModItems.AIMPOINT_T2_SIGHT.get(), new AimpointT2SightModel());
 
-        ModelOverrides.register(ModItems.AIMPOINT_T1_SIGHT.get(), new AimpointT1SightModel());
+        OverrideModelManager.register(ModItems.AIMPOINT_T1_SIGHT.get(), new AimpointT1SightModel());
 
-        ModelOverrides.register(ModItems.EOTECH_N_SIGHT.get(), new EotechNSightModel());
-        ModelOverrides.register(ModItems.VORTEX_UH_1.get(), new VortexUh1SightModel());
-        ModelOverrides.register(ModItems.EOTECH_SHORT_SIGHT.get(), new EotechShortSightModel());
-        ModelOverrides.register(ModItems.SRS_RED_DOT_SIGHT.get(), new SrsRedDotSightModel());
-        ModelOverrides.register(ModItems.QMK152.get(), new Qmk152ScopeModel());
+        OverrideModelManager.register(ModItems.EOTECH_N_SIGHT.get(), new EotechNSightModel());
+        OverrideModelManager.register(ModItems.VORTEX_UH_1.get(), new VortexUh1SightModel());
+        OverrideModelManager.register(ModItems.EOTECH_SHORT_SIGHT.get(), new EotechShortSightModel());
+        OverrideModelManager.register(ModItems.SRS_RED_DOT_SIGHT.get(), new SrsRedDotSightModel());
+        OverrideModelManager.register(ModItems.QMK152.get(), new Qmk152ScopeModel());
 
-        ModelOverrides.register(ModItems.OLD_LONGRANGE_8x_SCOPE.get(), new OldLongRange8xScopeModel());
-        ModelOverrides.register(ModItems.OLD_LONGRANGE_4x_SCOPE.get(), new OldLongRange4xScopeModel());
+        OverrideModelManager.register(ModItems.OLD_LONGRANGE_8x_SCOPE.get(), new OldLongRange8xScopeModel());
+        OverrideModelManager.register(ModItems.OLD_LONGRANGE_4x_SCOPE.get(), new OldLongRange4xScopeModel());
 
-        ModelOverrides.register(ModItems.MINI_DOT.get(), new MiniDotSightModel());
+        OverrideModelManager.register(ModItems.MINI_DOT.get(), new MiniDotSightModel());
         //ModelOverrides.register(ModItems.MICRO_HOLO_SIGHT.get(), new MicroHoloSightModel());
-        ModelOverrides.register(ModItems.SRO_DOT.get(), new SroDotSightModel());
+        OverrideModelManager.register(ModItems.SRO_DOT.get(), new SroDotSightModel());
 
         // Armor registry, kept manual cause nice and simple, requires registry on client side only
         VestLayerRender.registerModel(ModItems.LIGHT_ARMOR.get(), new ModernArmor());
