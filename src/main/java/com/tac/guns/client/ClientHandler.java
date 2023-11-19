@@ -4,6 +4,9 @@ import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.*;
 import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.render.armor.models.MediumArmor;
+import com.tac.guns.client.render.armor.models.ModernArmor;
+import com.tac.guns.client.render.armor.vestlayer.VestLayerRender;
 import com.tac.guns.client.render.entity.GrenadeRenderer;
 import com.tac.guns.client.render.entity.MissileRenderer;
 import com.tac.guns.client.render.entity.ProjectileRenderer;
@@ -164,8 +167,8 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.SRO_DOT.get(), new SroDotSightModel());
 
         // Armor registry, kept manual cause nice and simple, requires registry on client side only
-        //VestLayerRender.registerModel(ModItems.LIGHT_ARMOR.get(), new ModernArmor());
-        //VestLayerRender.registerModel(ModItems.MEDIUM_STEEL_ARMOR.get(), new MediumArmor());
+        VestLayerRender.registerModel(ModItems.LIGHT_ARMOR.get(), new ModernArmor());
+        VestLayerRender.registerModel(ModItems.MEDIUM_STEEL_ARMOR.get(), new MediumArmor());
         //VestLayerRender.registerModel(ModItems.CARDBOARD_ARMOR_FUN.get(), new CardboardArmor());
     }
 
