@@ -40,7 +40,7 @@ public abstract class ModelBakeryMixin implements CacheableModelBakery {
                     ordinal = 0
             ),
             remap = true)
-    public void addSpecialModels(ProfilerFiller p_119249_, int p_119250_, CallbackInfo ci) {
+    public void onBakeryLoading(ProfilerFiller p_119249_, int p_119250_, CallbackInfo ci) {
 
         //init
         SkinLoader.missingModel = getModel(MISSING_MODEL_LOCATION);
