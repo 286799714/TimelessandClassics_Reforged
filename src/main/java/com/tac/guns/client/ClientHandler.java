@@ -1,5 +1,6 @@
 package com.tac.guns.client;
 
+import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.*;
 import com.tac.guns.client.render.animation.module.GunAnimationController;

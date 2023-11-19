@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
@@ -49,6 +50,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -1066,35 +1068,6 @@ public class GunRenderingHandler {
             }
             return;
         }
-
-        /*if (heldItem.getItem() instanceof GunItem) {
-            Gun gun = ((GunItem) heldItem.getItem()).getGun(); // Cooldown stuffs, i should look into this
-            if (!gun.getGeneral().isAuto()) {
-                float coolDown = player.getCooldownTracker().getCooldown(heldItem.getItem(), event.renderTickTime);
-                if (coolDown > 0.0F) {
-                    double scale = 3;
-                    MainWindow window = mc.getMainWindow();
-                    int i = (int) ((window.getScaledHeight() / 2 - 7 - 60) / scale);
-                    int j = (int) Math.ceil((window.getScaledWidth() / 2 - 8 * scale) / scale);
-
-                    RenderSystem.enableBlend();
-                    RenderSystem.defaultBlendFunc();
-                    mc.getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
-
-                    RenderSystem.pushMatrix();
-                    {
-                        RenderSystem.scaled(scale, scale, scale);
-                        int progress = (int) Math.ceil((coolDown + 0.05) * 17.0F) - 1;
-                        MatrixStack matrixStack = new MatrixStack();
-                        Screen.blit(matrixStack, j, i, 36, 94, 16, 4, 256, 256);
-                        Screen.blit(matrixStack, j, i, 52, 94, progress, 4, 256, 256);
-                    }
-                    RenderSystem.popMatrix();
-
-                    RenderSystem.disableBlend();
-                }
-            }
-        }*/
     }
 
     @SubscribeEvent
@@ -1305,21 +1278,6 @@ public class GunRenderingHandler {
         }
         return false;
     }
-    /*public boolean renderColored(LivingEntity entity, IBakedModel model, ItemTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, float partialTicks) {
-
-            matrixStack.push();
-
-            RenderUtil.applyTransformTypeIB(model, matrixStack, transformType, entity);
-
-            this.renderColoredModel(entity, transformType, model, matrixStack, renderTypeBuffer, light, partialTicks);//matrixStack, renderTypeBuffer, light, partialTicks);
-            //this.renderAttachments(entity, transformType, stack, matrixStack, renderTypeBuffer, light, partialTicks);
-            //this.renderMuzzleFlash(entity, matrixStack, renderTypeBuffer, stack, transformType);
-
-            matrixStack.pop();
-            return true;
-
-        //return false;
-    }*/
     private void renderGun(LivingEntity entity, ItemTransforms.TransformType transformType, ItemStack stack, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks)
     {
         if(stack.getItem() instanceof ITimelessAnimated) RenderUtil.renderModel(stack, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, entity);
@@ -1455,10 +1413,14 @@ public class GunRenderingHandler {
 
         Matrix4f matrix = matrixStack.last().pose();
         VertexConsumer builder = buffer.getBuffer(GunRenderType.getMuzzleFlash());
-        builder.vertex(matrix, 0, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 1.0F).uv2(15728880).endVertex();
-        builder.vertex(matrix, size, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0, 1.0F).uv2(15728880).endVertex();
-        builder.vertex(matrix, size, size, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0, 0).uv2(15728880).endVertex();
-        builder.vertex(matrix, 0, size, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 0).uv2(15728880).endVertex();
+        RenderSystem.enableBlend();
+        RenderSystem.disableCull();
+        RenderSystem.disableScissor();
+        Matrix3f normal = matrixStack.last().normal();
+        builder.vertex(matrix, 0, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 1.0F).overlayCoords(0).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+        builder.vertex(matrix, size, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0, 1.0F).overlayCoords(0).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+        builder.vertex(matrix, size, size, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0, 0).overlayCoords(0).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
+        builder.vertex(matrix, 0, size, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 0).overlayCoords(0).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
 
         /*float smokeSize = (float) modifiedGun.getDisplay().getFlash().getSmokeSize();
         builder = buffer.getBuffer(GunRenderType.getMuzzleSmoke());
@@ -1519,78 +1481,6 @@ public class GunRenderingHandler {
             }
         }
     }
-
-    /*private void renderReloadArm(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, Gun modifiedGun, ItemStack stack, HandSide hand) {
-        *//*if (stack.getItem() instanceof IAnimatable && stack.getItem() instanceof GunItem) {
-
-        }*//*
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.player.ticksExisted < ReloadHandler.get().getStartReloadTick() || ReloadHandler.get().getReloadTimer() != 5)
-            return;
-
-        Item item = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
-        if (item == null)
-            return;
-
-        matrixStack.push();
-
-        float interval = GunEnchantmentHelper.getReloadInterval(stack);
-        float reload = ((mc.player.ticksExisted - ReloadHandler.get().getStartReloadTick() + mc.getRenderPartialTicks()) % interval) / interval;
-        float percent = 1.0F - reload;
-        if (percent >= 0.5F) {
-            percent = 1.0F - percent;
-        }
-        percent *= 2F;
-        percent = percent < 0.5 ? 2 * percent * percent : -1 + (4 - 2 * percent) * percent;
-
-        int side = hand.opposite() == HandSide.RIGHT ? 1 : -1;
-        matrixStack.translate(-2.75 * side * 0.0625, -0.5625, -0.5625);
-        matrixStack.rotate(Vector3f.YP.rotationDegrees(180F));
-        matrixStack.translate(0, -0.35 * (1.0 - percent), 0);
-        matrixStack.translate(side * 0.0625, 0, 0);
-        matrixStack.rotate(Vector3f.XP.rotationDegrees(90F));
-        matrixStack.rotate(Vector3f.YP.rotationDegrees(35F * -side));
-        matrixStack.rotate(Vector3f.XP.rotationDegrees(-75F * percent));
-        matrixStack.scale(0.5F, 0.5F, 0.5F);
-
-        RenderUtil.renderFirstPersonArm(mc.player, hand.opposite(), matrixStack, buffer, light);
-
-        if (reload < 0.5F) {
-            matrixStack.push();
-            matrixStack.translate(-side * 5 * 0.0625, 15 * 0.0625, -1 * 0.0625);
-            matrixStack.rotate(Vector3f.XP.rotationDegrees(180F));
-            matrixStack.scale(0.75F, 0.75F, 0.75F);
-            ItemStack ammo = new ItemStack(item, modifiedGun.getReloads().getReloadAmount());
-            IBakedModel model = RenderUtil.getModel(ammo);
-            boolean isModel = model.isGui3d();
-            this.random.setSeed(Item.getIdFromItem(item));
-            int count = Math.min(modifiedGun.getReloads().getReloadAmount(), 5);
-            for (int i = 0; i < count; ++i) {
-                matrixStack.push();
-                if (i > 0) {
-                    if (isModel) {
-                        float x = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
-                        float y = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
-                        float z = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F;
-                        matrixStack.translate(x, y, z);
-                    } else {
-                        float x = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
-                        float y = (this.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
-                        matrixStack.translate(x, y, 0);
-                    }
-                }
-
-                RenderUtil.renderModel(ammo, ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND, matrixStack, buffer, light, OverlayTexture.NO_OVERLAY, null);
-                matrixStack.pop();
-
-                if (!isModel) {
-                    matrixStack.translate(0.0, 0.0, 0.09375F);
-                }
-            }
-            matrixStack.pop();
-        }
-        matrixStack.pop();
-    }*/
 
     /**
      * A temporary hack to get the equip progress until Forge fixes the issue.
