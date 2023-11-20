@@ -1,6 +1,8 @@
 {
   "type": "custom",
   "gun_registry_name": "tac:ak47",
+  "skin_name": "tac:ak47_spent",
+  "component_namespace": ["tac"],
   "components": {
     "body": "body",
     "bolt": "bolt",

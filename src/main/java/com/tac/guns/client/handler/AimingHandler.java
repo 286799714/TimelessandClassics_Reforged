@@ -1,11 +1,10 @@
 package com.tac.guns.client.handler;
 
-import com.mojang.logging.LogUtils;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.Config.RightClickUse;
 import com.tac.guns.client.Keys;
-import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.AimingManager;
 import com.tac.guns.common.Gun;

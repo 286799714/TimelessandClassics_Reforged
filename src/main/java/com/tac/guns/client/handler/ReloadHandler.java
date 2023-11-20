@@ -1,9 +1,8 @@
 package com.tac.guns.client.handler;
 
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
-import com.tac.guns.client.Keys;
-import com.tac.guns.client.render.animation.module.GunAnimationController;
-import com.tac.guns.client.render.animation.module.PumpShotgunAnimationController;
+import com.tac.guns.client.animation.module.GunAnimationController;
+import com.tac.guns.client.animation.module.PumpShotgunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
@@ -11,7 +10,6 @@ import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageReload;
-import com.tac.guns.network.message.MessageUnload;
 import com.tac.guns.network.message.MessageUpdateGunID;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
@@ -23,7 +21,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.network.simple.SimpleChannel;
 
 
 /**

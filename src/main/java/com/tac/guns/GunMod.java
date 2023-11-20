@@ -3,8 +3,8 @@ package com.tac.guns;
 import com.tac.guns.client.ClientHandler;
 import com.tac.guns.client.CustomGunManager;
 import com.tac.guns.client.CustomRigManager;
-import com.tac.guns.client.render.model.IOverrideModel;
-import com.tac.guns.client.render.model.OverrideModelManager;
+import com.tac.guns.client.render.item.IOverrideModel;
+import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.render.pose.*;
 import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.GripType;
@@ -313,7 +313,7 @@ public class GunMod
                 try {
                     OverrideModelManager.register(
                             (Item) object.get(),
-                            (IOverrideModel) Class.forName("com.tac.guns.client.render.model.gun." + field.getName().toLowerCase(Locale.ENGLISH) + "_animation").newInstance()
+                            (IOverrideModel) Class.forName("com.tac.guns.client.render.item.gun." + field.getName().toLowerCase(Locale.ENGLISH) + "_animation").newInstance()
                     );
                 } catch (ClassNotFoundException e) {
                     LOGGER.warn("Could not load animations for gun - " + field.getName());
