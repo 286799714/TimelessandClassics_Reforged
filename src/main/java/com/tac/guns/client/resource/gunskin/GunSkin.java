@@ -1,6 +1,5 @@
 package com.tac.guns.client.resource.gunskin;
 
-import com.mojang.logging.LogUtils;
 import com.tac.guns.client.resource.model.CacheableModel;
 
 import net.minecraft.resources.ResourceLocation;

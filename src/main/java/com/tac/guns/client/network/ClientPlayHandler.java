@@ -1,5 +1,7 @@
 package com.tac.guns.client.network;
 
+import com.mojang.logging.LogUtils;
+import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
 import com.tac.guns.client.BulletTrail;
 import com.tac.guns.client.CustomGunManager;
@@ -23,6 +25,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -161,6 +164,7 @@ public class ClientPlayHandler
     public static void handleProjectileHitBlock(MessageProjectileHitBlock message)
     {
         Minecraft mc = Minecraft.getInstance();
+        if(mc.player == null) return;
         Level world = mc.level;
         if (world != null) {
             BlockState state = world.getBlockState(message.getPos());
@@ -168,13 +172,16 @@ public class ClientPlayHandler
             double holeY = message.getY() + 0.005 * message.getFace().getStepY();
             double holeZ = message.getZ() + 0.005 * message.getFace().getStepZ();
             double distance = Math.sqrt(mc.player.distanceToSqr(message.getX(), message.getY(), message.getZ()));
-            world.addParticle(new BulletHoleData(message.getFace(), message.getPos()), false, holeX, holeY, holeZ, 0, 0, 0);
+            if(message.isHaveHole())
+                world.addParticle(new BulletHoleData(message.getFace(), message.getPos()), false, holeX, holeY, holeZ, 0, 0, 0);
             if (distance < 16.0) {
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 4; i++) {
                     Vec3i normal = message.getFace().getNormal();
                     Vec3 motion = new Vec3(normal.getX(), normal.getY(), normal.getZ());
                     motion.add(getRandomDir(world.random), getRandomDir(world.random), getRandomDir(world.random));
-                    world.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), false, message.getX(), message.getY(), message.getZ(), 0, 0, 0);
+                    Vec3 reflection = message.getDirection().subtract(message.getDirection().multiply(normal.getX() * 2, normal.getY() * 2, normal.getZ() * 2));
+                    motion.add(reflection);
+                    world.addParticle(new DustParticleOptions(new Vector3f(175,175,175), 2), false, message.getX(), message.getY(), message.getZ(), 0, 0, 0);
                 }
             }
             if (distance < 32.0) {

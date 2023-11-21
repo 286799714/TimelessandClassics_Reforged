@@ -50,13 +50,15 @@ public class GunSkinManager {
         skins = new HashMap<>();
     }
 
-    public static @Nonnull GunSkin getSkin(ItemStack stack) {
+    public static @Nonnull GunSkin getSkinFromTag(ItemStack stack) {
         ResourceLocation gun = stack.getItem().getRegistryName();
         if (stack.getTag() != null) {
             if (stack.getTag().contains("Skin", Tag.TAG_STRING)) {
                 String skinLoc = stack.getTag().getString("Skin");
                 ResourceLocation loc = ResourceLocation.tryParse(skinLoc);
                 GunSkin skin = getGunSkin(loc);
+                if(skin == null)
+                    skin = getDefaultGunSkin(gun);
                 return skin == null ? GunSkin.MISSING_SKIN : skin;
             }
         }

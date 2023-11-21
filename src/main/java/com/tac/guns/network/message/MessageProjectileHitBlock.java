@@ -5,6 +5,7 @@ import com.tac.guns.client.network.ClientPlayHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -19,16 +20,20 @@ public class MessageProjectileHitBlock extends PlayMessage<MessageProjectileHitB
     private double z;
     private BlockPos pos;
     private Direction face;
+    private Vec3 direction;
+    private boolean haveHole;
 
     public MessageProjectileHitBlock() {
     }
 
-    public MessageProjectileHitBlock(double x, double y, double z, BlockPos pos, Direction face) {
+    public MessageProjectileHitBlock(double x, double y, double z, BlockPos pos, Direction face, Vec3 direction, boolean haveHole) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.pos = pos;
         this.face = face;
+        this.direction = direction;
+        this.haveHole = haveHole;
     }
 
     @Override
@@ -38,6 +43,10 @@ public class MessageProjectileHitBlock extends PlayMessage<MessageProjectileHitB
         buffer.writeDouble(messageProjectileHitBlock.z);
         buffer.writeBlockPos(messageProjectileHitBlock.pos);
         buffer.writeEnum(messageProjectileHitBlock.face);
+        buffer.writeDouble(messageProjectileHitBlock.direction.x);
+        buffer.writeDouble(messageProjectileHitBlock.direction.y);
+        buffer.writeDouble(messageProjectileHitBlock.direction.z);
+        buffer.writeBoolean(messageProjectileHitBlock.haveHole);
     }
 
     @Override
@@ -47,7 +56,9 @@ public class MessageProjectileHitBlock extends PlayMessage<MessageProjectileHitB
                 buffer.readDouble(),
                 buffer.readDouble(),
                 buffer.readBlockPos(),
-                buffer.readEnum(Direction.class)
+                buffer.readEnum(Direction.class),
+                new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()),
+                buffer.readBoolean()
         );
     }
 
@@ -76,4 +87,8 @@ public class MessageProjectileHitBlock extends PlayMessage<MessageProjectileHitB
     public Direction getFace() {
         return this.face;
     }
+
+    public Vec3 getDirection() {return direction;}
+
+    public boolean isHaveHole() {return haveHole;}
 }

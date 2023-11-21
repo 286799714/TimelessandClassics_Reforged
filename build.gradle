@@ -11,7 +11,6 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        //classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
         classpath 'org.codehaus.groovy:groovy-all:2.4.15'
@@ -28,11 +27,14 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 
-version = "0.3.10-1.18.2"
+version = "0.3.10.2-1.18.2"
 group = "com.tac"
-archivesBaseName = "tac-a"
+archivesBaseName = "tac"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+jarJar.enable()
+jarJar.fromRuntimeConfiguration()
 
 //sourceSets.main.resources { srcDir 'src/generated/resources' }
 
@@ -98,32 +100,19 @@ sourceSets.main.resources {
     srcDir 'src/generated/resources'
 }
 
-//processResources {
-//    doLast {
-//        fileTree(dir: outputs.files.asPath, include: "**/*.json").each {
-//            File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
-//        }
-//    }
-//}
-
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
 
-    //implementation fg.deobf('curse.maven:enchancedvisuals-255389:3419985')
-    //implementation fg.deobf('curse.maven:ccore-257814:3419983')
-    //implementation fg.deobf('curse.maven:extra-player-render-481042:3305584')
-
     implementation fg.deobf('curse.maven:framework-549225:3723144')
+    compileOnly fg.deobf("curse.maven:valkyrien-skies-258371:4794551")
     //implementation fg.deobf('curse.maven:rubidium-574856:4494903')
     //implementation fg.deobf('curse.maven:oculus-581495:4578744')
     //implementation fg.deobf('curse.maven:ysm-784675:4667056')
 
+    minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '[2.14.2,2.16.0)')
+    minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '[2.14.2,2.16.0)')
+    minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '[2.14.2,2.16.0)')
 
-    //compileOnly fg.deobf(fileTree(dir: 'lib4', include: '*.jar'))
-    //runtimeOnly files('lib4/optifine.jar')
-
-    //implementation 'lib.optifine:optifine:1.0.0'
-    minecraftLibrary 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
@@ -158,22 +147,11 @@ jar {
     }
 }
 
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact reobfArtifact
-        }
-    }
-    repositories {
-        maven {
-            url "./build/maven/"
-        }
+jarJar {
+    dependencies {
+        include(dependency("com.fasterxml.jackson.core:jackson-databind"))
+        include(dependency("com.fasterxml.jackson.core:jackson-annotations"))
+        include(dependency("com.fasterxml.jackson.core:jackson-core"))
     }
 }
 
@@ -181,20 +159,9 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
-shadowJar {
-    dependencies {
-        include(dependency("com.fasterxml.jackson.core:jackson-databind:2.12.4"))
-        include(dependency("com.fasterxml.jackson.core:jackson-annotations:2.12.4"))
-        include(dependency("com.fasterxml.jackson.core:jackson-core:2.12.4"))
-    }
-}
-
 reobf {
-    shadowJar {} // Re-obfuscate the shadowed JAR
+    jarJar {} // Re-obfuscate
 }
 
 jar.finalizedBy('reobfJar')
-shadowJar.finalizedBy('reobfShadowJar')
-
-publish.dependsOn('reobfJar')
-publish.dependsOn('reobfShadowJar')
+getTasksByName('jarJar', false).forEach(t -> {t.finalizedBy('reobfJarJar')})

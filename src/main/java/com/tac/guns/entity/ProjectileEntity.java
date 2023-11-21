@@ -2,7 +2,6 @@ package com.tac.guns.entity;
 
 //import com.sun.tools.jdi.Packet;
 
-import com.mojang.logging.LogUtils;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.common.AimingManager;
@@ -10,7 +9,6 @@ import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.Gun.Projectile;
 import com.tac.guns.common.SpreadTracker;
-import com.tac.guns.event.GunProjectileHitEvent;
 import com.tac.guns.event.LevelUpEvent;
 import com.tac.guns.init.ModEnchantments;
 import com.tac.guns.init.ModSyncedDataKeys;
@@ -27,7 +25,6 @@ import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.WearableHelper;
 import com.tac.guns.util.math.ExtendedEntityRayTraceResult;
 import com.tac.guns.world.ProjectileExplosion;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -38,7 +35,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -61,7 +57,7 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jline.utils.Log;
+import org.valkyrienskies.mod.common.world.RaycastUtilsKt;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -414,6 +410,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             boundingBox = BoundingBoxManager.getBoundingBox((Player) entity, ping);
         }
         boundingBox = boundingBox.expandTowards(0, expandHeight, 0);
+        //When the entity is moving, the position of the bounding box will shift forward, so move the bounding box back.
+        //Also, is stretch the bounding box according to the movement speed.
+        Vec3 velocity = entity.getVehicle() != null ? entity.getVehicle().getDeltaMovement() : entity.getDeltaMovement();
+        boundingBox = boundingBox.move(velocity.multiply(-1, -1, -1));
+        boundingBox = boundingBox.expandTowards(velocity.multiply(-1,-1,-1));
 
         Vec3 hitPos = boundingBox.clip(startVec, endVec).orElse(null);
         Vec3 grownHitPos = boundingBox.inflate(Config.COMMON.gameplay.growBoundingBoxAmountV2.get(), 0, Config.COMMON.gameplay.growBoundingBoxAmountV2.get()).clip(startVec, endVec).orElse(null);
@@ -484,9 +485,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 //        if (MinecraftForge.EVENT_BUS.post(new GunProjectileHitEvent(result, this)))
 //            return;
 
-        if(result instanceof BlockHitResult)
+        if(result instanceof BlockHitResult blockRayTraceResult)
         {
-            BlockHitResult blockRayTraceResult = (BlockHitResult) result;
             if(blockRayTraceResult.getType() == HitResult.Type.MISS)
             {
                 return;
@@ -716,7 +716,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z)
     {
-        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(pos)), new MessageProjectileHitBlock(x, y, z, pos, face));
+
+        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(pos)), new MessageProjectileHitBlock(x, y, z, pos, face, getDeltaMovement().normalize(), true));
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon) > 0)
             ((ServerLevel) this.level).sendParticles(ParticleTypes.LAVA, x, y, z, 1, 0, 0, 0, 0);
     }
@@ -930,9 +931,13 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
      */
     private static BlockHitResult rayTraceBlocks(Level world, ClipContext context, Predicate<BlockState> ignorePredicate/*, Predicate<BlockState> wallBangPredicate*/)
     {
-        /*BlockRayTraceResult r =*/ return performRayTrace(context, (rayTraceContext, blockPos) -> {
+        return performRayTrace(context, (rayTraceContext, blockPos) -> {
             BlockState blockState = world.getBlockState(blockPos);
             if(ignorePredicate.test(blockState)) return null;
+            try {
+                Class.forName("org.valkyrienskies.mod.common.world.RaycastUtilsKt");
+                return RaycastUtilsKt.clipIncludeShips(world, context);
+            } catch (ClassNotFoundException ignore) {}
             FluidState fluidState = world.getFluidState(blockPos);
             Vec3 startVec = rayTraceContext.getFrom();
             Vec3 endVec = rayTraceContext.getTo();

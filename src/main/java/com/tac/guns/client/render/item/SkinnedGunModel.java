@@ -2,7 +2,6 @@ package com.tac.guns.client.render.item;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3d;
 import com.tac.guns.client.resource.gunskin.GunComponent;
 import com.tac.guns.client.resource.gunskin.GunSkin;
@@ -34,7 +33,7 @@ public abstract class SkinnedGunModel implements IOverrideModel {
 
     @Override
     public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay){
-        GunSkin skin = GunSkinManager.getSkin(stack);
+        GunSkin skin = SkinManager.getSkin(stack);
         render(skin, partialTicks, transformType, stack, entity, matrixStack, buffer, light, overlay);
     }
 

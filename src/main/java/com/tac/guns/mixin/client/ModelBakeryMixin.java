@@ -40,8 +40,9 @@ public abstract class ModelBakeryMixin{
             remap = true)
     public void onBakeryLoading(ProfilerFiller p_119249_, int p_119250_, CallbackInfo ci) {
         MinecraftForge.EVENT_BUS.post(new ModelBakeryProcessLoadingEvent(unbakedCache, topLevelModels, getModel(MISSING_MODEL_LOCATION)));
+        GunSkinLoader.missingModel = getModel(MISSING_MODEL_LOCATION);
         //reload
         SkinManager.reload();
-        GunSkinLoader.load();
+        GunSkinLoader.loadModelsFromProfile();
     }
 }
