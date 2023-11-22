@@ -15,6 +15,10 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
@@ -38,6 +42,9 @@ public class ProjectileExplosion extends Explosion
 {
     private static final ExplosionDamageCalculator DEFAULT_CONTEXT = new ExplosionDamageCalculator();
 
+    private static final Predicate<BlockState> IGNORES = input -> input != null && ((Config.COMMON.gameplay.ignoreLeaves.get() && input.getBlock() instanceof LeavesBlock) ||
+            (Config.COMMON.gameplay.ignoreFences.get() && (input.getBlock() instanceof FenceBlock || input.getBlock() instanceof IronBarsBlock)) ||
+            (Config.COMMON.gameplay.ignoreFenceGates.get() && input.getBlock() instanceof FenceGateBlock));
     private final Level world;
     private final double x;
     private final double y;
@@ -155,7 +162,7 @@ public class ProjectileExplosion extends Explosion
                 d[13] = new Vec3(deltaX, deltaY, boundingBox.maxZ);
                 d[14] = new Vec3(deltaX, deltaY, deltaZ);
                 for (int i = 0; i < 15; i++) {
-                    result = rayTraceBlocks(this.world, new ClipContext(explosionPos, d[i], ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+                    result = rayTraceBlocks(this.world, new ClipContext(explosionPos, d[i], ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null), IGNORES);
                     minDistance = (result.getType() != HitResult.Type.BLOCK) ? Math.min(minDistance, explosionPos.distanceTo(d[i])) : minDistance;
                 }
                 strength = minDistance * 2 / radius;
@@ -202,12 +209,14 @@ public class ProjectileExplosion extends Explosion
      *
      * @param world     the world to perform the ray trace
      * @param context   the ray trace context
+     * @param ignorePredicate the block state predicate
      * @return a result of the raytrace
      */
-    private static BlockHitResult rayTraceBlocks(Level world, ClipContext context /*, Predicate<BlockState> wallBangPredicate*/)
+    private static BlockHitResult rayTraceBlocks(Level world, ClipContext context, Predicate<BlockState> ignorePredicate/*, Predicate<BlockState> wallBangPredicate*/)
     {
         /*BlockRayTraceResult r =*/ return performRayTrace(context, (rayTraceContext, blockPos) -> {
         BlockState blockState = world.getBlockState(blockPos);
+        if(ignorePredicate.test(blockState)) return null;
         FluidState fluidState = world.getFluidState(blockPos);
         Vec3 startVec = rayTraceContext.getFrom();
         Vec3 endVec = rayTraceContext.getTo();

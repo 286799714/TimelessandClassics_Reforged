@@ -72,7 +72,9 @@ import java.util.function.Predicate;
 public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnData
 {
     private static final Predicate<Entity> PROJECTILE_TARGETS = input -> input != null && input.isPickable() && !input.isSpectator();
-    private static final Predicate<BlockState> IGNORE_LEAVES = input -> input != null && Config.COMMON.gameplay.ignoreLeaves.get() && input.getBlock() instanceof LeavesBlock;
+    private static final Predicate<BlockState> IGNORES = input -> input != null && ((Config.COMMON.gameplay.ignoreLeaves.get() && input.getBlock() instanceof LeavesBlock) ||
+            (Config.COMMON.gameplay.ignoreFences.get() && (input.getBlock() instanceof FenceBlock || input.getBlock() instanceof IronBarsBlock)) ||
+            (Config.COMMON.gameplay.ignoreFenceGates.get() && input.getBlock() instanceof FenceGateBlock));
 
     protected int shooterId;
     protected LivingEntity shooter;
@@ -248,7 +250,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
             //TODO: Make RayTraceBlocks return the meta class, use end vec as a new start vec if a tracked block was the hit vec, pretty much re-running the raytrace
 
-            HitResult result = rayTraceBlocks(this.level, new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORE_LEAVES);
+            HitResult result = rayTraceBlocks(this.level, new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORES);
             BlockHitResult resultB = (BlockHitResult) result;
             BlockState blockState = level.getBlockState(resultB.getBlockPos());
             /*
@@ -419,7 +421,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         Vec3 grownHitPos = boundingBox.inflate(Config.COMMON.gameplay.growBoundingBoxAmountV2.get(), 0, Config.COMMON.gameplay.growBoundingBoxAmountV2.get()).clip(startVec, endVec).orElse(null);
         if(hitPos == null && grownHitPos != null)
         {
-            HitResult raytraceresult = rayTraceBlocks(this.level, new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORE_LEAVES);
+            HitResult raytraceresult = rayTraceBlocks(this.level, new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORES);
             BlockHitResult resultB = (BlockHitResult) raytraceresult;
             BlockState blockState = level.getBlockState(resultB.getBlockPos());
             if(blockState.getMaterial() == Material.WOOL)
