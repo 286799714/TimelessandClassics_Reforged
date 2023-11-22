@@ -256,12 +256,12 @@ public class ClientHandler {
         IHeadshotBox<LivingEntity> headshotBox = (IHeadshotBox<LivingEntity>) BoundingBoxManager.getHeadshotBoxes(entity.getType());
         if(headshotBox != null)
         {
-            AxisAlignedBB box = headshotBox.getHeadshotBox(entity);
+            AABB box = headshotBox.getHeadshotBox(entity);
             if(box != null)
             {
                 WorldRenderer.drawBoundingBox(event.getMatrixStack(), event.getBuffers().getBuffer(RenderType.getLines()), box, 1.0F, 1.0F, 0.0F, 1.0F);
 
-                AxisAlignedBB boundingBox = entity.getBoundingBox().offset(entity.getPositionVec().inverse());
+                AABB boundingBox = entity.getBoundingBox().offset(entity.getPositionVec().inverse());
                 boundingBox = boundingBox.grow(Config.COMMON.gameplay.growBoundingBoxAmountV2.get(), 0, Config.COMMON.gameplay.growBoundingBoxAmountV2.get());
                 WorldRenderer.drawBoundingBox(event.getMatrixStack(), event.getBuffers().getBuffer(RenderType.getLines()), boundingBox, 0.0F, 1.0F, 1.0F, 1.0F);
             }

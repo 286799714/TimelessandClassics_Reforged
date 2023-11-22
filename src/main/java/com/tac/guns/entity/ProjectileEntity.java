@@ -523,7 +523,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 ((IDamageable) block).onBlockDamaged(this.level, state, pos, this, this.getDamage(), (int) Math.ceil(this.getDamage() / 2.0) + 1);
             }
 
-            this.onHitBlock(state, pos, blockRayTraceResult.getDirection(), hitVec.x, hitVec.y, hitVec.z);
+            this.onHitBlock(state, pos, blockRayTraceResult.getDirection(), hitVec);
 
             if (block instanceof BellBlock bell) {
                 bell.attemptToRing(this.level, pos, blockRayTraceResult.getDirection());
@@ -585,7 +585,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
                 entity.invulnerableTime = 0;
             }
-
         }
     }
 
@@ -621,6 +620,13 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             int hitType = critical ? MessageProjectileHitEntity.HitType.CRITICAL : headshot ? MessageProjectileHitEntity.HitType.HEADSHOT : MessageProjectileHitEntity.HitType.NORMAL;
             updateWeaponLevels(damage);
             PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) this.shooter), new MessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
+        }
+
+        AABB boundingBox = entity.getBoundingBox();
+        Vec3 blastVec = new Vec3((boundingBox.maxX + boundingBox.minX) / 2, (boundingBox.maxY + boundingBox.minY) / 2, (boundingBox.maxZ + boundingBox.minZ) / 2);
+        if (this.projectile.isHasBlastDamage()) {
+            createExplosion(this, this.projectile.getBlastDamage() + this.projectile.getDamage(), this.projectile.getBlastRadius(), blastVec);
+            this.remove(RemovalReason.DISCARDED);
         }
 
         /* Send blood particle to tracking clients. */
@@ -714,11 +720,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.life -= 1;
     }*/
 
-    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z)
+    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, Vec3 hitVec)
     {
-        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(pos)), new MessageProjectileHitBlock(x, y, z, pos, face));
+        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(pos)), new MessageProjectileHitBlock(hitVec.x, hitVec.y, hitVec.z, pos, face));
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon) > 0)
-            ((ServerLevel) this.level).sendParticles(ParticleTypes.LAVA, x, y, z, 1, 0, 0, 0, 0);
+            ((ServerLevel) this.level).sendParticles(ParticleTypes.LAVA, hitVec.x, hitVec.y, hitVec.z, 1, 0, 0, 0, 0);
+
+        if (this.projectile.isHasBlastDamage()) {
+            createExplosion(this, this.projectile.getBlastDamage(), this.projectile.getBlastRadius(), hitVec);
+            this.remove(RemovalReason.DISCARDED);
+        }
     }
 
     protected void teleportToHitPoint(HitResult rayTraceResult)
@@ -863,6 +874,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         damage = GunModifierHelper.getModifiedDamage(this.weapon, this.modifiedGun, damage);
         damage = GunEnchantmentHelper.getAcceleratorDamage(this.weapon, damage);
         return Math.max(0F, damage);
+    }
+
+    public float getRadius() {
+        return Math.max(0F, this.projectile.getBlastRadius());
     }
 
     private float getCriticalDamage(ItemStack weapon, Random rand, float damage)
@@ -1036,16 +1051,24 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
      *
      * @param entity The entity to explode
      * @param radius The amount of radius the entity should deal
-     * @param forceNone If true, forces the explosion mode to be NONE instead of config value
      */
-    public static void createExplosion(Entity entity, float radius, boolean forceNone)
+    public static void createExplosion(Entity entity, float power, float radius, @Nullable Vec3 hitVec)
     {
         Level world = entity.level;
         if(world.isClientSide())
             return;
 
-        Explosion.BlockInteraction mode = Config.COMMON.gameplay.enableGunGriefing.get() && !forceNone ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE;
-        Explosion explosion = new ProjectileExplosion(world, entity, null, null, entity.getX(), entity.getY(), entity.getZ(), radius, false, mode);
+        Explosion.BlockInteraction mode = Config.COMMON.gameplay.enableExplosionBreak.get() ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE;
+        DamageSource source = null;
+        if(entity instanceof IExplosionProvider){
+            source = ((IExplosionProvider) entity).createDamageSource();
+        }
+
+        ProjectileExplosion explosion;
+        if (hitVec == null)
+            explosion = new ProjectileExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), power, radius, mode);
+        else
+            explosion = new ProjectileExplosion(world, entity, source, null, hitVec.x, hitVec.y, hitVec.z, power, radius, mode);
 
         if(net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;

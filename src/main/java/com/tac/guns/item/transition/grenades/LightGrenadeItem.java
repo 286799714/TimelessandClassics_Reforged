@@ -13,15 +13,17 @@ import net.minecraft.world.level.Level;
 public class LightGrenadeItem extends GrenadeItem
 {
     private float power;
-    public LightGrenadeItem(Item.Properties properties, int maxCookTime, float power, float speed)
+    private float radius;
+    public LightGrenadeItem(Item.Properties properties, int maxCookTime, float power, float radius, float speed)
     {
-        super(properties, maxCookTime, power, speed);
+        super(properties, maxCookTime, power, radius, speed);
         this.power = power;
+        this.radius = radius;
     }
 
     public ThrowableGrenadeEntity create(Level world, LivingEntity entity, int timeLeft)
     {
-        return new LightGrenadeEntity(world, entity, timeLeft, this.power);
+        return new LightGrenadeEntity(world, entity, timeLeft, this.power, this.radius);
     }
 
     public boolean canCook()

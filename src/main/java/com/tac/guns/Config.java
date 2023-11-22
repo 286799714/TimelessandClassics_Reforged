@@ -366,6 +366,8 @@ public class Config
     public static class Gameplay
     {
         public final ForgeConfigSpec.BooleanValue enableGunGriefing;
+        public final ForgeConfigSpec.BooleanValue enableExplosionBreak;
+        public final ForgeConfigSpec.BooleanValue explosionCauseFire;
         public final ForgeConfigSpec.DoubleValue growBoundingBoxAmountV2;
         public final ForgeConfigSpec.BooleanValue enableHeadShots;
         public final ForgeConfigSpec.DoubleValue headShotDamageMultiplier;
@@ -399,6 +401,8 @@ public class Config
             builder.comment("Properties relating to gameplay").push("gameplay");
             {
                 this.enableGunGriefing = builder.comment("If enable, allows guns to shoot out glass and remove blocks on explosions").define("enableGunGriefing", true);
+                this.enableExplosionBreak = builder.comment("If enable, allows explosions to break blocks").define("enableExplosionBreak", false);
+                this.explosionCauseFire = builder.comment("If enable, causes explosions to cause fire").define("explosionCauseFire", false);
                 this.growBoundingBoxAmountV2 = builder.comment("The extra amount to expand an entity's bounding box when checking for projectile collision. Setting this value higher will make it easier to hit entities").defineInRange(
                         "growBoundingBoxAmountV2", 0.0, 0.0, 1.0);
                 this.enableHeadShots = builder.comment("Enables the check for head shots for players. Projectiles that hit the head of a player will have increased damage.").define("enableHeadShots", true);
@@ -539,7 +543,7 @@ public class Config
         {
             builder.comment("Properties relating to missiles").push("missiles");
             {
-                this.explosionRadius = builder.comment("The max distance which the explosion is effective to").defineInRange("explosionRadius", 5.0, 0.0, Double.MAX_VALUE);
+                this.explosionRadius = builder.comment("The max distance which the explosion is effective to (no use now)").defineInRange("explosionRadius", 1.0, 0.0, Double.MAX_VALUE);
             }
             builder.pop();
         }
@@ -556,7 +560,7 @@ public class Config
         {
             builder.comment("Properties relating to grenades").push("grenades");
             {
-                this.explosionRadius = builder.comment("The max distance which the explosion is effective to").defineInRange("explosionRadius", 5.0, 0.0, Double.MAX_VALUE);
+                this.explosionRadius = builder.comment("The max distance which the explosion is effective to").defineInRange("explosionRadius", 2.0, 0.0, Double.MAX_VALUE);
             }
             builder.pop();
         }

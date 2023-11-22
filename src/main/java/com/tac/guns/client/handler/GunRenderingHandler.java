@@ -367,7 +367,7 @@ public class GunRenderingHandler {
 
         ItemStack heldItem = mc.player.getHeldItemMainhand();
         float targetAngle = heldItem.getItem() instanceof GunItem ? mc.player.movementInput.moveStrafe * 1F: 0F;
-        this.immersiveRoll = MathHelper.approach(this.immersiveRoll, targetAngle, 0.4F);
+        this.immersiveRoll = Mth.approach(this.immersiveRoll, targetAngle, 0.4F);
         event.setRoll(-this.immersiveRoll);
     }*/
 
@@ -467,7 +467,7 @@ public class GunRenderingHandler {
             this.walkingCameraYaw = cameraYaw;
             this.zoomProgressInv = (float)invertZoomProgress;
 
-            //matrixStack.translate((double) (Math.asin(-MathHelper.sin(distanceWalked*crouch * (float) Math.PI) * cameraYaw * 0.5F)) * invertZoomProgress, ((double) (Math.asin((-Math.abs(-MathHelper.cos(distanceWalked*crouch * (float) Math.PI) * cameraYaw))) * invertZoomProgress)) * 1.140, 0.0D);// * 1.140, 0.0D);
+            //matrixStack.translate((double) (Math.asin(-Mth.sin(distanceWalked*crouch * (float) Math.PI) * cameraYaw * 0.5F)) * invertZoomProgress, ((double) (Math.asin((-Math.abs(-MathHelper.cos(distanceWalked*crouch * (float) Math.PI) * cameraYaw))) * invertZoomProgress)) * 1.140, 0.0D);// * 1.140, 0.0D);
             applyBobbingTransforms(matrixStack, false);
             applyJumpingTransforms(matrixStack, event.getPartialTicks());
             //TODO: Implement config switch, it's not a required mechanic. it's just fun
