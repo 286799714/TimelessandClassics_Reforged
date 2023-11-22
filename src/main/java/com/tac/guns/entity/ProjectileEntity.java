@@ -722,7 +722,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, Vec3 hitVec)
     {
-        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(pos)), new MessageProjectileHitBlock(hitVec.x, hitVec.y, hitVec.z, pos, face));
+        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(pos)), new MessageProjectileHitBlock(hitVec.x, hitVec.y, hitVec.z, pos, face, this.projectile.isHasBlastDamage()));
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon) > 0)
             ((ServerLevel) this.level).sendParticles(ParticleTypes.LAVA, hitVec.x, hitVec.y, hitVec.z, 1, 0, 0, 0, 0);
 
