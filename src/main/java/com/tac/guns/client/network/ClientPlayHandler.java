@@ -171,6 +171,9 @@ public class ClientPlayHandler
         if(mc.player == null) return;
         Level world = mc.level;
         if (world != null) {
+            if (message.isBlast())
+                return;
+
             BlockState state = world.getBlockState(message.getPos());
             double holeX = message.getX() + 0.005 * message.getFace().getStepX();
             double holeY = message.getY() + 0.005 * message.getFace().getStepY();

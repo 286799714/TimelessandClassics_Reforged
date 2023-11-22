@@ -30,15 +30,15 @@ public class GrenadeEntity extends ProjectileEntity
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot)
     {
-        createExplosion(this, this.getDamage() / 5F, true);
+        createExplosion(this, this.getDamage(), this.getRadius(), null);
     }
 
     @Override
-    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {createExplosion(this, this.getDamage() / 5F, true);}
+    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, Vec3 hitVec) {createExplosion(this, this.getDamage(), this.getRadius(), null);}
 
     @Override
     public void onExpired()
     {
-        createExplosion(this, this.getDamage() / 5F, true);
+        createExplosion(this, this.getDamage(), this.getRadius(), null);
     }
 }

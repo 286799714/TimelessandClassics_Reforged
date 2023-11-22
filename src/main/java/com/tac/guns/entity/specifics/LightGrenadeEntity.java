@@ -29,10 +29,11 @@ public class LightGrenadeEntity extends ThrowableGrenadeEntity
         //this.setMaxLife(20 * 2);
     }
 
-    public LightGrenadeEntity(Level world, LivingEntity entity, int timeLeft, float power)
+    public LightGrenadeEntity(Level world, LivingEntity entity, int timeLeft, float power, float radius)
     {
         super(ModEntities.THROWABLE_GRENADE.get(), world, entity);
         this.power = power;
+        this.radius = radius;
         this.setShouldBounce(true);
         this.setItem(new ItemStack(ModItems.LIGHT_GRENADE.get()));
         this.setMaxLife(timeLeft);

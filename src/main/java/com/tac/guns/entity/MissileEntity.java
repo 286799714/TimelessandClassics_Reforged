@@ -20,15 +20,17 @@ import net.minecraft.world.phys.Vec3;
 public class MissileEntity extends ProjectileEntity
 {
     private float power;
+    private float radius;
     public MissileEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn)
     {
         super(entityType, worldIn);
     }
 
-    public MissileEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun, float power)
+    public MissileEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun)
     {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun,0,0);
-        this.power = power;
+        this.power = modifiedGun.getProjectile().getBlastDamage();
+        this.radius = modifiedGun.getProjectile().getBlastRadius();
     }
 
     @Override
@@ -51,19 +53,19 @@ public class MissileEntity extends ProjectileEntity
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot)
     {
-        createExplosion(this, this.power*Config.COMMON.missiles.explosionRadius.get().floatValue(), true);
+        createExplosion(this, this.power, this.radius * Config.COMMON.missiles.explosionRadius.get().floatValue(), hitVec);
     }
 
     @Override
-    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z)
+    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, Vec3 hitVec)
     {
-        createExplosion(this, this.power*Config.COMMON.missiles.explosionRadius.get().floatValue(), true);
+        createExplosion(this, this.power, this.radius * Config.COMMON.missiles.explosionRadius.get().floatValue(), null);
         this.life = 0;
     }
 
     @Override
     public void onExpired()
     {
-        createExplosion(this, this.power*Config.COMMON.missiles.explosionRadius.get().floatValue(), true);
+        createExplosion(this, this.power, this.radius * Config.COMMON.missiles.explosionRadius.get().floatValue(), null);
     }
 }

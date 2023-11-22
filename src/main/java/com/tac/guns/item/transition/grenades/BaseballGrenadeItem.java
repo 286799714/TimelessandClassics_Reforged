@@ -12,15 +12,17 @@ import net.minecraft.world.level.Level;
 public class BaseballGrenadeItem extends GrenadeItem
 {
     private float power;
-    public BaseballGrenadeItem(Properties properties, int maxCookTime, float power, float speed)
+    private float radius;
+    public BaseballGrenadeItem(Properties properties, int maxCookTime, float power, float radius, float speed)
     {
-        super(properties, maxCookTime, power, speed);
+        super(properties, maxCookTime, power, radius, speed);
         this.power = power;
+        this.radius = radius;
     }
 
     public ThrowableGrenadeEntity create(Level world, LivingEntity entity, int timeLeft)
     {
-        return new BaseballGrenadeEntity(world, entity, timeLeft, this.power); // Current ThrowableGrenadeEntity is perfect for impact 1/31/2022
+        return new BaseballGrenadeEntity(world, entity, timeLeft, this.power, this.radius); // Current ThrowableGrenadeEntity is perfect for impact 1/31/2022
     }
 
     public boolean canCook()

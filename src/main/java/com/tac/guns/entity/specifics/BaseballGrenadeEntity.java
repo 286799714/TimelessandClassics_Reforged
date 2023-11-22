@@ -29,10 +29,11 @@ public class BaseballGrenadeEntity extends ThrowableGrenadeEntity
         //this.setMaxLife(20 * 2);
     }
 
-    public BaseballGrenadeEntity(Level world, LivingEntity entity, int timeLeft, float power)
+    public BaseballGrenadeEntity(Level world, LivingEntity entity, int timeLeft, float power, float radius)
     {
         super(ModEntities.THROWABLE_GRENADE.get(), world, entity);
         this.power = power;
+        this.radius = radius;
         this.setShouldBounce(true);
         this.setGravityVelocity(0.0425F);
         this.setItem(new ItemStack(ModItems.BASEBALL_GRENADE.get()));
