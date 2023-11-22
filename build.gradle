@@ -27,7 +27,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 
-version = "0.3.10.1-g-1.18.2"
+version = "0.3.10.1-1.18.2"
 group = "com.tac"
 archivesBaseName = "tac"
 
@@ -36,7 +36,6 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 jarJar.enable()
 jarJar.fromRuntimeConfiguration()
 
-//sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 mixin {
     add sourceSets.main, "tac.refmap.json"
@@ -51,7 +50,6 @@ minecraft {
             workingDirectory project.file('run')
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-//            property 'mixin.env.disableRefMap', 'true'
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -105,9 +103,9 @@ dependencies {
 
     implementation fg.deobf('curse.maven:framework-549225:3723144')
     compileOnly fg.deobf("curse.maven:valkyrien-skies-258371:4794551")
-    //implementation fg.deobf('curse.maven:rubidium-574856:4494903')
-    //implementation fg.deobf('curse.maven:oculus-581495:4578744')
-    //implementation fg.deobf('curse.maven:ysm-784675:4667056')
+    implementation fg.deobf('curse.maven:rubidium-574856:4494903')
+    implementation fg.deobf('curse.maven:oculus-581495:4578744')
+    implementation fg.deobf('curse.maven:ysm-784675:4667056')
 
     minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '[2.14.2,2.16.0)')
     minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '[2.14.2,2.16.0)')
