@@ -9,7 +9,9 @@ import com.mojang.math.Vector3f;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.client.util.RenderUtil;
+import com.tac.guns.common.Gun;
 import com.tac.guns.common.NetworkGunManager;
+import com.tac.guns.common.WeaponType;
 import com.tac.guns.common.container.WorkbenchContainer;
 import com.tac.guns.crafting.WorkbenchRecipe;
 import com.tac.guns.crafting.WorkbenchRecipes;
@@ -86,6 +88,12 @@ public class WorkbenchScreen extends AbstractContainerScreen<WorkbenchContainer>
 
     private void createTabs(NonNullList<WorkbenchRecipe> recipes)
     {
+        List<WorkbenchRecipe> weapons_AR = new ArrayList<>();
+        List<WorkbenchRecipe> weapons_HMG = new ArrayList<>();
+        List<WorkbenchRecipe> weapons_PT = new ArrayList<>();
+        List<WorkbenchRecipe> weapons_SG = new ArrayList<>();
+        List<WorkbenchRecipe> weapons_SMG = new ArrayList<>();
+        List<WorkbenchRecipe> weapons_SR = new ArrayList<>();
         List<WorkbenchRecipe> weapons = new ArrayList<>();
         List<WorkbenchRecipe> attachments = new ArrayList<>();
         List<WorkbenchRecipe> ammo = new ArrayList<>();
@@ -96,7 +104,22 @@ public class WorkbenchScreen extends AbstractContainerScreen<WorkbenchContainer>
             ItemStack output = recipe.getItem();
             if(output.getItem() instanceof GunItem)
             {
-                weapons.add(recipe);
+                Gun gun = ((GunItem) output.getItem()).getGun();
+                if (gun.getDisplay().getWeaponType() == WeaponType.AR)
+                    weapons_AR.add(recipe);
+                else if (gun.getDisplay().getWeaponType() == WeaponType.MG ||
+                        gun.getDisplay().getWeaponType() == WeaponType.RPG)
+                    weapons_HMG.add(recipe);
+                else if (gun.getDisplay().getWeaponType() == WeaponType.PT)
+                    weapons_PT.add(recipe);
+                else if (gun.getDisplay().getWeaponType() == WeaponType.SG)
+                    weapons_SG.add(recipe);
+                else if (gun.getDisplay().getWeaponType() == WeaponType.SMG)
+                    weapons_SMG.add(recipe);
+                else if (gun.getDisplay().getWeaponType() == WeaponType.SR)
+                    weapons_SR.add(recipe);
+                else
+                    weapons.add(recipe);
             }
             else if(output.getItem() instanceof IAttachment)
             {
@@ -110,6 +133,48 @@ public class WorkbenchScreen extends AbstractContainerScreen<WorkbenchContainer>
             {
                 misc.add(recipe);
             }
+        }
+
+        if(!weapons_AR.isEmpty())
+        {
+            ItemStack icon = new ItemStack(ModItems.AK47.get());
+            icon.getOrCreateTag().putInt("AmmoCount", ModItems.AK47.get().getGun().getReloads().getMaxAmmo());
+            this.tabs.add(new Tab(icon, "weapons_ar", weapons_AR));
+        }
+
+        if(!weapons_HMG.isEmpty())
+        {
+            ItemStack icon = new ItemStack(ModItems.M60.get());
+            icon.getOrCreateTag().putInt("AmmoCount", ModItems.M60.get().getGun().getReloads().getMaxAmmo());
+            this.tabs.add(new Tab(icon, "weapons_hmg", weapons_HMG));
+        }
+
+        if(!weapons_PT.isEmpty())
+        {
+            ItemStack icon = new ItemStack(ModItems.GLOCK_17.get());
+            icon.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem) ModItems.GLOCK_17.get()).getGun().getReloads().getMaxAmmo());
+            this.tabs.add(new Tab(icon, "weapons_pt", weapons_PT));
+        }
+
+        if(!weapons_SG.isEmpty())
+        {
+            ItemStack icon = new ItemStack(ModItems.M870_CLASSIC.get());
+            icon.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem) ModItems.M870_CLASSIC.get()).getGun().getReloads().getMaxAmmo());
+            this.tabs.add(new Tab(icon, "weapons_sg", weapons_SG));
+        }
+
+        if(!weapons_SMG.isEmpty())
+        {
+            ItemStack icon = new ItemStack(ModItems.VECTOR45.get());
+            icon.getOrCreateTag().putInt("AmmoCount", ModItems.VECTOR45.get().getGun().getReloads().getMaxAmmo());
+            this.tabs.add(new Tab(icon, "weapons_smg", weapons_SMG));
+        }
+
+        if(!weapons_SR.isEmpty())
+        {
+            ItemStack icon = new ItemStack(ModItems.AI_AWP.get());
+            icon.getOrCreateTag().putInt("AmmoCount", ((TimelessGunItem) ModItems.AI_AWP.get()).getGun().getReloads().getMaxAmmo());
+            this.tabs.add(new Tab(icon, "weapons_sr", weapons_SR));
         }
 
         if(!weapons.isEmpty())
