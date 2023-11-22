@@ -532,7 +532,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             }
 
             int fireStarterLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
-            if(fireStarterLevel > 0 && Config.COMMON.gameplay.enableGunGriefing.get())
+            if(fireStarterLevel > 0 && Config.COMMON.gameplay.fireStarterCauseFire.get())
             {
                 BlockPos offsetPos = pos.relative(blockRayTraceResult.getDirection());
                 if(BaseFireBlock.canBePlacedAt(this.level, offsetPos, blockRayTraceResult.getDirection()))
