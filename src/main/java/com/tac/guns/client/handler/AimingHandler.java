@@ -4,9 +4,11 @@ import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.Config.RightClickUse;
 import com.tac.guns.client.Keys;
+import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.render.crosshair.Crosshair;
 import com.tac.guns.common.AimingManager;
 import com.tac.guns.common.Gun;
+import com.tac.guns.duck.MouseSensitivityModifier;
 import com.tac.guns.init.ModBlocks;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
@@ -28,10 +30,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.FOVModifierEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
@@ -57,6 +56,8 @@ public class AimingHandler {
     private double newProgress;
     private boolean aiming = false;
     private boolean toggledAim = false;
+
+    public boolean isRenderingHand = false;
 
     public int getCurrentScopeZoomIndex() {
         return this.currentScopeZoomIndex;
@@ -191,6 +192,12 @@ public class AimingHandler {
                 ModSyncedDataKeys.AIMING.setValue(player, true);
                 PacketHandler.getPlayChannel().sendToServer(new MessageAim(true));
                 this.aiming = true;
+
+                final ItemStack stack = player.getInventory().getSelected();
+                final GunAnimationController controller
+                        = GunAnimationController.fromItem( stack.getItem() );
+                if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT))
+                    controller.stopAnimation();
             }
             this.localTracker.handleAiming(player.getItemInHand(InteractionHand.MAIN_HAND), true);
         } else {
@@ -228,6 +235,15 @@ public class AimingHandler {
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void captureFovAndModifyMouseSensitivity(EntityViewRenderEvent.FieldOfView event){
+        if(!isRenderingHand) {
+            Minecraft mc = Minecraft.getInstance();
+            double modifier = MathUtil.fovToMagnification(event.getFOV(), mc.options.fov);
+            ((MouseSensitivityModifier) mc.mouseHandler).setSensitivity(mc.options.sensitivity / modifier);
         }
     }
 

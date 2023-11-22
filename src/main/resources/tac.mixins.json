@@ -8,6 +8,7 @@
     "common.LivingEntityMixin",
     "common.PlayerListMixin",
     "common.PlayerMixin",
+    "common.ServerPlayerMixin",
     "common.ServerPlayNetHandlerMixin",
     "common.SittingPhaseMixin"
   ],

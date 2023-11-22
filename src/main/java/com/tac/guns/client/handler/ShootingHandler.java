@@ -2,7 +2,7 @@ package com.tac.guns.client.handler;
 
 import com.tac.guns.Config;
 import com.tac.guns.client.Keys;
-import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
@@ -24,7 +24,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.lwjgl.glfw.GLFW;
 import com.tac.guns.util.GunModifierHelper;
 
 import static net.minecraftforge.event.TickEvent.Type.RENDER;

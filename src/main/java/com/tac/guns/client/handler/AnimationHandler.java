@@ -3,8 +3,8 @@ package com.tac.guns.client.handler;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Reference;
 import com.tac.guns.client.Keys;
-import com.tac.guns.client.render.animation.*;
-import com.tac.guns.client.render.animation.module.*;
+import com.tac.guns.client.animation.*;
+import com.tac.guns.client.animation.module.*;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
@@ -175,7 +175,10 @@ public enum AnimationHandler {
 
             final Player player = Minecraft.getInstance().player;
             if( player == null ) return;
-            
+
+            if(AimingHandler.get().getNormalisedAdsProgress() != 0)
+                return;
+
             final ItemStack stack = player.getInventory().getSelected();
             final GunAnimationController controller
                 = GunAnimationController.fromItem( stack.getItem() );

@@ -1,5 +1,6 @@
 package com.tac.guns.client.network;
 
+import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
 import com.tac.guns.client.BulletTrail;
@@ -9,13 +10,11 @@ import com.tac.guns.client.audio.GunShotSound;
 import com.tac.guns.client.handler.BulletTrailRenderingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.HUDRenderingHandler;
-import com.tac.guns.client.handler.ReloadHandler;
-import com.tac.guns.client.render.animation.module.AnimationMeta;
-import com.tac.guns.client.render.animation.module.AnimationSoundManager;
-import com.tac.guns.client.render.animation.module.AnimationSoundMeta;
+import com.tac.guns.client.animation.module.AnimationMeta;
+import com.tac.guns.client.animation.module.AnimationSoundManager;
+import com.tac.guns.client.animation.module.AnimationSoundMeta;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.common.NetworkRigManager;
-import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.init.ModParticleTypes;
 import com.tac.guns.network.message.*;
 import com.tac.guns.particles.BulletHoleData;
@@ -29,7 +28,6 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -166,6 +164,7 @@ public class ClientPlayHandler
     public static void handleProjectileHitBlock(MessageProjectileHitBlock message)
     {
         Minecraft mc = Minecraft.getInstance();
+        if(mc.player == null) return;
         Level world = mc.level;
         if (world != null) {
             if (message.isBlast())

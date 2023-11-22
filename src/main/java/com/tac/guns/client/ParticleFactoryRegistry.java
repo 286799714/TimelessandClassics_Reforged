@@ -1,8 +1,8 @@
 package com.tac.guns.client;
 
 import com.tac.guns.Reference;
-import com.tac.guns.client.particle.BloodParticle;
-import com.tac.guns.client.particle.BulletHoleParticle;
+import com.tac.guns.client.render.particle.BloodParticle;
+import com.tac.guns.client.render.particle.BulletHoleParticle;
 import com.tac.guns.init.ModParticleTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleEngine;

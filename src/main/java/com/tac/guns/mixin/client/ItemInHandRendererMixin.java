@@ -1,7 +1,7 @@
 package com.tac.guns.mixin.client;
 
-import com.tac.guns.client.render.animation.module.AnimationMeta;
-import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.animation.module.AnimationMeta;
+import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.network.CommonStateBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemInHandRenderer;

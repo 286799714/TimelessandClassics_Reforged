@@ -1,7 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.tac.guns.Reference;
-import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.item.GunItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;

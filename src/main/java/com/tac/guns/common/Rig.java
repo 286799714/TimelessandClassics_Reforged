@@ -45,6 +45,8 @@ public final class Rig implements INBTSerializable<CompoundTag>
         private float speedReduction = 0.0F;
         @Optional
         private float movementInaccuracy = 1F;
+        @Optional
+        private int inventoryRows = 1;
         @Override
         public CompoundTag serializeNBT()
         {
@@ -53,6 +55,7 @@ public final class Rig implements INBTSerializable<CompoundTag>
             tag.putInt("Ergonomics", ergonomics);
             tag.putFloat("SpeedReduction", speedReduction);
             tag.putFloat("MovementInaccuracy", movementInaccuracy); // Movement inaccuracy modifier
+            tag.putInt("InventoryRows", inventoryRows);
             return tag;
         }
 
@@ -75,6 +78,10 @@ public final class Rig implements INBTSerializable<CompoundTag>
             {
                 this.movementInaccuracy = tag.getFloat("MovementInaccuracy");
             }
+            if(tag.contains("InventoryRows", Tag.TAG_ANY_NUMERIC))
+            {
+                this.inventoryRows = tag.getInt("InventoryRows");
+            }
         }
 
         /**
@@ -87,6 +94,7 @@ public final class Rig implements INBTSerializable<CompoundTag>
             general.ergonomics = this.ergonomics;
             general.speedReduction = this.speedReduction;
             general.movementInaccuracy = this.movementInaccuracy;
+            general.inventoryRows = this.inventoryRows;
             return general;
         }
 
@@ -108,6 +116,10 @@ public final class Rig implements INBTSerializable<CompoundTag>
         public float getMovementInaccuracy()
         {
             return movementInaccuracy;
+        }
+        public int getInventoryRows()
+        {
+            return inventoryRows;
         }
     }
 

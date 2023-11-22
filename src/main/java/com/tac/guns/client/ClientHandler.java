@@ -3,23 +3,25 @@ package com.tac.guns.client;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.*;
-import com.tac.guns.client.handler.command.GuiEditor;
-import com.tac.guns.client.handler.command.GunEditor;
-import com.tac.guns.client.handler.command.ObjectRenderEditor;
-import com.tac.guns.client.handler.command.ScopeEditor;
-import com.tac.guns.client.render.animation.module.GunAnimationController;
+import com.tac.guns.client.animation.module.GunAnimationController;
+import com.tac.guns.client.render.armor.models.MediumArmor;
+import com.tac.guns.client.render.armor.models.ModernArmor;
+import com.tac.guns.client.render.armor.vestlayer.VestLayerRender;
 import com.tac.guns.client.render.entity.GrenadeRenderer;
 import com.tac.guns.client.render.entity.MissileRenderer;
 import com.tac.guns.client.render.entity.ProjectileRenderer;
 import com.tac.guns.client.render.entity.ThrowableGrenadeRenderer;
-import com.tac.guns.client.render.gun.ModelOverrides;
-import com.tac.guns.client.render.gun.model.scope.*;
+import com.tac.guns.client.render.item.scope.*;
+import com.tac.guns.client.render.item.OverrideModelManager;
+import com.tac.guns.client.resource.gunskin.GunSkinManager;
 import com.tac.guns.client.screen.*;
+import com.tac.guns.client.screen.AmmoScreen;
 import com.tac.guns.client.settings.GunOptions;
 import com.tac.guns.init.ModBlocks;
 import com.tac.guns.init.ModContainers;
 import com.tac.guns.init.ModEntities;
 import com.tac.guns.init.ModItems;
+import com.tac.guns.inventory.gear.armor.implementations.*;
 import com.tac.guns.item.IColored;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageAttachments;
@@ -29,13 +31,12 @@ import com.tac.guns.util.math.SecondOrderDynamics;
 import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.CycleOption;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Option;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.MouseSettingsScreen;
-import net.minecraft.client.gui.screens.VideoSettingsScreen;
+import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -43,6 +44,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ScreenEvent;
@@ -84,10 +86,10 @@ public class ClientHandler {
         MinecraftForge.EVENT_BUS.register(MovementAdaptationsHandler.get());
         MinecraftForge.EVENT_BUS.register(AnimationHandler.INSTANCE); //Mainly controls when the animation should play.
         if (Config.COMMON.development.enableTDev.get()) {
-            MinecraftForge.EVENT_BUS.register(GuiEditor.get());
+            /*MinecraftForge.EVENT_BUS.register(GuiEditor.get());
             MinecraftForge.EVENT_BUS.register(GunEditor.get());
             MinecraftForge.EVENT_BUS.register(ScopeEditor.get());
-            MinecraftForge.EVENT_BUS.register(ObjectRenderEditor.get());
+            MinecraftForge.EVENT_BUS.register(ObjectRenderEditor.get());*/
         }
 
         //ClientRegistry.bindTileEntityRenderer(ModTileEntities.UPGRADE_BENCH.get(), UpgradeBenchRenderUtil::new);
@@ -96,6 +98,7 @@ public class ClientHandler {
         registerColors();
         registerModelOverrides();
         registerScreenFactories();
+        registerDefaultGunSkins();
 
         AnimationHandler.preloadAnimations();
         new AnimationRunner(); //preload thread pool
@@ -124,6 +127,10 @@ public class ClientHandler {
         EntityRenderers.register(ModEntities.RPG7_MISSILE.get(), MissileRenderer::new);
     }
 
+    private static void registerDefaultGunSkins(){
+        GunSkinManager.registerDefaultGunSkin(ModItems.AK47.getId(), new ResourceLocation("tac:ak47_spent"));
+    }
+
     private static void registerColors() {
         ItemColor color = (stack, index) -> {
             if (!((IColored) stack.getItem()).canColor(stack)) {
@@ -142,33 +149,33 @@ public class ClientHandler {
     }
 
     private static void registerModelOverrides() {
-        ModelOverrides.register(ModItems.COYOTE_SIGHT.get(), new CoyoteSightModel());
-        ModelOverrides.register(ModItems.STANDARD_6_10x_SCOPE.get(), new Standard6_10xScopeModel());
-        ModelOverrides.register(ModItems.VORTEX_LPVO_3_6.get(), new VortexLPVO_3_6xScopeModel());
+        OverrideModelManager.register(ModItems.COYOTE_SIGHT.get(), new CoyoteSightModel());
+        OverrideModelManager.register(ModItems.STANDARD_6_10x_SCOPE.get(), new Standard6_10xScopeModel());
+        OverrideModelManager.register(ModItems.VORTEX_LPVO_3_6.get(), new VortexLPVO_3_6xScopeModel());
         //TODO: Fix up the SLX 2x, give a new reticle, new scope data, new mount and eye pos, pretty much remake the code end.
         //ModelOverrides.register(ModItems.SLX_2X.get(), new SLX_2X_ScopeModel());
-        ModelOverrides.register(ModItems.ACOG_4.get(), new ACOG_4x_ScopeModel());
-        ModelOverrides.register(ModItems.ELCAN_DR_14X.get(), new elcan_14x_ScopeModel());
-        ModelOverrides.register(ModItems.AIMPOINT_T2_SIGHT.get(), new AimpointT2SightModel());
+        OverrideModelManager.register(ModItems.ACOG_4.get(), new ACOG_4x_ScopeModel());
+        OverrideModelManager.register(ModItems.ELCAN_DR_14X.get(), new elcan_14x_ScopeModel());
+        OverrideModelManager.register(ModItems.AIMPOINT_T2_SIGHT.get(), new AimpointT2SightModel());
 
-        ModelOverrides.register(ModItems.AIMPOINT_T1_SIGHT.get(), new AimpointT1SightModel());
+        OverrideModelManager.register(ModItems.AIMPOINT_T1_SIGHT.get(), new AimpointT1SightModel());
 
-        ModelOverrides.register(ModItems.EOTECH_N_SIGHT.get(), new EotechNSightModel());
-        ModelOverrides.register(ModItems.VORTEX_UH_1.get(), new VortexUh1SightModel());
-        ModelOverrides.register(ModItems.EOTECH_SHORT_SIGHT.get(), new EotechShortSightModel());
-        ModelOverrides.register(ModItems.SRS_RED_DOT_SIGHT.get(), new SrsRedDotSightModel());
-        ModelOverrides.register(ModItems.QMK152.get(), new Qmk152ScopeModel());
+        OverrideModelManager.register(ModItems.EOTECH_N_SIGHT.get(), new EotechNSightModel());
+        OverrideModelManager.register(ModItems.VORTEX_UH_1.get(), new VortexUh1SightModel());
+        OverrideModelManager.register(ModItems.EOTECH_SHORT_SIGHT.get(), new EotechShortSightModel());
+        OverrideModelManager.register(ModItems.SRS_RED_DOT_SIGHT.get(), new SrsRedDotSightModel());
+        OverrideModelManager.register(ModItems.QMK152.get(), new Qmk152ScopeModel());
 
-        ModelOverrides.register(ModItems.OLD_LONGRANGE_8x_SCOPE.get(), new OldLongRange8xScopeModel());
-        ModelOverrides.register(ModItems.OLD_LONGRANGE_4x_SCOPE.get(), new OldLongRange4xScopeModel());
+        OverrideModelManager.register(ModItems.OLD_LONGRANGE_8x_SCOPE.get(), new OldLongRange8xScopeModel());
+        OverrideModelManager.register(ModItems.OLD_LONGRANGE_4x_SCOPE.get(), new OldLongRange4xScopeModel());
 
-        ModelOverrides.register(ModItems.MINI_DOT.get(), new MiniDotSightModel());
+        OverrideModelManager.register(ModItems.MINI_DOT.get(), new MiniDotSightModel());
         //ModelOverrides.register(ModItems.MICRO_HOLO_SIGHT.get(), new MicroHoloSightModel());
-        ModelOverrides.register(ModItems.SRO_DOT.get(), new SroDotSightModel());
+        OverrideModelManager.register(ModItems.SRO_DOT.get(), new SroDotSightModel());
 
         // Armor registry, kept manual cause nice and simple, requires registry on client side only
-        //VestLayerRender.registerModel(ModItems.LIGHT_ARMOR.get(), new ModernArmor());
-        //VestLayerRender.registerModel(ModItems.MEDIUM_STEEL_ARMOR.get(), new MediumArmor());
+        VestLayerRender.registerModel(ModItems.LIGHT_ARMOR.get(), new ModernArmor());
+        VestLayerRender.registerModel(ModItems.MEDIUM_STEEL_ARMOR.get(), new MediumArmor());
         //VestLayerRender.registerModel(ModItems.CARDBOARD_ARMOR_FUN.get(), new CardboardArmor());
     }
 
@@ -177,7 +184,11 @@ public class ClientHandler {
         MenuScreens.register(ModContainers.UPGRADE_BENCH.get(), UpgradeBenchScreen::new);
         MenuScreens.register(ModContainers.ATTACHMENTS.get(), AttachmentScreen::new);
         MenuScreens.register(ModContainers.INSPECTION.get(), InspectScreen::new);
-        MenuScreens.register(ModContainers.ARMOR_TEST.get(), AmmoPackScreen::new);
+        MenuScreens.register(ModContainers.ARMOR_R1.get(), AmmoScreen<R1_RigContainer>::new);
+        MenuScreens.register(ModContainers.ARMOR_R2.get(), AmmoScreen<R2_RigContainer>::new);
+        MenuScreens.register(ModContainers.ARMOR_R3.get(), AmmoScreen<R3_RigContainer>::new);
+        MenuScreens.register(ModContainers.ARMOR_R4.get(), AmmoScreen<R4_RigContainer>::new);
+        MenuScreens.register(ModContainers.ARMOR_R5.get(), AmmoScreen<R5_RigContainer>::new);
         //ScreenManager.registerFactory(ModContainers.COLOR_BENCH.get(), ColorBenchAttachmentScreen::new);
     }
 
@@ -196,28 +207,17 @@ public class ClientHandler {
                 list.addSmall(GunOptions.ALLOW_LEVER, GunOptions.ALLOW_BUTTON);
                 list.addSmall(GunOptions.ALLOW_DOORS, GunOptions.ALLOW_TRAP_DOORS);
                 list.addSmall(new CycleOption[]{GunOptions.ALLOW_CRAFTING_TABLE});
-                /*, GunOptions.BURST_MECH);*/
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-        if (event.getScreen() instanceof VideoSettingsScreen) {
-            VideoSettingsScreen screen = (VideoSettingsScreen) event.getScreen();
-            ;
+        if (event.getScreen() instanceof PauseScreen) {
+            PauseScreen  screen = (PauseScreen ) event.getScreen();
 
             event.addListener((new Button(screen.width / 2 - 215, 10, 75, 20, new TranslatableComponent("tac.options.gui_settings"), (p_213126_1_) -> {
                 Minecraft.getInstance().setScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().options));
             })));
         }
-        /*if(event.getGui() instanceof MainMenuScreen)
-        {
-            MainMenuScreen screen = (MainMenuScreen) event.getGui();
-
-            event.addWidget((new Button(screen.width / 2 - 215, 10, 75, 20, new TranslatableComponent("tac.options.gui_settings"), (p_213126_1_) -> {
-                Minecraft.getInstance().displayGuiScreen(new TaCSettingsScreen(screen, Minecraft.getInstance().gameSettings));
-            })));
-        }
-*/
     }
 
     static {

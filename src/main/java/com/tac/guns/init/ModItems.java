@@ -228,8 +228,8 @@ public class ModItems
     //public static final RegistryObject<Item> ARMOR_TEST = REGISTER.register("armor_test", () -> new ArmorRigItem(new MediumArmor(), 9, new Item.Properties().maxStackSize(1)tab(GunMod.GROUP)));
     //public static final RegistryObject<Item> ARMOR_REPAIR_PLATE_TEST = REGISTER.register("armor_plate_test", () -> new ArmorPlateItem(new Item.Properties().maxStackSize(4)tab(GunMod.GROUP)));
     
-    public static final RegistryObject<Item> LIGHT_ARMOR = REGISTER.register("light_armor", () -> new ArmorRigItem(2, new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
-    public static final RegistryObject<Item> MEDIUM_STEEL_ARMOR = REGISTER.register("medium_steel_armor", () -> new ArmorRigItem(2, new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
+    public static final RegistryObject<Item> LIGHT_ARMOR = REGISTER.register("light_armor", () -> new ArmorRigItem(new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
+    public static final RegistryObject<Item> MEDIUM_STEEL_ARMOR = REGISTER.register("medium_steel_armor", () -> new ArmorRigItem(new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));
     //public static final RegistryObject<Item> CARDBOARD_ARMOR_FUN = REGISTER.register("cardboard_armor", () -> new ArmorRigItem(2, new Item.Properties().maxStackSize(1)tab(GunMod.GROUP)));
 
 

@@ -19,7 +19,7 @@ public class BackpackContainer extends AbstractContainerMenu {
     private int numRows = 2;
 
     public BackpackContainer(int windowId, Inventory inv, ItemStack item) {
-        super(ModContainers.ARMOR_TEST.get(), windowId);
+        super(ModContainers.ARMOR_R2.get(), windowId);
         this.item = item;
         GearSlotsHandler itemHandler = (GearSlotsHandler)this.item.getCapability(WearableCapabilityProvider.capability).resolve().get();
         int i = (this.numRows - 4) * 18;
@@ -44,7 +44,7 @@ public class BackpackContainer extends AbstractContainerMenu {
     }
 
     public BackpackContainer(int windowId, Inventory inv) {
-        super(ModContainers.ARMOR_TEST.get(), windowId);
+        super(ModContainers.ARMOR_R2.get(), windowId);
         this.item = item;
         int i = (this.numRows - 4) * 18;
 
