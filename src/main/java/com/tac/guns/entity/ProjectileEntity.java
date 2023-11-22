@@ -2,6 +2,7 @@ package com.tac.guns.entity;
 
 //import com.sun.tools.jdi.Packet;
 
+import com.mojang.logging.LogUtils;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
 import com.tac.guns.common.AimingManager;
@@ -624,7 +625,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         }
 
         /* Send blood particle to tracking clients. */
-        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MessageBlood(hitVec.x, hitVec.y, hitVec.z));
+        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity),
+                new MessageBlood(hitVec.x, hitVec.y, hitVec.z, this.getDeltaMovement().normalize().multiply(damage/42f,damage/42f,damage/42f), damage > 14, (int)Math.pow(damage, 0.5) ));
     }
 
     // Apply blunt damage before applying any effects via armor

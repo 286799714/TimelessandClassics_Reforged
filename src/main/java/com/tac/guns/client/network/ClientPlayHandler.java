@@ -23,11 +23,9 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -36,6 +34,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
+import net.minecraft.world.level.gameevent.vibrations.VibrationPath;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -91,9 +91,13 @@ public class ClientPlayHandler
         Level world = Minecraft.getInstance().level;
         if(world != null)
         {
-            for(int i = 0; i < 10; i++)
+            for(int i = 0; i < message.getAmount(); i++)
             {
-                world.addParticle(ModParticleTypes.BLOOD.get(), true, message.getX(), message.getY(), message.getZ(), 0.5, 0, 0.5);
+                Vec3 motion = message.getMotion();
+                world.addParticle(ModParticleTypes.BLOOD.get(), true, message.getX(), message.getY(), message.getZ(), -motion.x*0.1, -motion.y*0.1, -motion.z*0.1);
+                motion = motion.multiply(1 - 0.7 * Math.random(), 1 - 0.7 * Math.random(), 1 - 0.7 * Math.random());
+                if(message.isPenetrate())
+                    world.addParticle(ModParticleTypes.BLOOD.get(), true, message.getX(), message.getY(), message.getZ(), motion.x, motion.y, motion.z);
             }
         }
     }
@@ -174,15 +178,12 @@ public class ClientPlayHandler
             double distance = Math.sqrt(mc.player.distanceToSqr(message.getX(), message.getY(), message.getZ()));
             if(message.isHaveHole())
                 world.addParticle(new BulletHoleData(message.getFace(), message.getPos()), false, holeX, holeY, holeZ, 0, 0, 0);
-            if (distance < 16.0) {
-                for (int i = 0; i < 4; i++) {
-                    Vec3i normal = message.getFace().getNormal();
-                    Vec3 motion = new Vec3(normal.getX(), normal.getY(), normal.getZ());
-                    motion.add(getRandomDir(world.random), getRandomDir(world.random), getRandomDir(world.random));
-                    Vec3 reflection = message.getDirection().subtract(message.getDirection().multiply(normal.getX() * 2, normal.getY() * 2, normal.getZ() * 2));
-                    motion.add(reflection);
-                    world.addParticle(new DustParticleOptions(new Vector3f(175,175,175), 2), false, message.getX(), message.getY(), message.getZ(), 0, 0, 0);
-                }
+            for (int i = 0; i < 5; i++) {
+                Vec3i normal = message.getFace().getNormal();
+                Vec3 motion = new Vec3(0,0,0);
+                Vec3 reflection = message.getDirection().subtract(message.getDirection().multiply(normal.getX() * 2, normal.getY() * 2, normal.getZ() * 2));
+                motion.add(reflection.multiply(0.5f, 0.5f, 0.5f));
+                world.addParticle(ModParticleTypes.HIT_BLOCK_SMOKE.get(), false, message.getX(), message.getY(), message.getZ(), motion.x , motion.y, motion.z);
             }
             if (distance < 32.0) {
                 world.playLocalSound(message.getX(), message.getY(), message.getZ(), state.getSoundType().getBreakSound(), SoundSource.BLOCKS, 0.75F, 2.0F, false);
