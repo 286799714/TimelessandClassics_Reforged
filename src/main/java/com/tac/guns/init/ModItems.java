@@ -122,7 +122,7 @@ public class ModItems
     public static final RegistryObject<Item> MRAD = REGISTER.register("mrad",
             () -> new TimelessGunItem(properties -> properties.tab(GunMod.SNIPER), GunModifiers.MRAD_MOD));
 
-    //public static final RegistryObject<Item> DEVELOPMENT_SLOW_BULLET = REGISTER.register("devgun1", () -> new TimelessGunItem(properties -> propertiestab(GunMod.RIFLE)));
+    public static final RegistryObject<Item> DEVELOPMENT_SLOW_BULLET = REGISTER.register("devgun1", () -> new TimelessGunItem(properties -> properties.tab(GunMod.RIFLE)));
 
 
     /* Ammunition */

@@ -1,6 +1,7 @@
 package com.tac.guns.inventory.gear.armor;
 
 import com.tac.guns.GunMod;
+import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.inventory.gear.armor.implementations.*;
 import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import net.minecraft.network.chat.Component;
@@ -31,7 +32,8 @@ public class ArmorRigContainerProvider implements MenuProvider {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-        if(player.getMainHandItem().getItem() instanceof ArmorRigItem) {
+        ItemStack rig = ((PlayerWithSynData) player).getRig().isEmpty() ? player.getMainHandItem() : ((PlayerWithSynData) player).getRig();
+        if(rig.getItem() instanceof ArmorRigItem) {
             int rows = Math.max(item.getOrCreateTag().getInt("rig_rows"), player.getMainHandItem().getOrCreateTag().getInt("rig_rows"));
             switch (rows) {
                 case 1:
