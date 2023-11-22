@@ -19,13 +19,15 @@ public class GrenadeItem extends AmmoItem
 {
     protected int maxCookTime;
     private float power;
+    private float radius;
     private float speed;
 
-    public GrenadeItem(Item.Properties properties, int maxCookTime, float power, float speed)
+    public GrenadeItem(Item.Properties properties, int maxCookTime, float power, float radius, float speed)
     {
         super(properties);
         this.maxCookTime = maxCookTime;
         this.power = power;
+        this.radius = radius;
         this.speed = speed;
     }
 
@@ -95,7 +97,7 @@ public class GrenadeItem extends AmmoItem
         return null;
     }
 
-    /*return new ThrowableGrenadeEntity(world, entity, timeLeft, this.power);*/
+    /*return new ThrowableGrenadeEntity(world, entity, timeLeft, this.power, this.radius);*/
 
     public boolean canCook()
     {

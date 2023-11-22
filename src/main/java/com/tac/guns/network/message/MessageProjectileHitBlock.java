@@ -20,18 +20,20 @@ public class MessageProjectileHitBlock extends PlayMessage<MessageProjectileHitB
     private double z;
     private BlockPos pos;
     private Direction face;
+    private boolean isBlast;
     private Vec3 direction;
     private boolean haveHole;
 
     public MessageProjectileHitBlock() {
     }
 
-    public MessageProjectileHitBlock(double x, double y, double z, BlockPos pos, Direction face, Vec3 direction, boolean haveHole) {
+    public MessageProjectileHitBlock(double x, double y, double z, BlockPos pos, Direction face, boolean isBlast, Vec3 direction, boolean haveHole) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.pos = pos;
         this.face = face;
+        this.isBlast = isBlast;
         this.direction = direction;
         this.haveHole = haveHole;
     }
@@ -43,6 +45,7 @@ public class MessageProjectileHitBlock extends PlayMessage<MessageProjectileHitB
         buffer.writeDouble(messageProjectileHitBlock.z);
         buffer.writeBlockPos(messageProjectileHitBlock.pos);
         buffer.writeEnum(messageProjectileHitBlock.face);
+        buffer.writeBoolean(messageProjectileHitBlock.isBlast);
         buffer.writeDouble(messageProjectileHitBlock.direction.x);
         buffer.writeDouble(messageProjectileHitBlock.direction.y);
         buffer.writeDouble(messageProjectileHitBlock.direction.z);
@@ -57,6 +60,7 @@ public class MessageProjectileHitBlock extends PlayMessage<MessageProjectileHitB
                 buffer.readDouble(),
                 buffer.readBlockPos(),
                 buffer.readEnum(Direction.class),
+                buffer.readBoolean(),
                 new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()),
                 buffer.readBoolean()
         );
@@ -86,6 +90,10 @@ public class MessageProjectileHitBlock extends PlayMessage<MessageProjectileHitB
 
     public Direction getFace() {
         return this.face;
+    }
+
+    public boolean isBlast() {
+        return this.isBlast;
     }
 
     public Vec3 getDirection() {return direction;}

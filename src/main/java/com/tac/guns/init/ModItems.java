@@ -150,8 +150,8 @@ public class ModItems
     /* Explosives */
     public static final RegistryObject<Item> RPG7_MISSILE = REGISTER.register("rpg7_missile", () -> new AmmoItem(new Item.Properties().stacksTo(6).tab(GunMod.AMMO)));
 
-    public static final RegistryObject<Item> LIGHT_GRENADE = REGISTER.register("light_grenade", () ->  new LightGrenadeItem(new Item.Properties().stacksTo(8).tab(GunMod.EXPLOSIVES), 25 * 4, 0.95f, 1.35f));
-    public static final RegistryObject<Item> BASEBALL_GRENADE = REGISTER.register("baseball_grenade", () ->  new BaseballGrenadeItem(new Item.Properties().stacksTo(4).tab(GunMod.EXPLOSIVES), 20 * 7, 1.425f, 1.135f));
+    public static final RegistryObject<Item> LIGHT_GRENADE = REGISTER.register("light_grenade", () ->  new LightGrenadeItem(new Item.Properties().stacksTo(8).tab(GunMod.EXPLOSIVES), 25 * 4, 30f, 1f, 1.35f));
+    public static final RegistryObject<Item> BASEBALL_GRENADE = REGISTER.register("baseball_grenade", () ->  new BaseballGrenadeItem(new Item.Properties().stacksTo(4).tab(GunMod.EXPLOSIVES), 20 * 7, 50f, 1.25f, 1.135f));
 
     /* Scope Attachments */
     public static final RegistryObject<Item> COYOTE_SIGHT = REGISTER.register("coyote_sight", () -> new ScopeItem(Scope.create(new ScopeZoomData[]{new ScopeZoomData(1.0F,0.00F)}, 2.15F, 0.325, "coyote",GunModifiers.COYOTE_SIGHT_ADS).viewFinderOffset(0.415).viewFinderOffsetSpecial(0.415), new Item.Properties().stacksTo(1).tab(GunMod.GROUP)));

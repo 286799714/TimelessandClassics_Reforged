@@ -68,7 +68,9 @@ import java.util.function.Predicate;
 public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnData
 {
     private static final Predicate<Entity> PROJECTILE_TARGETS = input -> input != null && input.isPickable() && !input.isSpectator();
-    private static final Predicate<BlockState> IGNORE_LEAVES = input -> input != null && Config.COMMON.gameplay.ignoreLeaves.get() && input.getBlock() instanceof LeavesBlock;
+    private static final Predicate<BlockState> IGNORES = input -> input != null && ((Config.COMMON.gameplay.ignoreLeaves.get() && input.getBlock() instanceof LeavesBlock) ||
+            (Config.COMMON.gameplay.ignoreFences.get() && (input.getBlock() instanceof FenceBlock || input.getBlock() instanceof IronBarsBlock)) ||
+            (Config.COMMON.gameplay.ignoreFenceGates.get() && input.getBlock() instanceof FenceGateBlock));
 
     protected int shooterId;
     protected LivingEntity shooter;
@@ -244,7 +246,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
             //TODO: Make RayTraceBlocks return the meta class, use end vec as a new start vec if a tracked block was the hit vec, pretty much re-running the raytrace
 
-            HitResult result = rayTraceBlocks(this.level, new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORE_LEAVES);
+            HitResult result = rayTraceBlocks(this.level, new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORES);
             BlockHitResult resultB = (BlockHitResult) result;
             BlockState blockState = level.getBlockState(resultB.getBlockPos());
             /*
@@ -420,7 +422,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         Vec3 grownHitPos = boundingBox.inflate(Config.COMMON.gameplay.growBoundingBoxAmountV2.get(), 0, Config.COMMON.gameplay.growBoundingBoxAmountV2.get()).clip(startVec, endVec).orElse(null);
         if(hitPos == null && grownHitPos != null)
         {
-            HitResult raytraceresult = rayTraceBlocks(this.level, new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORE_LEAVES);
+            HitResult raytraceresult = rayTraceBlocks(this.level, new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORES);
             BlockHitResult resultB = (BlockHitResult) raytraceresult;
             BlockState blockState = level.getBlockState(resultB.getBlockPos());
             if(blockState.getMaterial() == Material.WOOL)
@@ -523,14 +525,14 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 ((IDamageable) block).onBlockDamaged(this.level, state, pos, this, this.getDamage(), (int) Math.ceil(this.getDamage() / 2.0) + 1);
             }
 
-            this.onHitBlock(state, pos, blockRayTraceResult.getDirection(), hitVec.x, hitVec.y, hitVec.z);
+            this.onHitBlock(state, pos, blockRayTraceResult.getDirection(), hitVec);
 
             if (block instanceof BellBlock bell) {
                 bell.attemptToRing(this.level, pos, blockRayTraceResult.getDirection());
             }
 
             int fireStarterLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon);
-            if(fireStarterLevel > 0 && Config.COMMON.gameplay.enableGunGriefing.get())
+            if(fireStarterLevel > 0 && Config.COMMON.gameplay.fireStarterCauseFire.get())
             {
                 BlockPos offsetPos = pos.relative(blockRayTraceResult.getDirection());
                 if(BaseFireBlock.canBePlacedAt(this.level, offsetPos, blockRayTraceResult.getDirection()))
@@ -585,7 +587,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
                 entity.invulnerableTime = 0;
             }
-
         }
     }
 
@@ -621,6 +622,13 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             int hitType = critical ? MessageProjectileHitEntity.HitType.CRITICAL : headshot ? MessageProjectileHitEntity.HitType.HEADSHOT : MessageProjectileHitEntity.HitType.NORMAL;
             updateWeaponLevels(damage);
             PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) this.shooter), new MessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
+        }
+
+        AABB boundingBox = entity.getBoundingBox();
+        Vec3 blastVec = new Vec3((boundingBox.maxX + boundingBox.minX) / 2, (boundingBox.maxY + boundingBox.minY) / 2, (boundingBox.maxZ + boundingBox.minZ) / 2);
+        if (this.projectile.isHasBlastDamage()) {
+            createExplosion(this, this.projectile.getBlastDamage() + this.projectile.getDamage(), this.projectile.getBlastRadius(), blastVec);
+            this.remove(RemovalReason.DISCARDED);
         }
 
         /* Send blood particle to tracking clients. */
@@ -714,12 +722,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.life -= 1;
     }*/
 
-    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z)
+    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, Vec3 hitVec)
     {
-
-        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(pos)), new MessageProjectileHitBlock(x, y, z, pos, face, getDeltaMovement().normalize(), true));
+        PacketHandler.getPlayChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunkAt(pos)), new MessageProjectileHitBlock(hitVec.x, hitVec.y, hitVec.z, pos, face, this.projectile.isHasBlastDamage(), getDeltaMovement().normalize(), true));
         if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.FIRE_STARTER.get(), this.weapon) > 0)
-            ((ServerLevel) this.level).sendParticles(ParticleTypes.LAVA, x, y, z, 1, 0, 0, 0, 0);
+            ((ServerLevel) this.level).sendParticles(ParticleTypes.LAVA, hitVec.x, hitVec.y, hitVec.z, 1, 0, 0, 0, 0);
+
+        if (this.projectile.isHasBlastDamage()) {
+            createExplosion(this, this.projectile.getBlastDamage(), this.projectile.getBlastRadius(), hitVec);
+            this.remove(RemovalReason.DISCARDED);
+        }
     }
 
     protected void teleportToHitPoint(HitResult rayTraceResult)
@@ -864,6 +876,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         damage = GunModifierHelper.getModifiedDamage(this.weapon, this.modifiedGun, damage);
         damage = GunEnchantmentHelper.getAcceleratorDamage(this.weapon, damage);
         return Math.max(0F, damage);
+    }
+
+    public float getRadius() {
+        return Math.max(0F, this.projectile.getBlastRadius());
     }
 
     private float getCriticalDamage(ItemStack weapon, Random rand, float damage)
@@ -1041,16 +1057,24 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
      *
      * @param entity The entity to explode
      * @param radius The amount of radius the entity should deal
-     * @param forceNone If true, forces the explosion mode to be NONE instead of config value
      */
-    public static void createExplosion(Entity entity, float radius, boolean forceNone)
+    public static void createExplosion(Entity entity, float power, float radius, @Nullable Vec3 hitVec)
     {
         Level world = entity.level;
         if(world.isClientSide())
             return;
 
-        Explosion.BlockInteraction mode = Config.COMMON.gameplay.enableGunGriefing.get() && !forceNone ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE;
-        Explosion explosion = new ProjectileExplosion(world, entity, null, null, entity.getX(), entity.getY(), entity.getZ(), radius, false, mode);
+        Explosion.BlockInteraction mode = Config.COMMON.gameplay.enableExplosionBreak.get() ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE;
+        DamageSource source = null;
+        if(entity instanceof IExplosionProvider){
+            source = ((IExplosionProvider) entity).createDamageSource();
+        }
+
+        ProjectileExplosion explosion;
+        if (hitVec == null)
+            explosion = new ProjectileExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), power, radius, mode);
+        else
+            explosion = new ProjectileExplosion(world, entity, source, null, hitVec.x, hitVec.y, hitVec.z, power, radius, mode);
 
         if(net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;
