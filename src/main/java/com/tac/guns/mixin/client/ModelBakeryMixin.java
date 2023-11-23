@@ -2,7 +2,6 @@ package com.tac.guns.mixin.client;
 
 import com.tac.guns.client.event.ModelBakeryProcessLoadingEvent;
 import com.tac.guns.client.resource.gunskin.GunSkinLoader;
-import com.tac.guns.client.resource.gunskin.SkinManager;
 
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -39,10 +38,10 @@ public abstract class ModelBakeryMixin{
             ),
             remap = true)
     public void onBakeryLoading(ProfilerFiller p_119249_, int p_119250_, CallbackInfo ci) {
-        MinecraftForge.EVENT_BUS.post(new ModelBakeryProcessLoadingEvent(unbakedCache, topLevelModels, getModel(MISSING_MODEL_LOCATION)));
+        MinecraftForge.EVENT_BUS.post(new ModelBakeryProcessLoadingEvent(unbakedCache, topLevelModels));
         GunSkinLoader.missingModel = getModel(MISSING_MODEL_LOCATION);
-        //reload
-        SkinManager.reload();
+        GunSkinLoader.unbakedCache = unbakedCache;
+        GunSkinLoader.topLevelModels = topLevelModels;
         GunSkinLoader.loadModelsFromProfile();
     }
 }

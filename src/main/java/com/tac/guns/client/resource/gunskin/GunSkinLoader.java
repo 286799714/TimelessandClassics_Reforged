@@ -2,16 +2,14 @@ package com.tac.guns.client.resource.gunskin;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.logging.LogUtils;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
-import com.tac.guns.client.resource.model.CacheableModel;
+import com.tac.guns.client.resource.model.VanillaBakedModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.renderer.block.model.BlockModel;
@@ -23,7 +21,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,12 +31,12 @@ import java.util.*;
 public class GunSkinLoader {
     protected String extension = ".meta.json";
     public static UnbakedModel missingModel;
+    public static Map<ResourceLocation, UnbakedModel> unbakedCache;
+    public static Map<ResourceLocation, UnbakedModel> topLevelModels;
 
     /**
-     * When loading custom skin,
+     * Load skin with Vanilla Baked Model.
      * The loader will load the model file named "{skin_id}_{components}.json" in the same directory based on the components specified in meta json.
-     * When loading texture only skin,
-     * The loader will simply load the textures specified in meta json.
      *
      * @param metaLocation the ResourceLocation of gun skin meta json file.
      *                     Filename must end with ".meta.json".
@@ -62,23 +59,23 @@ public class GunSkinLoader {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
 
             String skinType = json.get("type").getAsString();
-            ResourceLocation gunRegistryName =
-                    ResourceLocation.tryParse(
-                            json.get("gun_registry_name").getAsString()
-                    );
-            ResourceLocation icon =
-                    ResourceLocation.tryParse(
-                            json.get("icon").getAsString()
-                    );
-            ResourceLocation miniIcon =
-                    ResourceLocation.tryParse(
-                            json.get("mini_icon").getAsString()
-                    );
-            GunSkin gunSkin = new GunSkin(new ResourceLocation(namespace, skinId), gunRegistryName);
-            gunSkin.setIcon(icon);
-            gunSkin.setMiniIcon(miniIcon);
-
             if ("custom".equals(skinType)) {
+                ResourceLocation gunRegistryName =
+                        ResourceLocation.tryParse(
+                                json.get("gun_registry_name").getAsString()
+                        );
+                ResourceLocation icon =
+                        ResourceLocation.tryParse(
+                               json.get("icon").getAsString()
+                        );
+                ResourceLocation miniIcon =
+                        ResourceLocation.tryParse(
+                                json.get("mini_icon").getAsString()
+                        );
+                GunSkin gunSkin = new GunSkin(new ResourceLocation(namespace, skinId), gunRegistryName);
+                gunSkin.icon = icon;
+                gunSkin.miniIcon = miniIcon;
+
                 //traverse and load all components
                 String mainPath = namespace + ":" + path.substring(0, path.length() - extension.length());
                 JsonObject componentsJson = json.getAsJsonObject("components");
@@ -91,28 +88,54 @@ public class GunSkinLoader {
 
                     //mapping components to groups
                     String group = entry.getValue().getAsString();
-                    gunSkin.mapComponentGroup(component, group);
+                    gunSkin.setComponentGroup(component, group);
 
                     //try to load the component model from file
                     ResourceLocation modelRL = component.getModelLocation(mainPath);
                     if (modelRL != null) {
                         ForgeModelBakery.addSpecialModel(modelRL);
-                        CacheableModel componentModel = new CacheableModel(modelRL);
-                        gunSkin.putComponentModel(component, componentModel);
+                        VanillaBakedModel componentModel = new VanillaBakedModel(modelRL);
+                        gunSkin.setComponentModel(component, componentModel);
                     } else {
                         GunMod.LOGGER.info("        Missing component model {} while loading {}", componentKey, namespace + ":" + skinId);
-                        gunSkin.putComponentModel(component, CacheableModel.MISSING_MODEL);
+                        gunSkin.setComponentModel(component, VanillaBakedModel.MISSING_MODEL);
                     }
                 }
+                GunMod.LOGGER.info("    loaded skin {}", namespace + ":" +skinId);
+                return gunSkin;
             }
-            GunMod.LOGGER.info("    loaded skin {}", namespace + ":" +skinId);
-            return gunSkin;
         } catch (Exception e) {
             GunMod.LOGGER.warn("    Failed to load skin {}\n{}", metaLocation, e);
         }
-
         return null;
     }
+
+    /*
+    public GunSkin loadTextureOnlySkin(ResourceLocation skinName, List<Pair<String, ResourceLocation>> textures) {
+        GunSkin skin = new GunSkin(skinName, this.getGunRegistryName());
+        //create unbaked models for every component of this gun.
+        for (GunComponent component : this.components) {
+            ResourceLocation parent = component.getModelLocation(this.gunItemRegistryName.getNamespace()+ ":special/" + this.gunItemRegistryName.getPath());
+            //Copy one because we need to change the texture
+            SkinLoader.TextureModel componentModel = SkinLoader.TextureModel.tryCreateCopy(parent);
+            if (componentModel != null) {
+                //Change the component model's texture
+                componentModel.applyTextures(textures);
+
+                //Used as an identifier for component models with changed textures.
+                ResourceLocation componentLoc = component.getModelLocation(skinName.getNamespace()+
+                        ":gunskin/generated/"+this.gunItemRegistryName.getNamespace()+this.gunItemRegistryName.getPath()+"_"+skinName.getPath());
+
+                //Add the component model into bakery's cache, so that it will be baked and become accessible for CacheableModel.
+                unbakedModels.put(componentLoc, componentModel.getModel());
+                topUnbakedModels.put(componentLoc, componentModel.getModel());
+
+                skin.putComponentModel(component, new VanillaBakedModel(componentLoc));
+            }
+        }
+        return skin;
+    }
+     */
 
     public static void loadModelsFromProfile(){
         //remove all skins from cache because they need to reload.

@@ -1,47 +1,11 @@
 package com.tac.guns.client.resource.model;
 
-import com.tac.guns.Reference;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.Mod;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.item.ItemStack;
 
-@Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class CacheableModel {
-    public final ResourceLocation modelLocation;
-    private BakedModel cachedModel;
+public interface CacheableModel {
+    void render(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay);
 
-    public CacheableModel(ResourceLocation location)
-    {
-        this.modelLocation = location;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public BakedModel getModel()
-    {
-        if(this.cachedModel == null)
-        {
-            BakedModel model = Minecraft.getInstance().getModelManager().getModel(this.modelLocation);
-            if(model == Minecraft.getInstance().getModelManager().getMissingModel())
-                return model;
-            this.cachedModel = model;
-        }
-        return this.cachedModel;
-    }
-
-    public void cleanCache(){
-        this.cachedModel = null;
-    }
-
-    public static final CacheableModel MISSING_MODEL = new CacheableModel(null){
-        @Override
-        public BakedModel getModel(){
-            return Minecraft.getInstance().getModelManager().getMissingModel();
-        }
-
-        @Override
-        public void cleanCache(){}
-    };
+    void cleanCache();
 }

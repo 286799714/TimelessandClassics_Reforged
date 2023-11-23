@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
-public class M1911AnimationController extends PistalAnimationController {
+public class M1911AnimationController extends PistolAnimationController {
     public static int INDEX_BODY = 11;
     public static int INDEX_SLIDE = 4;
     public static int INDEX_MAG = 7;

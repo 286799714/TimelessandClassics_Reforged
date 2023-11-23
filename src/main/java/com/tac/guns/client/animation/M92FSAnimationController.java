@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;
 
-public class M92FSAnimationController extends PistalAnimationController {
+public class M92FSAnimationController extends PistolAnimationController {
     public static int INDEX_BODY = 3;
     public static int INDEX_SLIDE = 2;
     public static int INDEX_MAG = 1;

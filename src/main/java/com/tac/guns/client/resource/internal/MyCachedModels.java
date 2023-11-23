@@ -2,6 +2,7 @@ package com.tac.guns.client.resource.internal;
 
 import com.tac.guns.Reference;
 import com.tac.guns.client.resource.model.CacheableModel;
+import com.tac.guns.client.resource.model.VanillaBakedModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
@@ -40,7 +41,7 @@ public enum MyCachedModels
 
     private final ResourceLocation modelLocation;
 
-    private final CacheableModel cacheableModel;
+    private final VanillaBakedModel cacheableModel;
 
     /**
      * Sets the model's location
@@ -60,7 +61,7 @@ public enum MyCachedModels
     MyCachedModels(ResourceLocation resource)
     {
         this.modelLocation = resource;
-        cacheableModel = new CacheableModel(resource);
+        cacheableModel = new VanillaBakedModel(resource);
     }
 
     /**
@@ -69,9 +70,9 @@ public enum MyCachedModels
      * @return isolated model
      */
     @OnlyIn(Dist.CLIENT)
-    public BakedModel getModel()
+    public CacheableModel getModel()
     {
-        return cacheableModel.getModel();
+        return cacheableModel;
     }
 
     @SubscribeEvent

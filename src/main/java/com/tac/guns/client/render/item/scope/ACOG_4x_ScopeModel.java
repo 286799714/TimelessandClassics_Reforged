@@ -66,7 +66,7 @@ public class ACOG_4x_ScopeModel implements IOverrideModel
         RenderUtil.renderModel(stack, parent, matrixStack, renderTypeBuffer, light, overlay);
         double progress = AimingHandler.get().getLerpAdsProgress(partialTicks);
         if(progress < 0.8){
-            RenderUtil.renderModel(MyCachedModels.ACOG_SCOPE_MIRROR.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
+            MyCachedModels.ACOG_SCOPE_MIRROR.getModel().render(stack, matrixStack, renderTypeBuffer, light, overlay);
         }
 
         matrixStack.translate(0, -0.057, 0);

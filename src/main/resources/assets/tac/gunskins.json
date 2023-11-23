@@ -1,5 +1,6 @@
 {
-  "models/gunskin/ak47/ak47_spent.meta.json": {
-    "displayName": "spent"
+  "models/gunskin/ak47/spent/ak47_spent.meta.json": {
+  },
+  "models/gunskin/ak47/default/ak47.meta.json": {
   }
 }

@@ -6,13 +6,14 @@ import com.mojang.math.Vector3d;
 import com.tac.guns.client.resource.gunskin.GunComponent;
 import com.tac.guns.client.resource.gunskin.GunSkin;
 import com.tac.guns.client.resource.gunskin.GunSkinManager;
-import com.tac.guns.client.resource.gunskin.SkinManager;
 import com.tac.guns.client.resource.model.CacheableModel;
+import com.tac.guns.client.resource.model.VanillaBakedModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.attachment.IAttachment;
 import com.tac.guns.util.GunModifierHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
@@ -33,43 +34,34 @@ public abstract class SkinnedGunModel implements IOverrideModel {
 
     @Override
     public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay){
-        GunSkin skin = SkinManager.getSkin(stack);
+        GunSkin skin = GunSkinManager.getSkinFromTag(stack);
         render(skin, partialTicks, transformType, stack, entity, matrixStack, buffer, light, overlay);
     }
 
     public abstract void render(GunSkin skin, float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, LivingEntity entity, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay);
 
     protected BakedModel getComponentModel(GunSkin skin, GunComponent key) {
-        if(skin == null) return null;
-        CacheableModel cacheableModel = skin.getModel(key);
-        if(cacheableModel == null) return CacheableModel.MISSING_MODEL.getModel();
-        return cacheableModel.getModel();
+        return Minecraft.getInstance().getModelManager().getMissingModel();
     }
 
-    private void renderComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, GunComponent modelComponent) {
-        BakedModel bakedModel = getComponentModel(skin, modelComponent);
-        if(bakedModel == null) return;
+    protected void renderComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, GunComponent modelComponent) {
+        if(skin == null) return;
+        CacheableModel model = skin.getModel(modelComponent);
+        String group = skin.getGroup(modelComponent);
+        if(model == null) return;
         if (extraOffset.containsKey(modelComponent)) {
             Vector3d x = extraOffset.get(modelComponent);
             matrices.pushPose();
             matrices.translate(x.x, x.y, x.z);
-            RenderUtil.renderModel(bakedModel, stack, matrices, renderBuffer, light, overlay);
+            model.render(stack, matrices, renderBuffer, light, overlay);
             matrices.translate(-x.x, -x.y, -x.z);
             matrices.popPose();
         } else
-            RenderUtil.renderModel(bakedModel, stack, matrices, renderBuffer, light, overlay);
+            model.render(stack, matrices, renderBuffer, light, overlay);
     }
 
-    private void renderLaserModuleComponent(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin, GunComponent modelComponent) {
-        if (extraOffset.containsKey(modelComponent)) {
-            Vector3d x = extraOffset.get(modelComponent);
-            matrices.pushPose();
-            matrices.translate(x.x, x.y, x.z);
-            RenderUtil.renderLaserModuleModel(getComponentModel(skin, modelComponent), stack, matrices, renderBuffer, light, overlay);
-            matrices.translate(-x.x, -x.y, -x.z);
-            matrices.popPose();
-        } else
-            RenderUtil.renderLaserModuleModel(getComponentModel(skin, modelComponent), stack, matrices, renderBuffer, light, overlay);
+    public void renderBody(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin){
+        renderComponent(stack, matrices, renderBuffer, light, overlay, skin, BODY);
     }
 
     public void renderStockWithDefault(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin) {
@@ -152,19 +144,19 @@ public abstract class SkinnedGunModel implements IOverrideModel {
 
     public void renderLaserDevice(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin) {
         if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
-            renderLaserModuleComponent(Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay, skin, LASER_BASIC_DEVICE);
+            renderComponent(Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, light, overlay, skin, LASER_BASIC_DEVICE);
         } else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) ||
                 Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
-            renderLaserModuleComponent(Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay, skin, LASER_IR_DEVICE);
+            renderComponent(Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, light, overlay, skin, LASER_IR_DEVICE);
         }
     }
 
     public void renderLaser(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin) {
         if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() == ModItems.BASIC_LASER.orElse(ItemStack.EMPTY.getItem())) {
-            renderLaserModuleComponent(Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay, skin, LASER_BASIC);
+            renderComponent(Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack), matrices, renderBuffer, 15728880, overlay, skin, LASER_BASIC);
         } else if (Gun.getAttachment(IAttachment.Type.SIDE_RAIL, stack).getItem() != ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem()) ||
                 Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack).getItem() == ModItems.IR_LASER.orElse(ItemStack.EMPTY.getItem())) {
-            renderLaserModuleComponent(Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay, skin, LASER_IR);
+            renderComponent(Gun.getAttachment(IAttachment.Type.IR_DEVICE, stack), matrices, renderBuffer, 15728880, overlay, skin, LASER_IR);
         }
     }
 }

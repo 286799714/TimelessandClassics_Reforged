@@ -16,7 +16,7 @@ import com.tac.guns.client.event.RenderItemEvent;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.client.render.IHeldAnimation;
 import com.tac.guns.client.animation.module.GunAnimationController;
-import com.tac.guns.client.animation.module.PistalAnimationController;
+import com.tac.guns.client.animation.module.PistolAnimationController;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.util.RenderUtil;
@@ -1369,10 +1369,10 @@ public class GunRenderingHandler {
                             GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
                             if (controller != null) {
                                 if (type != null) {
-                                    if (controller instanceof PistalAnimationController
+                                    if (controller instanceof PistolAnimationController
                                             && gun.getModules().getAttachments().getPistolScope() != null
                                             && gun.getModules().getAttachments().getPistolScope().getDoOnSlideMovement()) {
-                                        PistalAnimationController pcontroller = (PistalAnimationController) controller;
+                                        PistolAnimationController pcontroller = (PistolAnimationController) controller;
                                         controller.applyTransform(stack, pcontroller.getSlideNodeIndex(), transformType, entity, matrixStack);
                                     } else
                                         controller.applyAttachmentsTransform(stack, transformType, entity, matrixStack);

@@ -84,6 +84,6 @@ public class GunComponent implements Comparable<GunComponent>{
     }
 
     public ResourceLocation getModelLocation(ResourceLocation mainLocation){
-        return getModelLocation(mainLocation.toString().replace("models/", ""));
+        return getModelLocation(mainLocation.toString());
     }
 }

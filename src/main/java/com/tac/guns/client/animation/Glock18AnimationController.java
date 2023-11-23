@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;
 
-public class Glock18AnimationController extends PistalAnimationController {
+public class Glock18AnimationController extends PistolAnimationController {
     public static int INDEX_BODY = 5;
     public static int INDEX_SLIDE = 4;
     public static int INDEX_MAG = 3;

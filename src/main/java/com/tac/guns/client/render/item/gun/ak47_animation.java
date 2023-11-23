@@ -10,6 +10,7 @@ import com.tac.guns.client.animation.Ak47AnimationController;
 import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.render.item.SkinnedGunModel;
+import com.tac.guns.client.resource.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;
@@ -44,23 +45,23 @@ public class ak47_animation extends SkinnedGunModel {
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getComponentModel(skin, BODY), Ak47AnimationController.INDEX_BODY, transformType, matrices);
+            controller.applyTransform(stack, Ak47AnimationController.INDEX_BODY, transformType, entity, matrices);
             if (Gun.getScope(stack) != null) {
-                RenderUtil.renderModel(getComponentModel(skin, RAIL_SCOPE), stack, matrices, renderBuffer, light, overlay);
+                renderComponent(stack, matrices, renderBuffer, light, overlay, skin, RAIL_SCOPE);
             }
 
             renderStock(stack, matrices, renderBuffer, light, overlay, skin);
 
             renderBarrel(stack, matrices, renderBuffer, light, overlay, skin);
 
-            RenderUtil.renderModel(getComponentModel(skin, BODY), stack, matrices, renderBuffer, light, overlay);
+            renderComponent(stack, matrices, renderBuffer, light, overlay, skin, BODY);
         }
         matrices.popPose();
 
         //Always push
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getComponentModel(skin, BODY), Ak47AnimationController.INDEX_BOLT, transformType, matrices);
+            controller.applyTransform(stack, Ak47AnimationController.INDEX_BOLT, transformType, entity, matrices);
 
             /*//We're getting the cooldown tracker for the item - items like the sword, ender pearl, and chorus fruit all have this too.
             Gun gun = ((GunItem) stack.getItem()).getGun();
@@ -72,14 +73,15 @@ public class ak47_animation extends SkinnedGunModel {
                 GunRenderingHandler.get().opticMovement = 0.190f * (-4.5 * Math.pow(cooldownOg - 0.5, 2) + 1);
                 matrices.translate(0, 0, 0.025F);
             }
-            RenderUtil.renderModel(getComponentModel(skin, BOLT), stack, matrices, renderBuffer, light, overlay);
+            renderComponent(stack, matrices, renderBuffer, light, overlay, skin, BOLT);
         }
         //Always pop
         matrices.popPose();
 
         matrices.pushPose();
         {
-            controller.applySpecialModelTransform(getComponentModel(skin, BODY), Ak47AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            //controller.applySpecialModelTransform(getComponentModel(skin, BODY), Ak47AnimationController.INDEX_MAGAZINE, transformType, matrices);
+            controller.applyTransform(stack, Ak47AnimationController.INDEX_MAGAZINE, transformType, entity, matrices);
             renderMag(stack, matrices, renderBuffer, light, overlay, skin);
         }
         matrices.popPose();
@@ -87,7 +89,8 @@ public class ak47_animation extends SkinnedGunModel {
         if (controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_EMPTY).equals(controller.getPreviousAnimation())) {
             matrices.pushPose();
             {
-                controller.applySpecialModelTransform(getComponentModel(skin, BODY), Ak47AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
+                //controller.applySpecialModelTransform(getComponentModel(skin, BODY), Ak47AnimationController.INDEX_EXTRA_MAG, transformType, matrices);
+                controller.applyTransform(stack, Ak47AnimationController.INDEX_EXTRA_MAG, transformType, entity, matrices);
                 renderMag(stack, matrices, renderBuffer, light, overlay, skin);
             }
             matrices.popPose();

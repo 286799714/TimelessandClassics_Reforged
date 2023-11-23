@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;
 
-public class COLTPYTHONAnimationController extends PistalAnimationController implements CameraAnimated {
+public class COLTPYTHONAnimationController extends PistolAnimationController implements CameraAnimated {
     public static int INDEX_BODY = 10;
     public static int INDEX_LOADER = 6;
     public static int INDEX_MAG = 8;

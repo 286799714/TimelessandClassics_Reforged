@@ -43,7 +43,7 @@ public class MissileRenderer extends EntityRenderer<MissileEntity>
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(entity.getXRot() - 90));
         Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(), ItemTransforms.TransformType.NONE, light, OverlayTexture.NO_OVERLAY, matrixStack, renderTypeBuffer, entity.getId());
         matrixStack.translate(0, -1, 0);
-        RenderUtil.renderModel(MyCachedModels.FLAME.getModel(), entity.getItem(), matrixStack, renderTypeBuffer, 15728880, OverlayTexture.NO_OVERLAY);
+        MyCachedModels.FLAME.getModel().render(entity.getItem(), matrixStack, renderTypeBuffer, 15728880, OverlayTexture.NO_OVERLAY);
         matrixStack.popPose();
     }
 }

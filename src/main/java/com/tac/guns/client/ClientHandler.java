@@ -128,7 +128,7 @@ public class ClientHandler {
     }
 
     private static void registerDefaultGunSkins(){
-        GunSkinManager.registerDefaultGunSkin(ModItems.AK47.getId(), new ResourceLocation("tac:ak47_spent"));
+        GunSkinManager.registerDefaultGunSkin(ModItems.AK47.getId(), new ResourceLocation("tac:ak47"));
     }
 
     private static void registerColors() {

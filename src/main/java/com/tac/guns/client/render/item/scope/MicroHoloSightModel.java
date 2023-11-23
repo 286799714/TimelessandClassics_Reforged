@@ -8,6 +8,7 @@ import com.tac.guns.Reference;
 import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.render.item.IOverrideModel;
+import com.tac.guns.client.resource.internal.MyCachedModels;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.transition.TimelessPistolGunItem;
@@ -59,7 +60,7 @@ public class MicroHoloSightModel implements IOverrideModel
             }
             matrixStack.translate(0, 0.055, 0);
             if (gunItem.getGun().getModules().getAttachments().getPistolScope().getDoRenderMount())
-                RenderUtil.renderModel(MICRO_HOLO_BASE.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
+                MICRO_HOLO_BASE.getModel().render(stack, matrixStack, renderTypeBuffer, light, overlay);
         }
         RenderUtil.renderModel(stack, parent, matrixStack, renderTypeBuffer, light, overlay);
         matrixStack.translate(0, -0.049, 0);
