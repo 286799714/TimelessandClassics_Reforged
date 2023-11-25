@@ -270,29 +270,28 @@ public class HUDRenderingHandler extends GuiComponent {
             }
         }
 
-        if (ArmorInteractionHandler.get().isRepairing())//Replace with reload bar checker
-        {
-            // FireMode rendering
-            RenderSystem.enableDepthTest();
 
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-            stack.pushPose();
-            {
-                stack.translate(anchorPointX - (ReloadBarSize * 4.35) / 4F, anchorPointY + (ReloadBarSize * 1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
-                stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
-                // stack.translate(0, 0, );
-                stack.scale(2.1F * (1 - ArmorInteractionHandler.get().getRepairProgress(event.getPartialTicks(), player)), 0.25F, 0); // *21F
-                RenderSystem.setShaderTexture(0, RELOAD_ICONS[0]);
-                Matrix4f matrix = stack.last().pose();
-                buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-                buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-                buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-                buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
-            }
-            buffer.end();
-            BufferUploader.end(buffer);
-            stack.popPose();
+        // FireMode rendering
+        /*RenderSystem.enableDepthTest();
+
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        stack.pushPose();
+        {
+            stack.translate(anchorPointX - (ReloadBarSize * 4.35) / 4F, anchorPointY + (ReloadBarSize * 1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
+            stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
+            // stack.translate(0, 0, );
+            stack.scale(2.1F * (1 - ArmorInteractionHandler.get().getRepairProgress(event.getPartialTicks(), player)), 0.25F, 0); // *21F
+            RenderSystem.setShaderTexture(0, RELOAD_ICONS[0]);
+            Matrix4f matrix = stack.last().pose();
+            buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+            buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
         }
+        buffer.end();
+        BufferUploader.end(buffer);
+        stack.popPose();*/
+
 
         /*if(ArmorInteractionHandler.get().isRepairing())//Replace with reload bar checker
         {
@@ -457,7 +456,6 @@ public class HUDRenderingHandler extends GuiComponent {
             stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
 
             stack.translate(-16.25-7.3, 0.15+1.6, 0);
-            // stack.translate(0, 0, );
             stack.scale(3.05F,0.028F,0); // *21F
             RenderSystem.setShaderTexture(0, RELOAD_ICONS[0]); // Future options to render bar types
 
@@ -478,6 +476,29 @@ public class HUDRenderingHandler extends GuiComponent {
 
             buffer.end();
             BufferUploader.end(buffer);
+            stack.popPose();
+
+            stack.pushPose();
+            {
+                buffer = Tesselator.getInstance().getBuilder();
+                RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+                buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+
+                stack.translate(anchorPointX - (ReloadBarSize * 4.35) / 4F, anchorPointY + (ReloadBarSize * 1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
+                stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
+
+                stack.translate(-16.25-7.3, 4.5, 0);
+                stack.scale(3.05F* (1 - ArmorInteractionHandler.get().getRepairProgress(player)),0.324F,0); // *21F
+                RenderSystem.setShaderTexture(0, RELOAD_ICONS[0]); // Future options to render bar types
+
+                matrix = stack.last().pose();
+                buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(1.0F, 0.0F, 0.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(1.0F, 0.0F, 0.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(1.0F, 0.0F, 0.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 0.0F, 0.0F, 0.99F).endVertex();
+                buffer.end();
+                BufferUploader.end(buffer);
+            }
             stack.popPose();
         }
     }

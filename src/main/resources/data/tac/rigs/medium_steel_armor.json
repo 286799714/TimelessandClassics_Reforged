@@ -14,11 +14,11 @@
     "repairItem": "tac:light_armor_plate"
   },
   "sounds": {
-    "step": "tac:item.fire_m16",
-    "on":"tac:item.fire_m16",
-    "off":"tac:item.fire_m16",
-    "hit":"tac:item.fire_m16",
-    "broken":"minecraft:block.chain.break",
-    "repair":"minecraft:item.crossbow.loading_end"
+    "step": "minecraft:item.armor.equip_diamond",
+    "on":"minecraft:item.armor.equip_diamond",
+    "off":"minecraft:item.armor.equip_diamond",
+    "hit":"minecraft:item.armor.equip_diamond",
+    "broken":"minecraft:item.armor.equip_diamond",
+    "repair":"minecraft:item.armor.equip_diamond"
   }
 }

@@ -47,6 +47,7 @@ public class MessageAnimationRun extends PlayMessage<MessageAnimationRun> {
         supplier.get().enqueueWork(() ->
         {
             MessageAnimationSound message = new MessageAnimationSound(messageAnimationRun.animationResource, messageAnimationRun.soundResource, messageAnimationRun.play, messageAnimationRun.fromWho);
+            //TODO: Send to ALL? Is this not why we hear animations across the world?
             PacketHandler.getPlayChannel().send(PacketDistributor.ALL.noArg(), message);
         });
         supplier.get().setPacketHandled(true);

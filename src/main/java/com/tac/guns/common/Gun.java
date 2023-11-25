@@ -2559,18 +2559,6 @@ public final class Gun implements INBTSerializable<CompoundTag>
         ItemStack wornRig = WearableHelper.PlayerWornRig(player);
         if(!wornRig.isEmpty())
         {
-            /*
-            ListTag nbtTagList = (ListTag) ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").get("Items");
-            for (int i = 0; i < ((ArmorRigItem)wornRig.getItem()).getShareTag(wornRig).getCompound("storage").getInt("Size"); i++)
-            {
-                ItemStack ammoStack = ItemStack.of(nbtTagList.getCompound(i));
-                //player.sendMessage(new TextComponent("" + nbtTagList.size()), UUID.randomUUID());
-                if(isAmmo(ammoStack, id)) {
-                    stacks.add(ammoStack);
-                    count += ammoStack.getCount();
-                }
-            }
-            */
             RigSlotsHandler itemHandler = (RigSlotsHandler) wornRig.getCapability(ArmorRigCapabilityProvider.capability).resolve().get();
             List<ItemStack> list = itemHandler.getStacks();
             for(ItemStack ammoStack : list){

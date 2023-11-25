@@ -679,7 +679,7 @@ public class Config
         public final ForgeConfigSpec.DoubleValue ringVolume;
         public final ForgeConfigSpec.DoubleValue gunShotMaxDistance;
         public final ForgeConfigSpec.BooleanValue enableCameraRecoil;
-
+        public final ForgeConfigSpec.DoubleValue reloadingSoundDistance;
 
         public Server(ForgeConfigSpec.Builder builder)
         {
@@ -698,6 +698,7 @@ public class Config
                 builder.comment("Audio properties").push("audio");
                 {
                     this.gunShotMaxDistance = builder.comment("The maximum distance weapons can be heard by players.").defineInRange("gunShotMaxDistance", 100, 0, Double.MAX_VALUE);
+                    this.reloadingSoundDistance = builder.comment("The maximum distance reloading a weapon can be heard by players.").defineInRange("reloadingSoundDistance", 14, 0, Double.MAX_VALUE);
                 }
                 builder.pop();
 

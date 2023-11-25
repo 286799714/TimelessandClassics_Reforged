@@ -803,18 +803,18 @@ public class ServerPlayHandler
      */
     public static void handleArmorFixApplication(ServerPlayer player)
     {
-        if(!WearableHelper.PlayerWornRig(player).isEmpty() && !WearableHelper.isFullDurability(WearableHelper.PlayerWornRig(player)))
+        ItemStack rigStack = WearableHelper.PlayerWornRig(player);
+        if(!rigStack.isEmpty() && !WearableHelper.isFullDurability(rigStack))
         {
-            Rig rig = ((ArmorRigItem)WearableHelper.PlayerWornRig(player).getItem()).getRig();
-            if(player.getMainHandItem().getItem().getRegistryName().equals(rig.getRepair().getItem()))
-            {
-                WearableHelper.tickRepairCurrentDurability(WearableHelper.PlayerWornRig(player));
-                player.getMainHandItem().setCount(player.getMainHandItem().getCount()-1);
-                ResourceLocation repairSound = rig.getSounds().getRepair();
-                if (repairSound != null && player.isAlive()) {
-                    MessageGunSound messageSound = new MessageGunSound(repairSound, SoundSource.PLAYERS, (float) player.getX(), (float) (player.getY() + 1.0), (float) player.getZ(), 1F, 1F, player.getId(), false, false);
-                    PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), messageSound);
-                }
+            Rig rig = ((ArmorRigItem)rigStack.getItem()).getRig();
+            WearableHelper.tickRepairCurrentDurability(rigStack);
+            WearableHelper.consumeRepairItem(player);
+            ResourceLocation repairSound = rig.getSounds().getRepair();
+            //SoundEvents.ARMOR_EQUIP_DIAMOND.getLocation()
+            if (repairSound != null && player.isAlive()) {
+                MessageGunSound messageSound = new MessageGunSound(repairSound, SoundSource.PLAYERS, (float) player.getX(), (float) (player.getY() + 1.0), (float) player.getZ(), 1F, 1F, player.getId(), false, false);
+                PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(player.getX(), (player.getY() + 1.0), player.getZ(), 16.0, player.level.dimension())),
+                        messageSound);
             }
         }
     }
