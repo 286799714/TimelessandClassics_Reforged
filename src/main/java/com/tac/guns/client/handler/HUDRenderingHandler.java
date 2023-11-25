@@ -12,8 +12,10 @@ import com.tac.guns.common.ReloadTracker;
 import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.item.transition.TimelessGunItem;
+import com.tac.guns.item.transition.wearables.ArmorRigItem;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageFireMode;
+import com.tac.guns.util.WearableHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -229,22 +231,6 @@ public class HUDRenderingHandler extends GuiComponent {
             }
         }
 
-        ItemStack rig = ((PlayerWithSynData)player).getRig();
-        if(!rig.isEmpty()){
-            ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-            stack.pushPose();
-            {
-                MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-                float iconAnchorX = (anchorPointX - (counterSize*32) / 2) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.x.get().floatValue());
-                float iconAnchorY = (anchorPointY + 5 + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.y.get().floatValue()));
-                itemRenderer.renderGuiItem(rig, (int) iconAnchorX , (int) iconAnchorY);
-            }
-            stack.popPose();
-        }else {
-            //render empty texture
-        }
-        //this.hitMarkerTracker--;
-
         // All code for rendering night vision, still only a test
         if (false) {
             renderNightVision(Config.CLIENT.weaponGUI.weaponTypeIcon.showWeaponIcon.get());
@@ -403,11 +389,11 @@ public class HUDRenderingHandler extends GuiComponent {
             stack.pushPose();
             {
                 stack.translate(
-                        (anchorPointX - (counterSize*32) / 2) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.x.get().floatValue()),
-                        (anchorPointY - (counterSize*32) / 4) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.y.get().floatValue()),
+                        (anchorPointX - (counterSize * 32) / 2) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.x.get().floatValue()),
+                        (anchorPointY - (counterSize * 32) / 4) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.y.get().floatValue()),
                         0
                 );
-                if(player.getMainHandItem().getTag() != null) {
+                if (player.getMainHandItem().getTag() != null) {
                     MutableComponent currentAmmo;
                     MutableComponent reserveAmmo;
                     int ammo = player.getMainHandItem().getTag().getInt("AmmoCount");
@@ -428,7 +414,7 @@ public class HUDRenderingHandler extends GuiComponent {
                     stack.scale(counterSize, counterSize, counterSize);
                     stack.pushPose();
                     {
-                        stack.translate(-21.15, 0, 0 );
+                        stack.translate(-21.15, 0, 0);
                         drawString(stack, Minecraft.getInstance().font, currentAmmo, 0, 0, 0xffffff); // Gun ammo
                     }
                     stack.popPose();
@@ -439,13 +425,30 @@ public class HUDRenderingHandler extends GuiComponent {
                         stack.translate(
                                 (3.7),
                                 (3.4),
-                                0 );
+                                0);
                         drawString(stack, Minecraft.getInstance().font, reserveAmmo, 0, 0, 0xffffff); // Reserve ammo
                     }
                     stack.popPose();
                 }
             }
             stack.popPose();
+        }
+
+        //ARMOR
+        if(Config.CLIENT.weaponGUI.weaponAmmoCounter.showWeaponAmmoCounter.get())
+        {
+            ItemStack rig = ((PlayerWithSynData)player).getRig();
+            if(!rig.isEmpty()){
+                ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+                stack.pushPose();
+                {
+                    MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+                    float iconAnchorX = (anchorPointX - (counterSize*32) / 2) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.x.get().floatValue());
+                    float iconAnchorY = (anchorPointY + 7 + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.y.get().floatValue()));
+                    itemRenderer.renderGuiItem(rig, (int) iconAnchorX , (int) iconAnchorY);
+                }
+                stack.popPose();
+            }
 
             stack.pushPose();
             buffer = Tesselator.getInstance().getBuilder();
@@ -480,6 +483,7 @@ public class HUDRenderingHandler extends GuiComponent {
 
             stack.pushPose();
             {
+                //HANDLE ARMOR REPAIR TIMER
                 buffer = Tesselator.getInstance().getBuilder();
                 RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
                 buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
@@ -487,19 +491,77 @@ public class HUDRenderingHandler extends GuiComponent {
                 stack.translate(anchorPointX - (ReloadBarSize * 4.35) / 4F, anchorPointY + (ReloadBarSize * 1.625F) / 5F * 3F, 0);//stack.translate(anchorPointX - (fireModeSize*6) / 4F, anchorPointY - (fireModeSize*1F) / 5F * 3F, 0); // *68for21F
                 stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
 
-                stack.translate(-16.25-7.3, 4.5, 0);
-                stack.scale(3.05F* (1 - ArmorInteractionHandler.get().getRepairProgress(player)),0.324F,0); // *21F
+                stack.translate(-16.25-7.3, 7.25, 0);
+                stack.scale(3.05F* (1 - ArmorInteractionHandler.get().getRepairProgress(player)),0.1F,0); // *21F
                 RenderSystem.setShaderTexture(0, RELOAD_ICONS[0]); // Future options to render bar types
 
                 matrix = stack.last().pose();
-                buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(1.0F, 0.0F, 0.0F, 0.99F).endVertex();
-                buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(1.0F, 0.0F, 0.0F, 0.99F).endVertex();
-                buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(1.0F, 0.0F, 0.0F, 0.99F).endVertex();
-                buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 0.0F, 0.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
+                buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, 0.99F).endVertex();
                 buffer.end();
                 BufferUploader.end(buffer);
             }
             stack.popPose();
+
+            if(!rig.isEmpty()) {
+                float blackBarAlpha = 0.325F;
+                var rigData = ((ArmorRigItem)rig.getItem()).getRig();
+                //RENDER BACKGROUND FOR ARMOR HEALTH
+                stack.pushPose();
+                {
+
+                    RenderSystem.enableBlend();
+                    RenderSystem.enableDepthTest();
+                    buffer = Tesselator.getInstance().getBuilder();
+                    RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+                    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+
+                    stack.translate(anchorPointX - (ReloadBarSize * 4.35) / 4F, anchorPointY + (ReloadBarSize * 1.625F) / 5F * 3F, 0);
+                    stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
+
+                    stack.translate(-16.25 - 7.3, 3.25, 0);
+                    stack.scale(3.05F, 0.224F, 0);
+
+                    matrix = stack.last().pose();
+
+                    buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(0.0F, 0.0F, 0.0F, blackBarAlpha).endVertex();
+                    buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(0.0F, 0.0F, 0.0F, blackBarAlpha).endVertex();
+                    buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(0.0F, 0.0F, 0.0F, blackBarAlpha).endVertex();
+                    buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(0.0F, 0.0F, 0.0F, blackBarAlpha).endVertex();
+                    buffer.end();
+                    BufferUploader.end(buffer);
+                }
+                stack.popPose();
+                //RENDER ARMOR HEALTH
+                stack.pushPose();
+                {
+                    RenderSystem.enableBlend();
+                    RenderSystem.enableDepthTest();
+                    buffer = Tesselator.getInstance().getBuilder();
+                    RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+                    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+
+                    stack.translate(anchorPointX - (ReloadBarSize * 4.35) / 4F, anchorPointY + (ReloadBarSize * 1.625F) / 5F * 3F, 0);
+                    stack.translate(-ReloadBarSize, -ReloadBarSize, 0);
+
+                    stack.translate(-16.25 - 5.35, 4.2, 0);
+                    float healthPercentage = WearableHelper.currentDurabilityPercentage(rig);
+                    stack.scale(2.925F*healthPercentage, 0.16F, 0);
+
+                    matrix = stack.last().pose();
+                    buffer.vertex(matrix, 0, ReloadBarSize, 0).uv(0, 1).color(1.0F, 1.0F, 1.0F, 0.8F).endVertex();
+                    buffer.vertex(matrix, ReloadBarSize, ReloadBarSize, 0).uv(1, 1).color(1.0F, 1.0F, 1.0F, 0.8F).endVertex();
+                    buffer.vertex(matrix, ReloadBarSize, 0, 0).uv(1, 0).color(1.0F, 1.0F, 1.0F, 0.8F).endVertex();
+                    buffer.vertex(matrix, 0, 0, 0).uv(0, 0).color(1.0F, 1.0F, 1.0F, 0.8F).endVertex();
+                    buffer.end();
+                    BufferUploader.end(buffer);
+                }
+                stack.popPose();
+                RenderSystem.disableBlend();
+                RenderSystem.disableDepthTest();
+            }
         }
     }
             /*if (Minecraft.getInstance().gameSettings.viewBobbing) {

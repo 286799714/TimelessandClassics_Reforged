@@ -84,7 +84,8 @@ public class ArmorInteractionHandler {
             return 0;
         return this.repairTime > 0 ? ((float)this.repairTime) / (float) ((ArmorRigItem) WearableHelper.PlayerWornRig(player).getItem()).getRig().getRepair().getTicksToRepair() : 1F;
     }
-    private void resetRepairProgress(boolean isAnotherPlateRepairing) {
+    // Made public so interrupts can simply reset the armor repairing proccess
+    public void resetRepairProgress(boolean isAnotherPlateRepairing) {
         if(isAnotherPlateRepairing) {
             this.repairing = true;
             Player player = Minecraft.getInstance().player;

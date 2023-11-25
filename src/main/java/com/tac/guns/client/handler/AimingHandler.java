@@ -180,9 +180,6 @@ public class AimingHandler {
         if (player == null)
             return;
 
-        if (this.aiming)
-            player.setSprinting(false);
-
         if (!Config.CLIENT.controls.holdToAim.get()) {
             if (!Keys.AIM_TOGGLE.isDown())
                 this.isPressed = false;
@@ -209,7 +206,10 @@ public class AimingHandler {
             }
             this.localTracker.handleAiming(player.getItemInHand(InteractionHand.MAIN_HAND), false);
         }
-
+        if(this.aiming) {
+            ArmorInteractionHandler.get().resetRepairProgress(false);
+            player.setSprinting(false);
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

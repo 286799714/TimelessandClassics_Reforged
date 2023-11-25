@@ -366,6 +366,7 @@ public class ShootingHandler {
 
             if (MinecraftForge.EVENT_BUS.post(new GunFireEvent.Pre(player, heldItem)))
                 return;
+            ArmorInteractionHandler.get().resetRepairProgress(false);
 
             // CHECK HERE: Change this to test different rpm settings.
             // TODO: Test serverside, possible issues 0.3.4-alpha
