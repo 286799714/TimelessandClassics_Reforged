@@ -35,7 +35,6 @@ public class FirstPersonRendererMixin {
         prevItemStack = mainHandItemStack;
         prevSlot = Minecraft.getInstance().player.getInventory().selected;
         CommonStateBox.isSwapped = false;
-        //if(isSameWeapon(Minecraft.getInstance().player)) return;
         if(controller1 != null && controller1.isAnimationRunning()) {
             controller1.stopAnimation();
         }

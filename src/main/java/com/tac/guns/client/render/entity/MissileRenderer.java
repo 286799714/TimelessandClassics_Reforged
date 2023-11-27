@@ -2,8 +2,8 @@ package com.tac.guns.client.render.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import com.tac.guns.client.render.item.ItemModelRenderManager;
 import com.tac.guns.client.resource.internal.MyCachedModels;
-import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.entity.MissileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -43,7 +43,8 @@ public class MissileRenderer extends EntityRenderer<MissileEntity>
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(entity.getXRot() - 90));
         Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(), ItemTransforms.TransformType.NONE, light, OverlayTexture.NO_OVERLAY, matrixStack, renderTypeBuffer, entity.getId());
         matrixStack.translate(0, -1, 0);
-        MyCachedModels.FLAME.getModel().render(entity.getItem(), matrixStack, renderTypeBuffer, 15728880, OverlayTexture.NO_OVERLAY);
+        ItemModelRenderManager.render(MyCachedModels.FLAME.getModel(), entity.getItem(), matrixStack, renderTypeBuffer, 15728880, OverlayTexture.NO_OVERLAY);
+        //MyCachedModels.FLAME.getModel().render(entity.getItem(), matrixStack, renderTypeBuffer, 15728880, OverlayTexture.NO_OVERLAY);
         matrixStack.popPose();
     }
 }

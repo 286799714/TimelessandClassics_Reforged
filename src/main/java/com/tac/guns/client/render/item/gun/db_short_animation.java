@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.resource.gunskin.GunSkin;
 import com.tac.guns.client.animation.DBShotgunAnimationController;
 import com.tac.guns.client.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.item.SkinnedGunModel;
 import com.tac.guns.client.resource.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import net.minecraft.client.renderer.MultiBufferSource;

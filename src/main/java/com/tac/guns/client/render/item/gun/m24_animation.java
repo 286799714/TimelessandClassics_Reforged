@@ -6,7 +6,6 @@ import com.tac.guns.client.animation.M24AnimationController;
 import com.tac.guns.client.animation.module.AnimationMeta;
 import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.item.SkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import net.minecraft.client.renderer.MultiBufferSource;

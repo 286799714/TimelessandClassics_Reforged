@@ -17,19 +17,21 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.fml.common.Mod;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
-public class GunSkinLoader {
-    protected String extension = ".meta.json";
+public class VanillaGunSkinLoader{
+    public static final String extension = ".meta.json";
     public static UnbakedModel missingModel;
     public static Map<ResourceLocation, UnbakedModel> unbakedCache;
     public static Map<ResourceLocation, UnbakedModel> topLevelModels;
@@ -59,7 +61,7 @@ public class GunSkinLoader {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
 
             String skinType = json.get("type").getAsString();
-            if ("custom".equals(skinType)) {
+            if ("multi".equals(skinType)) {
                 ResourceLocation gunRegistryName =
                         ResourceLocation.tryParse(
                                 json.get("gun_registry_name").getAsString()
@@ -137,36 +139,6 @@ public class GunSkinLoader {
     }
      */
 
-    public static void loadModelsFromProfile(){
-        //remove all skins from cache because they need to reload.
-        GunSkinManager.cleanCache();
-
-        //get all declared gun skins in gunskins.json.
-        Minecraft.getInstance().getResourceManager().getNamespaces();
-        Set<String> nameSpaces = Minecraft.getInstance().getResourceManager().getNamespaces();
-        for (String nameSpace : nameSpaces) {
-            ResourceLocation location = new ResourceLocation(nameSpace, "gunskins.json");
-            try {
-                List<Resource> resources = Minecraft.getInstance().getResourceManager().getResources(location);
-                GunMod.LOGGER.info("loading skins from {}", location);
-                for (Resource resource : resources) {
-                    InputStream stream = resource.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-                    JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-                    for (Map.Entry<String, JsonElement> elementEntry : json.entrySet()) {
-                        ResourceLocation gunSkinLocation = new ResourceLocation(nameSpace, elementEntry.getKey());
-                        //try to load and register skin
-                        GunSkinLoader loader = new GunSkinLoader();
-                        GunSkin skin = loader.loadGunSkin(gunSkinLocation);
-                        if(skin != null) {
-                            GunSkinManager.registerGunSkin(skin);
-                        }
-                    }
-                }
-            } catch (IOException ignore) {}
-        }
-    }
-
     public static class TextureModel {
         public static final ResourceLocation atlasLocation = new ResourceLocation("minecraft:textures/atlas/blocks.png");
         private final BlockModel unbaked;
@@ -175,8 +147,8 @@ public class GunSkinLoader {
             this.unbaked = model;
         }
 
-        public static GunSkinLoader.TextureModel tryCreateCopy(ResourceLocation parentLocation) {
-            GunSkinLoader.TextureModel textureModel = null;
+        public static VanillaGunSkinLoader.TextureModel tryCreateCopy(ResourceLocation parentLocation) {
+            VanillaGunSkinLoader.TextureModel textureModel = null;
             if (ForgeModelBakery.instance() != null) {
                 BlockModel parent = (BlockModel) ForgeModelBakery.instance().getModel(parentLocation);
 
@@ -188,7 +160,7 @@ public class GunSkinLoader {
                 BlockModel model = new BlockModel(parentLocation, list, map,
                         true, null, parent.getTransforms(), parent.getOverrides());
 
-                textureModel = new GunSkinLoader.TextureModel(model);
+                textureModel = new VanillaGunSkinLoader.TextureModel(model);
             }
             return textureModel;
         }

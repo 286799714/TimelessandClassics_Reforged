@@ -8,7 +8,6 @@ import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.animation.HK416A5AnimationController;
 import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.item.SkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.item.GunItem;

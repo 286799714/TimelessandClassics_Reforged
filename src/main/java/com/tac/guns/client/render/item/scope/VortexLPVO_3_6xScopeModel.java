@@ -14,8 +14,8 @@ import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
+import com.tac.guns.client.render.item.ItemModelRenderManager;
 import com.tac.guns.client.render.item.IOverrideModel;
-import com.tac.guns.client.resource.internal.MyCachedModels;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.attachment.IAttachment;
@@ -46,8 +46,8 @@ public class VortexLPVO_3_6xScopeModel implements IOverrideModel
         matrixStack.translate(0, 0.074, 0);
 
         if(AimingHandler.get().getNormalisedAdsProgress() < 0.525 || Config.CLIENT.display.scopeDoubleRender.get())
-            LPVO_1_6_FRONT.getModel().render(stack, matrixStack, renderTypeBuffer, light, overlay);
-        LPVO_1_6.getModel().render(stack, matrixStack, renderTypeBuffer, light, overlay);
+            ItemModelRenderManager.render(LPVO_1_6_FRONT.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
+        ItemModelRenderManager.render(LPVO_1_6.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
 
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(180F));
 

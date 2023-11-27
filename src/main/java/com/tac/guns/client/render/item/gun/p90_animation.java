@@ -15,7 +15,6 @@ import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
 import com.tac.guns.client.animation.P90AnimationController;
 import com.tac.guns.client.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.item.SkinnedGunModel;
 import com.tac.guns.client.resource.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;

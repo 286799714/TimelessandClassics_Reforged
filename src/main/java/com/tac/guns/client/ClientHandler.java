@@ -11,9 +11,12 @@ import com.tac.guns.client.render.entity.GrenadeRenderer;
 import com.tac.guns.client.render.entity.MissileRenderer;
 import com.tac.guns.client.render.entity.ProjectileRenderer;
 import com.tac.guns.client.render.entity.ThrowableGrenadeRenderer;
+import com.tac.guns.client.render.item.ItemModelRenderManager;
+import com.tac.guns.client.render.item.VanillaBakedItemModelRenderer;
 import com.tac.guns.client.render.item.scope.*;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.resource.gunskin.GunSkinManager;
+import com.tac.guns.client.resource.model.VanillaBakedModel;
 import com.tac.guns.client.screen.*;
 import com.tac.guns.client.screen.AmmoScreen;
 import com.tac.guns.client.settings.GunOptions;
@@ -99,6 +102,7 @@ public class ClientHandler {
         registerModelOverrides();
         registerScreenFactories();
         registerDefaultGunSkins();
+        registerCacheableModelRender();
 
         AnimationHandler.preloadAnimations();
         new AnimationRunner(); //preload thread pool
@@ -128,7 +132,11 @@ public class ClientHandler {
     }
 
     private static void registerDefaultGunSkins(){
-        GunSkinManager.registerDefaultGunSkin(ModItems.AK47.getId(), new ResourceLocation("tac:ak47"));
+        GunSkinManager.getInstance().registerDefaultGunSkin(ModItems.AK47.getId(), new ResourceLocation("tac:ak47"));
+    }
+
+    private static void registerCacheableModelRender(){
+        ItemModelRenderManager.registerRenderer(VanillaBakedModel.class, VanillaBakedItemModelRenderer.getInstance());
     }
 
     private static void registerColors() {

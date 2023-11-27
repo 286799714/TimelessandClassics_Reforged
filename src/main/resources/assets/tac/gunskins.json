@@ -1,6 +1,8 @@
 {
-  "models/gunskin/ak47/spent/ak47_spent.meta.json": {
+  "models/gunskin/ak47/default/ak47": {
+    "loader": "vanilla"
   },
-  "models/gunskin/ak47/default/ak47.meta.json": {
+  "models/gunskin/ak47/spent/ak47_spent": {
+    "loader": "custom"
   }
 }

@@ -1,14 +1,14 @@
-package com.tac.guns.client.render.item;
+package com.tac.guns.client.render.item.gun;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3d;
+import com.tac.guns.client.render.item.ItemModelRenderManager;
+import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.resource.gunskin.GunComponent;
 import com.tac.guns.client.resource.gunskin.GunSkin;
 import com.tac.guns.client.resource.gunskin.GunSkinManager;
 import com.tac.guns.client.resource.model.CacheableModel;
-import com.tac.guns.client.resource.model.VanillaBakedModel;
-import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.init.ModItems;
 import com.tac.guns.item.attachment.IAttachment;
@@ -34,7 +34,7 @@ public abstract class SkinnedGunModel implements IOverrideModel {
 
     @Override
     public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay){
-        GunSkin skin = GunSkinManager.getSkinFromTag(stack);
+        GunSkin skin = GunSkinManager.getInstance().getSkinFromTag(stack);
         render(skin, partialTicks, transformType, stack, entity, matrixStack, buffer, light, overlay);
     }
 
@@ -53,11 +53,11 @@ public abstract class SkinnedGunModel implements IOverrideModel {
             Vector3d x = extraOffset.get(modelComponent);
             matrices.pushPose();
             matrices.translate(x.x, x.y, x.z);
-            model.render(stack, matrices, renderBuffer, light, overlay);
+            ItemModelRenderManager.render(model, stack, matrices, renderBuffer, light, overlay);
             matrices.translate(-x.x, -x.y, -x.z);
             matrices.popPose();
         } else
-            model.render(stack, matrices, renderBuffer, light, overlay);
+            ItemModelRenderManager.render(model, stack, matrices, renderBuffer, light, overlay);
     }
 
     public void renderBody(ItemStack stack, PoseStack matrices, MultiBufferSource renderBuffer, int light, int overlay, GunSkin skin){

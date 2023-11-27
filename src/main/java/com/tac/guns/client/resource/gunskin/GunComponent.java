@@ -19,7 +19,6 @@ import java.util.Objects;
  * If two GunComponent with the same key have different namespaces, they are not regarded as the same.
  * */
 public class GunComponent implements Comparable<GunComponent>{
-    private static final HashMap<String, HashMap<String, GunComponent>> componentMap = new HashMap<>(); // namespace -> (key -> GunComponent)
 
     public final String key;
     public final String namespace;
@@ -31,28 +30,6 @@ public class GunComponent implements Comparable<GunComponent>{
     public GunComponent(@Nullable String namespace, @Nullable String key){
         this.key = key;
         this.namespace = namespace;
-    }
-
-    public void registerThis(){
-        componentMap.compute(namespace, (k, map)->{
-            if(map == null){
-                map = new HashMap<>();
-            }
-            map.put(key, this);
-            return map;
-        });
-    }
-
-    public static void register(GunComponent component){
-        component.registerThis();
-    }
-
-    public static GunComponent getComponent(@Nullable String namespace, @Nullable String key){
-        Map<String, GunComponent> map = componentMap.get(namespace);
-        if(map != null){
-            return map.get(key);
-        }
-        return null;
     }
 
     @Override

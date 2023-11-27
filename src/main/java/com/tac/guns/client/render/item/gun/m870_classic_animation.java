@@ -5,7 +5,6 @@ import com.tac.guns.client.resource.gunskin.GunSkin;
 import com.tac.guns.client.animation.M870AnimationController;
 import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.item.SkinnedGunModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.util.GunModifierHelper;
 import net.minecraft.client.renderer.MultiBufferSource;

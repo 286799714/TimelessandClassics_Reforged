@@ -7,7 +7,6 @@ import com.tac.guns.client.resource.gunskin.GunSkin;
 import com.tac.guns.client.handler.ShootingHandler;
 import com.tac.guns.client.animation.MK47AnimationController;
 import com.tac.guns.client.animation.module.PlayerHandAnimation;
-import com.tac.guns.client.render.item.SkinnedGunModel;
 import com.tac.guns.client.resource.internal.TacGunComponents;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;

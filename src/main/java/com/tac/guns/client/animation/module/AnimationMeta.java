@@ -15,8 +15,12 @@ public class AnimationMeta {
         return resourceLocation;
     }
 
-    public boolean equals(AnimationMeta meta){
-        if(meta == null) return false;
-        return meta.resourceLocation.equals(resourceLocation);
+    @Override
+    public boolean equals(Object meta){
+        if(meta instanceof AnimationMeta) {
+            AnimationMeta meta1 = (AnimationMeta) meta;
+            return meta1.resourceLocation.equals(resourceLocation);
+        }else
+            return false;
     }
 }

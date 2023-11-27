@@ -17,7 +17,7 @@ public class HitBlockSmokeParticle  extends ExplodeParticle {
         this.setColor(0.56f,0.56f,0.56f);
         this.quadSize = 0.3f + 0.15f * this.random.nextFloat();
         this.lifetime = (int)(6D / ((double)this.random.nextFloat() * 0.9 + 0.1D)) + 2;
-        this.gravity = 0.05F;
+        this.gravity = 0;
     }
 
     @OnlyIn(Dist.CLIENT)

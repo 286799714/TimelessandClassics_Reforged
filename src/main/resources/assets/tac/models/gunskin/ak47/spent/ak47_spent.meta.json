@@ -1,5 +1,5 @@
 {
-  "type": "custom",
+  "type": "multi",
   "gun_registry_name": "tac:ak47",
   "components": {
     "body": "body",

@@ -4,7 +4,6 @@ import com.tac.guns.Reference;
 import com.tac.guns.client.resource.model.CacheableModel;
 import com.tac.guns.client.resource.model.VanillaBakedModel;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;

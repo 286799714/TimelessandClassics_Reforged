@@ -1,6 +1,7 @@
 package com.tac.guns.client.network;
 
 import com.mojang.logging.LogUtils;
+import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
 import com.tac.guns.client.BulletTrail;

@@ -13,8 +13,8 @@ import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
+import com.tac.guns.client.render.item.ItemModelRenderManager;
 import com.tac.guns.client.render.item.IOverrideModel;
-import com.tac.guns.client.resource.internal.MyCachedModels;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.item.ScopeItem;
 import com.tac.guns.item.attachment.IAttachment;
@@ -44,8 +44,8 @@ public class Standard6_10xScopeModel implements IOverrideModel
         matrixStack.translate(0, -0.15, -0.38);
         matrixStack.translate(0, 0, 0.0015);
         if(AimingHandler.get().getNormalisedAdsProgress() < 0.525 || Config.CLIENT.display.scopeDoubleRender.get())
-            Sx8_FRONT.getModel().render(stack, matrixStack, renderTypeBuffer, light, overlay);
-        Sx8_BODY.getModel().render(stack, matrixStack, renderTypeBuffer, light, overlay);
+            ItemModelRenderManager.render(Sx8_FRONT.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
+        ItemModelRenderManager.render(Sx8_BODY.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
 
         matrixStack.translate(0, 0.15, 0.42);
 
