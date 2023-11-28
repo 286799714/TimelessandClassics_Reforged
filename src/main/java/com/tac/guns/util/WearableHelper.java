@@ -62,10 +62,14 @@ public class WearableHelper
         float og = rig.getOrCreateTag().getFloat("RigDurability");
         rig.getOrCreateTag().remove("RigDurability");
 
-        if(og == 0)
+        if(og == 0) {
+            ((PlayerWithSynData) player).updateRig();
             return true;
-        if(og - proj.getDamage() > 0)
+        }
+        if(og - proj.getDamage() > 0) {
             rig.getOrCreateTag().putFloat("RigDurability", og - proj.getDamage());
+            ((PlayerWithSynData) player).updateRig();
+        }
         else if (og - proj.getDamage() < 0) {
             ResourceLocation brokenSound = ((ArmorRigItem)rig.getItem()).getRig().getSounds().getBroken();
             if (brokenSound != null) {
@@ -73,9 +77,10 @@ public class WearableHelper
                 PacketHandler.getPlayChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), messageSound);
             }
             rig.getOrCreateTag().putFloat("RigDurability", 0);
+            ((PlayerWithSynData) player).updateRig();
             return false;
         }
-
+        ((PlayerWithSynData) player).updateRig();
         return false;
     }
 
@@ -109,6 +114,7 @@ public class WearableHelper
      * @param rig The Itemstack for armor, I don't want helpers to view through static capability's
      * @param repair The percentage to repair off the armor, can be used for custom methods, healing stations, ETC.
      * @return true if the armor is fully repaired, false if armor only got ticked and not at max
+     * @IMPORTANT ||| ((PlayerWithSynData) player).updateRig(); //update the rig so clientside gets updated values
      */
     public static boolean tickRepairCurrentDurability(ItemStack rig, float repair)
     {
@@ -129,11 +135,11 @@ public class WearableHelper
         return false;
     }
 
-    public static void consumeRepairItem(Player player, ItemStack rig) {
+    public static boolean consumeRepairItem(Player player, ItemStack rig) {
         Item repairItem = ForgeRegistries.ITEMS.getValue(((ArmorRigItem) rig.getItem()).getRig().getRepair().getItem());
         if(repairItem == null) {
             GunMod.LOGGER.log(Level.ERROR, ((ArmorRigItem) rig.getItem()).getRig().getRepair().getItem()+" | Is not a real / registered item.");
-            return;
+            return false;
         }
         int loc = -1;
         for(int i = 0; i < player.getInventory().getContainerSize(); ++i)
@@ -145,22 +151,23 @@ public class WearableHelper
         }
         if(loc > -1) {
             player.getInventory().removeItem(loc, 1);
+            return true;
         }
         else {
             GunMod.LOGGER.log(Level.WARN, ((ArmorRigItem) rig.getItem()).getRig().getRepair().getItem()+" | Not found anymore in {" + player.getDisplayName().getString() + "} inventory");
+            return false;
         }
 
     }
 
-    public static void consumeRepairItem(Player player) {
+    public static boolean consumeRepairItem(Player player) {
         ItemStack rig = WearableHelper.PlayerWornRig(player);
         if(rig.isEmpty())
-            return;
-        consumeRepairItem(player, rig);
+            return false;
+        return consumeRepairItem(player, rig);
     }
 
-    public static float GetCurrentDurability(ItemStack item)
-    {
+    public static float GetCurrentDurability(ItemStack item) {
         return item.getOrCreateTag().getFloat("RigDurability");
     }
 }

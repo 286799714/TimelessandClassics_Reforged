@@ -11,6 +11,7 @@ import com.tac.guns.common.*;
 import com.tac.guns.common.container.*;
 import com.tac.guns.crafting.WorkbenchRecipe;
 import com.tac.guns.crafting.WorkbenchRecipes;
+import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.entity.ProjectileEntity;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.init.ModBlocks;
@@ -807,8 +808,10 @@ public class ServerPlayHandler
         if(!rigStack.isEmpty() && !WearableHelper.isFullDurability(rigStack))
         {
             Rig rig = ((ArmorRigItem)rigStack.getItem()).getRig();
-            WearableHelper.tickRepairCurrentDurability(rigStack);
-            WearableHelper.consumeRepairItem(player);
+            if(WearableHelper.consumeRepairItem(player)) {
+                WearableHelper.tickRepairCurrentDurability(rigStack);
+            }
+
             ResourceLocation repairSound = rig.getSounds().getRepair();
             //SoundEvents.ARMOR_EQUIP_DIAMOND.getLocation()
             if (repairSound != null && player.isAlive()) {
@@ -817,5 +820,6 @@ public class ServerPlayHandler
                         messageSound);
             }
         }
+        ((PlayerWithSynData) player).updateRig();
     }
 }

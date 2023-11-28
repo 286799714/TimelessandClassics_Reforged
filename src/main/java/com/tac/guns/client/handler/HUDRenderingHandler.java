@@ -443,8 +443,8 @@ public class HUDRenderingHandler extends GuiComponent {
                 stack.pushPose();
                 {
                     MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-                    float iconAnchorX = (anchorPointX - (counterSize*32) / 2) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.x.get().floatValue());
-                    float iconAnchorY = (anchorPointY + 7 + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.y.get().floatValue()));
+                    float iconAnchorX = (anchorPointX - (counterSize*32) / 2) + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.x.get().floatValue()) + 38;
+                    float iconAnchorY = (anchorPointY - 3.5f + (-Config.CLIENT.weaponGUI.weaponAmmoCounter.y.get().floatValue()));
                     itemRenderer.renderGuiItem(rig, (int) iconAnchorX , (int) iconAnchorY);
                 }
                 stack.popPose();

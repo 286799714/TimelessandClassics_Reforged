@@ -281,6 +281,7 @@ public class GunRenderingHandler {
         }
     }
 
+    //TODO: Review for mistracking
     private void updateOffhandTranslate() {
         this.prevOffhandTranslate = this.offhandTranslate;
         Minecraft mc = Minecraft.getInstance();
