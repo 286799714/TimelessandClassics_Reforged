@@ -2,6 +2,7 @@ package com.tac.guns.client.model.bedrock;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
@@ -28,6 +29,11 @@ public class BedrockPart {
     private float initRotX;
     private float initRotY;
     private float initRotZ;
+    /**该变量用于动画旋转*/
+    public Quaternion additionalQuaternion = new Quaternion(0, 0, 0, 1);
+    public float xScale = 1;
+    public float yScale = 1;
+    public float zScale = 1;
 
     public void setPos(float x, float y, float z) {
         this.x = x;
@@ -35,20 +41,20 @@ public class BedrockPart {
         this.z = z;
     }
 
-    public void render(PoseStack poseStack, VertexConsumer consumer, int texU, int texV) {
-        this.render(poseStack, consumer, texU, texV, 1.0F, 1.0F, 1.0F, 1.0F);
+    public void render(PoseStack poseStack, VertexConsumer consumer, int light, int overlay) {
+        this.render(poseStack, consumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public void render(PoseStack poseStack, VertexConsumer consumer, int texU, int texV, float red, float green, float blue, float alpha) {
+    public void render(PoseStack poseStack, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
         if (this.visible) {
             if (!this.cubes.isEmpty() || !this.children.isEmpty()) {
                 poseStack.pushPose();
                 poseStack.translate(this.offsetX, this.offsetY, this.offsetZ);
-                this.translateAndRotate(poseStack);
-                this.compile(poseStack.last(), consumer, texU, texV, red, green, blue, alpha);
+                this.translateAndRotateAndScale(poseStack);
+                this.compile(poseStack.last(), consumer, light, overlay, red, green, blue, alpha);
 
                 for (BedrockPart part : this.children) {
-                    part.render(poseStack, consumer, texU, texV, red, green, blue, alpha);
+                    part.render(poseStack, consumer, light, overlay, red, green, blue, alpha);
                 }
 
                 poseStack.popPose();
@@ -56,7 +62,7 @@ public class BedrockPart {
         }
     }
 
-    public void translateAndRotate(PoseStack poseStack) {
+    public void translateAndRotateAndScale(PoseStack poseStack) {
         poseStack.translate((this.x / 16.0F), (this.y / 16.0F), (this.z / 16.0F));
         if (this.zRot != 0.0F) {
             poseStack.mulPose(Vector3f.ZP.rotation(this.zRot));
@@ -67,12 +73,13 @@ public class BedrockPart {
         if (this.xRot != 0.0F) {
             poseStack.mulPose(Vector3f.XP.rotation(this.xRot));
         }
-
+        poseStack.mulPose(additionalQuaternion);
+        poseStack.scale(xScale, yScale, zScale);
     }
 
-    private void compile(PoseStack.Pose pose, VertexConsumer consumer, int texU, int texV, float red, float green, float blue, float alpha) {
+    private void compile(PoseStack.Pose pose, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
         for (BedrockCube bedrockCube : this.cubes) {
-            bedrockCube.compile(pose, consumer, texU, texV, red, green, blue, alpha);
+            bedrockCube.compile(pose, consumer, light, overlay, red, green, blue, alpha);
         }
     }
 

@@ -9,8 +9,7 @@ import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
-import com.tac.guns.client.render.item.ItemModelRenderManager;
-import com.tac.guns.client.resource.internal.MyCachedModels;
+import com.tac.guns.client.resource.internal.MyBakedModels;
 import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.command.ScopeEditor;
@@ -67,7 +66,7 @@ public class ACOG_4x_ScopeModel implements IOverrideModel
         RenderUtil.renderModel(stack, parent, matrixStack, renderTypeBuffer, light, overlay);
         double progress = AimingHandler.get().getLerpAdsProgress(partialTicks);
         if(progress < 0.8){
-            ItemModelRenderManager.render(MyCachedModels.ACOG_SCOPE_MIRROR.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
+            RenderUtil.renderModel(MyBakedModels.ACOG_SCOPE_MIRROR.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
         }
 
         matrixStack.translate(0, -0.057, 0);

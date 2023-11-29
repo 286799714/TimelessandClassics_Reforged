@@ -1286,7 +1286,7 @@ public class GunRenderingHandler {
             }
             GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
             /* Render first person animated arms*/
-            PlayerHandAnimation.render(controller, transformType, matrixStack, renderTypeBuffer, light);
+            //PlayerHandAnimation.render(controller, transformType, matrixStack, renderTypeBuffer, light);
             this.renderGun(entity, transformType, model.isEmpty() ? stack : model, matrixStack, renderTypeBuffer, light, partialTicks);
             this.renderAttachments(entity, transformType, stack, matrixStack, renderTypeBuffer, light, partialTicks);
             this.renderMuzzleFlash(entity, matrixStack, renderTypeBuffer, stack, transformType);

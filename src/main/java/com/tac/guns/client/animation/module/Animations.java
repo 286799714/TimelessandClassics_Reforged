@@ -1,7 +1,13 @@
 package com.tac.guns.client.animation.module;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
 import com.mojang.math.Matrix4f;
+import com.tac.guns.client.animation.gltf.AnimationStructure;
+import com.tac.guns.client.resource.animation.gltf.AnimationOnlyGltfAsset;
 import de.javagl.jgltf.model.GltfAnimations;
 import de.javagl.jgltf.model.NodeModel;
 import de.javagl.jgltf.model.animation.Animation;
@@ -22,8 +28,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +82,7 @@ public class Animations {
             initialModelMap.put(resourceLocation.toString(),model2);
             return model;
         }
+
         inputStream.close();
         return null;
     }

@@ -66,7 +66,7 @@ public class BedrockCubePerFace implements BedrockCube {
 
 
     @Override
-    public void compile(PoseStack.Pose pose, VertexConsumer consumer, int texU, int texV, float red, float green, float blue, float alpha) {
+    public void compile(PoseStack.Pose pose, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
         Matrix4f matrix4f = pose.pose();
         Matrix3f matrix3f = pose.normal();
 
@@ -83,7 +83,7 @@ public class BedrockCubePerFace implements BedrockCube {
                 float z = vertex.pos.z() / 16.0F;
                 Vector4f vector4f = new Vector4f(x, y, z, 1.0F);
                 vector4f.transform(matrix4f);
-                consumer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), red, green, blue, alpha, vertex.u, vertex.v, texV, texU, nx, ny, nz);
+                consumer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), red, green, blue, alpha, vertex.u, vertex.v, overlay, light, nx, ny, nz);
             }
         }
     }

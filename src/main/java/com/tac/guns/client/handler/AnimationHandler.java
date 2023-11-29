@@ -1,13 +1,24 @@
 package com.tac.guns.client.handler;
 
+import com.mojang.logging.LogUtils;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
+import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.Keys;
-import com.tac.guns.client.animation.*;
+import com.tac.guns.client.animation.ObjectAnimation;
+import com.tac.guns.client.animation.ObjectAnimationChannel;
+import com.tac.guns.client.animation.ObjectAnimationRunner;
+import com.tac.guns.client.animation.gltf.AnimationStructure;
 import com.tac.guns.client.animation.module.*;
+import com.tac.guns.client.model.BedrockGunModel;
+import com.tac.guns.client.render.item.OverrideModelManager;
+import com.tac.guns.client.resource.animation.AnimationAssetLoader;
+import com.tac.guns.client.resource.animation.gltf.AnimationOnlyGltfAsset;
+import com.tac.guns.client.resource.model.bedrock.BedrockModelLoader;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
+import com.tac.guns.init.ModItems;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunModifierHelper;
@@ -15,6 +26,7 @@ import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +37,10 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Mainly controls when the animation should play.
  */
@@ -32,7 +48,59 @@ import net.minecraftforge.fml.common.Mod;
 public enum AnimationHandler {
     INSTANCE;
 
+
+    static List<ObjectAnimationRunner> runners = new ArrayList<>();
+    @SubscribeEvent
+    public void onRenderTick(TickEvent.RenderTickEvent event){
+        for(ObjectAnimationRunner runner : runners){
+            runner.update();
+        }
+    }
+
     public static void preloadAnimations(){
+        try {
+            OverrideModelManager.register(
+                    ModItems.AK47.get(),
+                    BedrockModelLoader.loadBedrockGunModel(
+                            new ResourceLocation("tac", "models/gunskin/ak47/ak47.geo.json"),
+                            new ResourceLocation("tac", "textures/items/ak47_uv.png")
+                    )
+            );
+        } catch (IOException e) {
+            GunMod.LOGGER.info("test fail: {}", e.toString());
+        }
+
+        try {
+            AnimationOnlyGltfAsset asset =
+                    AnimationAssetLoader.loadGltfAnimationAsset(new ResourceLocation("tac","animations/ak47_reload_empty.gltf"));
+            AnimationStructure structure = new AnimationStructure(asset);
+            BedrockGunModel model = (BedrockGunModel) OverrideModelManager.getModel(ModItems.AK47.get());
+            List<ObjectAnimation> animations = com.tac.guns.client.animation.Animations.createAnimations(structure, model);
+            for(ObjectAnimation animation : animations){
+                animation.playType = ObjectAnimation.PlayType.LOOP;
+                ObjectAnimationRunner runner = new ObjectAnimationRunner(animation);
+                runner.run();
+                runners.add(runner);
+
+                List<ObjectAnimationChannel> channels = animation.getChannels();
+                for(ObjectAnimationChannel channel : channels){
+                    GunMod.LOGGER.info("testing " + channel.node + " " + channel.type);
+                    for(int i = 0; i < channel.keyframeTimeS.length; i++){
+                        StringBuilder str = new StringBuilder();
+                        str.append(channel.keyframeTimeS[i]).append(":");
+                        for(int j = 0; j < channel.values[i].length; j++){
+                            str.append(channel.values[i][j]).append(",");
+                        }
+                        GunMod.LOGGER.info(str.toString());
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            GunMod.LOGGER.warn("testing fail!");
+            throw new RuntimeException(e);
+        }
+        /*
         //TODO: Make automatic or have some sort of check for this
         AA12AnimationController.getInstance();
         Dp28AnimationController.getInstance();
@@ -88,6 +156,8 @@ public enum AnimationHandler {
         TEC9AnimationController.getInstance();
         Timeless50AnimationController.getInstance();
         UZIAnimationController.getInstance();
+
+         */
     }
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {

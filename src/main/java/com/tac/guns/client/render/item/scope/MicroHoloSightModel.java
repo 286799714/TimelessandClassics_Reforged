@@ -7,7 +7,6 @@ import com.mojang.math.Matrix4f;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
-import com.tac.guns.client.render.item.ItemModelRenderManager;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.item.GunItem;
@@ -21,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-import static com.tac.guns.client.resource.internal.MyCachedModels.MICRO_HOLO_BASE;
+import static com.tac.guns.client.resource.internal.MyBakedModels.MICRO_HOLO_BASE;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -60,7 +59,7 @@ public class MicroHoloSightModel implements IOverrideModel
             }
             matrixStack.translate(0, 0.055, 0);
             if (gunItem.getGun().getModules().getAttachments().getPistolScope().getDoRenderMount())
-                ItemModelRenderManager.render(MICRO_HOLO_BASE.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
+                RenderUtil.renderModel(MICRO_HOLO_BASE.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
         }
         RenderUtil.renderModel(stack, parent, matrixStack, renderTypeBuffer, light, overlay);
         matrixStack.translate(0, -0.049, 0);

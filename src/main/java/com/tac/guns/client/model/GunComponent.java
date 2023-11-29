@@ -1,0 +1,63 @@
+package com.tac.guns.client.model;
+
+import net.minecraft.resources.ResourceLocation;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import java.util.Objects;
+
+/**
+ * This is used to identify and reorganize guns' component models.
+ *
+ * "key" is used to identify a component model. It appears in the file name in suffix form.
+ * For example, ak47_stock_light.json is a model file that contain the light stock of the ak47. Its corresponding component key is "stock_light".
+ *
+ * "namespace" is used to distinguish GunComponents under different organizations.
+ * If two GunComponent with the same key have different namespaces, they are not regarded as the same.
+ * */
+public class GunComponent implements Comparable<GunComponent>{
+
+    public final String key;
+    public final String namespace;
+
+    public GunComponent(@Nullable String key){
+        this(null, key);
+    }
+
+    public GunComponent(@Nullable String namespace, @Nullable String key){
+        this.key = key;
+        this.namespace = namespace;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof GunComponent component){
+            return
+                    Objects.equals(this.key, component.key) &&
+                    Objects.equals(this.namespace, component.namespace);
+        }
+        else
+            return false;
+    }
+
+    @Override
+    public int hashCode(){
+        return (namespace == null ? 0 : namespace.hashCode()) * 31 + (key == null ? 0 : key.hashCode());
+    }
+
+    @Override
+    public int compareTo(@Nonnull GunComponent o) {
+        int r = Objects.compare(namespace, o.namespace, String::compareTo);
+        if(r != 0) return r;
+        return Objects.compare(key, o.key, String::compareTo);
+    }
+
+    public ResourceLocation getModelLocation(String mainLocation){
+        mainLocation = mainLocation.replace("models/", "");        return ResourceLocation.tryParse(mainLocation+(this.key == null ? "" : "_" + this.key));
+    }
+
+    public ResourceLocation getModelLocation(ResourceLocation mainLocation){
+        return getModelLocation(mainLocation.toString());
+    }
+}

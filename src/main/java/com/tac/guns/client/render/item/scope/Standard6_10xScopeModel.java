@@ -13,7 +13,6 @@ import com.tac.guns.client.handler.AimingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.command.ScopeEditor;
 import com.tac.guns.client.handler.command.data.ScopeData;
-import com.tac.guns.client.render.item.ItemModelRenderManager;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.item.ScopeItem;
@@ -27,8 +26,8 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-import static com.tac.guns.client.resource.internal.MyCachedModels.Sx8_BODY;
-import static com.tac.guns.client.resource.internal.MyCachedModels.Sx8_FRONT;
+import static com.tac.guns.client.resource.internal.MyBakedModels.Sx8_BODY;
+import static com.tac.guns.client.resource.internal.MyBakedModels.Sx8_FRONT;
 
 /**
  * Author: Forked from MrCrayfish, continued by Timeless devs
@@ -44,8 +43,8 @@ public class Standard6_10xScopeModel implements IOverrideModel
         matrixStack.translate(0, -0.15, -0.38);
         matrixStack.translate(0, 0, 0.0015);
         if(AimingHandler.get().getNormalisedAdsProgress() < 0.525 || Config.CLIENT.display.scopeDoubleRender.get())
-            ItemModelRenderManager.render(Sx8_FRONT.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
-        ItemModelRenderManager.render(Sx8_BODY.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
+            RenderUtil.renderModel(Sx8_FRONT.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
+        RenderUtil.renderModel(Sx8_BODY.getModel(), stack, matrixStack, renderTypeBuffer, light, overlay);
 
         matrixStack.translate(0, 0.15, 0.42);
 

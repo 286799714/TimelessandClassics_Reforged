@@ -55,4 +55,10 @@ public class OverrideModelManager
     {
         return MODEL_MAP.get(stack.getItem());
     }
+
+    @Nullable
+    public static IOverrideModel getModel(Item item)
+    {
+        return MODEL_MAP.get(item);
+    }
 }

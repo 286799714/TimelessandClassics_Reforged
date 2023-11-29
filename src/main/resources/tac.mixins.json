@@ -22,7 +22,6 @@
     "client.ItemRendererMixin",
     "client.LivingRendererMixin",
     "client.MinecraftStaticMixin",
-    "client.ModelBakeryMixin",
     "client.MouseHelperMixin",
     "client.PlayerModelMixin",
     "client.PlayerRendererMixin",

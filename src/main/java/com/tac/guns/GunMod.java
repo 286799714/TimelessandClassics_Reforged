@@ -304,40 +304,6 @@ public class GunMod
     {
         // Too much to keep in Gunmod file
         ClientHandler.setup(Minecraft.getInstance());
-
-        try {
-            OverrideModelManager.register(
-                    ModItems.AK47.get(),
-                    BedrockModelLoader.loadBedrockGunModel(
-                            new ResourceLocation("tac", "models/gunskin/ak47/ak47.geo.json"),
-                            new ResourceLocation("tac", "textures/items/ak47_uv.png")
-                    )
-            );
-        } catch (IOException e) {
-            GunMod.LOGGER.info("test fail: {}", e.toString());
-        }
-
-        // Auto register code animation files, such as firing, animation mapping is called in these files too
-        for (Field field : ModItems.class.getDeclaredFields()) {
-            RegistryObject<?> object;
-            try {
-                object = (RegistryObject<?>) field.get(null);
-            } catch (ClassCastException | IllegalAccessException e) {
-                continue;
-            }
-            if (TimelessGunItem.class.isAssignableFrom(object.get().getClass())) {
-                try {
-                    OverrideModelManager.register(
-                            (Item) object.get(),
-                            (IOverrideModel) Class.forName("com.tac.guns.client.render.item.gun." + field.getName().toLowerCase(Locale.ENGLISH) + "_animation").newInstance()
-                    );
-                } catch (ClassNotFoundException e) {
-                    LOGGER.warn("Could not load animations for gun - " + field.getName());
-                } catch (IllegalAccessException | InstantiationException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
 

@@ -1,27 +1,13 @@
 package com.tac.guns.client.model.bedrock;
 
-
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Vector3f;
-import com.tac.guns.Reference;
-import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.resource.model.bedrock.BedrockVersion;
 import com.tac.guns.client.resource.model.bedrock.pojo.*;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class BedrockModel{
     /**
@@ -36,9 +22,6 @@ public class BedrockModel{
      * 哪些模型需要渲染。加载进父骨骼的子骨骼是不需要渲染的
      */
     protected final List<BedrockPart> shouldRender = new LinkedList<>();
-    /**
-     * 用于自定义动画的变量
-     */
 
     public BedrockModel(BedrockModelPOJO pojo, BedrockVersion version) {
         if (version == BedrockVersion.LEGACY) {
@@ -250,7 +233,7 @@ public class BedrockModel{
      *
      * @param index 是 xyz 的哪一个，x 是 0，y 是 1，z 是 2
      */
-    private float convertPivot(BonesItem bones, int index) {
+    protected float convertPivot(BonesItem bones, int index) {
         if (bones.getParent() != null) {
             if (index == 1) {
                 return indexBones.get(bones.getParent()).getPivot().get(index) - bones.getPivot().get(index);
@@ -266,7 +249,7 @@ public class BedrockModel{
         }
     }
 
-    private float convertPivot(BonesItem parent, CubesItem cube, int index) {
+    protected float convertPivot(BonesItem parent, CubesItem cube, int index) {
         assert cube.getPivot() != null;
         if (index == 1) {
             return parent.getPivot().get(index) - cube.getPivot().get(index);
@@ -284,7 +267,7 @@ public class BedrockModel{
      *
      * @param index 是 xyz 的哪一个，x 是 0，y 是 1，z 是 2
      */
-    private float convertOrigin(BonesItem bone, CubesItem cube, int index) {
+    protected float convertOrigin(BonesItem bone, CubesItem cube, int index) {
         if (index == 1) {
             return bone.getPivot().get(index) - cube.getOrigin().get(index) - cube.getSize().get(index);
         } else {
@@ -292,7 +275,7 @@ public class BedrockModel{
         }
     }
 
-    private float convertOrigin(CubesItem cube, int index) {
+    protected float convertOrigin(CubesItem cube, int index) {
         assert cube.getPivot() != null;
         if (index == 1) {
             return cube.getPivot().get(index) - cube.getOrigin().get(index) - cube.getSize().get(index);
@@ -304,8 +287,7 @@ public class BedrockModel{
     /**
      * 基岩版用的是度，Java 版用的是弧度，这个转换很简单
      */
-    private float convertRotation(float degree) {
+    protected float convertRotation(float degree) {
         return (float) (degree * Math.PI / 180);
     }
-
 }

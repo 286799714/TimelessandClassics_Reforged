@@ -1,7 +1,7 @@
 package com.tac.guns.client.model.bedrock;
 
 
-import com.tac.guns.client.model.IModelRenderer;
+import com.mojang.math.Quaternion;
 
 public class ModelRendererWrapper implements IModelRenderer {
     private final BedrockPart modelRenderer;
@@ -112,5 +112,45 @@ public class ModelRendererWrapper implements IModelRenderer {
     @Override
     public float getInitRotateAngleZ() {
         return modelRenderer.getInitRotZ();
+    }
+
+    @Override
+    public void setAdditionalQuaternion(Quaternion quaternion) {
+        modelRenderer.additionalQuaternion = quaternion;
+    }
+
+    @Override
+    public Quaternion getAdditionalQuaternion() {
+        return modelRenderer.additionalQuaternion;
+    }
+
+    @Override
+    public void setScaleX(float scaleX) {
+        modelRenderer.xScale = scaleX;
+    }
+
+    @Override
+    public float getScaleX() {
+        return modelRenderer.xScale;
+    }
+
+    @Override
+    public void setScaleY(float scaleY) {
+        modelRenderer.yScale = scaleY;
+    }
+
+    @Override
+    public float getScaleY() {
+        return modelRenderer.yScale;
+    }
+
+    @Override
+    public void setScaleZ(float scaleZ) {
+        modelRenderer.zScale = scaleZ;
+    }
+
+    @Override
+    public float getScaleZ() {
+        return modelRenderer.zScale;
     }
 }
