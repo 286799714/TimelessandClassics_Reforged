@@ -3,8 +3,7 @@ package com.tac.guns.client.resource.model.bedrock;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tac.guns.GunMod;
-import com.tac.guns.client.model.BedrockGunModel;
-import com.tac.guns.client.model.bedrock.BedrockModel;
+import com.tac.guns.client.model.BedrockAnimatedModel;
 import com.tac.guns.client.resource.model.bedrock.pojo.BedrockModelPOJO;
 import com.tac.guns.client.resource.model.bedrock.pojo.CubesItem;
 import net.minecraft.client.Minecraft;
@@ -27,7 +26,7 @@ public class BedrockModelLoader {
 
     private static final Marker MARKER = MarkerManager.getMarker("BedrockModelLoader");
 
-    @Nullable public static BedrockGunModel loadBedrockGunModel(ResourceLocation modelLocation, ResourceLocation textureLocation) throws IOException {
+    @Nullable public static BedrockAnimatedModel loadBedrockGunModel(ResourceLocation modelLocation, ResourceLocation textureLocation) throws IOException {
         Resource resource = Minecraft.getInstance().getResourceManager().getResource(modelLocation);
         try (InputStream stream = resource.getInputStream()) {
             BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
@@ -35,7 +34,7 @@ public class BedrockModelLoader {
             if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelLegacy() != null) {
-                    return new BedrockGunModel(pojo, BedrockVersion.LEGACY, textureLocation);
+                    return new BedrockAnimatedModel(pojo, BedrockVersion.LEGACY, textureLocation);
                 } else {
                     // 否则日志给出提示
                     GunMod.LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
@@ -47,7 +46,7 @@ public class BedrockModelLoader {
             if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
                 // 如果 model 字段不为空
                 if (pojo.getGeometryModelNew() != null) {
-                    return new BedrockGunModel(pojo, BedrockVersion.NEW, textureLocation);
+                    return new BedrockAnimatedModel(pojo, BedrockVersion.NEW, textureLocation);
                 } else {
                     // 否则日志给出提示
                     GunMod.LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);

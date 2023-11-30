@@ -30,13 +30,10 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
-public class BedrockGunModel extends BedrockModel implements IOverrideModel, AnimationListenerSupplier {
+public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel, AnimationListenerSupplier {
     /**以下用来给每个基岩版模型提供专门的 RenderType，用于提供VertexConsumer。*/ //todo 是否有更好的方法？
     private static int registryCounter = 1;
     private static final RenderStateShard.LightmapStateShard LIGHTMAP = new RenderStateShard.LightmapStateShard(true);
@@ -46,8 +43,9 @@ public class BedrockGunModel extends BedrockModel implements IOverrideModel, Ani
     public final RenderType MODEL_RENDER_TYPE;
 
     private Map<String, Function<BedrockPart, IModelRenderer>> functionRenderers;
+    private final CameraAnimationObject cameraAnimationObject = new CameraAnimationObject();
 
-    public BedrockGunModel(BedrockModelPOJO pojo, BedrockVersion version, ResourceLocation textureLocation) {
+    public BedrockAnimatedModel(BedrockModelPOJO pojo, BedrockVersion version, ResourceLocation textureLocation) {
         super(pojo, version);
         this.textureLocation = textureLocation;
         MODEL_RENDER_TYPE = RenderType.create(Reference.MOD_ID + ":bedrock_model$" + registryCounter++, DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 256, true, false, RenderType.CompositeState.builder().setLightmapState(LIGHTMAP).setShaderState(CUTOUT_SHADER).setTextureState(new RenderStateShard.TextureStateShard(textureLocation, false, false)).createCompositeState(true));
@@ -85,6 +83,10 @@ public class BedrockGunModel extends BedrockModel implements IOverrideModel, Ani
         matrixStack.popPose();
     }
 
+    public @Nonnull CameraAnimationObject getCameraAnimationObject(){
+        return cameraAnimationObject;
+    }
+
     @Override
     protected void loadNewModel(BedrockModelPOJO pojo) {
         if(functionRenderers == null) functionRenderers = new HashMap<>();
@@ -107,6 +109,57 @@ public class BedrockGunModel extends BedrockModel implements IOverrideModel, Ani
             modelMap.putIfAbsent(bones.getName(), new ModelRendererWrapper(new FunctionalBedrockPart(functionRenderers, bones.getName())));
         }
         super.loadLegacyModel(pojo);
+    }
+
+    private static float dot(float[] a, float[] b)
+    {
+        float sum = 0;
+        for (int i=0; i<a.length; i++)
+        {
+            sum += a[i] * b[i];
+        }
+        return sum;
+    }
+
+    private static void toQuaternion(float roll, float pitch, float yaw, @Nonnull Quaternion quaternion){
+        double cy = Math.cos(yaw * 0.5);
+        double sy = Math.sin(yaw * 0.5);
+        double cp = Math.cos(pitch * 0.5);
+        double sp = Math.sin(pitch * 0.5);
+        double cr = Math.cos(roll * 0.5);
+        double sr = Math.sin(roll * 0.5);
+
+        quaternion.set(
+                (float) (cy * cp * sr - sy * sp * cr),
+                (float) (sy * cp * sr + cy * sp * cr),
+                (float) (sy * cp * cr - cy * sp * sr),
+                (float) (cy * cp * cr + sy * sp * sr)
+        );
+    }
+
+    private static void quaternionToMatrix4x4(float[] q, float[] m)
+    {
+        float invLength = 1.0f / (float)Math.sqrt(dot(q, q));
+        float qx = q[0] * invLength;
+        float qy = q[1] * invLength;
+        float qz = q[2] * invLength;
+        float qw = q[3] * invLength;
+        m[ 0] = 1.0f - 2.0f * qy * qy - 2.0f * qz * qz;
+        m[ 1] = 2.0f * (qx * qy + qw * qz);
+        m[ 2] = 2.0f * (qx * qz - qw * qy);
+        m[ 3] = 0.0f;
+        m[ 4] = 2.0f * (qx * qy - qw * qz);
+        m[ 5] = 1.0f - 2.0f * qx * qx - 2.0f * qz * qz;
+        m[ 6] = 2.0f * (qy * qz + qw * qx);
+        m[ 7] = 0.0f;
+        m[ 8] = 2.0f * (qx * qz + qw * qy);
+        m[ 9] = 2.0f * (qy * qz - qw * qx);
+        m[10] = 1.0f - 2.0f * qx * qx - 2.0f * qy * qy;
+        m[11] = 0.0f;
+        m[12] = 0.0f;
+        m[13] = 0.0f;
+        m[14] = 0.0f;
+        m[15] = 1.0f;
     }
 
     @Override
@@ -158,56 +211,7 @@ public class BedrockGunModel extends BedrockModel implements IOverrideModel, Ani
                     float yaw = (float)Math.atan2(m[1], m[0]);
                     //因为模型是上下颠倒的，因此此处roll轴的旋转需要进行取反
                     //此处不使用forge的Quaternion构造方法是因为这玩意儿竟然是用单位元四元数连乘三轴旋转四元数，这样就顺序相关了....
-                    Quaternion rotation = toQuaternion(-roll, pitch, yaw);
-                    rendererWrapper.setAdditionalQuaternion(rotation);
-                }
-                private static float dot(float[] a, float[] b)
-                {
-                    float sum = 0;
-                    for (int i=0; i<a.length; i++)
-                    {
-                        sum += a[i] * b[i];
-                    }
-                    return sum;
-                }
-                private static Quaternion toQuaternion(float roll, float pitch, float yaw){
-                    double cy = Math.cos(yaw * 0.5);
-                    double sy = Math.sin(yaw * 0.5);
-                    double cp = Math.cos(pitch * 0.5);
-                    double sp = Math.sin(pitch * 0.5);
-                    double cr = Math.cos(roll * 0.5);
-                    double sr = Math.sin(roll * 0.5);
-
-                    return new Quaternion(
-                            (float) (cy * cp * sr - sy * sp * cr),
-                            (float) (sy * cp * sr + cy * sp * cr),
-                            (float) (sy * cp * cr - cy * sp * sr),
-                            (float) (cy * cp * cr + sy * sp * sr)
-                    );
-                }
-                private static void quaternionToMatrix4x4(float[] q, float[] m)
-                {
-                    float invLength = 1.0f / (float)Math.sqrt(dot(q, q));
-                    float qx = q[0] * invLength;
-                    float qy = q[1] * invLength;
-                    float qz = q[2] * invLength;
-                    float qw = q[3] * invLength;
-                    m[ 0] = 1.0f - 2.0f * qy * qy - 2.0f * qz * qz;
-                    m[ 1] = 2.0f * (qx * qy + qw * qz);
-                    m[ 2] = 2.0f * (qx * qz - qw * qy);
-                    m[ 3] = 0.0f;
-                    m[ 4] = 2.0f * (qx * qy - qw * qz);
-                    m[ 5] = 1.0f - 2.0f * qx * qx - 2.0f * qz * qz;
-                    m[ 6] = 2.0f * (qy * qz + qw * qx);
-                    m[ 7] = 0.0f;
-                    m[ 8] = 2.0f * (qx * qz + qw * qy);
-                    m[ 9] = 2.0f * (qy * qz - qw * qx);
-                    m[10] = 1.0f - 2.0f * qx * qx - 2.0f * qy * qy;
-                    m[11] = 0.0f;
-                    m[12] = 0.0f;
-                    m[13] = 0.0f;
-                    m[14] = 0.0f;
-                    m[15] = 1.0f;
+                    toQuaternion(-roll, pitch, yaw, rendererWrapper.getAdditionalQuaternion());
                 }
                 @Override
                 public ObjectAnimationChannel.ChannelType getType() {
@@ -232,6 +236,17 @@ public class BedrockGunModel extends BedrockModel implements IOverrideModel, Ani
             listeners.add(new Pair<>(entry.getKey(), translationListener));
             listeners.add(new Pair<>(entry.getKey(), rotationListener));
             listeners.add(new Pair<>(entry.getKey(), scaleListener));
+        }
+
+        //init and add camera animation object's animation listener to list
+        ModelRendererWrapper cameraRendererWrapper = modelMap.get(CameraAnimationObject.CAMERA_NODE_NAME);
+        if(cameraRendererWrapper != null) {
+            if(shouldRender.contains(cameraRendererWrapper.getModelRenderer())){
+                cameraAnimationObject.bonesItem = indexBones.get(CameraAnimationObject.CAMERA_NODE_NAME);
+            }else {
+                cameraAnimationObject.rendererWrapper = cameraRendererWrapper;
+            }
+            listeners.addAll(cameraAnimationObject.supplyListeners());
         }
 
         return listeners;
@@ -264,6 +279,67 @@ public class BedrockGunModel extends BedrockModel implements IOverrideModel, Ani
             }
 
             poseStack.popPose();
+        }
+    }
+
+    public static class CameraAnimationObject implements AnimationListenerSupplier{
+        public static final String CAMERA_NODE_NAME = "cameraK";
+        public Quaternion rotationQuaternion = Quaternion.ONE.copy();
+        public Vector3f translationVector = new Vector3f();
+
+        /**
+         * 当相机的节点为根时，传入cameraBones，cameraRenderer为空
+         * 否则传入cameraBones，cameraBones为空。
+         * */
+        protected ModelRendererWrapper rendererWrapper;
+        protected BonesItem bonesItem;
+
+        @Override
+        public List<Pair<String, AnimationListener>> supplyListeners() {
+            AnimationListener translation = new AnimationListener() {
+                @Override
+                public void update(float[] values) {
+                    if(bonesItem != null){
+                        //因为要达成所有位移都是相对位移，所以如果当前node是根node，则减去根node的pivot坐标。
+                        translationVector.setX(-values[0] + bonesItem.getPivot().get(0) / 16f);
+                        translationVector.setY(-values[1] + bonesItem.getPivot().get(1) / 16f);
+                        translationVector.setZ(values[2] - bonesItem.getPivot().get(2) / 16f);
+                    }else {
+                        //虽然方法名称写的是getRotationPoint，但其实还是相对父级node的坐标移动量。因此此处与listener提供的local translation相减。
+                        translationVector.setX(-values[0] - rendererWrapper.getRotationPointX() / 16f);
+                        translationVector.setY(-values[1] - rendererWrapper.getRotationPointY() / 16f);
+                        translationVector.setZ(values[2] - rendererWrapper.getRotationPointZ() / 16f);
+                    }
+                }
+
+                @Override
+                public ObjectAnimationChannel.ChannelType getType() {
+                    return ObjectAnimationChannel.ChannelType.TRANSLATION;
+                }
+            };
+            AnimationListener rotation = new AnimationListener() {
+                @Override
+                public void update(float[] values) {
+                    float[] m = new float[16];
+                    quaternionToMatrix4x4(values, m);
+                    // 计算 roll（绕 x 轴的旋转角）
+                    float roll = (float)Math.atan2(m[6], m[10]);
+                    // 计算 pitch（绕 y 轴的旋转角）
+                    float pitch = (float)Math.atan2(m[2], Math.sqrt(m[6] * m[6] + m[10] * m[10]));
+                    // 计算 roll（绕 z 轴的旋转角）
+                    float yaw = (float)Math.atan2(m[1], m[0]);
+                    //因为模型是上下颠倒的，因此此处roll轴的旋转需要进行取反
+                    //此处不使用forge的Quaternion构造方法是因为这玩意儿竟然是用单位元四元数连乘三轴旋转四元数，这样就顺序相关了....
+                    toQuaternion(-roll, pitch, yaw, rotationQuaternion);
+                }
+
+                @Override
+                public ObjectAnimationChannel.ChannelType getType() {
+                    return ObjectAnimationChannel.ChannelType.TRANSLATION;
+                }
+            };
+
+            return Arrays.asList(new Pair<>("cameraK", translation), new Pair<>("cameraK", rotation));
         }
     }
 }

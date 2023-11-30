@@ -7,8 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * A simple interface to render custom models. This can only be used for overriding the models of
- * guns or attachments.
+ * A simple interface to render custom models.
  */
 public interface IOverrideModel
 {

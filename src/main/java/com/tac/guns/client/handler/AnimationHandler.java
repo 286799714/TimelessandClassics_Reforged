@@ -1,7 +1,5 @@
 package com.tac.guns.client.handler;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
@@ -9,12 +7,10 @@ import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.Keys;
 import com.tac.guns.client.animation.ObjectAnimation;
-import com.tac.guns.client.animation.ObjectAnimationChannel;
 import com.tac.guns.client.animation.ObjectAnimationRunner;
 import com.tac.guns.client.animation.gltf.AnimationStructure;
 import com.tac.guns.client.animation.module.*;
-import com.tac.guns.client.model.BedrockGunModel;
-import com.tac.guns.client.model.bedrock.IModelRenderer;
+import com.tac.guns.client.model.BedrockAnimatedModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.resource.animation.AnimationAssetLoader;
 import com.tac.guns.client.resource.animation.gltf.AnimationOnlyGltfAsset;
@@ -84,7 +80,7 @@ public enum AnimationHandler {
         }
 
         try {
-            BedrockGunModel model = (BedrockGunModel) OverrideModelManager.getModel(ModItems.AK47.get());
+            BedrockAnimatedModel model = (BedrockAnimatedModel) OverrideModelManager.getModel(ModItems.AK47.get());
             if(model == null) return;
             model.setFunctionalRenderer("LeftHand", bedrockPart -> (poseStack, consumer, light, overlay) -> {
                 //do it because transform data from bedrock model is upside down
@@ -107,6 +103,7 @@ public enum AnimationHandler {
                 ObjectAnimationRunner runner = new ObjectAnimationRunner(animation);
                 runners.add(runner);
 
+                /*
                 //用来测试的是时候观察数据读取是否正常
                 List<ObjectAnimationChannel> channels = animation.getChannels();
                 for(ObjectAnimationChannel channel : channels){
@@ -120,6 +117,7 @@ public enum AnimationHandler {
                         GunMod.LOGGER.info(str.toString());
                     }
                 }
+                */
             }
 
         } catch (IOException e) {
