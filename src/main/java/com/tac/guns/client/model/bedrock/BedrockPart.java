@@ -2,6 +2,7 @@ package com.tac.guns.client.model.bedrock;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -9,12 +10,17 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class BedrockPart {
+    @Nullable public final String name;
     public final ObjectList<BedrockCube> cubes = new ObjectArrayList<>();
-    private final ObjectList<BedrockPart> children = new ObjectArrayList<>();
+    protected final ObjectList<BedrockPart> children = new ObjectArrayList<>();
     public float x;
     public float y;
     public float z;
@@ -29,11 +35,15 @@ public class BedrockPart {
     private float initRotX;
     private float initRotY;
     private float initRotZ;
-    /**该变量用于动画旋转*/
+    /**通常用于动画旋转。*/
     public Quaternion additionalQuaternion = new Quaternion(0, 0, 0, 1);
     public float xScale = 1;
     public float yScale = 1;
     public float zScale = 1;
+
+    public BedrockPart(@Nullable String name){
+        this.name = name;
+    }
 
     public void setPos(float x, float y, float z) {
         this.x = x;
@@ -77,7 +87,7 @@ public class BedrockPart {
         poseStack.scale(xScale, yScale, zScale);
     }
 
-    private void compile(PoseStack.Pose pose, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    protected void compile(PoseStack.Pose pose, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
         for (BedrockCube bedrockCube : this.cubes) {
             bedrockCube.compile(pose, consumer, light, overlay, red, green, blue, alpha);
         }

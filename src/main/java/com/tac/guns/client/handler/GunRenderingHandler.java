@@ -11,6 +11,7 @@ import com.tac.guns.Config;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
+import com.tac.guns.client.animation.module.Animations;
 import com.tac.guns.client.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.event.PlayerModelEvent;
 import com.tac.guns.client.event.RenderItemEvent;
@@ -668,16 +669,7 @@ public class GunRenderingHandler {
         this.applySprintingTransforms(heldItem, hand, matrixStack, event.getPartialTicks());
         /* Applies recoil and reload rotations */
         this.applyRecoilTransforms(matrixStack, heldItem, modifiedGun);
-        if(!isAnimated) this.applyReloadTransforms(matrixStack, hand, event.getPartialTicks(), heldItem);
-
-        /* Renders the first persons arms from the grip type of the weapon */
-        matrixStack.pushPose();
-        IHeldAnimation pose = modifiedGun.getGeneral().getGripType().getHeldAnimation();
-        if(pose!=null) {
-            if(!isAnimated) matrixStack.translate(-0.56, 0.52, 0.72);
-            if(!isAnimated) pose.renderFirstPersonArms(Minecraft.getInstance().player, hand, heldItem, matrixStack, event.getMultiBufferSource(), event.getPackedLight(), event.getPartialTicks());
-        }
-        matrixStack.popPose();
+        //if(!isAnimated) this.applyReloadTransforms(matrixStack, hand, event.getPartialTicks(), heldItem);
 
         ItemTransforms.TransformType transformType = right ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND;
 
@@ -1284,9 +1276,6 @@ public class GunRenderingHandler {
                     }
                 }
             }
-            GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
-            /* Render first person animated arms*/
-            //PlayerHandAnimation.render(controller, transformType, matrixStack, renderTypeBuffer, light);
             this.renderGun(entity, transformType, model.isEmpty() ? stack : model, matrixStack, renderTypeBuffer, light, partialTicks);
             this.renderAttachments(entity, transformType, stack, matrixStack, renderTypeBuffer, light, partialTicks);
             this.renderMuzzleFlash(entity, matrixStack, renderTypeBuffer, stack, transformType);

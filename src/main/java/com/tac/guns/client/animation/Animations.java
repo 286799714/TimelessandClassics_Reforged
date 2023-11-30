@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Animations {
-    public static @Nonnull List<ObjectAnimation> createAnimations(AnimationStructure structure, AnimationListenerSupplier supplier){
+    public static @Nonnull List<ObjectAnimation> createAnimations(AnimationStructure structure, AnimationListenerSupplier... suppliers){
         List<ObjectAnimation> result = new ArrayList<>();
 
         List<AnimationModel> animationModels = structure.getAnimationModels();
@@ -76,8 +76,10 @@ public class Animations {
             }
 
             //add Animation Listeners to animation
-            for(Pair<String, AnimationListener> listenerPair : supplier.supplyListeners()){
-                animation.addAnimationListener(listenerPair.getKey(), listenerPair.getValue());
+            for(AnimationListenerSupplier supplier : suppliers) {
+                for (Pair<String, AnimationListener> listenerPair : supplier.supplyListeners()) {
+                    animation.addAnimationListener(listenerPair.getKey(), listenerPair.getValue());
+                }
             }
 
             //add animation to result list

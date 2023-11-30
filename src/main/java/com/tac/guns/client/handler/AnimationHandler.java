@@ -1,6 +1,9 @@
 package com.tac.guns.client.handler;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.LogUtils;
+import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
@@ -11,10 +14,12 @@ import com.tac.guns.client.animation.ObjectAnimationRunner;
 import com.tac.guns.client.animation.gltf.AnimationStructure;
 import com.tac.guns.client.animation.module.*;
 import com.tac.guns.client.model.BedrockGunModel;
+import com.tac.guns.client.model.bedrock.IModelRenderer;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.resource.animation.AnimationAssetLoader;
 import com.tac.guns.client.resource.animation.gltf.AnimationOnlyGltfAsset;
 import com.tac.guns.client.resource.model.bedrock.BedrockModelLoader;
+import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
@@ -27,6 +32,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -48,12 +54,12 @@ import java.util.List;
 public enum AnimationHandler {
     INSTANCE;
 
+    public static final List<ObjectAnimationRunner> runners = new ArrayList<>();
 
-    static List<ObjectAnimationRunner> runners = new ArrayList<>();
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event){
         for(ObjectAnimationRunner runner : runners){
-            runner.update();
+            if(runner.isRunning()) runner.update();
         }
     }
 
@@ -66,22 +72,42 @@ public enum AnimationHandler {
                             new ResourceLocation("tac", "textures/items/ak47_uv.png")
                     )
             );
+            OverrideModelManager.register(
+                    ModItems.DEAGLE_357.get(),
+                    BedrockModelLoader.loadBedrockGunModel(
+                            new ResourceLocation("tac", "models/gunskin/deagle50/deagle_50_cc.geo.json"),
+                            new ResourceLocation("tac", "textures/items/deagle_50_cc.png")
+                    )
+            );
         } catch (IOException e) {
             GunMod.LOGGER.info("test fail: {}", e.toString());
         }
 
         try {
-            AnimationOnlyGltfAsset asset =
-                    AnimationAssetLoader.loadGltfAnimationAsset(new ResourceLocation("tac","animations/ak47_reload_empty.gltf"));
-            AnimationStructure structure = new AnimationStructure(asset);
             BedrockGunModel model = (BedrockGunModel) OverrideModelManager.getModel(ModItems.AK47.get());
+            if(model == null) return;
+            model.setFunctionalRenderer("LeftHand", bedrockPart -> (poseStack, consumer, light, overlay) -> {
+                //do it because transform data from bedrock model is upside down
+                poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
+                RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.LEFT, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), light);
+            });
+            model.setFunctionalRenderer("RightHand", bedrockPart -> (poseStack, consumer, light, overlay) -> {
+                //do it because transform data from bedrock model is upside down
+                poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
+                RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.RIGHT, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), light);
+            });
+
+            //create animation runner
+            AnimationOnlyGltfAsset asset =
+                    AnimationAssetLoader.loadGltfAnimationAsset(new ResourceLocation("tac","animations/ak47.geo.gltf"));
+            AnimationStructure structure = new AnimationStructure(asset);
             List<ObjectAnimation> animations = com.tac.guns.client.animation.Animations.createAnimations(structure, model);
             for(ObjectAnimation animation : animations){
-                animation.playType = ObjectAnimation.PlayType.LOOP;
+                animation.playType = ObjectAnimation.PlayType.PLAY_ONCE_HOLD;
                 ObjectAnimationRunner runner = new ObjectAnimationRunner(animation);
-                runner.run();
                 runners.add(runner);
 
+                //用来测试的是时候观察数据读取是否正常
                 List<ObjectAnimationChannel> channels = animation.getChannels();
                 for(ObjectAnimationChannel channel : channels){
                     GunMod.LOGGER.info("testing " + channel.node + " " + channel.type);
@@ -161,6 +187,13 @@ public enum AnimationHandler {
     }
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {
+        for(ObjectAnimationRunner runner : runners){
+            LogUtils.getLogger().info(runner.animation.name);
+            if("reload_empty" .equals(runner.animation.name)){
+                runner.reset();
+                runner.run();
+            }
+        }
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
         if (itemStack.getItem() instanceof GunItem) {

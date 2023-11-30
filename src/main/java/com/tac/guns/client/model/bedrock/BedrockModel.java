@@ -58,15 +58,15 @@ public class BedrockModel{
         // 往 indexBones 里面注入数据，为后续坐标转换做参考
         for (BonesItem bones : pojo.getGeometryModelNew().getBones()) {
             // 塞索引，这是给后面坐标转换用的
-            indexBones.put(bones.getName(), bones);
+            indexBones.putIfAbsent(bones.getName(), bones);
             // 塞入新建的空 BedrockPart 实例
             // 因为后面添加 parent 需要，所以先塞空对象，然后二次遍历再进行数据存储
-            modelMap.put(bones.getName(), new ModelRendererWrapper(new BedrockPart()));
+            modelMap.putIfAbsent(bones.getName(), new ModelRendererWrapper(new BedrockPart(bones.getName())));
         }
 
         // 开始往 ModelRenderer 实例里面塞数据
         for (BonesItem bones : pojo.getGeometryModelNew().getBones()) {
-            // 骨骼名称，注意因为后面动画的需要，头部、手部、腿部等骨骼命名必须是固定死的
+            // 骨骼名称
             String name = bones.getName();
             // 旋转点，可能为空
             @Nullable List<Float> rotation = bones.getRotation();
@@ -124,7 +124,7 @@ public class BedrockModel{
                 }
                 // 创建 Cube ModelRender
                 else {
-                    BedrockPart cubeRenderer = new BedrockPart();
+                    BedrockPart cubeRenderer = new BedrockPart(null);
                     cubeRenderer.setPos(convertPivot(bones, cube, 0), convertPivot(bones, cube, 1), convertPivot(bones, cube, 2));
                     setRotationAngle(cubeRenderer, convertRotation(cubeRotation.get(0)), convertRotation(cubeRotation.get(1)), convertRotation(cubeRotation.get(2)));
                     if (faceUv == null) {
@@ -164,10 +164,10 @@ public class BedrockModel{
         // 往 indexBones 里面注入数据，为后续坐标转换做参考
         for (BonesItem bones : pojo.getGeometryModelLegacy().getBones()) {
             // 塞索引，这是给后面坐标转换用的
-            indexBones.put(bones.getName(), bones);
+            indexBones.putIfAbsent(bones.getName(), bones);
             // 塞入新建的空 ModelRenderer 实例
             // 因为后面添加 parent 需要，所以先塞空对象，然后二次遍历再进行数据存储
-            modelMap.put(bones.getName(), new ModelRendererWrapper(new BedrockPart()));
+            modelMap.putIfAbsent(bones.getName(), new ModelRendererWrapper(new BedrockPart(bones.getName())));
         }
 
         // 开始往 ModelRenderer 实例里面塞数据

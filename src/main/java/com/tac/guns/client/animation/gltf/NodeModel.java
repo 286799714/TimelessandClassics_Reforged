@@ -8,12 +8,6 @@ import java.util.Objects;
 public class NodeModel {
     private String name;
 
-    private static final ThreadLocal<float[]> TEMP_MATRIX_4x4_IN_LOCAL =
-            ThreadLocal.withInitial(() -> new float[16]);
-
-    private static final ThreadLocal<float[]> TEMP_MATRIX_4x4_IN_GLOBAL =
-            ThreadLocal.withInitial(() -> new float[16]);
-
     private float[] matrix;
 
     private float[] translation;
