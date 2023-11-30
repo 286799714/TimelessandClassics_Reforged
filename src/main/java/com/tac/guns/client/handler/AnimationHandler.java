@@ -1,6 +1,5 @@
 package com.tac.guns.client.handler;
 
-import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.GunMod;
@@ -186,7 +185,6 @@ public enum AnimationHandler {
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {
         for(ObjectAnimationRunner runner : runners){
-            LogUtils.getLogger().info(runner.animation.name);
             if("reload_empty" .equals(runner.animation.name)){
                 runner.reset();
                 runner.run();

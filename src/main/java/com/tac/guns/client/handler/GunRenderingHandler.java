@@ -11,14 +11,12 @@ import com.tac.guns.Config;
 import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
-import com.tac.guns.client.animation.module.Animations;
-import com.tac.guns.client.animation.module.PlayerHandAnimation;
 import com.tac.guns.client.event.PlayerModelEvent;
 import com.tac.guns.client.event.RenderItemEvent;
 import com.tac.guns.client.handler.command.GunEditor;
-import com.tac.guns.client.render.IHeldAnimation;
 import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.animation.module.PistolAnimationController;
+import com.tac.guns.client.model.BedrockAnimatedModel;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.util.RenderUtil;
@@ -200,6 +198,14 @@ public class GunRenderingHandler {
                     * 0.9f);
             event.setPitch(event.getPitch() - Math.abs(alpha));
             event.setRoll(event.getRoll() + alpha * 0.5f);
+        }
+        //apply BedrockAnimatedModel's camera animation transform
+        IOverrideModel model = OverrideModelManager.getModel(mc.player.getMainHandItem().getItem());
+        if(model instanceof BedrockAnimatedModel bedrockAnimatedModel){
+            Vector3f rotationVector = bedrockAnimatedModel.getCameraAnimationObject().rotationQuaternion.toXYZ();
+            event.setRoll(event.getRoll() + rotationVector.x() * 180f / (float)Math.PI);
+            event.setPitch(event.getPitch() + rotationVector.y() * 180f / (float)Math.PI);
+            event.setYaw(event.getYaw() + rotationVector.z() * 180f / (float)Math.PI);
         }
     }
 

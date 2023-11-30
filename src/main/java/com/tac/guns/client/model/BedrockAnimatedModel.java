@@ -301,13 +301,13 @@ public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel
                 public void update(float[] values) {
                     if(bonesItem != null){
                         //因为要达成所有位移都是相对位移，所以如果当前node是根node，则减去根node的pivot坐标。
-                        translationVector.setX(-values[0] + bonesItem.getPivot().get(0) / 16f);
-                        translationVector.setY(-values[1] + bonesItem.getPivot().get(1) / 16f);
+                        translationVector.setX(values[0] - bonesItem.getPivot().get(0) / 16f);
+                        translationVector.setY(values[1] - bonesItem.getPivot().get(1) / 16f);
                         translationVector.setZ(values[2] - bonesItem.getPivot().get(2) / 16f);
                     }else {
                         //虽然方法名称写的是getRotationPoint，但其实还是相对父级node的坐标移动量。因此此处与listener提供的local translation相减。
-                        translationVector.setX(-values[0] - rendererWrapper.getRotationPointX() / 16f);
-                        translationVector.setY(-values[1] - rendererWrapper.getRotationPointY() / 16f);
+                        translationVector.setX(values[0] + rendererWrapper.getRotationPointX() / 16f);
+                        translationVector.setY(values[1] + rendererWrapper.getRotationPointY() / 16f);
                         translationVector.setZ(values[2] - rendererWrapper.getRotationPointZ() / 16f);
                     }
                 }
@@ -328,18 +328,16 @@ public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel
                     float pitch = (float)Math.atan2(m[2], Math.sqrt(m[6] * m[6] + m[10] * m[10]));
                     // 计算 roll（绕 z 轴的旋转角）
                     float yaw = (float)Math.atan2(m[1], m[0]);
-                    //因为模型是上下颠倒的，因此此处roll轴的旋转需要进行取反
-                    //此处不使用forge的Quaternion构造方法是因为这玩意儿竟然是用单位元四元数连乘三轴旋转四元数，这样就顺序相关了....
-                    toQuaternion(-roll, pitch, yaw, rotationQuaternion);
+                    toQuaternion(-roll, -pitch, -yaw, rotationQuaternion);
                 }
 
                 @Override
                 public ObjectAnimationChannel.ChannelType getType() {
-                    return ObjectAnimationChannel.ChannelType.TRANSLATION;
+                    return ObjectAnimationChannel.ChannelType.ROTATION;
                 }
             };
 
-            return Arrays.asList(new Pair<>("cameraK", translation), new Pair<>("cameraK", rotation));
+            return Arrays.asList(new Pair<>(CAMERA_NODE_NAME, translation), new Pair<>(CAMERA_NODE_NAME, rotation));
         }
     }
 }
