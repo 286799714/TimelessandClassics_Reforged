@@ -1,15 +1,18 @@
 package com.tac.guns.client.handler;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.GunMod;
-import com.tac.guns.Reference;
 import com.tac.guns.client.Keys;
 import com.tac.guns.client.animation.ObjectAnimation;
 import com.tac.guns.client.animation.ObjectAnimationRunner;
 import com.tac.guns.client.animation.gltf.AnimationStructure;
 import com.tac.guns.client.animation.module.*;
+import com.tac.guns.client.event.BeforeRenderHandEvent;
 import com.tac.guns.client.model.BedrockAnimatedModel;
+import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.resource.animation.AnimationAssetLoader;
 import com.tac.guns.client.resource.animation.gltf.AnimationOnlyGltfAsset;
@@ -32,11 +35,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +49,7 @@ import java.util.List;
 /**
  * Mainly controls when the animation should play.
  */
-@Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public enum AnimationHandler {
     INSTANCE;
 
@@ -55,6 +59,31 @@ public enum AnimationHandler {
     public void onRenderTick(TickEvent.RenderTickEvent event){
         for(ObjectAnimationRunner runner : runners){
             if(runner.isRunning()) runner.update();
+        }
+    }
+
+    @SubscribeEvent
+    public void applyCameraAnimation(EntityViewRenderEvent.CameraSetup event){
+        if(Minecraft.getInstance().player == null) return;
+        //apply BedrockAnimatedModel's camera animation transform
+        IOverrideModel model = OverrideModelManager.getModel(Minecraft.getInstance().player.getMainHandItem().getItem());
+        if(model instanceof BedrockAnimatedModel bedrockAnimatedModel){
+            Vector3f rotationVector = bedrockAnimatedModel.getCameraAnimationObject().rotationQuaternion.toXYZ();
+            event.setRoll(event.getRoll() + rotationVector.x() * 180f / (float)Math.PI);
+            event.setPitch(event.getPitch() + rotationVector.y() * 180f / (float)Math.PI);
+            event.setYaw(event.getYaw() + rotationVector.z() * 180f / (float)Math.PI);
+        }
+    }
+
+    @SubscribeEvent
+    public void reverseItemLayerCameraAnimation(BeforeRenderHandEvent event){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if(player == null) return;
+        IOverrideModel overrideModel = OverrideModelManager.getModel(player.getMainHandItem());
+        if(overrideModel == null) return;
+        if(overrideModel instanceof BedrockAnimatedModel animatedModel){
+            PoseStack poseStack = event.getPoseStack();
+            poseStack.mulPose(animatedModel.getCameraAnimationObject().rotationQuaternion);
         }
     }
 
@@ -278,16 +307,10 @@ public enum AnimationHandler {
             if(AimingHandler.get().getNormalisedAdsProgress() != 0)
                 return;
 
-            final ItemStack stack = player.getInventory().getSelected();
-            final GunAnimationController controller
-                = GunAnimationController.fromItem( stack.getItem() );
-            if( controller != null && !controller.isAnimationRunning() )
-            {
-                controller.stopAnimation();
-                if (Gun.hasAmmo(stack)) {
-                    controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT);
-                } else {
-                    controller.runAnimation(GunAnimationController.AnimationLabel.INSPECT_EMPTY);
+            for(ObjectAnimationRunner runner : runners){
+                if(runner.animation.name.equals("inspect")){
+                    runner.reset();
+                    runner.run();
                 }
             }
         } );

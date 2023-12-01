@@ -199,14 +199,6 @@ public class GunRenderingHandler {
             event.setPitch(event.getPitch() - Math.abs(alpha));
             event.setRoll(event.getRoll() + alpha * 0.5f);
         }
-        //apply BedrockAnimatedModel's camera animation transform
-        IOverrideModel model = OverrideModelManager.getModel(mc.player.getMainHandItem().getItem());
-        if(model instanceof BedrockAnimatedModel bedrockAnimatedModel){
-            Vector3f rotationVector = bedrockAnimatedModel.getCameraAnimationObject().rotationQuaternion.toXYZ();
-            event.setRoll(event.getRoll() + rotationVector.x() * 180f / (float)Math.PI);
-            event.setPitch(event.getPitch() + rotationVector.y() * 180f / (float)Math.PI);
-            event.setYaw(event.getYaw() + rotationVector.z() * 180f / (float)Math.PI);
-        }
     }
 
     @SubscribeEvent
