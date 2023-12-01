@@ -328,7 +328,7 @@ public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel
                     float pitch = (float)Math.atan2(m[2], Math.sqrt(m[6] * m[6] + m[10] * m[10]));
                     // 计算 roll（绕 z 轴的旋转角）
                     float yaw = (float)Math.atan2(m[1], m[0]);
-                    toQuaternion(-roll, -pitch, yaw, rotationQuaternion);
+                    toQuaternion(-roll, pitch, -yaw, rotationQuaternion);
                 }
 
                 @Override

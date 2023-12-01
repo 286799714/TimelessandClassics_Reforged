@@ -1,7 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.logging.LogUtils;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.GunMod;
@@ -10,6 +10,7 @@ import com.tac.guns.client.animation.ObjectAnimation;
 import com.tac.guns.client.animation.ObjectAnimationRunner;
 import com.tac.guns.client.animation.gltf.AnimationStructure;
 import com.tac.guns.client.animation.module.*;
+import com.tac.guns.client.event.BeforeCameraSetupEvent;
 import com.tac.guns.client.event.BeforeRenderHandEvent;
 import com.tac.guns.client.model.BedrockAnimatedModel;
 import com.tac.guns.client.render.item.IOverrideModel;
@@ -36,7 +37,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -63,15 +63,12 @@ public enum AnimationHandler {
     }
 
     @SubscribeEvent
-    public void applyCameraAnimation(EntityViewRenderEvent.CameraSetup event){
+    public void applyCameraAnimation(BeforeCameraSetupEvent event){
         if(Minecraft.getInstance().player == null) return;
         //apply BedrockAnimatedModel's camera animation transform
         IOverrideModel model = OverrideModelManager.getModel(Minecraft.getInstance().player.getMainHandItem().getItem());
         if(model instanceof BedrockAnimatedModel bedrockAnimatedModel){
-            Vector3f rotationVector = bedrockAnimatedModel.getCameraAnimationObject().rotationQuaternion.toXYZ();
-            event.setRoll(event.getRoll() + rotationVector.x() * 180f / (float)Math.PI);
-            event.setPitch(event.getPitch() + rotationVector.y() * 180f / (float)Math.PI);
-            event.setYaw(event.getYaw() + rotationVector.z() * 180f / (float)Math.PI);
+            event.setQuaternion(bedrockAnimatedModel.getCameraAnimationObject().rotationQuaternion);
         }
     }
 
