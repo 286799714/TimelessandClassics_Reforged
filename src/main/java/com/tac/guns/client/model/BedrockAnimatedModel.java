@@ -242,9 +242,9 @@ public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel
         ModelRendererWrapper cameraRendererWrapper = modelMap.get(CameraAnimationObject.CAMERA_NODE_NAME);
         if(cameraRendererWrapper != null) {
             if(shouldRender.contains(cameraRendererWrapper.getModelRenderer())){
-                cameraAnimationObject.bonesItem = indexBones.get(CameraAnimationObject.CAMERA_NODE_NAME);
+                cameraAnimationObject.cameraBone = indexBones.get(CameraAnimationObject.CAMERA_NODE_NAME);
             }else {
-                cameraAnimationObject.rendererWrapper = cameraRendererWrapper;
+                cameraAnimationObject.cameraRenderer = cameraRendererWrapper;
             }
             listeners.addAll(cameraAnimationObject.supplyListeners());
         }
@@ -289,27 +289,29 @@ public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel
         public Vector3f translationVector = new Vector3f();
 
         /**
-         * 当相机的节点为根时，传入cameraBones，cameraRenderer为空
-         * 否则传入cameraBones，cameraBones为空。
+         * 当相机的节点为根时，cameraRenderer为空
          * */
-        protected ModelRendererWrapper rendererWrapper;
-        protected BonesItem bonesItem;
+        protected ModelRendererWrapper cameraRenderer;
+        /**
+         * 当相机的节点不为根时，cameraBone为空
+         * */
+        protected BonesItem cameraBone;
 
         @Override
         public List<Pair<String, AnimationListener>> supplyListeners() {
             AnimationListener translation = new AnimationListener() {
                 @Override
                 public void update(float[] values) {
-                    if(bonesItem != null){
+                    if(cameraBone != null){
                         //因为要达成所有位移都是相对位移，所以如果当前node是根node，则减去根node的pivot坐标。
-                        translationVector.setX(values[0] - bonesItem.getPivot().get(0) / 16f);
-                        translationVector.setY(values[1] - bonesItem.getPivot().get(1) / 16f);
-                        translationVector.setZ(values[2] - bonesItem.getPivot().get(2) / 16f);
+                        translationVector.setX(values[0] - cameraBone.getPivot().get(0) / 16f);
+                        translationVector.setY(values[1] - cameraBone.getPivot().get(1) / 16f);
+                        translationVector.setZ(values[2] - cameraBone.getPivot().get(2) / 16f);
                     }else {
                         //虽然方法名称写的是getRotationPoint，但其实还是相对父级node的坐标移动量。因此此处与listener提供的local translation相减。
-                        translationVector.setX(values[0] + rendererWrapper.getRotationPointX() / 16f);
-                        translationVector.setY(values[1] + rendererWrapper.getRotationPointY() / 16f);
-                        translationVector.setZ(values[2] - rendererWrapper.getRotationPointZ() / 16f);
+                        translationVector.setX(values[0] + cameraRenderer.getRotationPointX() / 16f);
+                        translationVector.setY(values[1] + cameraRenderer.getRotationPointY() / 16f);
+                        translationVector.setZ(values[2] - cameraRenderer.getRotationPointZ() / 16f);
                     }
                 }
 
