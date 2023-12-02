@@ -284,6 +284,7 @@ public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel
 
     public static class CameraAnimationObject implements AnimationListenerSupplier{
         public static final String CAMERA_NODE_NAME = "cameraK";
+        /**存在这个四元数中的旋转是世界箱体的旋转，而不是摄像头的旋转（二者互为相反数）*/
         public Quaternion rotationQuaternion = Quaternion.ONE.copy();
         public Vector3f translationVector = new Vector3f();
 
@@ -328,6 +329,10 @@ public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel
                     float pitch = (float)Math.atan2(m[2], Math.sqrt(m[6] * m[6] + m[10] * m[10]));
                     // 计算 roll（绕 z 轴的旋转角）
                     float yaw = (float)Math.atan2(m[1], m[0]);
+                    /*对roll和yaw取反单纯是因为需要使用blockbench的camera插件，
+                      它在关键帧中储存的旋转数值并不是摄像头的旋转数值，是世界箱体的旋转数值，
+                      但唯独pitch是反的(也就是说唯独pitch是摄像机的旋转数值)。
+                      最终需要存入rotationQuaternion的是世界箱体的旋转，因此roll yaw取反，pitch不需要*/
                     toQuaternion(-roll, pitch, -yaw, rotationQuaternion);
                 }
 
