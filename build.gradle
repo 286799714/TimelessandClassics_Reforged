@@ -109,6 +109,13 @@ dependencies {
     //implementation fg.deobf('curse.maven:oculus-581495:4578744')
     //implementation fg.deobf('curse.maven:ysm-784675:4667056')
 
+    //JEI Plugin
+    // compile against the JEI API but do not include it at runtime
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+
     minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '[2.14.2,2.16.0)')
     minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '[2.14.2,2.16.0)')
     minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '[2.14.2,2.16.0)')
@@ -126,6 +133,21 @@ repositories {
     }
     maven {
         url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        // location of the maven that hosts JEI files before January 2023
+        name = "Progwml6's maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
     }
     flatDir {
         dir 'libs'
