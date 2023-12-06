@@ -20,11 +20,6 @@ public class TimelessJEI implements IModPlugin {
         return PLUGIN_ID;
     }
 
-    @Override
-    public void registerIngredients(IModIngredientRegistration registration) {
-        IModPlugin.super.registerIngredients(registration);
-    }
-
     /* TODO: optimize it! really confusing code right?
      */
     @Override
@@ -43,10 +38,5 @@ public class TimelessJEI implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         categories.forEach(category -> category.registerRecipeCatalyst(registration));
-    }
-
-    @Override
-    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        IModPlugin.super.registerGuiHandlers(registration);
     }
 }

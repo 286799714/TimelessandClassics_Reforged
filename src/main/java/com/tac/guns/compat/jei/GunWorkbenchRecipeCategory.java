@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,18 +38,28 @@ public class GunWorkbenchRecipeCategory extends TimelessRecipeCategory<Workbench
         builder.addSlot(RecipeIngredientRole.OUTPUT, 119, 37).addItemStack(recipe.getResultItem());
     }
 
-    //Thanks yor42 for jei recipe setup codes
+    //Thanks yor42 for jei recipe setup codes!
     private List<List<ItemStack>> getInputIngredients(WorkbenchRecipe recipe) {
         List<List<ItemStack>> ingredientList = new ArrayList<>();
         recipe.getMaterials().forEach(pair -> {
-            List<ItemStack> itemStacks = new ArrayList<>();
-            for (ItemStack stack : pair.getFirst().getItems()) {
-                stack.setCount(pair.getSecond());
-                itemStacks.add(stack);
-            }
-            ingredientList.add(itemStacks);
+            ingredientList.add(getItemStackList(pair.getFirst(), pair.getSecond()));
         });
         return ingredientList;
+    }
+
+    //Thanks Mekanism for inspirations!
+    private List<ItemStack> getItemStackList(Ingredient ingredient, int count) {
+        List<ItemStack> stackList = new ArrayList<>();
+        for (ItemStack stack : ingredient.getItems()) {
+            if (stack.getCount() == count) {
+                stackList.add(stack);
+            } else {
+                ItemStack stackCopy = stack.copy();
+                stackCopy.setCount(count);
+                stackList.add(stackCopy);
+            }
+        }
+        return stackList;
     }
 
 //    @Override
