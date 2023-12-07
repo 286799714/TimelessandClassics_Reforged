@@ -3,24 +3,17 @@ package com.tac.guns;
 import com.tac.guns.client.ClientHandler;
 import com.tac.guns.client.CustomGunManager;
 import com.tac.guns.client.CustomRigManager;
-import com.tac.guns.client.model.bedrock.BedrockModel;
-import com.tac.guns.client.render.item.IOverrideModel;
-import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.render.pose.*;
-import com.tac.guns.client.resource.model.bedrock.BedrockModelLoader;
 import com.tac.guns.common.BoundingBoxManager;
 import com.tac.guns.common.GripType;
-import com.tac.guns.common.ProjectileManager;
 import com.tac.guns.common.tooling.CommandsHandler;
 import com.tac.guns.common.tooling.CommandsManager;
 import com.tac.guns.crafting.RecipeType;
 import com.tac.guns.datagen.*;
 import com.tac.guns.enchantment.EnchantmentTypes;
-import com.tac.guns.entity.MissileEntity;
 import com.tac.guns.init.*;
 import com.tac.guns.inventory.gear.IWearableItemHandler;
 import com.tac.guns.inventory.gear.armor.IAmmoItemHandler;
-import com.tac.guns.item.GunItem;
 import com.tac.guns.item.transition.TimelessGunItem;
 import com.tac.guns.network.PacketHandler;
 import net.minecraft.client.Minecraft;
@@ -28,7 +21,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -44,14 +36,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.forgespi.language.IModInfo;
-import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Locale;
 
 @Mod(Reference.MOD_ID)
 public class GunMod

@@ -1,12 +1,9 @@
 package com.tac.guns.client.model;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import com.tac.guns.Reference;
 import com.tac.guns.client.animation.AnimationListener;
 import com.tac.guns.client.animation.AnimationListenerSupplier;
 import com.tac.guns.client.animation.ObjectAnimationChannel;
@@ -14,41 +11,24 @@ import com.tac.guns.client.model.bedrock.BedrockModel;
 import com.tac.guns.client.model.bedrock.BedrockPart;
 import com.tac.guns.client.model.bedrock.IModelRenderer;
 import com.tac.guns.client.model.bedrock.ModelRendererWrapper;
-import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.resource.model.bedrock.BedrockVersion;
 import com.tac.guns.client.resource.model.bedrock.pojo.BedrockModelPOJO;
 import com.tac.guns.client.resource.model.bedrock.pojo.BonesItem;
 import com.tac.guns.client.util.Pair;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel, AnimationListenerSupplier {
+public class BedrockAnimatedModel extends BedrockModel implements AnimationListenerSupplier {
     /**以下用来给每个基岩版模型提供专门的 RenderType，用于提供VertexConsumer。*/ //todo 是否有更好的方法？
-    private static int registryCounter = 1;
-    private static final RenderStateShard.LightmapStateShard LIGHTMAP = new RenderStateShard.LightmapStateShard(true);
-    private static final RenderStateShard.ShaderStateShard CUTOUT_SHADER = new RenderStateShard.ShaderStateShard(GameRenderer::getRendertypeCutoutShader);
-    public final ResourceLocation textureLocation;
-
-    public final RenderType MODEL_RENDER_TYPE;
-
     private Map<String, Function<BedrockPart, IModelRenderer>> functionRenderers;
     private final CameraAnimationObject cameraAnimationObject = new CameraAnimationObject();
 
-    public BedrockAnimatedModel(BedrockModelPOJO pojo, BedrockVersion version, ResourceLocation textureLocation) {
-        super(pojo, version);
-        this.textureLocation = textureLocation;
-        MODEL_RENDER_TYPE = RenderType.create(Reference.MOD_ID + ":bedrock_model$" + registryCounter++, DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 256, true, false, RenderType.CompositeState.builder().setLightmapState(LIGHTMAP).setShaderState(CUTOUT_SHADER).setTextureState(new RenderStateShard.TextureStateShard(textureLocation, false, false)).createCompositeState(true));
+    public BedrockAnimatedModel(BedrockModelPOJO pojo, BedrockVersion version, RenderType renderType) {
+        super(pojo, version, renderType);
     }
 
     public void setVisible(String bone, boolean visible){
@@ -67,20 +47,6 @@ public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel
 
     public void removeFunctionalRenderer(String node){
         functionRenderers.remove(node);
-    }
-
-    @Override
-    public void render(float partialTicks, ItemTransforms.TransformType transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
-        matrixStack.pushPose();
-        //游戏中模型是上下颠倒的，需要翻转过来。
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-
-        VertexConsumer builder = buffer.getBuffer(MODEL_RENDER_TYPE);
-        for (BedrockPart model : shouldRender) {
-            model.render(matrixStack, builder, light, overlay);
-        }
-
-        matrixStack.popPose();
     }
 
     public @Nonnull CameraAnimationObject getCameraAnimationObject(){
@@ -210,7 +176,7 @@ public class BedrockAnimatedModel extends BedrockModel implements IOverrideModel
                     // 计算 roll（绕 z 轴的旋转角）
                     float yaw = (float)Math.atan2(m[1], m[0]);
                     //因为模型是上下颠倒的，因此此处roll轴的旋转需要进行取反
-                    //此处不使用forge的Quaternion构造方法是因为这玩意儿竟然是用单位元四元数连乘三轴旋转四元数，这样就顺序相关了....
+                    //此处不使用forge的Quaternion构造方法是因为这玩意儿竟然是用单位元四元数连乘三轴旋转四元数，这样和欧拉角有什么区别....
                     toQuaternion(-roll, pitch, yaw, rendererWrapper.getAdditionalQuaternion());
                 }
                 @Override

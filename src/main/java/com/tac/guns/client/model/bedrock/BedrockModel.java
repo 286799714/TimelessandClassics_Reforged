@@ -1,15 +1,22 @@
 package com.tac.guns.client.model.bedrock;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import com.tac.guns.client.model.IModel;
 import com.tac.guns.client.resource.model.bedrock.BedrockVersion;
 import com.tac.guns.client.resource.model.bedrock.pojo.*;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-public class BedrockModel{
+public class BedrockModel implements IModel {
     /**
      * 存储 ModelRender 子模型的 HashMap
      */
@@ -22,14 +29,16 @@ public class BedrockModel{
      * 哪些模型需要渲染。加载进父骨骼的子骨骼是不需要渲染的
      */
     protected final List<BedrockPart> shouldRender = new LinkedList<>();
+    protected RenderType renderType;
 
-    public BedrockModel(BedrockModelPOJO pojo, BedrockVersion version) {
+    public BedrockModel(BedrockModelPOJO pojo, BedrockVersion version, RenderType renderType) {
         if (version == BedrockVersion.LEGACY) {
             loadLegacyModel(pojo);
         }
         if (version == BedrockVersion.NEW) {
             loadNewModel(pojo);
         }
+        this.renderType = renderType;
     }
 
     private void setRotationAngle(BedrockPart modelRenderer, float x, float y, float z) {
@@ -289,5 +298,27 @@ public class BedrockModel{
      */
     protected float convertRotation(float degree) {
         return (float) (degree * Math.PI / 180);
+    }
+
+    public RenderType getRenderType() {
+        return renderType;
+    }
+
+    public void setRenderType(@Nonnull RenderType renderType){
+        this.renderType = renderType;
+    }
+
+    @Override
+    public void render(float partialTicks, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
+        matrixStack.pushPose();
+        //游戏中模型是上下颠倒的，需要翻转过来。
+        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
+
+        VertexConsumer builder = buffer.getBuffer(renderType);
+        for (BedrockPart model : shouldRender) {
+            model.render(matrixStack, builder, light, overlay);
+        }
+
+        matrixStack.popPose();
     }
 }

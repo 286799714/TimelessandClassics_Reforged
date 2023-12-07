@@ -1,7 +1,6 @@
 package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.GunMod;
@@ -17,7 +16,7 @@ import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.resource.animation.AnimationAssetLoader;
 import com.tac.guns.client.resource.animation.gltf.AnimationOnlyGltfAsset;
-import com.tac.guns.client.resource.model.bedrock.BedrockModelLoader;
+import com.tac.guns.client.resource.model.ModelLoader;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
@@ -73,7 +72,7 @@ public enum AnimationHandler {
     }
 
     @SubscribeEvent
-    public void reverseItemLayerCameraAnimation(BeforeRenderHandEvent event){
+    public void applyItemLayerCameraAnimation(BeforeRenderHandEvent event){
         LocalPlayer player = Minecraft.getInstance().player;
         if(player == null) return;
         IOverrideModel overrideModel = OverrideModelManager.getModel(player.getMainHandItem());
@@ -85,17 +84,18 @@ public enum AnimationHandler {
     }
 
     public static void preloadAnimations(){
+
         try {
             OverrideModelManager.register(
                     ModItems.AK47.get(),
-                    BedrockModelLoader.loadBedrockGunModel(
+                    ModelLoader.loadBedrockGunModel(
                             new ResourceLocation("tac", "models/gunskin/ak47/ak47.geo.json"),
                             new ResourceLocation("tac", "textures/items/ak47_uv.png")
                     )
             );
             OverrideModelManager.register(
                     ModItems.DEAGLE_357.get(),
-                    BedrockModelLoader.loadBedrockGunModel(
+                    ModelLoader.loadBedrockGunModel(
                             new ResourceLocation("tac", "models/gunskin/deagle50/deagle_50_cc.geo.json"),
                             new ResourceLocation("tac", "textures/items/deagle_50_cc.png")
                     )

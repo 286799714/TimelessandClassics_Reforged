@@ -196,7 +196,7 @@ public class AimingHandler {
                 final ItemStack stack = player.getInventory().getSelected();
                 final GunAnimationController controller
                         = GunAnimationController.fromItem( stack.getItem() );
-                if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT))
+                if(controller != null && controller.isAnimationRunning(GunAnimationController.AnimationLabel.INSPECT))
                     controller.stopAnimation();
             }
             this.localTracker.handleAiming(player.getItemInHand(InteractionHand.MAIN_HAND), true);
