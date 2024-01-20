@@ -32,13 +32,11 @@ public class ModelLoader {
             .create();
 
     private static final Marker MARKER = MarkerManager.getMarker("BedrockModelLoader");
-    private static final RenderStateShard.LightmapStateShard LIGHTMAP = new RenderStateShard.LightmapStateShard(true);
-    private static final RenderStateShard.ShaderStateShard CUTOUT_SHADER = new RenderStateShard.ShaderStateShard(GameRenderer::getRendertypeCutoutShader);
 
     @Nullable public static BedrockGunModel loadBedrockGunModel(ResourceLocation modelLocation, ResourceLocation textureLocation) throws IOException {
         Resource resource = Minecraft.getInstance().getResourceManager().getResource(modelLocation);
         //load texture
-        RenderType renderType = RenderType.create(textureLocation.getNamespace() + ":bedrock_model$" + textureLocation.getPath(), DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 256, true, false, RenderType.CompositeState.builder().setLightmapState(LIGHTMAP).setShaderState(CUTOUT_SHADER).setTextureState(new RenderStateShard.TextureStateShard(textureLocation, false, false)).createCompositeState(true));
+        RenderType renderType = RenderType.entityCutout(textureLocation);
 
         //load model
         try (InputStream stream = resource.getInputStream()) {

@@ -1,11 +1,16 @@
 package com.tac.guns.mixin.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.tac.guns.client.animation.module.AnimationMeta;
 import com.tac.guns.client.animation.module.GunAnimationController;
+import com.tac.guns.client.event.BeforeRenderHandEvent;
 import com.tac.guns.network.CommonStateBox;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -49,8 +54,7 @@ public class ItemInHandRendererMixin {
             controller.runAnimation(GunAnimationController.AnimationLabel.DRAW);
         }
     }
-    /*
-             */
+
     @Inject(method = "tick",at = @At("RETURN"))
     public void cancelEquippedProgress(CallbackInfo ci){
         if(Minecraft.getInstance().player == null) return;
@@ -61,4 +65,8 @@ public class ItemInHandRendererMixin {
         oMainHandHeight = 1.0f;
     }
 
+    @Inject(method = "renderHandsWithItems", at = @At("HEAD"))
+    public void beforeHandRender(float p_109315_, PoseStack p_109316_, MultiBufferSource.BufferSource p_109317_, LocalPlayer p_109318_, int p_109319_, CallbackInfo ci){
+        MinecraftForge.EVENT_BUS.post(new BeforeRenderHandEvent(p_109316_));
+    }
 }

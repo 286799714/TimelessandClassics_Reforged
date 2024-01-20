@@ -2,6 +2,7 @@ package com.tac.guns.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.logging.LogUtils;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.tac.guns.client.animation.AnimationListener;
@@ -23,8 +24,6 @@ import java.util.*;
 import java.util.function.Function;
 
 public class BedrockAnimatedModel extends BedrockModel implements AnimationListenerSupplier {
-    /**以下用来给每个基岩版模型提供专门的 RenderType，用于提供VertexConsumer。*/ //todo 是否有更好的方法？
-    private Map<String, Function<BedrockPart, IModelRenderer>> functionRenderers;
     private final CameraAnimationObject cameraAnimationObject = new CameraAnimationObject();
 
     public BedrockAnimatedModel(BedrockModelPOJO pojo, BedrockVersion version, RenderType renderType) {
@@ -42,11 +41,13 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
      * @param function 输入为BedrockPart，返回IModelRenderer以替换渲染
      */
     public void setFunctionalRenderer(String node, Function<BedrockPart, IModelRenderer> function){
-        functionRenderers.put(node, function);
-    }
-
-    public void removeFunctionalRenderer(String node){
-        functionRenderers.remove(node);
+        ModelRendererWrapper wrapper = modelMap.get(node);
+        if(wrapper == null){
+            FunctionalBedrockPart functionalPart = new FunctionalBedrockPart(function, node);
+            modelMap.put(node, new ModelRendererWrapper(functionalPart));
+        }else if (wrapper.getModelRenderer() instanceof FunctionalBedrockPart functionalPart) {
+            functionalPart.functionalRenderer = function;
+        }
     }
 
     public @Nonnull CameraAnimationObject getCameraAnimationObject(){
@@ -55,24 +56,22 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
 
     @Override
     protected void loadNewModel(BedrockModelPOJO pojo) {
-        if(functionRenderers == null) functionRenderers = new HashMap<>();
         assert pojo.getGeometryModelNew() != null;
         pojo.getGeometryModelNew().deco();
         for (BonesItem bones : pojo.getGeometryModelNew().getBones()) {
             //将FunctionalBedrockPart先塞入modelMap中，以支持functionalRender操作
-            modelMap.putIfAbsent(bones.getName(), new ModelRendererWrapper(new FunctionalBedrockPart(functionRenderers, bones.getName())));
+            modelMap.putIfAbsent(bones.getName(), new ModelRendererWrapper(new FunctionalBedrockPart(null, bones.getName())));
         }
         super.loadNewModel(pojo);
     }
 
     @Override
     protected void loadLegacyModel(BedrockModelPOJO pojo) {
-        if(functionRenderers == null) functionRenderers = new HashMap<>();
         assert pojo.getGeometryModelLegacy() != null;
         pojo.getGeometryModelLegacy().deco();
         for (BonesItem bones : pojo.getGeometryModelLegacy().getBones()) {
             //将FunctionalBedrockPart先塞入modelMap中，以支持functionalRender操作
-            modelMap.putIfAbsent(bones.getName(), new ModelRendererWrapper(new FunctionalBedrockPart(functionRenderers, bones.getName())));
+            modelMap.putIfAbsent(bones.getName(), new ModelRendererWrapper(new FunctionalBedrockPart(null, bones.getName())));
         }
         super.loadLegacyModel(pojo);
     }
@@ -220,11 +219,34 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
 
     /**visible的优先级低于FunctionalBedrockPart，当visible为false的时候，仍然会执行functionalRenderers*/
     protected static class FunctionalBedrockPart extends BedrockPart{
-        private final Map<String, Function<BedrockPart, IModelRenderer>> functionalRenderers;
+        //private final Map<String, Function<BedrockPart, IModelRenderer>> functionalRenderers;
+        public @Nullable Function<BedrockPart, IModelRenderer> functionalRenderer;
 
-        public FunctionalBedrockPart(@Nonnull Map<String, Function<BedrockPart, IModelRenderer>> functionalRenderers, @Nonnull String name){
+        public FunctionalBedrockPart(@Nullable Function<BedrockPart, IModelRenderer> functionalRenderer, @Nonnull String name){
             super(name);
-            this.functionalRenderers = functionalRenderers;
+            this.functionalRenderer = functionalRenderer;
+        }
+
+        public FunctionalBedrockPart(@Nullable Function<BedrockPart, IModelRenderer> functionalRenderer, @Nonnull BedrockPart part){
+            super(part.name);
+            this.cubes.addAll(part.cubes);
+            this.children.addAll(part.children);
+            this.x = part.x;
+            this.y = part.y;
+            this.z = part.z;
+            this.xRot = part.xRot;
+            this.yRot = part.yRot;
+            this.zRot = part.zRot;
+            this.offsetX = part.offsetX;
+            this.offsetY = part.offsetY;
+            this.offsetZ = part.offsetZ;
+            this.visible = part.visible;
+            this.mirror = part.mirror;
+            this.setInitRotationAngle(part.getInitRotX(), part.getInitRotY(), part.getInitRotZ());
+            this.xScale = part.xScale;
+            this.yScale = part.yScale;
+            this.zScale = part.zScale;
+            this.functionalRenderer = functionalRenderer;
         }
 
         @Override
@@ -233,9 +255,8 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
             poseStack.translate(this.offsetX, this.offsetY, this.offsetZ);
             this.translateAndRotateAndScale(poseStack);
 
-            Function<BedrockPart, IModelRenderer> function = name == null ? null : functionalRenderers.get(name);
-            if(function != null){
-                @Nullable IModelRenderer renderer = function.apply(this);
+            if(functionalRenderer != null){
+                @Nullable IModelRenderer renderer = functionalRenderer.apply(this);
                 if(renderer != null) renderer.render(poseStack, consumer, light, overlay);
             }else {
                 super.compile(poseStack.last(), consumer, light, overlay, red, green, blue, alpha);

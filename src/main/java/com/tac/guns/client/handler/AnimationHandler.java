@@ -1,6 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.GunMod;
@@ -36,6 +37,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -44,6 +46,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Mainly controls when the animation should play.
@@ -62,12 +65,21 @@ public enum AnimationHandler {
     }
 
     @SubscribeEvent
-    public void applyCameraAnimation(BeforeCameraSetupEvent event){
+    public void applyCameraAnimation(EntityViewRenderEvent.CameraSetup event){
         if(Minecraft.getInstance().player == null) return;
         //apply BedrockAnimatedModel's camera animation transform
         IOverrideModel model = OverrideModelManager.getModel(Minecraft.getInstance().player.getMainHandItem().getItem());
         if(model instanceof BedrockAnimatedModel bedrockAnimatedModel){
-            event.setQuaternion(bedrockAnimatedModel.getCameraAnimationObject().rotationQuaternion);
+            Quaternion q = bedrockAnimatedModel.getCameraAnimationObject().rotationQuaternion;
+            double yaw = Math.asin(2 * (q.r() * q.j() - q.i() * q.k()));
+            double pitch = Math.atan2(2 * (q.r() * q.i() + q.j() * q.k()), 1 - 2 * (q.i() * q.i() + q.j() * q.j()));
+            double roll = Math.atan2(2 * (q.r() * q.k() + q.i() * q.j()), 1 - 2 * (q.j() * q.j() + q.k() * q.k()));
+            yaw = Math.toDegrees(yaw);
+            pitch = Math.toDegrees(pitch);
+            roll = Math.toDegrees(roll);
+            event.setYaw((float) yaw + event.getYaw());
+            event.setPitch((float) pitch + event.getPitch());
+            event.setRoll((float) roll + event.getRoll());
         }
     }
 

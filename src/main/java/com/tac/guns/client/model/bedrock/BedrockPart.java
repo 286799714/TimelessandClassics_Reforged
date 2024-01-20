@@ -20,7 +20,7 @@ import java.util.Random;
 public class BedrockPart {
     @Nullable public final String name;
     public final ObjectList<BedrockCube> cubes = new ObjectArrayList<>();
-    protected final ObjectList<BedrockPart> children = new ObjectArrayList<>();
+    public final ObjectList<BedrockPart> children = new ObjectArrayList<>();
     public float x;
     public float y;
     public float z;
