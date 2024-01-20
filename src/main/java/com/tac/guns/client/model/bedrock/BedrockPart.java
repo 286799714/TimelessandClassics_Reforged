@@ -7,6 +7,7 @@ import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -51,11 +52,11 @@ public class BedrockPart {
         this.z = z;
     }
 
-    public void render(PoseStack poseStack, VertexConsumer consumer, int light, int overlay) {
-        this.render(poseStack, consumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+    public void render(PoseStack poseStack, ItemTransforms.TransformType transformType, VertexConsumer consumer, int light, int overlay) {
+        this.render(poseStack, transformType, consumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public void render(PoseStack poseStack, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(PoseStack poseStack, ItemTransforms.TransformType transformType, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
         if (this.visible) {
             if (!this.cubes.isEmpty() || !this.children.isEmpty()) {
                 poseStack.pushPose();
@@ -64,7 +65,7 @@ public class BedrockPart {
                 this.compile(poseStack.last(), consumer, light, overlay, red, green, blue, alpha);
 
                 for (BedrockPart part : this.children) {
-                    part.render(poseStack, consumer, light, overlay, red, green, blue, alpha);
+                    part.render(poseStack, transformType, consumer, light, overlay, red, green, blue, alpha);
                 }
 
                 poseStack.popPose();

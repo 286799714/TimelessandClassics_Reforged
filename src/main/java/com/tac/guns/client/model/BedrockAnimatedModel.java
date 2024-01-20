@@ -17,6 +17,7 @@ import com.tac.guns.client.resource.model.bedrock.pojo.BedrockModelPOJO;
 import com.tac.guns.client.resource.model.bedrock.pojo.BonesItem;
 import com.tac.guns.client.util.Pair;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -250,18 +251,18 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
         }
 
         @Override
-        public void render(PoseStack poseStack, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
+        public void render(PoseStack poseStack, ItemTransforms.TransformType transformType, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
             poseStack.pushPose();
             poseStack.translate(this.offsetX, this.offsetY, this.offsetZ);
             this.translateAndRotateAndScale(poseStack);
 
             if(functionalRenderer != null){
                 @Nullable IModelRenderer renderer = functionalRenderer.apply(this);
-                if(renderer != null) renderer.render(poseStack, consumer, light, overlay);
+                if(renderer != null) renderer.render(poseStack, transformType, consumer, light, overlay);
             }else {
                 super.compile(poseStack.last(), consumer, light, overlay, red, green, blue, alpha);
                 for (BedrockPart part : this.children) {
-                    part.render(poseStack, consumer, light, overlay, red, green, blue, alpha);
+                    part.render(poseStack, transformType, consumer, light, overlay, red, green, blue, alpha);
                 }
             }
 

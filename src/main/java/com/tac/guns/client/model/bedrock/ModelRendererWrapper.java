@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 
 public class ModelRendererWrapper implements IModelRenderer {
     private final BedrockPart modelRenderer;
@@ -130,7 +131,7 @@ public class ModelRendererWrapper implements IModelRenderer {
     }
 
     @Override
-    public void render(PoseStack poseStack, VertexConsumer consumer, int light, int overlay){
-        modelRenderer.render(poseStack, consumer, light, overlay);
+    public void render(PoseStack poseStack, ItemTransforms.TransformType transformType, VertexConsumer consumer, int light, int overlay){
+        modelRenderer.render(poseStack, transformType, consumer, light, overlay);
     }
 }

@@ -314,10 +314,9 @@ public class BedrockModel implements IModel {
         matrixStack.pushPose();
         //游戏中模型是上下颠倒的，需要翻转过来。
         matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-        //附魔的紫色特效在枪械上不应该渲染，因此最后一个参数为false
         VertexConsumer builder = buffer.getBuffer(renderType);
         for (BedrockPart model : shouldRender) {
-            model.render(matrixStack, builder, light, overlay);
+            model.render(matrixStack, transformType, builder, light, overlay);
         }
 
         matrixStack.popPose();

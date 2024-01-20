@@ -10,13 +10,12 @@ import com.tac.guns.client.animation.ObjectAnimation;
 import com.tac.guns.client.animation.ObjectAnimationRunner;
 import com.tac.guns.client.animation.gltf.AnimationStructure;
 import com.tac.guns.client.animation.module.*;
-import com.tac.guns.client.event.BeforeCameraSetupEvent;
 import com.tac.guns.client.event.BeforeRenderHandEvent;
 import com.tac.guns.client.model.BedrockAnimatedModel;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.resource.animation.AnimationAssetLoader;
-import com.tac.guns.client.resource.animation.gltf.AnimationOnlyGltfAsset;
+import com.tac.guns.client.resource.animation.gltf.RawAnimationStructure;
 import com.tac.guns.client.resource.model.ModelLoader;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -46,7 +45,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Mainly controls when the animation should play.
@@ -67,6 +65,7 @@ public enum AnimationHandler {
     @SubscribeEvent
     public void applyCameraAnimation(EntityViewRenderEvent.CameraSetup event){
         if(Minecraft.getInstance().player == null) return;
+        if(!Minecraft.getInstance().options.bobView) return;
         //apply BedrockAnimatedModel's camera animation transform
         IOverrideModel model = OverrideModelManager.getModel(Minecraft.getInstance().player.getMainHandItem().getItem());
         if(model instanceof BedrockAnimatedModel bedrockAnimatedModel){
@@ -85,6 +84,7 @@ public enum AnimationHandler {
 
     @SubscribeEvent
     public void applyItemLayerCameraAnimation(BeforeRenderHandEvent event){
+        if(!Minecraft.getInstance().options.bobView) return;
         LocalPlayer player = Minecraft.getInstance().player;
         if(player == null) return;
         IOverrideModel overrideModel = OverrideModelManager.getModel(player.getMainHandItem());
@@ -119,20 +119,24 @@ public enum AnimationHandler {
         try {
             BedrockAnimatedModel model = (BedrockAnimatedModel) OverrideModelManager.getModel(ModItems.AK47.get());
             if(model == null) return;
-            model.setFunctionalRenderer("LeftHand", bedrockPart -> (poseStack, consumer, light, overlay) -> {
-                //do it because transform data from bedrock model is upside down
-                poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-                RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.LEFT, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), light);
+            model.setFunctionalRenderer("LeftHand", bedrockPart -> (poseStack, transformType, consumer, light, overlay) -> {
+                if(transformType.firstPerson()){
+                    //do it because transform data from bedrock model is upside down
+                    poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
+                    RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.LEFT, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), light);
+                }
             });
-            model.setFunctionalRenderer("RightHand", bedrockPart -> (poseStack, consumer, light, overlay) -> {
-                //do it because transform data from bedrock model is upside down
-                poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-                RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.RIGHT, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), light);
+            model.setFunctionalRenderer("RightHand", bedrockPart -> (poseStack, transformType, consumer, light, overlay) -> {
+                if(transformType.firstPerson()){
+                    //do it because transform data from bedrock model is upside down
+                    poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
+                    RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.RIGHT, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), light);
+                }
             });
 
             //create animation runner
-            AnimationOnlyGltfAsset asset =
-                    AnimationAssetLoader.loadGltfAnimationAsset(new ResourceLocation("tac","animations/ak47.geo.gltf"));
+            RawAnimationStructure asset =
+                    AnimationAssetLoader.loadRawAnimationStructure(new ResourceLocation("tac","animations/ak47.geo.gltf"));
             AnimationStructure structure = new AnimationStructure(asset);
             List<ObjectAnimation> animations = com.tac.guns.client.animation.Animations.createAnimations(structure, model);
             for(ObjectAnimation animation : animations){

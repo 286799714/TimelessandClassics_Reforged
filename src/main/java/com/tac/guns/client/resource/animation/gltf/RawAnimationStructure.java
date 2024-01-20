@@ -2,7 +2,7 @@ package com.tac.guns.client.resource.animation.gltf;
 
 import java.util.List;
 
-public class AnimationOnlyGltfAsset {
+public class RawAnimationStructure {
     private List<Accessor> accessors;
     private List<Animation> animations;
     private List<Buffer> buffers;

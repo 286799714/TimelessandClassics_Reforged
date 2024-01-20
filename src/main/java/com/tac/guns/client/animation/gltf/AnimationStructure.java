@@ -20,9 +20,9 @@ public class AnimationStructure {
     private final List<BufferModel> bufferModels = new ArrayList<>();
     private final List<BufferViewModel> bufferViewModels = new ArrayList<>();
     private final List<NodeModel> nodeModels = new ArrayList<>();
-    private final AnimationOnlyGltfAsset gltf;
+    private final RawAnimationStructure gltf;
 
-    public AnimationStructure(AnimationOnlyGltfAsset asset){
+    public AnimationStructure(RawAnimationStructure asset){
         gltf = asset;
         createAccessorModels();
         createAnimationModels();
