@@ -36,7 +36,7 @@ public class ModelLoader {
     @Nullable public static BedrockGunModel loadBedrockGunModel(ResourceLocation modelLocation, ResourceLocation textureLocation) throws IOException {
         Resource resource = Minecraft.getInstance().getResourceManager().getResource(modelLocation);
         //load texture
-        RenderType renderType = RenderType.entityCutout(textureLocation);
+        RenderType renderType = RenderType.itemEntityTranslucentCull(textureLocation);
 
         //load model
         try (InputStream stream = resource.getInputStream()) {

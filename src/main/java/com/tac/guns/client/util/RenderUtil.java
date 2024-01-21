@@ -3,6 +3,7 @@ package com.tac.guns.client.util;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.logging.LogUtils;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
@@ -22,6 +23,7 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
@@ -439,6 +441,7 @@ public class RenderUtil
         Minecraft mc = Minecraft.getInstance();
         EntityRenderDispatcher renderManager = mc.getEntityRenderDispatcher();
         PlayerRenderer renderer = (PlayerRenderer) renderManager.getRenderer(player);
+        int oldId = RenderSystem.getShaderTexture(0);
         RenderSystem.setShaderTexture(0, player.getSkinTextureLocation());
 
         if(hand == HumanoidArm.RIGHT)
@@ -449,6 +452,7 @@ public class RenderUtil
         {
             renderer.renderLeftHand(matrixStack, buffer, combinedLight, player);
         }
+        RenderSystem.setShaderTexture(0, oldId);
     }
 
     public static RenderType getRenderType(ItemStack stack, boolean entity)

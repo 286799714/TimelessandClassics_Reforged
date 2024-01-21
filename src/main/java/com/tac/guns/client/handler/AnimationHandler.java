@@ -1,6 +1,9 @@
 package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
@@ -12,6 +15,7 @@ import com.tac.guns.client.animation.gltf.AnimationStructure;
 import com.tac.guns.client.animation.module.*;
 import com.tac.guns.client.event.BeforeRenderHandEvent;
 import com.tac.guns.client.model.BedrockAnimatedModel;
+import com.tac.guns.client.model.bedrock.IModelRenderer;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.resource.animation.AnimationAssetLoader;
@@ -28,6 +32,8 @@ import com.tac.guns.util.GunModifierHelper;
 import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
@@ -121,16 +127,30 @@ public enum AnimationHandler {
             if(model == null) return;
             model.setFunctionalRenderer("LeftHand", bedrockPart -> (poseStack, transformType, consumer, light, overlay) -> {
                 if(transformType.firstPerson()){
-                    //do it because transform data from bedrock model is upside down
                     poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-                    RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.LEFT, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), light);
+                    Matrix3f normal = poseStack.last().normal().copy();
+                    Matrix4f pose = poseStack.last().pose().copy();
+                    //需要把手臂的渲染委托到枪械模型渲染结束，因为它和枪械模型共用缓冲区，渲染手臂之后枪械模型的贴图会错误
+                    model.delegateRender((poseStack1, transformType1, consumer1, light1, overlay1) -> {
+                        PoseStack poseStack2 = new PoseStack();
+                        poseStack2.last().normal().mul(normal);
+                        poseStack2.last().pose().multiply(pose);
+                        RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.LEFT, poseStack2, Minecraft.getInstance().renderBuffers().bufferSource(), light1);
+                    });
                 }
             });
             model.setFunctionalRenderer("RightHand", bedrockPart -> (poseStack, transformType, consumer, light, overlay) -> {
                 if(transformType.firstPerson()){
-                    //do it because transform data from bedrock model is upside down
                     poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-                    RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.RIGHT, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), light);
+                    Matrix3f normal = poseStack.last().normal().copy();
+                    Matrix4f pose = poseStack.last().pose().copy();
+                    //需要把手臂的渲染委托到枪械模型渲染结束，因为它和枪械模型共用缓冲区，渲染手臂之后枪械模型的贴图会错误
+                    model.delegateRender((poseStack1, transformType1, consumer1, light1, overlay1) -> {
+                        PoseStack poseStack2 = new PoseStack();
+                        poseStack2.last().normal().mul(normal);
+                        poseStack2.last().pose().multiply(pose);
+                        RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.RIGHT, poseStack2, Minecraft.getInstance().renderBuffers().bufferSource(), light1);
+                    });
                 }
             });
 

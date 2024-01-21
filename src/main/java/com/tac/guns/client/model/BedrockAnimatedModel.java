@@ -220,7 +220,6 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
 
     /**visible的优先级低于FunctionalBedrockPart，当visible为false的时候，仍然会执行functionalRenderers*/
     protected static class FunctionalBedrockPart extends BedrockPart{
-        //private final Map<String, Function<BedrockPart, IModelRenderer>> functionalRenderers;
         public @Nullable Function<BedrockPart, IModelRenderer> functionalRenderer;
 
         public FunctionalBedrockPart(@Nullable Function<BedrockPart, IModelRenderer> functionalRenderer, @Nonnull String name){
@@ -265,7 +264,6 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                     part.render(poseStack, transformType, consumer, light, overlay, red, green, blue, alpha);
                 }
             }
-
             poseStack.popPose();
         }
     }

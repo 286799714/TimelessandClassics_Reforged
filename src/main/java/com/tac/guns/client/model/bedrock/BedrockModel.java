@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +32,10 @@ public class BedrockModel implements IModel {
      */
     protected final List<BedrockPart> shouldRender = new LinkedList<>();
     protected RenderType renderType;
+    /**
+     * 委托到渲染结束时执行的渲染器，用于特殊部分的渲染，如手臂
+     */
+    protected List<IModelRenderer> delegateRenderers = new ArrayList<>();
 
     public BedrockModel(BedrockModelPOJO pojo, BedrockVersion version, RenderType renderType) {
         if (version == BedrockVersion.LEGACY) {
@@ -40,6 +45,10 @@ public class BedrockModel implements IModel {
             loadNewModel(pojo);
         }
         this.renderType = renderType;
+    }
+
+    public void delegateRender(IModelRenderer renderer){
+        delegateRenderers.add(renderer);
     }
 
     private void setRotationAngle(BedrockPart modelRenderer, float x, float y, float z) {
@@ -320,5 +329,10 @@ public class BedrockModel implements IModel {
         }
 
         matrixStack.popPose();
+
+        for(IModelRenderer renderer : delegateRenderers){
+            renderer.render(matrixStack, transformType, builder, light, overlay);
+        }
+        delegateRenderers = new ArrayList<>();
     }
 }
