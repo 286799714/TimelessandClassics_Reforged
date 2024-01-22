@@ -8,7 +8,6 @@ import com.tac.guns.client.animation.gltf.NodeModel;
 import com.tac.guns.client.animation.gltf.accessor.AccessorData;
 import com.tac.guns.client.animation.gltf.accessor.AccessorFloatData;
 import com.tac.guns.client.animation.interpolator.InterpolatorUtil;
-import com.tac.guns.client.util.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class Animations {
                 //init channel's node name and interpolator
                 AnimationModel.Interpolation interpolation = sampler.interpolation();
                 NodeModel nodeModel = channelModel.nodeModel();
-                channel.interpolator = InterpolatorUtil.fromInterpolation(interpolation);
+                channel.content.interpolator = InterpolatorUtil.fromInterpolation(interpolation);
                 channel.node = nodeModel.getName();
 
                 //init channel's keyframe time and keyframe values
@@ -44,7 +43,7 @@ public class Animations {
                     LogUtils.getLogger().warn(
                             "Input data is not an AccessorFloatData, but "
                             + inputData.getClass());
-                    return null;
+                    return result;
                 }
                 AccessorModel output = sampler.output();               //accessor of key frame values
                 AccessorData outputData = output.getAccessorData();
@@ -52,7 +51,7 @@ public class Animations {
                     LogUtils.getLogger().warn(
                             "Output data is not an AccessorFloatData, but "
                                     + inputData.getClass());
-                    return null;
+                    return result;
                 }
                 int numKeyElements = inputFloatData.getNumElements();
                 int numValuesElements = outputFloatData.getTotalNumComponents() / numKeyElements;
@@ -65,20 +64,20 @@ public class Animations {
                         values[i][j] = outputFloatData.get(i * numValuesElements + j);
                     }
                 }
-                channel.keyframeTimeS = keyframeTimeS;
-                channel.values = values;
+                channel.content.keyframeTimeS = keyframeTimeS;
+                channel.content.values = values;
 
                 //compile the interpolator after everything loaded
-                channel.interpolator.compile(channel);
+                channel.content.interpolator.compile(channel);
 
                 //add channel to animation
                 animation.addChannel(channel);
-            }
 
-            //add Animation Listeners to animation
-            for(AnimationListenerSupplier supplier : suppliers) {
-                for (Pair<String, AnimationListener> listenerPair : supplier.supplyListeners()) {
-                    animation.addAnimationListener(listenerPair.getKey(), listenerPair.getValue());
+                //add Animation Listeners to animation
+                for(AnimationListenerSupplier supplier : suppliers) {
+                    AnimationListener listener = supplier.supplyListeners(channel.node, channel.type);
+                    if(listener != null)
+                        channel.addListener(listener);
                 }
             }
 

@@ -12,11 +12,11 @@ public class Step implements Interpolator{
 
     @Override
     public void interpolate(int indexFrom, int indexTo, float alpha, float[] result) {
-        for(int i = 0; i < channel.values[indexFrom].length; i++){
+        for(int i = 0; i < channel.content.values[indexFrom].length; i++){
             if(alpha < 1)
-                result[i] = channel.values[indexFrom][i];
+                result[i] = channel.content.values[indexFrom][i];
             else
-                result[i] = channel.values[indexTo][i];
+                result[i] = channel.content.values[indexTo][i];
         }
     }
 }

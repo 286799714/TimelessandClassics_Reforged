@@ -12,8 +12,8 @@ public class Linear implements Interpolator{
 
     @Override
     public void interpolate(int indexFrom, int indexTo, float alpha, float[] result) {
-        for(int i = 0; i < channel.values[indexFrom].length; i++){
-            result[i] = channel.values[indexFrom][i] * (1 - alpha) + channel.values[indexTo][i] * alpha;
+        for(int i = 0; i < channel.content.values[indexFrom].length; i++){
+            result[i] = channel.content.values[indexFrom][i] * (1 - alpha) + channel.content.values[indexTo][i] * alpha;
         }
     }
 }

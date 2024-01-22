@@ -29,6 +29,10 @@ public class ObjectAnimationRunner {
         progressNs = 0;
     }
 
+    public void setProgressNs(long progressNs){
+        this.progressNs = progressNs;
+    }
+
     public void update(){
         if(running){
             long currentNs = System.nanoTime();
@@ -51,7 +55,7 @@ public class ObjectAnimationRunner {
             }
             case LOOP -> {
                 if(progressNs / 1e9f > animation.getMaxEndTimeS()) {
-                    progressNs = progressNs - (long)(animation.getMaxEndTimeS() * 1e9f);
+                    progressNs = progressNs % (long)(animation.getMaxEndTimeS() * 1e9f);
                 }
             }
         }

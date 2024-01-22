@@ -29,6 +29,15 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
 
     public BedrockAnimatedModel(BedrockModelPOJO pojo, BedrockVersion version, RenderType renderType) {
         super(pojo, version, renderType);
+        //init camera animation object
+        ModelRendererWrapper cameraRendererWrapper = modelMap.get(CameraAnimationObject.CAMERA_NODE_NAME);
+        if(cameraRendererWrapper != null) {
+            if(shouldRender.contains(cameraRendererWrapper.getModelRenderer())){
+                cameraAnimationObject.cameraBone = indexBones.get(CameraAnimationObject.CAMERA_NODE_NAME);
+            }else {
+                cameraAnimationObject.cameraRenderer = cameraRendererWrapper;
+            }
+        }
     }
 
     public void setVisible(String bone, boolean visible){
@@ -129,17 +138,23 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
     }
 
     @Override
-    public List<Pair<String, AnimationListener>> supplyListeners() {
-        List<Pair<String, AnimationListener>> listeners = new ArrayList<>();
+    public AnimationListener supplyListeners(String nodeName, ObjectAnimationChannel.ChannelType type) {
+        ModelRendererWrapper model = modelMap.get(nodeName);
+        if(model == null)
+            return null;
 
-        for(Map.Entry<String, ModelRendererWrapper> entry : modelMap.entrySet()){
-            AnimationListener translationListener = new AnimationListener() {
-                final ModelRendererWrapper rendererWrapper = entry.getValue();
+        AnimationListener cameraListener = cameraAnimationObject.supplyListeners(nodeName, type);
+        if(cameraListener != null)
+            return cameraListener;
+
+        if(type.equals(ObjectAnimationChannel.ChannelType.TRANSLATION)){
+            return new AnimationListener() {
+                final ModelRendererWrapper rendererWrapper = model;
                 BonesItem bonesItem;
                 {
                     //如果当前node是根node(也就是包含于shouldRender中)，则获取其bonesItem，以便后续计算相对位移 offset。
                     if(shouldRender.contains(rendererWrapper.getModelRenderer()))
-                         bonesItem = indexBones.get(entry.getKey());
+                        bonesItem = indexBones.get(nodeName);
                 }
                 @Override
                 public void update(float[] values) {
@@ -162,9 +177,11 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                     return ObjectAnimationChannel.ChannelType.TRANSLATION;
                 }
             };
+        }
 
-            AnimationListener rotationListener = new AnimationListener() {
-                final ModelRendererWrapper rendererWrapper = entry.getValue();
+        if(type.equals(ObjectAnimationChannel.ChannelType.ROTATION)){
+            return new AnimationListener() {
+                final ModelRendererWrapper rendererWrapper = model;
                 @Override
                 public void update(float[] values) {
                     float[] m = new float[16];
@@ -184,38 +201,27 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                     return ObjectAnimationChannel.ChannelType.ROTATION;
                 }
             };
+        }
 
-            AnimationListener scaleListener = new AnimationListener() {
-                final ModelRendererWrapper rendererWrapper = entry.getValue();
+        if(type.equals(ObjectAnimationChannel.ChannelType.SCALE)) {
+            return new AnimationListener() {
+                final ModelRendererWrapper rendererWrapper = model;
+
                 @Override
                 public void update(float[] values) {
                     rendererWrapper.setScaleX(values[0]);
                     rendererWrapper.setScaleY(values[1]);
                     rendererWrapper.setScaleZ(values[2]);
                 }
+
                 @Override
                 public ObjectAnimationChannel.ChannelType getType() {
                     return ObjectAnimationChannel.ChannelType.SCALE;
                 }
             };
-
-            listeners.add(new Pair<>(entry.getKey(), translationListener));
-            listeners.add(new Pair<>(entry.getKey(), rotationListener));
-            listeners.add(new Pair<>(entry.getKey(), scaleListener));
         }
 
-        //init and add camera animation object's animation listener to list
-        ModelRendererWrapper cameraRendererWrapper = modelMap.get(CameraAnimationObject.CAMERA_NODE_NAME);
-        if(cameraRendererWrapper != null) {
-            if(shouldRender.contains(cameraRendererWrapper.getModelRenderer())){
-                cameraAnimationObject.cameraBone = indexBones.get(CameraAnimationObject.CAMERA_NODE_NAME);
-            }else {
-                cameraAnimationObject.cameraRenderer = cameraRendererWrapper;
-            }
-            listeners.addAll(cameraAnimationObject.supplyListeners());
-        }
-
-        return listeners;
+        return null;
     }
 
     /**visible的优先级低于FunctionalBedrockPart，当visible为false的时候，仍然会执行functionalRenderers*/
@@ -284,53 +290,58 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
         protected BonesItem cameraBone;
 
         @Override
-        public List<Pair<String, AnimationListener>> supplyListeners() {
-            AnimationListener translation = new AnimationListener() {
-                @Override
-                public void update(float[] values) {
-                    if(cameraBone != null){
-                        //因为要达成所有位移都是相对位移，所以如果当前node是根node，则减去根node的pivot坐标。
-                        translationVector.setX(values[0] - cameraBone.getPivot().get(0) / 16f);
-                        translationVector.setY(values[1] - cameraBone.getPivot().get(1) / 16f);
-                        translationVector.setZ(values[2] - cameraBone.getPivot().get(2) / 16f);
-                    }else {
-                        //虽然方法名称写的是getRotationPoint，但其实还是相对父级node的坐标移动量。因此此处与listener提供的local translation相减。
-                        translationVector.setX(values[0] + cameraRenderer.getRotationPointX() / 16f);
-                        translationVector.setY(values[1] + cameraRenderer.getRotationPointY() / 16f);
-                        translationVector.setZ(values[2] - cameraRenderer.getRotationPointZ() / 16f);
+        public AnimationListener supplyListeners(String nodeName, ObjectAnimationChannel.ChannelType type) {
+            if(!nodeName.equals("cameraK"))
+                return null;
+            if(type.equals(ObjectAnimationChannel.ChannelType.TRANSLATION)) {
+                return new AnimationListener() {
+                    @Override
+                    public void update(float[] values) {
+                        if (cameraBone != null) {
+                            //因为要达成所有位移都是相对位移，所以如果当前node是根node，则减去根node的pivot坐标。
+                            translationVector.setX(values[0] - cameraBone.getPivot().get(0) / 16f);
+                            translationVector.setY(values[1] - cameraBone.getPivot().get(1) / 16f);
+                            translationVector.setZ(values[2] - cameraBone.getPivot().get(2) / 16f);
+                        } else {
+                            //虽然方法名称写的是getRotationPoint，但其实还是相对父级node的坐标移动量。因此此处与listener提供的local translation相减。
+                            translationVector.setX(values[0] + cameraRenderer.getRotationPointX() / 16f);
+                            translationVector.setY(values[1] + cameraRenderer.getRotationPointY() / 16f);
+                            translationVector.setZ(values[2] - cameraRenderer.getRotationPointZ() / 16f);
+                        }
                     }
-                }
 
-                @Override
-                public ObjectAnimationChannel.ChannelType getType() {
-                    return ObjectAnimationChannel.ChannelType.TRANSLATION;
-                }
-            };
-            AnimationListener rotation = new AnimationListener() {
-                @Override
-                public void update(float[] values) {
-                    float[] m = new float[16];
-                    quaternionToMatrix4x4(values, m);
-                    // 计算 roll（绕 x 轴的旋转角）
-                    float roll = (float)Math.atan2(m[6], m[10]);
-                    // 计算 pitch（绕 y 轴的旋转角）
-                    float pitch = (float)Math.atan2(m[2], Math.sqrt(m[6] * m[6] + m[10] * m[10]));
-                    // 计算 roll（绕 z 轴的旋转角）
-                    float yaw = (float)Math.atan2(m[1], m[0]);
+                    @Override
+                    public ObjectAnimationChannel.ChannelType getType() {
+                        return ObjectAnimationChannel.ChannelType.TRANSLATION;
+                    }
+                };
+            }
+            if(type.equals(ObjectAnimationChannel.ChannelType.ROTATION)) {
+                return new AnimationListener() {
+                    @Override
+                    public void update(float[] values) {
+                        float[] m = new float[16];
+                        quaternionToMatrix4x4(values, m);
+                        // 计算 roll（绕 x 轴的旋转角）
+                        float roll = (float) Math.atan2(m[6], m[10]);
+                        // 计算 pitch（绕 y 轴的旋转角）
+                        float pitch = (float) Math.atan2(m[2], Math.sqrt(m[6] * m[6] + m[10] * m[10]));
+                        // 计算 roll（绕 z 轴的旋转角）
+                        float yaw = (float) Math.atan2(m[1], m[0]);
                     /*对roll和yaw取反单纯是因为需要使用blockbench的camera插件，
                       它在关键帧中储存的旋转数值并不是摄像头的旋转数值，是世界箱体的旋转数值，
                       但唯独pitch是反的(也就是说唯独pitch是摄像机的旋转数值)。
                       最终需要存入rotationQuaternion的是世界箱体的旋转，因此roll yaw取反，pitch不需要*/
-                    toQuaternion(-roll, pitch, -yaw, rotationQuaternion);
-                }
+                        toQuaternion(-roll, pitch, -yaw, rotationQuaternion);
+                    }
 
-                @Override
-                public ObjectAnimationChannel.ChannelType getType() {
-                    return ObjectAnimationChannel.ChannelType.ROTATION;
-                }
-            };
-
-            return Arrays.asList(new Pair<>(CAMERA_NODE_NAME, translation), new Pair<>(CAMERA_NODE_NAME, rotation));
+                    @Override
+                    public ObjectAnimationChannel.ChannelType getType() {
+                        return ObjectAnimationChannel.ChannelType.ROTATION;
+                    }
+                };
+            }
+            return null;
         }
     }
 }

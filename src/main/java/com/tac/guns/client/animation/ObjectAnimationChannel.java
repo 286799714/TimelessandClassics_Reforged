@@ -13,14 +13,7 @@ public class ObjectAnimationChannel {
     /**
      * The key frame times, in seconds
      */
-    public float[] keyframeTimeS;
-    /**
-     * The values. Each element of this array corresponds to one key frame time,
-     * can be value of translation, rotation or scale
-     */
-    public float[][] values;
-
-    public Interpolator interpolator;
+    public AnimationChannelContent content;
 
     public final ChannelType type;
 
@@ -28,13 +21,19 @@ public class ObjectAnimationChannel {
 
     public ObjectAnimationChannel(ChannelType type){
         this.type = type;
+        this.content = new AnimationChannelContent();
+    }
+
+    public ObjectAnimationChannel(ChannelType type, AnimationChannelContent content){
+        this.type = type;
+        this.content = content;
     }
 
     public void addListener(AnimationListener listener){
         if(listener.getType().equals(type))
             listeners.add(listener);
         else
-            LogUtils.getLogger().warn("trying to add wrong type of listener to channel.");
+            throw new RuntimeException("trying to add wrong type of listener to channel.");
     }
 
     public void removeListener(AnimationListener listener){
@@ -47,7 +46,7 @@ public class ObjectAnimationChannel {
 
     public float getEndTimeS()
     {
-        return keyframeTimeS[keyframeTimeS.length-1];
+        return content.keyframeTimeS[content.keyframeTimeS.length-1];
     }
 
     /**
@@ -56,11 +55,11 @@ public class ObjectAnimationChannel {
      * */
     public void update(float timeS){
         int indexFrom = computeIndex(timeS);
-        int indexTo = Math.min(keyframeTimeS.length - 1, indexFrom + 1);
+        int indexTo = Math.min(content.keyframeTimeS.length - 1, indexFrom + 1);
         float alpha = computeAlpha(timeS, indexFrom);
 
-        float[] result = new float[values[indexFrom].length];
-        interpolator.interpolate(indexFrom, indexTo, alpha, result);
+        float[] result = new float[content.values[indexFrom].length];
+        content.interpolator.interpolate(indexFrom, indexTo, alpha, result);
 
         for (AnimationListener listener : listeners)
         {
@@ -70,7 +69,7 @@ public class ObjectAnimationChannel {
 
     private int computeIndex(float timeS)
     {
-        int index = Arrays.binarySearch(keyframeTimeS, timeS);
+        int index = Arrays.binarySearch(content.keyframeTimeS, timeS);
         if (index >= 0)
         {
             return index;
@@ -80,16 +79,16 @@ public class ObjectAnimationChannel {
 
     private float computeAlpha(float timeS, int indexFrom)
     {
-        if (timeS <= keyframeTimeS[0])
+        if (timeS <= content.keyframeTimeS[0])
         {
             return 0.0f;
         }
-        if (timeS >= keyframeTimeS[keyframeTimeS.length-1])
+        if (timeS >= content.keyframeTimeS[content.keyframeTimeS.length-1])
         {
             return 1.0f;
         }
-        float local = timeS - keyframeTimeS[indexFrom];
-        float delta = keyframeTimeS[indexFrom+1] - keyframeTimeS[indexFrom];
+        float local = timeS - content.keyframeTimeS[indexFrom];
+        float delta = content.keyframeTimeS[indexFrom+1] - content.keyframeTimeS[indexFrom];
         return local / delta;
     }
 

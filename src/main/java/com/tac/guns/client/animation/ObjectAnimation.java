@@ -23,7 +23,7 @@ public class ObjectAnimation {
     /**
      * The maximum {@link ObjectAnimationChannel#getEndTimeS()} of all channels
      */
-    private float maxEndTimeS;
+    private float maxEndTimeS = 0f;
 
     public ObjectAnimation(@Nonnull String name){
         this.name = Objects.requireNonNull(name);
@@ -35,7 +35,9 @@ public class ObjectAnimation {
             list.add(channel);
             return list;
         });
-        updateMaxEndTime();
+
+        if(channel.getEndTimeS() > maxEndTimeS)
+            maxEndTimeS = channel.getEndTimeS();
     }
 
     public void removeChannel(ObjectAnimationChannel channel){
@@ -44,7 +46,13 @@ public class ObjectAnimation {
             list.remove(channel);
             return list;
         });
-        updateMaxEndTime();
+
+        maxEndTimeS = 0.0f;
+        for(List<ObjectAnimationChannel> channels : channels.values()){
+            for(ObjectAnimationChannel c : channels) {
+                maxEndTimeS = Math.max(maxEndTimeS, c.getEndTimeS());
+            }
+        }
     }
 
     public List<ObjectAnimationChannel> getChannels(){
@@ -87,16 +95,6 @@ public class ObjectAnimation {
 
     public float getMaxEndTimeS(){
         return maxEndTimeS;
-    }
-
-    private void updateMaxEndTime()
-    {
-        maxEndTimeS = 0.0f;
-        for(List<ObjectAnimationChannel> channels : channels.values()){
-            for(ObjectAnimationChannel channel : channels) {
-                maxEndTimeS = Math.max(maxEndTimeS, channel.getEndTimeS());
-            }
-        }
     }
 
     public enum PlayType{
