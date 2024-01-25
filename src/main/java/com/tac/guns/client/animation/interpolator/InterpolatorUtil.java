@@ -1,9 +1,7 @@
 package com.tac.guns.client.animation.interpolator;
 
-import com.tac.guns.client.animation.gltf.AnimationModel;
-
 public class InterpolatorUtil {
-    public static Interpolator fromInterpolation(AnimationModel.Interpolation interpolation){
+    public static Interpolator fromInterpolation(InterpolatorType interpolation){
         switch (interpolation){
             case SPLINE -> {
                 return new Spline();
@@ -11,9 +9,19 @@ public class InterpolatorUtil {
             case STEP -> {
                 return new Step();
             }
+            case SLERP -> {
+                return new SLerp();
+            }
             default -> {
                 return new Linear();
             }
         }
+    }
+
+    public enum InterpolatorType{
+        LINEAR,
+        SLERP,
+        SPLINE,
+        STEP
     }
 }

@@ -14,44 +14,9 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public class BedrockGunModel extends BedrockAnimatedModel implements IGunModel, IOverrideModel {
-    private IScopeModel scopeModel;
-    private IMuzzleModel muzzleModel;
-
+public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideModel {
     public BedrockGunModel(BedrockModelPOJO pojo, BedrockVersion version, RenderType renderType) {
         super(pojo, version, renderType);
-    }
-
-    @Override
-    public void setScope(IScopeModel scope) {
-        this.scopeModel = scope;
-    }
-
-    @Override
-    public IScopeModel getScope() {
-        return scopeModel;
-    }
-
-    @Override
-    public void setMuzzle(IMuzzleModel muzzle) {
-        this.muzzleModel = muzzle;
-    }
-
-    @Override
-    public IMuzzleModel getMuzzleModel() {
-        return muzzleModel;
-    }
-
-    @Nullable
-    @Override
-    public Pair<Vector3f, Vector3f> getIronSightTransform() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Pair<Vector3f, Vector3f> getShellEjectorTransform() {
-        return null;
     }
 
     @Override

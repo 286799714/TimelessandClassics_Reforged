@@ -826,8 +826,8 @@ public class GunRenderingHandler {
         double magnification = MathUtil.fovToMagnification(currentHandLayerFov, originHandLayerFov);
         newKick *= 1 / Math.pow(magnification, 0.3);
 
-        matrixStack.translate(0, 0, newKick);
-        matrixStack.translate(0, 0.05 * newKick, 0.35 * newKick);
+        //matrixStack.translate(0, 0, newKick);
+        //matrixStack.translate(0, 0.05 * newKick, 0.35 * newKick);
 
         // TODO: have T/Time updatable per gun, weapons like the pistols, especially the deagle benifits from forcing accurate shots and awaiting front sight reset, unlike the m4 which should have little effect
         newSwayYaw = swayYawDynamics.update(0.12f, newSwayYawYaw * recoilReduction * weaponsHorizontalAngle);
@@ -837,9 +837,9 @@ public class GunRenderingHandler {
 
         //matrixStack.rotate(Vector3f.ZP.rotationDegrees(newSwayYaw * recoilReduction)); // seems to be interesting to increase the force of
 
-        if(gun.getGeneral().getWeaponRecoilOffset() != 0)
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(this.recoilLift * this.recoilReduction));
-        matrixStack.translate(0, -0.05 * newKick, -0.35 * newKick);
+        //if(gun.getGeneral().getWeaponRecoilOffset() != 0)
+        //    matrixStack.mulPose(Vector3f.XP.rotationDegrees(this.recoilLift * this.recoilReduction));
+        //matrixStack.translate(0, -0.05 * newKick, -0.35 * newKick);
     }
     private int backwardTicker = 0;
     public void applyBobbingTransforms(PoseStack matrixStack, boolean convert){

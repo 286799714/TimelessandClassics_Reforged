@@ -8,13 +8,27 @@ import com.tac.guns.client.animation.gltf.NodeModel;
 import com.tac.guns.client.animation.gltf.accessor.AccessorData;
 import com.tac.guns.client.animation.gltf.accessor.AccessorFloatData;
 import com.tac.guns.client.animation.interpolator.InterpolatorUtil;
+import com.tac.guns.client.resource.animation.AnimationAssetLoader;
+import com.tac.guns.client.resource.animation.gltf.RawAnimationStructure;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Animations {
-    public static @Nonnull List<ObjectAnimation> createAnimations(AnimationStructure structure, AnimationListenerSupplier... suppliers){
+public class AnimationResources {
+    private static AnimationResources instance;
+
+    public static AnimationResources getInstance(){
+        if(instance == null){
+            return instance = new AnimationResources();
+        }
+        return instance;
+    }
+
+    public @Nonnull List<ObjectAnimation> createAnimations(AnimationStructure structure, @Nullable AnimationListenerSupplier... suppliers){
         List<ObjectAnimation> result = new ArrayList<>();
 
         List<AnimationModel> animationModels = structure.getAnimationModels();
@@ -33,7 +47,14 @@ public class Animations {
                 //init channel's node name and interpolator
                 AnimationModel.Interpolation interpolation = sampler.interpolation();
                 NodeModel nodeModel = channelModel.nodeModel();
-                channel.content.interpolator = InterpolatorUtil.fromInterpolation(interpolation);
+                //Quaternions require special interpolation
+                if(channel.type.equals(ObjectAnimationChannel.ChannelType.ROTATION)
+                    && interpolation.equals(AnimationModel.Interpolation.LINEAR)) {
+                    channel.content.interpolator = InterpolatorUtil.fromInterpolation(InterpolatorUtil.InterpolatorType.SLERP);
+                }
+                else {
+                    channel.content.interpolator = InterpolatorUtil.fromInterpolation(InterpolatorUtil.InterpolatorType.valueOf(interpolation.name()));
+                }
                 channel.node = nodeModel.getName();
 
                 //init channel's keyframe time and keyframe values
@@ -74,10 +95,12 @@ public class Animations {
                 animation.addChannel(channel);
 
                 //add Animation Listeners to animation
-                for(AnimationListenerSupplier supplier : suppliers) {
-                    AnimationListener listener = supplier.supplyListeners(channel.node, channel.type);
-                    if(listener != null)
-                        channel.addListener(listener);
+                if(suppliers != null) {
+                    for (AnimationListenerSupplier supplier : suppliers) {
+                        AnimationListener listener = supplier.supplyListeners(channel.node, channel.type);
+                        if (listener != null)
+                            channel.addListener(listener);
+                    }
                 }
             }
 
@@ -86,5 +109,10 @@ public class Animations {
         }
 
         return result;
+    }
+
+    public AnimationStructure loadAnimationStructure(ResourceLocation resourceLocation) throws IOException {
+        RawAnimationStructure asset = AnimationAssetLoader.loadRawAnimationStructure(resourceLocation);
+        return new AnimationStructure(asset);
     }
 }

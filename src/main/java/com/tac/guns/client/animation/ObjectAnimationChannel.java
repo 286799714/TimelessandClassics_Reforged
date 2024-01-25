@@ -1,8 +1,5 @@
 package com.tac.guns.client.animation;
 
-import com.mojang.logging.LogUtils;
-import com.tac.guns.client.animation.interpolator.Interpolator;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +13,10 @@ public class ObjectAnimationChannel {
     public AnimationChannelContent content;
 
     public final ChannelType type;
+
+    /**This variable is used for animation transitions.
+     * Please don't change it if you don't understand what you are doing.*/
+    boolean transitioning = false;
 
     private final List<AnimationListener> listeners = new ArrayList<>();
 
@@ -44,6 +45,8 @@ public class ObjectAnimationChannel {
         listeners.clear();
     }
 
+    public List<AnimationListener> getListeners(){return listeners;}
+
     public float getEndTimeS()
     {
         return content.keyframeTimeS[content.keyframeTimeS.length-1];
@@ -54,6 +57,15 @@ public class ObjectAnimationChannel {
      * @param timeS absolute time in seconds
      * */
     public void update(float timeS){
+        if(!transitioning) {
+            float[] result = getResult(timeS);
+            for (AnimationListener listener : listeners) {
+                listener.update(result);
+            }
+        }
+    }
+
+    public float[] getResult(float timeS){
         int indexFrom = computeIndex(timeS);
         int indexTo = Math.min(content.keyframeTimeS.length - 1, indexFrom + 1);
         float alpha = computeAlpha(timeS, indexFrom);
@@ -61,10 +73,7 @@ public class ObjectAnimationChannel {
         float[] result = new float[content.values[indexFrom].length];
         content.interpolator.interpolate(indexFrom, indexTo, alpha, result);
 
-        for (AnimationListener listener : listeners)
-        {
-            listener.update(result);
-        }
+        return result;
     }
 
     private int computeIndex(float timeS)

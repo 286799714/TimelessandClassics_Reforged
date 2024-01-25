@@ -3,13 +3,11 @@ package com.tac.guns.client.model.bedrock;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import com.tac.guns.client.model.IModel;
 import com.tac.guns.client.resource.model.bedrock.BedrockVersion;
 import com.tac.guns.client.resource.model.bedrock.pojo.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -18,7 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BedrockModel implements IModel {
+public class BedrockModel{
     /**
      * 存储 ModelRender 子模型的 HashMap
      */
@@ -318,7 +316,6 @@ public class BedrockModel implements IModel {
         this.renderType = renderType;
     }
 
-    @Override
     public void render(float partialTicks, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
         matrixStack.pushPose();
         //游戏中模型是上下颠倒的，需要翻转过来。

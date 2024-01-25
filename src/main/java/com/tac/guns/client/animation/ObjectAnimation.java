@@ -17,7 +17,7 @@ public class ObjectAnimation {
 
     /**
      * key of this map is node name.
-     * */
+     */
     private final Map<String, List<ObjectAnimationChannel>> channels = new HashMap<>();
 
     /**
@@ -27,6 +27,27 @@ public class ObjectAnimation {
 
     public ObjectAnimation(@Nonnull String name){
         this.name = Objects.requireNonNull(name);
+    }
+
+    /**
+     * Create a copy of source object animation,
+     * The values of the new object animation is the same as the source,
+     * but the new one won't hold any Animation Listener.
+     */
+    public ObjectAnimation(ObjectAnimation source){
+        this.name = source.name;
+        this.playType = source.playType;
+        this.maxEndTimeS = source.maxEndTimeS;
+        this.timeNs = source.timeNs;
+        for(Map.Entry<String, List<ObjectAnimationChannel>> entry : source.channels.entrySet()){
+            List<ObjectAnimationChannel> newList = new ArrayList<>();
+            for(ObjectAnimationChannel channel : entry.getValue()){
+                ObjectAnimationChannel newChannel = new ObjectAnimationChannel(channel.type, channel.content);
+                newChannel.node = channel.node;
+                newList.add(newChannel);
+            }
+            this.channels.put(entry.getKey(), newList);
+        }
     }
 
     public void addChannel(ObjectAnimationChannel channel){
@@ -55,29 +76,16 @@ public class ObjectAnimation {
         }
     }
 
-    public List<ObjectAnimationChannel> getChannels(){
-        List<ObjectAnimationChannel> list = new ArrayList<>();
+    public Map<String, List<ObjectAnimationChannel>> getChannels(){
+        return channels;
+    }
+
+    public void applyAnimationListeners(AnimationListenerSupplier supplier){
         for(List<ObjectAnimationChannel> channelList : channels.values()){
-            list.addAll(channelList);
-        }
-        return list;
-    }
-
-    public void addAnimationListener(String nodeName, AnimationListener listener){
-        List<ObjectAnimationChannel> channelList = channels.get(nodeName);
-        if(channelList != null){
             for(ObjectAnimationChannel channel : channelList){
-                if(channel.type.equals(listener.getType()))
+                AnimationListener listener = supplier.supplyListeners(channel.node, channel.type);
+                if(listener != null)
                     channel.addListener(listener);
-            }
-        }
-    }
-
-    public void removeAnimationListener(String nodeName, AnimationListener listener){
-        List<ObjectAnimationChannel> channelList = channels.get(nodeName);
-        if(channelList != null){
-            for(ObjectAnimationChannel channel : channelList){
-                channel.removeListener(listener);
             }
         }
     }

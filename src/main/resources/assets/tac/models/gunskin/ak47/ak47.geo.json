@@ -6974,6 +6974,11 @@
 					]
 				},
 				{
+					"name": "scope_p",
+					"parent": "AKM",
+					"pivot": [0, 27, 2.6]
+				},
+				{
 					"name": "R",
 					"parent": "bone2",
 					"pivot": [6, 35, 0]

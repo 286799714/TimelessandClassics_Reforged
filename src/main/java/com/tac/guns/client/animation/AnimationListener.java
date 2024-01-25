@@ -7,5 +7,6 @@ public interface AnimationListener {
      *               When ChannelType is SCALE, the length of values will be 3 and will store xyz scale.(ALSO LOCAL SCALE)
      * */
     void update(float[] values);
+    float[] recover();
     ObjectAnimationChannel.ChannelType getType();
 }

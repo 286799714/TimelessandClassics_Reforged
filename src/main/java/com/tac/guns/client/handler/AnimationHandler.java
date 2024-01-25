@@ -1,7 +1,6 @@
 package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
@@ -9,17 +8,13 @@ import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.GunMod;
 import com.tac.guns.client.Keys;
-import com.tac.guns.client.animation.ObjectAnimation;
-import com.tac.guns.client.animation.ObjectAnimationRunner;
+import com.tac.guns.client.animation.*;
 import com.tac.guns.client.animation.gltf.AnimationStructure;
 import com.tac.guns.client.animation.module.*;
 import com.tac.guns.client.event.BeforeRenderHandEvent;
 import com.tac.guns.client.model.BedrockAnimatedModel;
-import com.tac.guns.client.model.bedrock.IModelRenderer;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
-import com.tac.guns.client.resource.animation.AnimationAssetLoader;
-import com.tac.guns.client.resource.animation.gltf.RawAnimationStructure;
 import com.tac.guns.client.resource.model.ModelLoader;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
@@ -32,8 +27,6 @@ import com.tac.guns.util.GunModifierHelper;
 import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
@@ -49,8 +42,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Mainly controls when the animation should play.
@@ -59,12 +51,12 @@ import java.util.List;
 public enum AnimationHandler {
     INSTANCE;
 
-    public static final List<ObjectAnimationRunner> runners = new ArrayList<>();
+    public static final Map<ResourceLocation, AnimationController> controllers = new HashMap<>();
 
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event){
-        for(ObjectAnimationRunner runner : runners){
-            if(runner.isRunning()) runner.update();
+        for(AnimationController controller : controllers.values()){
+            controller.update();
         }
     }
 
@@ -155,32 +147,26 @@ public enum AnimationHandler {
             });
 
             //create animation runner
-            RawAnimationStructure asset =
-                    AnimationAssetLoader.loadRawAnimationStructure(new ResourceLocation("tac","animations/ak47.geo.gltf"));
-            AnimationStructure structure = new AnimationStructure(asset);
-            List<ObjectAnimation> animations = com.tac.guns.client.animation.Animations.createAnimations(structure, model);
-            for(ObjectAnimation animation : animations){
-                animation.playType = ObjectAnimation.PlayType.PLAY_ONCE_HOLD;
-                ObjectAnimationRunner runner = new ObjectAnimationRunner(animation);
-                runners.add(runner);
-
-                /*
-                //用来测试的是时候观察数据读取是否正常
-                List<ObjectAnimationChannel> channels = animation.getChannels();
-                for(ObjectAnimationChannel channel : channels){
-                    GunMod.LOGGER.info("testing " + channel.node + " " + channel.type);
-                    for(int i = 0; i < channel.keyframeTimeS.length; i++){
-                        StringBuilder str = new StringBuilder();
-                        str.append(channel.keyframeTimeS[i]).append(":");
-                        for(int j = 0; j < channel.values[i].length; j++){
-                            str.append(channel.values[i][j]).append(",");
+            AnimationStructure structure =
+                    AnimationResources.getInstance().loadAnimationStructure(new ResourceLocation("tac","animations/ak47.geo.gltf"));
+            controllers.put(ModItems.AK47.get().getRegistryName(), new AnimationController(structure, model));
+            controllers.get(ModItems.AK47.get().getRegistryName()).refreshPrototypes();
+            for(ObjectAnimation animation : controllers.get(ModItems.AK47.get().getRegistryName()).getPrototypes()){
+                Collection<List<ObjectAnimationChannel>> channels = animation.getChannels().values();
+                for(List<ObjectAnimationChannel> list : channels){
+                    for(ObjectAnimationChannel channel : list) {
+                        GunMod.LOGGER.info("testing " + channel.node + " " + channel.type);
+                        for (int i = 0; i < channel.content.keyframeTimeS.length; i++) {
+                            StringBuilder str = new StringBuilder();
+                            str.append(channel.content.keyframeTimeS[i]).append(":");
+                            for (int j = 0; j < channel.content.values[i].length; j++) {
+                                str.append(channel.content.values[i][j]).append(",");
+                            }
+                            GunMod.LOGGER.info(str.toString());
                         }
-                        GunMod.LOGGER.info(str.toString());
                     }
                 }
-                */
             }
-
         } catch (IOException e) {
             GunMod.LOGGER.warn("testing fail!");
             throw new RuntimeException(e);
@@ -246,12 +232,9 @@ public enum AnimationHandler {
     }
 
     public void onGunReload(boolean reloading, ItemStack itemStack) {
-        for(ObjectAnimationRunner runner : runners){
-            if("reload_empty" .equals(runner.animation.name)){
-                runner.reset();
-                runner.run();
-            }
-        }
+        AnimationController animationController = controllers.get(itemStack.getItem().getRegistryName());
+        if(animationController != null)
+            animationController.runAnimation(0, "reload_empty", 0.3f);
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
         if (itemStack.getItem() instanceof GunItem) {
@@ -286,6 +269,11 @@ public enum AnimationHandler {
         if (!event.isClient()) return;
         if(Minecraft.getInstance().player == null) return;
         if(!event.getPlayer().getUUID().equals(Minecraft.getInstance().player.getUUID())) return;
+        if(event.getStack().getItem() instanceof GunItem){
+            AnimationController controller = controllers.get(event.getStack().getItem().getRegistryName());
+            if(controller != null)
+                controller.runAnimation(0, "shoot", 0.01f);
+        }
         GunAnimationController controller = GunAnimationController.fromItem(event.getStack().getItem());
         if (controller == null) return;
         if (controller.isAnimationRunning()) {
@@ -340,11 +328,11 @@ public enum AnimationHandler {
             if(AimingHandler.get().getNormalisedAdsProgress() != 0)
                 return;
 
-            for(ObjectAnimationRunner runner : runners){
-                if(runner.animation.name.equals("inspect")){
-                    runner.reset();
-                    runner.run();
-                }
+            ItemStack itemStack = player.getMainHandItem();
+            if(itemStack.getItem() instanceof GunItem){
+                AnimationController controller = controllers.get(itemStack.getItem().getRegistryName());
+                if(controller != null)
+                    controller.runAnimation(0, "inspect", 0.3f);
             }
         } );
     }

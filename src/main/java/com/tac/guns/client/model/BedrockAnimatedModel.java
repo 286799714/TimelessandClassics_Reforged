@@ -173,6 +173,21 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                 }
 
                 @Override
+                public float[] recover() {
+                    float[] recover = new float[3];
+                    if(bonesItem != null){
+                        recover[0] = bonesItem.getPivot().get(0) / 16f;
+                        recover[1] = bonesItem.getPivot().get(1) / 16f;
+                        recover[2] = bonesItem.getPivot().get(2) / 16f;
+                    }else {
+                        recover[0] = -rendererWrapper.getRotationPointX() / 16f;
+                        recover[1] = -rendererWrapper.getRotationPointY() / 16f;
+                        recover[2] = rendererWrapper.getRotationPointZ() / 16f;
+                    }
+                    return recover;
+                }
+
+                @Override
                 public ObjectAnimationChannel.ChannelType getType() {
                     return ObjectAnimationChannel.ChannelType.TRANSLATION;
                 }
@@ -196,6 +211,12 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                     //此处不使用forge的Quaternion构造方法是因为这玩意儿竟然是用单位元四元数连乘三轴旋转四元数，这样和欧拉角有什么区别....
                     toQuaternion(-roll, pitch, yaw, rendererWrapper.getAdditionalQuaternion());
                 }
+
+                @Override
+                public float[] recover() {
+                    return new float[]{0, 0, 0, 1};
+                }
+
                 @Override
                 public ObjectAnimationChannel.ChannelType getType() {
                     return ObjectAnimationChannel.ChannelType.ROTATION;
@@ -212,6 +233,11 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                     rendererWrapper.setScaleX(values[0]);
                     rendererWrapper.setScaleY(values[1]);
                     rendererWrapper.setScaleZ(values[2]);
+                }
+
+                @Override
+                public float[] recover() {
+                    return new float[]{1f, 1f, 1f};
                 }
 
                 @Override
@@ -311,6 +337,21 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                     }
 
                     @Override
+                    public float[] recover() {
+                        float[] recover = new float[3];
+                        if(cameraBone != null){
+                            recover[0] = cameraBone.getPivot().get(0) / 16f;
+                            recover[1] = cameraBone.getPivot().get(1) / 16f;
+                            recover[2] = cameraBone.getPivot().get(2) / 16f;
+                        }else {
+                            recover[0] = -cameraRenderer.getRotationPointX() / 16f;
+                            recover[1] = -cameraRenderer.getRotationPointY() / 16f;
+                            recover[2] = cameraRenderer.getRotationPointZ() / 16f;
+                        }
+                        return recover;
+                    }
+
+                    @Override
                     public ObjectAnimationChannel.ChannelType getType() {
                         return ObjectAnimationChannel.ChannelType.TRANSLATION;
                     }
@@ -333,6 +374,11 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                       但唯独pitch是反的(也就是说唯独pitch是摄像机的旋转数值)。
                       最终需要存入rotationQuaternion的是世界箱体的旋转，因此roll yaw取反，pitch不需要*/
                         toQuaternion(-roll, pitch, -yaw, rotationQuaternion);
+                    }
+
+                    @Override
+                    public float[] recover() {
+                        return new float[]{0, 0, 0, 1f};
                     }
 
                     @Override
