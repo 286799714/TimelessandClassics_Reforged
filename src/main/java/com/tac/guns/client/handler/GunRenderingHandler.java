@@ -83,9 +83,9 @@ import java.util.*;
 
 public class GunRenderingHandler {
     private static GunRenderingHandler instance;
-    private final SecondOrderDynamics recoilDynamics = new SecondOrderDynamics(0.5f,0.6f, 2.65f, 0);
-    private final SecondOrderDynamics swayYawDynamics = new SecondOrderDynamics(0.4f,0.5f, 3.25f, 0);
-    private final SecondOrderDynamics swayPitchDynamics = new SecondOrderDynamics(0.3f,0.4f, 3.5f, 0);
+    private final SecondOrderDynamics recoilDynamics = new SecondOrderDynamics(1f,1f, 0.5f, 0);
+    private final SecondOrderDynamics swayYawDynamics = new SecondOrderDynamics(1f,1f, 0.5f, 0);
+    private final SecondOrderDynamics swayPitchDynamics = new SecondOrderDynamics(1f,1f, 0.5f, 0);
     private final SecondOrderDynamics aimingDynamics = new SecondOrderDynamics(0.45f,0.8f, 1.2f, 0);
     // Standard Sprint Dynamics
     private final SecondOrderDynamics sprintDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
@@ -178,26 +178,6 @@ public class GunRenderingHandler {
     @SubscribeEvent
     public void onGunFired(GunFireEvent event){
         if(event.isClient()) fireTime = System.currentTimeMillis();
-    }
-
-    @SubscribeEvent
-    public void onCameraSetup(EntityViewRenderEvent.CameraSetup event){
-        Minecraft mc = Minecraft.getInstance();
-        if(mc.player == null || mc.level == null)
-            return;
-        if(!(mc.player.getMainHandItem().getItem() instanceof GunItem) || mc.player.getMainHandItem().getTag() == null)
-            return;
-        if((Config.COMMON.gameplay.forceCameraShakeOnFire.get() || Config.CLIENT.display.cameraShakeOnFire.get()) && IDLNBTUtil.getInt(mc.player.getMainHandItem(), "CurrentFireMode") != 0){
-            float cameraShakeDuration = 0.06f; //TODO: Force to be adjusted per shot later in 0.3.4-0.3.5, customizable per gun
-            long alphaTime = System.currentTimeMillis() - fireTime;
-            float progress = (alphaTime < cameraShakeDuration * 1000 ? 1 - alphaTime / (cameraShakeDuration * 1000f) : 0);
-            //apply camera shake when firing.
-            float alpha = (progress
-                    * (Math.random() - 0.5 < 0 ? -1 : 1)
-                    * 0.9f);
-            event.setPitch(event.getPitch() - Math.abs(alpha));
-            event.setRoll(event.getRoll() + alpha * 0.5f);
-        }
     }
 
     @SubscribeEvent
@@ -466,7 +446,7 @@ public class GunRenderingHandler {
             this.zoomProgressInv = (float)invertZoomProgress;
 
             //matrixStack.translate((double) (Math.asin(-Mth.sin(distanceWalked*crouch * (float) Math.PI) * cameraYaw * 0.5F)) * invertZoomProgress, ((double) (Math.asin((-Math.abs(-MathHelper.cos(distanceWalked*crouch * (float) Math.PI) * cameraYaw))) * invertZoomProgress)) * 1.140, 0.0D);// * 1.140, 0.0D);
-            applyBobbingTransforms(matrixStack, false);
+            //applyBobbingTransforms(matrixStack, false);
             applyJumpingTransforms(matrixStack, event.getPartialTicks());
             //TODO: Implement config switch, it's not a required mechanic. it's just fun
             applyNoiseMovementTransform(matrixStack);
@@ -663,7 +643,7 @@ public class GunRenderingHandler {
         int offset = right ? 1 : -1;
         matrixStack.translate(0.56 * offset, -0.52, -0.72);
 
-        this.applySprintingTransforms(heldItem, hand, matrixStack, event.getPartialTicks());
+        //this.applySprintingTransforms(heldItem, hand, matrixStack, event.getPartialTicks());
         /* Applies recoil and reload rotations */
         this.applyRecoilTransforms(matrixStack, heldItem, modifiedGun);
         //if(!isAnimated) this.applyReloadTransforms(matrixStack, hand, event.getPartialTicks(), heldItem);

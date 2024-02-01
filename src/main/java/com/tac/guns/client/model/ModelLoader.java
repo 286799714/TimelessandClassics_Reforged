@@ -1,18 +1,12 @@
-package com.tac.guns.client.resource.model;
+package com.tac.guns.client.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.tac.guns.GunMod;
-import com.tac.guns.client.model.BedrockAnimatedModel;
-import com.tac.guns.client.model.BedrockGunModel;
 import com.tac.guns.client.resource.model.bedrock.BedrockVersion;
 import com.tac.guns.client.resource.model.bedrock.pojo.BedrockModelPOJO;
 import com.tac.guns.client.resource.model.bedrock.pojo.CubesItem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;

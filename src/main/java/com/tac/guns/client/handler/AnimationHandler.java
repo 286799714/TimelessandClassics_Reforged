@@ -1,6 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
@@ -15,7 +16,7 @@ import com.tac.guns.client.event.BeforeRenderHandEvent;
 import com.tac.guns.client.model.BedrockAnimatedModel;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
-import com.tac.guns.client.resource.model.ModelLoader;
+import com.tac.guns.client.model.ModelLoader;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
@@ -29,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -44,9 +46,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Mainly controls when the animation should play.
- */
 @OnlyIn(Dist.CLIENT)
 public enum AnimationHandler {
     INSTANCE;
@@ -55,7 +54,31 @@ public enum AnimationHandler {
 
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event){
+        if(!event.phase.equals(TickEvent.Phase.START))
+            return;
+
         for(AnimationController controller : controllers.values()){
+            ObjectAnimationRunner runner = controller.getAnimation(0);
+            if (runner != null) {
+                //为了让冲刺动画和原版的viewBobbing相适应，需要手动更新冲刺动画的进度
+                //当前动画是run或者正在过渡向run动画的时候，就手动设置run动画的进度。
+                if(runner.getAnimation().name.equals("run") && runner.isRunning()) {
+                    Entity entity = Minecraft.getInstance().getCameraEntity();
+                    if (entity instanceof Player playerEntity) {
+                        float deltaDistanceWalked = playerEntity.walkDist - playerEntity.walkDistO;
+                        float distanceWalked = playerEntity.walkDist + deltaDistanceWalked * event.renderTickTime;
+                        runner.setProgressNs((long) (runner.getAnimation().getMaxEndTimeS() * (distanceWalked % 2f) / 2f * 1e9f));
+                    }
+                }
+                if(runner.isTransitioning() && runner.getTransitionTo()!= null && runner.getTransitionTo().getAnimation().name.equals("run")){
+                    Entity entity = Minecraft.getInstance().getCameraEntity();
+                    if (entity instanceof Player playerEntity) {
+                        float deltaDistanceWalked = playerEntity.walkDist - playerEntity.walkDistO;
+                        float distanceWalked = playerEntity.walkDist + deltaDistanceWalked * event.renderTickTime;
+                        runner.getTransitionTo().setProgressNs((long) (runner.getTransitionTo().getAnimation().getMaxEndTimeS() * (distanceWalked % 2f) / 2f * 1e9f));
+                    }
+                }
+            }
             controller.update();
         }
     }
@@ -99,15 +122,8 @@ public enum AnimationHandler {
             OverrideModelManager.register(
                     ModItems.AK47.get(),
                     ModelLoader.loadBedrockGunModel(
-                            new ResourceLocation("tac", "models/gunskin/ak47/ak47.geo.json"),
+                            new ResourceLocation("tac", "models/gun/ak47.geo.json"),
                             new ResourceLocation("tac", "textures/items/ak47_uv.png")
-                    )
-            );
-            OverrideModelManager.register(
-                    ModItems.DEAGLE_357.get(),
-                    ModelLoader.loadBedrockGunModel(
-                            new ResourceLocation("tac", "models/gunskin/deagle50/deagle_50_cc.geo.json"),
-                            new ResourceLocation("tac", "textures/items/deagle_50_cc.png")
                     )
             );
         } catch (IOException e) {
@@ -117,56 +133,9 @@ public enum AnimationHandler {
         try {
             BedrockAnimatedModel model = (BedrockAnimatedModel) OverrideModelManager.getModel(ModItems.AK47.get());
             if(model == null) return;
-            model.setFunctionalRenderer("LeftHand", bedrockPart -> (poseStack, transformType, consumer, light, overlay) -> {
-                if(transformType.firstPerson()){
-                    poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-                    Matrix3f normal = poseStack.last().normal().copy();
-                    Matrix4f pose = poseStack.last().pose().copy();
-                    //需要把手臂的渲染委托到枪械模型渲染结束，因为它和枪械模型共用缓冲区，渲染手臂之后枪械模型的贴图会错误
-                    model.delegateRender((poseStack1, transformType1, consumer1, light1, overlay1) -> {
-                        PoseStack poseStack2 = new PoseStack();
-                        poseStack2.last().normal().mul(normal);
-                        poseStack2.last().pose().multiply(pose);
-                        RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.LEFT, poseStack2, Minecraft.getInstance().renderBuffers().bufferSource(), light1);
-                    });
-                }
-            });
-            model.setFunctionalRenderer("RightHand", bedrockPart -> (poseStack, transformType, consumer, light, overlay) -> {
-                if(transformType.firstPerson()){
-                    poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-                    Matrix3f normal = poseStack.last().normal().copy();
-                    Matrix4f pose = poseStack.last().pose().copy();
-                    //需要把手臂的渲染委托到枪械模型渲染结束，因为它和枪械模型共用缓冲区，渲染手臂之后枪械模型的贴图会错误
-                    model.delegateRender((poseStack1, transformType1, consumer1, light1, overlay1) -> {
-                        PoseStack poseStack2 = new PoseStack();
-                        poseStack2.last().normal().mul(normal);
-                        poseStack2.last().pose().multiply(pose);
-                        RenderUtil.renderFirstPersonArm(Minecraft.getInstance().player, HumanoidArm.RIGHT, poseStack2, Minecraft.getInstance().renderBuffers().bufferSource(), light1);
-                    });
-                }
-            });
-
-            //create animation runner
             AnimationStructure structure =
                     AnimationResources.getInstance().loadAnimationStructure(new ResourceLocation("tac","animations/ak47.geo.gltf"));
             controllers.put(ModItems.AK47.get().getRegistryName(), new AnimationController(structure, model));
-            controllers.get(ModItems.AK47.get().getRegistryName()).refreshPrototypes();
-            for(ObjectAnimation animation : controllers.get(ModItems.AK47.get().getRegistryName()).getPrototypes()){
-                Collection<List<ObjectAnimationChannel>> channels = animation.getChannels().values();
-                for(List<ObjectAnimationChannel> list : channels){
-                    for(ObjectAnimationChannel channel : list) {
-                        GunMod.LOGGER.info("testing " + channel.node + " " + channel.type);
-                        for (int i = 0; i < channel.content.keyframeTimeS.length; i++) {
-                            StringBuilder str = new StringBuilder();
-                            str.append(channel.content.keyframeTimeS[i]).append(":");
-                            for (int j = 0; j < channel.content.values[i].length; j++) {
-                                str.append(channel.content.values[i][j]).append(",");
-                            }
-                            GunMod.LOGGER.info(str.toString());
-                        }
-                    }
-                }
-            }
         } catch (IOException e) {
             GunMod.LOGGER.warn("testing fail!");
             throw new RuntimeException(e);
@@ -234,7 +203,7 @@ public enum AnimationHandler {
     public void onGunReload(boolean reloading, ItemStack itemStack) {
         AnimationController animationController = controllers.get(itemStack.getItem().getRegistryName());
         if(animationController != null)
-            animationController.runAnimation(0, "reload_empty", 0.3f);
+            animationController.runAnimation(0, "reload_empty", ObjectAnimation.PlayType.PLAY_ONCE_HOLD,0.3f);
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
         if (itemStack.getItem() instanceof GunItem) {
@@ -272,7 +241,7 @@ public enum AnimationHandler {
         if(event.getStack().getItem() instanceof GunItem){
             AnimationController controller = controllers.get(event.getStack().getItem().getRegistryName());
             if(controller != null)
-                controller.runAnimation(0, "shoot", 0.01f);
+                controller.runAnimation(0, "shoot", ObjectAnimation.PlayType.PLAY_ONCE_HOLD, 0.05f);
         }
         GunAnimationController controller = GunAnimationController.fromItem(event.getStack().getItem());
         if (controller == null) return;
@@ -332,7 +301,7 @@ public enum AnimationHandler {
             if(itemStack.getItem() instanceof GunItem){
                 AnimationController controller = controllers.get(itemStack.getItem().getRegistryName());
                 if(controller != null)
-                    controller.runAnimation(0, "inspect", 0.3f);
+                    controller.runAnimation(0, "inspect", ObjectAnimation.PlayType.PLAY_ONCE_HOLD,0.3f);
             }
         } );
     }
@@ -396,11 +365,29 @@ public enum AnimationHandler {
             }
         }
     }
+    private boolean lastTickSprint = false;
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event){
         if(Minecraft.getInstance().player == null) return;
         ItemStack stack = Minecraft.getInstance().player.getMainHandItem();
+        if(Minecraft.getInstance().player.isSprinting() && !lastTickSprint) {
+            lastTickSprint = true;
+            AnimationController animationController = controllers.get(stack.getItem().getRegistryName());
+            if (animationController != null) {
+                ArrayDeque<AnimationController.AnimationPlan> deque = new ArrayDeque<>();
+                deque.add(new AnimationController.AnimationPlan("run_start", ObjectAnimation.PlayType.PLAY_ONCE_HOLD, 0.2f));
+                deque.add(new AnimationController.AnimationPlan("run", ObjectAnimation.PlayType.LOOP, 0.4f));
+                animationController.queueAnimation(0, deque);
+            }
+        }
+        if(!Minecraft.getInstance().player.isSprinting() && lastTickSprint) {
+            lastTickSprint = false;
+            AnimationController animationController = controllers.get(stack.getItem().getRegistryName());
+            if (animationController != null) {
+                animationController.runAnimation(0, "run_end", ObjectAnimation.PlayType.PLAY_ONCE_HOLD, 0.2f);
+            }
+        }
         GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
         if (controller instanceof PumpShotgunAnimationController) {
             if(controller.getPreviousAnimation() != null && controller.getPreviousAnimation().equals(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_LOOP)) && !ReloadHandler.get().isReloading()){

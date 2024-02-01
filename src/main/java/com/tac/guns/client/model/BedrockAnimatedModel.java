@@ -289,11 +289,22 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
 
             if(functionalRenderer != null){
                 @Nullable IModelRenderer renderer = functionalRenderer.apply(this);
-                if(renderer != null) renderer.render(poseStack, transformType, consumer, light, overlay);
+                if(renderer != null)
+                    renderer.render(poseStack, transformType, consumer, light, overlay);
+                else{
+                    if (this.visible) {
+                        super.compile(poseStack.last(), consumer, light, overlay, red, green, blue, alpha);
+                        for (BedrockPart part : this.children) {
+                            part.render(poseStack, transformType, consumer, light, overlay, red, green, blue, alpha);
+                        }
+                    }
+                }
             }else {
-                super.compile(poseStack.last(), consumer, light, overlay, red, green, blue, alpha);
-                for (BedrockPart part : this.children) {
-                    part.render(poseStack, transformType, consumer, light, overlay, red, green, blue, alpha);
+                if (this.visible) {
+                    super.compile(poseStack.last(), consumer, light, overlay, red, green, blue, alpha);
+                    for (BedrockPart part : this.children) {
+                        part.render(poseStack, transformType, consumer, light, overlay, red, green, blue, alpha);
+                    }
                 }
             }
             poseStack.popPose();

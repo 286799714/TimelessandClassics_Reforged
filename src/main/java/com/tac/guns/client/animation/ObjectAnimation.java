@@ -106,7 +106,6 @@ public class ObjectAnimation {
     }
 
     public enum PlayType{
-        PLAY_ONCE_RESET,
         PLAY_ONCE_HOLD,
         LOOP
     }
