@@ -4,6 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
+import com.tac.guns.client.animation.AnimationController;
+import com.tac.guns.client.animation.ObjectAnimationRunner;
+import com.tac.guns.client.handler.AnimationHandler;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.resource.model.bedrock.BedrockVersion;
 import com.tac.guns.client.resource.model.bedrock.pojo.BedrockModelPOJO;
@@ -21,7 +24,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-import java.sql.CallableStatement;
+import static com.tac.guns.client.model.CommonComponents.*;
 
 public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideModel {
     protected Gun currentModifiedGun;
@@ -58,19 +61,25 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
                 });
             }
         });
-        this.setFunctionalRenderer("bullet_in_barrel", bedrockPart -> {
+        this.setFunctionalRenderer(BULLET_IN_BARREL, bedrockPart -> {
             CompoundTag tag = currentItem.getOrCreateTag();
             int ammoCount = tag.getInt("AmmoCount");
             bedrockPart.visible = ammoCount != 0;
             return null;
         });
-        this.setFunctionalRenderer("bullet_in_mag", bedrockPart -> {
+        this.setFunctionalRenderer(BULLET_IN_MAG, bedrockPart -> {
             CompoundTag tag = currentItem.getOrCreateTag();
             int ammoCount = tag.getInt("AmmoCount");
             bedrockPart.visible = ammoCount > 1;
             return null;
         });
-        this.setFunctionalRenderer("muzzle_brake", bedrockPart -> {
+        this.setFunctionalRenderer(BULLET_CHAIN, bedrockPart -> {
+            CompoundTag tag = currentItem.getOrCreateTag();
+            int ammoCount = tag.getInt("AmmoCount");
+            bedrockPart.visible = ammoCount != 0;
+            return null;
+        });
+        this.setFunctionalRenderer(MUZZLE_BRAKE, bedrockPart -> {
             if (currentModifiedGun.canAttachType(IAttachment.Type.BARREL)) {
                 ItemStack muzzle = Gun.getAttachment(IAttachment.Type.BARREL, currentItem);
                 bedrockPart.visible = muzzle.getItem() == ModItems.MUZZLE_BRAKE.get();
@@ -78,7 +87,7 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
                 bedrockPart.visible = false;
             return null;
         });
-        this.setFunctionalRenderer("muzzle_compensator", bedrockPart -> {
+        this.setFunctionalRenderer(MUZZLE_COMPENSATOR, bedrockPart -> {
             if (currentModifiedGun.canAttachType(IAttachment.Type.BARREL)) {
                 ItemStack muzzle = Gun.getAttachment(IAttachment.Type.BARREL, currentItem);
                 bedrockPart.visible = muzzle.getItem() == ModItems.MUZZLE_COMPENSATOR.get();
@@ -86,7 +95,7 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
                 bedrockPart.visible = false;
             return null;
         });
-        this.setFunctionalRenderer("muzzle_silencer", bedrockPart -> {
+        this.setFunctionalRenderer(MUZZLE_SILENCER, bedrockPart -> {
             if (currentModifiedGun.canAttachType(IAttachment.Type.BARREL)) {
                 ItemStack muzzle = Gun.getAttachment(IAttachment.Type.BARREL, currentItem);
                 bedrockPart.visible = muzzle.getItem() == ModItems.SILENCER.get();
@@ -94,16 +103,160 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
                 bedrockPart.visible = false;
             return null;
         });
-        this.setFunctionalRenderer("muzzle_default", bedrockPart -> {
+        this.setFunctionalRenderer(MUZZLE_DEFAULT, bedrockPart -> {
             if (currentModifiedGun.canAttachType(IAttachment.Type.BARREL)) {
                 ItemStack muzzle = Gun.getAttachment(IAttachment.Type.BARREL, currentItem);
                 bedrockPart.visible = muzzle.getItem() == ItemStack.EMPTY.getItem();
             }else
+                bedrockPart.visible = true;
+            return null;
+        });
+        this.setFunctionalRenderer(MOUNT, bedrockPart -> {
+            bedrockPart.visible = currentModifiedGun.canAttachType(IAttachment.Type.SCOPE) && Gun.getScope(currentItem) != null;
+            return null;
+        });
+        this.setFunctionalRenderer(CARRY, bedrockPart -> {
+            bedrockPart.visible = currentModifiedGun.canAttachType(IAttachment.Type.SCOPE) && Gun.getScope(currentItem) == null;
+            return null;
+        });
+        this.setFunctionalRenderer(SIGHT_FOLDED, bedrockPart -> {
+            bedrockPart.visible = currentModifiedGun.canAttachType(IAttachment.Type.SCOPE) && Gun.getScope(currentItem) != null;
+            return null;
+        });
+        this.setFunctionalRenderer(SIGHT, bedrockPart -> {
+            bedrockPart.visible = currentModifiedGun.canAttachType(IAttachment.Type.SCOPE) && Gun.getScope(currentItem) == null;
+            return null;
+        });
+        this.setFunctionalRenderer(STOCK_LIGHT, bedrockPart -> {
+            if (currentModifiedGun.canAttachType(IAttachment.Type.STOCK)) {
+                ItemStack stock = Gun.getAttachment(IAttachment.Type.STOCK, currentItem);
+                bedrockPart.visible = stock.getItem() == ModItems.LIGHT_STOCK.get();
+            }else
                 bedrockPart.visible = false;
             return null;
         });
-        this.setFunctionalRenderer("mount", bedrockPart -> {
-            bedrockPart.visible = currentModifiedGun.canAttachType(IAttachment.Type.SCOPE) && Gun.getScope(currentItem) != null;
+        this.setFunctionalRenderer(STOCK_TACTICAL, bedrockPart -> {
+            if (currentModifiedGun.canAttachType(IAttachment.Type.STOCK)) {
+                ItemStack stock = Gun.getAttachment(IAttachment.Type.STOCK, currentItem);
+                bedrockPart.visible = stock.getItem() == ModItems.TACTICAL_STOCK.get();
+            }else
+                bedrockPart.visible = false;
+            return null;
+        });
+        this.setFunctionalRenderer(STOCK_HEAVY, bedrockPart -> {
+            if (currentModifiedGun.canAttachType(IAttachment.Type.STOCK)) {
+                ItemStack stock = Gun.getAttachment(IAttachment.Type.STOCK, currentItem);
+                bedrockPart.visible = stock.getItem() == ModItems.WEIGHTED_STOCK.get();
+            }else
+                bedrockPart.visible = false;
+            return null;
+        });
+        this.setFunctionalRenderer(STOCK_DEFAULT, bedrockPart -> {
+            if (currentModifiedGun.canAttachType(IAttachment.Type.STOCK)) {
+                ItemStack stock = Gun.getAttachment(IAttachment.Type.STOCK, currentItem);
+                bedrockPart.visible = stock.getItem() == ItemStack.EMPTY.getItem();
+            }else
+                bedrockPart.visible = true;
+            return null;
+        });
+        this.setFunctionalRenderer(MAG_EXTENDED_1, bedrockPart -> {
+            if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
+                ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
+                bedrockPart.visible = mag.getItem() == ModItems.SMALL_EXTENDED_MAG.get();
+            }else
+                bedrockPart.visible = false;
+            return null;
+        });
+        this.setFunctionalRenderer(MAG_EXTENDED_2, bedrockPart -> {
+            if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
+                ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
+                bedrockPart.visible = mag.getItem() == ModItems.MEDIUM_EXTENDED_MAG.get();
+            }else
+                bedrockPart.visible = false;
+            return null;
+        });
+        this.setFunctionalRenderer(MAG_EXTENDED_3, bedrockPart -> {
+            if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
+                ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
+                bedrockPart.visible = mag.getItem() == ModItems.LARGE_EXTENDED_MAG.get();
+            }else
+                bedrockPart.visible = false;
+            return null;
+        });
+        this.setFunctionalRenderer(MAG_STANDARD, bedrockPart -> {
+            if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
+                ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
+                bedrockPart.visible = mag.getItem() == ItemStack.EMPTY.getItem();
+            }else
+                bedrockPart.visible = true;
+            return null;
+        });
+        this.setFunctionalRenderer(MAG_EXTENDED_1_A, bedrockPart -> {
+            AnimationController controller = AnimationHandler.controllers.get(currentItem.getItem().getRegistryName());
+            if(controller != null) {
+                ObjectAnimationRunner runner = controller.getAnimation(AnimationHandler.MAIN_TRACK);
+                if(runner != null){
+                    if(runner.getAnimation().name.contains("reload")) {
+                        if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
+                            ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
+                            bedrockPart.visible = mag.getItem() == ModItems.SMALL_EXTENDED_MAG.get();
+                            return null;
+                        }
+                    }
+                }
+            }
+            bedrockPart.visible = false;
+            return null;
+        });
+        this.setFunctionalRenderer(MAG_EXTENDED_2_A, bedrockPart -> {
+            AnimationController controller = AnimationHandler.controllers.get(currentItem.getItem().getRegistryName());
+            if(controller != null) {
+                ObjectAnimationRunner runner = controller.getAnimation(AnimationHandler.MAIN_TRACK);
+                if(runner != null){
+                    if(runner.getAnimation().name.contains("reload")) {
+                        if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
+                            ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
+                            bedrockPart.visible = mag.getItem() == ModItems.MEDIUM_EXTENDED_MAG.get();
+                            return null;
+                        }
+                    }
+                }
+            }
+            bedrockPart.visible = false;
+            return null;
+        });
+        this.setFunctionalRenderer(MAG_EXTENDED_3_A, bedrockPart -> {
+            AnimationController controller = AnimationHandler.controllers.get(currentItem.getItem().getRegistryName());
+            if(controller != null) {
+                ObjectAnimationRunner runner = controller.getAnimation(AnimationHandler.MAIN_TRACK);
+                if(runner != null){
+                    if(runner.getAnimation().name.contains("reload")) {
+                        if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
+                            ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
+                            bedrockPart.visible = mag.getItem() == ModItems.LARGE_EXTENDED_MAG.get();
+                            return null;
+                        }
+                    }
+                }
+            }
+            bedrockPart.visible = false;
+            return null;
+        });
+        this.setFunctionalRenderer(MAG_STANDARD_A, bedrockPart -> {
+            AnimationController controller = AnimationHandler.controllers.get(currentItem.getItem().getRegistryName());
+            if(controller != null) {
+                ObjectAnimationRunner runner = controller.getAnimation(AnimationHandler.MAIN_TRACK);
+                if(runner != null){
+                    if(runner.getAnimation().name.contains("reload")) {
+                        if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
+                            ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
+                            bedrockPart.visible = mag.getItem() == ItemStack.EMPTY.getItem();
+                            return null;
+                        }
+                    }
+                }
+            }
+            bedrockPart.visible = false;
             return null;
         });
     }

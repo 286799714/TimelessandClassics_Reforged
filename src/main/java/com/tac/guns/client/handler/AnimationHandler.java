@@ -51,6 +51,7 @@ public enum AnimationHandler {
     INSTANCE;
 
     public static final Map<ResourceLocation, AnimationController> controllers = new HashMap<>();
+    public static final int MAIN_TRACK = 0;
 
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event){
@@ -58,7 +59,7 @@ public enum AnimationHandler {
             return;
 
         for(AnimationController controller : controllers.values()){
-            ObjectAnimationRunner runner = controller.getAnimation(0);
+            ObjectAnimationRunner runner = controller.getAnimation(MAIN_TRACK);
             if (runner != null) {
                 //为了让冲刺动画和原版的viewBobbing相适应，需要手动更新冲刺动画的进度
                 //当前动画是run或者正在过渡向run动画的时候，就手动设置run动画的进度。
@@ -103,6 +104,7 @@ public enum AnimationHandler {
         }
     }
 
+    //在ItemLayer应用反向的摄像机动画，让ItemLayer不要随着摄像机一起运动。
     @SubscribeEvent
     public void applyItemLayerCameraAnimation(BeforeRenderHandEvent event){
         if(!Minecraft.getInstance().options.bobView) return;
@@ -203,7 +205,7 @@ public enum AnimationHandler {
     public void onGunReload(boolean reloading, ItemStack itemStack) {
         AnimationController animationController = controllers.get(itemStack.getItem().getRegistryName());
         if(animationController != null)
-            animationController.runAnimation(0, "reload_empty", ObjectAnimation.PlayType.PLAY_ONCE_HOLD,0.3f);
+            animationController.runAnimation(MAIN_TRACK, "reload_empty", ObjectAnimation.PlayType.PLAY_ONCE_HOLD,0.3f);
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
         if (itemStack.getItem() instanceof GunItem) {
@@ -241,7 +243,7 @@ public enum AnimationHandler {
         if(event.getStack().getItem() instanceof GunItem){
             AnimationController controller = controllers.get(event.getStack().getItem().getRegistryName());
             if(controller != null)
-                controller.runAnimation(0, "shoot", ObjectAnimation.PlayType.PLAY_ONCE_HOLD, 0.05f);
+                controller.runAnimation(MAIN_TRACK, "shoot", ObjectAnimation.PlayType.PLAY_ONCE_HOLD, 0.05f);
         }
         GunAnimationController controller = GunAnimationController.fromItem(event.getStack().getItem());
         if (controller == null) return;
@@ -378,14 +380,14 @@ public enum AnimationHandler {
                 ArrayDeque<AnimationController.AnimationPlan> deque = new ArrayDeque<>();
                 deque.add(new AnimationController.AnimationPlan("run_start", ObjectAnimation.PlayType.PLAY_ONCE_HOLD, 0.2f));
                 deque.add(new AnimationController.AnimationPlan("run", ObjectAnimation.PlayType.LOOP, 0.4f));
-                animationController.queueAnimation(0, deque);
+                animationController.queueAnimation(MAIN_TRACK, deque);
             }
         }
         if(!Minecraft.getInstance().player.isSprinting() && lastTickSprint) {
             lastTickSprint = false;
             AnimationController animationController = controllers.get(stack.getItem().getRegistryName());
             if (animationController != null) {
-                animationController.runAnimation(0, "run_end", ObjectAnimation.PlayType.PLAY_ONCE_HOLD, 0.2f);
+                animationController.runAnimation(MAIN_TRACK, "run_end", ObjectAnimation.PlayType.PLAY_ONCE_HOLD, 0.2f);
             }
         }
         GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
