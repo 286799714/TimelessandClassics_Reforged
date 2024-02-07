@@ -1,6 +1,7 @@
 package com.tac.guns.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
@@ -31,6 +32,8 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
     protected ItemStack currentItem;
     protected ItemStack currentParent;
     protected LivingEntity currentEntity;
+    public static final String IRON_VIEW_NODE = "iron_view";
+    public final Vector3f ironViewOffset = new Vector3f(0, 0, 0);
     public BedrockGunModel(BedrockModelPOJO pojo, BedrockVersion version, RenderType renderType) {
         super(pojo, version, renderType);
         this.setFunctionalRenderer("LeftHand", bedrockPart -> (poseStack, transformType, consumer, light, overlay) -> {
@@ -256,6 +259,14 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
                     }
                 }
             }
+            bedrockPart.visible = false;
+            return null;
+        });
+        this.setFunctionalRenderer(IRON_VIEW_NODE, bedrockPart->{
+            //基岩模型上下颠倒，因此坐标轴的x、y轴相反。
+            ironViewOffset.setX(-bedrockPart.x / 16f);
+            ironViewOffset.setY(-bedrockPart.y / 16f);
+            ironViewOffset.setZ(bedrockPart.z / 16f);
             bedrockPart.visible = false;
             return null;
         });

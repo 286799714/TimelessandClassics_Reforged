@@ -28,7 +28,7 @@ public class AnimationResources {
         return instance;
     }
 
-    public @Nonnull List<ObjectAnimation> createAnimations(AnimationStructure structure, @Nullable AnimationListenerSupplier... suppliers){
+    public @Nonnull List<ObjectAnimation> createAnimations(@Nonnull AnimationStructure structure, @Nullable AnimationListenerSupplier... suppliers){
         List<ObjectAnimation> result = new ArrayList<>();
 
         List<AnimationModel> animationModels = structure.getAnimationModels();

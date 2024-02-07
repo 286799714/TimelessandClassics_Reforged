@@ -161,7 +161,7 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                     //因为模型是上下颠倒的，因此此处x轴和y轴的偏移也进行取反
                     if(bonesItem != null){
                         //因为要达成所有位移都是相对位移，所以如果当前node是根node，则减去根node的pivot坐标。
-                        rendererWrapper.setOffsetX(-values[0] + bonesItem.getPivot().get(0) / 16f);
+                        rendererWrapper.setOffsetX(-values[0] - bonesItem.getPivot().get(0) / 16f);
                         rendererWrapper.setOffsetY(-values[1] + bonesItem.getPivot().get(1) / 16f);
                         rendererWrapper.setOffsetZ(values[2] - bonesItem.getPivot().get(2) / 16f);
                     }else {
@@ -176,7 +176,7 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
                 public float[] recover() {
                     float[] recover = new float[3];
                     if(bonesItem != null){
-                        recover[0] = bonesItem.getPivot().get(0) / 16f;
+                        recover[0] = -bonesItem.getPivot().get(0) / 16f;
                         recover[1] = bonesItem.getPivot().get(1) / 16f;
                         recover[2] = bonesItem.getPivot().get(2) / 16f;
                     }else {
@@ -312,7 +312,7 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
     }
 
     public static class CameraAnimationObject implements AnimationListenerSupplier{
-        public static final String CAMERA_NODE_NAME = "cameraK";
+        public static final String CAMERA_NODE_NAME = "camera";
         /**存在这个四元数中的旋转是世界箱体的旋转，而不是摄像头的旋转（二者互为相反数）*/
         public Quaternion rotationQuaternion = Quaternion.ONE.copy();
         public Vector3f translationVector = new Vector3f();
@@ -328,7 +328,7 @@ public class BedrockAnimatedModel extends BedrockModel implements AnimationListe
 
         @Override
         public AnimationListener supplyListeners(String nodeName, ObjectAnimationChannel.ChannelType type) {
-            if(!nodeName.equals("cameraK"))
+            if(!nodeName.equals(CAMERA_NODE_NAME))
                 return null;
             if(type.equals(ObjectAnimationChannel.ChannelType.TRANSLATION)) {
                 return new AnimationListener() {

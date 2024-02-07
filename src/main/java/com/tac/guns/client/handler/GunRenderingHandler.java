@@ -16,6 +16,7 @@ import com.tac.guns.client.event.RenderItemEvent;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.animation.module.PistolAnimationController;
+import com.tac.guns.client.model.BedrockGunModel;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.util.RenderUtil;
@@ -381,8 +382,6 @@ public class GunRenderingHandler {
     @SubscribeEvent
     public void onRenderOverlay(RenderHandEvent event)
     {
-        GunAnimationController controller = GunAnimationController.fromItem(event.getItemStack().getItem());
-        boolean isAnimated = controller != null;
         PoseStack matrixStack = event.getPoseStack();
 
         boolean right = Minecraft.getInstance().options.mainHand == HumanoidArm.RIGHT ? event.getHand() == InteractionHand.MAIN_HAND : event.getHand() == InteractionHand.OFF_HAND;
@@ -395,12 +394,6 @@ public class GunRenderingHandler {
         /* Cancel it because we are doing our own custom render */
         event.setCanceled(true);
 
-        ItemStack overrideModel = ItemStack.EMPTY;
-        if (heldItem.getTag() != null) {
-            if (heldItem.getTag().contains("Model", Tag.TAG_COMPOUND)) {
-                overrideModel = ItemStack.of(heldItem.getTag().getCompound("Model"));
-            }
-        }
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null)
         {
@@ -492,13 +485,6 @@ public class GunRenderingHandler {
         }
 
         LocalPlayer entity = mc.player;
-        BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(overrideModel.isEmpty() ? heldItem : overrideModel, entity.level, entity, entity==null?0:entity.getId());
-        float scaleX = model.getTransforms().firstPersonRightHand.scale.x();
-        float scaleY = model.getTransforms().firstPersonRightHand.scale.y();
-        float scaleZ = model.getTransforms().firstPersonRightHand.scale.z();
-        this.translateX = model.getTransforms().firstPersonRightHand.translation.x();
-        this.translateY = model.getTransforms().firstPersonRightHand.translation.y();
-        this.translateZ = model.getTransforms().firstPersonRightHand.translation.z();
 
         matrixStack.pushPose();
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
@@ -506,80 +492,7 @@ public class GunRenderingHandler {
         if (modifiedGun.canAimDownSight())
         {
             if (event.getHand() == InteractionHand.MAIN_HAND) {
-                this.xOffset = 0.0;
-                this.yOffset = 0.0;
-                this.zOffset = 0.0;
-                Scope scope = Gun.getScope(heldItem);
-                boolean isScopeOffsetType = Config.CLIENT.display.gameplayEnchancedScopeOffset.get();
-                boolean isScopeRenderType = Config.CLIENT.display.scopeDoubleRender.get();
-                /* Creates the required offsets to position the scope into the middle of the screen. */
-                if (modifiedGun.canAttachType(IAttachment.Type.SCOPE) && scope != null) {
-                    double viewFinderOffset = isScopeOffsetType || OptifineHelper.isShadersEnabled() ? scope.getViewFinderOffsetSpecial() : scope.getViewFinderOffset();
-                    if (scope.getAdditionalZoom().getZoomMultiple() > 1)
-                        viewFinderOffset = isScopeRenderType ? (isScopeOffsetType || OptifineHelper.isShadersEnabled() ? scope.getViewFinderOffsetSpecial() : scope.getViewFinderOffset()) : (isScopeOffsetType || OptifineHelper.isShadersEnabled() ? scope.getViewFinderOffsetSpecialDR() : scope.getViewFinderOffsetDR()); // switches between either, but either must be populated
-
-                    //if (OptifineHelper.isShadersEnabled()) viewFinderOffset *= 0.735;
-                    //if (isScopeRenderType) viewFinderOffset *= 0.735;
-                    try {
-                        Gun.ScaledPositioned scaledPos = modifiedGun.getModules().getAttachments().getScope();
-                        xOffset = -translateX + (modifiedGun.getModules().getZoom().getXOffset() * 0.0625) + -scaledPos.getXOffset() * 0.0625 * scaleX;
-                        yOffset = -translateY + (8 - scaledPos.getYOffset()) * 0.0625 * scaleY - scope.getCenterOffset() * scaleY * 0.0625 * scaledPos.getScale();
-                        zOffset = Config.CLIENT.display.sight1xRealisticPosition.get() && scope.getAdditionalZoom().getZoomMultiple() == 1 ? -translateZ + modifiedGun.getModules().getZoom().getZOffset() * 0.0625 * scaleZ :
-                                -translateZ - scaledPos.getZOffset() * 0.0625 * scaleZ + 0.72 - viewFinderOffset * scaleZ * scaledPos.getScale();
-                    } catch (NullPointerException e) {
-                        GunMod.LOGGER.info("GunRenderingHandler NPE @509");
-                    }
-
-                    if (Objects.equals(scope.getTagName(), "qmk152"))
-                        this.fix = -0.05;
-                    else if (Objects.equals(scope.getTagName(), "elcan14x"))
-                        this.fix = -0.06;
-                    else if (Objects.equals(scope.getTagName(), "acog4x"))
-                        this.fix = -0.03;
-                    else if (Objects.equals(scope.getTagName(), "vlpvo6"))
-                        this.fix = -0.05;
-                    else if (Objects.equals(scope.getTagName(), "gener8x"))
-                        this.fix = -0.06;
-                    else if (Objects.equals(scope.getTagName(), "aimpoint2") ||
-                            Objects.equals(scope.getTagName(), "eotechn") ||
-                            Objects.equals(scope.getTagName(), "vortex1") ||
-                            Objects.equals(scope.getTagName(), "eotechshort"))
-                        this.fix = -0.02;
-                    else
-                        this.fix = 0;
-                }
-                else if (modifiedGun.canAttachType(IAttachment.Type.OLD_SCOPE) && scope != null) {
-                    double viewFinderOffset = isScopeOffsetType || isScopeRenderType ? scope.getViewFinderOffsetSpecial() : scope.getViewFinderOffset(); // switches between either, but either must be populated
-                    if (OptifineHelper.isShadersEnabled()) viewFinderOffset *= 0.735;
-                    Gun.ScaledPositioned scaledPos = modifiedGun.getModules().getAttachments().getOldScope();
-                    xOffset = -translateX +  (modifiedGun.getModules().getZoom().getXOffset() * 0.0625) + -scaledPos.getXOffset() * 0.0625 * scaleX;
-                    yOffset = -translateY + (8 - scaledPos.getYOffset()) * 0.0625 * scaleY - scope.getCenterOffset() * scaleY * 0.0625 * scaledPos.getScale();
-                    zOffset = -translateZ - scaledPos.getZOffset() * 0.0625 * scaleZ + 0.72 - viewFinderOffset * scaleZ * scaledPos.getScale();
-
-                    this.fix = -0.05;
-                }
-                else if (modifiedGun.canAttachType(IAttachment.Type.PISTOL_SCOPE) && scope != null) {
-                    double viewFinderOffset = isScopeOffsetType || isScopeRenderType ? scope.getViewFinderOffsetSpecial() : scope.getViewFinderOffset(); // switches between either, but either must be populated
-                    if (OptifineHelper.isShadersEnabled()) viewFinderOffset *= 0.735;
-                    Gun.ScaledPositioned scaledPos = modifiedGun.getModules().getAttachments().getPistolScope();
-
-                    xOffset = -translateX +  (modifiedGun.getModules().getZoom().getXOffset() * 0.0625) + -scaledPos.getXOffset() * 0.0625 * scaleX;
-                    yOffset = -translateY + (8 - scaledPos.getYOffset()) * 0.0625 * scaleY - scope.getCenterOffset() * scaleY * 0.0625 * scaledPos.getScale();
-                    zOffset = Config.CLIENT.display.sight1xRealisticPosition.get() && scope.getAdditionalZoom().getZoomMultiple() == 1 ? -translateZ + modifiedGun.getModules().getZoom().getZOffset() * 0.0625 * scaleZ :
-                            -translateZ - scaledPos.getZOffset() * 0.0625 * scaleZ + 0.72 - viewFinderOffset * scaleZ * scaledPos.getScale();
-
-                    this.fix = 0;
-                }
-                else if (modifiedGun.getModules().getZoom() != null)
-                {
-                    xOffset = -translateX + modifiedGun.getModules().getZoom().getXOffset() * 0.0625 * scaleX;
-                    yOffset = -translateY + (8 - modifiedGun.getModules().getZoom().getYOffset()-0.2) * 0.0625 * scaleY;
-                    zOffset = -translateZ + modifiedGun.getModules().getZoom().getZOffset() * 0.0625 * scaleZ;
-
-                    this.fix = 0;
-                }
-
-
+                IOverrideModel overrideModel = OverrideModelManager.getModel(heldItem);
                 /* Controls the direction of the following translations, changes depending on the main hand. */
                 float side = right ? 1.0F : -1.0F;
                 //double transition = 1.0 - Math.pow(1.0 - AimingHandler.get().getNormalisedRepairProgress(), 2);
@@ -587,34 +500,15 @@ public class GunRenderingHandler {
                 double transition = (float) AimingHandler.get().getLerpAdsProgress(event.getPartialTicks());
 
                 float result = aimingDynamics.update(0.05f, (float) transition);
-                /* Reverses the original first person translations */
-                //matrixStack.translate(-0.56 * side * transition, 0.52 * transition, 0);
-                matrixStack.translate(  xOffset * side * result - 0.56 * side * result,
-                                        yOffset * result + 0.52 * result + 0.033 - Math.abs(0.5 - result) * 0.066 + this.fix,
-                                        zOffset * result);
-                matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) (5*(1-transition))) );
-                /* Reverses the first person translations of the item in order to position it in the center of the screen */
-                //matrixStack.translate(xOffset * side * transition, yOffset * transition, zOffset * transition);
-                matrixStack.translate(0, (0.015 - this.fix)*transition, 0);
-
-                if(Config.COMMON.gameplay.realisticAimedBreathing.get()) {
-                    /* Apply scope jitter*/
-                    double scopeJitterOffset = 0.8;
-                    if (scope == null)
-                        scopeJitterOffset *= modifiedGun.getModules().getZoom().getStabilityOffset();
-                    else
-                        scopeJitterOffset *= scope.getStabilityOffset();
-                    if (entity.isCrouching())
-                        scopeJitterOffset *= 0.30;
-                    if (entity.isSprinting() && !entity.isCrouching())
-                        scopeJitterOffset *= 4;
-                    if (entity.getDeltaMovement().x() != 0.0 || entity.getDeltaMovement().y() != 0.0 || entity.getDeltaMovement().z() != 0.0)
-                        scopeJitterOffset *= 6.5;
-
-                    double yOffsetRatio = ScopeJitterHandler.getInstance().getYOffsetRatio() * (0.0125 * 0.75 * scopeJitterOffset);
-                    double xOffsetRatio = ScopeJitterHandler.getInstance().getXOffsetRatio() * (0.0085 * 0.875 * scopeJitterOffset);
-                    Objects.requireNonNull(Minecraft.getInstance().player).setXRot((float) (Objects.requireNonNull(Minecraft.getInstance().player).getXRot() + yOffsetRatio));
-                    Objects.requireNonNull(Minecraft.getInstance().player).setXRot((float) (Objects.requireNonNull(Minecraft.getInstance().player).getYRot() + xOffsetRatio));
+                //move camera to the position of (-0, -(16 - 24), -(-12)) = (0, 8, 12)
+                matrixStack.translate(0, 1, -0.75);
+                //translate to iron sight if player is aiming
+                if(overrideModel instanceof BedrockGunModel gunModel) {
+                    matrixStack.translate(
+                            -gunModel.ironViewOffset.x() * result,
+                            -gunModel.ironViewOffset.y() * result +0.033 - Math.abs(0.5 - result) * 0.066,
+                            -gunModel.ironViewOffset.z() * result
+                    );
                 }
             }
         }
@@ -634,14 +528,6 @@ public class GunRenderingHandler {
         int blockLight = entity.isOnFire() ? 14 : entity.level.getBrightness(LightLayer.BLOCK, new BlockPos(entity.getEyePosition(event.getPartialTicks())));
         if(blockLight > 14) blockLight = 14;
         int packedLight = LightTexture.pack(blockLight, entity.level.getBrightness(LightLayer.SKY, new BlockPos(entity.getEyePosition(event.getPartialTicks()))));
-
-        /* Renders the reload arm. Will only render if actually reloading. This is applied before
-         * any recoil or reload rotations as the animations would be borked if applied after. */
-        //this.renderReloadArm(matrixStack, event.getBuffers(), event.getLight(), modifiedGun, heldItem, hand);
-
-        /* Translate the item position based on the hand side */
-        int offset = right ? 1 : -1;
-        matrixStack.translate(0.56 * offset, -0.52, -0.72);
 
         //this.applySprintingTransforms(heldItem, hand, matrixStack, event.getPartialTicks());
         /* Applies recoil and reload rotations */
@@ -685,16 +571,12 @@ public class GunRenderingHandler {
                 degree *= percentage;
 
                 if((Config.CLIENT.display.weaponDelayedSwayYNOptical.get() && Gun.getScope(player.getMainHandItem()) != null) || YDIR.equals(Vector3f.YN)) {
-                    stack.translate(this.translateX, this.translateY, this.translateZ);
                     stack.mulPose(YDIR.rotationDegrees(degree));
                     stack.mulPose(Vector3f.ZP.rotationDegrees(degree * 1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
-                    stack.translate(-this.translateX, -this.translateY, -this.translateZ);
                 }
                 else{
-                    stack.translate(-this.translateX, -this.translateY, -this.translateZ);
                     stack.mulPose(YDIR.rotationDegrees(degree));
                     stack.mulPose(Vector3f.ZP.rotationDegrees(degree * 1.5f * (float) (1f - AimingHandler.get().getNormalisedAdsProgress())));
-                    stack.translate(this.translateX, this.translateY, this.translateZ);
                 }
             }
     }
@@ -930,16 +812,14 @@ public class GunRenderingHandler {
     private final OneDimensionalPerlinNoise aimed_noiseRotationY = new OneDimensionalPerlinNoise(-0.675f, 0.675f, 1900);
     public void applyNoiseMovementTransform(PoseStack matrixStack){
         //matrixStack.translate(noiseX.getValue()* (1 - AimingHandler.get().getNormalisedRepairProgress()), (noiseY.getValue() + additionNoiseY.getValue()) * (1 - AimingHandler.get().getNormalisedRepairProgress()), 0);
-        if(AimingHandler.get().getNormalisedAdsProgress() == 1) {
-            matrixStack.translate(aimed_noiseX.getValue()/2, aimed_noiseY.getValue() + additionNoiseY.getValue(), 0);
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(aimed_noiseRotationY.getValue()*0.405f));
-            matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue()*0.925)));
-        }
-        else {
-            matrixStack.translate(noiseX.getValue(), noiseY.getValue() + additionNoiseY.getValue(), 0);
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(noiseRotationY.getValue()));
-        }
-
+        double progress = AimingHandler.get().getNormalisedAdsProgress();
+        matrixStack.translate(
+                aimed_noiseX.getValue()/2 * progress + noiseX.getValue() * (1 - progress),
+                aimed_noiseY.getValue()* progress + noiseY.getValue() * (1 - progress) + additionNoiseY.getValue(),
+                0
+                );
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) (aimed_noiseRotationY.getValue() * 0.405f * progress + noiseRotationY.getValue() * (1 - progress))));
+        matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) (aimed_noiseRotationY.getValue() * 0.925 * progress)));
     }
 
     public void applyNoiseMovementTransform(PoseStack matrixStack, float reverser){
