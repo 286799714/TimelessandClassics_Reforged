@@ -22,6 +22,7 @@ public class BedrockPart {
     @Nullable public final String name;
     public final ObjectList<BedrockCube> cubes = new ObjectArrayList<>();
     public final ObjectList<BedrockPart> children = new ObjectArrayList<>();
+    protected BedrockPart parent;
     public float x;
     public float y;
     public float z;
@@ -122,5 +123,9 @@ public class BedrockPart {
 
     public void addChild(BedrockPart model) {
         this.children.add(model);
+    }
+
+    public BedrockPart getParent(){
+        return parent;
     }
 }

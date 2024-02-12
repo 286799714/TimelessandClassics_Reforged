@@ -68,4 +68,46 @@ public class ModelLoader {
         // 如果前面出了错，返回 Null
         return null;
     }
+
+    @Nullable public static BedrockAttachmentModel loadBedrockAttachmentModel(ResourceLocation modelLocation, ResourceLocation textureLocation) throws IOException {
+        Resource resource = Minecraft.getInstance().getResourceManager().getResource(modelLocation);
+        //load texture
+        RenderType renderType = RenderType.itemEntityTranslucentCull(textureLocation);
+
+        //load model
+        try (InputStream stream = resource.getInputStream()) {
+            BedrockModelPOJO pojo = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
+            // 先判断是不是 1.10.0 版本基岩版模型文件
+            if (pojo.getFormatVersion().equals(BedrockVersion.LEGACY.getVersion())) {
+                // 如果 model 字段不为空
+                if (pojo.getGeometryModelLegacy() != null) {
+                    return new BedrockAttachmentModel(pojo, BedrockVersion.LEGACY, renderType);
+                } else {
+                    // 否则日志给出提示
+                    GunMod.LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+                    return null;
+                }
+            }
+
+            // 判定是不是 1.12.0 版本基岩版模型文件
+            if (pojo.getFormatVersion().equals(BedrockVersion.NEW.getVersion())) {
+                // 如果 model 字段不为空
+                if (pojo.getGeometryModelNew() != null) {
+                    return new BedrockAttachmentModel(pojo, BedrockVersion.NEW, renderType);
+                } else {
+                    // 否则日志给出提示
+                    GunMod.LOGGER.warn(MARKER, "{} model file don't have model field", modelLocation);
+                    return null;
+                }
+            }
+
+            GunMod.LOGGER.warn(MARKER, "{} model version is not 1.10.0 or 1.12.0", modelLocation);
+        } catch (IOException ioe) {
+            // 可能用来判定错误，打印下
+            GunMod.LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);
+            ioe.printStackTrace();
+        }
+        // 如果前面出了错，返回 Null
+        return null;
+    }
 }

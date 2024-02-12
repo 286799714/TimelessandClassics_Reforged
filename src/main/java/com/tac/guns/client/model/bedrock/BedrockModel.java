@@ -105,10 +105,13 @@ public class BedrockModel{
 
             // Null 检查，进行父骨骼绑定
             if (parent != null) {
-                modelMap.get(parent).getModelRenderer().addChild(model);
+                BedrockPart parentPart = modelMap.get(parent).getModelRenderer();
+                parentPart.addChild(model);
+                model.parent = parentPart;
             } else {
                 // 没有父骨骼的模型才进行渲染
                 shouldRender.add(model);
+                model.parent = null;
             }
 
             // 我的天，Cubes 还能为空……
@@ -316,10 +319,8 @@ public class BedrockModel{
         this.renderType = renderType;
     }
 
-    public void render(float partialTicks, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
+    public void render(ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
         matrixStack.pushPose();
-        //游戏中模型是上下颠倒的，需要翻转过来。
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
         VertexConsumer builder = buffer.getBuffer(renderType);
         for (BedrockPart model : shouldRender) {
             model.render(matrixStack, transformType, builder, light, overlay);

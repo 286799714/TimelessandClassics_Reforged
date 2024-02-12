@@ -162,9 +162,9 @@ public class ClientHandler {
         OverrideModelManager.register(ModItems.OLD_LONGRANGE_8x_SCOPE.get(), new OldLongRange8xScopeModel());
         OverrideModelManager.register(ModItems.OLD_LONGRANGE_4x_SCOPE.get(), new OldLongRange4xScopeModel());
 
-        OverrideModelManager.register(ModItems.MINI_DOT.get(), new MiniDotSightModel());
+        //OverrideModelManager.register(ModItems.MINI_DOT.get(), new MiniDotSightModel());
         //ModelOverrides.register(ModItems.MICRO_HOLO_SIGHT.get(), new MicroHoloSightModel());
-        OverrideModelManager.register(ModItems.SRO_DOT.get(), new SroDotSightModel());
+        //OverrideModelManager.register(ModItems.SRO_DOT.get(), new SroDotSightModel());
 
         // Armor registry, kept manual cause nice and simple, requires registry on client side only
         VestLayerRender.registerModel(ModItems.LIGHT_ARMOR.get(), new ModernArmor());

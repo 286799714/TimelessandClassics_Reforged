@@ -12,15 +12,6 @@
 			},
 			"bones": [
 				{
-					"name": "camera",
-					"pivot": [0, 8, 12]
-				},
-				{
-					"name": "iron_view",
-					"parent": "camera",
-					"pivot": [-2.225, 6.625, 8.675]
-				},
-				{
 					"name": "root",
 					"pivot": [-2.225, 3.625, 5.8]
 				},
@@ -2012,6 +2003,11 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "scope_pos",
+					"parent": "mount",
+					"pivot": [-2.225, 6.425, 1.425]
 				},
 				{
 					"name": "stock_light",
@@ -7332,6 +7328,16 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "camera",
+					"pivot": [0, 8, 12]
+				},
+				{
+					"name": "iron_view",
+					"parent": "camera",
+					"pivot": [-2.225, 6.625, 8.675],
+					"rotation": [0.75, 0, 0]
 				}
 			]
 		}

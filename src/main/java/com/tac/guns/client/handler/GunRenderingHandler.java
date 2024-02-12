@@ -5,10 +5,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
-import com.tac.guns.GunMod;
 import com.tac.guns.Reference;
 import com.tac.guns.client.GunRenderType;
 import com.tac.guns.client.event.PlayerModelEvent;
@@ -16,6 +16,7 @@ import com.tac.guns.client.event.RenderItemEvent;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.animation.module.PistolAnimationController;
+import com.tac.guns.client.model.BedrockAttachmentModel;
 import com.tac.guns.client.model.BedrockGunModel;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
@@ -37,7 +38,6 @@ import com.tac.guns.item.attachment.impl.Scope;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessagePlayerShake;
 import com.tac.guns.util.IDLNBTUtil;
-import com.tac.guns.util.OptifineHelper;
 import com.tac.guns.util.math.MathUtil;
 import com.tac.guns.util.math.OneDimensionalPerlinNoise;
 import com.tac.guns.util.math.SecondOrderDynamics;
@@ -87,7 +87,6 @@ public class GunRenderingHandler {
     private final SecondOrderDynamics recoilDynamics = new SecondOrderDynamics(1f,1f, 0.5f, 0);
     private final SecondOrderDynamics swayYawDynamics = new SecondOrderDynamics(1f,1f, 0.5f, 0);
     private final SecondOrderDynamics swayPitchDynamics = new SecondOrderDynamics(1f,1f, 0.5f, 0);
-    private final SecondOrderDynamics aimingDynamics = new SecondOrderDynamics(0.45f,0.8f, 1.2f, 0);
     // Standard Sprint Dynamics
     private final SecondOrderDynamics sprintDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 0);
     private final SecondOrderDynamics bobbingDynamics = new SecondOrderDynamics(0.22f,0.7f, 0.6f, 1);
@@ -488,30 +487,6 @@ public class GunRenderingHandler {
 
         matrixStack.pushPose();
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
-
-        if (modifiedGun.canAimDownSight())
-        {
-            if (event.getHand() == InteractionHand.MAIN_HAND) {
-                IOverrideModel overrideModel = OverrideModelManager.getModel(heldItem);
-                /* Controls the direction of the following translations, changes depending on the main hand. */
-                float side = right ? 1.0F : -1.0F;
-                //double transition = 1.0 - Math.pow(1.0 - AimingHandler.get().getNormalisedRepairProgress(), 2);
-
-                double transition = (float) AimingHandler.get().getLerpAdsProgress(event.getPartialTicks());
-
-                float result = aimingDynamics.update(0.05f, (float) transition);
-                //move camera to the position of (-0, -(16 - 24), -(-12)) = (0, 8, 12)
-                matrixStack.translate(0, 1, -0.75);
-                //translate to iron sight if player is aiming
-                if(overrideModel instanceof BedrockGunModel gunModel) {
-                    matrixStack.translate(
-                            -gunModel.ironViewOffset.x() * result,
-                            -gunModel.ironViewOffset.y() * result +0.033 - Math.abs(0.5 - result) * 0.066,
-                            -gunModel.ironViewOffset.z() * result
-                    );
-                }
-            }
-        }
 
         //Set Delayed Sway config options
 
@@ -1104,9 +1079,8 @@ public class GunRenderingHandler {
                 }
             }
 
-            RenderUtil.applyTransformType(model.isEmpty() ? stack : model, matrixStack, transformType, entity);
-
             if(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND.equals(transformType)) {
+                //使用长筒瞄具的时候，将枪身压缩
                 Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
                 IAttachment.Type type = IAttachment.Type.SCOPE;
                 if (gun.canAttachType(type)) {
@@ -1133,8 +1107,11 @@ public class GunRenderingHandler {
                     }
                 }
             }
+
+            RenderUtil.applyTransformType(model.isEmpty() ? stack : model, matrixStack, transformType, entity);
+
             this.renderGun(entity, transformType, model.isEmpty() ? stack : model, matrixStack, renderTypeBuffer, light, partialTicks);
-            this.renderAttachments(entity, transformType, stack, matrixStack, renderTypeBuffer, light, partialTicks);
+            //this.renderAttachments(entity, transformType, stack, matrixStack, renderTypeBuffer, light, partialTicks);
             this.renderMuzzleFlash(entity, matrixStack, renderTypeBuffer, stack, transformType);
             this.renderShellCasing(entity, matrixStack, stack, transformType, renderTypeBuffer, light, partialTicks);
             matrixStack.popPose();

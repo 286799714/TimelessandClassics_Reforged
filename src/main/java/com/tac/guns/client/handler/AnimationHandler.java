@@ -128,6 +128,13 @@ public enum AnimationHandler {
                             new ResourceLocation("tac", "textures/items/ak47_uv.png")
                     )
             );
+            OverrideModelManager.register(
+                    ModItems.SRO_DOT.get(),
+                    ModelLoader.loadBedrockAttachmentModel(
+                            new ResourceLocation("tac", "models/scope/sro_dot.geo.json"),
+                            new ResourceLocation("tac", "textures/items/sro_dot_uv.png")
+                    )
+            );
         } catch (IOException e) {
             GunMod.LOGGER.info("test fail: {}", e.toString());
         }
