@@ -346,57 +346,59 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
                 throw new ClassCastException("The Item type of the item stack in the formal parameter must be GunItem when render BedrockGunModel");
             currentModifiedGun = ((GunItem) currentItem.getItem()).getModifiedGun(currentItem);
         }
-        //应用iron sight瞄准的位移。
-        float result = aimingDynamics.update(0.05f, (float) AimingHandler.get().getLerpAdsProgress(partialTicks));
-        //从渲染原点(0, 24, 0)移动到模型原点(0, 0, 0)
-        matrixStack.translate(0, 1.5f, 0);
-        //游戏中模型是上下颠倒的，需要翻转过来。
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-        ItemStack scopeItemStack = Gun.getAttachment(IAttachment.Type.SCOPE, stack);
-        if (scopeItemStack.isEmpty()) {
-            //应用定位组的反向位移、旋转，使定位组的位置就是屏幕中心
+        if(transformType.firstPerson()) {
+            //计算瞄准的进度
+            float v = aimingDynamics.update(0.05f, (float) AimingHandler.get().getLerpAdsProgress(partialTicks));
+            //从渲染原点(0, 24, 0)移动到模型原点(0, 0, 0)
             matrixStack.translate(0, 1.5f, 0);
-            for (int f = ironSightPath.size() - 1; f >= 0; f--) {
-                BedrockPart t = ironSightPath.get(f);
-                float[] q = toQuaternion(-t.xRot * result, -t.yRot * result, -t.zRot * result);
-                matrixStack.mulPose(new Quaternion(q[0], q[1], q[2], q[3]));
-                if (t.getParent() != null)
-                    matrixStack.translate(-t.x / 16.0F * result, -t.y / 16.0F * result, -t.z / 16.0F * result);
-                else {
-                    matrixStack.translate(-t.x / 16.0F * result, (1.5F - t.y / 16.0F) * result, -t.z / 16.0F * result);
-                }
-            }
-            matrixStack.translate(0, -1.5f, 0);
-        } else {
-            IOverrideModel scopeModel = OverrideModelManager.getModel(scopeItemStack);
-            if (scopeModel instanceof BedrockAttachmentModel bedrockScopeModel) {
+            //游戏中模型是上下颠倒的，需要翻转过来。
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
+            ItemStack scopeItemStack = Gun.getAttachment(IAttachment.Type.SCOPE, stack);
+            if (scopeItemStack.isEmpty()) {
                 //应用定位组的反向位移、旋转，使定位组的位置就是屏幕中心
                 matrixStack.translate(0, 1.5f, 0);
-                for (int f = bedrockScopeModel.scopeViewPath.size() - 1; f >= 0; f--) {
-                    BedrockPart t = bedrockScopeModel.scopeViewPath.get(f);
-                    float[] q = toQuaternion(-t.xRot * result, -t.yRot * result, -t.zRot * result);
+                for (int f = ironSightPath.size() - 1; f >= 0; f--) {
+                    BedrockPart t = ironSightPath.get(f);
+                    float[] q = toQuaternion(-t.xRot * v, -t.yRot * v, -t.zRot * v);
                     matrixStack.mulPose(new Quaternion(q[0], q[1], q[2], q[3]));
                     if (t.getParent() != null)
-                        matrixStack.translate(-t.x / 16.0F * result, -t.y / 16.0F * result, -t.z / 16.0F * result);
+                        matrixStack.translate(-t.x / 16.0F * v, -t.y / 16.0F * v, -t.z / 16.0F * v);
                     else {
-                        matrixStack.translate(-t.x / 16.0F * result, (1.5F - t.y / 16.0F) * result, -t.z / 16.0F * result);
-                    }
-                }
-                for (int f = scopePosPath.size() - 1; f >= 0; f--) {
-                    BedrockPart t = scopePosPath.get(f);
-                    float[] q = toQuaternion(-t.xRot * result, -t.yRot * result, -t.zRot * result);
-                    matrixStack.mulPose(new Quaternion(q[0], q[1], q[2], q[3]));
-                    if (t.getParent() != null)
-                        matrixStack.translate(-t.x / 16.0F * result, -t.y / 16.0F * result, -t.z / 16.0F * result);
-                    else {
-                        matrixStack.translate(-t.x / 16.0F * result, (1.5F - t.y / 16.0F) * result, -t.z / 16.0F * result);
+                        matrixStack.translate(-t.x / 16.0F * v, (1.5F - t.y / 16.0F) * v, -t.z / 16.0F * v);
                     }
                 }
                 matrixStack.translate(0, -1.5f, 0);
+            } else {
+                IOverrideModel scopeModel = OverrideModelManager.getModel(scopeItemStack);
+                if (scopeModel instanceof BedrockAttachmentModel bedrockScopeModel) {
+                    //应用定位组的反向位移、旋转，使定位组的位置就是屏幕中心
+                    matrixStack.translate(0, 1.5f, 0);
+                    for (int f = bedrockScopeModel.scopeViewPath.size() - 1; f >= 0; f--) {
+                        BedrockPart t = bedrockScopeModel.scopeViewPath.get(f);
+                        float[] q = toQuaternion(-t.xRot * v, -t.yRot * v, -t.zRot * v);
+                        matrixStack.mulPose(new Quaternion(q[0], q[1], q[2], q[3]));
+                        if (t.getParent() != null)
+                            matrixStack.translate(-t.x / 16.0F * v, -t.y / 16.0F * v, -t.z / 16.0F * v);
+                        else {
+                            matrixStack.translate(-t.x / 16.0F * v, (1.5F - t.y / 16.0F) * v, -t.z / 16.0F * v);
+                        }
+                    }
+                    for (int f = scopePosPath.size() - 1; f >= 0; f--) {
+                        BedrockPart t = scopePosPath.get(f);
+                        float[] q = toQuaternion(-t.xRot * v, -t.yRot * v, -t.zRot * v);
+                        matrixStack.mulPose(new Quaternion(q[0], q[1], q[2], q[3]));
+                        if (t.getParent() != null)
+                            matrixStack.translate(-t.x / 16.0F * v, -t.y / 16.0F * v, -t.z / 16.0F * v);
+                        else {
+                            matrixStack.translate(-t.x / 16.0F * v, (1.5F - t.y / 16.0F) * v, -t.z / 16.0F * v);
+                        }
+                    }
+                    matrixStack.translate(0, -1.5f, 0);
+                }
             }
+            //主摄像机的默认位置是(0, 8, 12)
+            matrixStack.translate(0, 0.5 * (1 - v), -0.75 * (1 - v));
         }
-        //主摄像机的默认位置是(0, 8, 12)
-        matrixStack.translate(0, 0.5 * (1 - result), -0.75 * (1 - result));
         //调用上层渲染方法
         render(transformType, matrixStack, buffer, light, overlay);
         matrixStack.popPose();
