@@ -5,7 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.Config;
@@ -16,8 +15,6 @@ import com.tac.guns.client.event.RenderItemEvent;
 import com.tac.guns.client.handler.command.GunEditor;
 import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.animation.module.PistolAnimationController;
-import com.tac.guns.client.model.BedrockAttachmentModel;
-import com.tac.guns.client.model.BedrockGunModel;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.util.RenderUtil;
@@ -117,7 +114,7 @@ public class GunRenderingHandler {
     private final Random random = new Random();
     private final Set<Integer> entityIdForMuzzleFlash = new HashSet<>();
     private final Set<Integer> entityIdForDrawnMuzzleFlash = new HashSet<>();
-    private Queue<ShellInAir> shells = new ArrayDeque<>();
+    private final Queue<ShellInAir> shells = new ArrayDeque<>();
     private final Map<Integer, Float> entityIdToRandomValue = new HashMap<>();
 
     public int sprintTransition;
@@ -1111,7 +1108,6 @@ public class GunRenderingHandler {
             RenderUtil.applyTransformType(model.isEmpty() ? stack : model, matrixStack, transformType, entity);
 
             this.renderGun(entity, transformType, model.isEmpty() ? stack : model, matrixStack, renderTypeBuffer, light, partialTicks);
-            //this.renderAttachments(entity, transformType, stack, matrixStack, renderTypeBuffer, light, partialTicks);
             this.renderMuzzleFlash(entity, matrixStack, renderTypeBuffer, stack, transformType);
             this.renderShellCasing(entity, matrixStack, stack, transformType, renderTypeBuffer, light, partialTicks);
             matrixStack.popPose();

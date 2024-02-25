@@ -1,0 +1,26 @@
+{
+  "model": "tac:models/gun/ak47.geo.json",
+  "textures": [
+    {
+      "name": "default",
+      "location": "tac:textures/items/ak47_uv.png"
+    },
+    {
+      "name": "blue",
+      "location": "tac:textures/items/ak47_blue_uv.png",
+      "attachment": [
+        {
+          "key": "tac:sro_dot",
+          "location": "tac:textures/items/ak47_blue_sro_uv.png"
+        }
+      ]
+    }
+  ],
+  "shell_ejection": {
+    "type": "tac:762x39",
+    "velocity": [8.0, 1.0, -0.5],
+    "random_velocity": [0.0, 1.5, 0.0],
+    "angular_velocity": [45.0, -90.0, 15.0],
+    "living_time": 1.0
+  }
+}

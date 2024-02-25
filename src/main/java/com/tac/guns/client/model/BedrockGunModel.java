@@ -5,10 +5,7 @@ import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import com.tac.guns.client.animation.AnimationController;
-import com.tac.guns.client.animation.ObjectAnimationRunner;
 import com.tac.guns.client.handler.AimingHandler;
-import com.tac.guns.client.handler.AnimationHandler;
 import com.tac.guns.client.model.bedrock.BedrockPart;
 import com.tac.guns.client.model.bedrock.ModelRendererWrapper;
 import com.tac.guns.client.render.item.IOverrideModel;
@@ -30,9 +27,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 import static com.tac.guns.client.model.CommonComponents.*;
 
@@ -45,6 +40,13 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
     protected final List<BedrockPart> scopePosPath = new ArrayList<>();
     public static final String IRON_VIEW_NODE = "iron_view";
     public static final String SCOPE_POS_NODE = "scope_pos";
+    public static final String EJECTION_NODE = "ejection";
+    protected Matrix4f ejectionPose = null;
+    protected Matrix3f ejectionNormal = null;
+    protected Vector3f ejectionVelocity = null;
+    protected Vector3f ejectionRandomVelocity = null;
+    protected Vector3f ejectionAngularVelocity = null;
+    protected float ejectionLivingTimeS = 0;
     private final SecondOrderDynamics aimingDynamics = new SecondOrderDynamics(0.45f, 0.8f, 1.2f, 0);
 
     public BedrockGunModel(BedrockModelPOJO pojo, BedrockVersion version, RenderType renderType) {
@@ -207,74 +209,6 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
                 bedrockPart.visible = true;
             return null;
         });
-        this.setFunctionalRenderer(MAG_EXTENDED_1_A, bedrockPart -> {
-            AnimationController controller = AnimationHandler.controllers.get(currentItem.getItem().getRegistryName());
-            if (controller != null) {
-                ObjectAnimationRunner runner = controller.getAnimation(AnimationHandler.MAIN_TRACK);
-                if (runner != null) {
-                    if (runner.getAnimation().name.contains("reload")) {
-                        if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
-                            ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
-                            bedrockPart.visible = mag.getItem() == ModItems.SMALL_EXTENDED_MAG.get();
-                            return null;
-                        }
-                    }
-                }
-            }
-            bedrockPart.visible = false;
-            return null;
-        });
-        this.setFunctionalRenderer(MAG_EXTENDED_2_A, bedrockPart -> {
-            AnimationController controller = AnimationHandler.controllers.get(currentItem.getItem().getRegistryName());
-            if (controller != null) {
-                ObjectAnimationRunner runner = controller.getAnimation(AnimationHandler.MAIN_TRACK);
-                if (runner != null) {
-                    if (runner.getAnimation().name.contains("reload")) {
-                        if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
-                            ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
-                            bedrockPart.visible = mag.getItem() == ModItems.MEDIUM_EXTENDED_MAG.get();
-                            return null;
-                        }
-                    }
-                }
-            }
-            bedrockPart.visible = false;
-            return null;
-        });
-        this.setFunctionalRenderer(MAG_EXTENDED_3_A, bedrockPart -> {
-            AnimationController controller = AnimationHandler.controllers.get(currentItem.getItem().getRegistryName());
-            if (controller != null) {
-                ObjectAnimationRunner runner = controller.getAnimation(AnimationHandler.MAIN_TRACK);
-                if (runner != null) {
-                    if (runner.getAnimation().name.contains("reload")) {
-                        if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
-                            ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
-                            bedrockPart.visible = mag.getItem() == ModItems.LARGE_EXTENDED_MAG.get();
-                            return null;
-                        }
-                    }
-                }
-            }
-            bedrockPart.visible = false;
-            return null;
-        });
-        this.setFunctionalRenderer(MAG_STANDARD_A, bedrockPart -> {
-            AnimationController controller = AnimationHandler.controllers.get(currentItem.getItem().getRegistryName());
-            if (controller != null) {
-                ObjectAnimationRunner runner = controller.getAnimation(AnimationHandler.MAIN_TRACK);
-                if (runner != null) {
-                    if (runner.getAnimation().name.contains("reload")) {
-                        if (currentModifiedGun.canAttachType(IAttachment.Type.EXTENDED_MAG)) {
-                            ItemStack mag = Gun.getAttachment(IAttachment.Type.EXTENDED_MAG, currentItem);
-                            bedrockPart.visible = mag.getItem() == ItemStack.EMPTY.getItem();
-                            return null;
-                        }
-                    }
-                }
-            }
-            bedrockPart.visible = false;
-            return null;
-        });
         {
             ModelRendererWrapper rendererWrapper = modelMap.get(IRON_VIEW_NODE);
             if(rendererWrapper != null) {
@@ -331,6 +265,37 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
                 }
             };
         });
+        this.setFunctionalRenderer(EJECTION_NODE, bedrockPart -> {
+            bedrockPart.visible = false;
+            return (poseStack, transformType, consumer, light, overlay) -> {
+                ejectionPose = poseStack.last().pose();
+                ejectionNormal = poseStack.last().normal();
+            };
+        });
+    }
+
+    public float getEjectionLivingTimeS() {
+        return ejectionLivingTimeS;
+    }
+
+    public Vector3f getEjectionVelocity(){
+        return ejectionVelocity;
+    }
+
+    public Vector3f getEjectionRandomVelocity(){
+        return ejectionRandomVelocity;
+    }
+
+    public Vector3f getEjectionAngularVelocity(){
+        return ejectionAngularVelocity;
+    }
+
+    public Matrix4f getEjectionPose(){
+        return ejectionPose;
+    }
+
+    public Matrix3f getEjectionNormal(){
+        return ejectionNormal;
     }
 
     @Override
@@ -340,10 +305,9 @@ public class BedrockGunModel extends BedrockAnimatedModel implements IOverrideMo
         currentEntity = entity;
 
         matrixStack.pushPose();
-
         if (currentItem != null) {
             if (!(currentItem.getItem() instanceof GunItem))
-                throw new ClassCastException("The Item type of the item stack in the formal parameter must be GunItem when render BedrockGunModel");
+                throw new ClassCastException("The Item type of the item stack must be GunItem when render BedrockGunModel");
             currentModifiedGun = ((GunItem) currentItem.getItem()).getModifiedGun(currentItem);
         }
         if(transformType.firstPerson()) {

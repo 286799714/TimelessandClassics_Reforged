@@ -1,11 +1,7 @@
 package com.tac.guns.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.logging.LogUtils;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.GunMod;
 import com.tac.guns.client.Keys;
@@ -16,8 +12,7 @@ import com.tac.guns.client.event.BeforeRenderHandEvent;
 import com.tac.guns.client.model.BedrockAnimatedModel;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
-import com.tac.guns.client.model.ModelLoader;
-import com.tac.guns.client.util.RenderUtil;
+import com.tac.guns.client.resource.model.ModelLoader;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
@@ -31,7 +26,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -124,8 +118,7 @@ public enum AnimationHandler {
             OverrideModelManager.register(
                     ModItems.AK47.get(),
                     ModelLoader.loadBedrockGunModel(
-                            new ResourceLocation("tac", "models/gun/ak47.geo.json"),
-                            new ResourceLocation("tac", "textures/items/ak47_uv.png")
+                            new ResourceLocation("tac", "models/gun/ak47.meta.json")
                     )
             );
             OverrideModelManager.register(
