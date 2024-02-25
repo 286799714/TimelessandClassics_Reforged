@@ -33,6 +33,7 @@ public class BedrockPart {
     public float offsetY;
     public float offsetZ;
     public boolean visible = true;
+    public boolean illuminated = false;
     public boolean mirror;
     private float initRotX;
     private float initRotY;
@@ -58,6 +59,8 @@ public class BedrockPart {
     }
 
     public void render(PoseStack poseStack, ItemTransforms.TransformType transformType, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
+        if(illuminated)
+            light = 15728880; //1111,0000,0000,0000,1111,0000 意义不明，能让模型渲染亮度变亮
         if (this.visible) {
             if (!this.cubes.isEmpty() || !this.children.isEmpty()) {
                 poseStack.pushPose();
