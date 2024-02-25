@@ -18,7 +18,6 @@
     "client.ItemEntityRendererMixin",
     "client.ItemFrameRendererMixin",
     "client.ItemInHandLayerMixin",
-    "client.ItemInHandRendererMixin",
     "client.ItemRendererMixin",
     "client.LivingRendererMixin",
     "client.MinecraftStaticMixin",

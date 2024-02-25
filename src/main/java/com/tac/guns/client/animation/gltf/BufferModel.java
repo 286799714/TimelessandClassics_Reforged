@@ -1,7 +1,5 @@
 package com.tac.guns.client.animation.gltf;
 
-import de.javagl.jgltf.model.io.Buffers;
-
 import java.nio.ByteBuffer;
 
 public class BufferModel {

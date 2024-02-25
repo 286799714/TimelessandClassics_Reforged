@@ -3,7 +3,6 @@ package com.tac.guns.client;
 import com.tac.guns.Config;
 import com.tac.guns.Reference;
 import com.tac.guns.client.handler.*;
-import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.client.render.armor.models.MediumArmor;
 import com.tac.guns.client.render.armor.models.ModernArmor;
 import com.tac.guns.client.render.armor.vestlayer.VestLayerRender;
@@ -24,10 +23,8 @@ import com.tac.guns.inventory.gear.armor.implementations.*;
 import com.tac.guns.item.IColored;
 import com.tac.guns.network.PacketHandler;
 import com.tac.guns.network.message.MessageAttachments;
-import com.tac.guns.network.message.MessageInspection;
 import com.tac.guns.util.IDLNBTUtil;
 import com.tac.guns.util.math.SecondOrderDynamics;
-import de.javagl.jgltf.model.animation.AnimationRunner;
 import net.minecraft.client.CycleOption;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColor;
@@ -98,7 +95,6 @@ public class ClientHandler {
         registerScreenFactories();
 
         AnimationHandler.preloadAnimations();
-        new AnimationRunner(); //preload thread pool
         new SecondOrderDynamics(1f, 1f, 1f, 1f); //preload thread pool
 
         Map<String, EntityRenderer<? extends Player>> skins = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
@@ -221,20 +217,6 @@ public class ClientHandler {
             final Minecraft mc = Minecraft.getInstance();
             if (mc.player != null && mc.screen == null)
                 PacketHandler.getPlayChannel().sendToServer(new MessageAttachments());
-        });
-
-        Keys.INSPECT.addPressCallback(() -> {
-            if (!Keys.noConflict(Keys.INSPECT))
-                return;
-
-            final Minecraft mc = Minecraft.getInstance();
-            if (
-                    mc.player != null
-                            && mc.screen == null
-                            && GunAnimationController.fromItem(
-                            Minecraft.getInstance().player.getInventory().getSelected().getItem()
-                    ) == null
-            ) PacketHandler.getPlayChannel().sendToServer(new MessageInspection());
         });
     }
 

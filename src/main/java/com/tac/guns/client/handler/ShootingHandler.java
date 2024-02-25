@@ -2,7 +2,6 @@ package com.tac.guns.client.handler;
 
 import com.tac.guns.Config;
 import com.tac.guns.client.Keys;
-import com.tac.guns.client.animation.module.GunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.item.GunItem;
@@ -171,15 +170,8 @@ public class ShootingHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void renderTick(TickEvent.RenderTickEvent evt) {
         // Upper is to handle rendering, bellow is handling animation calls and burst tracking
-
-        if (Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getMainHandItem().getItem() instanceof GunItem)
-            return;
-        GunAnimationController controller = GunAnimationController.fromItem(Minecraft.getInstance().player.getMainHandItem().getItem());
-        if (controller == null)
-            return;
-        else if (controller.isAnimationRunning() && (shootMsGap < 0F && this.burstTracker != 0)) {
-            if (controller.isAnimationRunning(GunAnimationController.AnimationLabel.PUMP) || controller.isAnimationRunning(GunAnimationController.AnimationLabel.PULL_BOLT))
-                return;
+        if (!(Minecraft.getInstance().player == null || !Minecraft.getInstance().player.isAlive() || Minecraft.getInstance().player.getMainHandItem().getItem() instanceof GunItem) &&
+            shootMsGap < 0F && this.burstTracker != 0) {
             if (Config.CLIENT.controls.burstPress.get())
                 this.burstTracker = 0;
             this.clickUp = true;

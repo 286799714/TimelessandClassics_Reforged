@@ -1,8 +1,6 @@
 package com.tac.guns.client.handler;
 
 import com.mrcrayfish.framework.common.data.SyncedEntityData;
-import com.tac.guns.client.animation.module.GunAnimationController;
-import com.tac.guns.client.animation.module.PumpShotgunAnimationController;
 import com.tac.guns.common.Gun;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
@@ -314,11 +312,11 @@ public class ReloadHandler {
                                 this.startReloadTick = player.tickCount + 5;
                             }
                             if (this.reloadTimer < gun.getReloads().getinterReloadPauseTicks()) {
-                                if (!AnimationHandler.INSTANCE.isReloadingIntro(prevItemStack.getItem()))
-                                    this.reloadTimer++;
+                                //if (!AnimationHandler.INSTANCE.isReloadingIntro(prevItemStack.getItem()))
+                                //    this.reloadTimer++;
                             }
                             if (this.reloadTimer == gun.getReloads().getinterReloadPauseTicks()) {
-                                AnimationHandler.INSTANCE.onReloadLoop(prevItemStack.getItem());
+                                //AnimationHandler.INSTANCE.onReloadLoop(prevItemStack.getItem());
                                 this.reloadTimer = 0;
                             }
                         } else
@@ -329,7 +327,7 @@ public class ReloadHandler {
         } else {
             if (prevState) {
                 prevState = false;
-                AnimationHandler.INSTANCE.onReloadEnd(prevItemStack.getItem());
+                //AnimationHandler.INSTANCE.onReloadEnd(prevItemStack.getItem());
             }
             if (stack.getItem() instanceof GunItem) {
                 Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
@@ -396,8 +394,6 @@ public class ReloadHandler {
         if (!(stack.getItem() instanceof GunItem))
             return; // Fails on server instances where all plays must be holding a gun
         Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
-        if (GunAnimationController.fromItem(stack.getItem()) instanceof PumpShotgunAnimationController && isReloading())
-            event.setCanceled(true);
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.getInt("AmmoCount") <= 0) {
             if (gun.getReloads().getReloadMagTimer() + gun.getReloads().getAdditionalReloadEmptyMagTimer() - reloadTimer > 5) {

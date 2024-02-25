@@ -1,8 +1,5 @@
 package com.tac.guns.client.network;
 
-import com.mojang.logging.LogUtils;
-import com.mojang.math.Vector3d;
-import com.mojang.math.Vector3f;
 import com.tac.guns.Config;
 import com.tac.guns.client.BulletTrail;
 import com.tac.guns.client.CustomGunManager;
@@ -11,9 +8,6 @@ import com.tac.guns.client.audio.GunShotSound;
 import com.tac.guns.client.handler.BulletTrailRenderingHandler;
 import com.tac.guns.client.handler.GunRenderingHandler;
 import com.tac.guns.client.handler.HUDRenderingHandler;
-import com.tac.guns.client.animation.module.AnimationMeta;
-import com.tac.guns.client.animation.module.AnimationSoundManager;
-import com.tac.guns.client.animation.module.AnimationSoundMeta;
 import com.tac.guns.common.NetworkGunManager;
 import com.tac.guns.common.NetworkRigManager;
 import com.tac.guns.init.ModParticleTypes;
@@ -24,7 +18,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.*;
 import net.minecraft.resources.ResourceLocation;
@@ -35,8 +28,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.BlockPositionSource;
-import net.minecraft.world.level.gameevent.vibrations.VibrationPath;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -77,10 +68,8 @@ public class ClientPlayHandler
         Player player = world.getPlayerByUUID(fromWho);
         if (player == null) return;
         if (animationResource == null || soundResource == null) return;
-        AnimationMeta animationMeta = new AnimationMeta(animationResource);
-        AnimationSoundMeta soundMeta = new AnimationSoundMeta(soundResource);
-        if (play) AnimationSoundManager.INSTANCE.playerSound(player, animationMeta, soundMeta);
-        else AnimationSoundManager.INSTANCE.interruptSound(player, animationMeta);
+        //if (play) AnimationSoundManager.INSTANCE.playerSound(player, animationMeta, soundMeta);
+        //else AnimationSoundManager.INSTANCE.interruptSound(player, animationMeta);
     }
 
     public static void handleMessageBlood(MessageBlood message)

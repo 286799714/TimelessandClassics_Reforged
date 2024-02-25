@@ -13,13 +13,10 @@ import com.tac.guns.client.GunRenderType;
 import com.tac.guns.client.event.PlayerModelEvent;
 import com.tac.guns.client.event.RenderItemEvent;
 import com.tac.guns.client.handler.command.GunEditor;
-import com.tac.guns.client.animation.module.GunAnimationController;
-import com.tac.guns.client.animation.module.PistolAnimationController;
 import com.tac.guns.client.render.item.IOverrideModel;
 import com.tac.guns.client.render.item.OverrideModelManager;
 import com.tac.guns.client.util.RenderUtil;
 import com.tac.guns.common.Gun;
-import com.tac.guns.common.network.ServerPlayHandler;
 import com.tac.guns.common.tooling.CommandsHandler;
 import com.tac.guns.event.GunFireEvent;
 import com.tac.guns.event.GunReloadEvent;
@@ -202,16 +199,9 @@ public class GunRenderingHandler {
                 ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
                 if(heldItem.getItem() instanceof GunItem) {
                     GunItem modifiedGun = (GunItem) heldItem.getItem();
-                    GunAnimationController controller = GunAnimationController.fromItem(modifiedGun);
                     if (this.sprintTransition < 5) {
-                        if (controller == null ||
-                                (modifiedGun.getGun().getGeneral().getGripType().getHeldAnimation().canApplySprintingAnimation() && !controller.isAnimationRunning())) {
+                        if (modifiedGun.getGun().getGeneral().getGripType().getHeldAnimation().canApplySprintingAnimation()) {
                             this.sprintTransition++;
-                        }
-                    }
-                    if(controller != null && controller.isAnimationRunning()) {
-                        if(sprintTransition > 0){
-                            this.sprintTransition -- ;
                         }
                     }
                 }
@@ -556,60 +546,6 @@ public class GunRenderingHandler {
     // made public for adjusting hands within animator instances
     public float sOT = 0.0f;
     public float wSpeed = 0.0f;
-    private void applySprintingTransforms(ItemStack gun, HumanoidArm hand,
-                                          PoseStack matrixStack, float partialTicks)
-    {
-        TimelessGunItem modifiedGun = (TimelessGunItem) gun.getItem();
-        GunAnimationController controller = GunAnimationController.fromItem(gun.getItem());
-        float draw = (controller == null || !controller.isAnimationRunning(GunAnimationController.AnimationLabel.DRAW) ? 1 : 0);
-        float leftHanded = hand == HumanoidArm.LEFT ? -1 : 1;
-        this.sOT = (this.prevSprintTransition + (this.sprintTransition - this.prevSprintTransition) * partialTicks) / 5F;
-        //TODO: Speed of the held weapon, make a static method? it's not that useful but will be cleaner
-        this.wSpeed = ServerPlayHandler.calceldGunWeightSpeed(modifiedGun.getGun(), gun);
-        // Light weight animation, used for SMGS and light rifles like the hk416
-        if (wSpeed > 0.094f) {
-            // Translation
-            float result = sprintDynamicsHSS.update(0.05f, sOT) * draw;
-
-            // Rotating to the left a bit
-            float result2 = sprintDynamicsZHSS.update(0.05f, sOT) * draw;
-
-            matrixStack.translate(0.215 * leftHanded * result ,
-                    0.07f * result , -30F * leftHanded * result / 170);
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(60f * result2));
-            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(-25f * result2));
-        }
-        // Default
-        else {
-            //transition = (float) Math.sin((transition * Math.PI) / 2);
-            float result = sprintDynamics.update(0.05f, sOT) * draw;
-            float result2 = sprintDynamicsZ.update(0.05f, sOT) * draw;
-            //matrixStack.translate(-0.25 * leftHanded * transition, -0.1 * transition, 0);
-            matrixStack.translate(-0.25 * leftHanded * result, -0.1 * result - 0.1 + Math.abs(0.5 - result) * 0.2, 0);
-            //matrixStack.rotate(Vector3f.YP.rotationDegrees(45F * leftHanded * transition));
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(28F * leftHanded * result));
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(15F * result2));
-            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(20f * result2));
-        }
-    }
-
-    private void applyReloadTransforms(PoseStack matrixStack, HumanoidArm hand, float partialTicks, ItemStack modifiedGun) {
-        /*float reloadProgress = ReloadHandler.get().getRepairProgress(partialTicks, stack);
-        matrixStack.translate(0, 0.35 * reloadProgress, 0);
-        matrixStack.translate(0, 0, -0.1 * reloadProgress);
-        matrixStack.rotate(Vector3f.XP.rotationDegrees(45F * reloadProgress));*/
-
-        float reloadProgress = ReloadHandler.get().getReloadProgress(partialTicks,  modifiedGun);
-
-        if(reloadProgress > 0) {
-            float leftHanded = hand == HumanoidArm.LEFT ? -1 : 1;
-
-            matrixStack.translate(-0.25 * leftHanded, -0.1, 0);
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(45F * leftHanded));
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(-25F));
-        }
-    }
-
     public float kickReduction = 0;
     public float recoilReduction = 0;
     public double kick = 0;
@@ -1189,19 +1125,6 @@ public class GunRenderingHandler {
                             double displayY = positioned.getYOffset() * 0.0625;
                             double displayZ = positioned.getZOffset() * 0.0625;
                             matrixStack.pushPose();
-                            GunAnimationController controller = GunAnimationController.fromItem(stack.getItem());
-                            if (controller != null) {
-                                if (type != null) {
-                                    if (controller instanceof PistolAnimationController
-                                            && gun.getModules().getAttachments().getPistolScope() != null
-                                            && gun.getModules().getAttachments().getPistolScope().getDoOnSlideMovement()) {
-                                        PistolAnimationController pcontroller = (PistolAnimationController) controller;
-                                        controller.applyTransform(stack, pcontroller.getSlideNodeIndex(), transformType, entity, matrixStack);
-                                    } else
-                                        controller.applyAttachmentsTransform(stack, transformType, entity, matrixStack);
-                                } else
-                                    controller.applyAttachmentsTransform(stack, transformType, entity, matrixStack);
-                            }
                             matrixStack.translate(displayX, displayY, displayZ);
                             matrixStack.translate(0, -0.5, 0);
                             matrixStack.scale((float) positioned.getScale(), (float) positioned.getScale(), (float) positioned.getScale());

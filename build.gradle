@@ -116,10 +116,6 @@ dependencies {
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 
-    minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '[2.14.2,2.16.0)')
-    minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '[2.14.2,2.16.0)')
-    minecraftLibrary(group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '[2.14.2,2.16.0)')
-
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
@@ -171,9 +167,7 @@ jar {
 
 jarJar {
     dependencies {
-        include(dependency("com.fasterxml.jackson.core:jackson-databind"))
-        include(dependency("com.fasterxml.jackson.core:jackson-annotations"))
-        include(dependency("com.fasterxml.jackson.core:jackson-core"))
+        //include(dependency("com.fasterxml.jackson.core:jackson-databind"))
     }
 }
 

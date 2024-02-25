@@ -6,8 +6,6 @@ import com.mrcrayfish.framework.common.data.SyncedEntityData;
 import com.tac.guns.client.TacKeyMapping.TacKeyBuilder;
 import com.tac.guns.client.handler.ReloadHandler;
 import com.tac.guns.client.handler.ShootingHandler;
-import com.tac.guns.client.animation.module.GunAnimationController;
-import com.tac.guns.client.animation.module.PumpShotgunAnimationController;
 import com.tac.guns.duck.PlayerWithSynData;
 import com.tac.guns.init.ModSyncedDataKeys;
 import com.tac.guns.item.GunItem;
@@ -103,11 +101,6 @@ public final class Keys
                     if (!SyncedEntityData.instance().get(player, ModSyncedDataKeys.RELOADING)) {
                         ShootingHandler.get().burstTracker = 0;
                         ReloadHandler.get().setReloading(true);
-                    } else if (
-                            GunAnimationController.fromItem(stack.getItem())
-                                    instanceof PumpShotgunAnimationController
-                    ) {
-                        ReloadHandler.get().setReloading(false);
                     }
                 }
             });
