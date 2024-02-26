@@ -35,6 +35,12 @@ public enum AnimationHandler {
 
     public static final Map<ResourceLocation, AnimationController> controllers = new HashMap<>();
     public static final int MAIN_TRACK = 0;
+    private boolean lastTickSprint = false;
+    private boolean lastTickWalk = false;
+    //记录开始冲刺时玩家的walk distance，以便让冲刺动画有统一的开头
+    private float baseDistanceWalked = 0.0f;
+    //玩家以冲刺状态脱离地面时，需要保持walk distance不变以保持姿态。
+    private float keepDistanceWalked = 0.0f;
 
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event){
@@ -44,21 +50,24 @@ public enum AnimationHandler {
         for(AnimationController controller : controllers.values()){
             ObjectAnimationRunner runner = controller.getAnimation(MAIN_TRACK);
             if (runner != null) {
-                //为了让冲刺动画和原版的viewBobbing相适应，需要手动更新冲刺动画的进度
+                //为了让冲刺和行走动画和原版的viewBobbing相适应，需要手动更新冲刺动画的进度
                 //当前动画是run或者正在过渡向run动画的时候，就手动设置run动画的进度。
-                if(runner.getAnimation().name.equals("run") && runner.isRunning()) {
-                    Entity entity = Minecraft.getInstance().getCameraEntity();
-                    if (entity instanceof Player playerEntity) {
-                        float deltaDistanceWalked = playerEntity.walkDist - playerEntity.walkDistO;
-                        float distanceWalked = playerEntity.walkDist + deltaDistanceWalked * event.renderTickTime;
+                Entity entity = Minecraft.getInstance().getCameraEntity();
+                if (entity instanceof Player playerEntity) {
+                    float deltaDistanceWalked = playerEntity.walkDist - playerEntity.walkDistO;
+                    float distanceWalked;
+                    if(playerEntity.isOnGround())
+                        distanceWalked = playerEntity.walkDist + deltaDistanceWalked * event.renderTickTime - baseDistanceWalked;
+                    else {
+                        distanceWalked = keepDistanceWalked;
+                        baseDistanceWalked = playerEntity.walkDist + deltaDistanceWalked * event.renderTickTime - keepDistanceWalked;
+                    }
+                    keepDistanceWalked = distanceWalked;
+                    if((runner.getAnimation().name.equals("run") || runner.getAnimation().name.contains("walk")) && runner.isRunning()) {
                         runner.setProgressNs((long) (runner.getAnimation().getMaxEndTimeS() * (distanceWalked % 2f) / 2f * 1e9f));
                     }
-                }
-                if(runner.isTransitioning() && runner.getTransitionTo()!= null && runner.getTransitionTo().getAnimation().name.equals("run")){
-                    Entity entity = Minecraft.getInstance().getCameraEntity();
-                    if (entity instanceof Player playerEntity) {
-                        float deltaDistanceWalked = playerEntity.walkDist - playerEntity.walkDistO;
-                        float distanceWalked = playerEntity.walkDist + deltaDistanceWalked * event.renderTickTime;
+                    if(runner.isTransitioning() && runner.getTransitionTo()!= null &&
+                            (runner.getTransitionTo().getAnimation().name.equals("run") || runner.getTransitionTo().getAnimation().name.contains("walk"))){
                         runner.getTransitionTo().setProgressNs((long) (runner.getTransitionTo().getAnimation().getMaxEndTimeS() * (distanceWalked % 2f) / 2f * 1e9f));
                     }
                 }
@@ -187,20 +196,21 @@ public enum AnimationHandler {
             }
         } );
     }
-    private boolean lastTickSprint = false;
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event){
+    public void applyRunAnimation(TickEvent.ClientTickEvent event){
         if(Minecraft.getInstance().player == null) return;
         ItemStack stack = Minecraft.getInstance().player.getMainHandItem();
-        if(Minecraft.getInstance().player.isSprinting() && !lastTickSprint) {
+        if(Minecraft.getInstance().player.isSprinting() && Minecraft.getInstance().player.isOnGround() && !lastTickSprint) {
             lastTickSprint = true;
+            lastTickWalk = false;
             AnimationController animationController = controllers.get(stack.getItem().getRegistryName());
             if (animationController != null) {
                 ArrayDeque<AnimationController.AnimationPlan> deque = new ArrayDeque<>();
                 deque.add(new AnimationController.AnimationPlan("run_start", ObjectAnimation.PlayType.PLAY_ONCE_HOLD, 0.2f));
                 deque.add(new AnimationController.AnimationPlan("run", ObjectAnimation.PlayType.LOOP, 0.4f));
                 animationController.queueAnimation(MAIN_TRACK, deque);
+                baseDistanceWalked = Minecraft.getInstance().player.walkDist;
             }
         }
         if(!Minecraft.getInstance().player.isSprinting() && lastTickSprint) {
@@ -212,60 +222,17 @@ public enum AnimationHandler {
         }
     }
 
-    /*@SubscribeEvent
-    public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event){
-        AnimationSoundManager.INSTANCE.onPlayerDeath(event.getPlayer());
-    }
-
     @SubscribeEvent
-    public void onClientPlayerReload(GunReloadEvent.Pre event){
-        if(event.isClient()){
-            GunAnimationController controller = GunAnimationController.fromItem(event.getStack().getItem());
-            if(controller != null){
-                if(controller.isAnimationRunning(GunAnimationController.AnimationLabel.DRAW) ||
-                        controller.isAnimationRunning(GunAnimationController.AnimationLabel.PUMP))
-                    event.setCanceled(true);
-            }
+    public void applyWalkAnimation(TickEvent.ClientTickEvent event){
+        if(Minecraft.getInstance().player == null) return;
+        LocalPlayer player = Minecraft.getInstance().player;
+        ItemStack stack = player.getMainHandItem();
+        boolean isMoving = player.xOld != player.getX() || player.yOld != player.getY() || player.zOld != player.getZ();
+        if(!player.isSprinting() && isMoving && !lastTickWalk){
+            lastTickWalk = true;
         }
-    }
-
-    @SubscribeEvent
-    public void onRenderHand(RenderHandEvent event){
-        ClientPlayerEntity player = Minecraft.getInstance().player;
-        if(player == null) return;
-        ItemStack itemStack = player.getInventory().getCurrentItem();
-        GunAnimationController controller = GunAnimationController.fromItem(itemStack.getItem());
-        if(controller == null) return;
-        if(controller.isAnimationRunning()){
+        if(!isMoving && lastTickWalk){
 
         }
     }
-
-    public boolean isReloadingIntro(Item item){
-        GunAnimationController controller = GunAnimationController.fromItem(item);
-        if(controller == null) return false;
-        return controller.isAnimationRunning(GunAnimationController.AnimationLabel.RELOAD_INTRO);
-    }
-
-    public void onReloadLoop(Item item){
-        GunAnimationController controller = GunAnimationController.fromItem(item);
-        if(controller == null) return;
-        controller.stopAnimation();
-        controller.runAnimation(GunAnimationController.AnimationLabel.RELOAD_LOOP);
-    }
-
-    public void onReloadEnd(Item item){
-        GunAnimationController controller = GunAnimationController.fromItem(item);
-        if(controller == null) return;
-        if(controller instanceof PumpShotgunAnimationController ) {
-            if(controller.getAnimationFromLabel(GunAnimationController.AnimationLabel.RELOAD_NORMAL_END) != null) {
-                controller.stopAnimation();
-                controller.runAnimation(GunAnimationController.AnimationLabel.RELOAD_NORMAL_END);
-            }
-        }else{
-            controller.stopAnimation();
-            controller.runAnimation(GunAnimationController.AnimationLabel.STATIC);
-            controller.stopAnimation();
-        }
-    }*/
 }
